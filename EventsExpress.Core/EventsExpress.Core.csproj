@@ -12,9 +12,4 @@
     <ProjectReference Include="..\EventsExpress.Db\EventsExpress.Db.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IServices\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
