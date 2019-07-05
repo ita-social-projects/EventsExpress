@@ -24,7 +24,7 @@ namespace EventsExpress
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var dbContext = services.GetRequiredService<AppDbContext>();
+                    var dbContext = services.GetRequiredService<AppDbContext>();      
                     DbInitializer.Seed(dbContext);
                 }
                 catch (Exception ex)

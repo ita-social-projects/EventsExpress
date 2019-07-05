@@ -1,5 +1,7 @@
 ﻿using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,18 @@ namespace EventsExpress.Db.DbInitialize
 
         public static void Seed(AppDbContext dbContext) {
             dbContext.Database.EnsureCreated();
-
+                                                 
             //Look for any users
             if (dbContext.Users.Any()) {
                 return; // DB has been seeded
             }
+
+            List<Country> countries = LocationParser.GetCountries();
+            foreach (var country in countries)
+            {
+                dbContext.Countries.Add(country);
+            }
+            dbContext.SaveChanges();
 
             var users = new User[] {
                  new User{Name="Admin", PasswordHash="1234ADMIN", Email="admin@gmail.com", EmailConfirmed= true,
@@ -49,6 +58,8 @@ namespace EventsExpress.Db.DbInitialize
             {
                 dbContext.Categories.Add(c);
             }
+                                                                    
+
             dbContext.SaveChanges();
         }
     }
