@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
+
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
@@ -24,6 +27,16 @@ namespace EventsExpress.Controllers
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             });
+        }
+
+        // Authorize test method:
+        [Authorize]
+        [HttpGet("[action]")]
+        public ActionResult<string> Test()
+        {
+            var nameIdentifier = this.HttpContext.User.Claims
+                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            return $"Hello, {nameIdentifier.Value}!";
         }
 
         public class WeatherForecast
