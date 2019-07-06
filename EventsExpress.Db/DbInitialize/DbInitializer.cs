@@ -20,11 +20,11 @@ namespace EventsExpress.Db.DbInitialize
 
         public static void Seed(AppDbContext dbContext) {
             dbContext.Database.EnsureCreated();
-                                                 
+
             //Look for any users
-            if (dbContext.Users.Any()) {
-                return; // DB has been seeded
-            }
+             if (dbContext.Users.Any()) {
+                  return; // DB has been seeded
+             }
 
             List<Country> countries = LocationParser.GetCountries();
             foreach (var country in countries)
@@ -33,11 +33,16 @@ namespace EventsExpress.Db.DbInitialize
             }
             dbContext.SaveChanges();
 
+            Role adminRole = new Role { Name = "Admin" };
+            Role userRole = new Role { Name = "User" };
+            dbContext.Roles.AddRange(new Role[] {adminRole, userRole});
+            dbContext.SaveChanges();
+
             var users = new User[] {
                  new User{Name="Admin", PasswordHash="1234ADMIN", Email="admin@gmail.com", EmailConfirmed= true,
-                 Phone="+380974293583", Birthday=DateTime.Parse("2000-01-01"), Gender=Enums.Gender.Male, IsBlocked=false},
+                 Phone="+380974293583", Birthday=DateTime.Parse("2000-01-01"), Gender=Enums.Gender.Male, IsBlocked=false, RoleId=adminRole.Id},
                   new User{Name="User1", PasswordHash="1234ABCD", Email="user@gmail.com", EmailConfirmed= true,
-                 Phone="+380970101013", Birthday=DateTime.Parse("2000-01-01"), Gender=Enums.Gender.Male, IsBlocked=false}
+                 Phone="+380970101013", Birthday=DateTime.Parse("2000-01-01"), Gender=Enums.Gender.Male, IsBlocked=false, RoleId= userRole.Id}
             };
             foreach (User u in users) {
                 dbContext.Users.Add(u);

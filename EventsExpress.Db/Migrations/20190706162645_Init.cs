@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -186,6 +186,7 @@ namespace EventsExpress.Db.Migrations
                     Birthday = table.Column<DateTime>(type: "date", nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     IsBlocked = table.Column<bool>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: true),
                     PhotoId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -195,6 +196,12 @@ namespace EventsExpress.Db.Migrations
                         name: "FK_Users_Photos_PhotoId",
                         column: x => x.PhotoId,
                         principalTable: "Photos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -401,6 +408,11 @@ namespace EventsExpress.Db.Migrations
                 table: "Users",
                 column: "PhotoId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_EventCategory_Events_EventId",
                 table: "EventCategory",
@@ -460,9 +472,6 @@ namespace EventsExpress.Db.Migrations
                 name: "Relationships");
 
             migrationBuilder.DropTable(
-                name: "Roles");
-
-            migrationBuilder.DropTable(
                 name: "UserCategory");
 
             migrationBuilder.DropTable(
@@ -485,6 +494,9 @@ namespace EventsExpress.Db.Migrations
 
             migrationBuilder.DropTable(
                 name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Reports");
