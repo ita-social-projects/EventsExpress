@@ -1,5 +1,8 @@
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,28 +30,22 @@ namespace EventsExpress
         {
             #region Authorization and Autontification configuring:
 
-            const string signingSecurityKey = "0d5b3235a8b403c3dab9c3f4f65c07fcalskd234n1k41230";
-            var signingKey = new SigningSymmetricKey(signingSecurityKey);
+            var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTSecretKey"));
+
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
-            const string jwtSchemeName = "JwtBearer";
             var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
 
-            services.AddAuthentication(options => {
-                options.DefaultAuthenticateScheme = jwtSchemeName;
-                options.DefaultChallengeScheme = jwtSchemeName;
-            })
-                .AddJwtBearer(jwtSchemeName, jwtBearerOptions => {
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => {
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = signingDecodingKey.GetKey(),
 
-                        ValidateIssuer = true,
-                        ValidIssuer = "EventsExpress",
-
-                        ValidateAudience = true,
-                        ValidAudience = "EventsExpress.Web",
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
 
                         ValidateLifetime = true,
 
@@ -57,6 +54,7 @@ namespace EventsExpress
                 });
 
             #endregion
+
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration
                     //.GetConnectionString("AzureSQLServer")));
@@ -70,7 +68,7 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            
+            services.AddTransient<IAuthServicre, AuthServicre>();
 
         }
 
