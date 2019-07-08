@@ -15,7 +15,8 @@ namespace EventsExpress.Db.Entities
         public DateTime Birthday { get; set; }
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
-        
+        public Guid RoleId { get; set; }
+        public virtual Role Role { get; set; }
         public Guid? PhotoId { get; set; }
         public virtual Photo Photo { get; set; }
 

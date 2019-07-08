@@ -8,6 +8,8 @@ namespace EventsExpress.Db.Entities
     {
         public string Name { get; set; }
 
+        public IEnumerable<User> Users { get; set; }  
+
         //navigation properties:
     }
 }

@@ -15,7 +15,7 @@ namespace EventsExpress.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -258,9 +258,13 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<Guid?>("PhotoId");
 
+                    b.Property<Guid?>("RoleId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PhotoId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -296,7 +300,7 @@ namespace EventsExpress.Db.Migrations
             modelBuilder.Entity("EventsExpress.Db.Entities.City", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Country", "Country")
-                        .WithMany()
+                        .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -395,6 +399,10 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
+
+                    b.HasOne("EventsExpress.Db.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>

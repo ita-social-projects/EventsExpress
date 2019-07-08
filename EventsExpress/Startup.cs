@@ -3,6 +3,8 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EventsExpress.Db.IRepo;
+using EventsExpress.Db.Repo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -59,6 +61,8 @@ namespace EventsExpress
                 options.UseSqlServer(Configuration
                     //.GetConnectionString("AzureSQLServer")));
                     .GetConnectionString("DefaultConnection")));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
