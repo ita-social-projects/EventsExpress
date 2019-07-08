@@ -8,7 +8,7 @@ namespace EventsExpress.Db.Entities
     {
         public string Name { get; set; }
 
-        public List<User> Users { get; set; }
+        public IEnumerable<User> Users { get; set; }
         public Role()
         {
             Users = new List<User>();
