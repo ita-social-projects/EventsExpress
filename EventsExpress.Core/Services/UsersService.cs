@@ -66,8 +66,8 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var oper = Db.UserRepository.Get(id);
-            return _mapper.Map<UserDTO>(oper);
+            var user = Db.UserRepository.Get(id);
+            return _mapper.Map<UserDTO>(user);
         }
 
         public UserDTO GetByEmail(string email)
