@@ -1,6 +1,7 @@
 ﻿using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;

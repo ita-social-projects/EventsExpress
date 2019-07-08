@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EventsExpress.Core.Infrastructure
+namespace EventsExpress.Db.Helpers
 {
     public static class PasswordHasher
     {    

@@ -1,6 +1,7 @@
 ﻿using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Db.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,7 +31,7 @@ namespace EventsExpress.Db.DbInitialize
             var users = new User[] {
                  new User{
                      Name ="Admin",
-                     PasswordHash ="1qaz1qaz",
+                     PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz"),
                      Email ="admin@gmail.com",
                      EmailConfirmed = true,
                      Phone="+380974293583",
@@ -42,7 +43,7 @@ namespace EventsExpress.Db.DbInitialize
 
                   new User{
                       Name ="UserTest",
-                      PasswordHash ="1qaz1qaz",
+                      PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz"),
                       Email ="user@gmail.com",
                       EmailConfirmed = true,
                       Phone="+380970101013",
