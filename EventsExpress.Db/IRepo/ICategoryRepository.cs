@@ -7,7 +7,7 @@ using System.Text;
 namespace EventsExpress.Db.IRepo
 {
     public interface ICategoryRepository : IRepository<Category>
-    {                                           
-        
+    {
+        Category GetByTitle(string title);
     }
 }

@@ -15,6 +15,10 @@ namespace EventsExpress.Db.Repo
         public CategoryRepository(AppDbContext db): base(db)
         {
 
-        }      
+        }
+        public Category GetByTitle(string title)
+        {
+            return Database.Categories.FirstOrDefault(x => x.Name == title);
+        }
     }
 }
