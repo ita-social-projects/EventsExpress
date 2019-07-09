@@ -2,57 +2,30 @@
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import Header from '../shared/Header';
 
-export const actionCreators = {
-    login: ( email, password ) => ({ type: "LOGIN", payload: { email, password} })
+
+const actionCreators = {
+    login: ( email, password ) => ({ type: "LOGIN", payload: { email, password } })
 }
 
 
-//        (dispatch, getState) => {
-//        console.log("LOGIN");
-//        dispatch({ type: "LOGIN",  login});
-//        const url = 'https://localhost:44315/api/Authentication/';
-//        const response = fetch(url, {
-//            method: 'post',
-//            headers: new Headers({
-//                'Content-Type': 'application/json'
-//            }),
-//            body: JSON.stringify({ Email: getState.login, Password: getState.password })
-//        });
-//        const login_response = response.json();
+const mapDispatchToProps = dispatch => {
+    return {
+        // dispatching plain actions
+        login: (email, password) => dispatch(actionCreators.login(email, password)),
+    };
+}
 
-//        dispatch({ type: "LOGIN_RESPONSE", login, login_response });
-//    },
-//};
+const mapStateToProps = (state) => ({
+  ...state })
 
 
-export const reducer = (state, action) => {
-
-    console.log("entry");
-    if (action.type === "LOGIN") {
-
-        const url = 'https://localhost:44315/api/Authentication/';
-        const response = fetch(url, {
-            method: 'post',
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({ Email: action.payload.email, Password: action.payload.password })
-        });
-        const login_response = response.json();
-
-        console.log(login_response);
-        return { ...state, login: action.login };
-    }
-    
-};
-
-
-export default class LoginForm extends React.Component {
+class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -66,32 +39,12 @@ export default class LoginForm extends React.Component {
 
     updateLoginValue = (event) => {
         this.setState({ login: event.target.value });
-        
     }
 
     updatePasswordValue = (event) => {
         this.setState({ password: event.target.value });
-        
     }
 
-    sendMyData = (event) => {
-
-        event.preventDefault();
-        fetch('https://localhost:44315/api/Authentication/', {
-            method: 'post',
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({ Email: this.state.login, Password: this.state.password })
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ token: responseJson });
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
 
     
 
@@ -118,14 +71,14 @@ export default class LoginForm extends React.Component {
                         <Glyphicon /> Register
                     </NavItem>
                 </LinkContainer>
-                <div className="form-group">
-                    <button onClick={actionCreators["LOGIN"]} className="btn btn-primary btn-lg">Login</button>
-                </div>
             </form>
 
-            <button onClick={this.reducer(null, actionCreators.login)}>Send</button>
+            <button onClick={() => this.props.login(this.state.login, this.state.password)}>Send</button>
         </div>
 
 
 
 }
+
+export default connect(mapStateToProps,
+    mapDispatchToProps)(LoginForm);

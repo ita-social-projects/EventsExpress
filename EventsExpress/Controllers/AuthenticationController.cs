@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,8 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         [AllowAnonymous]
-        public ActionResult<string> Post(
+        [HttpPost]
+        public async Task<ActionResult<string>> Login(
             LoginDto authRequest,
             [FromServices] IAuthServicre _authServise
             )
