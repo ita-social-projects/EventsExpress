@@ -24,5 +24,7 @@ namespace EventsExpress.Core.DTOs
 
         public Guid EventId { get; set; }
         public Event Event { get; set; }
+
+        public List<Guid> Visitors { get; set; }
     }
 }

@@ -128,6 +128,77 @@ namespace EventsExpress.Core.Services
             await _unitOfWork.SaveAsync();
             return new OperationResult(true, "Ok", "");
         }
+        public async Task<OperationResult> Edit(EventDTO e)
+        {
+            var evnt = _unitOfWork.EventRepository.Get(e.EventId);
+            evnt.Title = e.Title;
+            evnt.Description = e.Description;
+            evnt.DateFrom = e.DateFrom;
+            evnt.DateTo = e.DateTo;
+
+            City city = _unitOfWork.CityRepository.Get(e.City.Id);
+            evnt.City = city;
+
+
+            if (e.Photo != null)
+            {
+                string path = "/files/" + e.Photo.FileName;
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await e.Photo.CopyToAsync(fileStream);
+                }
+
+                Photo photo = _unitOfWork.PhotoRepository.Insert(new Photo { Path = path });
+                evnt.Photo = photo;
+                _unitOfWork.EventRepository.Update(evnt);
+            }
+            List<EventCategory> eventCategories = new List<EventCategory>();
+
+            foreach (var item in e.Categories)
+            {
+                eventCategories.Add(new EventCategory
+                {
+                    Event = evnt,
+                    Category = _unitOfWork.CategoryRepository.GetByTitle(item)
+                });
+            }
+            evnt.Categories = eventCategories;
+            await _unitOfWork.SaveAsync();
+            return new OperationResult(true, "Ok", "");
+        }
+        public IEnumerable<EventDTO> Events()
+        {
+            var events = _unitOfWork.EventRepository.Get().ToList();
+
+            return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
+        }
+        public EventDTO EventById(Guid eventId)
+        {
+            var evv = _unitOfWork.EventRepository.Get(eventId);
+            return _mapper.Map<EventDTO>(evv);
+        }
+        public IEnumerable<EventDTO> EventsByUserId(Guid userId)
+        {  
+            var evv = _unitOfWork.EventRepository.Filter(filter: e => e.OwnerId == userId);
+            return _mapper.Map<IEnumerable<EventDTO>>(evv);
+
+        }
+        public EventDTO Details(Guid event_id)
+        {
+            var ev = _unitOfWork.EventRepository.Filter(filter: e => e.Id == event_id, includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault();
+            List<string> Categories = new List<string>();
+            foreach (var x in _unitOfWork.CategoryRepository.EventCategories(event_id))
+            {
+                Categories.Add(x.Name);
+            }
+            EventDTO eventDTO = _mapper.Map<Event, EventDTO>(ev);
+                
+            eventDTO.Visitors = ev.Visitors
+               .Select(x => x.User.Id)
+               .ToList();
+
+            return eventDTO;
+        }
     }
 }
 

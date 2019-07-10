@@ -20,5 +20,13 @@ namespace EventsExpress.Db.Repo
         {
             return Database.Categories.FirstOrDefault(x => x.Name == title);
         }
+        public List<Category> EventCategories(Guid id)
+        {
+            List<Category> categories = new List<Category>();
+            categories = Database.Categories.Where(c => c.Events
+                                .Any(e => e.EventId == id))
+                                .ToList();
+            return categories;
+        }
     }
 }

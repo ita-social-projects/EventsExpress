@@ -9,7 +9,7 @@ namespace EventsExpress.Core.IServices
     public interface IEventService
     {
         Task<OperationResult> Create(EventDTO e);
-        Task<OperationResult> Edit(Guid event_id, EventDTO e);
+        Task<OperationResult> Edit(EventDTO e);
         IEnumerable<EventDTO> Events();
         bool Exists(Guid id);
         EventDTO EventById(Guid eventId);
@@ -18,7 +18,6 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Delete(Guid eventId);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
         IEnumerable<EventDTO> UpcomingThreeEvents();
-        Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
-        IEnumerable<EventDTO> SearchEvents(Guid Category_id);
+        Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId); 
     }
 }
