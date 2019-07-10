@@ -1,16 +1,14 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import * as Counter from './Counter';
-import * as WeatherForecasts from './WeatherForecasts';
-import * as Auth from './Auth';
+import { reducer as formReducer } from 'redux-form';
+import * as Auth from '../reducers/login';
 
 export default function configureStore(history, initialState) {
     const reducers = {
         auth: Auth.reducer,
-        counter: Counter.reducer,
-        weatherForecasts: WeatherForecasts.reducer
-    };
+        form: formReducer
+};
 
   const middleware = [
     thunk,
@@ -27,6 +25,7 @@ export default function configureStore(history, initialState) {
   const rootReducer = combineReducers({
     ...reducers,
       routing: routerReducer
+      
   });
 
   return createStore(

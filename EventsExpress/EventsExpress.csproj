@@ -30,8 +30,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\components\events\" />
-    <Folder Include="ClientApp\src\store\actions\" />
-    <Folder Include="ClientApp\src\store\reducers\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
