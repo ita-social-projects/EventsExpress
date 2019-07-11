@@ -98,18 +98,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(EventDTO e)
         {
-            Event evnt = _mapper.Map<EventDTO, Event>(e);
-                
-                //new Event
-                //{
-                //Title = e.Title,
-                //Description = e.Description,
-                //DateFrom = e.DateFrom,
-                //DateTo = e.DateTo,
-                //CityId = e.City.Id,
-                //OwnerId = e.UserId
-                //};
-            
+            Event evnt = _mapper.Map<EventDTO, Event>(e);   
             evnt = _unitOfWork.EventRepository.Insert(evnt);
 
             // !uncoment when _photoservice will be done
@@ -151,10 +140,7 @@ namespace EventsExpress.Core.Services
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
             evnt.DateTo = e.DateTo;
-
-            City city = _unitOfWork.CityRepository.Get(e.City.Id);
-            evnt.City = city;
-
+            evnt.CityId = e.City.Id;
 
             if (e.Photo != null)
             {
