@@ -32,7 +32,6 @@ export default class Login extends React.Component {
                 </div>
                 <LinkContainer to={'/account/register'} exact>
                     <NavItem>
-
                         <Glyphicon glyph='th-reg' /> Register
                     </NavItem>
                 </LinkContainer>
