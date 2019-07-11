@@ -20,17 +20,22 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly IHostingEnvironment _appEnvironment;
-        public EventService(IUnitOfWork unitOfWork, IMapper mapper, AppDbContext context, IHostingEnvironment hostingEnvironment) {
+
+        public EventService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            IHostingEnvironment hostingEnvironment
+            )
+        {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _context = context;
+       
             _appEnvironment = hostingEnvironment;
         }
-        public bool Exists(Guid id) => this._context.Events.Any(e => e.Id == id);
+       
 
-        public bool UserIsAuthorizedToEdit(Guid eventid, Guid userId) => this._context.Events.Any(p => p.Id == eventid && p.OwnerId == userId);
+        public bool Exists(Guid id) => (_unitOfWork.EventRepository.Get(id) != null);
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -51,8 +56,9 @@ namespace EventsExpress.Core.Services
             ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
             await _unitOfWork.SaveAsync();
 
-            return new OperationResult(true, "", "");
+            return new OperationResult(true);
         }
+
         public async Task<OperationResult> Delete(Guid id)
         {
             if (id == null)
@@ -76,32 +82,39 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Error!", "");
             }
         }
-        public IEnumerable<EventDTO> UpcomingThreeEvents()
+
+        public IEnumerable<EventDTO> UpcomingEvents(int? num)
         {
-            var ev = this._context
-                .Events.Where(e => e.DateTo <= DateTime.UtcNow)
-                .OrderBy(e => e.DateFrom)
-                .ToList();
+            var ev = _unitOfWork.EventRepository.Filter(
+                skip: 0,
+                take: num,
+                filter: e => e.DateTo <= DateTime.UtcNow,
+                orderBy: es => es.OrderBy(e => e.DateFrom)
+                ).AsEnumerable();
+                
+
             return _mapper.Map<IEnumerable<EventDTO>>(ev);
         }
+
         public async Task<OperationResult> Create(EventDTO e)
         {
-            Event evnt = new Event
-            {
-                Title = e.Title,
-                Description = e.Description,
-                DateFrom = e.DateFrom,
-                DateTo = e.DateTo,
-            };
-            //add location
-           
-            City city = _unitOfWork.CityRepository.Get(e.City.Id);
-            evnt.City = city;
-            evnt.Owner = _unitOfWork.UserRepository.Get(e.UserId);
-
-
+            Event evnt = _mapper.Map<EventDTO, Event>(e);
+                
+                //new Event
+                //{
+                //Title = e.Title,
+                //Description = e.Description,
+                //DateFrom = e.DateFrom,
+                //DateTo = e.DateTo,
+                //CityId = e.City.Id,
+                //OwnerId = e.UserId
+                //};
+            
             evnt = _unitOfWork.EventRepository.Insert(evnt);
 
+            // !uncoment when _photoservice will be done
+            //if (e.Photo != null)
+            //    evnt.PhotoId = _photoservice.AddPhoto(e.Photo, PhotoTypes.EventPhoto);
             if (e.Photo != null)
             {
                 string path = "/files/" + e.Photo.FileName;
@@ -114,6 +127,8 @@ namespace EventsExpress.Core.Services
                 evnt.Photo = photo;
                 _unitOfWork.EventRepository.Update(evnt);
             }
+
+
             List<EventCategory> eventCategories = new List<EventCategory>();
          
             foreach (var item in e.Categories)
@@ -128,6 +143,7 @@ namespace EventsExpress.Core.Services
             await _unitOfWork.SaveAsync();
             return new OperationResult(true, "Ok", "");
         }
+
         public async Task<OperationResult> Edit(EventDTO e)
         {
             var evnt = _unitOfWork.EventRepository.Get(e.EventId);
@@ -166,23 +182,27 @@ namespace EventsExpress.Core.Services
             await _unitOfWork.SaveAsync();
             return new OperationResult(true, "Ok", "");
         }
+
         public IEnumerable<EventDTO> Events()
         {
             var events = _unitOfWork.EventRepository.Get().ToList();
 
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
         }
+
         public EventDTO EventById(Guid eventId)
         {
             var evv = _unitOfWork.EventRepository.Get(eventId);
             return _mapper.Map<EventDTO>(evv);
         }
+
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
         {  
             var evv = _unitOfWork.EventRepository.Filter(filter: e => e.OwnerId == userId);
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
 
         }
+
         public EventDTO Details(Guid event_id)
         {
             var ev = _unitOfWork.EventRepository.Filter(filter: e => e.Id == event_id, includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault();

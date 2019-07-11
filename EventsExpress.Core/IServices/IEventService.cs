@@ -8,16 +8,19 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
+        bool Exists(Guid id);
+
         Task<OperationResult> Create(EventDTO e);
         Task<OperationResult> Edit(EventDTO e);
-        IEnumerable<EventDTO> Events();
-        bool Exists(Guid id);
-        EventDTO EventById(Guid eventId);
-        bool UserIsAuthorizedToEdit(Guid eventId, Guid userId);
-        EventDTO Details(Guid id);
         Task<OperationResult> Delete(Guid eventId);
+
+        EventDTO EventById(Guid eventId);
+        EventDTO Details(Guid id);
+
+        IEnumerable<EventDTO> Events();
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
-        IEnumerable<EventDTO> UpcomingThreeEvents();
+        IEnumerable<EventDTO> UpcomingEvents(int? num);
+
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId); 
     }
 }
