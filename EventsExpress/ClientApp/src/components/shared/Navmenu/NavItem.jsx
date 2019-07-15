@@ -12,10 +12,10 @@ export default class NavItem extends React.Component {
 
     render() {
         return <li className="sidebar-header">
-            <Link to={ this.props.to } className="active">
+            <Link to={ this.props.to } >
                 <span className="link">
-                    <i className= { this.props.icon } ></i>
-                    <span className="hiden"> { this.props.text } </span>
+                    <i className= { this.props.icon } >  </i>
+                    <span className="hiden"> &nbsp; { this.props.text } </span>
                     <strong></strong>
                 </span>
            </Link>
