@@ -8,17 +8,18 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
-   public class UsersService : IUsersService
+   public class UserService : IUserService
     {
         private readonly IMapper _mapper;
         public IUnitOfWork Db { get; set; }
 
-        public UsersService(IUnitOfWork uow, IMapper mapper)
+        public UserService(IUnitOfWork uow, IMapper mapper)
         {
             Db = uow;
             _mapper = mapper;
@@ -32,6 +33,8 @@ namespace EventsExpress.Core.Services
             }
 
             User user = _mapper.Map<UserDTO, User>(userDto);
+
+
             user.Role = Db.RoleRepository.Filter(filter: r => r.Name == "User").FirstOrDefault();
             var result =  Db.UserRepository.Insert(user);
 
@@ -72,8 +75,11 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetByEmail(string email)
         {
-            var user = Db.UserRepository.Filter(filter: o => o.Email == email);
-            return _mapper.Map<UserDTO>(user.FirstOrDefault());
+            var user = Db.UserRepository.Filter(
+                filter: o => o.Email == email,
+                includeProperties: "Role"
+                ).FirstOrDefault();
+            return _mapper.Map<UserDTO>(user);
         }
 
         public IEnumerable<UserDTO> GetAll()
@@ -83,11 +89,48 @@ namespace EventsExpress.Core.Services
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
             return result;
         }
-        /*  public async Task<User> GetCurrentUserAsync(HttpContext context)
-          {
-              User user = await Db.UserRepository.Get(context.User)..FirstOrDefault();
 
-              return user;
-          }*/
+        public IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter)
+        {
+            var users = Db.UserRepository.Filter(filter: filter);
+
+            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+            return result;
+        }
+
+        public async Task<OperationResult> ChangeRole(Guid uId, Guid rId)
+        {
+            var role = Db.RoleRepository.Get(rId);
+            if (role == null)
+            {
+                return new OperationResult(false, "Invalid role Id", "roleId");
+            }
+
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
+            user.Role = role;
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> Unblock(Guid uId)
+        {
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
+            user.IsBlocked = true;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
     }
 }

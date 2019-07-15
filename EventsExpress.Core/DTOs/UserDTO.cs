@@ -8,7 +8,7 @@ namespace EventsExpress.Core.DTOs
 {
   public  class UserDTO
     {
-        public Guid id;
+        public Guid Id;
         public string Name;
         public string PasswordHash { get; set; }
         public string Email { get; set; }
@@ -17,7 +17,7 @@ namespace EventsExpress.Core.DTOs
         public DateTime Birthday { get; set; }
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
-        public User GetUser { get; set; }
+        
         public virtual Role Role { get; set; }
         public virtual Photo Photo { get; set; }
 
