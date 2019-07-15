@@ -19,6 +19,10 @@ namespace EventsExpress.Core.Services
             Db = uow;
         }
 
+        public IEnumerable<Category> GetAllCategories() => Db.CategoryRepository.Get();
+
+        public Category Get(Guid id) => Db.CategoryRepository.Get(id);
+
         public async  Task<OperationResult> Create(string title)
         {
             if (title == null)
