@@ -2,21 +2,18 @@
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
-   public class EventService : IEventService
+    public class EventService : IEventService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

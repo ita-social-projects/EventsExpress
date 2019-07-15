@@ -4,17 +4,15 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
-   public class UserService : IUserService
+    public class UserService : IUserService
     {
         private readonly IMapper _mapper;
         public IUnitOfWork Db { get; set; }
