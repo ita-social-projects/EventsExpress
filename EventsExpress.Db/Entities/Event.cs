@@ -23,7 +23,7 @@ namespace EventsExpress.Db.Entities
         public Guid OwnerId { get; set; }
         public virtual User Owner { get; set; }
 
-        public IEnumerable<UserEvent> Visitors { get; set; }
+        public ICollection<UserEvent> Visitors { get; set; } = new List<UserEvent>();
         public IEnumerable<EventCategory> Categories { get; set; }
 
         public IEnumerable<Rate> Rates { get; set; }

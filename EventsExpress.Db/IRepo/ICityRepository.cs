@@ -7,5 +7,6 @@ namespace EventsExpress.Db.IRepo
 {
     public interface ICityRepository : IRepository<City>
     {
+       
     }
 }
