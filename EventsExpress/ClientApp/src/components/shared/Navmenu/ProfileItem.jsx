@@ -94,41 +94,47 @@ export default function MenuAppBar() {
                     </div>
                 )}
                 {auth && (
-                    <div>
+                    <div className="d-flex flex-column align-items-center">
                         <Avatar
                             alt="Тут аватар"
-                            src="/static/images/avatar/1.jpg"
+                            src="/dima/dima.png"
+                        
+                        
                             className={classes.bigAvatar}
                         />
-                        <h4>Тут Юзернейм</h4>
-                        <h5>Тут стать</h5>
-                        <h5>Тут Вік</h5>
-                        <IconButton
-                            aria-label="Account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="#000000"
-                        >
-                            <Create />
-                        </IconButton>
-                        <IconButton
-                            aria-label="Account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="#000000"
-                        >
-                            <Notifications />
-                        </IconButton>
-                        <IconButton
-                            className={classes.button}
-                            aria-label="Edit"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="#000000"
-                        >
-                            <DirectionsRun />
-                        </IconButton>
+                        <h4>DimaKundiy</h4>
+                        <h5>Others</h5>
+                        <h5>13</h5>
+                        <div>
+                            <IconButton
+                                aria-label="Account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="#000000"
+                            >
+                                <Create />
+                            </IconButton>
+                            <IconButton
+                                aria-label="Account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="#000000"
+                            >
+                                <Notifications />
+                            </IconButton>
+                            <IconButton
+                                className={classes.button}
+                                aria-label="Edit"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="#000000"
+                            >
+                                <DirectionsRun />
+                            </IconButton>
+                        </div>
+                        
+                            
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorEl}
