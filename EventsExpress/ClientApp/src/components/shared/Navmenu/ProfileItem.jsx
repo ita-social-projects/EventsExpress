@@ -11,6 +11,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -24,8 +25,8 @@ const useStyles = makeStyles(theme => ({
     },
     bigAvatar: {
         margin: 10,
-        width: 90,
-        height: 90
+        width: 120,
+        height: 120
     }
 }));
 
@@ -64,33 +65,11 @@ export default function MenuAppBar() {
 
             <div>
                 {!auth && (
-                    <div>
-                        <IconButton
-                            aria-label="Account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="#000000"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right"
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right"
-                            }}
-                            open={open}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Sign In/Up</MenuItem>
-                        </Menu>
+                    <div className='d-flex justify-content-start '>
+                        <Button variant="outlined" color="primary" >
+                            Sign In/Up
+                        </Button>
+                        
                     </div>
                 )}
                 {auth && (
@@ -103,8 +82,7 @@ export default function MenuAppBar() {
                             className={classes.bigAvatar}
                         />
                         <h4>DimaKundiy</h4>
-                        <h5>Others</h5>
-                        <h5>13</h5>
+                        
                         <div>
                             <IconButton
                                 aria-label="Account of current user"
