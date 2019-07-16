@@ -1,36 +1,32 @@
-﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import React from 'react';
+
+import { combineReducers } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
+
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import { reducer as formReducer } from 'redux-form';
-import * as Auth from '../reducers/login';
+import thunk from 'redux-thunk';
+import rootReducers from '../reducers/root'; 
 
-export default function configureStore(history, initialState) {
-    const reducers = {
-        auth: Auth.reducer,
-        form: formReducer
-};
 
-  const middleware = [
-    thunk,
-    routerMiddleware(history)
-  ];
+function configureStore(history, initialState){
 
-  // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
-    enhancers.push(window.devToolsExtension());
-    }
+    const middleware = [
+        thunk,
+        routerMiddleware(history)
+      ];
 
-  const rootReducer = combineReducers({
-    ...reducers,
-      routing: routerReducer
-      
-  });
+    const enhancers = [];
+    const isDevelopment = process.env.NODE_ENV === 'development';
+      if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
+        enhancers.push(window.devToolsExtension());
+      }
 
-  return createStore(
-    rootReducer,
-    initialState,
-    compose(applyMiddleware(...middleware), ...enhancers)
-  );
+
+    return createStore(
+        rootReducers,
+        initialState,
+        compose(applyMiddleware(...middleware), ...enhancers)
+      );
 }
+
+export default configureStore;

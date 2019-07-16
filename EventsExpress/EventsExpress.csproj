@@ -20,16 +20,19 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\components\events\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\components\events\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventsExpress.Core\EventsExpress.Core.csproj" />
+    <EmbeddedResource Remove="ClientApp\src\components\events\**" />
+    <None Remove="ClientApp\src\components\events\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\events\" />
+    <ProjectReference Include="..\EventsExpress.Core\EventsExpress.Core.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

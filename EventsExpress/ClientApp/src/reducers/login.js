@@ -1,31 +1,34 @@
-﻿import { requestTOKEN, receiveTOKEN, receiveERROR } from '../constants/index'
+import {
+  SET_LOGIN_PENDING,
+  SET_LOGIN_SUCCESS,
+  SET_LOGIN_ERROR
+} from "../actions/login";
 
+export const reducer = (
+  state = {
+    isLoginSuccess: false,
+    isLoginPending: false,
+    loginError: null
+  },
+  action
+) => {
+  switch (action.type) {
+    case SET_LOGIN_PENDING:
+      return Object.assign({}, state, {
+        isLoginPending: action.isLoginPending
+      });
 
-const initialState = { isReqested: false, isAuthorized: false, token: "", error: "" };
+    case SET_LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        isLoginSuccess: action.isLoginSuccess
+      });
 
-export const reducer = (state = initialState, action) => {
+    case SET_LOGIN_ERROR:
+      return Object.assign({}, state, {
+        loginError: action.loginError
+      });
 
-    if (action.type === requestTOKEN) {
-        return {
-            ...state,
-            isReqested: true
-        };
-    }
-
-    if (action.type === receiveTOKEN) {
-        return {
-            ...state,
-            isAuthorized: true,
-            token: action.payload
-        };
-    }
-
-    if (action.type === receiveERROR) {
-        return {
-            ...state,
-            error: action.payload
-        };
-    }
-
-    return state;
-};
+    default:
+      return state;
+  }
+}

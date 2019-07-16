@@ -1,41 +1,47 @@
-﻿import { requestTOKEN, receiveTOKEN, receiveERROR } from '../constants/index';
+export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
+export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
+export const SET_LOGIN_ERROR = "SET_LOGIN_ERROR";
 
-export const actionCreators = {
-    login: (email, password) => async (dispatch) => {
+export default function login(email, password) {
+  return dispatch => {
+    dispatch(setLoginPending(false));
+    callLoginApi(email, password, error => {
+      if (!error) {
+        dispatch(setLoginSuccess(true));
+      } else {
+        dispatch(setLoginError(error));
+      }
+    });
+  };
+}
 
-        console.log('reqested with: ' + email);
-        dispatch({ type: requestTOKEN });
+function setLoginPending(isLoginPending) {
+  return {
+    type: SET_LOGIN_PENDING,
+    isLoginPending
+  };
+}
 
-        const url = 'https://localhost:44315/api/Authentication/';
-        const reqestOptions = {
-            method: 'post',
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({ Email: email, Password: password })
-        };
+function setLoginSuccess(isLoginSuccess) {
+  return {
+    type: SET_LOGIN_SUCCESS,
+    isLoginSuccess
+  };
+}
 
-        const response = await fetch(url, reqestOptions);
+function setLoginError(loginError) {
+  return {
+    type: SET_LOGIN_ERROR,
+    loginError
+  };
+}
 
-        console.log(response);
-
-
-        if (response.ok) {
-            const token = await response.text();
-
-            console.log(token);
-
-            dispatch({ type: receiveTOKEN, payload: token });
-        }
-        else {
-
-            const error = await response.text();
-            console.log(error);
-
-            dispatch({ type: receiveERROR, payload: error });
-        }
-
+function callLoginApi(email, password, callback) {
+  setTimeout(() => {
+    if (email === "admin@example.com" && password === "admin") {
+      return callback(null);
+    } else {
+      return callback(new Error("Invalid email and password"));
     }
-
-
-};
+  }, 1000);
+}
