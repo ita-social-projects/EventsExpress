@@ -15,28 +15,30 @@ namespace EventsExpress.Core.Services
 {
     public class EventService : IEventService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork Db;
         private readonly IMapper _mapper;
         private readonly IHostingEnvironment _appEnvironment;
+        private readonly IPhotoService _photoService;
 
         public EventService(
             IUnitOfWork unitOfWork, 
             IMapper mapper, 
-            IHostingEnvironment hostingEnvironment
+            IHostingEnvironment hostingEnvironment,
+            IPhotoService photoSrv
             )
         {
-            _unitOfWork = unitOfWork;
+            Db = unitOfWork;
             _mapper = mapper;
-       
+            _photoService = photoSrv;
             _appEnvironment = hostingEnvironment;
         }
        
 
-        public bool Exists(Guid id) => (_unitOfWork.EventRepository.Get(id) != null);
+        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
-            var ev = _unitOfWork.EventRepository
+            var ev = Db.EventRepository
                .Filter( filter: e => e.Id == eventId, includeProperties: "Visitors")
                .FirstOrDefault();
 
@@ -51,7 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
-            await _unitOfWork.SaveAsync();
+            await Db.SaveAsync();
 
             return new OperationResult(true);
         }
@@ -62,18 +64,18 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Id field is '0'", "");
             }
-            Event ev = _unitOfWork.EventRepository.Get(id);
+            Event ev = Db.EventRepository.Get(id);
             if (ev == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
 
-            var result = _unitOfWork.EventRepository.Delete(ev);
-            await _unitOfWork.SaveAsync();
+            var result = Db.EventRepository.Delete(ev);
+            await Db.SaveAsync();
 
             if (result == null)
             {
-                return new OperationResult(true, "Ok", "");
+                return new OperationResult(true);
             }
             else {
                 return new OperationResult(false, "Error!", "");
@@ -82,7 +84,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> UpcomingEvents(int? num)
         {
-            var ev = _unitOfWork.EventRepository.Filter(
+            var ev = Db.EventRepository.Filter(
                 skip: 0,
                 take: num,
                 filter: e => e.DateTo <= DateTime.UtcNow,
@@ -96,7 +98,7 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> Create(EventDTO e)
         {
             Event evnt = _mapper.Map<EventDTO, Event>(e);   
-            evnt = _unitOfWork.EventRepository.Insert(evnt);
+            evnt = Db.EventRepository.Insert(evnt);
 
             // !uncoment when _photoservice will be done
             //if (e.Photo != null)
@@ -109,9 +111,9 @@ namespace EventsExpress.Core.Services
                     await e.Photo.CopyToAsync(fileStream);
                 }
 
-                Photo photo = _unitOfWork.PhotoRepository.Insert(new Photo { Path = path });
+                Photo photo = Db.PhotoRepository.Insert(new Photo { Path = path });
                 evnt.Photo = photo;
-                _unitOfWork.EventRepository.Update(evnt);
+                Db.EventRepository.Update(evnt);
             }
 
 
@@ -122,17 +124,17 @@ namespace EventsExpress.Core.Services
                 eventCategories.Add(new EventCategory
                 {
                     Event = evnt,
-                    Category = _unitOfWork.CategoryRepository.GetByTitle(item)
+                    Category = Db.CategoryRepository.GetByTitle(item)
                 });
             }
             evnt.Categories = eventCategories;
-            await _unitOfWork.SaveAsync();
+            await Db.SaveAsync();
             return new OperationResult(true, "Ok", "");
         }
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = _unitOfWork.EventRepository.Get(e.EventId);
+            var evnt = Db.EventRepository.Get(e.EventId);
             evnt.Title = e.Title;
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
@@ -147,9 +149,9 @@ namespace EventsExpress.Core.Services
                     await e.Photo.CopyToAsync(fileStream);
                 }
 
-                Photo photo = _unitOfWork.PhotoRepository.Insert(new Photo { Path = path });
+                Photo photo = Db.PhotoRepository.Insert(new Photo { Path = path });
                 evnt.Photo = photo;
-                _unitOfWork.EventRepository.Update(evnt);
+                Db.EventRepository.Update(evnt);
             }
             List<EventCategory> eventCategories = new List<EventCategory>();
 
@@ -158,39 +160,39 @@ namespace EventsExpress.Core.Services
                 eventCategories.Add(new EventCategory
                 {
                     Event = evnt,
-                    Category = _unitOfWork.CategoryRepository.GetByTitle(item)
+                    Category = Db.CategoryRepository.GetByTitle(item)
                 });
             }
             evnt.Categories = eventCategories;
-            await _unitOfWork.SaveAsync();
+            await Db.SaveAsync();
             return new OperationResult(true, "Ok", "");
         }
 
         public IEnumerable<EventDTO> Events()
         {
-            var events = _unitOfWork.EventRepository.Get().ToList();
+            var events = Db.EventRepository.Get().ToList();
 
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
         }
 
         public EventDTO EventById(Guid eventId)
         {
-            var evv = _unitOfWork.EventRepository.Get(eventId);
+            var evv = Db.EventRepository.Get(eventId);
             return _mapper.Map<EventDTO>(evv);
         }
 
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
         {  
-            var evv = _unitOfWork.EventRepository.Filter(filter: e => e.OwnerId == userId);
+            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId);
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
 
         }
 
         public EventDTO Details(Guid event_id)
         {
-            var ev = _unitOfWork.EventRepository.Filter(filter: e => e.Id == event_id, includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault();
+            var ev = Db.EventRepository.Filter(filter: e => e.Id == event_id, includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault();
             List<string> Categories = new List<string>();
-            foreach (var x in _unitOfWork.CategoryRepository.EventCategories(event_id))
+            foreach (var x in Db.CategoryRepository.EventCategories(event_id))
             {
                 Categories.Add(x.Name);
             }

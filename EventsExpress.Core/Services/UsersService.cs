@@ -29,14 +29,12 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Emali is exist in database", "Email");
             }
-
             User user = _mapper.Map<UserDTO, User>(userDto);
-
-
+            
             user.Role = Db.RoleRepository.Filter(filter: r => r.Name == "User").FirstOrDefault();
             var result =  Db.UserRepository.Insert(user);
 
-            if (result==user)
+            if (result.Email == user.Email && result.Id != null)
             {
                 await Db.SaveAsync();
                 return new OperationResult(true, "Registration succeeded", "");
@@ -47,11 +45,16 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Update(UserDTO userDTO)
         {
-            if (string.IsNullOrEmpty(userDTO.Name))
-                return new OperationResult(false, "Operator name cannot be empty", "");
-            var check = Db.UserRepository.Filter(filter: o => o.Name == userDTO.Name).FirstOrDefault();
-            if (check != null)
-                return new OperationResult(false, "Operator name already exist", "");
+            if (string.IsNullOrEmpty(userDTO.Email))
+            {
+                return new OperationResult(false, "EMAIL cannot be empty", "Email");
+            }
+            
+            if (!Db.UserRepository.Get().Any(u => u.Id == userDTO.Id))
+            {
+                return new OperationResult(false, "Not found", "");
+            }
+            
             var result = _mapper.Map<User>(userDTO);
             try
             {
