@@ -73,6 +73,7 @@ namespace EventsExpress
             });
 
             services.AddTransient<IAuthServicre, AuthServicre>();
+            services.AddTransient<ICategoryService, CategoryService>();
 
         }
 
