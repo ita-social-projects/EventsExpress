@@ -1,15 +1,36 @@
-﻿import { reduxForm } from 'redux-form';
-import { Login } from '../components/account/LoginForm'
-const mapStateToProps = (state) => ({
-    ...state
-});
+﻿import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import Login  from '../components/login';
+import login from '../actions/login';
 
-const mapDispatchToProps = (dispatch) => ({
-    login: () => dispatch(actionCreators)
-});
 
-export const LoginForm = reduxForm({
-    form: 'login-form'
-})(Login)
+class LoginWrapper extends Component {
+  submit = values => {
+    console.log(values);
+    this.props.login(values.email, values.password);
+  };
+  render() {
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+    let { isLoginPending, isLoginSuccess, loginError } = this.props;
+    
+    return <Login onSubmit={this.submit} />;
+  }
+}
+const mapStateToProps = state => {
+    return {
+      ...state,
+    isLoginPending: state.login.isLoginPending,
+    isLoginSuccess: state.login.isLoginSuccess,
+    loginError: state.login.loginError
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (email, password) => dispatch(login(email, password))
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginWrapper);

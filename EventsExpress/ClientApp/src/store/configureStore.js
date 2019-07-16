@@ -2,11 +2,15 @@
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
-import * as Auth from '../reducers/login';
+import * as Login from '../reducers/login';
+import * as User from '../reducers/user';
+import * as Register from '../reducers/register'
 
 export default function configureStore(history, initialState) {
     const reducers = {
-        auth: Auth.reducer,
+        user: User.reducer,
+        login: Login.reducer,
+        register: Register.reducer, 
         form: formReducer
 };
 
