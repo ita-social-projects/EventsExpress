@@ -1,6 +1,6 @@
 import React from 'react';
 import './left-sidebar.css';
-import HeaderProfile from '../header-profile';
+import HeaderProfileWrapper from '../../containers/header-profile';
 import { Link } from 'react-router-dom';
 
 const NavItem = ({to, icon, text}) => {
@@ -22,7 +22,7 @@ const LeftSidebar = () =>{
     <div id="colorlib-page">
             <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  
             <div id="colorlib-aside" role="complementary" className="js-fullheight">
-                <HeaderProfile/>
+                <HeaderProfileWrapper/>
                 <nav id="colorlib-main-menu" role="navigation">
 
                     <ul className="list-unstyled">

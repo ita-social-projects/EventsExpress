@@ -1,17 +1,29 @@
+import EventsExpressService from '../services/EventsExpressService';
+
+
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
 export const SET_REGISTER_ERROR = "SET_REGISTER_ERROR";
 
+
+const api_serv = new EventsExpressService();
+
+
 export default function register(email, password) {
   return dispatch => {
     dispatch(setRegisterPending(false));
-    callRegisterApi(email, password, error => {
-      if (!error) {
-        dispatch(setRegisterSuccess(true));
-      } else {
-        dispatch(setRegisterError(error));
-      }
-    });
+
+    const res = api_serv.setResource('Authentication/login', {Email: email, Password: password});
+    res.then(response => {
+      if(response.error == null){
+          dispatch(setUser(response));
+          
+          dispatch(setLoginSuccess(true));
+        }else{
+          dispatch(setLoginError(response.error));
+        }
+      });
+
   };
 }
 

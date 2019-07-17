@@ -4,6 +4,10 @@ import {
   SET_LOGIN_ERROR
 } from "../actions/login";
 
+import { 
+  SET_LOGOUT }
+  from '../actions/logout';
+
 export const reducer = (
   state = {
     isLoginSuccess: false,
@@ -26,6 +30,11 @@ export const reducer = (
     case SET_LOGIN_ERROR:
       return Object.assign({}, state, {
         loginError: action.loginError
+      });
+
+    case SET_LOGOUT:
+      return Object.assign({}, state, {
+        isLoginSuccess: !action.isLoginSuccess
       });
 
     default:
