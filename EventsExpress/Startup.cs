@@ -71,9 +71,11 @@ namespace EventsExpress
 
             services.AddTransient<IAuthServicre, AuthServicre>();
 
+            
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICityService, CityService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPhotoService, PhotoService> ();
 
 
@@ -88,9 +90,7 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddTransient<IAuthServicre, AuthServicre>();
-            services.AddTransient<ICategoryService, CategoryService>();
-
+            
                        
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
