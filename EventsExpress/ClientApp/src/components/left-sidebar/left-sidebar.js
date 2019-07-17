@@ -21,7 +21,7 @@ const LeftSidebar = () =>{
     return (
     <div id="colorlib-page">
             <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  
-            <aside id="colorlib-aside" role="complementary" className="js-fullheight">
+            <div id="colorlib-aside" role="complementary" className="js-fullheight">
                 <HeaderProfile/>
                 <nav id="colorlib-main-menu" role="navigation">
 
@@ -35,7 +35,7 @@ const LeftSidebar = () =>{
                 </ul>
             </nav>
             
-        </aside> </div>
+        </div> </div>
             );
 }
 
