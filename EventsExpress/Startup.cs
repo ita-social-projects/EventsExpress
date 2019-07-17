@@ -87,6 +87,10 @@ namespace EventsExpress
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IAuthServicre, AuthServicre>();
+            services.AddTransient<ICategoryService, CategoryService>();
+
                        
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
