@@ -20,7 +20,6 @@ export const validate = values => {
   ) {
     errors.email = 'Invalid email address'
   }
-  console.log(values, errors);
   if(values.password!== values.RepeatPassword){
     errors.RepeatPassword = 'Passwords do not match';
   }

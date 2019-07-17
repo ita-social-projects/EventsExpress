@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Create from "@material-ui/icons/Create";
@@ -11,10 +11,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from '@material-ui/core/Avatar';
-import './header-profile.css';
-import ReactDOM from 'react-dom';
+import Button from '@material-ui/core/Button';
 import ModalWind from '../modal-wind';
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,12 +26,12 @@ const useStyles = makeStyles(theme => ({
     },
     bigAvatar: {
         margin: 10,
-        width: 90,
-        height: 90
+        width: 120,
+        height: 120
     }
 }));
 
-export default function HeaderProfile() {
+export default function MenuAppBar() {
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -68,46 +66,46 @@ export default function HeaderProfile() {
 
             <div>
                 {!auth && (
-                    <div>
-                        <ModalWind />
-                    </div>
+                    <ModalWind/>
                 )}
                 {auth && (
-                    <div>
+                    <div className="d-flex flex-column align-items-center">
                         <Avatar
                             alt="Тут аватар"
-                            src="/static/images/avatar/1.jpg"
+                            src="/dima/dima.png"
+                        
+                        
                             className={classes.bigAvatar}
                         />
-                        <h4>Тут Юзернейм</h4>
-                        <h5>Тут стать</h5>
-                        <h5>Тут Вік</h5>
-                        <IconButton
-                            aria-label="Account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="#000000"
-                        >
-                            <Create />
-                        </IconButton>
-                        <IconButton
-                            aria-label="Account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="#000000"
-                        >
-                            <Notifications />
-                        </IconButton>
-                        <IconButton
-                            className={classes.button}
-                            aria-label="Edit"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="#000000"
-                        >
-                            <DirectionsRun />
-                        </IconButton>
+                        <h4>DimaKundiy</h4>
+                        
+                        <div>
+                            <IconButton
+                                aria-label="Account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                            >
+                                <Create />
+                            </IconButton>
+                            <IconButton
+                                aria-label="Account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                            >
+                                <Notifications />
+                            </IconButton>
+                            <IconButton
+                                className={classes.button}
+                                aria-label="Edit"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                            >
+                                <DirectionsRun />
+                            </IconButton>
+                        </div>
+                        
+                            
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorEl}
