@@ -15,6 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using AutoMapper;
+using EventsExpress.Mapping;
+using System.Reflection;
 
 namespace EventsExpress
 {
@@ -63,7 +66,7 @@ namespace EventsExpress
                     .GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+            services.AddTransient<IUserService, UserService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the React files will be served from this directory
@@ -73,7 +76,7 @@ namespace EventsExpress
             });
 
             services.AddTransient<IAuthServicre, AuthServicre>();
-
+            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
