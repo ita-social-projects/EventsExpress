@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import './home.css';
 import Event from '../event';
- 
+import SelectCategories from '../SelectCategories/SelectCategories';
 export default class Home extends Component{
     
     render(){
     return(
         <div>
+            <SelectCategories/>
             <Event 
                 title="A Loving Heart is the Truest Wisdom"
                 date_from="June 28, 2019"
