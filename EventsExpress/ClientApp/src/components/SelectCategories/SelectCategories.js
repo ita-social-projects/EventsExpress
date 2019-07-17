@@ -1,5 +1,7 @@
-﻿import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+﻿import React from 'react'
+import { Field, reduxForm } from 'redux-form'
+import Multiselect from 'react-widgets/lib/Multiselect'
+import Button from "@material-ui/core/Button";
 import clsx from 'clsx';
 import Select from 'react-select';
 import { emphasize, makeStyles, useTheme } from '@material-ui/core/styles';
@@ -11,15 +13,12 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import PropTypes from 'prop-types';
-import Button from "@material-ui/core/Button";
-
 const suggestions = [
     { label: 'Summer' },
     { label: 'Mount' },
     { label: 'Party' },
-    { label: 'Golf' },
-    { label: 'Swimming' },
-    { label: 'Gaming' }, 
+    { label: 'Gaming' },
+    { label: 'Golf' }
 ].map(suggestion => ({
     value: suggestion.label,
     label: suggestion.label,
@@ -28,7 +27,7 @@ const suggestions = [
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
-        height: 150,
+        height: 250,
     },
     input: {
         display: 'flex',
@@ -140,7 +139,7 @@ function Option(props) {
             selected={props.isFocused}
             component="div"
             style={{
-                fontWeight: props.isSelected ? 300 : 200,
+                fontWeight: props.isSelected ? 500 : 400,
             }}
             {...props.innerProps}
         >
@@ -244,13 +243,15 @@ const components = {
     ValueContainer,
 };
 
- let SelectCategories=props => {
+
+
+
+function SelectCategories(props) {
+   
+    const { handleSubmit, pristine, submitting } = props
     const classes = useStyles();
     const theme = useTheme();
-    const [setSingle] = React.useState(null);
     const [multi, setMulti] = React.useState(null);
-
-
     function handleChangeMulti(value) {
         setMulti(value);
     }
@@ -264,46 +265,45 @@ const components = {
             },
         }),
     };
-     const { handleSubmit, pristine, submitting } = props
-     return (
-         <div className="auth">
-             <form onSubmit={handleSubmit}>
-        <div className={classes.root}>
-            <NoSsr>
-                <div className={classes.divider} />
-                <Select
-                    classes={classes}
-                    styles={selectStyles}
-                    inputId="react-select-multiple"
-                    TextFieldProps={{
-                        label: 'Categories',
-                        InputLabelProps: {
-                            htmlFor: 'react-select-multiple',
-                            shrink: true,
-                        },
-                        placeholder: 'Select what are you interested in:',
-                    }}
-                    options={suggestions}
-                    components={components}
-                    value={multi}
-                    onChange={handleChangeMulti}
-                    isMulti
-                         />
-                         <div>
-                             <Button  type="submit"  color="primary">
-                               Save
-                             </Button>
-                         </div>
-                     </NoSsr>
-                 </div>
-                
-             </form>
-         </div>
-    );
-}
-
-SelectCategories = reduxForm({
-    form: 'Select-Categories'  // a unique identifier for this form
+    const renderMultiselect = ({ input, data, valueField, textField }) =>
+        <Select
+            classes={classes}
+            styles={selectStyles}
+            inputId="react-select-multiple"
+            TextFieldProps={{
+                label: 'Categories',
+                InputLabelProps: {
+                    htmlFor: 'react-select-multiple',
+                    shrink: true,
+                },
+                placeholder: 'Select multiple countries',
+            }}
+            options={suggestions}
+            components={components}
+            value={multi}
+            onChange={handleChangeMulti}
+            isMulti
+        />
+    return ( 
+        <form onSubmit={handleSubmit}>
+                <div className={classes.root}>
+                    <NoSsr> 
+                        <div className={classes.divider} />
+                        <Field
+                            name="Categories"
+                            component={renderMultiselect}
+                            data={suggestions}
+                    />
+                    <div>
+                        <Button type="submit" color="primary" disabled={ submitting} >
+                            Save
+                        </Button >
+                    </div>
+                  </NoSsr>
+            </div>
+        </form>  
+  )
+} 
+export default reduxForm({
+    form: 'SelectCategories',  // a unique identifier for this form
 })(SelectCategories)
-
-export default SelectCategories;

@@ -17,7 +17,7 @@ function selectCategoriesError(IsSelectCategoriesError) {
         IsSelectCategoriesError
     };
 }
-function callSelectCategoriesApi(categories[], callback) {
+function callSelectCategoriesApi(categories[ ], callback) {
     setTimeout(() => {
         if (categories[] !==0) {
             return callback(null);
