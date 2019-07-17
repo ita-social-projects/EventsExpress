@@ -1,13 +1,7 @@
 ﻿using EventsExpress.Db.Entities;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace EventsExpress.Db.DbInitialize
 {

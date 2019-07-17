@@ -15,6 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using AutoMapper;
+using EventsExpress.Mapping;
+using System.Reflection;
 
 namespace EventsExpress
 {
@@ -30,7 +33,7 @@ namespace EventsExpress
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region Authorization and Autontification configuring:
+            #region Authorization and Autontification configuring...
 
             var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTSecretKey"));
 
@@ -62,18 +65,30 @@ namespace EventsExpress
                     //.GetConnectionString("AzureSQLServer")));
                     .GetConnectionString("DefaultConnection")));
 
+            #region Configure our services...
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddTransient<IAuthServicre, AuthServicre>();
+
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<IPhotoService, PhotoService> ();
+
+
+            #endregion
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
-
-            services.AddTransient<IAuthServicre, AuthServicre>();
-
+                       
+            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
