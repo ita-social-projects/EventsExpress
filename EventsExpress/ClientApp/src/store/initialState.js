@@ -20,6 +20,16 @@ const initialState = {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
+    },
+    add_event:{
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

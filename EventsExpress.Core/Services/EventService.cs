@@ -118,14 +118,17 @@ namespace EventsExpress.Core.Services
 
 
             List<EventCategory> eventCategories = new List<EventCategory>();
-         
-            foreach (var item in e.Categories)
+
+            if (e.Categories != null)
             {
-                eventCategories.Add(new EventCategory
+                foreach (var item in e.Categories)
                 {
-                    Event = evnt,
-                    Category = Db.CategoryRepository.GetByTitle(item)
-                });
+                    eventCategories.Add(new EventCategory
+                    {
+                        Event = evnt,
+                        Category = Db.CategoryRepository.GetByTitle(item)
+                    });
+                }
             }
             evnt.Categories = eventCategories;
             await Db.SaveAsync();
@@ -134,7 +137,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = Db.EventRepository.Get(e.EventId);
+            var evnt = Db.EventRepository.Get(e.Id);
             evnt.Title = e.Title;
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
@@ -155,13 +158,16 @@ namespace EventsExpress.Core.Services
             }
             List<EventCategory> eventCategories = new List<EventCategory>();
 
-            foreach (var item in e.Categories)
+            if (e.Categories != null)
             {
-                eventCategories.Add(new EventCategory
+                foreach (var item in e.Categories)
                 {
-                    Event = evnt,
-                    Category = Db.CategoryRepository.GetByTitle(item)
-                });
+                    eventCategories.Add(new EventCategory
+                    {
+                        Event = evnt,
+                        Category = Db.CategoryRepository.GetByTitle(item)
+                    });
+                }
             }
             evnt.Categories = eventCategories;
             await Db.SaveAsync();
@@ -170,7 +176,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> Events()
         {
-            var events = Db.EventRepository.Get().ToList();
+            var events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country").ToList();
 
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
         }
