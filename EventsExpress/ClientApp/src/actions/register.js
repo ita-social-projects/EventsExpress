@@ -1,29 +1,24 @@
 import EventsExpressService from '../services/EventsExpressService';
 
-
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
 export const SET_REGISTER_ERROR = "SET_REGISTER_ERROR";
 
-
 const api_serv = new EventsExpressService();
-
 
 export default function register(email, password) {
   return dispatch => {
+    console.log('sdagsag');
     dispatch(setRegisterPending(false));
 
-    const res = api_serv.setResource('Authentication/login', {Email: email, Password: password});
+    const res = api_serv.setRegister({Email: email, Password: password});
     res.then(response => {
       if(response.error == null){
-          dispatch(setUser(response));
-          
-          dispatch(setLoginSuccess(true));
+          dispatch(setRegisterSuccess(true));
         }else{
-          dispatch(setLoginError(response.error));
+          dispatch(setRegisterError(response.error));
         }
       });
-
   };
 }
 
@@ -34,10 +29,10 @@ function setRegisterPending(isRegisterPending) {
   };
 }
 
-function setRegisterSuccess(isRegisterSuccess) {
+function setRegisterSuccess(data) {
   return {
     type: SET_REGISTER_SUCCESS,
-    isRegisterSuccess
+    payload: data
   };
 }
 
@@ -46,14 +41,4 @@ function setRegisterError(registerError) {
     type:SET_REGISTER_ERROR,
     registerError
   };
-}
-
-function callRegisterApi(email, password, callback) {
-  setTimeout(() => {
-    if (email !== "admin@example.com" && password) {
-      return callback(null);
-    } else {
-      return callback(new Error("This email is already exsist"));
-    }
-  }, 1000);
 }

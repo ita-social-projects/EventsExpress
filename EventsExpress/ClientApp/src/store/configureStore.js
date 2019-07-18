@@ -1,18 +1,9 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import { reducer as formReducer } from 'redux-form';
-import * as Login from '../reducers/login';
-import * as User from '../reducers/user';
-import * as Register from '../reducers/register'
+import rootReducers from '../reducers/root';
 
 export default function configureStore(history, initialState) {
-    const reducers = {
-        user: User.reducer,
-        login: Login.reducer,
-        register: Register.reducer, 
-        form: formReducer
-};
 
   const middleware = [
     thunk,
@@ -27,9 +18,7 @@ export default function configureStore(history, initialState) {
     }
 
   const rootReducer = combineReducers({
-    ...reducers,
-      routing: routerReducer
-      
+    ...rootReducers
   });
 
   return createStore(

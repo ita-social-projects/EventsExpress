@@ -5,6 +5,27 @@ export default class EventsExpressService{
 
     _baseUrl = 'http://localhost:64144/api/';
 
+    setEvent = async (data) => {
+        
+    }
+
+
+    setLogin = async (data) => {
+        const res = await this.setResource('Authentication/login', data);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return await res.json();
+    }
+
+    setRegister = async (data) => {
+        const res = await this.setResource('Authentication/register', data);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    }
+
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url);
 
@@ -14,8 +35,7 @@ export default class EventsExpressService{
         return await res.json();
     }
 
-    setResource = async (url, data) =>{
-        const res = await fetch(
+    setResource =  (url, data) => fetch(
             this._baseUrl + url,
             {
                 method: "post",
@@ -25,12 +45,5 @@ export default class EventsExpressService{
                 body: JSON.stringify(data)
             }
         );
-        if(!res.ok){
-            return await { error: `Could not fetch ${this._baseUrl + url}` +
-            `, received ${res.status}`};
-        }
-        
-        return await res.json();
-    }
 
 }

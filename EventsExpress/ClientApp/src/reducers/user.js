@@ -1,5 +1,6 @@
 import initialState from '../store/initialState';
-import {SET_USER, SET_LOGOUT} from '../actions/login';
+import {SET_USER} from '../actions/login';
+import {SET_LOGOUT} from '../actions/logout';
 
 export const reducer = (state, action) => {
     state = state || initialState.user;

@@ -12,16 +12,17 @@ class LoginWrapper extends Component {
 
     let { isLoginPending, isLoginSuccess, loginError } = this.props;
     
-    return <Login onSubmit={this.submit} />;
+    return <div>
+              <Login onSubmit={this.submit} />
+              {loginError && 
+              <p className="text-danger text-center">{loginError}</p>
+              }
+           </div>
+    ;
   }
 }
 const mapStateToProps = state => {
-    return {
-      ...state,
-    isLoginPending: state.login.isLoginPending,
-    isLoginSuccess: state.login.isLoginSuccess,
-    loginError: state.login.loginError
-  };
+    return state.login;
 };
 
 const mapDispatchToProps = dispatch => {
