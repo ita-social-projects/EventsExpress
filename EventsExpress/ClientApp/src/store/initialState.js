@@ -21,7 +21,6 @@ const initialState = {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
-        loginError: {}
     },
     
     editUsername: {

@@ -12,7 +12,7 @@ const rootReducers = {
     routing: routerReducer,
     form: formReducer,
     login: LoginReducer,
-    editUsername: Edit.reducer
+    editUsername: Edit.reducer,
     form: formReducer,
     login: LoginReducer,
     register: Register.reducer
