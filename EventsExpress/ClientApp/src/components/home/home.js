@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import './home.css';
 import Event from '../event';
- 
+import Profile from '../profile/index'
 export default class Home extends Component{
     
-    render(){
+    render() {
+        let user = {
+            id: "1",
+            Name: "DimaKundiy"
+        }
     return(
         <div>
+            <Profile user={user} />
             <Event 
                 title="A Loving Heart is the Truest Wisdom"
                 date_from="June 28, 2019"
