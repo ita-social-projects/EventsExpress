@@ -1,4 +1,5 @@
 
+
 const initialState = {
     user:{
         id: null,
@@ -15,7 +16,11 @@ const initialState = {
         isLoginPending: false,
         isLoginSuccess: false,
         loginError: {}
-    }
+    },
+    SelectCategories: {
+         IsSelectCategoriesSeccess: false,
+         IsSelectCategoriesError: {}
+     }
 };
 
 export default initialState;

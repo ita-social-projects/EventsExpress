@@ -5,7 +5,7 @@ import {
 } from "../actions/login";
 
 export const reducer = (
-  state = {
+    state = {
     isLoginSuccess: false,
     isLoginPending: false,
     loginError: null
