@@ -21,6 +21,13 @@ const initialState = {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
+    },
+    
+    editUsername: {
+        isEditUsernamePending: false,
+        isEditUsernameSuccess: false,
+        EditUsernameError: {}
+    }
      },
     SelectCategories: {
          IsSelectCategoriesSeccess: false,

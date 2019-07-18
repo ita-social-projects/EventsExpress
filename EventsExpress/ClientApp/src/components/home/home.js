@@ -2,11 +2,19 @@ import React, { Component } from 'react';
 import './home.css';
 import Event from '../event';
 import SelectCategoriesWrapper from '../../containers/SelectCategories'
+import Profile from '../profile/index'
 export default class Home extends Component{
     
-    render(){
+    render() {
+        let user = {
+            id: "1",
+            Name: "DimaKundiy",
+            Gender: 'Helicopter',
+            Age:'41'
+        }
     return(
         <div>
+            <Profile user={user} />
             <SelectCategoriesWrapper/>
             <Event 
                 title="A Loving Heart is the Truest Wisdom"
