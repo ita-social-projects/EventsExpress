@@ -63,7 +63,7 @@ namespace EventsExpress
                     .GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-
+            services.AddTransient<IUsersService, UsersService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the React files will be served from this directory
