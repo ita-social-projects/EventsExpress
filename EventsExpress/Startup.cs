@@ -70,13 +70,14 @@ namespace EventsExpress
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IAuthServicre, AuthServicre>();
+            services.AddTransient<IEmailService, EmailService>();
 
-            
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPhotoService, PhotoService> ();
+            
 
 
             #endregion

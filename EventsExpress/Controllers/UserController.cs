@@ -53,7 +53,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeRole(Guid userId)
+        public async Task<IActionResult> Unblock(Guid userId)
         {
 
             var result = await _userService.Unblock(userId);
