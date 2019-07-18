@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Create from "@material-ui/icons/Create";
@@ -14,70 +14,31 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ModalWind from '../modal-wind';
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexGrow: 1
-    },
-    bigAvatar: {
-        margin: 10,
-        width: 120,
-        height: 120
-    }
-}));
+import './header-profile.css';
 
-export default function MenuAppBar() {
-    const classes = useStyles();
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
+export default class HeaderProfile extends Component {
 
-    function handleChange(event) {
-        setAuth(event.target.checked);
-    }
 
-    function handleMenu(event) {
-        setAnchorEl(event.currentTarget);
-    }
-
-    function handleClose() {
-        setAnchorEl(null);
-    }
-
+    render(){
+ 
+        const { id, name } = this.props.user;
+        const { onClick } = this.props;
+    
     return (
-        <div className={classes.root}>
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={auth}
-                            onChange={handleChange}
-                            aria-label="LoginSwitch"
-                        />
-                    }
-                    label={auth ? "Logout" : "Login"}
-                />
-            </FormGroup>
-
+        <div className='root'>
             <div>
-                {!auth && (
+                {!id && (
                     <ModalWind/>
                 )}
-                {auth && (
+                {id && (
                     <div className="d-flex flex-column align-items-center">
                         <Avatar
                             alt="Тут аватар"
                             src="/dima/dima.png"
                         
-                        
-                            className={classes.bigAvatar}
+                            className='bigAvatar'
                         />
-                        <h4>DimaKundiy</h4>
+                        <h4>{name}</h4>
                         
                         <div>
                             <IconButton
@@ -95,37 +56,21 @@ export default function MenuAppBar() {
                                 <Notifications />
                             </IconButton>
                             <IconButton
-                                className={classes.button}
+                                className='menuButton'
                                 aria-label="Edit"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
-                                onClick={handleMenu}
+                                onClick={onClick}
                             >
                                 <DirectionsRun />
                             </IconButton>
                         </div>
                         
                             
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right"
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right"
-                            }}
-                            open={open}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
-                        </Menu>
                     </div>
                 )}
             </div>
         </div>
     );
+}
 }

@@ -1,0 +1,17 @@
+.root {
+    flex-grow: 1;
+}
+
+.menuButton {
+    margin-right: 2em;
+}
+
+.title {
+    flex-grow: 1;
+}
+
+.bigAvatar {
+    margin: 10px;
+    width: 150px;
+    height: 150px;
+}
