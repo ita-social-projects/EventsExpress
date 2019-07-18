@@ -1,4 +1,5 @@
 
+
 const initialState = {
     user:{
         id: null,
@@ -15,6 +16,12 @@ const initialState = {
         isLoginPending: false,
         isLoginSuccess: false,
         loginError: {}
+    },
+    
+    editUsername: {
+        isEditUsernamePending: false,
+        isEditUsernameSuccess: false,
+        EditUsernameError: {}
     }
 };
 
