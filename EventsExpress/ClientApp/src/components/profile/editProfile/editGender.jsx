@@ -3,8 +3,7 @@ import { Field, reduxForm } from "redux-form";
 
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
-import asyncValidate from "./asyncValidate";
-import validate from "./validate";
+
 
 const renderSelectField = ({
     input,
@@ -23,7 +22,7 @@ const renderSelectField = ({
         />
     );
 
-const editGender = props => {
+const EditGender = props => {
     const { handleSubmit, pristine, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
@@ -49,6 +48,6 @@ const editGender = props => {
 };
 
 export default reduxForm({
-    form: "MaterialUiForm", // a unique identifier for this form
+    form: "EditGender" // a unique identifier for this form
     
-})(editGender);
+})(EditGender);

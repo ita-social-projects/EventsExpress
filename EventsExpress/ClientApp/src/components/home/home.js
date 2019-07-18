@@ -7,7 +7,9 @@ export default class Home extends Component{
     render() {
         let user = {
             id: "1",
-            Name: "DimaKundiy"
+            Name: "DimaKundiy",
+            Gender: 'Helicopter',
+            Age:'41'
         }
     return(
         <div>

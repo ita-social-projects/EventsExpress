@@ -1,6 +1,8 @@
 import React from 'react';
 import './profile.css';
 import EditUsernameContainer from '../../containers/editProfileContainers/editUsernameContainer';
+import EditGenderContainer from '../../containers/editProfileContainers/editGenderContainer';
+import EditBirthdayContainer from '../../containers/editProfileContainers/editBirthdayContainer';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -57,6 +59,66 @@ const Profile = (props) => {
                     <Typography>
                         <MuiThemeProvider>
                             <EditUsernameContainer />
+                        </MuiThemeProvider>
+                    </Typography>
+
+                </ExpansionPanelDetails>
+
+            </ExpansionPanel>
+            <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2bh-content"
+                    id="panel2bh-header"
+                >
+                    <Typography className={classes.heading}>Gender</Typography>
+                    <Typography className={classes.secondaryHeading}>{props.user.Gender}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+
+                    <Typography>
+                        <MuiThemeProvider>
+                            <EditGenderContainer />
+                        </MuiThemeProvider>
+                    </Typography>
+
+                </ExpansionPanelDetails>
+
+            </ExpansionPanel>
+            <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel3bh-content"
+                    id="panel3bh-header"
+                >
+                    <Typography className={classes.heading}>Age</Typography>
+                    <Typography className={classes.secondaryHeading}>{props.user.Age}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+
+                    <Typography>
+                        <MuiThemeProvider>
+                            <EditBirthdayContainer />
+                        </MuiThemeProvider>
+                    </Typography>
+
+                </ExpansionPanelDetails>
+
+            </ExpansionPanel>
+            <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel4bh-content"
+                    id="panel4bh-header"
+                >
+                    <Typography className={classes.heading}>Favorite Categories</Typography>
+                    <Typography className={classes.secondaryHeading}>/*Тут пропси діма*/</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+
+                    <Typography>
+                        <MuiThemeProvider>
+                            /* тут твій компонент*/
                         </MuiThemeProvider>
                     </Typography>
 
