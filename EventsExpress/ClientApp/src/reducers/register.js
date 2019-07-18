@@ -1,13 +1,8 @@
-import SET_REGISTER_PENDING from '../actions/register';
-import SET_REGISTER_SUCCESS from '../actions/register';
-import SET_REGISTER_ERROR from '../actions/register';
+import { SET_REGISTER_PENDING, SET_REGISTER_SUCCESS, SET_REGISTER_ERROR} from '../actions/register';
+import initialState from '../store/initialState';
 
 export const reducer = (
-    state = {
-      isRegisterSuccess: false,
-      isRegisterPending: false,
-      registerError: null
-    },
+    state = initialState.register,
     action
   ) => {
     switch (action.type) {
@@ -17,13 +12,16 @@ export const reducer = (
         });
   
       case SET_REGISTER_SUCCESS:
+        console.log('wsdsf');
         return Object.assign({}, state, {
-            isRegisterSuccess: action.isRegisterSuccess
+            isRegisterSuccess: action.payload,
+            registerError: null
         });
   
       case SET_REGISTER_ERROR:
         return Object.assign({}, state, {
-            registerError: action.registerError
+            registerError: action.registerError,
+            isRegisterSuccess: false
         });
   
       default:

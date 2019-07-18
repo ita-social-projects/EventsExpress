@@ -5,6 +5,7 @@ import {reducer as LoginReducer} from './login';
 import { reducer as formReducer } from 'redux-form';
 import * as Edit from './editReducers/editUsernameReducer';
 import * as User from './user';
+import * as Register from './register';
 
 const rootReducers = {
     user: User.reducer,
@@ -12,6 +13,9 @@ const rootReducers = {
     form: formReducer,
     login: LoginReducer,
     editUsername: Edit.reducer
+    form: formReducer,
+    login: LoginReducer,
+    register: Register.reducer
 };
 
 

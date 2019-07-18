@@ -4,21 +4,20 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
-   public class UsersService : IUsersService
+    public class UserService : IUserService
     {
         private readonly IMapper _mapper;
         public IUnitOfWork Db { get; set; }
 
-        public UsersService(IUnitOfWork uow, IMapper mapper)
+        public UserService(IUnitOfWork uow, IMapper mapper)
         {
             Db = uow;
             _mapper = mapper;
@@ -30,12 +29,12 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Emali is exist in database", "Email");
             }
-
             User user = _mapper.Map<UserDTO, User>(userDto);
+            
             user.Role = Db.RoleRepository.Filter(filter: r => r.Name == "User").FirstOrDefault();
             var result =  Db.UserRepository.Insert(user);
 
-            if (result==user)
+            if (result.Email == user.Email && result.Id != null)
             {
                 await Db.SaveAsync();
                 return new OperationResult(true, "Registration succeeded", "");
@@ -46,11 +45,16 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Update(UserDTO userDTO)
         {
-            if (string.IsNullOrEmpty(userDTO.Name))
-                return new OperationResult(false, "Operator name cannot be empty", "");
-            var check = Db.UserRepository.Filter(filter: o => o.Name == userDTO.Name).FirstOrDefault();
-            if (check != null)
-                return new OperationResult(false, "Operator name already exist", "");
+            if (string.IsNullOrEmpty(userDTO.Email))
+            {
+                return new OperationResult(false, "EMAIL cannot be empty", "Email");
+            }
+            
+            if (!Db.UserRepository.Get().Any(u => u.Id == userDTO.Id))
+            {
+                return new OperationResult(false, "Not found", "");
+            }
+            
             var result = _mapper.Map<User>(userDTO);
             try
             {
@@ -72,8 +76,11 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetByEmail(string email)
         {
-            var user = Db.UserRepository.Filter(filter: o => o.Email == email);
-            return _mapper.Map<UserDTO>(user.FirstOrDefault());
+            var user = Db.UserRepository.Filter(
+                filter: o => o.Email == email,
+                includeProperties: "Role"
+                ).FirstOrDefault();
+            return _mapper.Map<UserDTO>(user);
         }
 
         public IEnumerable<UserDTO> GetAll()
@@ -83,11 +90,48 @@ namespace EventsExpress.Core.Services
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
             return result;
         }
-        /*  public async Task<User> GetCurrentUserAsync(HttpContext context)
-          {
-              User user = await Db.UserRepository.Get(context.User)..FirstOrDefault();
 
-              return user;
-          }*/
+        public IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter)
+        {
+            var users = Db.UserRepository.Filter(filter: filter);
+
+            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+            return result;
+        }
+
+        public async Task<OperationResult> ChangeRole(Guid uId, Guid rId)
+        {
+            var role = Db.RoleRepository.Get(rId);
+            if (role == null)
+            {
+                return new OperationResult(false, "Invalid role Id", "roleId");
+            }
+
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
+            user.Role = role;
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> Unblock(Guid uId)
+        {
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
+            user.IsBlocked = true;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
     }
 }

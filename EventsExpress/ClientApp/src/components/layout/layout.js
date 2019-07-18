@@ -7,7 +7,7 @@ import './colorlib.css';
 
 const Layout = ({ children }) => {
     return (
-        <div>
+        <>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-3 position-fixed">
@@ -20,13 +20,13 @@ const Layout = ({ children }) => {
                                 {children}
                             </div>
                             <div className="col-3">
-                                Hello
+                                <RightSidebar />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

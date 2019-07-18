@@ -9,15 +9,19 @@ class RegisterWrapper extends React.Component {
     this.props.register(values.email, values.password);
   };
   render() {
-    return <Register onSubmit={this.submit} />;
+
+    const { registerError } = this.props;
+
+    return <>
+      <Register onSubmit={this.submit} />
+      {registerError && 
+              <p className="text-danger text-center">{registerError}</p>
+              }
+    </>;
   }
 }
 const mapStateToProps = state => {
-  return {
-    isRegisterPending: state.register.isRegisterPending,
-    isRegisterSuccess: state.register.isRegisterSuccess,
-    registerError: state.register.registerError
-  };
+  return state.register;
 };
 
 const mapDispatchToProps = dispatch => {
