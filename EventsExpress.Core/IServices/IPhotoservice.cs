@@ -9,7 +9,8 @@ namespace EventsExpress.Core.IServices
 {
     public interface IPhotoService
     {
-        Task<Photo> AddPhoto(IFormFile uploadedFile);
+        Task<Photo> AddEventPhoto(IFormFile uploadedFile);
+        Task<Photo> AddUserPhoto(IFormFile uploadedFile);
         Task Delete(Guid id);
     }
 }

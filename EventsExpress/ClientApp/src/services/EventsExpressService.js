@@ -3,7 +3,7 @@ import React from 'react';
 
 export default class EventsExpressService{
 
-    _baseUrl = 'http://localhost:64144/api/';
+    _baseUrl = 'http://localhost:44315/api/';
 
     setEvent = async (data) => {
         

@@ -1,6 +1,7 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -16,6 +17,7 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> Update(UserDTO userDTO);
         Task<OperationResult> ChangeRole(Guid uId, Guid rId);
+        Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar);
         Task<OperationResult> Unblock(Guid uId);
 
         UserDTO GetById(Guid id);

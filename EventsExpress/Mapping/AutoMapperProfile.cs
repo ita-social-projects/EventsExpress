@@ -21,7 +21,7 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDTO, UserInfo>()
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Path))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Path + "_400" + src.Photo.Extension))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<EventDTO, Event>()

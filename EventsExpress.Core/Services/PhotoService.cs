@@ -8,6 +8,7 @@ using ImageProcessor.Imaging.Formats;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -19,7 +20,27 @@ namespace EventsExpress.Core.Services
     {
         private IUnitOfWork Db;
         private IHostingEnvironment _appEnvironment;
-        
+
+        #region configure storing
+        // 
+
+        private enum OwnType
+        {
+            UserAvatar,
+            EventPhoto
+        }
+
+        private Dictionary<OwnType, string> _pathOptions = new Dictionary<OwnType, string>()
+        {
+            {OwnType.UserAvatar, "/files/images/avatars/"},
+            {OwnType.EventPhoto, "/files/images/events/"}
+        };
+        private Dictionary<OwnType, int[]> _widths = new Dictionary<OwnType, int[]>
+        {
+            {OwnType.UserAvatar, new int[] { 400 } },
+            {OwnType.EventPhoto, new int[] { 400, 1200 } }
+        };
+        #endregion
 
         public PhotoService(
             IUnitOfWork uow,
@@ -30,26 +51,29 @@ namespace EventsExpress.Core.Services
             _appEnvironment = appEnvironment;
         }
 
-
-        public async Task<Photo> AddPhoto(IFormFile uploadedFile)
+        public async Task<Photo> AddUserPhoto(IFormFile uploadedFile)
         {
-            if (!IsValidImage(uploadedFile))
+           
+            var path = SaveImage(uploadedFile, OwnType.UserAvatar);
+
+            // Create new Photo Object for DataBase:
+            Photo photo = new Photo
             {
-                throw (new Exception("Bad file!"));
-            }
+                Path = path,
+                Extension = Path.GetExtension(uploadedFile.FileName).Substring(0)
+            };
+            Db.PhotoRepository.Insert(photo);
 
-            string path = "/files/" + uploadedFile.FileName;
+            await Db.SaveAsync();
 
-            // TODO: image resizing ...
-            //
-            //
-            //
+            return photo;
+        }
 
-            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-            {
-                await uploadedFile.CopyToAsync(fileStream);
-            }
+        public async Task<Photo> AddEventPhoto(IFormFile uploadedFile)
+        {
+            var path = SaveImage(uploadedFile, OwnType.EventPhoto);
 
+            // Create new Photo Object for DataBase:
             Photo photo = new Photo { Path = path };
             Db.PhotoRepository.Insert(photo);
 
@@ -57,6 +81,7 @@ namespace EventsExpress.Core.Services
 
             return photo;
         }
+
 
         public async Task Delete(Guid id)
         {
@@ -76,13 +101,24 @@ namespace EventsExpress.Core.Services
 
         }
 
+        #region UploadHelpers...
 
         private bool IsValidImage(IFormFile file) => (file != null || file.IsImage());
-        
-        // We can use this one to resize and save image:
-        // need to customize params for our situation...
-        //
-        public void ResizeAndSaveImage(IFormFile originalImage, int[] widths, string originalImageFilePath, string extension)
+
+        private string SaveImage(IFormFile uploadedFile, OwnType type)
+        {
+            if (!IsValidImage(uploadedFile))
+            {
+                throw (new Exception("Bad file!"));
+            }
+            // Check for Directory exist
+            CreateFolder(_appEnvironment.WebRootPath + _pathOptions[type]);
+
+            string fileExt = Path.GetExtension(uploadedFile.FileName).Substring(0);
+            return ResizeAndSaveImage(uploadedFile, _widths[type], _pathOptions[type] + uploadedFile.FileName, fileExt);
+        }
+
+        private string ResizeAndSaveImage(IFormFile originalImage, int[] widths, string originalImageFilePath, string extension)
         {
             byte[] imgData;
             using (var reader = new BinaryReader(originalImage.OpenReadStream()))
@@ -98,18 +134,24 @@ namespace EventsExpress.Core.Services
 
                 byte[] resizedImageBytes = this.Resize(imgData, width);
 
+                File.WriteAllBytes(_appEnvironment.ContentRootPath + resizedImageFilePath, resizedImageBytes);
+
+                //var q = _appEnvironment.ContentRootPath + resizedImageFilePath;
+
                 MemoryStream ms = new MemoryStream(resizedImageBytes);
                 Image resizedImage = Image.FromStream(ms);
 
                 //resizedImage.Save(resizedImageFilePath);
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + resizedImageFilePath, FileMode.Create))
+                using (var fileStream = new FileStream(_appEnvironment.ContentRootPath + resizedImageFilePath, FileMode.Create))
                 {
                     resizedImage.Save(fileStream, ImageFormat.Jpeg);
                 }
             }
+
+            return filePath;
         }
 
-        public byte[] Resize(byte[] originalImage, int width)
+        private byte[] Resize(byte[] originalImage, int width)
         {
             using (var originalImageStream = new MemoryStream(originalImage))
             {
@@ -135,5 +177,74 @@ namespace EventsExpress.Core.Services
                 }
             }
         }
+
+        #endregion
+
+        #region FoldersHelpers...
+
+        private bool CreateFolder(string path)
+        {
+            try
+            {
+                if (Directory.Exists(path))
+                {
+                    return false;
+                }
+                DirectoryInfo di = Directory.CreateDirectory(path);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool DeleteFolders(string path)
+        {
+            try
+            {
+                if (!Directory.Exists(path))
+                {
+                    return false;
+                }
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+                di.Delete();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private int GetFilesCount(string path)
+        {
+            var count = 0;
+            try
+            {
+                if (!Directory.Exists(path))
+                {
+                    return 0;
+                }
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                count = di.GetFiles().Length;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+            return count;
+        }
+        #endregion
+
     }
 }
+
