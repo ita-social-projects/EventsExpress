@@ -21,12 +21,10 @@ const initialState = {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
-    }
-        loginError: {}
-    },
+     },
     SelectCategories: {
          IsSelectCategoriesSeccess: false,
-         IsSelectCategoriesError: {}
+         IsSelectCategoriesError: null
      }
 };
 
