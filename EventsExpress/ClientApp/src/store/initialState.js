@@ -27,7 +27,6 @@ const initialState = {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
         EditUsernameError: {}
-    }
      },
     SelectCategories: {
          IsSelectCategoriesSeccess: false,

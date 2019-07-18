@@ -20,7 +20,7 @@ const rootReducers = {
     editBirthday: Birthday.reducer,
     form: formReducer,
     login: LoginReducer,
-    register: Register.reducer
+    register: Register.reducer,
     selectCategories: SelectCategories.reducer
 };
 

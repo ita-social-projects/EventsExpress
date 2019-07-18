@@ -40,7 +40,6 @@ export const renderMultiselect = ({ input, data, valueField, textField }) =>
         data={data}
         valueField={valueField}
         textField={textField}
-
     />
 
 export const renderTextField = ({
