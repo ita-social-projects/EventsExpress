@@ -23,7 +23,7 @@ const rootReducers = {
     form: formReducer,
     login: LoginReducer,
     register: Register.reducer,
-    selectCategories: SelectCategories.reducer
+    selectCategories: SelectCategories.reducer,
     register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer

@@ -1,5 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import './index.css';
+
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -20,7 +19,7 @@ const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
 async function AuthUser(token){
-    const res = await fetch('http://localhost:64144/api/Authentication/login_token', {
+    const res = await fetch('api/Authentication/login_token', {
     method: 'post',  
     headers: new Headers({
         'Content-Type': 'application/json',
