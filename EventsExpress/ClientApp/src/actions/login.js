@@ -20,6 +20,8 @@ export default function login(email, password) {
           dispatch(setUser(response));
           
           dispatch(setLoginSuccess(true));
+          
+          localStorage.setItem('token', response.token);
         }else{
           dispatch(setLoginError(response.error));
         }
@@ -28,7 +30,10 @@ export default function login(email, password) {
 }
 
 
-  function setUser(data) {
+
+
+  export function setUser(data) {
+    console.log(data);
     return {
       type: SET_USER,
       payload: data

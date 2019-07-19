@@ -24,8 +24,8 @@
   .lds-rolling div,
   .lds-rolling div:after {
     position: absolute;
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     border: 20px solid #93dbe9;
     border-top-color: transparent;
     border-radius: 50%;
