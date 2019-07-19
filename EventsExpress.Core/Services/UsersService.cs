@@ -126,13 +126,19 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
         {
-            var user = Db.UserRepository.Get(uId);
+            var user = Db.UserRepository
+                .Filter(filter: u => u.Id == uId, includeProperties: "Photo")
+                .FirstOrDefault();
             if (user == null)
             {
                 return new OperationResult(false, "User not found", "Id");
             }
 
-            user.Photo = await _photoService.AddUserPhoto(avatar);
+            if (user.Photo != null)
+            {
+                await _photoService.Delete(user.Photo.Id);
+            }
+            user.Photo = await _photoService.AddPhoto(avatar);
 
             Db.UserRepository.Update(user);
 

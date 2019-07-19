@@ -97,28 +97,11 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(EventDTO e)
         {
-            Event evnt = _mapper.Map<EventDTO, Event>(e);   
-            evnt = Db.EventRepository.Insert(evnt);
+            Event evnt = _mapper.Map<EventDTO, Event>(e);
 
-            // !uncoment when _photoservice will be done
-            //if (e.Photo != null)
-            //    evnt.PhotoId = _photoservice.AddPhoto(e.Photo, PhotoTypes.EventPhoto);
-            if (e.Photo != null)
-            {
-                string path = "/files/" + e.Photo.FileName;
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await e.Photo.CopyToAsync(fileStream);
-                }
-
-                Photo photo = Db.PhotoRepository.Insert(new Photo { Path = path });
-                evnt.Photo = photo;
-                Db.EventRepository.Update(evnt);
-            }
-
+            evnt.Photo = await _photoService.AddPhoto(e.Photo);
 
             List<EventCategory> eventCategories = new List<EventCategory>();
-         
             foreach (var item in e.Categories)
             {
                 eventCategories.Add(new EventCategory
@@ -128,8 +111,11 @@ namespace EventsExpress.Core.Services
                 });
             }
             evnt.Categories = eventCategories;
+
+            evnt = Db.EventRepository.Insert(evnt);
+
             await Db.SaveAsync();
-            return new OperationResult(true, "Ok", "");
+            return new OperationResult(true);
         }
 
         public async Task<OperationResult> Edit(EventDTO e)
@@ -141,20 +127,13 @@ namespace EventsExpress.Core.Services
             evnt.DateTo = e.DateTo;
             evnt.CityId = e.City.Id;
 
-            if (e.Photo != null)
+            if (e.Photo != null && evnt.Photo != null) 
             {
-                string path = "/files/" + e.Photo.FileName;
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await e.Photo.CopyToAsync(fileStream);
-                }
-
-                Photo photo = Db.PhotoRepository.Insert(new Photo { Path = path });
-                evnt.Photo = photo;
-                Db.EventRepository.Update(evnt);
+                await _photoService.Delete(evnt.Photo.Id);
+                evnt.Photo = await _photoService.AddPhoto(e.Photo);
             }
-            List<EventCategory> eventCategories = new List<EventCategory>();
 
+            List<EventCategory> eventCategories = new List<EventCategory>();
             foreach (var item in e.Categories)
             {
                 eventCategories.Add(new EventCategory
@@ -164,8 +143,9 @@ namespace EventsExpress.Core.Services
                 });
             }
             evnt.Categories = eventCategories;
+
             await Db.SaveAsync();
-            return new OperationResult(true, "Ok", "");
+            return new OperationResult(true);
         }
 
         public IEnumerable<EventDTO> Events()
