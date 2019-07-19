@@ -10,7 +10,7 @@ export default class EventsExpressService{
                                                         Description: data.description, 
                                                         DateFrom: data.date_from,
                                                         Location: {
-                                                            CityId: '81996ade-9c72-45c9-e60b-08d703976546'
+                                                            CityId: 'aab36e16-7004-415b-2932-08d70456082e'
                                                           },
                                                         User: {
                                                             Id: data.user_id
