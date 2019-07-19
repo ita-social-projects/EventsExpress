@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './home.css';
 import Event from '../event';
 import Profile from '../profile/index'
+import SelectCategories from '../SelectCategories/SelectCategories';
 export default class Home extends Component{
     
     render() {

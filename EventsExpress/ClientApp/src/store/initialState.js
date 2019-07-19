@@ -28,6 +28,12 @@ const initialState = {
         isEditUsernameSuccess: false,
         EditUsernameError: {}
     }
+        loginError: {}
+    },
+    SelectCategories: {
+         IsSelectCategoriesSeccess: false,
+         IsSelectCategoriesError: {}
+     }
 };
 
 export default initialState;
