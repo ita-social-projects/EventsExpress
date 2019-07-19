@@ -1,5 +1,4 @@
 
-
 const initialState = {
     user:{
         id: null,
@@ -31,7 +30,17 @@ const initialState = {
     SelectCategories: {
          IsSelectCategoriesSeccess: false,
          IsSelectCategoriesError: null
-     }
+     },
+    add_event:{
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: false,
+        isError: false,
+        data: []
+    }
 };
 
 export default initialState;

@@ -1,5 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import {  } from 'redux-form';
+
 import Multiselect from 'react-widgets/lib/Multiselect'
 import 'react-widgets/dist/css/react-widgets.css'
 export const validate = values => {
@@ -51,6 +53,7 @@ export const renderTextField = ({
 }) => (
   <TextField
    fullWidth
+    value={new Date(2019, 1, 1)}
     label={label}
     placeholder={label}
     error={touched && invalid}
@@ -59,6 +62,12 @@ export const renderTextField = ({
     {...custom}
   />
 )
+
+export const renderDateTimePicker = () =>
+{
+
+}
+
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

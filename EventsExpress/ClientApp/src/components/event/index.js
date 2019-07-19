@@ -1,4 +1,3 @@
-import EventForm from './EventForm';
-import Event from './event';
+import Event from './event-item';
 
 export default Event;

@@ -9,7 +9,7 @@ import {
   from '../actions/logout';
 
 export const reducer = (
-  state = initialState.register,
+  state = initialState.login,
   action
 ) => {
   switch (action.type) {

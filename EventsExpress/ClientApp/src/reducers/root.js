@@ -9,6 +9,8 @@ import * as Birthday from './editReducers/EditBirthdayReducer';
 import * as User from './user';
 import * as Register from './register';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
+import * as AddEvent from './add-event';
+import * as Events from './event-list';
 
 const rootReducers = {
     user: User.reducer,
@@ -22,6 +24,9 @@ const rootReducers = {
     login: LoginReducer,
     register: Register.reducer,
     selectCategories: SelectCategories.reducer
+    register: Register.reducer,
+    add_event: AddEvent.reducer,
+    events: Events.reducer
 };
 
 
