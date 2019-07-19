@@ -1,42 +1,50 @@
-﻿export const SET_EDITBIRTHDAY_PENDING = "SET_EDITBIRTHDAY_PENDING";
-export const SET_EDITBIRTHDAY_SUCCESS = "SET_EDITBIRTHDAY_SUCCESS";
-export const SET_EDITBIRTHDAY_ERROR = "SET_EDITBIRTHDAY_ERROR";
+﻿import EventsExpressService from '../services/EventsExpressService';
 
+export const editBirthday = {
+    PENDING = "SET_EDITBIRTHDAY_PENDING",
+    SUCCESS = "SET_EDITBIRTHDAY_SUCCESS",
+    ERROR = "SET_EDITBIRTHDAY_ERROR"
+}
 
-export default function editBirthday(date) {
+const api_serv = new EventsExpressService();
+
+export default function editBirthday(data) {
     return dispatch => {
-        dispatch(setEditBirthday(false));
-        callEditBirthdayNameApi(date, error => {
-            if (!error) {
+        dispatch(setEditBirthday(true));
+
+
+        /* місце для апі
+        const res = api_serv.setEvent(data);*/
+        res.then(response => {
+            if (response.error == null) {
+
                 dispatch(setEditBirthdaySuccess(true));
+
             } else {
-                dispatch(setEditBirthdayError(error));
+                dispatch(setEditBirthdayError(response.error));
             }
         });
-    };
+    
 }
 
-function setEditBirthday(isEditBirthdayPending) {
+function setEditBirthday(data) {
     return {
-        type: SET_EDITBIRTHDAY_PENDING,
-        isEditBirthdayPending
+        type: editBirthday.PENDING,
+        payload: data
     };
 }
 
-function setEditBirthdaySuccess(isEditBirthdaySuccess) {
+function setEditBirthdaySuccess(data) {
     return {
-        type: SET_EDITBIRTHDAY_SUCCESS,
-        isEditBirthdaySuccess
+        type: editBirthday.SUCCESS,
+        payload: data
     };
 }
 
-function setEditBirthdayError(EditBirthdayError) {
+function setEditBirthdayError(data) {
     return {
-        type: SET_EDITBIRTHDAY_ERROR,
-        EditBirthdayError
+        type: editBirthday.ERROR,
+        payload: data
     };
 }
 
-function callEditBirthdayNameApi(date, callback) {
-
-}

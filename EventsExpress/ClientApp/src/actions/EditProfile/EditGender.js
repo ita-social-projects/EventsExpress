@@ -1,42 +1,53 @@
-﻿export const SET_EDITGENDER_PENDING = "SET_EDITGENDER_PENDING";
-export const SET_EDITGENDER_SUCCESS = "SET_EDITGENDER_SUCCESS";
-export const SET_EDITGENDER_ERROR = "SET_EDITGENDER_ERROR";
+﻿import EventsExpressService from '../services/EventsExpressService';
+
+export const editGender = {
+    PENDING = "SET_EDITGENDER_PENDING",
+    SUCCESS = "SET_EDITGENDER_SUCCESS",
+    ERROR = "SET_EDITGENDER_ERROR"
+}
+
+const api_serv = new EventsExpressService();
 
 
-export default function editUsername(gender) {
+export default function editUsername(data) {
+
+
     return dispatch => {
-        dispatch(setEditGenderPending(false));
-        callEditGenderNameApi(gender, error => {
-            if (!error) {
+        dispatch(setEditGenderPending(true));
+
+
+
+        /* місце для апі
+        const res = api_serv.setEvent(data);*/;
+        res.then(response => {
+            if (response.error == null) {
+
                 dispatch(setEditGenderSuccess(true));
+
             } else {
-                dispatch(setEditGenderError(error));
+                dispatch(setEditGenderError(response.error));
             }
         });
-    };
+    }
 }
 
-function setEditGenderPending(isEditGenderPending) {
-    return {
-        type: SET_EDITGENDER_PENDING,
-        isEditGenderPending
-    };
-}
+    function setEditGenderPending(data) {
+        return {
+            type: editGender.PENDING,
+            payload: data
+        };
+    }
 
-function setEditGenderSuccess(isEditGenderSuccess) {
-    return {
-        type: SET_EDITGENDER_SUCCESS,
-        isEditGenderSuccess
-    };
-}
+    function setEditGenderSuccess(data) {
+        return {
+            type: editGender.SUCCESS,
+            payload: data
+        };
+    }
 
-function setEditGenderError(EditGenderError) {
-    return {
-        type: SET_EDITGENDER_ERROR,
-        EditGenderError
-    };
-}
-
-function callEditGenderNameApi(name, callback) {
-
-}
+    function setEditGenderError(data) {
+        return {
+            type: editGender.ERROR,
+            payload: data
+        };
+    }

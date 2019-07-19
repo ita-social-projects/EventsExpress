@@ -1,42 +1,54 @@
-﻿export const SET_EDITUSERNAME_PENDING = "SET_EDITUSERNAME_PENDING";
-export const SET_EDITUSERNAME_SUCCESS = "SET_EDITUSERNAME_SUCCESS";
-export const SET_EDITUSERNAME_ERROR = "SET_EDITUSERNAME_ERROR";
+﻿import EventsExpressService from '../services/EventsExpressService';
 
+export const editUserName = {
+    PENDING = "SET_EDITUSERNAME_PENDING",
+    SUCCESS = "SET_EDITUSERNAME_SUCCESS",
+    ERROR = "SET_EDITUSERNAME_ERROR"
 
-export default function editUsername(name) {
+}
+
+const api_serv = new EventsExpressService();
+
+export default function editUsername(data) {
+   
+
     return dispatch => {
-        dispatch(setEditUsernamePending(false));
-        callEditUserNameApi(name, error => {
-            if (!error) {
+        dispatch(setEditUsernamePending(true));
+
+
+
+        /* місце для апі
+        const res = api_serv.setEvent(data);*/;
+        res.then(response => {
+            if (response.error == null) {
+
                 dispatch(setEditUsernameSuccess(true));
+
             } else {
-                dispatch(setEditUsernameError(error));
+                dispatch(setEditUsernameError(response.error));
             }
         });
-    };
+    }
 }
 
-function setEditUsernamePending(isEditUsernamePending) {
+function setEditUsernamePending(data) {
     return {
-        type: SET_EDITUSERNAME_PENDING,
-        isEditUsernamePending
+        type: editUserName.PENDING,
+        payload: data
     };
 }
 
-function setEditUsernameSuccess(isEditUsernameSuccess) {
+function setEditUsernameSuccess(data) {
     return {
-        type: SET_EDITUSERNAME_SUCCESS,
-        isEditUsernameSuccess
+        type: editUserName.SUCCESS,
+        payload: data
     };
 }
 
-function setEditUsernameError(EditUsernameError) {
+function setEditUsernameError(data) {
     return {
-        type: SET_EDITUSERNAME_ERROR,
-        EditUsernameError
+        type: editUserName.ERROR,
+        payload: data
     };
 }
 
-function callEditUserNameApi(name, callback) {
-    
-}

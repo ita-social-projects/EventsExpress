@@ -22,7 +22,7 @@ const rootReducers = {
     editBirthday: Birthday.reducer,
     form: formReducer,
 
-    selectCategories: SelectCategories.reducer
+    selectCategories: SelectCategories.reducer,
     register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer

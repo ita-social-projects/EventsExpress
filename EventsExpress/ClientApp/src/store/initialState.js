@@ -30,7 +30,7 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
-    }
+    },
     
     editUsername: {
         isEditUsernamePending: false,
