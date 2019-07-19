@@ -1,9 +1,10 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-
-
 import Multiselect from 'react-widgets/lib/Multiselect'
 import 'react-widgets/dist/css/react-widgets.css'
+import DateTimePicker from 'react-widgets/lib/DateTimePicker'
+
+
 export const validate = values => {
   const errors = {}
   const requiredFields = [
@@ -28,6 +29,14 @@ export const validate = values => {
   }
   return errors
 }
+
+export const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
+    <DateTimePicker
+        onChange={onChange}
+        format="DD MMM YYYY"
+        time={showTime}
+        value={!value ? null : new Date(value)}
+    />
 
  export const maxLength = max => value =>
     value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -63,10 +72,6 @@ export const renderTextField = ({
   />
 )
 
-export const renderDateTimePicker = () =>
-{
-
-}
 
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

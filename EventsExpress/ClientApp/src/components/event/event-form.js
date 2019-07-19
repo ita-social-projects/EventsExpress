@@ -1,9 +1,11 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { renderTextField } from '../helpers/helpers';
-
+import { renderTextField, renderDateTimePicker } from '../helpers/helpers';
 import Button from "@material-ui/core/Button";
+import moment from 'moment'
+import momentLocaliser from 'react-widgets-moment'
 
+momentLocaliser(moment)
 export class EventForm extends Component {
 
     render() {
@@ -17,8 +19,11 @@ export class EventForm extends Component {
                         <Field name='title' component={renderTextField} type="input" label="Title" />
                             <div className="meta-wrap">
                                 <p className="meta">    
-                                <span><i className="fa fa-calendar mr-2"></i>
-                        <Field name='date_from' component="input" type="date" label="" /></span>
+                                <span>
+                                    <Field name="date_from"
+                                        showTime={false}
+                                        component={renderDateTimePicker}
+                                        /></span>
                                 <span><a href="single.html"><i className="fa fa-folder mr-2"></i>Travel</a></span>
                                 <span><i className="fa fa-comment mr-2"></i>2 Comment</span>
                                 </p>
