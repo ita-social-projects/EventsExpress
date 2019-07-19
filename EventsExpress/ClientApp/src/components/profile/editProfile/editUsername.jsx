@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import TextField from 'material-ui/TextField';
+import TextField from "@material-ui/core/TextField";
 
 
 const renderTextField = (
