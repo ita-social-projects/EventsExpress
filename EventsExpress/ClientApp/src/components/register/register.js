@@ -3,7 +3,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Module  from '../helpers';
 import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
-
+import { minLength2, maxLength15 } from '../helpers/helpers'
 const { validate, renderTextField, asyncValidate } = Module;
 
  class Register extends Component {
@@ -29,7 +29,8 @@ const { validate, renderTextField, asyncValidate } = Module;
               name="password"
               component={renderTextField}
               label="Password:"
-              type="password"
+                        type="password"
+                        validate={[maxLength15, minLength2]}
             />
           </div>
           <div>
@@ -37,7 +38,8 @@ const { validate, renderTextField, asyncValidate } = Module;
               name="RepeatPassword"
               component={renderTextField}
               label="Repeat password:"
-              type="password"
+                        type="password"
+                        validate={[maxLength15, minLength2]}
             />
           </div>
           <div>

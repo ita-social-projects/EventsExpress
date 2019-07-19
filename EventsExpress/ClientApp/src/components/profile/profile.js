@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
+import SelectCategoriesWrapper from '../../containers/SelectCategories'
 
 
 
@@ -40,7 +40,6 @@ const Profile = (props) => {
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-
 
     return (
         <div className={classes.root}>
@@ -112,13 +111,15 @@ const Profile = (props) => {
                     id="panel4bh-header"
                 >
                     <Typography className={classes.heading}>Favorite Categories</Typography>
-                    <Typography className={classes.secondaryHeading}>/*Тут пропси діма*/</Typography>
+                    <Typography className={classes.secondaryHeading}>
+                        <div>{props.user.suggestions.map(suggestions => <span key={suggestions.id}>#{suggestions.label}</span>)}</div>
+                    </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
                     <Typography>
                         <MuiThemeProvider>
-                            /* тут твій компонент*/
+                            <SelectCategoriesWrapper />
                         </MuiThemeProvider>
                     </Typography>
 

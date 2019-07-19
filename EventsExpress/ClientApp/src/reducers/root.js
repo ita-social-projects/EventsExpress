@@ -8,6 +8,7 @@ import * as Gender from './editReducers/EditGenderReducer';
 import * as Birthday from './editReducers/EditBirthdayReducer';
 import * as User from './user';
 import * as Register from './register';
+import SelectCategories from '../components/SelectCategories/SelectCategories';
 
 const rootReducers = {
     user: User.reducer,
@@ -19,7 +20,8 @@ const rootReducers = {
     editBirthday: Birthday.reducer,
     form: formReducer,
     login: LoginReducer,
-    register: Register.reducer
+    register: Register.reducer,
+    selectCategories: SelectCategories.reducer
 };
 
 
