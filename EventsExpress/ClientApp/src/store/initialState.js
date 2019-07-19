@@ -1,5 +1,6 @@
 
 
+
 const initialState = {
     user:{
         id: null,
@@ -27,8 +28,7 @@ const initialState = {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
         EditUsernameError: {}
-    }
-        loginError: {}
+        
     },
     SelectCategories: {
          IsSelectCategoriesSeccess: false,
