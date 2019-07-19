@@ -58,6 +58,25 @@ namespace EventsExpress.Controllers
             return Ok(responce);
         }
 
+
+        [Authorize]
+        [HttpPost("login_token")]
+        public IActionResult Post(
+            [FromServices] IAuthServicre _authServise
+            )
+        {
+            var s = User.Identity.Name;     
+
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);  
+                                                                       
+            var responce = _mapper.Map<UserDTO, UserInfo>(user);
+
+            //responce.Token = result.Message;
+
+            return Ok(responce);
+        }
+
+
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Register(LoginDto authRequest)

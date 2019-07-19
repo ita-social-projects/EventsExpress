@@ -1,5 +1,4 @@
 
-
 const initialState = {
     user:{
         id: null,
@@ -22,11 +21,15 @@ const initialState = {
         isRegisterSuccess: false,
         registerError: null
     },
-    
-    editUsername: {
-        isEditUsernamePending: false,
-        isEditUsernameSuccess: false,
-        EditUsernameError: {}
+    add_event:{
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

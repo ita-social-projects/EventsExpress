@@ -8,6 +8,9 @@ namespace EventsExpress.Core.DTOs
 {
    public class EventDTO
     {
+
+        public Guid Id { get; set; }
+
         public bool IsBlocked { get; set; }
 
         public string Title { get; set; }
@@ -19,11 +22,11 @@ namespace EventsExpress.Core.DTOs
         public List<string> Categories { get; set; }
         public IFormFile Photo { get; set; }
 
-        public Guid UserId { get; set; }
-        public City City { get; set; }
+        public Guid OwnerId { get; set; }
+        public User Owner { get; set; }
 
-        public Guid EventId { get; set; }
-        public Event Event { get; set; }
+        public Guid CityId { get; set; }
+        public City City { get; set; }   
 
         public List<Guid> Visitors { get; set; }
     }
