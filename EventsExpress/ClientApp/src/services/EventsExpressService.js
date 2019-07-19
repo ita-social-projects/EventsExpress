@@ -8,9 +8,14 @@ export default class EventsExpressService{
     setEvent = async (data) => {
         const res = await this.setResource('event/edit', {Title: data.title, 
                                                         Description: data.description, 
-                                                        OwnerId: data.user_id,
                                                         DateFrom: data.date_from,
-                                                        CityId: '81996ade-9c72-45c9-e60b-08d703976546'  });
+                                                        Location: {
+                                                            CityId: '81996ade-9c72-45c9-e60b-08d703976546'
+                                                          },
+                                                        User: {
+                                                            Id: data.user_id
+                                                        }
+                                                    });
         if(!res.ok){
             return { error: await res.text()};
         }

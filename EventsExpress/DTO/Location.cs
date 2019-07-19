@@ -7,6 +7,7 @@ namespace EventsExpress.DTO
 {
     public class Location
     {
+        public Guid CityId { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
     }

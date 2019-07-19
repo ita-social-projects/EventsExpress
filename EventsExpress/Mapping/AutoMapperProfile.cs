@@ -11,13 +11,20 @@ namespace EventsExpress.Mapping
         {
             CreateMap<User, UserDTO>();
 
+
+            CreateMap<EventDto, EventDTO>()
+                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.Location.CityId))
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
+
             CreateMap<EventDTO, EventDto>()                                                    
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => new Location() {
+                                                            CityId = src.CityId,
                                                             City = src.City.Name,
                                                             Country = src.City.Country.Name
                                                             })) 
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto()
                                                             {
+                                                            Id = src.OwnerId,
                                                             Birthday = src.Owner.Birthday,
                                                             //PhotoUrl = src.Owner.Photo.Path,  create default user avatar will be work
                                                             Username = src.Owner.Name
