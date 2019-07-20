@@ -19,7 +19,7 @@ namespace EventsExpress.Core.Services
             Db = uow;
         }
 
-        public IEnumerable<Category> GetAllCategories() => Db.CategoryRepository.Get();
+        public IEnumerable<Category> GetAllCategories() => Db.CategoryRepository.Get().ToList();
 
         public Category Get(Guid id) => Db.CategoryRepository.Get(id);
 

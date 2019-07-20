@@ -45,6 +45,12 @@ export default class EventsExpressService{
         return res;
     }
 
+    getAllCategories = async () => {
+        const res = await this.getResource('category/all');
+        console.log(res);
+        return res;
+    }
+
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url);
         if(!res.ok){

@@ -7,6 +7,7 @@ import { renderMultiselect } from '../helpers/helpers'
 
 
 function SelectCategories(props) {
+
     const { handleSubmit, submitting } = props
 
     return ( 
