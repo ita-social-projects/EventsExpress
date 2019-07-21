@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +65,26 @@ namespace EventsExpress.Controllers
                 return BadRequest(result.Message);
             }
             return Ok();
+        }
+
+        [HttpPost("editProfile")]
+        public async Task<IActionResult> EditProfile
+            (UserInfo userInfo, [FromServices] IUserService _userServise)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.Update(_mapper.Map<UserInfo, UserDTO>(userInfo));
+
+            if (result.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest(result.Message);
+
+
+
         }
     }
 }
