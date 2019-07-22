@@ -8,6 +8,7 @@ import * as Register from './register';
 import * as AddEvent from './add-event';
 import * as Events from './event-list';
 import * as Countries from './countries';
+import * as Cities from './cities';
 
 const rootReducers = {
     user: User.reducer,
@@ -17,7 +18,8 @@ const rootReducers = {
     register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
-    countries: Countries.reducer
+    countries: Countries.reducer,
+    cities: Cities.reducer
 };
 
 

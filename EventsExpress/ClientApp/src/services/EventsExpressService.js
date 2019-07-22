@@ -43,6 +43,11 @@ export default class EventsExpressService{
         return res;
     }
 
+    getCities = async (country) => {
+        const res = await this.getResource('locations/country:' + country + '/cities');
+        return res;
+    }
+
     getAllEvents = async () =>{
         const res = await this.getResource('event/all');
         return res;

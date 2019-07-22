@@ -5,7 +5,7 @@ import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 
-import { DropdownList } from 'react-widgets';
+import DropdownList from 'react-widgets/lib/DropdownList'
 
 import DropZoneField from '../helpers/DropZoneField';
 
@@ -45,19 +45,18 @@ export class EventForm extends Component {
     
       resetForm = () => this.setState({ imagefile: [] }, () => this.props.reset());
 
-      renderCountries = (arr) =>{
-        
+      renderLocations = (arr) =>{
         return arr.map((item) => {
-
-          return item;
+            
+          return <option value={item.id}>{item.name}</option>;
         });
       }
 
     render() {
 
-        const { countries } = this.props;
+        const { countries, form_values } = this.props;
 
-        let countries_list = this.renderCountries(countries);
+        let countries_list = this.renderLocations(countries);
 
         return (
             <form onSubmit={ this.props.handleSubmit } encType="multipart/form-data">
@@ -86,22 +85,25 @@ export class EventForm extends Component {
                                 <p className="meta">    
                                 <span><i className="fa fa-calendar mr-2"></i>
                         <Field name='date_from' component="input" type="date" label="" /></span>
-                                <span><a href="single.html"><i className="fa fa-folder mr-2"></i>Travel</a></span>
+                                <span><a href="/#"><i className="fa fa-folder mr-2"></i>Travel</a></span>
                                 <span><i className="fa fa-comment mr-2"></i>2 Comment</span>
                                 </p>
                             </div>
                             
                         <Field name='description' component={renderTextField} type="input" label="Description" />
-                            <p><a href="#" className="btn-custom">Read More <span className="ion-ios-arrow-forward"></span></a></p>
-                        
-                        <Field name='country' component={() => (<DropdownList busy defaultValue="Country" 
-                            textField={"name"} valueField={"id"}
-                            data={countries_list} busySpinner={
-                            <span className="fas fa-sync fa-spin" />
-                        }/>)} />
-                        
-                            
+                           
                     </div>
+                    <Field onChange={this.props.onChangeCountry} name='country' component="select">
+                        <option>Country</option>
+                        {countries_list}
+                    </Field>
+                    {form_values &&
+                      <Field name='city' component="select">
+                        <option>City</option>
+                        {this.renderLocations(this.props.cities)}
+                      </Field>    
+                    }
+
                 <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
                    Save
                 </Button>
