@@ -1,12 +1,9 @@
-import {
-  SET_LOGIN_PENDING,
-  SET_LOGIN_SUCCESS,
-  SET_LOGIN_ERROR
-} from "../actions/login";
+import { SET_LOGIN_PENDING, SET_LOGIN_SUCCESS, SET_LOGIN_ERROR} from "../actions/login";
+import { SET_LOGOUT } from '../actions/logout';
 import initialState from '../store/initialState';
-import { 
-  SET_LOGOUT }
-  from '../actions/logout';
+
+
+  
 
 export const reducer = (
   state = initialState.login,

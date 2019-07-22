@@ -21,7 +21,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name } = this.props.user;
+        const { id, name, photoUrl } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -36,6 +36,12 @@ export default class HeaderProfile extends Component {
                             alt="Тут аватар"
                             src="/dima/dima.png"
                         
+                            className='bigAvatar'
+                        />
+                        <Avatar
+                            alt="Тут аватар"
+                            src={photoUrl}
+
                             className='bigAvatar'
                         />
                         <h4>{name}</h4>

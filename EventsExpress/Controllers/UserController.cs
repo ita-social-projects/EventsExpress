@@ -64,5 +64,21 @@ namespace EventsExpress.Controllers
             }
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ChangeAvatar(
+            //Guid userId, 
+            IFormFile newAva)
+        {
+            //var result = await _userService.ChangeAvatar(userId, newAva);
+            var result = await _userService.ChangeAvatar(new Guid("a27514cd-a007-44f6-a0fe-08d7039626cc"), newAva);
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
     }
 }

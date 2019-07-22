@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
 
@@ -47,7 +48,7 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDTO, UserInfo>()
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Path))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<EventDTO, Event>().ReverseMap();                                    

@@ -6,6 +6,7 @@ namespace EventsExpress.Db.Entities
 {
     public class Photo : BaseEntity
     {
-        public string Path { get; set; }
+        public byte[] Thumb { get; set; }
+        public byte[] Img { get; set; }
     }
 }

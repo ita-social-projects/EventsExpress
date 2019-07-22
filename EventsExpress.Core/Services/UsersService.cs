@@ -4,6 +4,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,17 @@ namespace EventsExpress.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly IMapper _mapper;
         public IUnitOfWork Db { get; set; }
 
-        public UserService(IUnitOfWork uow, IMapper mapper)
+        private readonly IMapper _mapper;
+        private IPhotoService _photoService;
+
+
+        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv)
         {
             Db = uow;
             _mapper = mapper;
+            _photoService = photoSrv;
         }
 
         public async Task<OperationResult> Create(UserDTO userDto)
@@ -118,6 +123,29 @@ namespace EventsExpress.Core.Services
 
             return new OperationResult(true);
         }
+
+        public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
+        {
+            var user = Db.UserRepository
+                .Filter(filter: u => u.Id == uId, includeProperties: "Photo")
+                .FirstOrDefault();
+            if (user == null)
+            {
+                return new OperationResult(false, "User not found", "Id");
+            }
+
+            if (user.Photo != null)
+            {
+                await _photoService.Delete(user.Photo.Id);
+            }
+            user.Photo = await _photoService.AddPhoto(avatar);
+
+            Db.UserRepository.Update(user);
+
+            await Db.SaveAsync();
+            return new OperationResult(true);
+        }
+
 
         public async Task<OperationResult> Unblock(Guid uId)
         {
