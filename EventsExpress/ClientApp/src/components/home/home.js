@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './home.css';
 import Event from '../event';
 import Profile from '../profile/index'
-import { suggestions } from '../../containers/SelectCategories';
-
 import AddEventWrapper from '../../containers/add-event';
 import EventListWrapper from '../../containers/event-list';
 import AddCAtegory from '../../containers/add-category';
@@ -30,7 +28,8 @@ export default class Home extends Component{
             <Profile user={user} />        
             <AddEventWrapper />
             <EventListWrapper /> 
-            
+          
+       
         </div>
         
     );

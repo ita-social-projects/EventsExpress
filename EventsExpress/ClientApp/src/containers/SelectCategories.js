@@ -2,13 +2,12 @@
 import React, { Component } from 'react';
 import save from '../actions/SelectCategories';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
-
+import get_categories from '../actions/category-list'
 
 class SelectCategoriesWrapper extends Component {
+    componentDidMount = () => this.props.get_categories();
     submit = values => {
-        console.log(values);
-       
-      
+        console.log(values); 
     };
     render() {
         let { IsSelectCategoriesSeccess, IsSelectCategoriesError } = this.props
@@ -24,8 +23,12 @@ const mapStateToProps = state => {
     };
 };
 
-
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_categories: () => dispatch(get_categories())
+    }
+};
 export default connect(
-    mapStateToProps
-  
+    mapStateToProps,
+   mapDispatchToProps
 )(SelectCategoriesWrapper);
