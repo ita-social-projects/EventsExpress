@@ -28,13 +28,13 @@ const EditGender = props => {
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="chooseGender"
+                    name="Gender"
                     component={renderSelectField}
                     label="Chose Gender"
                 >
-                    <MenuItem value="ff0000" primaryText="Red" />
-                    <MenuItem value="00ff00" primaryText="Green" />
-                    <MenuItem value="0000ff" primaryText="Blue" />
+                    <MenuItem value="0" primaryText="Men" />
+                    <MenuItem value="1" primaryText="Female" />
+                    <MenuItem value="2" primaryText="Other" />
                 </Field>
             </div>
 

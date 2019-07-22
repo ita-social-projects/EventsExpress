@@ -53,13 +53,51 @@ export default class EventsExpressService{
         return await res.json();
     }
 
+    setUsername = async (data) => {
+       
+        const res = await this.setResource('Users/EditUsername', {
+            Name: data.UserName
+           
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res; 
+    }
+    setBirthday = async (data) => {
+       
+        const res = await this.setResource('Users/EditBirthday', {
+            Birthday: data.Birthday
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setGender = async (data) => {
+
+        const res = await this.setResource('Users/EditGender', {
+            Gender: data.Gender
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    
+
 
     setResource =  (url, data) => fetch(
             this._baseUrl + url,
             {
                 method: "post",
                 headers: new Headers({
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }),
                 body: JSON.stringify(data)
             }

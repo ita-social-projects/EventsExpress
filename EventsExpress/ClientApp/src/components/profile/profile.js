@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SelectCategoriesWrapper from '../../containers/SelectCategories';
 import { connect } from 'react-redux';
+import genders from '../../constants/GenderConstants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -70,7 +71,7 @@ const useStyles = makeStyles(theme => ({
                     id="panel2bh-header"
                 >
                     <Typography className={classes.heading}>Gender</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.gender}</Typography>
+                    <Typography className={classes.secondaryHeading}>{genders[props.gender]}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,7 @@ namespace EventsExpress.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private IUserService _userService;
@@ -28,6 +29,7 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Get()
         {
             var users = _userService.GetAll();
@@ -36,6 +38,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("blocked")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetBlockedUsers()
         {
             var users = _userService.Get(u => u.IsBlocked);
@@ -44,6 +47,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
             var result = await _userService.ChangeRole(userId, roleId);
@@ -55,6 +59,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid userId)
         {
 
@@ -66,25 +71,80 @@ namespace EventsExpress.Controllers
             }
             return Ok();
         }
-
-        [HttpPost("editProfile")]
-        public async Task<IActionResult> EditProfile
-            (UserInfo userInfo, [FromServices] IUserService _userServise)
+        
+         [HttpPost("[action]")]
+        public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
-            if (!ModelState.IsValid)
+            string newName = userInfo.Name;
+            if (string.IsNullOrEmpty(newName))
             {
-                return BadRequest(ModelState);
+                return BadRequest();
+            } 
+
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+
+            if (user == null)
+            {
+                return BadRequest();
+
             }
-            var result = await _userService.Update(_mapper.Map<UserInfo, UserDTO>(userInfo));
+
+            user.Name = newName;
+            var result = await _userService.Update(user);
 
             if (result.Successed)
             {
                 return Ok();
             }
             return BadRequest(result.Message);
+        }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditBirthday(UserInfo userInfo)
+        {
+            DateTime newBirthday = userInfo.Birthday;
+           
 
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
 
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+
+            user.Birthday = newBirthday;
+            var result = await _userService.Update(user);
+
+            if (result.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditGender(UserInfo userInfo)
+        {
+            byte newGender = userInfo.Gender;
+            
+
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+
+            user.Gender = (Gender)newGender;
+            var result = await _userService.Update(user);
+
+            if (result.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest(result.Message);
         }
     }
 }

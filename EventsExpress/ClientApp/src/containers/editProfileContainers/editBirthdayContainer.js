@@ -6,7 +6,7 @@ import editBirthday from "../../actions/EditProfile/editBirthday";
 class EditBirthdayContainer extends React.Component {
     submit = value => {
         console.log(value);
-        this.props.editBirthday(value.date);
+        this.props.editBirthday(value);
     }
 
 

@@ -38,10 +38,30 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.Country.Name)); 
 
             CreateMap<UserDTO, User>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.EmailConfirmed, opts => opts.MapFrom(src => src.EmailConfirmed))
+                .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
+                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
+                .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForAllOtherMembers(x => x.Ignore());
-                
+
+            /*
+                     public Guid Id;
+        public string Name;
+        public string PasswordHash { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string Phone { get; set; }
+        public DateTime Birthday { get; set; }
+        public Gender Gender { get; set; }
+        public bool IsBlocked { get; set; }
+             */
+
 
             CreateMap<LoginDto, UserDTO>();
 
