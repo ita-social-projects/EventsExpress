@@ -15,13 +15,15 @@ export const reducer = (
         console.log('wsdsf');
         return Object.assign({}, state, {
             isRegisterSuccess: action.payload,
-            registerError: null
+            registerError: null,
+            isRegisterPending: false,
         });
   
       case SET_REGISTER_ERROR:
         return Object.assign({}, state, {
             registerError: action.registerError,
-            isRegisterSuccess: false
+            isRegisterSuccess: false,
+            isRegisterPending: false
         });
   
       default:

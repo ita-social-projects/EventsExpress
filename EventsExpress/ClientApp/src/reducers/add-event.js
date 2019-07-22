@@ -11,6 +11,7 @@ export const reducer = (state = initialState.add_event, action) => {
         case SET_EVENT_ERROR:
             return {
                 ...state,
+                isEventPending: false,
                 eventError: action.payload
             };
         case SET_EVENT_PENDING:
@@ -21,6 +22,7 @@ export const reducer = (state = initialState.add_event, action) => {
         case SET_EVENT_SUCCESS:
             return {
                 ...state,
+                isEventPending: false,
                 isEventSuccess: action.payload
             };
     }

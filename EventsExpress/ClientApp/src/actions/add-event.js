@@ -16,7 +16,7 @@ export default function add_event(data) {
         if(response.error == null){
             
             dispatch(setEventSuccess(true));
-            get_events();
+            dispatch(get_events());
           }else{
             dispatch(setEventError(response.error));
           }

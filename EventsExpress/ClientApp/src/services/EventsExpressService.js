@@ -3,19 +3,19 @@ import React from 'react';
 
 export default class EventsExpressService{
 
-    _baseUrl = window.location.origin + '/api/';
+    _baseUrl = 'api/';
 
     setEvent = async (data) => {
-        const res = await this.setResource('event/edit', {Title: data.title, 
-                                                        Description: data.description, 
-                                                        DateFrom: data.date_from,
-                                                        Location: {
-                                                            CityId: '81996ade-9c72-45c9-e60b-08d703976546'
-                                                          },
-                                                        User: {
-                                                            Id: data.user_id
-                                                        }
-                                                    });
+        let file = new FormData();
+        console.log(data);
+        file.append('Photo', data.image.file);
+        file.append('Title', data.title);
+        file.append('Description', data.description);
+        file.append('Location.CityId', '81996ade-9c72-45c9-e60b-08d703976546');
+        file.append('User.Id', data.user_id);
+        file.append('DateFrom', data.date_from);
+        console.log(file);
+        const res = await this.setResourceWithData('event/edit', file);
         if(!res.ok){
             return { error: await res.text()};
         }
@@ -53,16 +53,24 @@ export default class EventsExpressService{
         return await res.json();
     }
 
+    setResourceWithData = (url, data) => fetch(
+        this._baseUrl + url,
+        {mode: 'no-cors',
+            method: "post",
+            body: data
+        }
+    );
 
     setResource =  (url, data) => fetch(
             this._baseUrl + url,
             {
                 method: "post",
                 headers: new Headers({
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 }),
                 body: JSON.stringify(data)
             }
         );
+        
 
 }

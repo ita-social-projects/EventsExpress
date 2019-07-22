@@ -12,7 +12,7 @@ const api_serv = new EventsExpressService();
 export default function login(email, password) {
 
   return dispatch => {
-    dispatch(setLoginPending(false));
+    dispatch(setLoginPending(true));
 
     const res = api_serv.setLogin({Email: email, Password: password});
     res.then(response => {

@@ -35,11 +35,11 @@ namespace EventsExpress.Controllers
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
 
             return Ok(res);
-        }
+        }          
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit(EventDto model)
+        public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
             
             var res = model.Id == Guid.Empty ? await _eventService.Create(_mapper.Map<EventDto, EventDTO>(model))
