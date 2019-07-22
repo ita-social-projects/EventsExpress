@@ -1,19 +1,38 @@
 ﻿import React from "react";
-import CategoryItem from "./categoryItem";
+import CategoryItem from "../components/category/category-item";
 import { connect } from "react-redux";
 import deleteCat from "../actions/delete-category";
+import Button from "@material-ui/core/Button";
+
+import '../components/category/Category.css';
 
 class categoryItemWrapper extends React.Component {
-    submit = value => {
-        console.log(this.props.id);
-        this.props.deleteCat({ ...value });
+    submit = () => {
+        let value = this.props.item.id;
+        console.log('delete: ');
+        console.log(value);
+        this.props.deleteCat({ id: value });
     };
     render() {
-        const { id, Title } = this.props;
-        return <CategoryItem click={this.submit} id={id} Title={Title} />;
-    }
+
+        return(
+            <div className="ItemCategory">
+                < CategoryItem item = {this.props.item} />
+                <div>
+                    <Button
+                        className="btn"
+                        type="submit"
+                        onClick={this.submit}
+                        value="deleteCat"
+                        color="primary">
+                        Delete
+                    </Button>
+                </div>
+            </div>
+        )
+    };
 }
-const mapStateToProps = state => ({ add: state.add });
+const mapStateToProps = state => ({ deleteCat: state.deleteCat });
 
 const mapDispatchToProps = dispatch => {
     return {

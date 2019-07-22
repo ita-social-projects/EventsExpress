@@ -1,8 +1,13 @@
-﻿export const SET_CATEGORY_DELETE_PENDING = "SET_CATEGORY_DELETE_PENDING";
+﻿import EventsExpressService from '../services/EventsExpressService';
+import get_categories from './category-list';
+
+export const SET_CATEGORY_DELETE_PENDING = "SET_CATEGORY_DELETE_PENDING";
 export const SET_CATEGORY_DELETE_SUCCESS = "SET_CATEGORY_DELETE_SUCCESS";
 export const SET_CATEGORY_DELETE_ERROR = "SET_CATEGORY_DELETE_ERROR";
 
 export default function delete_category(data) {
+
+    const api_serv = new EventsExpressService();
 
     return dispatch => {
         dispatch(setCategoryPending(true));
@@ -12,7 +17,7 @@ export default function delete_category(data) {
             if (response.error == null) {
 
                 dispatch(setCategorySuccess(true));
-                get_categories();
+                dispatch(get_categories());
             } else {
                 dispatch(setCategoryError(response.error));
             }

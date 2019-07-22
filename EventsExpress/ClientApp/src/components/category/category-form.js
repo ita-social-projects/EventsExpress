@@ -2,7 +2,8 @@
 import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import { renderTextField } from '../helpers/helpers'
+import { renderTextField } from '../helpers/helpers';
+import './Category.css';
 
 class Category extends React.Component {
     constructor(props) {

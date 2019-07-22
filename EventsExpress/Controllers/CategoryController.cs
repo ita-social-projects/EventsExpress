@@ -39,10 +39,10 @@ namespace EventsExpress.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("[action]")]
-        public IActionResult Delete(Guid id)
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var res = _categoryService.Delete(id);
+            var res = await _categoryService.Delete(id);
 
             return Ok(res);
         }

@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import EventsExpressService from '../../services/EventsExpressService';
-import Category from './category-item';
+import CategoryItemWrapper from '../../containers/delete-category';
+
 
 export default class CategoryList extends Component {
 
@@ -8,7 +9,7 @@ export default class CategoryList extends Component {
          return arr.map((item) => {
      
            return (
-               <Category key={item.id} item={item} />
+               <CategoryItemWrapper key={item.id} item={item} />
            );
          });
     }
@@ -18,7 +19,9 @@ export default class CategoryList extends Component {
         const items = this.renderItems(data_list);
 
         return <>
-            {items}
+            <div className="listbox">
+                {items}
+                </div>
         </>
     }
 }

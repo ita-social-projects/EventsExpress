@@ -40,9 +40,7 @@ export default class EventsExpressService{
     }
 
     setCategoryDelete = async (data) => {
-        const res = await this.setResource('category/delete', {
-            Id: data.Id
-        });
+        const res = await this.setResource(`category/delete/${data.id}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
