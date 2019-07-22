@@ -29,11 +29,7 @@ export default class Home extends Component{
         <div>
             <Profile user={user} />        
             <AddEventWrapper />
-        
             <EventListWrapper /> 
-           
-            <AddCAtegory />
-            <CategoryListWrapper />
             
         </div>
         
