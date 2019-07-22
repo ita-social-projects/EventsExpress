@@ -2,14 +2,12 @@
 import { Field, reduxForm } from 'redux-form'
 import Button from "@material-ui/core/Button";
 import Select from 'react-select';
-import { suggestions } from '../../containers/SelectCategories'
 import { renderMultiselect } from '../helpers/helpers'
-
 
 function SelectCategories(props) {
 
-    const { handleSubmit, submitting } = props
-
+    const { handleSubmit, submitting, items } = props
+    console.log(items)
     return ( 
         <div >
           
@@ -17,9 +15,9 @@ function SelectCategories(props) {
                 <Field
                     name="Categories"
                     component={renderMultiselect}
-                    data={suggestions}
+                    data={items}
                     valueField={"id"}
-                    textField={"label"}
+                    textField={"name"}
                  
                     />
                     <div>

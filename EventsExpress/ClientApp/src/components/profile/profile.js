@@ -119,7 +119,7 @@ const Profile = (props) => {
 
                     <Typography>
                         <MuiThemeProvider>
-                            <SelectCategoriesWrapper />
+                            <SelectCategoriesWrapper  />
                         </MuiThemeProvider>
                     </Typography>
 

@@ -18,14 +18,13 @@ export default class Home extends Component{
             Name: "Misha",
             Gender: 'Other',
             Age: '41',
-            suggestions:[
+            suggestions: [
                 { id: 1, label: 'Summer' },
                 { id: 2, label: 'Mount' },
                 { id: 3, label: 'Party' },
                 { id: 4, label: 'Gaming' },
             ],
-        }
-        
+        } 
     return(
         <div>
             <Profile user={user} />        
@@ -35,9 +34,11 @@ export default class Home extends Component{
            
             <AddCAtegory />
             <CategoryListWrapper />
-            {
+            
         </div>
         
     );
     }
 }
+       
+           
