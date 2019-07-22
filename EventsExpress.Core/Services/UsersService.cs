@@ -4,6 +4,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,15 +56,15 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Not found", "");
             }
             
-            var result = _mapper.Map<User>(userDTO);
+            var result = _mapper.Map<UserDTO, User>(userDTO);
             try
             {
                 Db.UserRepository.Update(result);
                 await Db.SaveAsync();
             }
-            catch
+            catch (Exception e)
             {
-                return new OperationResult(false, "Internal error", "");
+                return new OperationResult(false, $"{e.Message}", "");
             }
             return new OperationResult(true);
         }
@@ -79,7 +80,7 @@ namespace EventsExpress.Core.Services
             var user = Db.UserRepository.Filter(
                 filter: o => o.Email == email,
                 includeProperties: "Role"
-                ).FirstOrDefault();
+                ).AsNoTracking().FirstOrDefault();
             return _mapper.Map<UserDTO>(user);
         }
 

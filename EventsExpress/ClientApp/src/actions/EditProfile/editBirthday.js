@@ -1,42 +1,48 @@
-﻿export const SET_EDITBIRTHDAY_PENDING = "SET_EDITBIRTHDAY_PENDING";
-export const SET_EDITBIRTHDAY_SUCCESS = "SET_EDITBIRTHDAY_SUCCESS";
-export const SET_EDITBIRTHDAY_ERROR = "SET_EDITBIRTHDAY_ERROR";
+﻿import EventsExpressService from '../../services/EventsExpressService';
 
+export const editBirthday = {
+    PENDING : "SET_EDITBIRTHDAY_PENDING",
+    SUCCESS : "SET_EDITBIRTHDAY_SUCCESS",
+    ERROR : "SET_EDITBIRTHDAY_ERROR"
+}
 
-export default function editBirthday(date) {
+const api_serv = new EventsExpressService();
+
+export default function edit_Birthday(data) {
     return dispatch => {
-        dispatch(setEditBirthday(false));
-        callEditBirthdayNameApi(date, error => {
-            if (!error) {
+        dispatch(setEditBirthdayPending(true));
+        const res = api_serv.setBirthday(data);
+        res.then(response => {
+            if (response.error == null) {
+
                 dispatch(setEditBirthdaySuccess(true));
+
             } else {
-                dispatch(setEditBirthdayError(error));
+                dispatch(setEditBirthdayError(response.error));
             }
         });
-    };
+
+    }
 }
 
-function setEditBirthday(isEditBirthdayPending) {
-    return {
-        type: SET_EDITBIRTHDAY_PENDING,
-        isEditBirthdayPending
-    };
-}
+    function setEditBirthdayPending(data) {
+        return {
+            type: editBirthday.PENDING,
+            payload: data
+        };
+    }
 
-function setEditBirthdaySuccess(isEditBirthdaySuccess) {
-    return {
-        type: SET_EDITBIRTHDAY_SUCCESS,
-        isEditBirthdaySuccess
-    };
-}
+    function setEditBirthdaySuccess(data) {
+        return {
+            type: editBirthday.SUCCESS,
+            payload: data
+        };
+    }
 
-function setEditBirthdayError(EditBirthdayError) {
-    return {
-        type: SET_EDITBIRTHDAY_ERROR,
-        EditBirthdayError
-    };
-}
+    function setEditBirthdayError(data) {
+        return {
+            type: editBirthday.ERROR,
+            payload: data
+        };
+    }
 
-function callEditBirthdayNameApi(date, callback) {
-
-}

@@ -9,9 +9,10 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import SelectCategoriesWrapper from '../../containers/SelectCategories'
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import SelectCategoriesWrapper from '../../containers/SelectCategories';
+import { connect } from 'react-redux';
+import genders from '../../constants/GenderConstants';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,8 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-
-const Profile = (props) => {
+ const Profile = (props) => {
     const classes = useStyles();
 
     const [expanded, setExpanded] = React.useState(false);
@@ -51,7 +51,7 @@ const Profile = (props) => {
                         id="panel1bh-header"
                     >
                         <Typography className={classes.heading}>Username</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.user.Name}</Typography>
+                    <Typography className={classes.secondaryHeading}>{props.name}</Typography>
                     </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     
@@ -71,7 +71,7 @@ const Profile = (props) => {
                     id="panel2bh-header"
                 >
                     <Typography className={classes.heading}>Gender</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.user.Gender}</Typography>
+                    <Typography className={classes.secondaryHeading}>{genders[props.gender]}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
@@ -91,7 +91,7 @@ const Profile = (props) => {
                     id="panel3bh-header"
                 >
                     <Typography className={classes.heading}>Age</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.user.Age}</Typography>
+                    <Typography className={classes.secondaryHeading}>{props.birthday}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
@@ -112,7 +112,6 @@ const Profile = (props) => {
                 >
                     <Typography className={classes.heading}>Favorite Categories</Typography>
                     <Typography className={classes.secondaryHeading}>
-                        <div>{props.user.suggestions.map(suggestions => <span key={suggestions.id}>#{suggestions.label}</span>)}</div>
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -133,4 +132,18 @@ const Profile = (props) => {
 
 
 
-export default Profile;
+const mapStateToProps = state => {
+    return state.user;
+
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        
+    };
+};
+
+export default connect(
+    mapStateToProps,
+
+)(Profile);

@@ -25,7 +25,6 @@ export default class Home extends Component{
         } 
     return(
         <div>
-            <Profile user={user} />        
             <AddEventWrapper />
             <EventListWrapper /> 
           

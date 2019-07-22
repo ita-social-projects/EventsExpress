@@ -23,6 +23,7 @@ const EditBirthday = props => {
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
+                    name="Birthday"
                     id="date"
                     label="Birthday"
                     type="date"

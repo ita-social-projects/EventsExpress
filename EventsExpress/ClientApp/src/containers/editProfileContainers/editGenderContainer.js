@@ -1,12 +1,12 @@
 ﻿import React from "react";
 import EditGender from "../../components/profile/editProfile/editGender";
 import { connect } from "react-redux";
-import editGender from "../../actions/EditProfile/EditGender";
+import edit_Gender from "../../actions/EditProfile/EditGender";
 
 class EditGenderContainer extends React.Component {
     submit = value => {
         console.log(value);
-        this.props.editGender(value.gender);
+        this.props.editGender(value);
     }
 
 
@@ -21,13 +21,13 @@ class EditGenderContainer extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return state.editGender;
+    return state.gender
 
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editGender: (gender) => dispatch(editGender(gender))
+        editGender: (gender) => dispatch(edit_Gender(gender))
     };
 };
 

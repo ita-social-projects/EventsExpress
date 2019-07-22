@@ -1,8 +1,4 @@
-﻿import {
-    SET_EDITBIRTHDAY_PENDING,
-    SET_EDITBIRTHDAY_SUCCESS,
-    SET_EDITBIRTHDAY_ERROR
-} from '../../actions/EditProfile/editBirthday';
+﻿import { editBirthday } from '../../actions/EditProfile/editBirthday';
 
 export const reducer = (
     state = {
@@ -12,17 +8,17 @@ export const reducer = (
     },
     action) => {
     switch (action.type) {
-        case SET_EDITBIRTHDAY_PENDING:
+        case editBirthday.PENDING:
             return Object.assign({}, state, {
                 isEditBirthdayPending: action.isEditBirthdayPending
             });
 
-        case SET_EDITBIRTHDAY_SUCCESS:
+        case editBirthday.SUCCESS:
             return Object.assign({}, state, {
                 isEditBirthdaySuccess: action.isEditBirthdaySuccess
             });
 
-        case SET_EDITBIRTHDAY_ERROR:
+        case editBirthday.ERROR:
             return Object.assign({}, state, {
                 EditBirthdayError: action.EditBirthdayError
             });
