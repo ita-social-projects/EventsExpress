@@ -11,6 +11,8 @@ import * as Register from './register';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
 import * as AddEvent from './add-event';
 import * as Events from './event-list';
+import * as AddCategories from './add-category';
+import * as Categories from './category-list';
 
 const rootReducers = {
     user: User.reducer,
@@ -26,7 +28,9 @@ const rootReducers = {
     selectCategories: SelectCategories.reducer,
     register: Register.reducer,
     add_event: AddEvent.reducer,
-    events: Events.reducer
+    events: Events.reducer,
+    add_category: AddCategories.reducer,
+    categories: Categories.reducer
 };
 
 

@@ -6,6 +6,8 @@ import { suggestions } from '../../containers/SelectCategories';
 
 import AddEventWrapper from '../../containers/add-event';
 import EventListWrapper from '../../containers/event-list';
+import AddCAtegory from '../../containers/add-category';
+import CategoryListWrapper from '../../containers/category-list';
 
 
 export default class Home extends Component{
@@ -30,7 +32,10 @@ export default class Home extends Component{
             <AddEventWrapper />
         
             <EventListWrapper /> 
-
+           
+            <AddCAtegory />
+            <CategoryListWrapper />
+            {
         </div>
         
     );

@@ -1,4 +1,6 @@
-﻿using EventsExpress.Core.Infrastructure;
+﻿using AutoMapper;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
@@ -13,13 +15,18 @@ namespace EventsExpress.Core.Services
     public class CategoryService : ICategoryService
     {
         public IUnitOfWork Db { get; set; }
+        private readonly IMapper _mapper;
 
-        public CategoryService(IUnitOfWork uow)
+        public CategoryService(IUnitOfWork uow, IMapper mapper)
         {
             Db = uow;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Category> GetAllCategories() => Db.CategoryRepository.Get().ToList();
+        public IEnumerable<CategoryDTO> GetAllCategories()
+        {
+           return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
+        } 
 
         public Category Get(Guid id) => Db.CategoryRepository.Get(id);
 
@@ -42,7 +49,7 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "", "");
         }
 
-        public async Task<OperationResult> Edit(Category category)
+        public async Task<OperationResult> Edit(CategoryDTO category)
         {
             if (category.Id == null)
             {

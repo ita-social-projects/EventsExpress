@@ -39,6 +39,32 @@ export default class EventsExpressService{
         return res;
     }
 
+    setCategoryDelete = async (data) => {
+        const res = await this.setResource('category/delete', {
+            Id: data.Id
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setCategory = async (data) => {
+        const res = await this.setResource('category/edit', {
+            Name: data.category
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getAllCategories = async () => {
+        const res = await this.getResource('category/all');
+        console.log(res);
+        return res;
+    }
+
     getAllEvents = async () =>{
         const res = await this.getResource('event/all');
         console.log(res);
