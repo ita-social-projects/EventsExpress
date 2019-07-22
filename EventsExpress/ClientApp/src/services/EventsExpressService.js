@@ -10,7 +10,7 @@ export default class EventsExpressService{
                                                         Description: data.description, 
                                                         DateFrom: data.date_from,
                                                         Location: {
-                                                            CityId: 'aab36e16-7004-415b-2932-08d70456082e'
+                                                            CityId: '81996ade-9c72-45c9-e60b-08d703976546'
                                                           },
                                                         User: {
                                                             Id: data.user_id
@@ -36,6 +36,32 @@ export default class EventsExpressService{
         if(!res.ok){
             return { error: await res.text()};
         }
+        return res;
+    }
+
+    setCategoryDelete = async (data) => {
+        const res = await this.setResource('category/delete', {
+            Id: data.Id
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setCategory = async (data) => {
+        const res = await this.setResource('category/edit', {
+            Name: data.category
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getAllCategories = async () => {
+        const res = await this.getResource('category/all');
+        console.log(res);
         return res;
     }
 

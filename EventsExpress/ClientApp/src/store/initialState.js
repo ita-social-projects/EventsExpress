@@ -30,6 +30,16 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    add_category: {
+        isCategoryPending: false,
+        isCategorySuccess: false,
+        categoryError: null
+    },
+    categories: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 
