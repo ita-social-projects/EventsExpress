@@ -33,7 +33,6 @@ export default function login(email, password) {
 
 
   export function setUser(data) {
-    console.log(data);
     return {
       type: SET_USER,
       payload: data

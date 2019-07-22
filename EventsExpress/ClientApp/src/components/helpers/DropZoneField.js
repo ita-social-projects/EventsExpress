@@ -10,7 +10,7 @@ const DropZoneField = ({
   input: { onChange },
   imagefile,
   meta: { error, touched }
-}) => { console.log(imagefile); return <div className="preview-container">
+}) => { return <div className="preview-container">
     <DropZone
       accept="image/jpeg, image/png, image/gif, image/bmp"
       className="upload-container"

@@ -15,9 +15,11 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.Location.CityId))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));          
 
-            CreateMap<EventDTO, EventDto>()                                                    
+            CreateMap<EventDTO, EventDto>()  
+
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoBytes.ToRenderablePictureString()))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => new Location() {
                                                             CityId = src.CityId,
                                                             City = src.City.Name,
@@ -27,12 +29,13 @@ namespace EventsExpress.Mapping
                                                             {
                                                             Id = src.OwnerId,
                                                             Birthday = src.Owner.Birthday,
-                                                            //PhotoUrl = src.Owner.Photo.Path,  create default user avatar will be work
+                                                            PhotoUrl = src.Owner.Photo.Thumb.ToRenderablePictureString(),
                                                             Username = src.Owner.Name
                                                             })); 
 
+
             CreateMap<UserDTO, UserPreviewDto>()
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Path));
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
             CreateMap<City, Location>()
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Name))            
@@ -51,7 +54,12 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
-            CreateMap<EventDTO, Event>().ReverseMap();                                    
+            CreateMap<EventDTO, Event>()
+                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+
+            CreateMap<Event, EventDTO>()
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo.Thumb));
         }
     }
 }

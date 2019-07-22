@@ -115,6 +115,7 @@ namespace EventsExpress.Core.Services
                 }
             }
             evnt.Categories = eventCategories;
+            Db.EventRepository.Insert(evnt);
             await Db.SaveAsync();
             return new OperationResult(true);
         }

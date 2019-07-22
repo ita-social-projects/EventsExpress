@@ -7,20 +7,19 @@ export default class EventsExpressService{
 
     setEvent = async (data) => {
         let file = new FormData();
-        console.log(data);
         file.append('Photo', data.image.file);
         file.append('Title', data.title);
         file.append('Description', data.description);
-        file.append('Location.CityId', '81996ade-9c72-45c9-e60b-08d703976546');
+        file.append('Location.CityId', 'b75dd7ff-71d1-46e4-c8c0-08d70ea7bb28');
         file.append('User.Id', data.user_id);
         file.append('DateFrom', data.date_from);
-        console.log(file);
         const res = await this.setResourceWithData('event/edit', file);
         if(!res.ok){
             return { error: await res.text()};
         }
         return res;
     }
+
 
 
     setLogin = async (data) => {
@@ -39,9 +38,13 @@ export default class EventsExpressService{
         return res;
     }
 
+    getCountries = async () => {
+        const res = await this.getResource('locations/countries');
+        return res;
+    }
+
     getAllEvents = async () =>{
         const res = await this.getResource('event/all');
-        console.log(res);
         return res;
     }
 

@@ -8,7 +8,6 @@ const api_serv = new EventsExpressService();
 
 export default function register(email, password) {
   return dispatch => {
-    console.log('sdagsag');
     dispatch(setRegisterPending(false));
 
     const res = api_serv.setRegister({Email: email, Password: password});

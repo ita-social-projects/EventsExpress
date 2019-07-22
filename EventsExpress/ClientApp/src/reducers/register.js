@@ -12,7 +12,6 @@ export const reducer = (
         });
   
       case SET_REGISTER_SUCCESS:
-        console.log('wsdsf');
         return Object.assign({}, state, {
             isRegisterSuccess: action.payload,
             registerError: null,

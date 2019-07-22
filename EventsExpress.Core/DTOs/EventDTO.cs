@@ -22,6 +22,8 @@ namespace EventsExpress.Core.DTOs
         public List<string> Categories { get; set; }
         public IFormFile Photo { get; set; }
 
+        public byte[] PhotoBytes { get; set; }
+
         public Guid OwnerId { get; set; }
         public User Owner { get; set; }
 

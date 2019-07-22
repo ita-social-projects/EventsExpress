@@ -30,6 +30,16 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    countries: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
+    cities: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

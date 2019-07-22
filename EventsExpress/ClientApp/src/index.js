@@ -17,6 +17,8 @@ const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
 async function AuthUser(token){
+  if(!token)
+    return;
     const res = await fetch('api/Authentication/login_token', {
     method: 'post',  
     headers: new Headers({
@@ -25,8 +27,9 @@ async function AuthUser(token){
     }),
     });
     if(res.ok){
-      console.log(res);
       store.dispatch(setUser(await res.json()));
+    }else{
+      localStorage.clear();
     }
 }
 

@@ -15,6 +15,7 @@ namespace EventsExpress.DTO
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public IFormFile Photo { get; set; }
+        public string PhotoUrl { get; set; }
         public UserPreviewDto User { get; set; }
         public Location Location { get; set; }
     }
