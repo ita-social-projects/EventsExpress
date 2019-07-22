@@ -16,8 +16,7 @@ class SelectCategoriesWrapper extends Component {
         let { IsSelectCategoriesSeccess, IsSelectCategoriesError } = this.props
         console.log(this.props);
 
-        return
-            <SelectCategories items={this.props.allCategories.data} onSubmit={this.submit} />;
+        return <SelectCategories items={this.props.allCategories.data} onSubmit={this.submit} />;
     }
 }
 const mapStateToProps = state => {

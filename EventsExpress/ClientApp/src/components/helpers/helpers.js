@@ -6,7 +6,7 @@ import DateTimePicker from 'react-widgets/lib/DateTimePicker'
 
 import {  } from 'redux-form';
 
->>>>>>>>> Temporary merge branch 2
+
 export const validate = values => {
   const errors = {}
   const requiredFields = [
