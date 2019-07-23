@@ -53,6 +53,7 @@ class categoryItemWrapper extends React.Component {
                         <Fab 
                             size="small"
                             color="primary"
+                            className="mr-2"
                             onClick={this.edit}
                             aria-label="Edit">
                             <i className="fa fa-edit"></i>
