@@ -32,7 +32,11 @@ const initialState = {
         isError: false,
         data: []
     },
-    
+    change_avatar: {
+        isPending: false,
+        isSuccess: false,
+        Error: {}
+     },
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,

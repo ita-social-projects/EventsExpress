@@ -172,12 +172,17 @@ namespace EventsExpress.Controllers
 
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> ChangeAvatar(
-            //Guid userId, 
-            IFormFile newAva)
+        public async Task<IActionResult> ChangeAvatar([FromForm]IFormFile newAva)
         {
-            //var result = await _userService.ChangeAvatar(userId, newAva);
-            var result = await _userService.ChangeAvatar(new Guid("a27514cd-a007-44f6-a0fe-08d7039626cc"), newAva);
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+
+            newAva = HttpContext.Request.Form.Files[0];
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+            var result = await _userService.ChangeAvatar(user.Id, newAva);
 
             if (!result.Successed)
             {

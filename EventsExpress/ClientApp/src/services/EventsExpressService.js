@@ -14,6 +14,8 @@ export default class EventsExpressService{
         file.append('Location.CityId', data.city);
         file.append('User.Id', data.user_id);
         file.append('DateFrom', data.date_from);
+        file.append('DateTo', data.date_to);
+    
         const res = await this.setResourceWithData('event/edit', file);
         if(!res.ok){
             return { error: await res.text()};
@@ -21,6 +23,15 @@ export default class EventsExpressService{
         return res;
     }
 
+    setAvatar = async (data) => {
+        let file = new FormData();
+        file.append('newAva', data.image.file);
+        const res = await this.setResourceWithData('users/changeAvatar', file);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    }
 
 
     setLogin = async (data) => {
@@ -168,6 +179,16 @@ export default class EventsExpressService{
                 body: JSON.stringify(data)
             }
         );
-        
+    
+    setResourceWithData = (url, data) => fetch(
+        this._baseUrl + url,
+        {
+            method: "post",
+            headers: new Headers({
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            body: data
+        }
+    );
 
 }

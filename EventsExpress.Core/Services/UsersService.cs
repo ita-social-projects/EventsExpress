@@ -84,7 +84,7 @@ namespace EventsExpress.Core.Services
         {
             var user = Db.UserRepository.Filter(
                 filter: o => o.Email == email,
-                includeProperties: "Role,Categories.Category"
+                includeProperties: "Role,Categories.Category,Photo"
                 ).AsNoTracking().FirstOrDefault();
             return _mapper.Map<UserDTO>(user);
         }

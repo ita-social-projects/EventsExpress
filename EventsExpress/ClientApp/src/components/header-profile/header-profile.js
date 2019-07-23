@@ -34,12 +34,6 @@ export default class HeaderProfile extends Component {
                     <div className="d-flex flex-column align-items-center">
                         <Avatar
                             alt="Тут аватар"
-                            src="/dima/dima.png"
-                        
-                            className='bigAvatar'
-                        />
-                        <Avatar
-                            alt="Тут аватар"
                             src={photoUrl}
 
                             className='bigAvatar'

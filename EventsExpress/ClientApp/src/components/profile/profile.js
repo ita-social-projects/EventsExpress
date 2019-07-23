@@ -14,7 +14,7 @@ import SelectCategoriesWrapper from '../../containers/SelectCategories';
 import AddUserCategory from '../../containers/editProfileContainers/addUserCategoryContainer';
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
-
+import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -44,7 +44,25 @@ const useStyles = makeStyles(theme => ({
 
     return (
         <div className={classes.root}>
-            
+             <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                    >
+                        <Typography className={classes.heading}>Change Avatar</Typography>
+                    </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    
+                    <Typography>
+                        <MuiThemeProvider>
+                            <ChangeAvatarWrapper />
+                        </MuiThemeProvider>
+                    </Typography>
+
+                </ExpansionPanelDetails>
+
+            </ExpansionPanel>
                 <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}

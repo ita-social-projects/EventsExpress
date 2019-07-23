@@ -45,7 +45,7 @@ export const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =
 export const maxLength15 = maxLength(15)
 export const minLength = min => value =>
     value && value.length < min ? `Must be ${min} characters or more` : undefined
-export const minLength2 = minLength(2)
+export const minLength2 = minLength(6)
 
 export const renderMultiselect = ({ input, data, valueField, textField }) =>
     <Multiselect {...input}
