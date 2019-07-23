@@ -25,6 +25,7 @@ namespace EventsExpress.Core.IServices
         UserDTO GetByEmail(string email);
 
         IEnumerable<UserDTO> GetAll();
+        IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<string> categories);
         IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter);
     }
 }

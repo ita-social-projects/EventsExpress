@@ -96,6 +96,17 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
+        public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<string> categories)
+        {
+            var categoryNames = new List<string> { "Sea", "Weekends" };
+
+            var users = Db.UserRepository.Filter(includeProperties: "Categories.Category")
+                .Where(user => user.Categories.Any(category => categoryNames.Contains(category.Category.Name)))
+                .ToList();
+           
+            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+        }
+
         public IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter)
         {
             var users = Db.UserRepository.Filter(filter: filter);
@@ -145,8 +156,7 @@ namespace EventsExpress.Core.Services
             await Db.SaveAsync();
             return new OperationResult(true);
         }
-
-
+        
         public async Task<OperationResult> Unblock(Guid uId)
         {
             var user = Db.UserRepository.Get(uId);
@@ -161,5 +171,7 @@ namespace EventsExpress.Core.Services
 
             return new OperationResult(true);
         }
+
+        
     }
 }
