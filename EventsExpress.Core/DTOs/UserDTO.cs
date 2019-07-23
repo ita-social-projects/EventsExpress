@@ -18,7 +18,9 @@ namespace EventsExpress.Core.DTOs
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
         
+        public virtual Guid RoleId { get; set; }
         public virtual Role Role { get; set; }
+        public virtual Guid? PhotoId { get; set; }
         public virtual Photo Photo { get; set; }
 
         public IEnumerable<Event> Events { get; set; }

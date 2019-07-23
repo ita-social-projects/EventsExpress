@@ -4,6 +4,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -35,9 +36,9 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Emali is exist in database", "Email");
             }
             User user = _mapper.Map<UserDTO, User>(userDto);
-            
+
             user.Role = Db.RoleRepository.Filter(filter: r => r.Name == "User").FirstOrDefault();
-            var result =  Db.UserRepository.Insert(user);
+            var result = Db.UserRepository.Insert(user);
 
             if (result.Email == user.Email && result.Id != null)
             {
@@ -54,21 +55,21 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "EMAIL cannot be empty", "Email");
             }
-            
+
             if (!Db.UserRepository.Get().Any(u => u.Id == userDTO.Id))
             {
                 return new OperationResult(false, "Not found", "");
             }
-            
-            var result = _mapper.Map<User>(userDTO);
+
+            var result = _mapper.Map<UserDTO, User>(userDTO);
             try
             {
                 Db.UserRepository.Update(result);
                 await Db.SaveAsync();
             }
-            catch
+            catch (Exception e)
             {
-                return new OperationResult(false, "Internal error", "");
+                return new OperationResult(false, $"{e.Message}", "");
             }
             return new OperationResult(true);
         }
@@ -83,8 +84,8 @@ namespace EventsExpress.Core.Services
         {
             var user = Db.UserRepository.Filter(
                 filter: o => o.Email == email,
-                includeProperties: "Role"
-                ).FirstOrDefault();
+                includeProperties: "Role,Categories.Category"
+                ).AsNoTracking().FirstOrDefault();
             return _mapper.Map<UserDTO>(user);
         }
 
@@ -173,6 +174,31 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        
+        public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
+        {
+            User u = Db.UserRepository.Filter(includeProperties: "Categories").Single(user => user.Id == userDTO.Id);
+            var temp = new List<UserCategory>();
+            foreach (var c in categories)
+            {
+                temp.Add(new UserCategory
+                {
+                    UserId = u.Id,
+                    CategoryId = c.Id
+                });
+
+            }
+            u.Categories = temp;
+            try
+            {
+                Db.UserRepository.Update(u);
+                await Db.SaveAsync();
+
+                return new OperationResult(true);
+            }
+            catch (Exception e)
+            {
+                return new OperationResult(false, "Update failing", "");
+            }
+        }
     }
 }

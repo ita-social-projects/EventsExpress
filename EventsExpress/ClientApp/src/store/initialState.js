@@ -31,6 +31,26 @@ const initialState = {
         isError: false,
         data: []
     },
+    
+    editUsername: {
+        isEditUsernamePending: false,
+        isEditUsernameSuccess: false,
+        EditUsernameError: {}
+     },
+    SelectCategories: {
+         IsSelectCategoriesSeccess: false,
+         IsSelectCategoriesError: null
+     },
+    add_event:{
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,

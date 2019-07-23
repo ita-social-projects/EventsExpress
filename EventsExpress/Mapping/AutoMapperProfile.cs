@@ -3,6 +3,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
+using System.Linq;
 
 namespace EventsExpress.Mapping
 {
@@ -44,15 +45,27 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.Country.Name)); 
 
             CreateMap<UserDTO, User>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.EmailConfirmed, opts => opts.MapFrom(src => src.EmailConfirmed))
+                .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
+                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
+                .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForAllOtherMembers(x => x.Ignore());
-                
+
+
 
             CreateMap<LoginDto, UserDTO>();
 
             CreateMap<UserDTO, UserInfo>()
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
+                                                                                          
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src =>  src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name})));
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
@@ -66,7 +79,9 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserPreviewDto>()
                 .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
+                                                         
 
+            CreateMap<CategoryDto, Category>();
         }
     }
 }

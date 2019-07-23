@@ -1,6 +1,11 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import Multiselect from 'react-widgets/lib/Multiselect'
+import 'react-widgets/dist/css/react-widgets.css'
+import DateTimePicker from 'react-widgets/lib/DateTimePicker'
+
 import {  } from 'redux-form';
+
 
 export const validate = values => {
   const errors = {}
@@ -20,12 +25,36 @@ export const validate = values => {
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
     errors.email = 'Invalid email address'
-  }
+    }
   if(values.password!== values.RepeatPassword){
     errors.RepeatPassword = 'Passwords do not match';
   }
   return errors
 }
+
+export const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
+    <DateTimePicker
+        onChange={onChange}
+        format="DD MMM YYYY"
+        time={showTime}
+        value={!value ? null : new Date(value)}
+    />
+
+ export const maxLength = max => value =>
+    value && value.length > max ? `Must be ${max} characters or less` : undefined
+export const maxLength15 = maxLength(15)
+export const minLength = min => value =>
+    value && value.length < min ? `Must be ${min} characters or more` : undefined
+export const minLength2 = minLength(2)
+
+export const renderMultiselect = ({ input, data, valueField, textField }) =>
+    <Multiselect {...input}
+        onBlur={() => input.onBlur()}
+        value={input.value || []} // requires value to be an array\
+        data={data}
+        valueField={valueField}
+        textField={textField}
+    />
 
 export const renderTextField = ({
   label,
@@ -45,10 +74,6 @@ export const renderTextField = ({
   />
 )
 
-export const renderDateTimePicker = () =>
-{
-
-}
 
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

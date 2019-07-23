@@ -2,6 +2,7 @@
 import { Field, reduxForm } from "redux-form";
 import TextField from "material-ui/TextField";
 
+
 const renderTextField = ({
     input,
     label,
@@ -17,12 +18,13 @@ const renderTextField = ({
         />
     );
 
-const editBirthday = props => {
+const EditBirthday = props => {
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
+                    name="Birthday"
                     id="date"
                     label="Birthday"
                     type="date"
@@ -33,6 +35,7 @@ const editBirthday = props => {
                     }}
                 />
             </div>
+            
 
             <div>
                 <button type="submit" disabled={pristine || submitting}>
@@ -47,5 +50,5 @@ const editBirthday = props => {
 };
 
 export default reduxForm({
-    form: "editBirthday" // a unique identifier for this form
-})(editBirthday);
+    form: "EditBirthday" // a unique identifier for this form
+})(EditBirthday);

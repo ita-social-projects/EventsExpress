@@ -1,4 +1,5 @@
 import React from 'react';
+import { dark } from '@material-ui/core/styles/createPalette';
 
 
 export default class EventsExpressService{
@@ -84,6 +85,12 @@ export default class EventsExpressService{
         return res;
     }
 
+    getAllCategories = async () => {
+        const res = await this.getResource('category/all');
+        console.log(res);
+        return res;
+    }
+
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url,
             {
@@ -99,13 +106,55 @@ export default class EventsExpressService{
         return await res.json();
     }
 
-    setResourceWithData = (url, data) => fetch(
-        this._baseUrl + url,
-        {mode: 'no-cors',
-            method: "post",
-            body: data
+    setUsername = async (data) => {
+       
+        const res = await this.setResource('Users/EditUsername', {
+            Name: data.UserName
+           
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
         }
-    );
+        return res; 
+    }
+    setBirthday = async (data) => {
+       
+        const res = await this.setResource('Users/EditBirthday', {
+            Birthday: data.Birthday
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setGender = async (data) => {
+
+        const res = await this.setResource('Users/EditGender', {
+            Gender: data.Gender
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setUserCategory = async (data) => {
+        console.log(data);
+        const res = await this.setResource('Users/EditUserCategory', {
+            Categories: data.Categories
+
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+    
+
 
     setResource =  (url, data) => fetch(
             this._baseUrl + url,
@@ -113,6 +162,7 @@ export default class EventsExpressService{
                 method: "post",
                 headers: new Headers({
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }),
                 body: JSON.stringify(data)
             }
