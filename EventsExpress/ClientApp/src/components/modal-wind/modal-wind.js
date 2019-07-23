@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
 import register from "../../registerServiceWorker";
-import { reset } from '../../containers/header-profile'
+import  reset  from '../../containers/header-profile'
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -37,7 +37,7 @@ export default function ModalWind(props) {
     
   const [open, setOpen] = React.useState(false); 
   const classes = useStyles();
-  const [value, setValue] = React.useState(props.value);
+  const [value, setValue] = React.useState(0);
     
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -48,7 +48,7 @@ export default function ModalWind(props) {
 
   function handleClose() {
       setOpen(false);
-    // props.reset();
+    props.reset();
   }
   return (
     <div>

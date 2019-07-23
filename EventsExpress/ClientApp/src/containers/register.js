@@ -8,7 +8,6 @@ class RegisterWrapper extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (!this.props.registerError && this.props.isRegisterSuccess) {
             this.props.handleClose();
-            this.props.reset();
         }
     }
 
@@ -37,8 +36,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-      register: (email, password) => dispatch(register(email, password)),
-      reset: () => { dispatch(setRegisterSuccess(false)); dispatch(setRegisterError(null)); }
+      register: (email, password) => dispatch(register(email, password))
   };
 };
 export default connect(
