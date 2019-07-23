@@ -12,6 +12,8 @@ namespace EventsExpress.Mapping
         {
             CreateMap<User, UserDTO>();
 
+            CreateMap<CategoryDTO, Category>().ReverseMap();
+            CreateMap<CategoryDto, CategoryDTO>().ReverseMap();
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.Location.CityId))

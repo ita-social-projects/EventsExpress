@@ -31,6 +31,16 @@ const initialState = {
         isError: false,
         data: []
     },
+    add_category: {
+        isCategoryPending: false,
+        isCategorySuccess: false,
+        categoryError: null
+    },
+    categories: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
     countries: {
         isPending: false,
         isError: false,

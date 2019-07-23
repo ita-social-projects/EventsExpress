@@ -38,13 +38,27 @@ export default class EventsExpressService{
         return res;
     }
 
-    getCountries = async () => {
-        const res = await this.getResource('locations/countries');
+    setCategoryDelete = async (data) => {
+        const res = await this.setResource(`category/delete/${data.id}`);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
         return res;
     }
 
-    getCities = async (country) => {
-        const res = await this.getResource('locations/country:' + country + '/cities');
+    setCategory = async (data) => {
+        const res = await this.setResource('category/edit', {
+            Name: data.category
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getAllCategories = async () => {
+        const res = await this.getResource('category/all');
+        console.log(res);
         return res;
     }
 
