@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using EventsExpress.Core.Notifications;
 
 namespace EventsExpress.Core.Services
 {
@@ -19,17 +21,20 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IHostingEnvironment _appEnvironment;
         private readonly IPhotoService _photoService;
+        private readonly IMediator _mediator;
 
         public EventService(
             IUnitOfWork unitOfWork, 
             IMapper mapper, 
             IHostingEnvironment hostingEnvironment,
+            IMediator mediator,
             IPhotoService photoSrv
             )
         {
             Db = unitOfWork;
             _mapper = mapper;
             _photoService = photoSrv;
+            _mediator = mediator;
             _appEnvironment = hostingEnvironment;
         }
        
@@ -98,11 +103,9 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> Create(EventDTO e)
         {
             Event evnt = _mapper.Map<EventDTO, Event>(e);
-
             evnt.Photo = await _photoService.AddPhoto(e.Photo);
 
             List<EventCategory> eventCategories = new List<EventCategory>();
-
             if (e.Categories != null)
             {
                 foreach (var item in e.Categories)
@@ -115,9 +118,19 @@ namespace EventsExpress.Core.Services
                 }
             }
             evnt.Categories = eventCategories;
-            Db.EventRepository.Insert(evnt);
-            await Db.SaveAsync();
-            return new OperationResult(true);
+            try
+            {
+                var result = Db.EventRepository.Insert(evnt);
+                await Db.SaveAsync();
+
+                e.Id = result.Id;
+                await _mediator.Publish(new EventCreatedMessage(e));
+                return new OperationResult(true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, "");
+            }
         }
 
         public async Task<OperationResult> Edit(EventDTO e)

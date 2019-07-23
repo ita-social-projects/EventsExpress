@@ -30,7 +30,7 @@ namespace EventsExpress.Core.Services
         {
             SmtpClient client = new SmtpClient
             {
-                Port = 2526,
+                Port = 2525,
                 Host = "localhost"
             };
             MailMessage email = new MailMessage()

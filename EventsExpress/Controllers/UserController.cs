@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +31,8 @@ namespace EventsExpress.Controllers
         public IActionResult All()
         {
             var users = _userService.GetAll();
-
-            return Ok(users);
+            
+            return Ok(_mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserPreviewDto>>(users));
         }
 
         [HttpGet("blocked")]

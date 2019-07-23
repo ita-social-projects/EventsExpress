@@ -18,6 +18,8 @@ using System;
 using AutoMapper;
 using EventsExpress.Mapping;
 using System.Reflection;
+using MediatR;
+using EventsExpress.Core.NotificationHandlers;
 
 namespace EventsExpress
 {
@@ -92,8 +94,9 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            
-                       
+            //services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
 
