@@ -60,6 +60,11 @@ namespace EventsExpress.Mapping
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo.Thumb));
+
+            CreateMap<UserDTO, UserPreviewDto>()
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
+
         }
     }
 }
