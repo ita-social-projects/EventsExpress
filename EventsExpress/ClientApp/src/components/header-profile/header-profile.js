@@ -28,7 +28,7 @@ export default class HeaderProfile extends Component {
         <div className='root'>
             <div>
                 {!id && (
-                    <ModalWind/>
+                    <ModalWind  reset={this.props.reset} />
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">

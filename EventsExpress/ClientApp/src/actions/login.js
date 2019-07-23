@@ -40,21 +40,21 @@ export default function login(email, password) {
   }
   
 
-function setLoginPending(isLoginPending) {
+ export function setLoginPending(isLoginPending) {
   return {
     type: SET_LOGIN_PENDING,
     isLoginPending
   };
 }
 
-function setLoginSuccess(isLoginSuccess) {
+export function setLoginSuccess(isLoginSuccess) {
   return {
     type: SET_LOGIN_SUCCESS,
     isLoginSuccess
   };
 }
 
-function setLoginError(loginError) {
+export function setLoginError(loginError) {
   return {
     type: SET_LOGIN_ERROR,
     loginError

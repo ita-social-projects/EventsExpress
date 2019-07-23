@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, fade } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
@@ -13,7 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
-
+import register from "../../registerServiceWorker";
+import  reset  from '../../containers/header-profile'
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -25,17 +26,19 @@ function TabContainer(props) {
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired
 };
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     maxWidth: 500
   }
 });
-export default function ModalWind() {
-  const [open, setOpen] = React.useState(false);
+export default function ModalWind(props) {
+    
+  const [open, setOpen] = React.useState(false); 
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
+    
   function handleChange(event, newValue) {
     setValue(newValue);
   }
@@ -44,15 +47,16 @@ export default function ModalWind() {
   }
 
   function handleClose() {
-    setOpen(false);
+      setOpen(false);
+    props.reset();
   }
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Sign In/Up
       </Button>
-      <Dialog
-        open={open}
+          <Dialog
+              open={ open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       
@@ -75,18 +79,16 @@ export default function ModalWind() {
               </TabContainer>
             )}
             {value === 1 && (
-              <TabContainer>
-                <RegisterWrapper />
+                      <TabContainer>
+                          <RegisterWrapper handleClose={handleClose} />
               </TabContainer>
             )}
             <Button  fullWidth onClick={handleClose} color="primary">
           Cancel
         </Button>
           </Paper>
-      
-
-        
       </Dialog>
     </div>
-  );
+    );
+
 }
