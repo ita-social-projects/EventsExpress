@@ -52,6 +52,7 @@ namespace EventsExpress.Controllers
 
             var user = _userService.GetByEmail(authRequest.Email);
             var responce = _mapper.Map<UserDTO, UserInfo>(user);
+            //responce.Categories = user.Categories.Select(x => x.Category);
 
             responce.Token = result.Message;
 

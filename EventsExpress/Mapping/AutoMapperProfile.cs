@@ -2,6 +2,7 @@
 using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
+using System.Linq;
 
 namespace EventsExpress.Mapping
 {
@@ -50,19 +51,9 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
                 .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            /*
-                     public Guid Id;
-        public string Name;
-        public string PasswordHash { get; set; }
-        public string Email { get; set; }
-        public bool EmailConfirmed { get; set; }
-        public string Phone { get; set; }
-        public DateTime Birthday { get; set; }
-        public Gender Gender { get; set; }
-        public bool IsBlocked { get; set; }
-             */
 
 
             CreateMap<LoginDto, UserDTO>();
@@ -70,9 +61,12 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserInfo>()
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Path))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src =>  src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name})));
 
-            CreateMap<EventDTO, Event>().ReverseMap();                                    
+            CreateMap<EventDTO, Event>().ReverseMap();
+
+            CreateMap<CategoryDto, Category>();
         }
     }
 }

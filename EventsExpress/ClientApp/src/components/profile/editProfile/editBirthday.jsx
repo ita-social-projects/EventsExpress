@@ -2,6 +2,7 @@
 import { Field, reduxForm } from "redux-form";
 import TextField from "material-ui/TextField";
 
+
 const renderTextField = ({
     input,
     label,
@@ -34,6 +35,7 @@ const EditBirthday = props => {
                     }}
                 />
             </div>
+            
 
             <div>
                 <button type="submit" disabled={pristine || submitting}>

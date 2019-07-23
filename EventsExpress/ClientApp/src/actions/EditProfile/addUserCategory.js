@@ -11,14 +11,14 @@ const api_serv = new EventsExpressService();
 export default function add_UserCategory(data) {
     return dispatch => {
         dispatch(setAddUserCategoryPending(true));
-        const res = api_serv.setUserCategories(data);
+        const res = api_serv.setUserCategory(data);
         res.then(response => {
             if (response.error == null) {
 
                 dispatch(setAddUserCategorySuccess(true));
 
             } else {
-                dispatch(setAddUserCategorySuccess(response.error));
+                dispatch(setAddUserCategoryError(response.error));
             }
         });
 

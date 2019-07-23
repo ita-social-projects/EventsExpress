@@ -1,4 +1,5 @@
 import React from 'react';
+import { dark } from '@material-ui/core/styles/createPalette';
 
 
 export default class EventsExpressService{
@@ -120,6 +121,18 @@ export default class EventsExpressService{
         return res;
     }
 
+    setUserCategory = async (data) => {
+        console.log(data);
+        const res = await this.setResource('Users/EditUserCategory', {
+            Categories: data.Categories
+
+
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
     
 
 

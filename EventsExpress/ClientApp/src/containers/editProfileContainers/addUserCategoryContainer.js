@@ -1,12 +1,15 @@
 ﻿import React from "react";
-import CategoryForm from '../components/category/category-form';
+import SelectCategoriesWrapper from '../SelectCategories';
+import add_UserCategory from '../../actions/EditProfile/addUserCategory';
 import { connect } from "react-redux";
-import add from "../actions/add-category";
+import add from "../../actions/add-category";
 
 class AddUserCategory extends React.Component {
     submit = values => {
+        console.log("AddUserCategory container:");
         console.log(values);
-        add(values);
+        console.log(add);
+        this.props.add(values);
     };
 
     render() {
@@ -14,11 +17,13 @@ class AddUserCategory extends React.Component {
     }
 }
 
+const mapStateToProps = () => { }
+
 const mapDispatchToProps = dispatch => {
     return {
         add: (data) => dispatch(add_UserCategory(data))
     };
-};
+}
 
 export default connect(
     mapStateToProps,

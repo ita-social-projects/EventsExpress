@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SelectCategoriesWrapper from '../../containers/SelectCategories';
+import AddUserCategory from '../../containers/editProfileContainers/addUserCategoryContainer';
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
 
@@ -111,14 +112,16 @@ const useStyles = makeStyles(theme => ({
                     id="panel4bh-header"
                 >
                     <Typography className={classes.heading}>Favorite Categories</Typography>
-                    <Typography className={classes.secondaryHeading}>
+                    <Typography className={classes.secondaryHeading}> {props.categories.map(
+                        (c) => <div key={c.id}>{c.name}</div>
+                    )}
                     </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
                     <Typography>
                         <MuiThemeProvider>
-                            <SelectCategoriesWrapper  />
+                            <AddUserCategory  />
                         </MuiThemeProvider>
                     </Typography>
 

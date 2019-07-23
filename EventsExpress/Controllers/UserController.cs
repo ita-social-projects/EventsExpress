@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -145,6 +146,29 @@ namespace EventsExpress.Controllers
                 return Ok();
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
+        {
+            IEnumerable<Category> newCategories = _mapper.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(userInfo.Categories);
+
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+
+            var result = await _userService.EditFavoriteCategories(user, newCategories);
+
+            if (result.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest();
+
         }
     }
 }
