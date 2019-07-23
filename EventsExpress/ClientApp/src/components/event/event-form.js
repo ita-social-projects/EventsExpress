@@ -81,28 +81,28 @@ export class EventForm extends Component {
 
                     <div className="text text-2 pl-md-4">
                         <Field name='title' component={renderTextField} type="input" label="Title" />
-                            <div className="meta-wrap">
+                            <div className="meta-wrap m-2">
                                 <p className="meta">    
-                                <span><i className="fa fa-calendar mr-2"></i>
-                        <Field name='date_from' component="input" type="date" label="" /></span>
-                                <span><a href="/#"><i className="fa fa-folder mr-2"></i>Travel</a></span>
-                                <span><i className="fa fa-comment mr-2"></i>2 Comment</span>
+                                <span>From
+                                        <Field name='date_from' component="input" type="date" label="" /></span>
+                                <span>To<Field name='date_to' component="input" type="date" label="" /></span>
                                 </p>
                             </div>
                             
                         <Field name='description' component={renderTextField} type="input" label="Description" />
                            
-                    </div>
-                    <Field onChange={this.props.onChangeCountry} name='country' component="select">
-                        <option>Country</option>
-                        {countries_list}
-                    </Field>
+                        <Field onChange={this.props.onChangeCountry} className="form-control" name='country' component="select">
+                            <option>Country</option>
+                            {countries_list}
+                        </Field>
                     {form_values &&
-                      <Field name='city' component="select">
+                    <Field name='city' className="form-control" component="select">
                         <option>City</option>
                         {this.renderLocations(this.props.cities)}
                       </Field>    
                     }
+                    </div>
+                    
 
                 <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
                    Save

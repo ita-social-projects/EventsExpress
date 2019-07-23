@@ -10,7 +10,7 @@ export default class EventsExpressService{
         file.append('Photo', data.image.file);
         file.append('Title', data.title);
         file.append('Description', data.description);
-        file.append('Location.CityId', 'b75dd7ff-71d1-46e4-c8c0-08d70ea7bb28');
+        file.append('Location.CityId', data.city);
         file.append('User.Id', data.user_id);
         file.append('DateFrom', data.date_from);
         const res = await this.setResourceWithData('event/edit', file);
