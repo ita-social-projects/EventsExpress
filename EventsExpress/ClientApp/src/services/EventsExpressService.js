@@ -66,6 +66,7 @@ export default class EventsExpressService{
 
     setCategory = async (data) => {
         const res = await this.setResource('category/edit', {
+            Id: data.Id,
             Name: data.category
         });
         if (!res.ok) {

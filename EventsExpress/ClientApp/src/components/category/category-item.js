@@ -1,6 +1,5 @@
 ﻿import React, { Component } from "react";
 import { reduxForm } from "redux-form";
-
 import './Category.css';
 
 
@@ -12,11 +11,12 @@ export default class categoryItem extends Component {
 
     render() {
         const { name } = this.props.item;
-        return (
-            <div >
-                <h4>#{name}</h4>
-            </div>
-        );
+            return (
+                <div>
+
+                    <h4>#{name}</h4>
+                </div>
+            );
     }
 }
 

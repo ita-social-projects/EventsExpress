@@ -23,11 +23,14 @@ class Category extends React.Component {
                         />
                     </div>
                     <div>
+                        {this.props.categoryError && <div className="alert alert-danger">{this.props.categoryError}</div>}
+
                         <DialogActions>
                             <Button  type="submit" value="Add" color="primary">
                                 Add
                             </Button>
-                            </DialogActions>
+                        </DialogActions>
+
                     </div>
                 </form>
             </div>

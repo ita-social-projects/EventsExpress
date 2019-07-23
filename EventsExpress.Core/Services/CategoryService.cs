@@ -62,6 +62,11 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Not found", "");
             }
 
+            if (Db.CategoryRepository.Get().Any(c => c.Name == category.Name))
+            {
+                return new OperationResult(false, "The same category is already exist in database", "");
+            }
+
             oldCategory.Name = category.Name;
 
             await Db.SaveAsync();
