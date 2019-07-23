@@ -15,10 +15,6 @@ export default class Home extends Component{
             <AddEventWrapper />
             
             <EventListWrapper /> 
-
-           
-            <AddCAtegory />
-            <CategoryListWrapper />
           
         </div>
         

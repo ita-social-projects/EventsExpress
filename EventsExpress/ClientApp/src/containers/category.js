@@ -1,11 +1,12 @@
-﻿import { reduxForm } from 'redux-form';
-import { CategoryForm } from '../components/category/category-form';
+﻿
+import { Category } from '../components/category/category';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
-    ...state
+    categories: state.categories
 });
 
 const mapDispatchToProps = (dispatch) => { return bindActionCreators(() => { }, dispatch); };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryForm);
+export default connect(mapStateToProps, mapDispatchToProps)(Category);

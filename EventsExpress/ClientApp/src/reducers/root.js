@@ -11,6 +11,7 @@ import * as AddCategories from './add-category';
 import * as Categories from './category-list';
 import * as Countries from './countries';
 import * as Cities from './cities';
+import * as Users from './users';
 
 const rootReducers = {
     user: User.reducer,
@@ -23,7 +24,8 @@ const rootReducers = {
     countries: Countries.reducer,
     cities: Cities.reducer,
     add_category: AddCategories.reducer,
-    categories: Categories.reducer
+    categories: Categories.reducer,
+    users: Users.reducer
 };
 
 

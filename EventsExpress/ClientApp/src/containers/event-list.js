@@ -15,6 +15,7 @@ class EventListWrapper extends Component{
         // const hasData = !(isPending || isError);
 
         // const errorMessage = isError ? <ErrorIndicator/> : null;
+        
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventList data_list={data} /> : null;
     

@@ -5,12 +5,12 @@ import Event from './event-item';
 export default class EventList extends Component{
   
   renderItems = (arr) => {
-   /* return arr.map((item) => {
+   return arr.map((item) => {
 
       return (
           <Event key={item.id} item={item} />
       );
-    });*/
+    });
   }
   render()
   {

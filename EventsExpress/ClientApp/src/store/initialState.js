@@ -50,6 +50,11 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    users: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

@@ -26,7 +26,7 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult All()
         {
             var users = _userService.GetAll();
 

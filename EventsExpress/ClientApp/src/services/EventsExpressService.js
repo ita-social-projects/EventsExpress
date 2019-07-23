@@ -38,6 +38,23 @@ export default class EventsExpressService{
         return res;
     }
 
+
+    getUsers = async () => {
+        const res = await this.getResource('users');
+        console.log(res);
+        return res;  
+    }
+
+    getCountries = async () => {
+        const res = await this.getResource('locations/countries');
+        return res;
+    }
+
+    getCities = async (country) => {
+        const res = await this.getResource('locations/country:' + country + '/cities');
+        return res;
+    }
+
     setCategoryDelete = async (data) => {
         const res = await this.setResource(`category/delete/${data.id}`);
         if (!res.ok) {
@@ -68,7 +85,14 @@ export default class EventsExpressService{
     }
 
     getResource = async (url) => {
-        const res = await fetch(this._baseUrl + url);
+        const res = await fetch(this._baseUrl + url,
+            {
+                method: "get",
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }),
+            });
         if(!res.ok){
             return {error: "Invalid data"}
         }

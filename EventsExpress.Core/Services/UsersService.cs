@@ -93,6 +93,7 @@ namespace EventsExpress.Core.Services
             var users = Db.UserRepository.Get();
 
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+
             return result;
         }
 

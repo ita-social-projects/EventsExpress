@@ -17,7 +17,7 @@ const NavItem = ({to, icon, text}) => {
 }
 
 
-const LeftSidebar = () =>{
+const LeftSidebar = (props) =>{
     return (
     <div id="colorlib-page">
             <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  
@@ -29,7 +29,15 @@ const LeftSidebar = () =>{
                         
                             <NavItem to={'/'} icon={'fa fa-home'} text={"Home"} />
                             <NavItem to={'/profile'} icon={'fa fa-paper-plane'} text={"Profile"} />
-
+                        {props.user.role === "Admin" &&
+                        <>
+                            <NavItem to={'/admin/categories/'} icon={'fa fa-home'} text={"Categories"} />
+                            
+                            <NavItem to={'/admin/users/'} icon={'fa fa-home'} text={"Users"} />
+                            
+                            <NavItem to={'/admin/events/'} icon={'fa fa-home'} text={"Events"} />
+                        </>
+                        }
 
                         
                 </ul>
