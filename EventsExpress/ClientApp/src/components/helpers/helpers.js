@@ -29,7 +29,8 @@ export const validate = values => {
 
 export const renderTextField = ({
   label,
-  input,
+    input,
+  value,
   meta: { touched, invalid, error },
   ...custom
 }) => (
@@ -39,6 +40,7 @@ export const renderTextField = ({
     label={label}
     placeholder={label}
     error={touched && invalid}
+            defaultValue={value}
     helperText={touched && error}
     {...input}
     {...custom}

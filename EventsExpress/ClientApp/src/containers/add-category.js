@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import CategoryForm  from '../components/category/category-form';
+import CategoryForm from '../components/category/category-form';
 import { connect } from "react-redux";
 import add from "../actions/add-category";
 
@@ -9,10 +9,14 @@ class CategoryWrapper extends React.Component {
         this.props.add({ ...values });
     };
     render() {
-        return <CategoryForm onSubmit={this.submit} />;
+        return (
+            <div>
+                <CategoryForm categoryError={this.props.categoryError} onSubmit={this.submit} />
+        </div>
+        );
     }
 }
-const mapStateToProps = state => ({ add: state.add });
+const mapStateToProps = state => ({ categoryError: state.add_category.categoryError });
 
 const mapDispatchToProps = dispatch => {
     return {
