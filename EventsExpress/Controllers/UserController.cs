@@ -167,12 +167,7 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
-            return BadRequest();
-
-        }
-                return BadRequest(result.Message);
-            }
-            return Ok();
+            return BadRequest();      
         }
 
         [HttpPost("[action]")]

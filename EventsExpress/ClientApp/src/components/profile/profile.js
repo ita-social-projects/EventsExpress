@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 
  const Profile = (props) => {
     const classes = useStyles();
-
+    console.log(props);
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {

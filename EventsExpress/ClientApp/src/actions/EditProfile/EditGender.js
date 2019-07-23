@@ -3,7 +3,8 @@
 export const editGender = {
     PENDING : "SET_EDITGENDER_PENDING",
     SUCCESS : "SET_EDITGENDER_SUCCESS",
-    ERROR : "SET_EDITGENDER_ERROR"
+    ERROR : "SET_EDITGENDER_ERROR",
+    UPDATE: "UPDATE_GENDER"
 }
 
 const api_serv = new EventsExpressService();
@@ -19,13 +20,21 @@ export default function edit_Gender(data) {
             if (response.error == null) {
 
                 dispatch(setEditGenderSuccess(true));
-
+                dispatch(updateGender(data));
             } else {
                 dispatch(setEditGenderError(response.error));
             }
         });
     }
 }
+
+function updateGender(data) {
+    return {
+        type: editGender.UPDATE,
+        payload: data
+    };
+}
+
 
     function setEditGenderPending(data) {
         return {

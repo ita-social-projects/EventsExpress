@@ -1,7 +1,6 @@
 ﻿import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import Button from "@material-ui/core/Button";
-import Select from 'react-select';
 import { renderMultiselect } from '../helpers/helpers'
 
 function SelectCategories(props) {

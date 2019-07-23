@@ -3,7 +3,8 @@
 export const editBirthday = {
     PENDING : "SET_EDITBIRTHDAY_PENDING",
     SUCCESS : "SET_EDITBIRTHDAY_SUCCESS",
-    ERROR : "SET_EDITBIRTHDAY_ERROR"
+    ERROR : "SET_EDITBIRTHDAY_ERROR",
+    UPDATE: "UPDATE_BIRTHDAY"
 }
 
 const api_serv = new EventsExpressService();
@@ -16,13 +17,21 @@ export default function edit_Birthday(data) {
             if (response.error == null) {
 
                 dispatch(setEditBirthdaySuccess(true));
-
+                dispatch(updateBirthday(data));
             } else {
                 dispatch(setEditBirthdayError(response.error));
             }
         });
 
     }
+}
+
+
+function updateBirthday(data) {
+    return {
+        type: editBirthday.UPDATE,
+        payload: data
+    };
 }
 
     function setEditBirthdayPending(data) {

@@ -1,9 +1,9 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-
 export const addUserCategory = {
     PENDING: "SET_ADDUSERCATEGORY_PENDING",
     SUCCESS: "SET_ADDUSERCATEGORY_SUCCESS",
-    ERROR: "SET_ADDUSERCATEGORY_ERROR"
+    ERROR: "SET_ADDUSERCATEGORY_ERROR",
+    UPDATE: "UPDATE_CATEGORIES"
 }
 
 const api_serv = new EventsExpressService();
@@ -16,13 +16,20 @@ export default function add_UserCategory(data) {
             if (response.error == null) {
 
                 dispatch(setAddUserCategorySuccess(true));
-
+                dispatch(updateCategories(data));
             } else {
                 dispatch(setAddUserCategoryError(response.error));
             }
         });
 
     }
+}
+
+function updateCategories(data) {
+    return {
+        type: addUserCategory.UPDATE,
+        payload: data
+    };
 }
 
 function setAddUserCategoryPending(data) {

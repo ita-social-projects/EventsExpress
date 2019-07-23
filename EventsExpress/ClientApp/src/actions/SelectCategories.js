@@ -5,6 +5,7 @@ export default function save(categories) {
     callSelectCategoriesApi(categories, error => {
         if (!error) {
             dispatch(selectCategoriesSeccess(true));
+            
         } else {
             dispatch(selectCategoriesError(error));
         }

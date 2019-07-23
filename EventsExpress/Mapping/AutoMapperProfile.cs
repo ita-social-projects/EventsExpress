@@ -65,7 +65,7 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserInfo>()
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                                                                                           
-                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src =>  src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name})));
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src =>  src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name})))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 

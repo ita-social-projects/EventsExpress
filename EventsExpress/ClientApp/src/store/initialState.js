@@ -9,7 +9,8 @@ const initialState = {
         gender: null,
         role: null,
         photoUrl: null,
-        token: null
+        token: null,
+        categories: []
     },
     login:{
         isLoginPending: false,

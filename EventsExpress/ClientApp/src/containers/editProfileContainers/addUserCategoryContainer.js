@@ -6,9 +6,7 @@ import add from "../../actions/add-category";
 
 class AddUserCategory extends React.Component {
     submit = values => {
-        console.log("AddUserCategory container:");
-        console.log(values);
-        console.log(add);
+
         this.props.add(values);
     };
 

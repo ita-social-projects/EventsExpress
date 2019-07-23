@@ -3,7 +3,8 @@
 export const editUsername = {
     PENDING : "SET_EDITUSERNAME_PENDING",
     SUCCESS : "SET_EDITUSERNAME_SUCCESS",
-    ERROR : "SET_EDITUSERNAME_ERROR"
+    ERROR : "SET_EDITUSERNAME_ERROR",
+    UPDATE: "UPDATE_USERNAME"
 
 }
 
@@ -20,12 +21,19 @@ export default function edit_Username(data) {
             if (response.error == null) {
 
                 dispatch(setEditUsernameSuccess(true));
-                
+                dispatch(updateUsername(data));
             } else {
                 dispatch(setEditUsernameError(response.error));
             }
         });
     }
+}
+
+function updateUsername(data) {
+    return {
+        type: editUsername.UPDATE,
+        payload: data
+    };
 }
 
 function setEditUsernamePending(data) {

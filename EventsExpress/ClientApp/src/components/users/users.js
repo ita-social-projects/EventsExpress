@@ -6,7 +6,7 @@ export default class Users extends Component{
     
     renderUsers = (arr) => {
         return arr.map(x => {
-            return <p>{x.name}</p>
+            return <p>{x.username}</p>
         }
             );
     }
