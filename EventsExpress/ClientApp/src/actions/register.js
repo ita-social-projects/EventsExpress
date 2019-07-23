@@ -1,5 +1,5 @@
+import React from 'react';
 import EventsExpressService from '../services/EventsExpressService';
-
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
 export const SET_REGISTER_ERROR = "SET_REGISTER_ERROR";
@@ -9,7 +9,7 @@ const api_serv = new EventsExpressService();
 export default function register(email, password) {
   return dispatch => {
     console.log('sdagsag');
-    dispatch(setRegisterPending(false));
+    dispatch(setRegisterPending(true));
 
     const res = api_serv.setRegister({Email: email, Password: password});
     res.then(response => {
@@ -22,21 +22,21 @@ export default function register(email, password) {
   };
 }
 
-function setRegisterPending(isRegisterPending) {
+export function setRegisterPending(isRegisterPending) {
   return {
     type: SET_REGISTER_PENDING,
     isRegisterPending
   };
 }
 
-function setRegisterSuccess(data) {
+export function setRegisterSuccess(data) {
   return {
     type: SET_REGISTER_SUCCESS,
     payload: data
   };
 }
 
-function setRegisterError(registerError) {
+export function setRegisterError(registerError) {
   return {
     type:SET_REGISTER_ERROR,
     registerError

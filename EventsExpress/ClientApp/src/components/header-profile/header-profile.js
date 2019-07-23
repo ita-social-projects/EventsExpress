@@ -22,13 +22,13 @@ export default class HeaderProfile extends Component {
     render(){
  
         const { id, name } = this.props.user;
-        const { onClick } = this.props;
+        const { onClick} = this.props;
     
     return (
         <div className='root'>
             <div>
                 {!id && (
-                    <ModalWind/>
+                    <ModalWind value={0}  />
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">

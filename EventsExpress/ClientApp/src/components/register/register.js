@@ -47,7 +47,7 @@ const { validate, renderTextField, asyncValidate } = Module;
             <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
                CLEAR
         </Button >
-              <Button fullWidth={true} type="submit" value="Login" color="primary">
+              <Button fullWidth={true} type="submit" color="primary">
                 Sign Up
               </Button> </DialogActions>
           </div>

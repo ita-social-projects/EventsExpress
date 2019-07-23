@@ -1,6 +1,6 @@
 import { SET_REGISTER_PENDING, SET_REGISTER_SUCCESS, SET_REGISTER_ERROR} from '../actions/register';
 import initialState from '../store/initialState';
-
+import ModalWind from '.././components/modal-wind'
 export const reducer = (
     state = initialState.register,
     action
@@ -12,10 +12,10 @@ export const reducer = (
         });
   
       case SET_REGISTER_SUCCESS:
-        console.log('wsdsf');
-        return Object.assign({}, state, {
+            return Object.assign({}, state, {
             isRegisterSuccess: action.payload,
-            registerError: null
+                registerError: null,
+                isRegisterPending: false
         });
   
       case SET_REGISTER_ERROR:
@@ -27,4 +27,5 @@ export const reducer = (
       default:
         return state;
     }
-  }
+}
+
