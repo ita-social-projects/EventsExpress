@@ -11,7 +11,7 @@
 }
 
 .bigAvatar {
-    margin: 10px;
-    width: 350px;
-    height: 350px;
+    margin: 10px !important;
+    width: 150px !important;
+    height: 150px !important;
 }

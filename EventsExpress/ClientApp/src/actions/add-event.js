@@ -25,21 +25,21 @@ export default function add_event(data) {
   }
 
 
-  function setEventSuccess(data) {
+  export function setEventSuccess(data) {
     return {
       type: SET_EVENT_SUCCESS,
       payload: data
     };
   }
 
-  function setEventPending(data) {
+  export function setEventPending(data) {
     return {
       type: SET_EVENT_PENDING,
       payload: data
     };
   }
 
-  function setEventError(data) {
+  export function setEventError(data) {
     return {
       type: SET_EVENT_ERROR,
       payload: data
