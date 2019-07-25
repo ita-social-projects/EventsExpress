@@ -113,7 +113,7 @@ namespace EventsExpress.Core.Services
                     eventCategories.Add(new EventCategory
                     {
                         Event = evnt,
-                        Category = Db.CategoryRepository.GetByTitle(item)
+                        CategoryId = item.Id
                     });
                 }
             }
@@ -157,7 +157,7 @@ namespace EventsExpress.Core.Services
                     eventCategories.Add(new EventCategory
                     {
                         Event = evnt,
-                        Category = Db.CategoryRepository.GetByTitle(item)
+                        CategoryId = item.Id
                     });
                 }
             }
@@ -169,7 +169,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> Events()
         {
-            var events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country").ToList();
+            var events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category").ToList();
 
             return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
         }

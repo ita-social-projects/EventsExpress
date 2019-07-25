@@ -70,10 +70,13 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<EventDTO, Event>()
-                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Visitors, opt => opt.Ignore())
+                .ForMember(dest => dest.Categories, opt => opt.Ignore());
 
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
                 .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo.Thumb));
 
             CreateMap<UserDTO, UserPreviewDto>()

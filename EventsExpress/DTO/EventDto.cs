@@ -18,5 +18,7 @@ namespace EventsExpress.DTO
         public string PhotoUrl { get; set; }
         public UserPreviewDto User { get; set; }
         public Location Location { get; set; }
+                                                               
+        public IEnumerable<CategoryDto> Categories { get; set; }
     }
 }

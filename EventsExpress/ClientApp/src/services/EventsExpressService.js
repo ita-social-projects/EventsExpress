@@ -15,7 +15,12 @@ export default class EventsExpressService{
         file.append('User.Id', data.user_id);
         file.append('DateFrom', data.date_from);
         file.append('DateTo', data.date_to);
-    
+        let i = 0;
+        let categories = data.categories.map(x => {
+            console.log(i);
+            file.append('Categories[' + i + '].Id', x.id);
+            i++;
+        })
         const res = await this.setResourceWithData('event/edit', file);
         if(!res.ok){
             return { error: await res.text()};

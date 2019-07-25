@@ -98,9 +98,9 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
-        public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<string> categories)
+        public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
         {
-            var categoryNames = new List<string> { "Sea", "Weekends" };
+            var categoryNames = new List<string> { "Golf", "Summer" };
 
             var users = Db.UserRepository.Filter(includeProperties: "Categories.Category")
                 .Where(user => user.Categories.Any(category => categoryNames.Contains(category.Category.Name)))
