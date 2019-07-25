@@ -91,7 +91,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetAll()
         {
-            var users = Db.UserRepository.Get();
+            var users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
 
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
 

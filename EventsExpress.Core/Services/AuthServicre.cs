@@ -64,7 +64,7 @@ namespace EventsExpress.Core.Services
         {
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Email),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
             };
 
