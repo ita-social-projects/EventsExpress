@@ -2,8 +2,15 @@
 import CategoryForm from '../components/category/category-form';
 import { connect } from "react-redux";
 import add from "../actions/add-category";
+import { reset } from 'redux-form';
+import { setCategoryError, setCategoryPending, setCategorySuccess } from '../actions/add-category';
 
 class CategoryWrapper extends React.Component {
+    componentDidUpdate = () => {
+        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
+            this.props.reset();
+        }
+    }
     submit = values => {
         console.log(values);
         this.props.add({ ...values });
@@ -20,7 +27,13 @@ const mapStateToProps = state => ({ categoryError: state.add_category.categoryEr
 
 const mapDispatchToProps = dispatch => {
     return {
-        add: (data) => dispatch(add(data))
+        add: (data) => dispatch(add(data)),
+        reset: () => {
+            dispatch(reset('add-form'));
+            dispatch(setCategoryPending(true));
+            dispatch(setCategorySuccess(false));
+            dispatch(setCategoryError(null));
+        }
     };
 };
 export default connect(

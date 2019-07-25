@@ -25,21 +25,21 @@ export default function add_category(data) {
 }
 
 
-function setCategorySuccess(data) {
+export function setCategorySuccess(data) {
     return {
         type: SET_CATEGORY_SUCCESS,
         payload: data
     };
 }
 
-function setCategoryPending(data) {
+export function setCategoryPending(data) {
     return {
         type: SET_CATEGORY_PENDING,
         payload: data
     };
 }
 
-function setCategoryError(data) {
+export function setCategoryError(data) {
     return {
         type: SET_CATEGORY_ERROR,
         payload: data

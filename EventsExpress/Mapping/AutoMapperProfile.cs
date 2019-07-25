@@ -82,6 +82,9 @@ namespace EventsExpress.Mapping
                                                          
 
             CreateMap<CategoryDto, Category>();
+
+
+            CreateMap<CommentDTO, Comments>().ReverseMap();
         }
     }
 }

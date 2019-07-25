@@ -75,6 +75,14 @@ export default class EventsExpressService{
         return res;
     }
 
+    setCommentDelete = async (data) => {
+        const res = await this.setResource(`comment/delete/${data.Id}`);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
     setCategory = async (data) => {
         const res = await this.setResource('category/edit', {
             Id: data.Id,
@@ -86,9 +94,16 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllCategories = async () => {
-        const res = await this.getResource('category/all');
-        console.log(res);
+    setComment = async (data) => {
+        const res = await this.setResource('comment/edit', {
+            Id: data.Id,
+            Text: data.Text,
+            UserId: data.UserId,
+            EventId: data.EventId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
         return res;
     }
 
@@ -99,6 +114,12 @@ export default class EventsExpressService{
 
     getAllCategories = async () => {
         const res = await this.getResource('category/all');
+        console.log(res);
+        return res;
+    }
+
+    getAllComments = async () => {
+        const res = await this.getResource('comment/all');
         console.log(res);
         return res;
     }

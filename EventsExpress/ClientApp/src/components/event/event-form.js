@@ -5,9 +5,9 @@ import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import {renderDateTimePicker } from '../helpers/helpers';
-import DropdownList from 'react-widgets/lib/DropdownList'
-import moment from 'moment'
-import momentLocaliser from 'react-widgets-moment'
+import DropdownList from 'react-widgets/lib/DropdownList';
+import moment from 'moment';
+import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 momentLocaliser(moment)
 const enhanceWithPreview = files =>
