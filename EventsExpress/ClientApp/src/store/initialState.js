@@ -80,6 +80,11 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    event: {
+        isPending: true,
+        isError: false,
+        data: null
     }
 };
 

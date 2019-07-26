@@ -5,6 +5,7 @@ import Category from '../category/category';
 import Admin from '../admin';
 import UsersWrapper from '../../containers/users';
 import EventListWrapper from '../../containers/event-list';
+import EventItemViewWrapper from '../../containers/event-item-view';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 import Layout from '../layout';
 
@@ -17,6 +18,7 @@ export default class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/admin/" component={Admin} />
+                        <Route path="/event/:id" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users/" component={UsersWrapper} />
                         <Route path="/admin/events/" component={EventListWrapper} />

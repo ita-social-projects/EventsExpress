@@ -30,6 +30,16 @@ namespace EventsExpress.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]")]
+        public IActionResult Get(Guid id)
+        {
+
+            var res = _mapper.Map<EventDTO, EventDto>(_eventService.EventById(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
         public IActionResult All()
         {
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());

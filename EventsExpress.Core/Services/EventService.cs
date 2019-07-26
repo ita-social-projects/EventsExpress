@@ -176,7 +176,7 @@ namespace EventsExpress.Core.Services
 
         public EventDTO EventById(Guid eventId)
         {
-            var evv = Db.EventRepository.Get(eventId);
+            var evv = Db.EventRepository.Filter(filter: x => x.Id == eventId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category").FirstOrDefault();
             return _mapper.Map<EventDTO>(evv);
         }
 

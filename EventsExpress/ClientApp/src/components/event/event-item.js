@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
 
@@ -10,7 +11,7 @@ export default class Event extends Component{
     }
 
     render(){
-        const { title, dateFrom, comment_count, description, photoUrl, categories } = this.props.item;
+        const { id, title, dateFrom, comment_count, description, photoUrl, categories } = this.props.item;
         const { city, country } = this.props.item.location;
         console.log('Event ', categories);
 
@@ -30,7 +31,7 @@ export default class Event extends Component{
                             </div>
                             <p className="mb-4">{description}</p>
                             <p>{this.renderCategories(categories)}</p>
-                            <p><a href="#" className="btn-custom">Read More <span className="ion-ios-arrow-forward"></span></a></p>
+                            <p><Link to={'/event/'+id} className="btn-custom">Read More</Link></p>
                     </div>
                 </div>
         );

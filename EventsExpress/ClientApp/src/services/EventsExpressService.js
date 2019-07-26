@@ -55,6 +55,11 @@ export default class EventsExpressService{
         return res;
     }
 
+    getEvent = async (id) => {
+        const res = await this.getResource('event/get?id=' + id);
+        return res;
+    }
+
 
     getUsers = async () => {
         const res = await this.getResource('users');

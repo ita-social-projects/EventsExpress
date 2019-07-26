@@ -60,7 +60,7 @@ export const minLength2 = minLength(6)
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
     <Multiselect {...input}
         onBlur={() => input.onBlur()}
-        value={input.value || []} // requires value to be an array\
+        value={input.value || []} 
         data={data}
         valueField={valueField}
         textField={textField}
