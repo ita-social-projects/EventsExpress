@@ -12,12 +12,14 @@ export default class Users extends Component {
         return (
             <table className="table">
                 <thead className="bg-light">
-                    <td scope="col"></td>
-                    <td scope="col">email</td>
-                    <td scope="col">name</td>
-                    <td scope="col">role</td>
-                    <td scope="col"></td>
-                    <td scope="col">status</td>
+                    <tr>
+                        <td scope="col"></td>
+                        <td scope="col">email</td>
+                        <td scope="col">name</td>
+                        <td scope="col">role</td>
+                        <td scope="col"></td>
+                        <td scope="col">status</td>
+                    </tr>
                 </thead>
                 <tbody>
                     {this.renderUsers(this.props.users)}

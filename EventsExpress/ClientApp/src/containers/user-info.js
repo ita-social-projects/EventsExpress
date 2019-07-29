@@ -9,14 +9,14 @@ class UserInfoWpapper extends Component {
         let value = this.props.user.id;
         console.log('block user: ');
         console.log(value);
-        this.props.block({ id: value });
+        this.props.block(value);
     };
 
     unblock = () => {
         let value = this.props.user.id;
         console.log('unblock user: ');
         console.log(value);
-        this.props.unblock({ id: value });
+        this.props.unblock(value);
     };
 
     render() {
@@ -39,18 +39,18 @@ class UserInfoWpapper extends Component {
 
                 <td className="align-middle">
                     <Fab size="small" onClick={this.unSblock} >
-                        <i class="fas fa-edit"></i>
+                        <i className="fas fa-edit"></i>
                     </Fab>
                 </td>
 
                 <td className="align-middle">
                     <div className="d-flex justify-content-center align-items-center">
                         {(user.isBlocked == true)
-                            ? <Fab size="small" onClick={this.unSblock} >
-                                <i class="fas fa-lock" ></i>
+                            ? <Fab size="small" onClick={this.unblock} >
+                                <i className="fas fa-lock" ></i>
                             </Fab>
                             : <Fab size="small" onClick={this.block} >
-                                <i class="fas fa-unlock-alt" ></i>
+                                <i className="fas fa-unlock-alt" ></i>
                             </Fab>}
                     </div>
                 </td>
@@ -65,8 +65,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-       block: () => dispatch(block_user()),
-       unblock: () => dispatch(unblock_user())
+       block: (id) => dispatch(block_user(id)),
+       unblock: (id) => dispatch(unblock_user(id))
     };
 }
 

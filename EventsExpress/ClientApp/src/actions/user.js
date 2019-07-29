@@ -1,25 +1,29 @@
 ﻿import EventsExpressService from '../services/EventsExpressService';
 
-const blockUser = {
+export const blockUser = {
     PENDING: 'PENDING',
     SUCCESS: 'SUCCESS',
     ERROR: 'ERROR',
+    UPDATE: 'UPDATE'
 }
 
-const unBlockUser = {
+export const unBlockUser = {
     PENDING: 'PENDING',
     SUCCESS: 'SUCCESS',
     ERROR: 'ERROR',
+    UPDATE: 'UPDATE'
 }
 
 const api_serv = new EventsExpressService();
 
 
 export function unblock_user(id) {
+    console.log("action creators:")
+    console.log(id)
     return dispatch => {
         dispatch(setUnBlockUserPending(true));
 
-        const res = api_serv.unBlockUser(id);
+        const res = api_serv.setUserUnblock(id);
 
         res.then(response => {
             if (response.error == null) {
@@ -33,10 +37,11 @@ export function unblock_user(id) {
 }
 
 export function block_user(id) {
+
     return dispatch => {
         dispatch(setBlockUserPending(true));
 
-        const res = api_serv.blockUser(id);
+        const res = api_serv.setUserBlock(id);
 
         res.then(response => {
             if (response.error == null) {
@@ -73,7 +78,7 @@ function setBlockUserError(data) {
 
 function updateBlockedUser(id) {
     return {
-        type: blockUser.ERROR,
+        type: blockUser.UPDATE,
         payload: id
     }
 } 
@@ -101,7 +106,7 @@ function setUnBlockUserError(data) {
 
 function updateUnBlockedUser(id) {
     return {
-        type: unBlockUser.ERROR,
+        type: unBlockUser.UPDATE,
         payload: id
     }
 } 

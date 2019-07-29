@@ -167,6 +167,21 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
 
+            user.IsBlocked = false;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> Block(Guid uId)
+        {
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
             user.IsBlocked = true;
 
             await Db.SaveAsync();

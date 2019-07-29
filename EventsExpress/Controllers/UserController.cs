@@ -73,6 +73,21 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Block(Guid userId)
+        {
+            //Guid id;
+            //Guid.TryParse(userId, out id);
+            var result = await _userService.Block(userId);
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
         #region My profile managment
 
         [HttpPost("[action]")]
