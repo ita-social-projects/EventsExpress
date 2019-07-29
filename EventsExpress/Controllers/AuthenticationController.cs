@@ -96,6 +96,32 @@ namespace EventsExpress.Controllers
             }
             return Ok();
         }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangePassword
+            (ChangePasswordDto changePasswordDto, [FromServices] IAuthServicre _authServise
+            )
+        {
+            var user = _authServise.GetCurrentUser(HttpContext.User);
 
+            var check = _authServise.CheckPassword(changePasswordDto.OldPassword, user.PasswordHash);
+
+            if (check == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            user.PasswordHash = PasswordHasher.GenerateHash(changePasswordDto.NewPassword);
+
+            var result = await _userService.Update(user);
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok();
+        }
+        
     }
 }

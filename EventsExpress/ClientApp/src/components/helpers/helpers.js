@@ -32,6 +32,25 @@ export const validate = values => {
   return errors
 }
 
+export const ChangePasswordHelper = values => {
+    const errors = {}
+    const requiredFields = [
+        'oldPassword',
+        'password',
+        'repeatPassword'
+    ]
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    })
+
+    if (values.password !== values.repeatPassword) {
+        errors.RepeatPassword = 'Passwords do not match';
+    }
+    return errors
+}
+
 export const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
     <DateTimePicker
         onChange={onChange}

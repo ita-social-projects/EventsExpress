@@ -165,6 +165,16 @@ export default class EventsExpressService{
         }
         return res;
     }
+
+    setChangePassword = async (data) => {
+        
+        const res = await this.setResource('Authentication/ChangePassword', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        
+        return res;
+    }
     
 
 

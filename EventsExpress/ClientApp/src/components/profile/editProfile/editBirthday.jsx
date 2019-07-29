@@ -29,7 +29,7 @@ const EditBirthday = props => {
                     label="Birthday"
                     type="date"
                     component={renderTextField}
-                    defaultValue="2017-05-24"
+                   
                     InputLabelProps={{
                         shrink: true
                     }}

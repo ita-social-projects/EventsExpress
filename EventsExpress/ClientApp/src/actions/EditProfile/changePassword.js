@@ -12,7 +12,7 @@ const api_serv = new EventsExpressService();
 export default function change_Password(data) {
     return dispatch => {
         dispatch(setChangePasswordPending(true));
-        const res = api_serv.setBirthday(data);
+        const res = api_serv.setChangePassword(data);
         res.then(response => {
             if (response.error == null) {
 

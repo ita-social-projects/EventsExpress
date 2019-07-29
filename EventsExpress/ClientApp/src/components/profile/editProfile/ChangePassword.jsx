@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { makeStyles } from "@material-ui/core/styles";
+import Module from '../../helpers';
 
 const renderTextField = ({
     input,
@@ -23,6 +24,7 @@ const renderTextField = ({
             {...custom}
         />
     );
+const { ChangePasswordHelper } = Module;
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 const ChangePassword = (props) => {
     const { handleSubmit, pristine, reset, submitting } = props;
     const classes = useStyles();
-
+    
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
@@ -67,9 +69,10 @@ const ChangePassword = (props) => {
                     <MuiThemeProvider>
 
                         <form onSubmit={handleSubmit}>
-                            <div>
+                            <div className="d-flex flex-column " >
+                                
                                 <Field
-                                    name="currentPassword"
+                                    name="oldPassword"
                                     label="Input current password"
                                     component={renderTextField}
                                     InputLabelProps={{
@@ -120,6 +123,7 @@ const ChangePassword = (props) => {
     );
 };
 
-export default ChangePassword({
-    form: "ChangePassword" // a unique identifier for this form
+export default reduxForm({
+    form: "ChangePassword", // a unique identifier for this form
+    ChangePasswordHelper
 })(ChangePassword);

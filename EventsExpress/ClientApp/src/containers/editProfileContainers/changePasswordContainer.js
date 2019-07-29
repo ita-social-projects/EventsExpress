@@ -25,6 +25,7 @@ const mapStateToProps = state => {
 
 };
 
+
 const mapDispatchToProps = dispatch => {
     return {
         changePassword: (date) => dispatch(changePassword(date))
