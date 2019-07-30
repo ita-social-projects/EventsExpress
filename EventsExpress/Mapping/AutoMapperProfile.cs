@@ -92,6 +92,13 @@ namespace EventsExpress.Mapping
                                                          
 
             CreateMap<CategoryDto, Category>();
+
+
+            CreateMap<CommentDTO, Comments>().ReverseMap();
+            CreateMap<CommentDto, CommentDTO>();
+            CreateMap<CommentDTO, CommentDto>()
+                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))            
+                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
         }
     }
 }
