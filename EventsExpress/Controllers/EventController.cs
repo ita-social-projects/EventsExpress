@@ -44,7 +44,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All(int page = 1)
         {
-            int pageSize = 2;
+            int pageSize = 1;
             IQueryable<Event> source = _appDbContext.Events
                 .Include(x => x.City);
                

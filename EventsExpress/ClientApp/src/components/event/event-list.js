@@ -2,16 +2,11 @@ import React, {Component} from 'react';
 import EventsExpressService from '../../services/EventsExpressService';
 import Event from './event-item';
 import Pagination from "react-paginating";
-const fruits = [
-    ["apple", "orange"],
-    ["banana", "avocado"],
-    ["coconut", "blueberry"],
-    ["payaya", "peach"],
-    ["pear", "plum"]
-];
+import { Link } from 'react-router-dom'
+
 const limit = 2;
-const pageCount = 10;
-const total = fruits.length * limit;
+const pageCount = 5;
+
 
 
 export default class EventList extends Component{
@@ -45,20 +40,16 @@ export default class EventList extends Component{
       const { data_list } = this.props;
       
       const items = this.renderItems(data_list);
-       const {currentPage} = this.state;
+      const { page, totalPages } = this.props;
       return <>
           {items}
-  
-      <div>
-              <ul>
-                 
-               
-              </ul>
-              <Pagination
-                  total={total}
+
+          <ul class="pagination justify-content-center">
+              <Pagination   
+                  total={totalPages * limit}
                   limit={limit}
                   pageCount={pageCount}
-                  currentPage={currentPage}
+                  currentPage={page}
               >
                   {({
                       pages,
@@ -71,33 +62,38 @@ export default class EventList extends Component{
                       getPageItemProps
                   }) => (
                           <div>
-                              <button
+                              <Link class="btn btn-primary"
+                                  to={'/admin/events/' + page}
                                   {...getPageItemProps({
                                       pageValue: 1,
                                       onPageChange: this.handlePageChange
                                   })}
                               >
                                   first
-                              </button>
+                              </Link>
 
                               {hasPreviousPage && (
-                                  <button
+                                  <Link class="btn btn-primary"
+                                      to={'/admin/events/' + page}
+                                    
                                       {...getPageItemProps({
                                           pageValue: previousPage,
                                           onPageChange: this.handlePageChange
                                       })}
                                   >
                                       {"<"}
-                                  </button>
+                                  </Link>
                               )}
 
                               {pages.map(page => {
                                   let activePage = null;
                                   if (currentPage === page) {
-                                      activePage = { backgroundColor: "#fdce09" };
+                                      activePage = { backgroundColor: "	#ffffff", color: "#00BFFF"};
                                   }
                                   return (
-                                      <button
+                                      <Link class="btn btn-primary"
+                                          to={'/admin/events/' + page}
+                                   
                                           {...getPageItemProps({
                                               pageValue: page,
                                               key: page,
@@ -106,33 +102,36 @@ export default class EventList extends Component{
                                           })}
                                       >
                                           {page}
-                                      </button>
+                                      </Link>
                                   );
                               })}
 
                               {hasNextPage && (
-                                  <button
+                                  <Link class="btn btn-primary"
+                                      to={'/admin/events/' + page}
+                                  
                                       {...getPageItemProps({
                                           pageValue: nextPage,
                                           onPageChange: this.handlePageChange
                                       })}
                                   >
                                       {">"}
-                                  </button>
+                                  </Link>
                               )}
-
-                              <button
+                              <Link class="btn btn-primary"
+                                  to={'/admin/events/' + page}
+                                 
                                   {...getPageItemProps({
-                                      pageValue: totalPages,
+                                      pageValue: this.props.totalPages,
                                       onPageChange: this.handlePageChange
                                   })}
                               >
                                   last
-                               </button>
+                                </Link>
                           </div>
                       )}
               </Pagination>
-          </div>
+          </ul>
           
       </>
   }
