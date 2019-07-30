@@ -64,7 +64,7 @@ namespace EventsExpress.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost()]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
             

@@ -5,7 +5,7 @@ import Pagination from "react-paginating";
 import { Link } from 'react-router-dom'
 
 const limit = 2;
-const pageCount = 5;
+const pageCount = 3;
 
 
 
@@ -38,7 +38,8 @@ export default class EventList extends Component{
   render()
   {
       const { data_list } = this.props;
-      
+      console.log(window.location.pathname.replace(/[/].$/g, "/stas"));
+
       const items = this.renderItems(data_list);
       const { page, totalPages } = this.props;
       return <>
@@ -63,7 +64,7 @@ export default class EventList extends Component{
                   }) => (
                           <div>
                               <Link class="btn btn-primary"
-                                  to={'/admin/events/' + page}
+                                  to={window.location.pathname.replace(/[/].$/g, '/'+page)}
                                   {...getPageItemProps({
                                       pageValue: 1,
                                       onPageChange: this.handlePageChange
@@ -74,7 +75,7 @@ export default class EventList extends Component{
 
                               {hasPreviousPage && (
                                   <Link class="btn btn-primary"
-                                      to={'/admin/events/' + page}
+                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
                                     
                                       {...getPageItemProps({
                                           pageValue: previousPage,
@@ -92,7 +93,7 @@ export default class EventList extends Component{
                                   }
                                   return (
                                       <Link class="btn btn-primary"
-                                          to={'/admin/events/' + page}
+                                          to={window.location.pathname.replace(/[/].$/g, '/' + page)}
                                    
                                           {...getPageItemProps({
                                               pageValue: page,
@@ -108,7 +109,7 @@ export default class EventList extends Component{
 
                               {hasNextPage && (
                                   <Link class="btn btn-primary"
-                                      to={'/admin/events/' + page}
+                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
                                   
                                       {...getPageItemProps({
                                           pageValue: nextPage,
@@ -119,7 +120,7 @@ export default class EventList extends Component{
                                   </Link>
                               )}
                               <Link class="btn btn-primary"
-                                  to={'/admin/events/' + page}
+                                  to={window.location.pathname.replace(/[/].$/g, '/' + page)}
                                  
                                   {...getPageItemProps({
                                       pageValue: this.props.totalPages,

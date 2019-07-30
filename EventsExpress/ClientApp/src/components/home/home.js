@@ -54,7 +54,7 @@ class Home extends Component{
             {this.props.id &&
             <AddComponent/>
             }
-            <EventListWrapper /> 
+            <EventListWrapper match={this.props.match} /> 
           
         </div>
         

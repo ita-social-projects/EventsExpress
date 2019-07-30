@@ -14,7 +14,7 @@ export default class App extends Component {
     render(){
         return (
                 <Layout>
-                        <Route exact path="/" component={Home} />
+                        <Route path="/home/events/:page" component={Home} />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/admin/" component={Admin} />
                         <Route path="/admin/categories/" component={Category} />
