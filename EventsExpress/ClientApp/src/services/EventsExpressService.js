@@ -13,8 +13,8 @@ export default class EventsExpressService{
         file.append('Description', data.description);
         file.append('Location.CityId', data.city);
         file.append('User.Id', data.user_id);
-        file.append('DateFrom', data.date_from);
-        file.append('DateTo', data.date_to);
+        file.append('DateFrom', new Date(data.date_from).toDateString());
+        file.append('DateTo', new Date(data.date_to).toDateString());
         let i = 0;
         let categories = data.categories.map(x => {
             console.log(i);
@@ -27,6 +27,22 @@ export default class EventsExpressService{
         }
         return res;
     }
+
+    setUserFromEvent = async (data) => {
+        const res = await this.setResource('event/DeleteUserFromEvent?userId='+data.userId+'&eventId='+data.eventId);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    } 
+
+    setUserToEvent = async (data) => {
+        const res = await this.setResource('event/AddUserToEvent?userId='+data.userId+'&eventId='+data.eventId);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    } 
 
     setAvatar = async (data) => {
         let file = new FormData();

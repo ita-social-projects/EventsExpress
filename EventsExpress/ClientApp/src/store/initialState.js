@@ -27,11 +27,6 @@ const initialState = {
         isEventSuccess: false,
         eventError: null
     },
-    events: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
     change_avatar: {
         isPending: false,
         isSuccess: false,

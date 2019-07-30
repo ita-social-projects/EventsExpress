@@ -11,38 +11,79 @@ const api_serv = new EventsExpressService();
 
 export default function get_event(id) {
 
-    return dispatch => {
-        dispatch(getEventPending(true));
-  
-      const res = api_serv.getEvent(id);
-      res.then(response => {
-        if(response.error == null){
+  return dispatch => {
+    dispatch(getEventPending(true));
+
+    const res = api_serv.getEvent(id);
+    res.then(response => {
+      if (response.error == null) {
+        dispatch(getEvent(response));
+
+      } else {
+        dispatch(getEventError(response.error));
+      }
+    });
+  }
+}
+
+export function leave(userId, eventId) {
+  return dispatch => {
+    const res = api_serv.setUserFromEvent({ userId: userId, eventId: eventId });
+    res.then(response => {
+      if (response.error == null) {
+
+        const res1 = api_serv.getEvent(eventId);
+        res1.then(response => {
+          if (response.error == null) {
             dispatch(getEvent(response));
-            
-          }else{
+
+          } else {
             dispatch(getEventError(response.error));
           }
         });
-    }
-  }
-
-function getEventPending(data){
-    return {
-        type: GET_EVENT_PENDING,
-        payload: data
-    } 
-}  
-
-function getEvent(data){
-      return {
-          type: GET_EVENT_SUCCESS,
-          payload: data
       }
+    });
   }
+}
 
-function getEventError(data){
-    return{
-        type: GET_EVENT_ERROR,
-        payload: data
-    }
+
+export function join(userId, eventId) {
+  return dispatch => {
+    const res = api_serv.setUserToEvent({ userId: userId, eventId: eventId });
+    res.then(response => {
+      if (response.error == null) {
+
+        const res1 = api_serv.getEvent(eventId);
+        res1.then(response => {
+          if (response.error == null) {
+            dispatch(getEvent(response));
+
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        });
+      }
+    });
+  }
+}
+
+function getEventPending(data) {
+  return {
+    type: GET_EVENT_PENDING,
+    payload: data
+  }
+}
+
+function getEvent(data) {
+  return {
+    type: GET_EVENT_SUCCESS,
+    payload: data
+  }
+}
+
+function getEventError(data) {
+  return {
+    type: GET_EVENT_ERROR,
+    payload: data
+  }
 }
