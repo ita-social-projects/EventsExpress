@@ -18,6 +18,7 @@ const renderTextField = ({
         />
     );
 
+
 const EditBirthday = props => {
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
@@ -50,5 +51,6 @@ const EditBirthday = props => {
 };
 
 export default reduxForm({
-    form: "EditBirthday" // a unique identifier for this form
+    form: "EditBirthday", // a unique identifier for this form
+
 })(EditBirthday);
