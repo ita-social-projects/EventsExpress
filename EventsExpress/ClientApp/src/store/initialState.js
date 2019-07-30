@@ -80,6 +80,21 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    add_comment: {
+        isCommentPending: false,
+        isCommentSuccess: false,
+        commentError: null
+    },
+    comments: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
+    delete_comment: {
+        isCommentDeletePending: false,
+        isCommentDeleteSuccess: false,
+        commentDeleteError: null
     }
 };
 

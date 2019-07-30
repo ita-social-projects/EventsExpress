@@ -7,9 +7,7 @@ import { setCategoryError, setCategoryPending, setCategorySuccess } from '../act
 
 class CategoryWrapper extends React.Component {
     componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
-            this.props.reset();
-        }
+
     }
     submit = values => {
         console.log(values);

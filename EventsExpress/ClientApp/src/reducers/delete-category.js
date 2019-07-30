@@ -1,4 +1,4 @@
-﻿
+﻿import initialState from '../store/initialState';
 import {
     SET_CATEGORY_DELETE_PENDING,
     SET_CATEGORY_DELETE_SUCCESS,

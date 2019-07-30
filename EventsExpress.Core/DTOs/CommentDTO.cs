@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventsExpress.Db.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,5 +16,7 @@ namespace EventsExpress.Core.DTOs
         public Guid EventId { get; set; }
 
         public DateTime Date { get; set; }
+
+        public User User { get; set; }
     }
 }

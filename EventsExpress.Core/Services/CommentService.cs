@@ -16,16 +16,20 @@ namespace EventsExpress.Core.Services
     {
         public IUnitOfWork Db { get; set; }
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public CommentService(IUnitOfWork uow, IMapper mapper)
+
+        public CommentService(IUnitOfWork uow, IMapper mapper, IUserService userService)
         {
             Db = uow;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id)
         {
-            return _mapper.Map<IEnumerable<Comments>, IEnumerable<CommentDTO>>(Db.CommentsRepository.Get().AsEnumerable().Where(x => x.EventId == id));
+           var comments = _mapper.Map<IEnumerable<Comments>, IEnumerable<CommentDTO>>(Db.CommentsRepository.Filter(filter: x => x.EventId == id, includeProperties: "User.Photo"));/*Get().AsQueryable().Where(x => x.EventId == id))*/
+            return comments;
         }
 
         public async Task<OperationResult> Create(CommentDTO comment)
@@ -44,11 +48,11 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Wrong event id!", "");
             }
-
+            
             Db.CommentsRepository.Insert(new Comments() { Text = comment.Text,
                                                           Date = DateTime.Now,
                                                           UserId = comment.UserId,
-                                                          EventId = comment.EventId
+                                                          EventId = comment.EventId,
             });
 
             await Db.SaveAsync();
