@@ -19,7 +19,7 @@ export default class App extends Component {
                         <Route path="/admin/" component={Admin} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users/" component={UsersWrapper} />
-                        <Route path="/admin/events/" component={EventListWrapper} />
+                        <Route path="/admin/events/:page" component={EventListWrapper} />
                 </Layout>
         );
     }

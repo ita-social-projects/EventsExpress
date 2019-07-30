@@ -18,7 +18,7 @@ export const reducer = (
     case SET_EVENTS_PENDING:
             return {
                     ...state,
-                    isPending: action.payload
+                    isPending: true
                 } 
       case GET_EVENTS_SUCCESS:
           return {

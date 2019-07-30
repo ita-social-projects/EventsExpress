@@ -7,19 +7,26 @@ import get_events from '../actions/event-list';
 
 class EventListWrapper extends Component{
 
-    componentDidMount = () => this.props.get_events();
-
-    render(){   
+    componentDidMount() {
+        const { page } = this.props.match.params;
+        this.getEvents(page);
+    }
+    getEvents = (page) => this.props.get_events(page);
     
-        const {data, isPending, isError} = this.props;
+
+    render() {
+
+        const { data, isPending, isError } = this.props;
+        const { events } = this.props.data;
         // const hasData = !(isPending || isError);
 
         // const errorMessage = isError ? <ErrorIndicator/> : null;
-        
+
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList data_list={data} /> : null;
-    
+        const content = !isPending ? <EventList data_list={events} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+       
         return <>
+              
                 {spinner}
                 {content}
                </>
@@ -30,7 +37,7 @@ const mapStateToProps = (state) => (state.events);
 
 const mapDispatchToProps = (dispatch) => { 
     return {
-        get_events: () => dispatch(get_events())
+        get_events: (page) => dispatch(get_events(page))
     } 
 };
 

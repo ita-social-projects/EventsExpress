@@ -28,9 +28,13 @@ const initialState = {
         eventError: null
     },
     events: {
-        isPending: false,
+        isPending: true,
         isError: false,
-        data: []
+        data: {
+            events: [],
+            pageViewModel: {}
+
+        }
     },
     change_avatar: {
         isPending: false,
@@ -50,11 +54,6 @@ const initialState = {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
-    },
-    events: {
-        isPending: false,
-        isError: false,
-        data: []
     },
     add_category: {
         isCategoryPending: false,

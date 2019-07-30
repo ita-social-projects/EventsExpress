@@ -92,8 +92,8 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllEvents = async () =>{
-        const res = await this.getResource('event/all');
+    getAllEvents = async (page, totalpage) => {
+        const res = await this.getResource(`event/all?page=${page}`);
         return res;
     }
 

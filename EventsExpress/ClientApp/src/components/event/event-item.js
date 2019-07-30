@@ -6,7 +6,7 @@ export default class Event extends Component{
 
     render(){
         const { title, dateFrom, comment_count, description, photoUrl } = this.props.item;
-        const { city, country } = this.props.item.location;
+        const { city, country } = this.props.item;
         return(
                 <div className="blog-entry d-md-flex fadeInUp">
                     <a href="/#" className="img img-2" style={{backgroundImage: "url('" + photoUrl + "')"}}></a>
@@ -17,7 +17,7 @@ export default class Event extends Component{
                                 <span><i className="fa fa-calendar mr-2"></i><Moment format="D MMM YYYY" withTitle>
                                                                                 {dateFrom}
                                                                              </Moment></span>
-                                <span><a href="/#"><i className="fa fa-map mr-2"></i>{country} {city}</a></span>
+                                <span><a href="/#"><i className="fa fa-map mr-2"></i>{country} {city.name}</a></span>
                                 <span><i className="fa fa-comment mr-2"></i>{comment_count} Comment</span>
                                 </p>
                             </div>

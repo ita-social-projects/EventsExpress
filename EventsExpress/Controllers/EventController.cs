@@ -42,13 +42,16 @@ namespace EventsExpress.Controllers
         //}
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<IActionResult> All(int page = 1)
+        public IActionResult All(int page = 1)
         {
-            int pageSize = 1; 
-           // var events = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
-            IQueryable<Event> source = _appDbContext.Events;
-            var count = await source.CountAsync();
-            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            int pageSize = 2;
+            IQueryable<Event> source = _appDbContext.Events
+                .Include(x => x.City);
+               
+
+            var count =  source.Count();
+            var items =  source.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             IndexViewModel viewModel = new IndexViewModel
@@ -57,7 +60,9 @@ namespace EventsExpress.Controllers
                 Events = items
             };
             return Ok(viewModel);
+        
         }
+
         [AllowAnonymous]
         [HttpPost()]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
