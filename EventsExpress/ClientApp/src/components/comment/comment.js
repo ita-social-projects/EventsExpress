@@ -10,9 +10,9 @@ export default class Comment extends Component {
 
         return (
             <div>
-                <AddComment />
                 <CommentListWrapper /> 
 
+                <AddComment />
             </div>
 
         );

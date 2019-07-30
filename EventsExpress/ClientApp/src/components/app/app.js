@@ -23,7 +23,6 @@ export default class App extends Component {
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users/" component={UsersWrapper} />
                 <Route path="/admin/events/" component={EventListWrapper} />
-                <Route path="/comment/" component={Comment} />
 
                 </Layout>
         );

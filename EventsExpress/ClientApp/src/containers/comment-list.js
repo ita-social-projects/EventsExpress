@@ -24,7 +24,7 @@ class CommentListWrapper extends Component {
 
 const mapStateToProps = state => ({
     comments: state.comments,
-    eventId: 'd3994f53-1e0d-4eda-d0e8-08d70c4f9464'
+    eventId: state.event.data.id
 });
 
 const mapDispatchToProps = (dispatch) => {

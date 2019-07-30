@@ -7,7 +7,7 @@ import '../layout/colorlib.css';
 
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
-
+import Comment from '../comment/comment';
 export default class EventItemView extends Component {
 
     renderCategories = (arr) => {
@@ -99,7 +99,7 @@ export default class EventItemView extends Component {
                     <h2><p className="text-center">Comments</p></h2>
 
                     <div className="text-box overflow-auto shadow p-3 mb-5 bg-white rounded">
-
+                        <Comment />
                     </div>
                 </div>
             </div>

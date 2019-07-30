@@ -28,7 +28,6 @@ const LeftSidebar = (props) =>{
                     <ul className="list-unstyled">
                         
                         <NavItem to={'/'} icon={'fa fa-home'} text={"Home"} />
-                        <NavItem to={'/comment'} icon={'fa fa-calendar'} text={"Comments"} />
                             {props.user.id &&
                             <NavItem to={'/profile'} icon={'fa fa-user'} text={"Profile"} />
                             

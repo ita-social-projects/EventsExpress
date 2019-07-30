@@ -41,7 +41,7 @@ class commentItemWrapper extends React.Component {
 };
 const mapStateToProps = state => ({
     userId: state.user.id,
-    eventId: 'd3994f53-1e0d-4eda-d0e8-08d70c4f9464'
+    eventId: state.event.data.id
 });
 
 const mapDispatchToProps = dispatch => {

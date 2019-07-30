@@ -42,7 +42,7 @@ const rootReducers = {
     add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,
-    event: EventView.reducer
+    event: EventView.reducer,
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
