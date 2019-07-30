@@ -27,11 +27,6 @@ const initialState = {
         isEventSuccess: false,
         eventError: null
     },
-    events: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
     change_avatar: {
         isPending: false,
         isSuccess: false,
@@ -80,6 +75,26 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    add_comment: {
+        isCommentPending: false,
+        isCommentSuccess: false,
+        commentError: null
+    },
+    comments: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
+    delete_comment: {
+        isCommentDeletePending: false,
+        isCommentDeleteSuccess: false,
+        commentDeleteError: null
+    },
+    event: {
+        isPending: true,
+        isError: false,
+        data: null
     },
     changePassword: {
         isPending: false,

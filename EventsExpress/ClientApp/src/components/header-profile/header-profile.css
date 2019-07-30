@@ -15,3 +15,9 @@
     width: 150px !important;
     height: 150px !important;
 }
+
+.littleAvatar {
+    margin: 10px !important;
+    width: 75px !important;
+    height: 75px !important;
+}

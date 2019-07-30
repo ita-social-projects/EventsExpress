@@ -18,8 +18,7 @@ namespace EventsExpress.Core.DTOs
 
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-
-        public List<string> Categories { get; set; }
+                                                     
         public IFormFile Photo { get; set; }
 
         public byte[] PhotoBytes { get; set; }
@@ -28,8 +27,9 @@ namespace EventsExpress.Core.DTOs
         public User Owner { get; set; }
 
         public Guid CityId { get; set; }
-        public City City { get; set; }   
+        public City City { get; set; }                                  
 
-        public List<Guid> Visitors { get; set; }
+        public IEnumerable<CategoryDTO> Categories { get; set; }
+        public IEnumerable<UserEvent> Visitors { get; set; }
     }
 }

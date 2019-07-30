@@ -80,6 +80,7 @@ namespace EventsExpress
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPhotoService, PhotoService> ();
+            services.AddTransient<ICommentService, CommentService>();
             
 
 

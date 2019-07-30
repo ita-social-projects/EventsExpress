@@ -25,8 +25,37 @@ namespace EventsExpress.Controllers
         {
             _eventService = eventService;
             _mapper = mapper;
+        }                    
+
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        {
+            var res = await _eventService.DeleteUserFromEvent(userId, eventId);
+            if (res.Successed)
+                return Ok();
+            return BadRequest();
         }
 
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
+        {
+            var res = await _eventService.AddUserToEvent(userId, eventId);
+            if (res.Successed)
+                return Ok();
+            return BadRequest();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult Get(Guid id)
+        {
+
+            var res = _mapper.Map<EventDTO, EventDto>(_eventService.EventById(id));
+
+            return Ok(res);
+        }
 
         [AllowAnonymous]
         [HttpGet("[action]")]

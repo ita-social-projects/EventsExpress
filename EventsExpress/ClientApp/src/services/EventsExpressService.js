@@ -13,15 +13,36 @@ export default class EventsExpressService{
         file.append('Description', data.description);
         file.append('Location.CityId', data.city);
         file.append('User.Id', data.user_id);
-        file.append('DateFrom', data.date_from);
-        file.append('DateTo', data.date_to);
-    
+        file.append('DateFrom', new Date(data.date_from).toDateString());
+        file.append('DateTo', new Date(data.date_to).toDateString());
+        let i = 0;
+        let categories = data.categories.map(x => {
+            console.log(i);
+            file.append('Categories[' + i + '].Id', x.id);
+            i++;
+        })
         const res = await this.setResourceWithData('event/edit', file);
         if(!res.ok){
             return { error: await res.text()};
         }
         return res;
     }
+
+    setUserFromEvent = async (data) => {
+        const res = await this.setResource('event/DeleteUserFromEvent?userId='+data.userId+'&eventId='+data.eventId);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    } 
+
+    setUserToEvent = async (data) => {
+        const res = await this.setResource('event/AddUserToEvent?userId='+data.userId+'&eventId='+data.eventId);
+        if(!res.ok){
+            return { error: await res.text()};
+        }
+        return res;
+    } 
 
     setAvatar = async (data) => {
         let file = new FormData();
@@ -50,6 +71,11 @@ export default class EventsExpressService{
         return res;
     }
 
+    getEvent = async (id) => {
+        const res = await this.getResource('event/get?id=' + id);
+        return res;
+    }
+
 
     getUsers = async () => {
         const res = await this.getResource('users');
@@ -75,6 +101,15 @@ export default class EventsExpressService{
         return res;
     }
 
+    setCommentDelete = async (data) => {
+        console.log(data);
+        const res = await this.setResource(`comment/delete/${data.id}`);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
     setCategory = async (data) => {
         const res = await this.setResource('category/edit', {
             Id: data.Id,
@@ -86,9 +121,16 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllCategories = async () => {
-        const res = await this.getResource('category/all');
-        console.log(res);
+    setComment = async (data) => {
+        const res = await this.setResource('comment/edit', {
+            Id: data.id,
+            Text: data.comment,
+            UserId: data.userId,
+            EventId: data.eventId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
         return res;
     }
 
@@ -99,6 +141,12 @@ export default class EventsExpressService{
 
     getAllCategories = async () => {
         const res = await this.getResource('category/all');
+        console.log(res);
+        return res;
+    }
+
+    getAllComments = async (data) => {
+        const res = await this.getResource(`comment/all/${data}`);
         console.log(res);
         return res;
     }

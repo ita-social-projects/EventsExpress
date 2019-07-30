@@ -17,11 +17,8 @@ const Layout = ({ children }) => {
                     </div>
                     <div className="col-9 offset-3">
                         <div className="row">
-                            <div className="col-9">
+                            <div className="col-12">
                                 {children}
-                            </div>
-                            <div className="col-3">
-                                <RightSidebar />
                             </div>
                         </div>
                     </div>

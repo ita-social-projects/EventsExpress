@@ -1,14 +1,15 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { renderTextField } from '../helpers/helpers';
+import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
-import {renderDateTimePicker } from '../helpers/helpers';
-import DropdownList from 'react-widgets/lib/DropdownList'
-import moment from 'moment'
-import momentLocaliser from 'react-widgets-moment'
+import moment from 'moment';
+import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
+import Module from '../helpers';
+import { renderMultiselect } from '../helpers/helpers';
+
 momentLocaliser(moment)
 const enhanceWithPreview = files =>
   files.map(file =>
@@ -17,12 +18,9 @@ const enhanceWithPreview = files =>
     })
   )
 
-const withPreviews = dropHandler => (accepted, rejected) =>
-  dropHandler(enhanceWithPreview(accepted), rejected)
-
   const imageIsRequired = value => (!value ? "Required" : undefined);
 
-
+  const { validate } = Module;
 
 
 export class EventForm extends Component {
@@ -55,49 +53,58 @@ export class EventForm extends Component {
 
     render() {
 
-        const { countries, form_values } = this.props;
-
+        const { countries, form_values, all_categories } = this.props;
+        let values = form_values || this.props.initialValues;
         let countries_list = this.renderLocations(countries);
 
         return (
             <form onSubmit={ this.props.handleSubmit } encType="multipart/form-data">
- 
-                    <Field
-          name="image"
-          component={DropZoneField}
-          type="file"
-          imagefile={this.state.imagefile}
-          handleOnDrop={this.handleOnDrop}
-          validate={[imageIsRequired]}
-        />        
-        <button
-        type="button"
-        className="uk-button uk-button-default uk-button-large clear"
-        disabled={this.props.pristine || this.props.submitting}
-        onClick={this.resetForm}
-        style={{ float: "right" }}
-      >
-        Clear
-      </button>
-
                     <div className="text text-2 pl-md-4">
+                    <Field
+                        name="image"
+                        component={DropZoneField}
+                        type="file"
+                        imagefile={this.state.imagefile}
+                        handleOnDrop={this.handleOnDrop}
+                        validate={[imageIsRequired]}
+                      />        
+                          <button
+                            type="button"
+                            className="uk-button uk-button-default uk-button-large clear"
+                            disabled={this.props.pristine || this.props.submitting}
+                            onClick={this.resetForm}
+                            style={{ float: "right" }}
+                          >
+                            Clear
+                          </button>
                         <Field name='title' component={renderTextField} type="input" label="Title" />
                             <div className="meta-wrap m-2">
                                 <p className="meta">    
                                 <span>From
-                                         <Field name='date_from' component="input" type="date" label="" /></span>
-                                <span>To<Field name='date_to' component="input" type="date" label="" /></span>
+                                         <Field name='date_from' defaultValue={values.date_from} component={renderDatePicker} /></span>
+                                         {values.date_from != null &&
+                                <span>To<Field name='date_to' defaultValue={values.date_from} component={renderDatePicker} /></span>
+                              }
                                 </p>
                             </div>
                             
                         <Field name='description' component={renderTextField} type="input" label="Description" />
                            
-                        <Field onChange={this.props.onChangeCountry} className="form-control" name='country' component="select">
+                        <Field
+                          name="categories"
+                          component={renderMultiselect}
+                          data={all_categories.data}
+                          valueField={"id"}
+                          textField={"name"}
+                          className="form-control mt-2"
+                          placeholder='#hashtags'
+                          />
+                        <Field onChange={this.props.onChangeCountry} className="form-control mt-2" name='country' component="select">
                             <option>Country</option>
                             {countries_list}
                         </Field>
-                    {form_values &&
-                    <Field name='city' className="form-control" component="select">
+                    {values.country != null &&
+                    <Field name='city' className="form-control mt-2" component="select">
                         <option>City</option>
                         {this.renderLocations(this.props.cities)}
                       </Field>    
@@ -115,7 +122,13 @@ export class EventForm extends Component {
 }
 
 EventForm = reduxForm({
-    form: 'event-form'
+    form: 'event-form',
+    validate: validate,
+    initialValues:{
+      date_from: null,
+      date_to: null,
+      country: null
+    }
 })(EventForm);
 
 export default EventForm;

@@ -19,6 +19,10 @@ import * as Users from './users';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import { changePassword } from '../actions/EditProfile/changePassword';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
+import * as EventView from './event-item-view';
+import * as AddComment from './add-comment';
+import * as DeleteComment from './delete-comment'; 
+import * as Comments from './comment-list';
 
 const rootReducers = {
     user: User.reducer,
@@ -42,6 +46,11 @@ const rootReducers = {
     users: Users.reducer,
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer
+    event: EventView.reducer,
+    change_avatar: ChangeAvatar.reducer,
+    add_comment: AddComment.reducer,
+    comments: Comments.reducer,
+    delete_comment: DeleteComment.reducer
 };
 
 
