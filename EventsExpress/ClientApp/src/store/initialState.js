@@ -80,7 +80,13 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    changePassword: {
+        isPending: false,
+        isError: false,
+        data: []
     }
+
 };
 
 export default initialState;

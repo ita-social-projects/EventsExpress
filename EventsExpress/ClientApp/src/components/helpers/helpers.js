@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect'
 import 'react-widgets/dist/css/react-widgets.css'
 import DateTimePicker from 'react-widgets/lib/DateTimePicker'
-
+import { SubmissionError } from 'redux-form';
 import {  } from 'redux-form';
 
 
@@ -12,7 +12,11 @@ export const validate = values => {
   const requiredFields = [
     'email',
     'password',
-    'RepeatPassword'
+     'RepeatPassword',
+     'oldPassword',
+     'newPassword',
+     'repeatPassword',
+     'Birthday'
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
@@ -28,28 +32,20 @@ export const validate = values => {
     }
   if(values.password!== values.RepeatPassword){
     errors.RepeatPassword = 'Passwords do not match';
-  }
+    }
+    if (values.newPassword !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords do not match';
+    }
+    if (new Date(values.Birthday).getTime <= Date.now()) {
+        errors.Birthday = 'Date is incorrect';
+    }
   return errors
 }
 
-export const ChangePasswordHelper = values => {
-    const errors = {}
-    const requiredFields = [
-        'oldPassword',
-        'password',
-        'repeatPassword'
-    ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
 
-    if (values.password !== values.repeatPassword) {
-        errors.RepeatPassword = 'Passwords do not match';
-    }
-    return errors
-}
+
+
+
 
 export const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
     <DateTimePicker

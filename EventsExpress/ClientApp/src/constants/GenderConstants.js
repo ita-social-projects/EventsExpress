@@ -1,3 +1,3 @@
-﻿const genders = ['Male', 'Female', 'Other']
+﻿const genders = ['Other', 'Male', 'Female']
 
 export default genders;

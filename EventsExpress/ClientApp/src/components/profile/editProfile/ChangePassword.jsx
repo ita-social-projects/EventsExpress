@@ -24,7 +24,7 @@ const renderTextField = ({
             {...custom}
         />
     );
-const { ChangePasswordHelper } = Module;
+const { validate } = Module;
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -75,6 +75,7 @@ const ChangePassword = (props) => {
                                     name="oldPassword"
                                     label="Input current password"
                                     component={renderTextField}
+                                    type="password"
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -84,6 +85,7 @@ const ChangePassword = (props) => {
                                     name="newPassword"
                                     label="Input new password"
                                     component={renderTextField}
+                                    type="password"
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -91,6 +93,7 @@ const ChangePassword = (props) => {
 
                                 <Field
                                     name="repeatPassword"
+                                    type="password"
                                     label="Repeat new password"
                                     component={renderTextField}
                                     InputLabelProps={{
@@ -100,9 +103,9 @@ const ChangePassword = (props) => {
 
                             </div>
 
-
-                            <div>
-                                <button type="submit" disabled={pristine || submitting}>
+                            
+                            <div >
+                                <button type="submit" disabled={pristine || submitting }>
                                     Submit
                                 </button>
                                 <button type="button" disabled={pristine || submitting} onClick={reset}>
@@ -125,5 +128,6 @@ const ChangePassword = (props) => {
 
 export default reduxForm({
     form: "ChangePassword", // a unique identifier for this form
-    ChangePasswordHelper
+    validate
+    
 })(ChangePassword);

@@ -17,6 +17,8 @@ import * as Countries from './countries';
 import * as Cities from './cities';
 import * as Users from './users';
 import * as ChangeAvatar from './editReducers/change_avatar';
+import { changePassword } from '../actions/EditProfile/changePassword';
+import * as ChangePassword from './editReducers/ChangePasswordReducer';
 
 const rootReducers = {
     user: User.reducer,
@@ -38,7 +40,8 @@ const rootReducers = {
     add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,
-    change_avatar: ChangeAvatar.reducer 
+    change_avatar: ChangeAvatar.reducer,
+    changePassword: ChangePassword.reducer
 };
 
 
