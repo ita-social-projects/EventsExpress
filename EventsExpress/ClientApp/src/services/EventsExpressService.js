@@ -157,7 +157,7 @@ export default class EventsExpressService{
     }
     
     setUserBlock = async (id) => {
-        const res = await this.setResource('Users/Block/?userId='+id);
+        const res = await this.setResource('Users/Block/?userId=' + id);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -165,7 +165,6 @@ export default class EventsExpressService{
     }
 
     setUserUnblock = async (id) => {
-        console.log("SERVICE: unblocking user id: " + id);
         const res = await this.setResource('Users/Unblock/?userId=' + id);
         if (!res.ok) {
             return { error: await res.text() };

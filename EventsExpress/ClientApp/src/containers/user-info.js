@@ -5,6 +5,12 @@ import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
 
 class UserInfoWpapper extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { user: props.user };
+    }
+
     block = () => {
         let value = this.props.user.id;
         console.log('block user: ');
@@ -19,11 +25,16 @@ class UserInfoWpapper extends Component {
         this.props.unblock(value);
     };
 
+
+
     render() {
         const { user } = this.props;
 
+        console.log("UserInfoWrapper render:")
+        console.log(user)
+
         return (
-            <tr id={user.id} className={(user.isBlocked == true) ? "bg-warning" : ""}>
+            <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <td className="align-middle">
                     {user.photoUrl
                         ? <Avatar src={user.photoUrl} />

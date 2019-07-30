@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
 import './users.css';
 import UserInfoWpapper from '../../containers/user-info';
+import users from '../../containers/users';
 
 
 export default class Users extends Component {
     renderUsers = (arr) => {
-        return arr.map(user => <UserInfoWpapper key={user.id} user={user} />);
+        console.log("Users renderUsers:")
+        console.log(arr)
+        
+        return arr.map(user => <UserInfoWpapper id={user.id + user.isBlocked} user={user} /> );
     }
 
+
     render() {
+        console.log("Users render:")
+        console.log(this.props.users)
+
         return (
             <table className="table">
                 <thead className="bg-light">
