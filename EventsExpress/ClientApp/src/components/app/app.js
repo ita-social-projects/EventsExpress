@@ -21,7 +21,7 @@ export default class App extends Component {
                         <Route path="/admin/" component={Admin} />
                         <Route path="/event/:id" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
-                        <Route path="/admin/users/" component={UsersWrapper} />
+                        <Route path="/admin/users/:page" component={UsersWrapper} />
                         <Route path="/admin/events/:page" component={EventListWrapper} />
                 </Layout>
         );

@@ -36,7 +36,7 @@ const LeftSidebar = (props) =>{
                         <>
                             <NavItem to={'/admin/categories/'} icon={'fa fa-hashtag'} text={"Categories"} />
                             
-                            <NavItem to={'/admin/users/'} icon={'fa fa-users'} text={"Users"} />
+                            <NavItem to={'/admin/users/1'} icon={'fa fa-users'} text={"Users"} />
                             
                             <NavItem to={'/admin/events/1'} icon={'fa fa-calendar'} text={"Events"} />
                         </>

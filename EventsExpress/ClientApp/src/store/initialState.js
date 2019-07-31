@@ -78,7 +78,11 @@ const initialState = {
     users: {
         isPending: false,
         isError: false,
-        data: []
+        data: {
+            users: [],
+            pageViewModel: {}
+
+        }
     },
     add_comment: {
         isCommentPending: false,

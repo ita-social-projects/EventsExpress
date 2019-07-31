@@ -75,12 +75,11 @@ export default class EventsExpressService{
         return res;
     }
 
-    getUsers = async () => {
-        const res = await this.getResource('users');
+    getUsers = async (page, totalpage) => {
+        const res = await this.getResource(`users/get?page=${page}`);
         console.log(res);
         return res;  
     }
-
     getCountries = async () => {
         const res = await this.getResource('locations/countries');
         return res;

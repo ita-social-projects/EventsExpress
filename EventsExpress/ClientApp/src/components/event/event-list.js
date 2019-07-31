@@ -37,7 +37,7 @@ export default class EventList extends Component{
   render()
   {
       const { data_list } = this.props;
-      console.log(window.location.pathname.replace(/[/].$/g, "/stas"));
+ 
 
       const items = this.renderItems(data_list);
       const { page, totalPages } = this.props;
