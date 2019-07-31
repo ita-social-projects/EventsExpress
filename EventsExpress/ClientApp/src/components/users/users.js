@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
 import './users.css';
+import UserInfoWpapper from '../../containers/user-info';
 
 
-export default class Users extends Component{
-    
+export default class Users extends Component {
     renderUsers = (arr) => {
-        return arr.map(x => {
-            return <p>{x.username}</p>
-        }
-            );
+        return arr.map(user => <UserInfoWpapper key={user.id} user={user} />);
     }
 
-    render(){
-     
-        const {data} = this.props.users;
-
-    return(
-        <div>
-            {this.renderUsers(data)}
-        </div>
-        
-    );
+    render() {
+        return (
+            <table className="table">
+                <thead className="bg-light">
+                    <tr>
+                        <td scope="col"></td>
+                        <td scope="col">email</td>
+                        <td scope="col">name</td>
+                        <td scope="col">role</td>
+                        <td scope="col"></td>
+                        <td scope="col">status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.renderUsers(this.props.users)}
+                </tbody>
+            </table>
+        )
     }
 }

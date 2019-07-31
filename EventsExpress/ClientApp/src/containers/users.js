@@ -1,24 +1,24 @@
 import React, {Component} from 'react';
-import Users  from '../components/users';
-import { bindActionCreators } from 'redux';
 import get_users from '../actions/users';
 import { connect } from 'react-redux';
+import Users from '../components/users';
 
 
 class UsersWrapper extends Component{
 
-    componentDidMount = () => this.props.get_users(); 
+    componentDidMount = () => this.props.get_users()
 
-    render(){
-        return(
-            <Users users={this.props.users} />
+    render() {
+        return (
+            <Users users={this.props.users.data} />
         );
     }
 
-} 
+}
 
 const mapStateToProps = (state) => ({
-    users: state.users
+    users: state.users,
+    currentUser: state.user
 });
 
 const mapDispatchToProps = (dispatch) => { 

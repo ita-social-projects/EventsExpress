@@ -91,7 +91,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetAll()
         {
-            var users = Db.UserRepository.Get();
+            var users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
 
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
 
@@ -160,6 +160,21 @@ namespace EventsExpress.Core.Services
         }
         
         public async Task<OperationResult> Unblock(Guid uId)
+        {
+            var user = Db.UserRepository.Get(uId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+
+            user.IsBlocked = false;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> Block(Guid uId)
         {
             var user = Db.UserRepository.Get(uId);
             if (user == null)

@@ -47,6 +47,14 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserPreviewDto>()
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
+            CreateMap<UserDTO, UserManageDto>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
+                .ForMember(dest => dest.Role, opts => opts.MapFrom(src => new RoleDto { Id = src.RoleId, Name = src.Role.Name }))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
+
             CreateMap<City, Location>()
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Name))            
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.Country.Name)); 
