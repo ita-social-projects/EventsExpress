@@ -74,12 +74,11 @@ namespace EventsExpress.Controllers
         public IActionResult All(int page = 1)
         {
             int pageSize = 1;
-            IQueryable<Event> source = _appDbContext.Events
-                .Include(x => x.City);
-               
+          
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
 
-            var count =  source.Count();
-            var items =  source.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count =  res.Count();
+            var items =  res.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
