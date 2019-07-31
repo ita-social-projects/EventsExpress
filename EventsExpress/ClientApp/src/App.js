@@ -5,6 +5,6 @@ import Home from './components/Home';
 
 export default () => (
   <Layout>
-    <Route exact path='/' component={Home} />
+        <Route exact path='/home/events/:page' component={Home} />
   </Layout>
 );

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.DTO
 {
-    public class UserPreviewDto
+    public class UserManageDto
     {                                    
         public Guid Id { get; set; }
-        public string PhotoUrl { get; set; }
-        public string Username { get; set; }
         public string Email { get; set; }
-        public DateTime Birthday { get; set; }
+        public string Username { get; set; }
+        public string PhotoUrl { get; set; }
+
+        public bool IsBlocked { get; set; }
+        public virtual RoleDto Role { get; set; }
     }
 }

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.IServices;
+using EventsExpress.Core.IServices;using EventsExpress.Db.EF;
+using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
+using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Controllers
 {
@@ -19,10 +22,11 @@ namespace EventsExpress.Controllers
 
         private IEventService _eventService;
         private IMapper _mapper;
-
+        private AppDbContext _appDbContext;
         public EventController(IEventService eventService,
-                    IMapper mapper)
+                    IMapper mapper, AppDbContext appDbContext)
         {
+            _appDbContext = appDbContext;
             _eventService = eventService;
             _mapper = mapper;
         }                    
@@ -57,14 +61,35 @@ namespace EventsExpress.Controllers
             return Ok(res);
         }
 
+        //[AllowAnonymous]
+        //[HttpGet("[action]")]
+        //public IActionResult All()
+        //{
+        //    var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
+
+        //    return Ok(res);
+        //}
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult All()
+        public IActionResult All(int page = 1)
         {
+            int pageSize = 1;
+          
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
 
-            return Ok(res);
-        }          
+            var count =  res.Count();
+            var items =  res.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                PageViewModel = pageViewModel,
+                Events = items
+            };
+            return Ok(viewModel);
+        
+        }
 
         [AllowAnonymous]
         [HttpPost("[action]")]

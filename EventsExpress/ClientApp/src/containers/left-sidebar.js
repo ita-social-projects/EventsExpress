@@ -13,7 +13,8 @@ class LeftSidebarWrapper extends Component {
       return { ...state, user: state.user};
   };
   
-  const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
+
   };
 
   export default connect(

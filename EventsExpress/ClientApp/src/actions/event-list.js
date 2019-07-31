@@ -9,12 +9,12 @@ export const SET_EVENTS_ERROR = "SET_EVENTS_ERROR";
 
 const api_serv = new EventsExpressService();
 
-export default function get_events() {
+export default function get_events(page) {
 
     return dispatch => {
         dispatch(setEventPending(true));
-  
-      const res = api_serv.getAllEvents();
+
+        const res = api_serv.getAllEvents(page);
       res.then(response => {
         if(response.error == null){
             dispatch(getEvents(response));

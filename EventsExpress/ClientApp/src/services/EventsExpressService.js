@@ -54,7 +54,6 @@ export default class EventsExpressService{
         return res;
     }
 
-
     setLogin = async (data) => {
         const res = await this.setResource('Authentication/login', data);
         if(!res.ok){
@@ -76,13 +75,11 @@ export default class EventsExpressService{
         return res;
     }
 
-
-    getUsers = async () => {
-        const res = await this.getResource('users');
+    getUsers = async (page, totalpage) => {
+        const res = await this.getResource(`users/get?page=${page}`);
         console.log(res);
         return res;  
     }
-
     getCountries = async () => {
         const res = await this.getResource('locations/countries');
         return res;
@@ -134,8 +131,8 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllEvents = async () =>{
-        const res = await this.getResource('event/all');
+    getAllEvents = async (page, totalpage) => {
+        const res = await this.getResource(`event/all?page=${page}`);
         return res;
     }
 
@@ -152,8 +149,7 @@ export default class EventsExpressService{
     }
 
     getResource = async (url) => {
-        const res = await fetch(this._baseUrl + url,
-            {
+        const res = await fetch(this._baseUrl + url, {
                 method: "get",
                 headers: new Headers({
                     'Content-Type': 'application/json',
@@ -167,21 +163,18 @@ export default class EventsExpressService{
     }
 
     setUsername = async (data) => {
-       
         const res = await this.setResource('Users/EditUsername', {
             Name: data.UserName
-           
         });
         if (!res.ok) {
             return { error: await res.text() };
         }
         return res; 
     }
+
     setBirthday = async (data) => {
-       
         const res = await this.setResource('Users/EditBirthday', {
             Birthday: data.Birthday
-
         });
         if (!res.ok) {
             return { error: await res.text() };
@@ -190,10 +183,8 @@ export default class EventsExpressService{
     }
 
     setGender = async (data) => {
-
         const res = await this.setResource('Users/EditGender', {
             Gender: data.Gender
-
         });
         if (!res.ok) {
             return { error: await res.text() };
@@ -205,8 +196,6 @@ export default class EventsExpressService{
         console.log(data);
         const res = await this.setResource('Users/EditUserCategory', {
             Categories: data.Categories
-
-
         });
         if (!res.ok) {
             return { error: await res.text() };
@@ -214,7 +203,22 @@ export default class EventsExpressService{
         return res;
     }
     
+    setUserBlock = async (id) => {
+        const res = await this.setResource('Users/Block/?userId='+id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
 
+    setUserUnblock = async (id) => {
+        console.log("SERVICE: unblocking user id: " + id);
+        const res = await this.setResource('Users/Unblock/?userId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
 
     setResource =  (url, data) => fetch(
             this._baseUrl + url,

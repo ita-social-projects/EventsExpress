@@ -16,14 +16,13 @@ export default class App extends Component {
     render(){
         return (
                 <Layout>
-                        <Route exact path="/" component={Home} />
+                        <Route path="/home/events/:page" component={Home} />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/admin/" component={Admin} />
                         <Route path="/event/:id" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
-                        <Route path="/admin/users/" component={UsersWrapper} />
-                <Route path="/admin/events/" component={EventListWrapper} />
-
+                        <Route path="/admin/users/:page" component={UsersWrapper} />
+                        <Route path="/admin/events/:page" component={EventListWrapper} />
                 </Layout>
         );
     }
