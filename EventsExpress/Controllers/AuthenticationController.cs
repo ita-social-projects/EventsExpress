@@ -94,6 +94,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
         

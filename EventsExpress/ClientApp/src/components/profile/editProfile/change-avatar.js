@@ -1,6 +1,7 @@
 import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
+import Button from "@material-ui/core/Button";
 
 const enhanceWithPreview = files =>
   files.map(file =>
@@ -48,20 +49,19 @@ class ChangeAvatar extends React.Component {
           handleOnDrop={this.handleOnDrop}
           validate={[imageIsRequired]}
         />        
-        <button
-        type="button"
-        className="uk-button uk-button-default uk-button-large clear"
+            <Button
+                type="button" color="primary"
         disabled={this.props.pristine || this.props.submitting}
         onClick={this.resetForm}
         style={{ float: "right" }}
       >
         Clear
-      </button>
+      </Button>
 
             <div>
-                <button type="submit" disabled={pristine || submitting}>
+                <Button  color="primary" type="submit" disabled={pristine || submitting}>
                     Submit
-                </button>
+                </Button >
             </div>
         </form>
     );

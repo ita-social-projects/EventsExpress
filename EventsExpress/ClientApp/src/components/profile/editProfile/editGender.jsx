@@ -3,7 +3,7 @@ import { Field, reduxForm } from "redux-form";
 
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
-
+import Button from "@material-ui/core/Button";
 
 const renderSelectField = ({
     input,
@@ -32,16 +32,16 @@ const EditGender = props => {
                     component={renderSelectField}
                     label="Chose Gender"
                 >
-                    <MenuItem value="0" primaryText="Men" />
-                    <MenuItem value="1" primaryText="Female" />
-                    <MenuItem value="2" primaryText="Other" />
+                    <MenuItem value="0" primaryText="Other" />
+                    <MenuItem value="1" primaryText="Male" />
+                    <MenuItem value="2" primaryText="Female" />
                 </Field>
             </div>
 
             <div>
-                <button type="submit" disabled={pristine || submitting}>
+                <Button type="submit" color="primary" disabled={pristine || submitting}>
                     Submit
-        </button>
+        </Button>
             </div>
         </form>
     );

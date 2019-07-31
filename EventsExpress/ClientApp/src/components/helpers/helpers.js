@@ -18,12 +18,13 @@ export const validate = values => {
     'date_from',
     'description',
     'categories',
-    'country'
+    'country',
      'RepeatPassword',
      'oldPassword',
      'newPassword',
      'repeatPassword',
-     'Birthday'
+      'Birthday',
+      'UserName'
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
@@ -51,12 +52,25 @@ export const validate = values => {
     if (new Date(values.Birthday).getTime <= Date.now()) {
         errors.Birthday = 'Date is incorrect';
     }
+   
+    
   return errors
 }
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, }) =>
+    <DatePicker
+        onChange={onChange}
+        selected={value || defaultValue || new Date()}
+    
+    peekNextMonth
+    showMonthDropdown
+    showYearDropdown
+    dropdownMode="select"
+/>
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>
 <DatePicker
   onChange={onChange}
+    
   minDate={defaultValue || new Date()}
   selected={value || defaultValue || new Date()}
 />
@@ -67,6 +81,7 @@ export const maxLength15 = maxLength(15)
 export const minLength = min => value =>
     value && value.length < min ? `Must be ${min} characters or more` : undefined
 export const minLength2 = minLength(6)
+export const minLength3 = minLength(4)
 
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
     <Multiselect {...input}

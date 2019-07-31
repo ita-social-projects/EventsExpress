@@ -51,7 +51,7 @@ export default class EventsExpressService{
         if(!res.ok){
             return { error: await res.text()};
         }
-        return res;
+        return await res.text();
     }
 
 
@@ -180,7 +180,7 @@ export default class EventsExpressService{
     setBirthday = async (data) => {
        
         const res = await this.setResource('Users/EditBirthday', {
-            Birthday: data.Birthday
+            Birthday: new Date(data.Birthday).toDateString()
 
         });
         if (!res.ok) {

@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MediatR;
+using EventsExpress.Core.Notifications;
 
 namespace EventsExpress.Core.Services
 {
@@ -20,13 +22,14 @@ namespace EventsExpress.Core.Services
 
         private readonly IMapper _mapper;
         private IPhotoService _photoService;
+        private readonly IMediator _mediator;
 
-
-        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv)
+        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv,IMediator mediator)
         {
             Db = uow;
             _mapper = mapper;
             _photoService = photoSrv;
+            _mediator = mediator;
         }
 
         public async Task<OperationResult> Create(UserDTO userDto)
@@ -43,6 +46,8 @@ namespace EventsExpress.Core.Services
             if (result.Email == user.Email && result.Id != null)
             {
                 await Db.SaveAsync();
+                userDto.Id = result.Id;
+                await _mediator.Publish(new RegisterVerificationMessage(userDto));
                 return new OperationResult(true, "Registration succeeded", "");
             }
 

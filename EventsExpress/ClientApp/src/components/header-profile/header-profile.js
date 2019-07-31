@@ -33,6 +33,7 @@ export default class HeaderProfile extends Component {
                 {id && (
                     <div className="d-flex flex-column align-items-center">
                         <Avatar
+                            key={id + photoUrl}
                             alt="Тут аватар"
                             src={photoUrl}
 

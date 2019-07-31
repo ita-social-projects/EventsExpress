@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -184,11 +186,13 @@ namespace EventsExpress.Controllers
             }
             var result = await _userService.ChangeAvatar(user.Id, newAva);
 
+            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
-            return Ok();
+            return Ok(updatedPhoto);
         }
 
         

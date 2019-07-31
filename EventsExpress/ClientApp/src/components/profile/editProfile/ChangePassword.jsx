@@ -9,6 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { makeStyles } from "@material-ui/core/styles";
 import Module from '../../helpers';
+import Button from "@material-ui/core/Button";
 
 const renderTextField = ({
     input,
@@ -105,12 +106,12 @@ const ChangePassword = (props) => {
 
                             
                             <div >
-                                <button type="submit" disabled={pristine || submitting }>
+                                <Button type="submit" color="primary" disabled={pristine || submitting }>
                                     Submit
-                                </button>
-                                <button type="button" disabled={pristine || submitting} onClick={reset}>
+                                </Button>
+                                <Button type="button" disabled={pristine || submitting} onClick={reset}>
                                     Clear
-                                </button>
+                                </Button>
                             </div>
                         </form>
 

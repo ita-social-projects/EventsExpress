@@ -97,6 +97,7 @@ namespace EventsExpress
 
             //services.AddMediatR(typeof(Startup));
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(RegisterVerificationHandler).Assembly);
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }

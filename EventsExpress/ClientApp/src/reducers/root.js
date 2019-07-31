@@ -45,7 +45,7 @@ const rootReducers = {
     categories: Categories.reducer,
     users: Users.reducer,
     change_avatar: ChangeAvatar.reducer,
-    changePassword: ChangePassword.reducer
+    changePassword: ChangePassword.reducer,
     event: EventView.reducer,
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
