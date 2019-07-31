@@ -3,45 +3,26 @@ import { connect } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
+import UserInfo from '../components/user-info'
+
 
 class UserInfoWpapper extends Component {
     constructor(props) {
         super(props);
-
-        this.state = { user: props.user };
     }
 
-    block = () => {
-        let value = this.props.user.id;
-        console.log('block user: ');
-        console.log(value);
-        this.props.block(value);
-    };
+    block = () => this.props.block(this.props.user.id)
 
-    unblock = () => {
-        let value = this.props.user.id;
-        console.log('unblock user: ');
-        console.log(value);
-        this.props.unblock(value);
-    };
+    unblock = () => this.props.unblock(this.props.user.id)
 
 
 
     render() {
-        const { user } = this.props;
+        const { user, currentUser } = this.props;
         
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
-                <td className="align-middle">
-                    {user.photoUrl
-                        ? <Avatar src={user.photoUrl} />
-                        : <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>}
-
-                </td>
-
-                <td className="align-middle">{user.email}</td>
-
-                <td className="align-middle">{user.username}</td>
+                <UserInfo user={user} />
 
                 <td className="align-middle">{user.role.name}</td>
 
@@ -52,15 +33,18 @@ class UserInfoWpapper extends Component {
                 </td>
 
                 <td className="align-middle">
-                    <div className="d-flex justify-content-center align-items-center">
-                        {(user.isBlocked == true)
-                            ? <Fab size="small" onClick={this.unblock} >
-                                <i className="fas fa-lock" ></i>
-                            </Fab>
-                            : <Fab size="small" onClick={this.block} >
-                                <i className="fas fa-unlock-alt" ></i>
-                            </Fab>}
-                    </div>
+                    {(user.id !== currentUser.id)
+                        ? <div className="d-flex justify-content-center align-items-center">
+                            {(user.isBlocked == true)
+                                ? <Fab size="small" onClick={this.unblock} >
+                                    <i className="fas fa-lock" ></i>
+                                </Fab>
+                                : <Fab size="small" onClick={this.block} >
+                                    <i className="fas fa-unlock-alt" ></i>
+                                </Fab>}
+                        </div>
+                        : <div> </div>
+                    }
                 </td>
             </tr>
         )
@@ -68,7 +52,7 @@ class UserInfoWpapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    currentUser: state.user
 });
 
 const mapDispatchToProps = (dispatch) => {

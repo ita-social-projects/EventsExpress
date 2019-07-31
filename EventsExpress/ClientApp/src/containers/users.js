@@ -13,12 +13,10 @@ class UsersWrapper extends Component{
             <Users users={this.props.users.data} />
         );
     }
-
 }
 
 const mapStateToProps = (state) => ({
-    users: state.users,
-    currentUser: state.user
+    users: state.users
 });
 
 const mapDispatchToProps = (dispatch) => { 
