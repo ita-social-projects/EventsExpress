@@ -1,4 +1,5 @@
-﻿using EventsExpress.Db.Entities;
+﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,8 @@ namespace EventsExpress.DTO
         public string PhotoUrl { get; set; }
         public UserPreviewDto User { get; set; }
         public Location Location { get; set; }
+                                                               
+        public IEnumerable<CategoryDto> Categories { get; set; }
+        public IEnumerable<UserPreviewDto> Visitors { get; set; }
     }
 }

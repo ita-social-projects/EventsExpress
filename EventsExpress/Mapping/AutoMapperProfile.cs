@@ -3,6 +3,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EventsExpress.Mapping
@@ -18,11 +19,17 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.Location.CityId))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));          
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
-            CreateMap<EventDTO, EventDto>()  
+            CreateMap<EventDTO, EventDto>()
 
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoBytes.ToRenderablePictureString()))
+                .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x => new UserPreviewDto {
+                    Id = x.User.Id,
+                    Username = x.User.Name,
+                    Birthday = x.User.Birthday,
+                    PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null 
+                    })))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => new Location() {
                                                             CityId = src.CityId,
                                                             City = src.City.Name,
@@ -32,7 +39,7 @@ namespace EventsExpress.Mapping
                                                             {
                                                             Id = src.OwnerId,
                                                             Birthday = src.Owner.Birthday,
-                                                            PhotoUrl = src.Owner.Photo.Thumb.ToRenderablePictureString(),
+                                                            PhotoUrl = src.Owner.Photo != null? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
                                                             Username = src.Owner.Name
                                                             })); 
 
@@ -70,10 +77,13 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<EventDTO, Event>()
-                .ForMember(dest => dest.Photo, opt => opt.Ignore());
+                .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Visitors, opt => opt.Ignore())
+                .ForMember(dest => dest.Categories, opt => opt.Ignore());
 
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
                 .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo.Thumb));
 
             CreateMap<UserDTO, UserPreviewDto>()
@@ -82,6 +92,13 @@ namespace EventsExpress.Mapping
                                                          
 
             CreateMap<CategoryDto, Category>();
+
+
+            CreateMap<CommentDTO, Comments>().ReverseMap();
+            CreateMap<CommentDto, CommentDTO>();
+            CreateMap<CommentDTO, CommentDto>()
+                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))            
+                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
         }
     }
 }

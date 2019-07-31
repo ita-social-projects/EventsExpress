@@ -17,6 +17,10 @@ import * as Countries from './countries';
 import * as Cities from './cities';
 import * as Users from './users';
 import * as ChangeAvatar from './editReducers/change_avatar';
+import * as EventView from './event-item-view';
+import * as AddComment from './add-comment';
+import * as DeleteComment from './delete-comment'; 
+import * as Comments from './comment-list';
 
 const rootReducers = {
     user: User.reducer,
@@ -38,7 +42,11 @@ const rootReducers = {
     add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,
-    change_avatar: ChangeAvatar.reducer 
+    event: EventView.reducer,
+    change_avatar: ChangeAvatar.reducer,
+    add_comment: AddComment.reducer,
+    comments: Comments.reducer,
+    delete_comment: DeleteComment.reducer
 };
 
 

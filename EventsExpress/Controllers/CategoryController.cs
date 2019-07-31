@@ -34,7 +34,6 @@ namespace EventsExpress.Controllers
         public IActionResult All()
         {
             var res = _mapper.Map<IEnumerable<CategoryDTO>, IEnumerable<CategoryDto>>(_categoryService.GetAllCategories());
-
             return Ok(res);
         }
 

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import EventsExpressService from '../../services/EventsExpressService';
 import Event from './event-item';
 import Pagination from "react-paginating";
 import { Link } from 'react-router-dom'

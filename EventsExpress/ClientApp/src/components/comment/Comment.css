@@ -1,0 +1,32 @@
+﻿.card-inner {
+    margin-left: 4rem;
+}
+
+.photo {
+   width: 55px;
+   height: 55px;
+}
+
+.comment-text {
+    font-size: 9px;
+}
+
+.photo-container {
+    width: 80px;
+    height: 80px;
+}
+
+.comment-container {
+    width: 300px;
+    height: 90px;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+.ItemComment {
+    border-radius: 15px;
+    display: flex;
+    padding: 15px;
+    margin-bottom: 2%;
+    color: black;
+    justify-content: space-between;
+}
