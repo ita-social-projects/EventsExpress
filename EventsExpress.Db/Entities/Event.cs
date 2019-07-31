@@ -21,7 +21,7 @@ namespace EventsExpress.Db.Entities
         public virtual Photo Photo { get; set; }
 
         public Guid OwnerId { get; set; }
-        public virtual User Owner { get; set; }
+        public virtual User Owner { get; set; }    
 
         public ICollection<UserEvent> Visitors { get; set; } = new List<UserEvent>();
         public IEnumerable<EventCategory> Categories { get; set; }

@@ -4,7 +4,7 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
-import moment from 'moment';
+import moment, { now } from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
@@ -81,7 +81,7 @@ export class EventForm extends Component {
                             <div className="meta-wrap m-2">
                                 <p className="meta">    
                                 <span>From
-                                         <Field name='date_from' defaultValue={values.date_from} component={renderDatePicker} /></span>
+                                         <Field name='date_from' component={renderDatePicker} /></span>
                                          {values.date_from != null &&
                                 <span>To<Field name='date_to' defaultValue={values.date_from} component={renderDatePicker} /></span>
                               }
@@ -125,8 +125,8 @@ EventForm = reduxForm({
     form: 'event-form',
     validate: validate,
     initialValues:{
-      date_from: null,
-      date_to: null,
+      date_from: new Date(),
+      date_to: new Date(),
       country: null
     }
 })(EventForm);

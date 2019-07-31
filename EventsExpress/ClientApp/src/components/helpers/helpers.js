@@ -15,7 +15,6 @@ export const validate = values => {
     'RepeatPassword',
     'image',
     'title',
-    'date_from',
     'description',
     'categories',
     'country'
@@ -25,12 +24,12 @@ export const validate = values => {
       errors[field] = 'Required'
     }
   })
-  if(new Date(values.date_from).getTime() <= Date.now()){
-    errors.date_from  = 'Date is incorrect';
-  }
-  if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
-    errors.date_to = 'Date is too low of start';
-  }
+  // if(new Date(values.date_from).getTime() <= new Date().getTime()){
+  //   errors.date_from  = 'Date is incorrect';
+  // }
+  // if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
+  //   errors.date_to = 'Date is too low of start';
+  // }
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
