@@ -93,9 +93,9 @@ namespace EventsExpress.Core.Services
         {
             var users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
 
-            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
 
-            return result;
+        
         }
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)

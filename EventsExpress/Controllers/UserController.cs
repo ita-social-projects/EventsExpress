@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
+using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,27 @@ namespace EventsExpress.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get()
+        public IActionResult Get(int page = 1)
         {
-            var users = _userService.GetAll();
-            
-            return Ok(_mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(users));
+
+            int pageSize = 1;
+
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll());
+
+            var count = res.Count();
+            var items = res.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            UsersViewModel viewModel = new UsersViewModel
+            {
+                PageViewModel = pageViewModel,
+                Users = items
+            };
+            return Ok(viewModel);
+    
         }
 
         [HttpGet("blocked")]
