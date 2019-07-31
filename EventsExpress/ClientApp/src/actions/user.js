@@ -1,25 +1,23 @@
 ﻿import EventsExpressService from '../services/EventsExpressService';
 
 export const blockUser = {
-    PENDING: 'PENDING',
-    SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR',
-    UPDATE: 'UPDATE'
+    PENDING: 'PENDING_BLOCK',
+    SUCCESS: 'SUCCESS_BLOCK',
+    ERROR: 'ERROR_BLOCK',
+    UPDATE: 'UPDATE_BLOCKED'
 }
 
 export const unBlockUser = {
-    PENDING: 'PENDING',
-    SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR',
-    UPDATE: 'UPDATE'
+    PENDING: 'PENDING_UNBLOCK',
+    SUCCESS: 'SUCCESS_UNBLOCK',
+    ERROR: 'ERROR_UNBLOCK',
+    UPDATE: 'UPDATE_UNBLOCKED'
 }
 
 const api_serv = new EventsExpressService();
 
 
 export function unblock_user(id) {
-    console.log("action creators:")
-    console.log(id)
     return dispatch => {
         dispatch(setUnBlockUserPending(true));
 

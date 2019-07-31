@@ -9,8 +9,6 @@ class UsersWrapper extends Component{
     componentDidMount = () => this.props.get_users()
 
     render() {
-        console.log("UsersWrapper render:")
-        console.log(this.props.users.data)
         return (
             <Users users={this.props.users.data} />
         );

@@ -29,10 +29,7 @@ class UserInfoWpapper extends Component {
 
     render() {
         const { user } = this.props;
-
-        console.log("UserInfoWrapper render:")
-        console.log(user)
-
+        
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <td className="align-middle">

@@ -6,16 +6,12 @@ import users from '../../containers/users';
 
 export default class Users extends Component {
     renderUsers = (arr) => {
-        console.log("Users renderUsers:")
-        console.log(arr)
         
         return arr.map(user => <UserInfoWpapper id={user.id + user.isBlocked} user={user} /> );
     }
 
 
     render() {
-        console.log("Users render:")
-        console.log(this.props.users)
 
         return (
             <table className="table">

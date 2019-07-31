@@ -2,8 +2,7 @@ import initialState from '../store/initialState';
 import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS } from '../actions/users';
 import { blockUser, unBlockUser } from '../actions/user';
 
-export const reducer = (state, action) => {
-    state = state || initialState.users;
+export const reducer = (state = initialState.users, action) => {
     switch(action.type) {
         case GET_USERS_SUCCESS:
             return{
@@ -11,6 +10,7 @@ export const reducer = (state, action) => {
                 isPending: false,
                 data: action.payload
             }
+
         case GET_USERS_PENDING:
             return{
                 ...state,
@@ -23,6 +23,7 @@ export const reducer = (state, action) => {
                 isError: action.payload,
                 isPending: false
             }
+
         case blockUser.UPDATE:
             let newState = { ...state };
             newState.data = state.data.map((item) => {
@@ -36,9 +37,7 @@ export const reducer = (state, action) => {
             return newState;
 
         case unBlockUser.UPDATE:
-
             let newstate = { ...state };
-
             newstate.data = state.data.map((item) => {
                 if (item.id === action.payload) {
                     let updItem = item;
@@ -47,8 +46,9 @@ export const reducer = (state, action) => {
                 }
                 return item;
             });
-
             return newstate;
+
+        default:
+            return state;
     }
-    return state;
 }
