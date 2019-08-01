@@ -200,11 +200,14 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public IEnumerable<EventDTO> Events()
+        public IEnumerable<EventDTO> Events(int page, int pageSize)
         {
-            var events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category").ToList();
+            IQueryable<Event> events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category").Skip((page - 1) * pageSize).Take(pageSize);
 
-            return _mapper.Map<IEnumerable<Event>, IEnumerable<EventDTO>>(events);
+            var IEvents = _mapper.Map<IEnumerable<EventDTO>>(events);
+           
+            return IEvents;
+           
         }
 
         public EventDTO EventById(Guid eventId)

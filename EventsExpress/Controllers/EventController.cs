@@ -75,17 +75,17 @@ namespace EventsExpress.Controllers
         {
             int pageSize = 4;
           
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(page, pageSize));
 
-            var count =  res.Count();
-            var items =  res.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count = _appDbContext.Events.Count();
+            
 
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            IndexViewModel viewModel = new IndexViewModel
+            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
             {
                 PageViewModel = pageViewModel,
-                Events = items
+                items = res
             };
             return Ok(viewModel);
         

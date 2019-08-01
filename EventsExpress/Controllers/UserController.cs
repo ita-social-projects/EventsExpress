@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
@@ -23,9 +24,10 @@ namespace EventsExpress.Controllers
     {
         private IUserService _userService;
         private IMapper _mapper;
-
-        public UsersController(IUserService userSrv, IMapper mapper)
+        private AppDbContext _appDbContext;
+        public UsersController(IUserService userSrv, IMapper mapper, AppDbContext appDbContext)
         {
+            _appDbContext = appDbContext;
             _userService = userSrv;
             _mapper = mapper;
         }
@@ -35,20 +37,17 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Get(int page = 1)
         {
-
             int pageSize = 1;
 
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll());
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page, pageSize));
 
-            var count = res.Count();
-            var items = res.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-
+            var count = _appDbContext.Users.Count();
+          
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            UsersViewModel viewModel = new UsersViewModel
+            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
             {
                 PageViewModel = pageViewModel,
-                Users = items
+                items = res
             };
             return Ok(viewModel);
     

@@ -31,7 +31,7 @@ const initialState = {
         isPending: true,
         isError: false,
         data: {
-            events: [],
+            items: [],
             pageViewModel: {}
 
         }
@@ -79,7 +79,7 @@ const initialState = {
         isPending: false,
         isError: false,
         data: {
-            users: [],
+            items: [],
             pageViewModel: {}
 
         }

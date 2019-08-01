@@ -17,7 +17,7 @@ class UsersWrapper extends Component{
         const spinner = isPending ? <Spinner /> : null;
         return <>
             {spinner}
-            <Users users={this.props.users.data.users} page={this.props.users.data.pageViewModel.pageNumber} totalPages={this.props.users.data.pageViewModel.totalPages} callback={this.getUsers} /> 
+            <Users users={this.props.users.data.items} page={this.props.users.data.pageViewModel.pageNumber} totalPages={this.props.users.data.pageViewModel.totalPages} callback={this.getUsers} /> 
         </>
     }
 

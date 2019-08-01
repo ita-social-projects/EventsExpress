@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.ViewModel
 {
-    public class IndexViewModel
+    public class IndexViewModel<T>
     {
-        public IEnumerable<EventDto> Events { get; set; }
+        public IEnumerable<T> items { get; set; }
         public PageViewModel PageViewModel { get; set; }
     }
 }

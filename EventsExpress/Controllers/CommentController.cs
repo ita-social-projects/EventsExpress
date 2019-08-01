@@ -54,9 +54,11 @@ namespace EventsExpress.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]/{id}")]
-        public IActionResult All(Guid id)
+        public IActionResult All(Guid id, int page)
         {
-            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id));
+            int pageSize = 1;
+
+            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id, page, pageSize));
 
             return Ok(res);
         }

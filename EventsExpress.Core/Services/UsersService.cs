@@ -89,13 +89,13 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public IEnumerable<UserDTO> GetAll()
+        public IEnumerable<UserDTO> GetAll(int page, int pageSize)
         {
-            var users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
 
-            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+            IQueryable<User> users = Db.UserRepository.Filter(includeProperties: "Photo,Role").Skip((page - 1) * pageSize).Take(pageSize); ;
 
-        
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+
         }
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
