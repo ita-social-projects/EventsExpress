@@ -2,6 +2,7 @@
 using EventsExpress.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.IServices
@@ -17,7 +18,7 @@ namespace EventsExpress.Core.IServices
         EventDTO EventById(Guid eventId);
         EventDTO Details(Guid id);
 
-        IEnumerable<EventDTO> Events();
+        IEnumerable<EventDTO>  Events(int page);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
         IEnumerable<EventDTO> UpcomingEvents(int? num);
 
