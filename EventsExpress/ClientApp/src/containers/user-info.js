@@ -1,9 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
 import UserInfo from '../components/user-info'
+import UserRoleWrapper from '../containers/user-role'
 
 
 class UserInfoWpapper extends Component {
@@ -24,14 +24,8 @@ class UserInfoWpapper extends Component {
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo user={user} />
 
-                <td className="align-middle">{user.role.name}</td>
-
-                <td className="align-middle">
-                    <Fab size="small" onClick={this.unSblock} >
-                        <i className="fas fa-edit"></i>
-                    </Fab>
-                </td>
-
+                <UserRoleWrapper user={user} />
+                
                 <td className="align-middle">
                     {(user.id !== currentUser.id)
                         ? <div className="d-flex justify-content-center align-items-center">
