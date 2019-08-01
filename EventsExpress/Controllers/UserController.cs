@@ -39,15 +39,15 @@ namespace EventsExpress.Controllers
         {
             int pageSize = 1;
 
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page));
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page, pageSize));
 
             var count = _appDbContext.Users.Count();
           
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            UsersViewModel viewModel = new UsersViewModel
+            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
             {
                 PageViewModel = pageViewModel,
-                Users = res
+                items = res
             };
             return Ok(viewModel);
     

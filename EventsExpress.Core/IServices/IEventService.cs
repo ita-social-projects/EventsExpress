@@ -18,7 +18,7 @@ namespace EventsExpress.Core.IServices
         EventDTO EventById(Guid eventId);
         EventDTO Details(Guid id);
 
-        IEnumerable<EventDTO>  Events(int page);
+        IEnumerable<EventDTO>  Events(int page, int pagesize);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
         IEnumerable<EventDTO> UpcomingEvents(int? num);
 

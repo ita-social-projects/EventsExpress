@@ -17,13 +17,13 @@ class EventListWrapper extends Component{
     render() {
 
         const { data, isPending, isError } = this.props;
-        const { events } = this.props.data;
+        const { items } = this.props.data;
         // const hasData = !(isPending || isError);
 
         // const errorMessage = isError ? <ErrorIndicator/> : null;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList data_list={events} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !isPending ? <EventList data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
         return <>
               
