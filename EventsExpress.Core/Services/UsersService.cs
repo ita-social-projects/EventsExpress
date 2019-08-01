@@ -89,11 +89,11 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public IEnumerable<UserDTO> GetAll(int page, int pageSize)
+        public IEnumerable<UserDTO> GetAll(int page, int pageSize, out int count)
         {
 
             IQueryable<User> users = Db.UserRepository.Filter(includeProperties: "Photo,Role").Skip((page - 1) * pageSize).Take(pageSize); ;
-
+            count = Db.UserRepository.Filter(includeProperties: "Photo,Role").Count();
             return _mapper.Map<IEnumerable<UserDTO>>(users);
 
         }

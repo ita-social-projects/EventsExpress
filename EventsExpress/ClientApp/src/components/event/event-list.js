@@ -45,7 +45,7 @@ export default class EventList extends Component{
           {items}
 
           <ul class="pagination justify-content-center">
-              <Pagination   
+              <Pagination
                   total={totalPages * limit}
                   limit={limit}
                   pageCount={pageCount}
@@ -61,21 +61,24 @@ export default class EventList extends Component{
                       totalPages,
                       getPageItemProps
                   }) => (
+
                           <div>
-                              <Link class="btn btn-primary"
-                                  to={window.location.pathname.replace(/[/].$/g, '/'+page)}
-                                  {...getPageItemProps({
-                                      pageValue: 1,
-                                      onPageChange: this.handlePageChange
-                                  })}
-                              >
-                                  first
-                              </Link>
 
                               {hasPreviousPage && (
                                   <Link class="btn btn-primary"
                                       to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                    
+                                      {...getPageItemProps({
+                                          pageValue: 1,
+                                          onPageChange: this.handlePageChange
+                                      })}
+                                  >
+                                      first
+                              </Link>)}
+
+                              {hasPreviousPage && (
+                                  <Link class="btn btn-primary"
+                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+
                                       {...getPageItemProps({
                                           pageValue: previousPage,
                                           onPageChange: this.handlePageChange
@@ -88,12 +91,12 @@ export default class EventList extends Component{
                               {pages.map(page => {
                                   let activePage = null;
                                   if (currentPage === page) {
-                                      activePage = { backgroundColor: "	#ffffff", color: "#00BFFF"};
+                                      activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                   }
                                   return (
                                       <Link class="btn btn-primary"
                                           to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                   
+
                                           {...getPageItemProps({
                                               pageValue: page,
                                               key: page,
@@ -109,7 +112,7 @@ export default class EventList extends Component{
                               {hasNextPage && (
                                   <Link class="btn btn-primary"
                                       to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                  
+
                                       {...getPageItemProps({
                                           pageValue: nextPage,
                                           onPageChange: this.handlePageChange
@@ -118,16 +121,17 @@ export default class EventList extends Component{
                                       {">"}
                                   </Link>
                               )}
-                              <Link class="btn btn-primary"
-                                  to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                 
-                                  {...getPageItemProps({
-                                      pageValue: this.props.totalPages,
-                                      onPageChange: this.handlePageChange
-                                  })}
-                              >
-                                  last
-                                </Link>
+                              {hasNextPage && (
+                                  <Link class="btn btn-primary"
+                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+
+                                      {...getPageItemProps({
+                                          pageValue: this.props.totalPages,
+                                          onPageChange: this.handlePageChange
+                                      })}
+                                  >
+                                      last
+                                </Link>)}
                           </div>
                       )}
               </Pagination>

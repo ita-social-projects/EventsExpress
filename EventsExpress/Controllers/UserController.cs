@@ -24,10 +24,10 @@ namespace EventsExpress.Controllers
     {
         private IUserService _userService;
         private IMapper _mapper;
-        private AppDbContext _appDbContext;
-        public UsersController(IUserService userSrv, IMapper mapper, AppDbContext appDbContext)
+     
+        public UsersController(IUserService userSrv, IMapper mapper)
         {
-            _appDbContext = appDbContext;
+           
             _userService = userSrv;
             _mapper = mapper;
         }
@@ -38,10 +38,10 @@ namespace EventsExpress.Controllers
         public IActionResult Get(int page = 1)
         {
             int pageSize = 1;
+            int count;
 
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page, pageSize));
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page, pageSize, out count));
 
-            var count = _appDbContext.Users.Count();
           
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>

@@ -99,7 +99,7 @@ export default class EventItemView extends Component {
                     <h2><p className="text-center">Comments</p></h2>
 
                     <div className="text-box overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        <Comment />
+                        <Comment match={this.props.match}/>
                     </div>
                 </div>
             </div>

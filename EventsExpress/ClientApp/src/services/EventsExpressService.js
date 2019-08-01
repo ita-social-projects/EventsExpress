@@ -131,7 +131,7 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllEvents = async (page, totalpage) => {
+    getAllEvents = async (page) => {
         const res = await this.getResource(`event/all?page=${page}`);
         return res;
     }
@@ -142,8 +142,8 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllComments = async (data) => {
-        const res = await this.getResource(`comment/all/${data}`);
+    getAllComments = async (data, page) => {
+        const res = await this.getResource(`comment/all/${data}?page=${page}`);
         console.log(res);
         return res;
     }

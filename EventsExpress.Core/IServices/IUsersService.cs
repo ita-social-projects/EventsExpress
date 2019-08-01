@@ -27,7 +27,7 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
 
-        IEnumerable<UserDTO> GetAll(int page, int pageSize);
+        IEnumerable<UserDTO> GetAll(int page, int pageSize, out int count);
         IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories);
         IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter);
     }

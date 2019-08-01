@@ -65,16 +65,19 @@ export default class Users extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
+
                             <div>
-                                <Link class="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                    {...getPageItemProps({
-                                        pageValue: 1,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    first
-                              </Link>
+
+                                {hasPreviousPage && (
+                                    <Link class="btn btn-primary"
+                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                        {...getPageItemProps({
+                                            pageValue: 1,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        first
+                              </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link class="btn btn-primary"
@@ -122,16 +125,17 @@ export default class Users extends Component {
                                         {">"}
                                     </Link>
                                 )}
-                                <Link class="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                {hasNextPage && (
+                                    <Link class="btn btn-primary"
+                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
-                                    {...getPageItemProps({
-                                        pageValue: this.props.totalPages,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    last
-                                </Link>
+                                        {...getPageItemProps({
+                                            pageValue: this.props.totalPages,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        last
+                                </Link>)}
                             </div>
                         )}
                 </Pagination>

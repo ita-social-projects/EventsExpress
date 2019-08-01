@@ -19,7 +19,7 @@ export default class App extends Component {
                         <Route path="/home/events/:page" component={Home} />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/admin/" component={Admin} />
-                        <Route path="/event/:id" component={EventItemViewWrapper} />
+                        <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users/:page" component={UsersWrapper} />
                         <Route path="/admin/events/:page" component={EventListWrapper} />

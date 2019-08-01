@@ -92,7 +92,11 @@ const initialState = {
     comments: {
         isPending: false,
         isError: false,
-        data: []
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     delete_comment: {
         isCommentDeletePending: false,

@@ -10,9 +10,9 @@ export default class Comment extends Component {
 
         return (
             <div>
-                <CommentListWrapper /> 
-
                 <AddComment />
+                <CommentListWrapper match={this.props.match} /> 
+
             </div>
 
         );
