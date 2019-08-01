@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './home.css';
 import AddEventWrapper from '../../containers/add-event';
+import EditEventWrapper from '../../containers/edit-event';
 import EventListWrapper from '../../containers/event-list';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -13,7 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 
 
-function AddComponent(props) {
+export function AddComponent(props) {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
@@ -26,13 +27,18 @@ function AddComponent(props) {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
         >
-            <Typography>Add Event</Typography>
+            <Typography>{props.title}</Typography>
         </ExpansionPanelSummary>
     <ExpansionPanelDetails>
         
         <Typography>
             <MuiThemeProvider>
+            {props.title === "Add Event" &&
                 <AddEventWrapper />
+        }
+                {props.title === "Edit Event" &&
+                <EditEventWrapper/>
+            } 
             </MuiThemeProvider>
         </Typography>
 
@@ -52,7 +58,7 @@ class Home extends Component{
     return(
         <div>
             {this.props.id &&
-            <AddComponent/>
+            <AddComponent title={'Add Event'}/>
             }
             <EventListWrapper match={this.props.match} /> 
           

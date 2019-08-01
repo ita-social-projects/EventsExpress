@@ -8,6 +8,10 @@ export default class EventsExpressService{
 
     setEvent = async (data) => {
         let file = new FormData();
+        if(data.id != null){
+            
+        file.append('Id', data.id);
+        }
         file.append('Photo', data.image.file);
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -16,7 +20,7 @@ export default class EventsExpressService{
         file.append('DateFrom', new Date(data.date_from).toDateString());
         file.append('DateTo', new Date(data.date_to).toDateString());
         let i = 0;
-        let categories = data.categories.map(x => {
+        data.categories.map(x => {
             console.log(i);
             file.append('Categories[' + i + '].Id', x.id);
             i++;

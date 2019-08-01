@@ -8,6 +8,7 @@ import '../layout/colorlib.css';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
+import { AddComponent } from '../home/home' 
 export default class EventItemView extends Component {
 
     renderCategories = (arr) => {
@@ -71,7 +72,7 @@ export default class EventItemView extends Component {
                         </>
                     }
                     {current_user.id === user.id &&
-                        <button onClick={this.props.onJoin} className="btn btn-info">Edit</button>
+                     <AddComponent title={'Edit Event'} />
                     }
 
                     <h4>Created by:</h4>

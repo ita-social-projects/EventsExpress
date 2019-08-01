@@ -168,19 +168,19 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = Db.EventRepository.Get(e.Id);
+            var evnt = Db.EventRepository.Filter(filter: x => x.Id == e.Id, includeProperties: "Photo,Categories.Category").FirstOrDefault();
             evnt.Title = e.Title;
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
             evnt.DateTo = e.DateTo;
-            evnt.CityId = e.City.Id;
+            evnt.CityId = e.CityId;
 
             if (e.Photo != null && evnt.Photo != null) 
             {
                 await _photoService.Delete(evnt.Photo.Id);
                 evnt.Photo = await _photoService.AddPhoto(e.Photo);
             }
-
+                                    
             List<EventCategory> eventCategories = new List<EventCategory>();
 
             if (e.Categories != null)
@@ -189,7 +189,7 @@ namespace EventsExpress.Core.Services
                 {
                     eventCategories.Add(new EventCategory
                     {
-                        Event = evnt,
+                        EventId = evnt.Id,
                         CategoryId = item.Id
                     });
                 }

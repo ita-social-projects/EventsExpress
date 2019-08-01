@@ -1,19 +1,20 @@
-﻿import React, {Component} from 'react';
+import React, {Component} from 'react';
 import EventForm from '../components/event/event-form';
 import add_event from '../actions/add-event';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
-import {getFormValues, reset} from 'redux-form';
+import {getFormValues, reset, formValues} from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 
 import get_categories from '../actions/category-list';
 
-class AddEventWrapper extends Component{
+class EditEventWrapper extends Component{
     
     componentDidMount = () =>{
         this.props.get_countries();
         this.props.get_categories();
+        formValues(this.props.initialValues);
     }
     componentDidUpdate = () => {
         if(!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess){
@@ -23,7 +24,8 @@ class AddEventWrapper extends Component{
 
     onSubmit = (values) => {
         console.log(values);
-        this.props.add_event({ ...values, user_id: this.props.user_id });
+
+        this.props.add_event({ ...values, user_id: this.props.user_id, id: this.props.initialValues.id });
         console.log(this.props.add_event_status);
 
     }
@@ -34,7 +36,7 @@ class AddEventWrapper extends Component{
 
     render(){   
         return <>
-                <EventForm data={{}} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
+                <EventForm data={this.props.initialValues} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
                </>
     }
 }
@@ -44,6 +46,7 @@ const mapStateToProps = (state) => ({user_id: state.user.id,
      countries: state.countries,
      cities: state.cities,
      all_categories: state.categories,
+     initialValues: state.event.data,
      form_values: getFormValues('event-form')(state)});
 
 const mapDispatchToProps = (dispatch) => { 
@@ -61,4 +64,4 @@ const mapDispatchToProps = (dispatch) => {
     } 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddEventWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);

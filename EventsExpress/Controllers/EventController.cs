@@ -73,7 +73,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All(int page = 1)
         {
-            int pageSize = 1;
+            int pageSize = 4;
           
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
 

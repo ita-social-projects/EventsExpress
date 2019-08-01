@@ -68,8 +68,8 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
 
 export const renderTextField = ({
   label,
+  defaultValue,
     input,
-  value,
   meta: { touched, invalid, error },
   ...custom
 }) => (
@@ -78,7 +78,8 @@ export const renderTextField = ({
     label={label}
     placeholder={label}
     error={touched && invalid}
-            defaultValue={value}
+    defaultValue={defaultValue}
+    value={defaultValue}
     helperText={touched && error}
     {...input}
     {...custom}
