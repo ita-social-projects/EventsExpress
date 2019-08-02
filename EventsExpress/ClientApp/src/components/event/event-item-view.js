@@ -8,6 +8,7 @@ import '../layout/colorlib.css';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
+import { AddComponent } from '../home/home' 
 export default class EventItemView extends Component {
 
     renderCategories = (arr) => {
@@ -57,7 +58,7 @@ export default class EventItemView extends Component {
         let flag = i_join == null;
         return <>
             <div className="row box">
-                <div className="col-6">
+                <div className="col-6 overflow-auto shadow p-3 mb-5 bg-white rounded">
                     <img src={photoUrl} className="img-thumbnail" />
                     <p>{categories_list}</p>
                     {current_user.id != user.id && current_user.id != null &&
@@ -69,6 +70,9 @@ export default class EventItemView extends Component {
                                 <button onClick={this.props.onLeave} className="btn btn-info">Leave</button>
                             }
                         </>
+                    }
+                    {current_user.id === user.id &&
+                     <AddComponent title={'Edit Event'} />
                     }
 
                     <h4>Created by:</h4>
@@ -87,11 +91,13 @@ export default class EventItemView extends Component {
                     {this.renderUsers(visitors)}
                 </div>
                 <div className="col-6">
+                    <div className="text-box overflow-auto scrollbar-near-moon shadow p-3 mb-5 bg-white roundeds">
                     <h3><strong><p className="text-center font-weight-bolder" >{title}</p></strong></h3>
 
                     <h3><p className="text-center"><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment></p></h3>
 
                     <h3><p className="text-center">{country} {city}</p></h3>
+                    </div>
                     <div className="text-box overflow-auto scrollbar-near-moon shadow p-3 mb-5 bg-white rounded">
                         <p>{description}</p>
                     </div>

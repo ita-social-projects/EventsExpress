@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
@@ -71,17 +72,16 @@ namespace EventsExpress.Controllers
         //}
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult All(int page = 1)
+        public IActionResult All([FromQuery]EventFilterViewModel model)
         {
-            int pageSize = 1;
-          
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(page, pageSize));
+            model.PageSize = 4;
 
-            var count = _appDbContext.Events.Count();
-            
+            int Count;
 
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(model, out Count));
+                    
 
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
             IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
             {
                 PageViewModel = pageViewModel,
@@ -94,8 +94,8 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
-        {
-            
+        {                                    
+
             var res = model.Id == Guid.Empty ? await _eventService.Create(_mapper.Map<EventDto, EventDTO>(model))
                                        : await _eventService.Edit(_mapper.Map<EventDto, EventDTO>(model));
             if (res.Successed)

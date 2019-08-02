@@ -168,19 +168,19 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = Db.EventRepository.Get(e.Id);
+            var evnt = Db.EventRepository.Filter(filter: x => x.Id == e.Id, includeProperties: "Photo,Categories.Category").FirstOrDefault();
             evnt.Title = e.Title;
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
             evnt.DateTo = e.DateTo;
-            evnt.CityId = e.City.Id;
+            evnt.CityId = e.CityId;
 
             if (e.Photo != null && evnt.Photo != null) 
             {
                 await _photoService.Delete(evnt.Photo.Id);
                 evnt.Photo = await _photoService.AddPhoto(e.Photo);
             }
-
+                                    
             List<EventCategory> eventCategories = new List<EventCategory>();
 
             if (e.Categories != null)
@@ -189,7 +189,7 @@ namespace EventsExpress.Core.Services
                 {
                     eventCategories.Add(new EventCategory
                     {
-                        Event = evnt,
+                        EventId = evnt.Id,
                         CategoryId = item.Id
                     });
                 }
@@ -200,12 +200,46 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public IEnumerable<EventDTO> Events(int page, int pageSize)
+        public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int Count)
         {
-            IQueryable<Event> events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category").Skip((page - 1) * pageSize).Take(pageSize);
 
-            var IEvents = _mapper.Map<IEnumerable<EventDTO>>(events);
-           
+
+            IQueryable<Event> events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category");
+
+            if (model.KeyWord != null)
+            {
+                events = events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord));
+            }
+            if(model.DateFrom != new DateTime())
+            {
+                events = events.Where(x => x.DateFrom >= model.DateFrom);
+            }
+
+            if (model.DateTo != new DateTime())
+            {
+                events = events.Where(x => x.DateTo <= model.DateTo);
+            }                 
+            
+            if(model.Categories != null)
+            {
+                var categories = model.Categories.Split(",");
+                List<Guid> categories_id = new List<Guid>(); 
+                foreach (var x in categories)
+                {
+                    Guid item;
+                    var res = Guid.TryParse(x, out item);
+                    if (res)
+                    {
+                        categories_id.Add(item);
+                    }
+                }                                                                       
+                events = events.Where(x => x.Categories.Any(category => categories_id.Contains(category.CategoryId)));  
+            }
+
+            Count = events.Count();
+
+            var IEvents = _mapper.Map<IEnumerable<EventDTO>>(events.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+                      
             return IEvents;
            
         }

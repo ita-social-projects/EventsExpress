@@ -8,8 +8,7 @@ import get_events from '../actions/event-list';
 class EventListWrapper extends Component{
 
     componentDidMount() {
-        const { page } = this.props.match.params;
-        this.getEvents(page);
+        this.getEvents(this.props.params);
     }
     getEvents = (page) => this.props.get_events(page);
     
