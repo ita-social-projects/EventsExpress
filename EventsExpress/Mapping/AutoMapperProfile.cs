@@ -90,6 +90,8 @@ namespace EventsExpress.Mapping
                                                          
 
             CreateMap<CategoryDto, Category>();
+
+            CreateMap<Role, RoleDto>();
         }
     }
 }

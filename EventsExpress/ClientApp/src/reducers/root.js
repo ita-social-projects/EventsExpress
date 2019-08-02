@@ -16,6 +16,7 @@ import * as Categories from './category-list';
 import * as Countries from './countries';
 import * as Cities from './cities';
 import * as Users from './users';
+import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 
 const rootReducers = {
@@ -38,6 +39,7 @@ const rootReducers = {
     add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,
+    roles: Roles.reducer,
     change_avatar: ChangeAvatar.reducer 
 };
 

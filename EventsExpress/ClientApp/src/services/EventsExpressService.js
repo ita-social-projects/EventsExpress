@@ -65,6 +65,23 @@ export default class EventsExpressService{
         return res;
     }
 
+    getRoles = async () => {
+        const res = await this.getResource('roles');
+        return res;
+    }
+
+    setChangeUserRole = async (userId, newRoleId) => {
+        console.log('Before sending .. \nuid: '+ userId + ' rId: ' + newRoleId);
+        
+        const res = await this.setResource(`users/ChangeRole/?userId=` + userId + '&roleId=' + newRoleId);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        console.log(res)
+
+        return res;
+    }
+
     setCategoryDelete = async (data) => {
         const res = await this.setResource(`category/delete/${data.id}`);
         if (!res.ok) {

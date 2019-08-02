@@ -1,6 +1,6 @@
 import initialState from '../store/initialState';
 import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS } from '../actions/users';
-import { blockUser, unBlockUser } from '../actions/user';
+import { blockUser, unBlockUser, changeUserRole } from '../actions/user';
 
 export const reducer = (state = initialState.users, action) => {
     switch(action.type) {
@@ -47,6 +47,18 @@ export const reducer = (state = initialState.users, action) => {
                 return item;
             });
             return newstate;
+
+        case changeUserRole.UPDATE:
+            let nstate = { ...state };
+            nstate.data = state.data.map((item) => {
+                if (item.id === action.payload.userId) {
+                    let updItem = item;
+                    updItem.role.id = action.payload.roleId;
+                    return updItem;
+                }
+                return item;
+            });
+            return nstate;
 
         default:
             return state;

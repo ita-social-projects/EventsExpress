@@ -80,6 +80,11 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    roles:{
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

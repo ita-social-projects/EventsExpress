@@ -16,6 +16,10 @@ class UserInfoWpapper extends Component {
     unblock = () => this.props.unblock(this.props.user.id)
 
 
+    componentDidUpdate(){
+        var role = this.props.roles.find(x => x.id = this.props.user.role.id);
+        this.props.user.role = role;
+    }
 
     render() {
         const { user, currentUser } = this.props;
@@ -24,7 +28,7 @@ class UserInfoWpapper extends Component {
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo user={user} />
 
-                <UserRoleWrapper user={user} />
+                <UserRoleWrapper user={user} currentUser={currentUser} />
                 
                 <td className="align-middle">
                     {(user.id !== currentUser.id)
@@ -46,7 +50,8 @@ class UserInfoWpapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    currentUser: state.user
+    currentUser: state.user,
+    roles: state.roles.data
 });
 
 const mapDispatchToProps = (dispatch) => {

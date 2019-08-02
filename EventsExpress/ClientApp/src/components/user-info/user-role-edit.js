@@ -1,9 +1,11 @@
 ﻿import React, { Component } from 'react';
 import Fab from '@material-ui/core/Fab';
-import { exact } from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
+import { connect } from 'react-redux';
+import { reduxForm, formValueSelector, Field } from 'redux-form';
+import get_roles from '../../actions/roles'
 
 class UserRoleEdit extends Component {
+    componentDidMount = () => this.props.get_roles();
 
     renderRolesOptions = (arr) => {
         return arr.map((item) => {
@@ -11,36 +13,57 @@ class UserRoleEdit extends Component {
         });
     }
 
-    roles = [
-        { id: "1bf45308-8120-4c14-f81e-08d7039626c7", name: "Admin"},
-        { id: "ccf760e0-c17e-4e22-f81f-08d7039626c7", name: "User"}
-    ]
+    
+    
+    handleSubmit = (e) => {
+        console.log("handle. now props:");
+        e.preventDefault();
+        this.props.callback(this.props.newRole);
+    }
 
     render() {
-
+        
         return (<>
             <td className="align-middle">
-                <form>
-                    <Field onChange={() => { }} className="form-control" name='roles' component="select">
+                <form onSubmit={this.handleSubmit} id="user-role"> 
+                    <Field className="form-control" name='role' component="select">
                         <option>Roles</option>
-                        {this.renderRolesOptions(this.roles)}
+                        {this.renderRolesOptions(this.props.roles)}
                     </Field>
-                </form>
 
+                </form>
             </td>
 
             <td className="align-middle">
-                <Fab size="small" onClick={this.props.callback} >
-                    <i className="fas fa-edit"></i>
+                <Fab size="small" type="submit" form='user-role'>                    
+                    <i class="fas fa-check"></i>
                 </Fab>
             </td>
         </>)
     }
 }
 
+const selector = formValueSelector('user-role')
+
+const mapStateToProps = state => {
+    return {
+        roles: state.roles.data,
+        newRole: selector(state, 'role')
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_roles: () => dispatch(get_roles())
+    }
+};
+
+UserRoleEdit = connect(mapStateToProps, mapDispatchToProps)(UserRoleEdit);
 
 UserRoleEdit = reduxForm({
     form: 'user-role'
 })(UserRoleEdit);
 
 export default UserRoleEdit;
+
+
