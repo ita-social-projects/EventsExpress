@@ -19,6 +19,8 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> ChangeRole(Guid uId, Guid rId);
         Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar);
         Task<OperationResult> Unblock(Guid uId);
+         Task<OperationResult> Verificate(CacheDTO cacheDto);
+        Task<OperationResult> PasswordRecover(UserDTO userDto);
 
         UserDTO GetById(Guid id);
 

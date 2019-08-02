@@ -97,7 +97,47 @@ namespace EventsExpress.Controllers
 
             return Ok();
         }
-        
+   
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> PasswordRecovery(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest();
+            }
+            var user = _userService.GetByEmail(email);
+
+            var res = await _userService.PasswordRecover(user);
+            if (!res.Successed)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok();
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("[action]/{userid}/{token}")]
+        public async Task<IActionResult> Verify(string userid, string token)
+        {
+            var cache = new CacheDTO { Token = token };
+
+            var res = Guid.TryParse(userid, out cache.UserId);
+            if (!res)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userService.Verificate(cache);
+            if (!result.Successed)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok();
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword
             (ChangePasswordDto changePasswordDto, [FromServices] IAuthServicre _authServise

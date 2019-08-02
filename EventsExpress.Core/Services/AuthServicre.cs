@@ -37,6 +37,11 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email}, your account was blocked.", "email");
             }
 
+            if (!user.EmailConfirmed)
+            {
+                return new OperationResult(false, $"{email} is not confirmed, please confirm", "");
+            }
+
             // validate password
             var passwordValid = this.VerifyPassword(password, user.PasswordHash);
             if (!passwordValid)

@@ -9,12 +9,12 @@ namespace EventsExpress.Core.Notifications
 {
     public class RegisterVerificationMessage: INotification
     {
-       // public string Message { get; }
+        public string Message { get; }
         public UserDTO User { get; }
 
         public RegisterVerificationMessage(UserDTO userDto)
         {
-           // Message=$"new user was registred: id{userDto.Id}" ;
+            
             User = userDto;
 
         }

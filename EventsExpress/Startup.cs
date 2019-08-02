@@ -44,6 +44,7 @@ namespace EventsExpress
             var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
 
             services
+                .AddMemoryCache()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -81,8 +82,8 @@ namespace EventsExpress
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPhotoService, PhotoService> ();
             services.AddTransient<ICommentService, CommentService>();
-            
 
+            services.AddSingleton<CacheHelper>();
 
             #endregion
 
@@ -95,9 +96,9 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            //services.AddMediatR(typeof(Startup));
+           
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
-            services.AddMediatR(typeof(RegisterVerificationHandler).Assembly);
+           
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
