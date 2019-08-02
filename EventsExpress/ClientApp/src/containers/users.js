@@ -7,8 +7,8 @@ import Spinner from '../components/spinner';
 class UsersWrapper extends Component{
 
     componentDidMount() {
-        const { page } = this.props.match.params;
-        this.getUsers(page);
+       
+        this.getUsers(this.props.params);
     }
     getUsers = (page) => this.props.get_users(page);
 

@@ -10,7 +10,7 @@ export const GET_USERS_ERROR = "GET_USERS_ERROR";
 const api_serv = new EventsExpressService();
 
 export default function get_users(page) {
-
+    console.log(page);
     return dispatch => {
         dispatch(getUsersPending(true));
   

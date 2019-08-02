@@ -64,6 +64,7 @@ export default class EventList extends Component{
                   }) => (
 
                           <div>
+                              {hasPreviousPage && (
                               <Link class="btn btn-primary"
                                   to={window.location.search.replace(/(page=)\w/gm, 'page='+1)}
                                   {...getPageItemProps({
@@ -72,7 +73,7 @@ export default class EventList extends Component{
                                   })}
                               >
                                   first
-                              </Link>
+                              </Link>)}
 
                               {hasPreviousPage && (
                                   <Link class="btn btn-primary"
@@ -120,6 +121,7 @@ export default class EventList extends Component{
                                       {">"}
                                   </Link>
                               )}
+                              {hasNextPage && (
                               <Link class="btn btn-primary"
                                   to={window.location.search.replace(/(page=)\w/gm, 'page='+this.props.totalPages)}
                                  
@@ -129,7 +131,7 @@ export default class EventList extends Component{
                                   })}
                               >
                                   last
-                                </Link>
+                                </Link>)}
                           </div>
                       )}
               </Pagination>
