@@ -2,15 +2,15 @@ import React from 'react';
 import { dark } from '@material-ui/core/styles/createPalette';
 
 
-export default class EventsExpressService{
+export default class EventsExpressService {
 
     _baseUrl = 'api/';
 
     setEvent = async (data) => {
         let file = new FormData();
-        if(data.id != null){
-            
-        file.append('Id', data.id);
+        if (data.id != null) {
+
+            file.append('Id', data.id);
         }
         file.append('Photo', data.image.file);
         file.append('Title', data.title);
@@ -26,50 +26,50 @@ export default class EventsExpressService{
             i++;
         })
         const res = await this.setResourceWithData('event/edit', file);
-        if(!res.ok){
-            return { error: await res.text()};
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
     }
 
     setUserFromEvent = async (data) => {
-        const res = await this.setResource('event/DeleteUserFromEvent?userId='+data.userId+'&eventId='+data.eventId);
-        if(!res.ok){
-            return { error: await res.text()};
+        const res = await this.setResource('event/DeleteUserFromEvent?userId=' + data.userId + '&eventId=' + data.eventId);
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
-    } 
+    }
 
     setUserToEvent = async (data) => {
-        const res = await this.setResource('event/AddUserToEvent?userId='+data.userId+'&eventId='+data.eventId);
-        if(!res.ok){
-            return { error: await res.text()};
+        const res = await this.setResource('event/AddUserToEvent?userId=' + data.userId + '&eventId=' + data.eventId);
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
-    } 
+    }
 
     setAvatar = async (data) => {
         let file = new FormData();
         file.append('newAva', data.image.file);
         const res = await this.setResourceWithData('users/changeAvatar', file);
-        if(!res.ok){
-            return { error: await res.text()};
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
     }
 
     setLogin = async (data) => {
         const res = await this.setResource('Authentication/login', data);
-        if(!res.ok){
-            return { error: await res.text()};
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return await res.json();
     }
 
     setRegister = async (data) => {
         const res = await this.setResource('Authentication/register', data);
-        if(!res.ok){
-            return { error: await res.text()};
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
     }
@@ -82,7 +82,7 @@ export default class EventsExpressService{
     getUsers = async (page, totalpage) => {
         const res = await this.getResource(`users/get?page=${page}`);
         console.log(res);
-        return res;  
+        return res;
     }
     getCountries = async () => {
         const res = await this.getResource('locations/countries');
@@ -135,8 +135,8 @@ export default class EventsExpressService{
         return res;
     }
 
-    getAllEvents = async (page, totalpage) => {
-        const res = await this.getResource(`event/all?page=${page}`);
+    getAllEvents = async (filters) => {
+        const res = await this.getResource(`event/all${filters}`);
         return res;
     }
 
@@ -154,14 +154,14 @@ export default class EventsExpressService{
 
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url, {
-                method: "get",
-                headers: new Headers({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }),
-            });
-        if(!res.ok){
-            return {error: "Invalid data"}
+            method: "get",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+        });
+        if (!res.ok) {
+            return { error: "Invalid data" }
         }
         return await res.json();
     }
@@ -173,7 +173,7 @@ export default class EventsExpressService{
         if (!res.ok) {
             return { error: await res.text() };
         }
-        return res; 
+        return res;
     }
 
     setBirthday = async (data) => {
@@ -206,9 +206,9 @@ export default class EventsExpressService{
         }
         return res;
     }
-    
+
     setUserBlock = async (id) => {
-        const res = await this.setResource('Users/Block/?userId='+id);
+        const res = await this.setResource('Users/Block/?userId=' + id);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -224,18 +224,18 @@ export default class EventsExpressService{
         return res;
     }
 
-    setResource =  (url, data) => fetch(
-            this._baseUrl + url,
-            {
-                method: "post",
-                headers: new Headers({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }),
-                body: JSON.stringify(data)
-            }
-        );
-    
+    setResource = (url, data) => fetch(
+        this._baseUrl + url,
+        {
+            method: "post",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }),
+            body: JSON.stringify(data)
+        }
+    );
+
     setResourceWithData = (url, data) => fetch(
         this._baseUrl + url,
         {

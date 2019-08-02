@@ -29,10 +29,6 @@ class EventForm extends Component {
 
   state = { imagefile: [] };
 
-  componentDidMount(){
-      initial = this.props.data;
-  }
-
   handleFile(fieldName, event) {
     event.preventDefault();
     // convert files to an array

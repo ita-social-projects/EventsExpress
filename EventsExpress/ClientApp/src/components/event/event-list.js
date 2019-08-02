@@ -18,7 +18,7 @@ export default class EventList extends Component{
 
     handlePageChange = (page, e) => {
         console.log("chanhe page"+page);
-        this.props.callback(page);
+        this.props.callback(window.location.search.replace(/(page=)\w/gm, 'page='+page));
         this.setState({
             currentPage: page
         });
@@ -39,6 +39,7 @@ export default class EventList extends Component{
       const { data_list } = this.props;
  
 
+      console.log(window.location);
       const items = this.renderItems(data_list);
       const { page, totalPages } = this.props;
       return <>
@@ -63,7 +64,7 @@ export default class EventList extends Component{
                   }) => (
                           <div>
                               <Link class="btn btn-primary"
-                                  to={window.location.pathname.replace(/[/].$/g, '/'+page)}
+                                  to={window.location.search.replace(/(page=)\w/gm, 'page='+1)}
                                   {...getPageItemProps({
                                       pageValue: 1,
                                       onPageChange: this.handlePageChange
@@ -74,7 +75,7 @@ export default class EventList extends Component{
 
                               {hasPreviousPage && (
                                   <Link class="btn btn-primary"
-                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                      to={window.location.search.replace(/(page=)\w/gm, 'page='+(page-1))}
                                     
                                       {...getPageItemProps({
                                           pageValue: previousPage,
@@ -92,7 +93,7 @@ export default class EventList extends Component{
                                   }
                                   return (
                                       <Link class="btn btn-primary"
-                                          to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                          to={window.location.search.replace(/(page=)\w/gm, 'page='+page)}
                                    
                                           {...getPageItemProps({
                                               pageValue: page,
@@ -108,7 +109,7 @@ export default class EventList extends Component{
 
                               {hasNextPage && (
                                   <Link class="btn btn-primary"
-                                      to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                      to={window.location.search.replace(/(page=)\w/gm, 'page='+(page+1))}
                                   
                                       {...getPageItemProps({
                                           pageValue: nextPage,
@@ -119,7 +120,7 @@ export default class EventList extends Component{
                                   </Link>
                               )}
                               <Link class="btn btn-primary"
-                                  to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                  to={window.location.search.replace(/(page=)\w/gm, 'page='+this.props.totalPages)}
                                  
                                   {...getPageItemProps({
                                       pageValue: this.props.totalPages,

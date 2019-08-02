@@ -16,7 +16,7 @@ export default class App extends Component {
     render(){
         return (
                 <Layout>
-                        <Route path="/home/events/:page" component={Home} />
+                        <Route path="/home/events" component={Home} />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/admin/" component={Admin} />
                         <Route path="/event/:id" component={EventItemViewWrapper} />
