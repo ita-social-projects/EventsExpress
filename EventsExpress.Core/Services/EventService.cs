@@ -45,8 +45,8 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var ev = Db.EventRepository
-               .Filter( filter: e => e.Id == eventId, includeProperties: "Visitors")
-               .FirstOrDefault();
+               .Get(includeProperties: "Visitors")
+               .FirstOrDefault(e => e.Id == eventId);
 
             if (ev == null)
             {
@@ -67,8 +67,8 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
             var ev = Db.EventRepository
-               .Filter(filter: e => e.Id == eventId, includeProperties: "Visitors")
-               .FirstOrDefault();
+               .Get(includeProperties: "Visitors")
+               .FirstOrDefault(e => e.Id == eventId);
 
             if (ev == null)
             {
@@ -122,12 +122,12 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> UpcomingEvents(int? num)
         {
-            var ev = Db.EventRepository.Filter(
-                skip: 0,
-                take: num,
-                filter: e => e.DateTo <= DateTime.UtcNow,
-                orderBy: es => es.OrderBy(e => e.DateFrom)
-                ).AsEnumerable();
+            var ev = Db.EventRepository.Get()
+                .Where(e => e.DateTo <= DateTime.UtcNow)
+                .OrderBy(e => e.DateFrom)
+                .Skip(0)
+                .Take((int)num)
+                .AsEnumerable();
                 
 
             return _mapper.Map<IEnumerable<EventDTO>>(ev);
@@ -168,7 +168,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = Db.EventRepository.Filter(filter: x => x.Id == e.Id, includeProperties: "Photo,Categories.Category").FirstOrDefault();
+            var evnt = Db.EventRepository.Get(includeProperties: "Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
             evnt.Title = e.Title;
             evnt.Description = e.Description;
             evnt.DateFrom = e.DateFrom;
@@ -204,7 +204,7 @@ namespace EventsExpress.Core.Services
         {
 
 
-            IQueryable<Event> events = Db.EventRepository.Filter(includeProperties: "Photo,Owner,City.Country,Categories.Category");
+            IQueryable<Event> events = Db.EventRepository.Get(includeProperties: "Photo,Owner,City.Country,Categories.Category");
 
             if (model.KeyWord != null)
             {
@@ -246,7 +246,7 @@ namespace EventsExpress.Core.Services
 
         public EventDTO EventById(Guid eventId)
         {
-            var evv = Db.EventRepository.Filter(filter: x => x.Id == eventId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").FirstOrDefault();
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").FirstOrDefault(x => x.Id == eventId);
 
             var res = _mapper.Map<EventDTO>(evv);
             return res;
@@ -254,14 +254,14 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
         {  
-            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId);
+            var evv = Db.EventRepository.Get().Where(e => e.OwnerId == userId);
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
 
         }
 
         public EventDTO Details(Guid event_id)
         {
-            var ev = Db.EventRepository.Filter(filter: e => e.Id == event_id, includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault();
+            var ev = Db.EventRepository.Get(includeProperties: "Title,Description,DateFrom,DateTo,City,Photo,EventCategory,Visitors").FirstOrDefault(e => e.Id == event_id);
             List<string> Categories = new List<string>();
             foreach (var x in Db.CategoryRepository.EventCategories(event_id))
             {

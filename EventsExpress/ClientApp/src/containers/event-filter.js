@@ -4,12 +4,19 @@ import { renderTextField } from '../components/helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import get_events from '../actions/event-list';
+import history from '../history';
+
+import get_categories from '../actions/category-list';
 
 class EventFilterWrapper extends Component {
 
+    componentWillMount(){
+        this.props.get_categories();
+    }
+    
     onSubmit = (filters) => {
         console.log(filters);       
-        var search_string = '';
+        var search_string = '?page=1';
         if (filters != null) {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
@@ -28,10 +35,8 @@ class EventFilterWrapper extends Component {
                 search_string += '&categories=' + categories;
             }
         }
-        this.props.search(window.location.search + search_string); 
-        console.log(window.location.search + search_string)
-        window.location.search += search_string;
-        
+        this.props.search(search_string); 
+        history.push(search_string);
     }
 
     render() {
@@ -49,7 +54,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        search: (values) => dispatch(get_events(values))
+        search: (values) => dispatch(get_events(values)),
+        get_categories: () => dispatch(get_categories())
     }
 };
 

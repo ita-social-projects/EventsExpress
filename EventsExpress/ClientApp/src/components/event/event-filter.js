@@ -5,6 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 
 class EventFilter extends Component {
+    
     render() {
         const { all_categories } = this.props;
         return <>

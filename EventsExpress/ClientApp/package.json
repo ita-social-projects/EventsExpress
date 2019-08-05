@@ -36,7 +36,7 @@
     "react-widgets": "^4.4.11",
     "react-widgets-moment": "^4.0.27",
     "redux": "^3.7.2",
-    "redux-form": "^8.2.4",
+    "redux-form": "7.4.2",
     "redux-form-material-ui": "^4.3.4",
     "redux-thunk": "^2.2.0",
     "tiny-custom-pagination": "^1.0.5",

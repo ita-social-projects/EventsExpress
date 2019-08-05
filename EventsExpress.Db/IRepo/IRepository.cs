@@ -15,13 +15,7 @@ namespace EventsExpress.Db.IRepo
         T Update(T entity);
         T Delete(T entity);
 
-        IQueryable<T> Get();        
-        
-        IQueryable<T> Filter(int? skip = null,
-          int? take = null,
-          Expression<Func<T, bool>> filter = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-          string includeProperties = "");
-                           
+        IQueryable<T> Get(string includeProperties = "");        
+                                                                        
     }
 }

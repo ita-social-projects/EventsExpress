@@ -102,7 +102,9 @@ const initialState = {
     event: {
         isPending: true,
         isError: false,
-        data: null
+        data: {
+            date_from: null
+        }
     }
 };
 
