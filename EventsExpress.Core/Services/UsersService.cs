@@ -89,13 +89,22 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public IEnumerable<UserDTO> GetAll(int page, int pageSize, out int count)
+        public IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int count)
         {
 
-            IQueryable<User> users = Db.UserRepository.Filter(includeProperties: "Photo,Role").Skip((page - 1) * pageSize).Take(pageSize); ;
-            count = Db.UserRepository.Filter(includeProperties: "Photo,Role").Count();
-            return _mapper.Map<IEnumerable<UserDTO>>(users);
+            IQueryable<User> users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
+            if (model.KeyWord != null)
+            {
+                users = users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord));
+            }
+            if (model.Role != null)
+            {
+                users = users.Where(x => x.Role.Name.Contains(model.Role));
+            }
+            count = users.Count();
+            var IUsers = _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
 
+            return IUsers;
         }
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
