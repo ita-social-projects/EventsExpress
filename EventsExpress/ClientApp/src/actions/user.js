@@ -1,25 +1,29 @@
 ﻿import EventsExpressService from '../services/EventsExpressService';
 
 export const blockUser = {
-    PENDING: 'PENDING',
-    SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR',
-    UPDATE: 'UPDATE'
+    PENDING: 'PENDING_BLOCK',
+    SUCCESS: 'SUCCESS_BLOCK',
+    ERROR: 'ERROR_BLOCK',
+    UPDATE: 'UPDATE_BLOCKED'
 }
 
 export const unBlockUser = {
-    PENDING: 'PENDING',
-    SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR',
-    UPDATE: 'UPDATE'
+    PENDING: 'PENDING_UNBLOCK',
+    SUCCESS: 'SUCCESS_UNBLOCK',
+    ERROR: 'ERROR_UNBLOCK',
+    UPDATE: 'UPDATE_UNBLOCKED'
 }
 
+export const changeUserRole = {
+    PENDING: 'PENDING_CHANGE_ROLE',
+    SUCCESS: 'SUCCESS_CHANGE_ROLE',
+    ERROR: 'ERROR_CHANGE_ROLE',
+    UPDATE: 'UPDATE_CHANGE_ROLE'
+}
 const api_serv = new EventsExpressService();
 
-
+// ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {
-    console.log("action creators:")
-    console.log(id)
     return dispatch => {
         dispatch(setUnBlockUserPending(true));
 
@@ -36,8 +40,8 @@ export function unblock_user(id) {
     }
 }
 
+// ACTION CREATOR FOR USER BLOCK:
 export function block_user(id) {
-
     return dispatch => {
         dispatch(setBlockUserPending(true));
 
@@ -53,6 +57,52 @@ export function block_user(id) {
         });
     }
 }
+
+// ACTION CREATOR FOR CHANGE USER ROLE:
+export function change_user_role(userId, newRole) {
+    return dispatch => {
+        dispatch(setChangeUserRolePending(true));
+
+        const res = api_serv.setChangeUserRole(userId, newRole.id);
+
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setChangeUserRoleSuccess());
+                dispatch(updateChangeUserRole({ userId: userId, newRole: newRole }));
+            } else {
+                dispatch(setChangeUserRoleError(response.error));
+            }
+        });
+    }
+}
+
+// change role actions
+function setChangeUserRolePending(data) {
+    return {
+        type: changeUserRole.PENDING,
+        payload: data
+    }
+}  
+
+function setChangeUserRoleSuccess() {
+    return {
+        type: changeUserRole.SUCCESS
+    }
+}  
+
+function setChangeUserRoleError(data) {
+    return {
+        type: changeUserRole.ERROR,
+        payload: data
+    }
+}  
+
+function updateChangeUserRole(data) {
+    return {
+        type: changeUserRole.UPDATE,
+        payload: data
+    }
+}  
 
 
 // block User actions

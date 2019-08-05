@@ -26,7 +26,8 @@ export default class Users extends Component {
 
 
     renderUsers = (arr) => {
-        return arr.map(user => <UserInfoWpapper key={user.id} user={user} />);
+        return arr.map(user => 
+            <UserInfoWpapper key={user.id + user.isBlocked + user.role.id} user={user} />);
     }
 
     render() {
