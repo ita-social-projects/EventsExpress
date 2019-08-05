@@ -22,9 +22,6 @@ const imageIsRequired = value => (!value ? "Required" : undefined);
 
 const { validate } = Module;
 
-let initial = {};
-
-
 class EventForm extends Component {
 
   state = { imagefile: [] };
@@ -53,6 +50,13 @@ class EventForm extends Component {
     });
   }
 
+  renderLocations = (arr) => {
+    return arr.map((item) => {
+  
+      return <option value={item.id}>{item.name}</option>;
+    });
+  }
+
   render() {
 
     const { countries, form_values, all_categories, data } = this.props;
@@ -68,7 +72,7 @@ class EventForm extends Component {
             type="file"
             imagefile={this.state.imagefile}
             handleOnDrop={this.handleOnDrop}
-            validate={[imageIsRequired]}
+            // validate={[imageIsRequired]}
           />
           <button
             type="button"
@@ -83,9 +87,9 @@ class EventForm extends Component {
           <div className="meta-wrap m-2">
             <p className="meta">
               <span>From
-                                         <Field name='date_from' component={renderDatePicker} /></span>
-              {values.date_from != null &&
-                <span>To<Field name='date_to' defaultValue={values.date_from} component={renderDatePicker} /></span>
+                                         <Field name='dateFrom' component={renderDatePicker} /></span>
+              {values.dateFrom != null &&
+                <span>To<Field name='dateTo' defaultValue={new Date(values.dateFrom)} component={renderDatePicker} /></span>
               }
             </p>
           </div>
@@ -120,14 +124,26 @@ class EventForm extends Component {
       </form>
     );
   }
-
 }
 
-EventForm = reduxForm({
+const mapStateToProps = (state) => ({
+  initialValues: state.event.data
+});
+
+const mapDispatchToProps = (dispatch) => { 
+ return {
+
+ } 
+};
+
+const asd = reduxForm({
   form: 'event-form',
   validate: validate,
   enableReinitialize: true,
-  initialValues: initial
+  // initialValues: {}
 })(EventForm);
+const qwe = connect(mapStateToProps, mapDispatchToProps)(asd);
 
-export default EventForm;
+
+
+export default qwe;

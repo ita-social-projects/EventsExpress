@@ -45,12 +45,16 @@ export const validate = values => {
   return errors
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>
-<DatePicker
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>{
+console.log(value, defaultValue);
+value = value || new Date();
+defaultValue = defaultValue || new Date();
+return <DatePicker
   onChange={onChange}
-  minDate={defaultValue || new Date()}
-  selected={value || defaultValue || new Date()}
+  minDate={new Date(defaultValue) || new Date()}
+  selected={new Date(value) || new Date(defaultValue) || new Date()}
 />
+}
 
  export const maxLength = max => value =>
     value && value.length > max ? `Must be ${max} characters or less` : undefined

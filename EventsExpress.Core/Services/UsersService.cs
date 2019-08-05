@@ -31,13 +31,13 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(UserDTO userDto)
         {
-            if (Db.UserRepository.Filter(filter: u => u.Email == userDto.Email).FirstOrDefault() != null)
+            if (Db.UserRepository.Get().FirstOrDefault(u => u.Email == userDto.Email) != null)
             {
                 return new OperationResult(false, "Emali is exist in database", "Email");
             }
             User user = _mapper.Map<UserDTO, User>(userDto);
 
-            user.Role = Db.RoleRepository.Filter(filter: r => r.Name == "User").FirstOrDefault();
+            user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
             var result = Db.UserRepository.Insert(user);
 
             if (result.Email == user.Email && result.Id != null)
@@ -82,10 +82,9 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetByEmail(string email)
         {
-            var user = Db.UserRepository.Filter(
-                filter: o => o.Email == email,
+            var user = Db.UserRepository.Get(
                 includeProperties: "Role,Categories.Category,Photo"
-                ).AsNoTracking().FirstOrDefault();
+                ).Where(o => o.Email == email).AsNoTracking().FirstOrDefault();
             return _mapper.Map<UserDTO>(user);
         }
 
@@ -111,7 +110,7 @@ namespace EventsExpress.Core.Services
         {
             var categoryNames = new List<string> { "Golf", "Summer" };
 
-            var users = Db.UserRepository.Filter(includeProperties: "Categories.Category")
+            var users = Db.UserRepository.Get(includeProperties: "Categories.Category")
                 .Where(user => user.Categories.Any(category => categoryNames.Contains(category.Category.Name)))
                 .ToList();
            
@@ -120,7 +119,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter)
         {
-            var users = Db.UserRepository.Filter(filter: filter);
+            var users = Db.UserRepository.Get().Where(filter);
 
             var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
             return result;
@@ -149,7 +148,7 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
         {
             var user = Db.UserRepository
-                .Filter(filter: u => u.Id == uId, includeProperties: "Photo")
+                .Get(includeProperties: "Photo").Where(u => u.Id == uId)
                 .FirstOrDefault();
             if (user == null)
             {
@@ -200,7 +199,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
         {
-            User u = Db.UserRepository.Filter(includeProperties: "Categories").Single(user => user.Id == userDTO.Id);
+            User u = Db.UserRepository.Get(includeProperties: "Categories").Single(user => user.Id == userDTO.Id);
             var temp = new List<UserCategory>();
             foreach (var c in categories)
             {

@@ -17,8 +17,8 @@ export default class EventsExpressService {
         file.append('Description', data.description);
         file.append('Location.CityId', data.city);
         file.append('User.Id', data.user_id);
-        file.append('DateFrom', new Date(data.date_from).toDateString());
-        file.append('DateTo', new Date(data.date_to).toDateString());
+        file.append('DateFrom', new Date(data.dateFrom).toDateString());
+        file.append('DateTo', new Date(data.dateTo).toDateString());
         let i = 0;
         data.categories.map(x => {
             console.log(i);
