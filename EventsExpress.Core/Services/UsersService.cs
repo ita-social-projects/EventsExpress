@@ -91,7 +91,8 @@ namespace EventsExpress.Core.Services
         public IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int count)
         {
 
-            IQueryable<User> users = Db.UserRepository.Filter(includeProperties: "Photo,Role");
+
+            IQueryable<User> users = Db.UserRepository.Get(includeProperties: "Photo,Role");
             if (model.KeyWord != null)
             {
                 users = users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord));

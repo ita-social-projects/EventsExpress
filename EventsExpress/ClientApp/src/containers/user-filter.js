@@ -4,12 +4,12 @@ import { renderTextField } from '../components/helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import UsersFilters from '../components/users/UsersFilters';
 import get_users from '../actions/users';
-
+import history from '../history';
 class UsersFilterWrapper extends Component {
-
+   
     onSubmit = (filters) => {
         console.log(filters);
-        var search_string = '';
+        var search_string = '?page=1';
         if (filters != null) {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
@@ -18,9 +18,8 @@ class UsersFilterWrapper extends Component {
                         search_string += '&Role=' + filters.role;
                     }
         }
-        this.props.search(window.location.search + search_string);
-        console.log(window.location.search + search_string)
-        window.location.search += search_string;
+        this.props.search(search_string);
+        history.push(search_string);
 
     }
 
