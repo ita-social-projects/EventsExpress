@@ -2,7 +2,7 @@
 import { renderTextField, renderDatePicker, renderMultiselect } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { renderSelectField } from '../helpers/helpers'
+import { renderSelectField, renderCheckbox } from '../helpers/helpers'
 class UsersFilters extends Component {
     render() {
         return <>
@@ -17,6 +17,10 @@ class UsersFilters extends Component {
                     <option value={"Admin"}>Admin</option>
                     <option value={"User"}>User</option>
                 </Field>
+                
+           <Field name="blocked" component={renderCheckbox} label="Blocked"   />
+                 
+                    <Field name="unblocked" component={renderCheckbox} label="Unblocked" />
                 <Button fullWidth={true} type="submit"  color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>

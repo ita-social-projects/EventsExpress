@@ -14,10 +14,17 @@ class UsersFilterWrapper extends Component {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
             }
-                    if (filters.role != null) {
-                        search_string += '&Role=' + filters.role;
-                    }
+            if (filters.role != null) {
+                search_string += '&Role=' + filters.role;
+            }
+            if (filters.blocked == true) {
+                search_string += '&Blocked=' + filters.blocked;
+            }
+            if (filters.unblocked == true) {
+                search_string += '&UnBlocked=' + filters.unblocked;
+            }
         }
+        console.log(search_string);
         this.props.search(search_string);
         history.push(search_string);
 

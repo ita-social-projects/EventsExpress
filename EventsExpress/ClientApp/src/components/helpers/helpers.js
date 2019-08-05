@@ -9,6 +9,8 @@ import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 export const validate = values => {
   const errors = {}
@@ -125,6 +127,19 @@ const renderFromHelper = ({ touched, error }) => {
     }
 }
 
+export const renderCheckbox = ({ input, label }) => (
+    <div>
+        <FormControlLabel
+            control={
+                <Checkbox
+                    checked={input.value ? true : false}
+                    onChange={input.onChange}
+                />
+            }
+            label={label}
+        />
+    </div>
+)
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

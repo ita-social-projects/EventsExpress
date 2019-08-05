@@ -101,6 +101,15 @@ namespace EventsExpress.Core.Services
             {
                 users = users.Where(x => x.Role.Name.Contains(model.Role));
             }
+
+            if (model.Blocked == true)
+            {
+                users = users.Where(x => x.IsBlocked == model.Blocked);
+            }
+            if (model.UnBlocked == true)
+            {
+                users = users.Where(x => x.IsBlocked == !(model.UnBlocked));
+            }
             count = users.Count();
             var IUsers = _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
 
