@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import IconButton from "@material-ui/core/IconButton";
 import Fab from '@material-ui/core/Fab';
 
 export function UserRoleDisplay(props) {
@@ -8,9 +9,9 @@ export function UserRoleDisplay(props) {
 
             <td className="align-middle">
                 { (props.user.id !== props.currentUser.id) 
-                    ? <Fab size="small" onClick={props.callback} >
+                    ? <IconButton  className=""  size="small" onClick={props.callback}>
                         <i className="fas fa-edit"></i>
-                    </Fab> : null
+                     </IconButton> : null
                 }
             </td>
         </>)
