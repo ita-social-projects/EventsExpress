@@ -42,14 +42,15 @@ export const validate = values => {
   return errors
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>{
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) =>{
 console.log(value, defaultValue);
-value = value || new Date();
-defaultValue = defaultValue || new Date();
+value =  value || defaultValue || new Date();
+defaultValue = defaultValue;
+minValue = minValue || new Date();
 return <DatePicker
   onChange={onChange}
-  minDate={new Date(defaultValue) || new Date()}
-  selected={new Date(value) || new Date(defaultValue) || new Date()}
+  minDate={new Date(minValue)}
+  selected={ new Date(value) || new Date()}
 />
 }
 

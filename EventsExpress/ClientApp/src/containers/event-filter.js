@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { renderTextField } from '../components/helpers/helpers';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, getFormValues } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import get_events from '../actions/event-list';
 import history from '../history';
@@ -21,11 +21,11 @@ class EventFilterWrapper extends Component {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
             }
-            if (filters.date_from != null) {
-                search_string += '&dateFrom=' + new Date(filters.date_from).toDateString();
+            if (filters.dateFrom != null) {
+                search_string += '&dateFrom=' + new Date(filters.dateFrom).toDateString();
             }
-            if (filters.date_to != null) {
-                search_string += '&dateTo=' + new Date(filters.date_to).toDateString();
+            if (filters.dateTo != null) {
+                search_string += '&dateTo=' + new Date(filters.dateTo).toDateString();
             }
             if (filters.categories != null) {
                 var categories = '';
@@ -43,13 +43,15 @@ class EventFilterWrapper extends Component {
         return <>
             <EventFilter 
             all_categories={this.props.all_categories}
-            onSubmit={this.onSubmit} />
+            onSubmit={this.onSubmit}
+            form_values={this.props.form_values} />
         </>
     }
 }
 
 const mapStateToProps = (state) => ({
-    all_categories: state.categories
+    all_categories: state.categories,
+    form_values: getFormValues('event-filter-form')(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
