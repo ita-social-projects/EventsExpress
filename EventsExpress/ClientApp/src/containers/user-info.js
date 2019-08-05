@@ -7,19 +7,11 @@ import UserRoleWrapper from '../containers/user-role'
 
 
 class UserInfoWpapper extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     block = () => this.props.block(this.props.user.id)
 
     unblock = () => this.props.unblock(this.props.user.id)
 
-
-    componentDidUpdate(){
-        var role = this.props.roles.find(x => x.id = this.props.user.role.id);
-        this.props.user.role = role;
-    }
 
     render() {
         const { user, currentUser } = this.props;
@@ -28,7 +20,7 @@ class UserInfoWpapper extends Component {
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo user={user} />
 
-                <UserRoleWrapper user={user} currentUser={currentUser} />
+                <UserRoleWrapper key={user.id + user.role.id} user={user} currentUser={currentUser} />
                 
                 <td className="align-middle">
                     {(user.id !== currentUser.id)

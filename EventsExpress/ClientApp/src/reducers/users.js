@@ -53,7 +53,7 @@ export const reducer = (state = initialState.users, action) => {
             nstate.data = state.data.map((item) => {
                 if (item.id === action.payload.userId) {
                     let updItem = item;
-                    updItem.role.id = action.payload.roleId;
+                    updItem.role = action.payload.newRole;
                     return updItem;
                 }
                 return item;

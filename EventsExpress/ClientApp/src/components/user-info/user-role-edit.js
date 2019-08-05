@@ -13,12 +13,10 @@ class UserRoleEdit extends Component {
         });
     }
 
-    
-    
     handleSubmit = (e) => {
-        console.log("handle. now props:");
         e.preventDefault();
-        this.props.callback(this.props.newRole);
+        var newRole = this.props.roles.find(r => r.id === this.props.newRoleId);
+        this.props.callback(newRole);
     }
 
     render() {
@@ -26,29 +24,31 @@ class UserRoleEdit extends Component {
         return (<>
             <td className="align-middle">
                 <form onSubmit={this.handleSubmit} id="user-role"> 
-                    <Field className="form-control" name='role' component="select">
+                    <Field className="form-control" name={"role-for-"+ this.props.user.id} component="select">
                         <option>Roles</option>
                         {this.renderRolesOptions(this.props.roles)}
                     </Field>
-
                 </form>
             </td>
 
-            <td className="align-middle">
-                <Fab size="small" type="submit" form='user-role'>                    
-                    <i class="fas fa-check"></i>
+            <td className="align-middle d-flex align-items-center">
+                <Fab size="small" type="submit" form='user-role' className="mr-1">
+                    <i className="fas fa-check"></i>
+                </Fab>
+                <Fab size="small" onClick={this.props.cancel}>
+                    <i className="fas fa-times"></i>
                 </Fab>
             </td>
         </>)
     }
 }
 
-const selector = formValueSelector('user-role')
+const selector = formValueSelector("user-role")
 
-const mapStateToProps = state => {
+const mapStateToProps = (state,props) => {
     return {
         roles: state.roles.data,
-        newRole: selector(state, 'role')
+        newRoleId: selector(state, "role-for-" + props.user.id)
     };
 };
 
@@ -61,9 +61,7 @@ const mapDispatchToProps = (dispatch) => {
 UserRoleEdit = connect(mapStateToProps, mapDispatchToProps)(UserRoleEdit);
 
 UserRoleEdit = reduxForm({
-    form: 'user-role'
+    form: "user-role"
 })(UserRoleEdit);
 
 export default UserRoleEdit;
-
-

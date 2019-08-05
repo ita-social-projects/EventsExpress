@@ -18,9 +18,10 @@ class UserRoleWpapper extends Component {
         this.setState({ mode: nextMode });
     }
 
-    saveChanges = (roleId) => {
-        if (roleId && roleId !== this.props.user.role.id) {
-            this.props.set_new_role(this.props.user.id, roleId)
+    saveChanges = (role) => {
+        
+        if (role && role.id !== this.props.user.role.id) {
+            this.props.set_new_role(this.props.user.id, role)
         }
         this.toggleMode();
     }
@@ -31,7 +32,7 @@ class UserRoleWpapper extends Component {
         return (<> {(this.state.mode === "display")
             ? <UserRoleDisplay user={user} currentUser={currentUser} callback={this.toggleMode} 
                 />
-            : <UserRoleEdit user={this.props.user} callback={this.saveChanges} />
+            : <UserRoleEdit user={this.props.user} callback={this.saveChanges} cancel={this.toggleMode}/>
                 }
             </>)
     }
@@ -39,7 +40,7 @@ class UserRoleWpapper extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        set_new_role: (uid, rid) => dispatch(change_user_role(uid, rid))
+        set_new_role: (uid, role) => dispatch(change_user_role(uid, role))
     }
 };
 

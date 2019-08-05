@@ -59,18 +59,16 @@ export function block_user(id) {
 }
 
 // ACTION CREATOR FOR CHANGE USER ROLE:
-export function change_user_role(userId, newRoleId) {
+export function change_user_role(userId, newRole) {
     return dispatch => {
         dispatch(setChangeUserRolePending(true));
 
-        const res = api_serv.setChangeUserRole(userId, newRoleId);
-
-        console.log(res);
+        const res = api_serv.setChangeUserRole(userId, newRole.id);
 
         res.then(response => {
             if (response.error == null) {
                 dispatch(setChangeUserRoleSuccess());
-                dispatch(updateChangeUserRole({ userId: userId, newRoleId: newRoleId }));
+                dispatch(updateChangeUserRole({ userId: userId, newRole: newRole }));
             } else {
                 dispatch(setChangeUserRoleError(response.error));
             }
@@ -81,27 +79,27 @@ export function change_user_role(userId, newRoleId) {
 // change role actions
 function setChangeUserRolePending(data) {
     return {
-        type: blockUser.PENDING,
+        type: changeUserRole.PENDING,
         payload: data
     }
 }  
 
 function setChangeUserRoleSuccess() {
     return {
-        type: blockUser.PENDING
+        type: changeUserRole.SUCCESS
     }
 }  
 
 function setChangeUserRoleError(data) {
     return {
-        type: blockUser.PENDING,
+        type: changeUserRole.ERROR,
         payload: data
     }
 }  
 
 function updateChangeUserRole(data) {
     return {
-        type: blockUser.PENDING,
+        type: changeUserRole.UPDATE,
         payload: data
     }
 }  

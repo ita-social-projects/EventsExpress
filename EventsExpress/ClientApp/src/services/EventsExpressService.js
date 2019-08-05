@@ -71,14 +71,10 @@ export default class EventsExpressService{
     }
 
     setChangeUserRole = async (userId, newRoleId) => {
-        console.log('Before sending .. \nuid: '+ userId + ' rId: ' + newRoleId);
-        
         const res = await this.setResource(`users/ChangeRole/?userId=` + userId + '&roleId=' + newRoleId);
         if (!res.ok) {
             return { error: await res.text() };
         }
-        console.log(res)
-
         return res;
     }
 
@@ -103,7 +99,6 @@ export default class EventsExpressService{
 
     getAllCategories = async () => {
         const res = await this.getResource('category/all');
-        console.log(res);
         return res;
     }
 
