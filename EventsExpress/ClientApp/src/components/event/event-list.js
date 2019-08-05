@@ -46,7 +46,7 @@ export default class EventList extends Component{
           {items}
 
           <ul class="pagination justify-content-center">
-              <Pagination   
+              <Pagination
                   total={totalPages * limit}
                   limit={limit}
                   pageCount={pageCount}
@@ -62,7 +62,9 @@ export default class EventList extends Component{
                       totalPages,
                       getPageItemProps
                   }) => (
+
                           <div>
+                              {hasPreviousPage && (
                               <Link class="btn btn-primary"
                                   to={window.location.search.replace(/(page=)\w/gm, 'page='+1)}
                                   {...getPageItemProps({
@@ -71,7 +73,7 @@ export default class EventList extends Component{
                                   })}
                               >
                                   first
-                              </Link>
+                              </Link>)}
 
                               {hasPreviousPage && (
                                   <Link class="btn btn-primary"
@@ -89,7 +91,7 @@ export default class EventList extends Component{
                               {pages.map(page => {
                                   let activePage = null;
                                   if (currentPage === page) {
-                                      activePage = { backgroundColor: "	#ffffff", color: "#00BFFF"};
+                                      activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                   }
                                   return (
                                       <Link class="btn btn-primary"
@@ -119,6 +121,7 @@ export default class EventList extends Component{
                                       {">"}
                                   </Link>
                               )}
+                              {hasNextPage && (
                               <Link class="btn btn-primary"
                                   to={window.location.search.replace(/(page=)\w/gm, 'page='+this.props.totalPages)}
                                  
@@ -128,7 +131,7 @@ export default class EventList extends Component{
                                   })}
                               >
                                   last
-                                </Link>
+                                </Link>)}
                           </div>
                       )}
               </Pagination>

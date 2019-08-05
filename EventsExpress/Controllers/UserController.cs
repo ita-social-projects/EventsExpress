@@ -24,10 +24,10 @@ namespace EventsExpress.Controllers
     {
         private IUserService _userService;
         private IMapper _mapper;
-        private AppDbContext _appDbContext;
-        public UsersController(IUserService userSrv, IMapper mapper, AppDbContext appDbContext)
+     
+        public UsersController(IUserService userSrv, IMapper mapper)
         {
-            _appDbContext = appDbContext;
+           
             _userService = userSrv;
             _mapper = mapper;
         }
@@ -35,15 +35,18 @@ namespace EventsExpress.Controllers
 
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get(int page = 1)
+        public IActionResult Get([FromQuery]UsersFilterViewModel model)
         {
-            int pageSize = 1;
 
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(page, pageSize));
+            model.PageSize = 2;
 
-            var count = _appDbContext.Users.Count();
-          
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            int Count;
+
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out Count));
+
+
+
+            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
             IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
             {
                 PageViewModel = pageViewModel,

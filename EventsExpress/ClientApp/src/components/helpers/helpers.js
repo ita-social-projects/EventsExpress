@@ -5,7 +5,12 @@ import 'react-widgets/dist/css/react-widgets.css';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {  } from 'redux-form';
-
+import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 export const validate = values => {
   const errors = {}
@@ -91,7 +96,51 @@ export const renderTextField = ({
   />
 )
 
+ export const renderSelectField = ({
+    input,
+    label,
+    meta: { touched, error },
+    children,
+    ...custom
+}) => (
+        <FormControl error={touched && error}>
+            <InputLabel htmlFor="age-native-simple">Role</InputLabel>
+            <Select
+                native
+                {...input}
+                {...custom}
+                inputProps={{
+                    name: 'Role',
+                    id: 'age-native-simple'
+                }}
+            >
+                {children}
+            </Select>
+            {renderFromHelper({ touched, error })}
+        </FormControl>
+    )
 
+const renderFromHelper = ({ touched, error }) => {
+    if (!(touched && error)) {
+        return
+    } else {
+        return <FormHelperText>{touched && error}</FormHelperText>
+    }
+}
+
+export const renderCheckbox = ({ input, label }) => (
+    <div>
+        <FormControlLabel
+            control={
+                <Checkbox
+                    checked={input.value ? true : false}
+                    onChange={input.onChange}
+                />
+            }
+            label={label}
+        />
+    </div>
+)
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

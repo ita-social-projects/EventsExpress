@@ -18,7 +18,7 @@ export default class Users extends Component {
 
     handlePageChange = (page, e) => {
         console.log("chanhe page" + page);
-        this.props.callback(page);
+        this.props.callback(window.location.search.replace(/(page=)\w/gm, 'page=' + page));
         this.setState({
             currentPage: page
         });
@@ -26,11 +26,13 @@ export default class Users extends Component {
 
 
     renderUsers = (arr) => {
-        return arr.map(user => <UserInfoWpapper key={user.id} user={user} />);
+        return arr.map(user => 
+            <UserInfoWpapper key={user.id + user.isBlocked + user.role.id} user={user} />);
     }
 
     render() {
         const { page, totalPages } = this.props;
+        console.log(window.location);
         return <>
             <table className="table">
                 <thead className="bg-light">
@@ -65,20 +67,22 @@ export default class Users extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
+
                             <div>
+                                {hasPreviousPage && (
                                 <Link class="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                    to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
                                     {...getPageItemProps({
                                         pageValue: 1,
                                         onPageChange: this.handlePageChange
                                     })}
                                 >
                                     first
-                              </Link>
+                              </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link class="btn btn-primary"
-                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page - 1))}
 
                                         {...getPageItemProps({
                                             pageValue: previousPage,
@@ -96,7 +100,7 @@ export default class Users extends Component {
                                     }
                                     return (
                                         <Link class="btn btn-primary"
-                                            to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                            to={window.location.search.replace(/(page=)\w/gm, 'page=' + page)}
 
                                             {...getPageItemProps({
                                                 pageValue: page,
@@ -112,7 +116,7 @@ export default class Users extends Component {
 
                                 {hasNextPage && (
                                     <Link class="btn btn-primary"
-                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page + 1))}
 
                                         {...getPageItemProps({
                                             pageValue: nextPage,
@@ -122,8 +126,9 @@ export default class Users extends Component {
                                         {">"}
                                     </Link>
                                 )}
+                                {hasNextPage && (
                                 <Link class="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                    to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
 
                                     {...getPageItemProps({
                                         pageValue: this.props.totalPages,
@@ -131,7 +136,7 @@ export default class Users extends Component {
                                     })}
                                 >
                                     last
-                                </Link>
+                                </Link>)}
                             </div>
                         )}
                 </Pagination>

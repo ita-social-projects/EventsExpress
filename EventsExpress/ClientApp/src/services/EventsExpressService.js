@@ -84,8 +84,8 @@ export default class EventsExpressService {
         return res;
     }
 
-    getUsers = async (page, totalpage) => {
-        const res = await this.getResource(`users/get?page=${page}`);
+    getUsers = async (page) => {
+        const res = await this.getResource(`users/get${page}`);
         console.log(res);
         return res;
     }
@@ -96,6 +96,19 @@ export default class EventsExpressService {
 
     getCities = async (country) => {
         const res = await this.getResource('locations/country:' + country + '/cities');
+        return res;
+    }
+
+    getRoles = async () => {
+        const res = await this.getResource('roles');
+        return res;
+    }
+
+    setChangeUserRole = async (userId, newRoleId) => {
+        const res = await this.setResource(`users/ChangeRole/?userId=` + userId + '&roleId=' + newRoleId);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
         return res;
     }
 
@@ -151,8 +164,8 @@ export default class EventsExpressService {
         return res;
     }
 
-    getAllComments = async (data) => {
-        const res = await this.getResource(`comment/all/${data}`);
+    getAllComments = async (data, page) => {
+        const res = await this.getResource(`comment/all/${data}?page=${page}`);
         console.log(res);
         return res;
     }
@@ -221,7 +234,6 @@ export default class EventsExpressService {
     }
 
     setUserUnblock = async (id) => {
-        console.log("SERVICE: unblocking user id: " + id);
         const res = await this.setResource('Users/Unblock/?userId=' + id);
         if (!res.ok) {
             return { error: await res.text() };

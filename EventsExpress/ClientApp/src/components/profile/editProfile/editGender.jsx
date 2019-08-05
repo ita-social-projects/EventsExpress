@@ -41,7 +41,7 @@ const EditGender = props => {
             <div>
                 <button type="submit" disabled={pristine || submitting}>
                     Submit
-        </button>
+                </button>
             </div>
         </form>
     );

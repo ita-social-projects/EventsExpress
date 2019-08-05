@@ -22,7 +22,7 @@ class EventListWrapper extends Component{
         // const errorMessage = isError ? <ErrorIndicator/> : null;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !isPending ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
         return <>
               

@@ -16,6 +16,7 @@ import * as Categories from './category-list';
 import * as Countries from './countries';
 import * as Cities from './cities';
 import * as Users from './users';
+import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
@@ -46,7 +47,9 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
-    delete_comment: DeleteComment.reducer
+    delete_comment: DeleteComment.reducer,
+    roles: Roles.reducer,
+    change_avatar: ChangeAvatar.reducer 
 };
 
 

@@ -24,7 +24,6 @@ class SelectCategoriesWrapper extends Component {
 const mapStateToProps = state => {
     return {
         allCategories: state.categories,
-
     };
 };
 
@@ -33,7 +32,4 @@ const mapDispatchToProps = (dispatch) => {
         get_categories: () => dispatch(get_categories())
     }
 };
-export default connect(
-    mapStateToProps,
-   mapDispatchToProps
-)(SelectCategoriesWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectCategoriesWrapper);

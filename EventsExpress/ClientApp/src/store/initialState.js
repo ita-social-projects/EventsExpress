@@ -12,6 +12,11 @@ const initialState = {
         token: null,
         categories: []
     },
+    roles: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
     login:{
         isLoginPending: false,
         isLoginSuccess: false,
@@ -92,7 +97,11 @@ const initialState = {
     comments: {
         isPending: false,
         isError: false,
-        data: []
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     delete_comment: {
         isCommentDeletePending: false,
