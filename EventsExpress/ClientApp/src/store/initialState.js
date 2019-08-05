@@ -100,7 +100,13 @@ const initialState = {
         isPending: false,
         isError: false,
         data: []
+    },
+    recoverPassword: {
+        isPending: false,
+        isError: false,
+        data: []
     }
+
 
 };
 

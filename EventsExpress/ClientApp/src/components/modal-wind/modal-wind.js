@@ -57,10 +57,9 @@ export default function ModalWind(props) {
       </Button>
           <Dialog
               open={ open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      
-      >
+              onClose={handleClose}
+              aria-labelledby="form-dialog-title"
+          >
       
           <Paper square className={classes.root}>
             <Tabs
@@ -75,7 +74,7 @@ export default function ModalWind(props) {
             </Tabs>
             {value === 0 && (
               <TabContainer>
-                <LoginWrapper />
+                <LoginWrapper  />
               </TabContainer>
             )}
             {value === 1 && (

@@ -63,6 +63,14 @@ export default class EventsExpressService{
         return await res.json();
     }
 
+    setRecoverPassword = async (data) => {
+        const res = await this.setResource('Authentication/PasswordRecovery', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res.json();
+    }
+
     setRegister = async (data) => {
         const res = await this.setResource('Authentication/register', data);
         if(!res.ok){
