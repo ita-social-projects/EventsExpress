@@ -12,6 +12,11 @@ const initialState = {
         token: null,
         categories: []
     },
+    roles: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
     login:{
         isLoginPending: false,
         isLoginSuccess: false,

@@ -26,7 +26,7 @@ export const reducer = (state = initialState.users, action) => {
 
         case blockUser.UPDATE:
             let newState = { ...state };
-            newState.data = state.data.map((item) => {
+            newState.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload) {
                     let updatedItem = item;
                     updatedItem.isBlocked = true;
@@ -38,7 +38,7 @@ export const reducer = (state = initialState.users, action) => {
 
         case unBlockUser.UPDATE:
             let newstate = { ...state };
-            newstate.data = state.data.map((item) => {
+            newstate.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload) {
                     let updItem = item;
                     updItem.isBlocked = false;
@@ -50,7 +50,7 @@ export const reducer = (state = initialState.users, action) => {
 
         case changeUserRole.UPDATE:
             let nstate = { ...state };
-            nstate.data = state.data.map((item) => {
+            nstate.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload.userId) {
                     let updItem = item;
                     updItem.role = action.payload.newRole;

@@ -47,7 +47,7 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
-    delete_comment: DeleteComment.reducer
+    delete_comment: DeleteComment.reducer,
     roles: Roles.reducer,
     change_avatar: ChangeAvatar.reducer 
 };
