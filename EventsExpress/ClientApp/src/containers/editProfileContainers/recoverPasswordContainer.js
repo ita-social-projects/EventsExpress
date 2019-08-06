@@ -6,14 +6,14 @@ import recover_Password from "../../actions/EditProfile/recoverPassword";
 class RecoverPasswordContainer extends React.Component {
     submit = value => {
         console.log(value);
-        //this.props.recoverPassword(value);
+        this.props.recoverPassword(value);
     }
 
     render() {
         let { isRecoverPasswordPending, isRecoverPasswordSuccess, RecoverPasswordError } = this.props;
         console.log(this.submit)
 
-        return <RecoverPassword callback={this.submit} />;
+        return <RecoverPassword onSubmit={this.submit} />;
     }
 }
 

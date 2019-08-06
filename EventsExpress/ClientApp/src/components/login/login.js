@@ -4,7 +4,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
 import { Link } from 'react-router-dom';
-import RecoverPassword from '../recoverPassword/recoverPassword';
+import Modalwind2 from '../recoverPassword/modalwind2';
 
 
 
@@ -16,7 +16,7 @@ class Login extends Component {
 
     }
 
-    openModal = () => (<RecoverPassword/>)
+    openModal = () => (<Modalwind2/>)
     
   render() {
      
@@ -53,7 +53,7 @@ class Login extends Component {
           </div>    
             </form>
             <div>
-                    <RecoverPassword />
+                <Modalwind2 />
             </div>
       </div>
     );

@@ -3,95 +3,57 @@ import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
-import { func } from "prop-types";
-import Dialog from "@material-ui/core/Dialog";
-import { makeStyles, fade } from "@material-ui/core/styles";
-import profile from "../profile/profile";
-import { th } from "date-fns/esm/locale";
+import { connect } from 'react-redux';
 
 
 
-
-const useStyles = makeStyles({
-    root: {
-        flexGrow: 1,
-        maxWidth: 500,
-        fullWidth:true
-    }
-});
 
 const { validate, renderTextField, asyncValidate } = Module;
 
-function RecoverPassword(props) {
-    console.log(props)
-    const [open, setOpen] = React.useState(false);
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    
-
-    function handleClickOpen() {
-        setOpen(true);
+class RecoverPassword extends React.Component {
+    constructor(props) {
+        super(props)
     }
 
-    function handleClose() {
-        setOpen(false);
-        props.reset();
-    }
-
-
-    return (
-        <div>
-            <span variant="outlined" color="primary" onClick={handleClickOpen}>
-                Forgot password
-      </span>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-                maxWidth='md'
-            >
-                <div className="recoverPass">
-                    <form onSubmit={props.onSubmit}>
-                        <div>
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="E-mail:"
-                            />
-                        </div>
-                        <div>
-                            <DialogActions className="d-flex flex-column ">
-                                
-                                <div className="d-flex justify-content-around w-100">
-                                    <Button fullWidth={true} type="button" color="primary" disabled={props.pristine || props.submitting} onClick={props.reset}>
-                                        CLEAR
-                                    </Button >
-                                    <Button fullWidth={true}  type="submit" color="primary">
-                                        Submit
-                                    </Button>
-                                </div>
-                                <Button fullWidth onClick={handleClose} color="primary">
-                                    Cancel
-                                </Button>
-                                
-                                
-                            </DialogActions>
-                        </div>
-                    </form>
+    render() {
+        const { handleSubmit, pristine, reset, submitting } = this.props;
+        return (
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <Field
+                        name="email"
+                        component={renderTextField}
+                        label="E-mail:"
+                    />
                 </div>
-            </Dialog>
-        </div>
-        )
+                <div>
+                    <DialogActions className="d-flex flex-column ">
+
+                        <div className="d-flex justify-content-around w-100">
+                            <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
+                                CLEAR
+                                    </Button >
+                            <Button fullWidth={true} type="submit" color="primary">
+                                Submit
+                                    </Button>
+                        </div>
+                        
+
+
+                    </DialogActions>
+                </div>
+            </form>
+            )
+    }
 }
 
 
-RecoverPassword = reduxForm({
+export default reduxForm({
     // a unique name for the form
     form: "recoverPass-form",
-   // validate,
+    validate,
     asyncValidate
 })(RecoverPassword);
 
-export default RecoverPassword;
+
 
