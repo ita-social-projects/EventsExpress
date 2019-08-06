@@ -4,22 +4,40 @@ import { connect } from "react-redux";
 import recover_Password from "../../actions/EditProfile/recoverPassword";
 
 class RecoverPasswordContainer extends React.Component {
+    componentDidUpdate(prevOps, prevState) {
+        if (!this.props.RecoverPasswordError && this.props.isRecoverPasswordSuccess) {
+            this.props.handleClose();
+        }
+    }
+
     submit = value => {
         console.log(value);
         this.props.recoverPassword(value);
     }
 
     render() {
-        let { isRecoverPasswordPending, isRecoverPasswordSuccess, RecoverPasswordError } = this.props;
-        console.log(this.submit)
+        let { isRecoverPasswordPending, isRecoverPasswordSuccess, RecoverPasswordError, status } = this.props;
+        
+        
 
-        return <RecoverPassword onSubmit={this.submit} />;
+        return <>
+            <RecoverPassword onSubmit={this.submit} />
+            {status.isSucces &&
+                <p className="text-success text-center">New password sent by your email.<br />Please use it to sign in.</p>
+
+            }
+            {
+                status.isError &&
+                <p className="text-danger text-center">{status.isError}</p>
+            }
+        </>
     }
 }
 
 const mapStateToProps = state => {
-    return state.recoverPassword;
-
+    return {
+        status: state.recoverPassword
+    }
 };
 
 const mapDispatchToProps = dispatch => {

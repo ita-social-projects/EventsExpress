@@ -104,7 +104,7 @@ const initialState = {
     recoverPassword: {
         isPending: false,
         isError: false,
-        data: []
+        isSucces:null,
     }
 
 

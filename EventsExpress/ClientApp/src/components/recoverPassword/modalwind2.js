@@ -6,7 +6,7 @@ import Module from '../helpers';
 import { func } from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
 import { makeStyles, fade } from "@material-ui/core/styles";
-import RecoverPassword from "./recoverPassword";
+import RecoverPasswordContainer from "../../containers/editProfileContainers/recoverPasswordContainer";
 
 
 
@@ -14,7 +14,7 @@ import RecoverPassword from "./recoverPassword";
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
-        maxWidth: 500,
+        maxWidth: true,
         fullWidth: true
     }
 });
@@ -50,9 +50,9 @@ function Modalwind2(props) {
                 aria-labelledby="form-dialog-title"
                 maxWidth='md'
             >
-                <RecoverPassword/>
+                <RecoverPasswordContainer handleClose={handleClose} />
                 <Button fullWidth onClick={handleClose} color="primary">
-                    Cancel
+                    Close
                 </Button>
             </Dialog>
         </div>

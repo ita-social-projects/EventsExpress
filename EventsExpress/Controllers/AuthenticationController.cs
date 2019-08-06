@@ -99,7 +99,7 @@ namespace EventsExpress.Controllers
         }
    
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> PasswordRecovery(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -107,11 +107,14 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
             var user = _userService.GetByEmail(email);
-
+            if (user == null)
+            {
+                return BadRequest("User with this email is not found");
+            }
             var res = await _userService.PasswordRecover(user);
             if (!res.Successed)
             {
-                return BadRequest(ModelState);
+                return BadRequest(res.Message);
             }
 
             return Ok();

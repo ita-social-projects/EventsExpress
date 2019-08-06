@@ -4,7 +4,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
 import { connect } from 'react-redux';
-
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 
 
@@ -19,11 +19,16 @@ class RecoverPassword extends React.Component {
         const { handleSubmit, pristine, reset, submitting } = this.props;
         return (
             <form onSubmit={handleSubmit}>
+                <DialogContentText>
+                    If you forgot your password please enter <br/>your email address here. We will send updates
+                   <br/> occasionally.
+                  </DialogContentText>
                 <div>
                     <Field
                         name="email"
                         component={renderTextField}
                         label="E-mail:"
+                        
                     />
                 </div>
                 <div>
@@ -50,7 +55,7 @@ class RecoverPassword extends React.Component {
 
 export default reduxForm({
     // a unique name for the form
-    form: "recoverPass-form",
+    form: "recoverPassword",
     validate,
     asyncValidate
 })(RecoverPassword);

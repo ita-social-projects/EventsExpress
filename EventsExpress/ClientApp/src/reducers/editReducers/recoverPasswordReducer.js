@@ -1,29 +1,35 @@
-﻿import { recover_Password, recoverPassword } from '../../actions/EditProfile/recoverPassword';
+﻿import { recoverPassword } from '../../actions/EditProfile/recoverPassword';
+import initialState from './../../store/initialState'
 
-export const reducer = (
-    state = {
-        isRecoverPasswordPending: false,
-        isRecoverPasswordSuccess: false,
-        RecoverPasswordError: null
-    },
-    action) => {
+
+
+export const reducer = (state = initialState.recoverPassword, action) => {
     switch (action.type) {
         case recoverPassword.PENDING:
-            return Object.assign({}, state, {
-                isRecoverPasswordPending: action.isRecoverPasswordPending
-            });
+            return { ...state, isPending: true }
+            
 
         case recoverPassword.SUCCESS:
-            return Object.assign({}, state, {
-                isRecoverPasswordSuccess: action.isRecoverPasswordSuccess
-            });
+            return {
+                ...state,
+                isPending: false,
+                isSucces: true
+            }
 
         case recoverPassword.ERROR:
-            return Object.assign({}, state, {
-                RecoverPasswordError: action.RecoverPasswordError
-            });
+            return {
+                ...state,
+                isPending: false,
+                isError: action.payload
+            }
 
         default:
             return state;
     }
 }
+
+/*
+         isPending: false,
+        isError: false,
+        isSucces:false,
+ */

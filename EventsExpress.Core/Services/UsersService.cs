@@ -95,10 +95,14 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
         {
+            if (userDto == null)
+            {
+                return new OperationResult(false, "Not found", "");
+            }
             var user = Db.UserRepository.Get(userDto.Id);
             if (user == null)
             {
-                return new OperationResult(false, "Invalid user Id", "Id");
+                return new OperationResult(false, "Not found", "");
             }
 
             var newPassword = Guid.NewGuid().ToString();
