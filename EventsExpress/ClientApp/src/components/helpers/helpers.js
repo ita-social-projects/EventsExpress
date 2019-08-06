@@ -11,6 +11,19 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+
+
+export const radioButton = ({ input, ...rest }) => (
+    <FormControl>
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+            <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+            <FormControlLabel value="all" control={<Radio />} label="All"  />
+        </RadioGroup>
+    </FormControl>
+)
 
 export const validate = values => {
   const errors = {}
@@ -103,13 +116,13 @@ export const renderTextField = ({
     ...custom
 }) => (
         <FormControl error={touched && error}>
-            <InputLabel htmlFor="age-native-simple">Role</InputLabel>
+             <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
             <Select
                 native
                 {...input}
                 {...custom}
-                inputProps={{
-                    name: 'Role',
+                 inputProps={{
+                     name: { label },
                     id: 'age-native-simple'
                 }}
             >

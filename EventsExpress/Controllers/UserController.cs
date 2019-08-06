@@ -38,7 +38,10 @@ namespace EventsExpress.Controllers
         public IActionResult Get([FromQuery]UsersFilterViewModel model)
         {
 
-            model.PageSize = 2;
+
+            if (model.PageSize == 0) {
+                model.PageSize = 4;
+            }
 
             int Count;
 

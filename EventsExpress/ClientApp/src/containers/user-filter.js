@@ -17,11 +17,17 @@ class UsersFilterWrapper extends Component {
             if (filters.role != null) {
                 search_string += '&Role=' + filters.role;
             }
-            if (filters.blocked == true) {
-                search_string += '&Blocked=' + filters.blocked;
+            if (filters.status == 'blocked') {
+                search_string += '&Blocked=' + true;
             }
-            if (filters.unblocked == true) {
-                search_string += '&UnBlocked=' + filters.unblocked;
+            if (filters.status == 'unblocked') {
+                search_string += '&Unblocked=' + true;
+            }
+            if (filters.status == 'all') {
+                search_string += '&All=' + true;
+            }
+            if (filters.PageSize != null) {
+                search_string += '&PageSize=' + filters.PageSize;
             }
         }
         console.log(search_string);
