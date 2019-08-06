@@ -8,8 +8,9 @@ import moment, { now } from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import { renderMultiselect } from '../helpers/helpers';
+import { renderMultiselect, renderSelectLocationField } from '../helpers/helpers';
 import {connect } from 'react-redux';
+
 momentLocaliser(moment)
 const enhanceWithPreview = files =>
   files.map(file =>
@@ -50,13 +51,6 @@ class EventForm extends Component {
     });
   }
 
-  renderLocations = (arr) => {
-    return arr.map((item) => {
-  
-      return <option value={item.id}>{item.name}</option>;
-    });
-  }
-
   render() {
 
     const { countries, form_values, all_categories, data } = this.props;
@@ -83,7 +77,10 @@ class EventForm extends Component {
           >
             Clear
                           </button>
-          <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
+                          
+          <div className="mt-2">
+            <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
+          </div>
           <div className="meta-wrap m-2">
             <p className="meta">
               <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
@@ -93,8 +90,10 @@ class EventForm extends Component {
             </p>
           </div>
 
+          <div className="mt-2">
           <Field name='description' component={renderTextField} type="input" label="Description" />
-
+          </div>
+          <div className="mt-2">
           <Field
             name="categories"
             component={renderMultiselect}
@@ -104,16 +103,19 @@ class EventForm extends Component {
             className="form-control mt-2"
             placeholder='#hashtags'
           />
-          <Field onChange={this.props.onChangeCountry} className="form-control mt-2" name='country' component="select">
-            <option>Country</option>
-            {countries_list}
-          </Field>
-          {values.country != null &&
-            <Field name='city' className="form-control mt-2" component="select">
-              <option>City</option>
-              {this.renderLocations(this.props.cities)}
-            </Field>
-          }
+          </div>
+          <div className="mt-2">
+            <Field onChange={this.props.onChangeCountry} 
+            name='countryId' 
+            data={countries} 
+            text='Country' 
+            component={renderSelectLocationField} />
+          </div>
+          {values.countryId != null &&
+          <div className="mt-2">
+            <Field name='cityId' data={this.props.cities} text='City' component={renderSelectLocationField} />
+          </div>
+          } 
         </div>
 
 

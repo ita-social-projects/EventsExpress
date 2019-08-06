@@ -12,7 +12,7 @@ export default class Event extends Component {
 
     render() {
         const { id, title, dateFrom, comment_count, description, photoUrl, categories } = this.props.item;
-        const { city, country } = this.props.item.location;
+        const { city, country } = this.props.item;
         console.log('Event ', categories);
 
         return (

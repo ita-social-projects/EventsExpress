@@ -17,7 +17,7 @@ class EventFilter extends Component {
                 <p className="meta">
                     <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>              
                     {values.dateFrom != null &&
-                <span>To<Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
+                <span>To<br/><Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
               }
                 </p>
                 <Field

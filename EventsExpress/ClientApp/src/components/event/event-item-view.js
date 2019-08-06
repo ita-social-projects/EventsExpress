@@ -45,7 +45,7 @@ export default class EventItemView extends Component {
 
         const { current_user } = this.props;
 
-        const { country, city } = this.props.data.location;
+        const { country, city } = this.props.data;
 
         const categories_list = this.renderCategories(categories);
 

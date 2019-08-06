@@ -4,13 +4,17 @@ import Multiselect from 'react-widgets/lib/Multiselect';
 import 'react-widgets/dist/css/react-widgets.css';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import {  } from 'redux-form';
+import { } from 'redux-form';
 import Select from '@material-ui/core/Select'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+
+import { makeStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export const validate = values => {
   const errors = {}
@@ -40,106 +44,139 @@ export const validate = values => {
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
     errors.email = 'Invalid email address'
-    }
-  if(values.password!== values.RepeatPassword){
+  }
+  if (values.password !== values.RepeatPassword) {
     errors.RepeatPassword = 'Passwords do not match';
   }
   return errors
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) =>{
-console.log(value, defaultValue);
-value =  value || defaultValue || new Date();
-defaultValue = defaultValue;
-minValue = minValue || new Date();
-return <DatePicker
-  onChange={onChange}
-  minDate={new Date(minValue)}
-  selected={ new Date(value) || new Date()}
-/>
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
+  console.log(value, defaultValue);
+  value = value || defaultValue || new Date();
+  defaultValue = defaultValue;
+  minValue = minValue || new Date();
+  return <DatePicker
+    onChange={onChange}
+    minDate={new Date(minValue)}
+    selected={new Date(value) || new Date()}
+  />
 }
 
- export const maxLength = max => value =>
-    value && value.length > max ? `Must be ${max} characters or less` : undefined
-export const maxLength15 = maxLength(15)
-export const minLength = min => value =>
-    value && value.length < min ? `Must be ${min} characters or more` : undefined
-export const minLength2 = minLength(6)
+
+
+export const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+
+  export const maxLength15 = maxLength(15)
+
+  export const minLength = min => value =>
+  value && value.length < min ? `Must be ${min} characters or more` : undefined
+
+  export const minLength2 = minLength(6)
+
+export const renderSelectLocationField = ({
+  input,
+  label,
+  text,
+  data,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
+  <FormControl error={touched && error}>
+    <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+    <Select
+      native
+      {...input}
+      {...custom}
+      inputProps={{
+        name: text.toLowerCase() + 'Id',
+        id: 'age-native-simple'
+      }}
+    >
+      <option value=""></option>
+      {data.map(x => <option value={x.id}>{x.name}</option>)}
+    </Select>
+    {renderFromHelper({ touched, error })}
+  </FormControl>
+)
+
 
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
-    <Multiselect {...input}
-        onBlur={() => input.onBlur()}
-        value={input.value || []} 
-        data={data}
-        valueField={valueField}
-        textField={textField}
-        placeholder={placeholder}
-    />
+  <Multiselect {...input}
+    onBlur={() => input.onBlur()}
+    value={input.value || []}
+    data={data}
+    valueField={valueField}
+    textField={textField}
+    placeholder={placeholder}
+  />
 
 export const renderTextField = ({
   label,
   defaultValue,
-    input,
+  input,
   meta: { touched, invalid, error },
   ...custom
 }) => (
-  <TextField
-   fullWidth
-    label={label}
-    placeholder={label}
-    error={touched && invalid}
-    defaultValue={defaultValue}
-    value={defaultValue}
-    helperText={touched && error}
-    {...input}
-    {...custom}
-  />
-)
+    <TextField
+      fullWidth
+      label={label}
+      placeholder={label}
+      error={touched && invalid}
+      defaultValue={defaultValue}
+      value={defaultValue}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  )
 
- export const renderSelectField = ({
-    input,
-    label,
-    meta: { touched, error },
-    children,
-    ...custom
+export const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
 }) => (
-        <FormControl error={touched && error}>
-            <InputLabel htmlFor="age-native-simple">Role</InputLabel>
-            <Select
-                native
-                {...input}
-                {...custom}
-                inputProps={{
-                    name: 'Role',
-                    id: 'age-native-simple'
-                }}
-            >
-                {children}
-            </Select>
-            {renderFromHelper({ touched, error })}
-        </FormControl>
-    )
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">Role</InputLabel>
+      <Select
+        native
+        {...input}
+        {...custom}
+        inputProps={{
+          name: 'Role',
+          id: 'age-native-simple'
+        }}
+      >
+        {children}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  )
 
 const renderFromHelper = ({ touched, error }) => {
-    if (!(touched && error)) {
-        return
-    } else {
-        return <FormHelperText>{touched && error}</FormHelperText>
-    }
+  if (!(touched && error)) {
+    return
+  } else {
+    return <FormHelperText>{touched && error}</FormHelperText>
+  }
 }
 
 export const renderCheckbox = ({ input, label }) => (
-    <div>
-        <FormControlLabel
-            control={
-                <Checkbox
-                    checked={input.value ? true : false}
-                    onChange={input.onChange}
-                />
-            }
-            label={label}
+  <div>
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={input.value ? true : false}
+          onChange={input.onChange}
         />
-    </div>
+      }
+      label={label}
+    />
+  </div>
 )
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

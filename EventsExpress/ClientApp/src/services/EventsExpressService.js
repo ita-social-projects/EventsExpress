@@ -15,7 +15,7 @@ export default class EventsExpressService {
         file.append('Photo', data.image.file);
         file.append('Title', data.title);
         file.append('Description', data.description);
-        file.append('Location.CityId', data.city);
+        file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
         if (data.dateFrom != null) {
             file.append('DateFrom', new Date(data.dateFrom).toDateString());

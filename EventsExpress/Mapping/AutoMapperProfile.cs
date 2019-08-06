@@ -18,7 +18,7 @@ namespace EventsExpress.Mapping
             CreateMap<CategoryDto, CategoryDTO>().ReverseMap();
 
             CreateMap<EventDto, EventDTO>()
-                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.Location.CityId))
+                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
                 .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
             CreateMap<EventDTO, EventDto>()
@@ -30,11 +30,10 @@ namespace EventsExpress.Mapping
                     Birthday = x.User.Birthday,
                     PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null 
                     })))
-                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => new Location() {
-                                                            CityId = src.CityId,
-                                                            City = src.City.Name,
-                                                            Country = src.City.Country.Name
-                                                            })) 
+                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name)) 
+                .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id)) 
+                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name)) 
+                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id)) 
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto()
                                                             {
                                                             Id = src.OwnerId,
@@ -55,9 +54,9 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => new RoleDto { Id = src.RoleId, Name = src.Role.Name }))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
-            CreateMap<City, Location>()
-                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Name))            
-                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.Country.Name)); 
+            //CreateMap<City, Location>()
+            //    .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Name))            
+            //    .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.Country.Name)); 
 
             CreateMap<UserDTO, User>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
