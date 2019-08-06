@@ -4,7 +4,7 @@ import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
 import UserInfo from '../components/user-info'
 import UserRoleWrapper from '../containers/user-role'
-
+import IconButton from "@material-ui/core/IconButton";
 
 class UserInfoWpapper extends Component {
 
@@ -18,7 +18,7 @@ class UserInfoWpapper extends Component {
         
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
-                <UserInfo user={user} />
+                <UserInfo key={user.id} user={user} />
 
                 <UserRoleWrapper key={user.id + user.role.id} user={user} currentUser={currentUser} />
                 
@@ -26,12 +26,19 @@ class UserInfoWpapper extends Component {
                     {(user.id !== currentUser.id)
                         ? <div className="d-flex justify-content-center align-items-center">
                             {(user.isBlocked == true)
-                                ? <Fab size="small" onClick={this.unblock} >
+                                ? <IconButton  className="text-success" size="small" onClick={this.unblock}>
+                                    <i className="fas fa-lock" ></i>
+                                </IconButton> 
+                                : <IconButton className="text-danger" size="small" onClick={this.block} >
+                                    <i className="fas fa-unlock-alt" ></i>
+                                </IconButton>
+                                
+                                /*? <Fab size="small" onClick={this.unblock} >
                                     <i className="fas fa-lock" ></i>
                                 </Fab>
                                 : <Fab size="small" onClick={this.block} >
                                     <i className="fas fa-unlock-alt" ></i>
-                                </Fab>}
+                            </Fab>*/}
                         </div>
                         : <div> </div>
                     }
@@ -40,6 +47,8 @@ class UserInfoWpapper extends Component {
         )
     }
 }
+
+
 
 const mapStateToProps = (state) => ({
     currentUser: state.user,

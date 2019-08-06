@@ -1,15 +1,22 @@
 ﻿import React, { Component } from 'react';
 import Fab from '@material-ui/core/Fab';
 import { connect } from 'react-redux';
-import { reduxForm, formValueSelector, Field } from 'redux-form';
+import { reduxForm, formValueSelector, Field , Form} from 'redux-form';
 import get_roles from '../../actions/roles'
+import IconButton from "@material-ui/core/IconButton";
 
 class UserRoleEdit extends Component {
-    componentDidMount = () => this.props.get_roles();
+    componentDidMount = () => {
+        this.props.get_roles();
+        let obj = JSON.parse('{"role-for-' + this.props.user.id + '":"' + this.props.user.role.id + '"}')
+        this.props.initialize(obj)   
+    }
+
+
 
     renderRolesOptions = (arr) => {
         return arr.map((item) => {
-            return <option key={item.id} value={item.id} selected={(this.props.user.role.id === item.id) ? true : false}>{item.name}</option>;
+            return <option key={item.id} value={item.id}>{item.name}</option>;
         });
     }
 
@@ -19,25 +26,27 @@ class UserRoleEdit extends Component {
         this.props.callback(newRole);
     }
 
+
     render() {
-        
+
         return (<>
             <td className="align-middle">
-                <form onSubmit={this.handleSubmit} id="user-role"> 
+                <Form onSubmit={this.handleSubmit} id="user-role"> 
                     <Field className="form-control" name={"role-for-"+ this.props.user.id} component="select">
-                        <option>Roles</option>
                         {this.renderRolesOptions(this.props.roles)}
                     </Field>
-                </form>
+                </Form>
             </td>
 
-            <td className="align-middle d-flex align-items-center">
-                <Fab size="small" type="submit" form='user-role' className="mr-1">
-                    <i className="fas fa-check"></i>
-                </Fab>
-                <Fab size="small" onClick={this.props.cancel}>
-                    <i className="fas fa-times"></i>
-                </Fab>
+            <td className="align-middle align-items-stretch">
+                <div className="d-flex align-items-center">
+                    <IconButton  className="text-success" size="small" type="submit" form='user-role' >
+                        <i className="fas fa-check"></i>
+                    </IconButton>
+                    <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
+                        <i className="fas fa-times"></i>
+                    </IconButton>
+                </div>
             </td>
         </>)
     }
@@ -45,7 +54,7 @@ class UserRoleEdit extends Component {
 
 const selector = formValueSelector("user-role")
 
-const mapStateToProps = (state,props) => {
+const mapStateToProps = (state, props) => {
     return {
         roles: state.roles.data,
         newRoleId: selector(state, "role-for-" + props.user.id)
@@ -61,7 +70,8 @@ const mapDispatchToProps = (dispatch) => {
 UserRoleEdit = connect(mapStateToProps, mapDispatchToProps)(UserRoleEdit);
 
 UserRoleEdit = reduxForm({
-    form: "user-role"
+    form: "user-role",
+    enableReinitialize: true
 })(UserRoleEdit);
 
 export default UserRoleEdit;
