@@ -44,9 +44,6 @@ namespace EventsExpress.Mapping
                                                             })); 
 
 
-            CreateMap<UserDTO, UserPreviewDto>()
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
-
             CreateMap<UserDTO, UserManageDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
