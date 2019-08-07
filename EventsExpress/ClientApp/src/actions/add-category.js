@@ -7,7 +7,6 @@ export const SET_CATEGORY_ERROR = "SET_CATEGORY_ERROR";
 const api_serv = new EventsExpressService();
 
 export default function add_category(data) {
-
     return dispatch => {
         dispatch(setCategoryPending(true));
 

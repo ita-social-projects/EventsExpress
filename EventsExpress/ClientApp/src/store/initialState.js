@@ -68,6 +68,7 @@ const initialState = {
     categories: {
         isPending: false,
         isError: false,
+        editedCategory: null,
         data: []
     },
     countries: {

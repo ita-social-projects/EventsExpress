@@ -7,14 +7,11 @@ import get_categories from '../actions/category-list';
 
 class CategoryListWrapper extends Component {
 
-    componentDidMount = () => this.props.get_categories();
+    componentWillMount = () => this.props.get_categories();
 
     render() {
 
-        const { data, isPending, isError } = this.props;
-        // const hasData = !(isPending || isError);
-
-        // const errorMessage = isError ? <ErrorIndicator/> : null;
+        const { data, isPending } = this.props;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <CategoryList data_list={data} /> : null;
 

@@ -4,9 +4,10 @@ import get_categories from './category-list';
 export const SET_CATEGORY_DELETE_PENDING = "SET_CATEGORY_DELETE_PENDING";
 export const SET_CATEGORY_DELETE_SUCCESS = "SET_CATEGORY_DELETE_SUCCESS";
 export const SET_CATEGORY_DELETE_ERROR = "SET_CATEGORY_DELETE_ERROR";
+export const SET_CATEGORY_EDITED = "SET_CATEGORY_EDITED";
 
-export default function delete_category(data) {
 
+export function delete_category(data) {
     const api_serv = new EventsExpressService();
 
     return dispatch => {
@@ -25,6 +26,22 @@ export default function delete_category(data) {
     }
 }
 
+export function set_edited_category(id) {
+    console.log("action set_edited_category");
+    console.log(id)
+
+    return dispatch => {
+
+        dispatch(setCategoryEdited(id));
+    }
+}
+
+function setCategoryEdited(data) {
+    return {
+        type: SET_CATEGORY_EDITED,
+        payload: data
+    };
+}
 
 function setCategorySuccess(data) {
     return {

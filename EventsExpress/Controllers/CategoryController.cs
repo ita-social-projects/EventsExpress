@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles ="Admin")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -29,15 +30,14 @@ namespace EventsExpress.Controllers
         }
 
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
+        [AllowAnonymous]
         public IActionResult All()
         {
             var res = _mapper.Map<IEnumerable<CategoryDTO>, IEnumerable<CategoryDto>>(_categoryService.GetAllCategories());
             return Ok(res);
         }
 
-        [AllowAnonymous]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -46,11 +46,13 @@ namespace EventsExpress.Controllers
             return Ok(res);
         }
 
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CategoryDto model)
         {
-
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return BadRequest("Category cannot be empty!");
+            }
             var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
                                        : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
             if (res.Successed)

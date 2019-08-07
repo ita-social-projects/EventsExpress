@@ -12,7 +12,8 @@ class categoryItem extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.callback({Name: this.props.newName});
+        console.log(this.props.newName);
+        this.props.callback({name: this.props.newName});
     }
 
     render() {
@@ -32,13 +33,13 @@ class categoryItem extends Component {
             </td>
             <td>
                 <IconButton  className="text-info"  size="small" type="submit" form="save-form">
-                    <i className="fa fa-check"></i>
+                    <i className="fa fa-check-circle"></i>
                 </IconButton>   
-
                 <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
                     <i className="fas fa-times"></i>
                 </IconButton>
                     
+                </Fab>
             </td>
         </>
     }

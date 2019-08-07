@@ -8,7 +8,7 @@ export function UserRoleDisplay(props) {
 
             <td className="align-middle">
                 { (!props.isCurrentUser) 
-                    ? <IconButton  className=""  size="small" onClick={props.callback}>
+                    ? <IconButton  className="text-info"  size="small" onClick={props.callback}>
                         <i className="fas fa-edit"></i>
                      </IconButton> : null
                 }
