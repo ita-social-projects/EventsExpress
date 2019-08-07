@@ -190,5 +190,36 @@ namespace EventsExpress.Controllers
             }
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult GetUserById(Guid id)
+        {
+            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+            var res = _mapper.Map<ProfileDTO, ProfileDto>(_userService.GetProfileById(id, user.Id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult GetAttitude(AttitudeDto attitude)
+        {
+            var res = _mapper.Map<AttitudeDTO, AttitudeDto>(_userService.GetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)));
+            return Ok(res);
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
+        {
+            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)); 
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
     }
 }

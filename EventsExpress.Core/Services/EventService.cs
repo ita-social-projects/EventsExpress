@@ -217,7 +217,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
         {  
-            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId);
+            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
 
         }

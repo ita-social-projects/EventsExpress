@@ -10,8 +10,9 @@ export default class Comment extends Component {
 
         return (
             <div>
-                <CommentListWrapper /> 
-
+                <div className="text-box overflow-auto "><CommentListWrapper /></div>
+                
+                            
                 <AddComment />
             </div>
 

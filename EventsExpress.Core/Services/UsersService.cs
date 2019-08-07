@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.Services
 {
@@ -20,13 +21,15 @@ namespace EventsExpress.Core.Services
 
         private readonly IMapper _mapper;
         private IPhotoService _photoService;
+        private IEventService _eventService;
 
 
-        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv)
+        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv, IEventService eventService)
         {
             Db = uow;
             _mapper = mapper;
             _photoService = photoSrv;
+            _eventService = eventService;
         }
 
         public async Task<OperationResult> Create(UserDTO userDto)
@@ -76,8 +79,8 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = Db.UserRepository.Get(id);
-            return _mapper.Map<UserDTO>(user);
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Filter(filter: x => x.Id == id, includeProperties: "Photo,Categories.Category,Events").FirstOrDefault());
+            return user;
         }
 
         public UserDTO GetByEmail(string email)
@@ -105,7 +108,7 @@ namespace EventsExpress.Core.Services
             var users = Db.UserRepository.Filter(includeProperties: "Categories.Category")
                 .Where(user => user.Categories.Any(category => categoryNames.Contains(category.Category.Name)))
                 .ToList();
-           
+
             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
         }
 
@@ -158,7 +161,7 @@ namespace EventsExpress.Core.Services
             await Db.SaveAsync();
             return new OperationResult(true);
         }
-        
+
         public async Task<OperationResult> Unblock(Guid uId)
         {
             var user = Db.UserRepository.Get(uId);
@@ -199,6 +202,50 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Update failing", "");
             }
+        }
+
+        public async Task<OperationResult> SetAttitude(AttitudeDTO attitude)
+        {
+            if (attitude.UserFromId == null || attitude.UserToId == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+            Relationship current_attitude = Db.RelationshipRepository.Filter(filter: x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault();
+
+            if (current_attitude == null)
+            {
+                Relationship rel = _mapper.Map<AttitudeDTO, Relationship>(attitude);
+                try
+                {
+                    Db.RelationshipRepository.Insert(rel);
+                    await Db.SaveAsync();
+
+                    return new OperationResult(true);
+                }
+                catch (Exception e)
+                {
+                    return new OperationResult(false, "Set failing", "");
+                }
+            }
+            current_attitude.Attitude = (Attitude)attitude.Attitude;
+            await Db.SaveAsync();
+            return new OperationResult(true);
+        }
+
+        public AttitudeDTO GetAttitude(AttitudeDTO attitude)
+        {            
+            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Filter(filter: x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault());
+
+            return rel;
+        }
+
+        public ProfileDTO GetProfileById(Guid id, Guid FromId)
+        {
+            var user = _mapper.Map<UserDTO, ProfileDTO>(this.GetById(id));
+            user.Events = _eventService.EventsByUserId(id);
+            Relationship rel = Db.RelationshipRepository.Filter(filter: x => x.UserFromId == FromId).Where(y => y.UserToId == id).FirstOrDefault();
+            user.Attitude = (byte)rel.Attitude;
+            return user;
         }
     }
 }

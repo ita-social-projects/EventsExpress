@@ -21,6 +21,7 @@ import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment'; 
 import * as Comments from './comment-list';
+import * as Profile from './user-item-view';
 
 const rootReducers = {
     user: User.reducer,
@@ -46,7 +47,8 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
-    delete_comment: DeleteComment.reducer
+    delete_comment: DeleteComment.reducer,
+    profile: Profile.reducer
 };
 
 

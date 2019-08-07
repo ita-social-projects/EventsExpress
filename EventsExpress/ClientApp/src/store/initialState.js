@@ -95,6 +95,11 @@ const initialState = {
         isPending: true,
         isError: false,
         data: null
+    },
+    profile: {
+        isPending: true,
+        isError: false,
+        data: null
     }
 };
 

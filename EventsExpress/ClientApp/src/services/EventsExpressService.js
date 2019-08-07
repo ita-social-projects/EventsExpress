@@ -76,6 +76,10 @@ export default class EventsExpressService{
         return res;
     }
 
+    getUserById = async (id) => {
+        const res = await this.getResource('users/GetUserById?id=' + id);
+        return res;
+    }
 
     getUsers = async () => {
         const res = await this.getResource('users');
@@ -151,6 +155,8 @@ export default class EventsExpressService{
         return res;
     }
 
+
+
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url,
             {
@@ -214,7 +220,17 @@ export default class EventsExpressService{
         return res;
     }
     
-
+    setAttitude = async (data) => {
+        const res = await this.setResource('users/SetAttitude', {
+            UserFromId: data.userFromId,
+            UserToId: data.userToId,
+            Attitude: data.attitude
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
 
     setResource =  (url, data) => fetch(
             this._baseUrl + url,

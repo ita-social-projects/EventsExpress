@@ -28,7 +28,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id)
         {
-           var comments = _mapper.Map<IEnumerable<Comments>, IEnumerable<CommentDTO>>(Db.CommentsRepository.Filter(filter: x => x.EventId == id, includeProperties: "User.Photo"));/*Get().AsQueryable().Where(x => x.EventId == id))*/
+           var comments = _mapper.Map<IEnumerable<Comments>, IEnumerable<CommentDTO>>(Db.CommentsRepository.Filter(filter: x => x.EventId == id, includeProperties: "User.Photo"));
             return comments;
         }
 

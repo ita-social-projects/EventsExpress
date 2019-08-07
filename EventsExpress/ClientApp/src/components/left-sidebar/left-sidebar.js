@@ -29,7 +29,7 @@ const LeftSidebar = (props) =>{
                         
                         <NavItem to={'/'} icon={'fa fa-home'} text={"Home"} />
                             {props.user.id &&
-                            <NavItem to={'/profile'} icon={'fa fa-user'} text={"Profile"} />
+                            <NavItem to={'/user/' + props.user.id} icon={'fa fa-user'} text={"Profile"} />
                             
                             }
                         {props.user.role === "Admin" &&

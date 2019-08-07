@@ -2,6 +2,7 @@
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,9 @@ namespace EventsExpress.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserDTO>();
+            CreateMap<User, UserDTO>()
+
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories));
 
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<CategoryDto, CategoryDTO>().ReverseMap();
@@ -99,6 +102,25 @@ namespace EventsExpress.Mapping
             CreateMap<CommentDTO, CommentDto>()
                 .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))            
                 .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
+
+
+
+            CreateMap<ProfileDTO, ProfileDto>().ReverseMap();
+
+            CreateMap<UserDTO, ProfileDTO>()
+                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })));
+
+            CreateMap<AttitudeDTO, AttitudeDto>()
+                .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
+
+            CreateMap<AttitudeDto, AttitudeDTO>()
+                .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
+
+            CreateMap<AttitudeDTO, Relationship>()
+                .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => (Attitude)src.Attitude));
+
+
         }
     }
 }
