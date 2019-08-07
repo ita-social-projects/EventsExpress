@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import get_events from '../actions/event-list';
-
+import BagRequest from '../components/Route guard/400'
 
 class EventListWrapper extends Component{
 
@@ -17,15 +17,15 @@ class EventListWrapper extends Component{
 
         const { data, isPending, isError } = this.props;
         const { items } = this.props.data;
-        // const hasData = !(isPending || isError);
+        //const hasData = !(isPending || isError);
 
-        // const errorMessage = isError ? <ErrorIndicator/> : null;
+        const errorMessage = isError ? <BagRequest/> : null;
 
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
         return <>
-              
+            {errorMessage}
                 {spinner}
                 {content}
                </>

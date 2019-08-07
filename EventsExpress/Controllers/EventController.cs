@@ -80,8 +80,11 @@ namespace EventsExpress.Controllers
 
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(model, out Count));
                     
-
+            
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
+            if (pageViewModel.PageNumber > pageViewModel.TotalPages) {
+                return BadRequest();
+            }
             IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
             {
                 PageViewModel = pageViewModel,
