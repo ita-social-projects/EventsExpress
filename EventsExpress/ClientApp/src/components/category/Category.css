@@ -1,41 +1,4 @@
-﻿.category {
-    margin-top: 5%;
-    border-radius: 15px;
-    padding: 15px;
-    background-color: #C0E3ED;
-}
-
-
-
-.ItemCategory {
-    border-radius: 15px;
-    display: flex;
-    padding: 15px;
-    margin-bottom: 2%;
-    background-color: #D3E1E5;
-    color: black;
-    justify-content: space-between;
-}
-
-    .ItemCategory .btn {
-        font-size: 100%;
-        font-weight: bold;
-        background-color: #C7D9DE;
-        border: none;
-        min-width: 4px;
-        margin-right: 5px;
-    }
-
-        .ItemCategory .btn:hover {
-            background-color: lightskyblue;
-            outline: none;
-        }
-
-.listbox {
-    color: #fff;
-    padding: 15px;
-    font-family: 'Roboto', sans-serif;
-}
+﻿
 
 
 

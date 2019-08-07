@@ -13,15 +13,19 @@ export default class categoryItem extends Component {
 
     render() {
         const { item, callback } = this.props;
-            return (<>
-                <td width="80%">
-                    #{item.name}
-                </td>
-                <td width="10%">
+        
+        return (<>
+            <td>
+                #{item.name}
+            </td>
+            <td className="align-middle align-items-stretch">
+                <div className="d-flex align-items-center justify-content-center">
                     <IconButton  className="text-info"  size="small" onClick={callback}>
                         <i className="fas fa-edit"></i>
                     </IconButton>
-                </td>
-            </>);
+                </div>
+            </td>
+            
+        </>);
     }
 }

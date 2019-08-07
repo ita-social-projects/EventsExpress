@@ -118,6 +118,7 @@ export const renderTextField = ({
         <FormControl error={touched && error}>
              <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
             <Select
+                fullWidth
                 native
                 {...input}
                 {...custom}

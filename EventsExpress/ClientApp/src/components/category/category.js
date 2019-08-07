@@ -5,16 +5,15 @@ import CategoryListWrapper from '../../containers/category-list';
 
 export default class Category extends Component{
     
-    render(){
+    render() {
      
-    return(
-        <div>
-            <AddCategory />
-            
-            <CategoryListWrapper /> 
-          
-        </div>
-        
-    );
+        return <div>
+                <table className="w-75 table">
+                    <tbody>
+                        <AddCategory item={{name: "", id: "000"}} />
+                        <CategoryListWrapper /> 
+                    </tbody>
+                </table> 
+            </div>
     }
 }

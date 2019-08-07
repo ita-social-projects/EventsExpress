@@ -10,15 +10,11 @@ class CategoryListWrapper extends Component {
     componentWillMount = () => this.props.get_categories();
 
     render() {
-
         const { data, isPending } = this.props;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <CategoryList data_list={data} /> : null;
 
-        return <>
-            {spinner}
-            {content}
-        </>
+        return (!isPending)
+            ? <CategoryList data_list={data} />
+            : <Spinner />
     }
 }
 
