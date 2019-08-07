@@ -15,6 +15,7 @@ export const unBlockUser = {
 }
 
 export const changeUserRole = {
+    SET_EDITED: 'SET_EDITED_USER',
     PENDING: 'PENDING_CHANGE_ROLE',
     SUCCESS: 'SUCCESS_CHANGE_ROLE',
     ERROR: 'ERROR_CHANGE_ROLE',
@@ -76,7 +77,21 @@ export function change_user_role(userId, newRole) {
     }
 }
 
+export function set_edited_user(userId) {
+    return dispatch => {
+        dispatch(setEditedUser(userId));
+    }
+}
+
 // change role actions
+
+function setEditedUser(data){
+    return {
+        type: changeUserRole.SET_EDITED,
+        payload: data
+    }
+}
+
 function setChangeUserRolePending(data) {
     return {
         type: changeUserRole.PENDING,

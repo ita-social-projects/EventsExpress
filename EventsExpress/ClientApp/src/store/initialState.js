@@ -83,10 +83,10 @@ const initialState = {
     users: {
         isPending: false,
         isError: false,
+        editedUser: null,
         data: {
             items: [],
             pageViewModel: {}
-
         }
     },
     add_comment: {

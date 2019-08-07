@@ -24,7 +24,7 @@ export const reducer = (state = initialState.users, action) => {
                 isPending: false
             }
 
-        case blockUser.UPDATE:
+        case blockUser.UPDATE: {
             let newState = { ...state };
             newState.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload) {
@@ -35,30 +35,40 @@ export const reducer = (state = initialState.users, action) => {
                 return item;
             });
             return newState;
+        }
 
-        case unBlockUser.UPDATE:
-            let newstate = { ...state };
-            newstate.data.items = state.data.items.map((item) => {
+        case unBlockUser.UPDATE: {
+            let newState = { ...state };
+            newState.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload) {
-                    let updItem = item;
-                    updItem.isBlocked = false;
-                    return updItem;
+                    let updatedItem = item;
+                    updatedItem.isBlocked = false;
+                    return updatedItem;
                 }
                 return item;
             });
-            return newstate;
+            return newState;
+        }
+            
+        case changeUserRole.SET_EDITED: {
+            return {
+                ...state,
+                editedUser: action.payload
+            }
+        }
 
-        case changeUserRole.UPDATE:
-            let nstate = { ...state };
-            nstate.data.items = state.data.items.map((item) => {
+        case changeUserRole.UPDATE: {
+            let newState = { ...state };
+            newState.data.items = state.data.items.map((item) => {
                 if (item.id === action.payload.userId) {
-                    let updItem = item;
-                    updItem.role = action.payload.newRole;
-                    return updItem;
+                    let updatedItem = item;
+                    updatedItem.role = action.payload.newRole;
+                    return updatedItem;
                 }
                 return item;
             });
-            return nstate;
+            return newState;
+        }
 
         default:
             return state;

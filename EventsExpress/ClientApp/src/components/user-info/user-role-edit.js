@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
-import Fab from '@material-ui/core/Fab';
 import { connect } from 'react-redux';
-import { reduxForm, formValueSelector, Field , Form} from 'redux-form';
+import { reduxForm, formValueSelector, Field  } from 'redux-form';
 import get_roles from '../../actions/roles'
 import IconButton from "@material-ui/core/IconButton";
 
@@ -11,8 +10,6 @@ class UserRoleEdit extends Component {
         let obj = JSON.parse('{"role-for-' + this.props.user.id + '":"' + this.props.user.role.id + '"}')
         this.props.initialize(obj)   
     }
-
-
 
     renderRolesOptions = (arr) => {
         return arr.map((item) => {
@@ -31,11 +28,11 @@ class UserRoleEdit extends Component {
 
         return (<>
             <td className="align-middle">
-                <Form onSubmit={this.handleSubmit} id="user-role"> 
+                <form onSubmit={this.handleSubmit} id="user-role"> 
                     <Field className="form-control" name={"role-for-"+ this.props.user.id} component="select">
                         {this.renderRolesOptions(this.props.roles)}
                     </Field>
-                </Form>
+                </form>
             </td>
 
             <td className="align-middle align-items-stretch">
