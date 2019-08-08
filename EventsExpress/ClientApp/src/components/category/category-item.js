@@ -16,7 +16,8 @@ export default class categoryItem extends Component {
         
         return (<>
             <td>
-                #{item.name}
+                <i className="fas fa-hashtag mr-1"></i>
+                {item.name}
             </td>
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center justify-content-center">

@@ -71,7 +71,7 @@ return <DatePicker
 />
 }
 
- export const maxLength = max => value =>
+export const maxLength = max => value =>
     value && value.length > max ? `Must be ${max} characters or less` : undefined
 export const maxLength15 = maxLength(15)
 export const minLength = min => value =>
@@ -91,14 +91,14 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
 export const renderTextField = ({
   label,
   defaultValue,
-    input,
+  input,
   meta: { touched, invalid, error },
   ...custom
 }) => (
   <TextField
-   fullWidth
-    label={label}
+    fullWidth
     placeholder={label}
+    label={label}
     error={touched && invalid}
     defaultValue={defaultValue}
     value={defaultValue}
@@ -116,15 +116,15 @@ export const renderTextField = ({
     ...custom
 }) => (
         <FormControl error={touched && error}>
-             <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
             <Select
                 fullWidth
                 native
                 {...input}
                 {...custom}
-                 inputProps={{
-                     name: { label },
-                    id: 'age-native-simple'
+                inputProps={{
+                  name: { label },
+                  id: 'age-native-simple'
                 }}
             >
                 {children}
