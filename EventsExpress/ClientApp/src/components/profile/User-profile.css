@@ -1,3 +1,12 @@
 ﻿.info {
     padding-top: 5%;
 }
+
+.attitude {
+    justify-content: space-around;
+}
+
+.events {
+    justify-content: space-evenly;
+    padding-right: 15px;
+}

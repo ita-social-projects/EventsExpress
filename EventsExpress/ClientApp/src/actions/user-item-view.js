@@ -1,5 +1,6 @@
 ﻿
 import EventsExpressService from '../services/EventsExpressService';
+import get_future_events  from './events-for-profile';
 
 
 export const GET_PROFILE_PENDING = "GET_PROFILE_PENDING";
@@ -18,6 +19,7 @@ export default function get_user(id) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(getProfile(response));
+                dispatch(get_future_events(id));
 
             } else {
                 dispatch(getProfileError(response.error));

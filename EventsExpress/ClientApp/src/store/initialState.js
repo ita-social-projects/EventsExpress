@@ -100,6 +100,11 @@ const initialState = {
         isPending: true,
         isError: false,
         data: null
+    },
+    events_for_profile: {
+        isPending: true,
+        isError: false,
+        data: null
     }
 };
 

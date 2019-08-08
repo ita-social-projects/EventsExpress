@@ -80,5 +80,40 @@ namespace EventsExpress.Controllers
             return BadRequest(res.Message);
         }
 
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult FutureEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.FutureEventsByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult PastEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.PastEventsByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult EventsToGo(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.EventsToGoByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult VisitedEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.VisitedEventsByUserId(id));
+
+            return Ok(res);
+        }
     }
 }

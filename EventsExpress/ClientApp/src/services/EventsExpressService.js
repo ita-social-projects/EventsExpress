@@ -155,7 +155,25 @@ export default class EventsExpressService{
         return res;
     }
 
+    getVisitedEvents = async (id) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id);
+        return res;
+    }
 
+    getFutureEvents = async (id) => {
+        const res = await this.getResource('event/futureEvents?id=' + id);
+        return res;
+    }
+
+    getPastEvents = async (id) => {
+        const res = await this.getResource('event/pastEvents?id=' + id);
+        return res;
+    }
+
+    getEventsToGo = async (id) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id);
+        return res;
+    }
 
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url,

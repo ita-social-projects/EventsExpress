@@ -31,21 +31,19 @@ export default class UsertemView extends Component {
         );
     }
 
-    check = (value) => {
-        if (value === this.props.current_user) return false;
-        return true;
-    }
-
     render() {
-        const { userPhoto, name, email, birthday, gender, categories, events, id } = this.props.data;
+        const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
         const categories_list = this.renderCategories(categories);
-        const event_list = this.renderEvents(events);
-        const current_user = this.props.current_user;
+        console.log(this.props)
+
+        
+        
+        
         return <>
             <div className="row box info">
-                {this.check(id) && 
+                {!(id === this.props.current_user) && 
                     <div className="col-3">
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center attitude">
                         <Avatar
                             alt="Тут аватар"
                             src={userPhoto}
@@ -53,11 +51,24 @@ export default class UsertemView extends Component {
                             className='bigAvatar'
                         />
                     </div>
-                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                        {attitude == '2' && <div className="row attitude">
+                        <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                        <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                    </div>}
+                        {attitude == '1' && <div className="row attitude">
+                        <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                        <button className="btn btn-light">Dislike</button>
+                        <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                    </div>}
+                        {attitude == '0' && <div className="row attitude">
+                        <button className="btn btn-light">Like</button>
+                        <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                        <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                    </div>}
                     </div>
                 }
-                {!this.check(id) &&
+                
+                {(id === this.props.current_user) &&
                     <div className="col-2">
                     </div>
                 }
@@ -77,9 +88,27 @@ export default class UsertemView extends Component {
                 </div>
 
             </div>
+            <div className="row events">
+                <div class="btn-group" data-toggle="buttons">
+  <label class="btn btn-light-blue form-check-label active">
+                        <input class="form-check-input" type="radio" name="options" id="option1" autocomplete="off" onClick={this.props.onFuture} checked />
+    Preselected
+  </label>
+  <label class="btn btn-light-blue form-check-label">
+                        <input class="form-check-input" type="radio" name="options" id="option2" autocomplete="off" onClick={this.props.onVisited}/> Radio
+  </label>
+  <label class="btn btn-light-blue form-check-label">
+    <input class="form-check-input" type="radio" name="options" id="option3" autocomplete="off"/> Radio
+  </label>
+</div>
+                <button onClick={this.props.onFuture} className="btn btn-outline-info active">Future</button>
+                <button onClick={this.props.onPast} className="btn blue-gradient">Past</button>
+                <button onClick={this.props.onVisited} className="btn btn-outline-info">Visited</button>
+                <button onClick={this.props.onToGo} className="btn btn-outline-info">To Go</button>
+            </div>
             <div className="row box ">
                 <div className="shadow p-3 mb-5 bg-white rounded">
-                    {event_list}
+                    {(this.props.events) ? this.renderEvents(this.props.events) : null}
                 </div>
             </div>
         </>

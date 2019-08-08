@@ -18,8 +18,6 @@ namespace EventsExpress.Core.DTOs
         public byte Attitude { get; set; }
         public string UserPhoto { get; set; }
 
-        public IEnumerable<EventDTO> Events { get; set; }
-
         public IEnumerable<CategoryDTO> Categories { get; set; }
 
         public IEnumerable<Rate> MyRates { get; set; }

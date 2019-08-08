@@ -242,9 +242,10 @@ namespace EventsExpress.Core.Services
         public ProfileDTO GetProfileById(Guid id, Guid FromId)
         {
             var user = _mapper.Map<UserDTO, ProfileDTO>(this.GetById(id));
-            user.Events = _eventService.EventsByUserId(id);
             Relationship rel = Db.RelationshipRepository.Filter(filter: x => x.UserFromId == FromId).Where(y => y.UserToId == id).FirstOrDefault();
-            user.Attitude = (byte)rel.Attitude;
+            if (rel != null)
+                user.Attitude = (byte)rel.Attitude;
+            else user.Attitude = 2;
             return user;
         }
     }
