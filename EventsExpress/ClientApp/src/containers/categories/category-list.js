@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import CategoryList from '../components/category/category-list';
-import Spinner from '../components/spinner';
-import get_categories from '../actions/category-list';
+import CategoryList from '../../components/category/category-list';
+import Spinner from '../../components/spinner';
+import get_categories from '../../actions/category-list';
 
 
 class CategoryListWrapper extends Component {

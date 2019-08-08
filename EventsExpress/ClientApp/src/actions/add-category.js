@@ -8,14 +8,15 @@ export const SET_CATEGORY_ERROR = "SET_CATEGORY_ERROR";
 
 const api_serv = new EventsExpressService();
 
+
 export function add_category(data) {
     return dispatch => {
         dispatch(setCategoryPending(true));
 
         const res = api_serv.setCategory(data);
+        
         res.then(response => {
             if (response.error == null) {
-
                 dispatch(setCategorySuccess(true));
                 dispatch(get_categories());
             } else {
@@ -26,16 +27,16 @@ export function add_category(data) {
 }
 
 
-export function setCategorySuccess(data) {
+export function setCategoryPending(data) {
     return {
-        type: SET_CATEGORY_SUCCESS,
+        type: SET_CATEGORY_PENDING,
         payload: data
     };
 }
 
-export function setCategoryPending(data) {
+export function setCategorySuccess(data) {
     return {
-        type: SET_CATEGORY_PENDING,
+        type: SET_CATEGORY_SUCCESS,
         payload: data
     };
 }

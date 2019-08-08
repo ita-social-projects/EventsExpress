@@ -1,7 +1,6 @@
-﻿
-import { Category } from '../components/category/category';
-import { bindActionCreators } from 'redux';
+﻿import Categories  from '../../components/category/categories';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state) => ({
     categories: state.categories
@@ -9,4 +8,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => { return bindActionCreators(() => { }, dispatch); };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Category);
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

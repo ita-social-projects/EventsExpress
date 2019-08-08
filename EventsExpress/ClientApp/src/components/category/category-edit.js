@@ -1,18 +1,15 @@
 ﻿import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from "redux-form";
-import { renderTextField } from '../helpers/helpers';
-import Fab from '@material-ui/core/Fab';
-import './Category.css';
 
-import TextField from '@material-ui/core/TextField';
+import { renderTextField } from '../helpers/helpers';
+
 import IconButton from "@material-ui/core/IconButton";
 
 
-class categoryItem extends Component {
+class CategoryEdit extends Component {
 
     componentDidMount = () => {
-        this.props.get_roles();
         let obj = JSON.parse('{"category":"' + this.props.item.name + '"}')
         this.props.initialize(obj)   
     }
@@ -73,11 +70,11 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-categoryItem = connect(mapStateToProps, null)(categoryItem);
+CategoryEdit = connect(mapStateToProps, null)(CategoryEdit);
 
-categoryItem = reduxForm({
+CategoryEdit = reduxForm({
     form: "save-form",
     enableReinitialize: true
-})(categoryItem);
+})(CategoryEdit);
 
-export default categoryItem;
+export default CategoryEdit;

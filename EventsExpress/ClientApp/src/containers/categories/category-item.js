@@ -1,24 +1,28 @@
 ﻿import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import IconButton from "@material-ui/core/IconButton";
-import CategoryItem from "../components/category/category-item";
-import CategoryEdit from "../components/category/category-edit";
-import { delete_category, set_edited_category } from "../actions/delete-category";
-import { add_category } from "../actions/add-category";
+import CategoryItem from "../../components/category/category-item";
+import CategoryEdit from "../../components/category/category-edit";
 
-import '../components/category/Category.css';
+import { add_category } from "../../actions/add-category";
+import { 
+    delete_category, 
+    set_edited_category 
+} from "../../actions/delete-category";
 
 
-
-class categoryItemWrapper extends Component {
+class CategoryItemWrapper extends Component {
 
     save = values => {
-        this.props.save_category({ ...values, Id: this.props.item.id });
-        //this.props.edit_cansel();
+        if (values.Name === this.props.item.name) {
+            this.props.edit_cansel();
+        } else {
+            this.props.save_category({ ...values, Id: this.props.item.id });
+        }
     };
 
     componentWillUpdate = () => {
-        
         const {categoryError, isCategorySuccess } = this.props.status;
         
         if (!categoryError && isCategorySuccess){
@@ -31,6 +35,7 @@ class categoryItemWrapper extends Component {
         return <tr>
                 {(this.props.item.id === this.props.editedCategory)
                     ? <CategoryEdit 
+                        key={this.props.item.id + this.props.editedCategory}
                         item={this.props.item} 
                         callback={this.save} 
                         cancel={edit_cansel} 
@@ -73,4 +78,4 @@ const mapDispatchToProps = (dispatch, props) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(categoryItemWrapper);
+)(CategoryItemWrapper);

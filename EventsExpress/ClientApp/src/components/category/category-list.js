@@ -1,10 +1,12 @@
 ﻿import React, { Component } from 'react';
-import CategoryItemWrapper from '../../containers/category-item';
+import CategoryItemWrapper from '../../containers/categories/category-item';
 
 
 export default class CategoryList extends Component {
 
-    renderItems = (arr) => arr.map((item) => <CategoryItemWrapper key={item.id} item={item} />);
+    renderItems = arr => arr.map(item => <CategoryItemWrapper 
+        key={item.id} 
+        item={item} />);
     
     render() {
         const { data_list } = this.props;

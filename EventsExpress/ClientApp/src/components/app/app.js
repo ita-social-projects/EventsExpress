@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Home from '../home';
 import Profile from '../profile';
-import Category from '../category/category';
+import Category from '../category/categories';
 import Comment from '../comment/comment'
 import Admin from '../admin';
 import UsersWrapper from '../../containers/users';
