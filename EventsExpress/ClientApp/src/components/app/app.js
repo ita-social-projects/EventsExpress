@@ -22,8 +22,7 @@ export default class App extends Component {
 
             <Layout>
                 <Switch>
-                      
-                    <Route path="/home/events"  component={Home} />
+                    <Route path="/home/events" exact component={Home} />
                         <Route
                          exact
                          path="/"
@@ -32,15 +31,15 @@ export default class App extends Component {
                          )}
                          /> 
                         <Route path="/profile/" component={Profile} />
-                        <Route path="/admin/" component={Admin} />
+                     
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
                         <Route path="/admin/events" component={Home} />
-                        <Route path="/search/users" component={SearchUserWrapper} />
-                        <Route component={NotFound} />
+                    <Route path="/search/users" component={SearchUserWrapper} />
+                    <Route component={NotFound} />
                 </Switch>
-
+                
                 </Layout>
         );
     }

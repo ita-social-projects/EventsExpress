@@ -79,8 +79,8 @@ export default class EventsExpressService {
         return res;
     }
 
-    getUsers = async (page) => {
-        const res = await this.getResource(`users/get${page}`);
+    getUsers = async (filter) => {
+        const res = await this.getResource(`users/get${filter}`);
         console.log(res);
         return res;
     }
@@ -174,7 +174,13 @@ export default class EventsExpressService {
             }),
         });
         if (!res.ok) {
-            return { error: "Invalid data" }
+            return {
+                error:
+                {
+                    ErrorCode: res.status,
+                    massage: await res.statusText
+                }
+            }
         }
         return await res.json();
     }

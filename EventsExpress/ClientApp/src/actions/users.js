@@ -13,7 +13,7 @@ export default function get_users(filters) {
     console.log(filters);
     return dispatch => {
         dispatch(getUsersPending(true));
-  
+        dispatch(getUsersError(false));
         const res = api_serv.getUsers(filters);
       res.then(response => {
         if(response.error == null){

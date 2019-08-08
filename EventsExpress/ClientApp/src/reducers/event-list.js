@@ -13,7 +13,7 @@ export const reducer = (
           return {
                 ...state,
                 isPending: false,
-                isError: action.payload
+              isError: action.payload
             } 
     case SET_EVENTS_PENDING:
             return {

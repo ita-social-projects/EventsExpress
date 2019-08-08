@@ -50,6 +50,10 @@ namespace EventsExpress.Controllers
 
 
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
+            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            {
+                return BadRequest();
+            }
             IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
             {
                 PageViewModel = pageViewModel,

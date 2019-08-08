@@ -13,13 +13,13 @@ export default function get_events(filters) {
     console.log(filters);
     return dispatch => {
         dispatch(setEventPending(true));
-
+        dispatch(setEventError(false));
       const res = api_serv.getAllEvents(filters);
       res.then(response => {
         if(response.error == null){
             dispatch(getEvents(response));
             
-          }else{
+        } else {
             dispatch(setEventError(response.error));
           }
         });
@@ -40,7 +40,7 @@ function getEvents(data){
       }
   }
 
-function setEventError(data){
+function setEventError(data ){
     return{
         type: SET_EVENTS_ERROR,
         payload: data

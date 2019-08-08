@@ -6,14 +6,19 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import genders from '../../constants/GenderConstants'
+import './user-info.css'
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
+        backgroundImage: "linear-gradient(90deg, #94d4ff, transparent)",
+ 
     },
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
         maxWidth: 500,
+        
+        
     },
     Avatar: {
         width: 128,
@@ -51,10 +56,10 @@ export default class UserInfoCard extends Component {
                     <div className="col-6">
                     <div className={classes.root}>
            
-                    <Paper className={classes.paper }>
+                    <Paper className={classes.paper}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                        <ButtonBase className={classes.Avatar}>
+                                        <ButtonBase classN ame={classes.Avatar}>
                                     {user.photoUrl
                                                 ? <Avatar className='MiddleAvatar' src={user.photoUrl} />
                                                 : <Avatar className='MiddleAvatar' >{user.email.charAt(0).toUpperCase()}</Avatar>}

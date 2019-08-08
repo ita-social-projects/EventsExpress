@@ -10,7 +10,7 @@ body {
 
 #notfound {
     position: relative;
-    height: 100vh;
+    height: 70vh;
 }
 
     #notfound .notfound {
@@ -23,7 +23,7 @@ body {
     }
 
 .notfound {
-    max-width: 410px;
+    max-width: 310px;
     width: 100%;
     text-align: center;
 }
@@ -88,7 +88,7 @@ body {
 
 @media only screen and (max-width: 767px) {
     .notfound .notfound-404 {
-        height: 142px;
+        height: 143px;
     }
 
         .notfound .notfound-404 h1 {

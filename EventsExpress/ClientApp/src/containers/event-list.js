@@ -4,6 +4,7 @@ import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import get_events from '../actions/event-list';
 import BagRequest from '../components/Route guard/400'
+import InternalServerError from '../components/Route guard/500'
 
 class EventListWrapper extends Component{
 
@@ -17,17 +18,9 @@ class EventListWrapper extends Component{
 
         const { data, isPending, isError } = this.props;
         const { items } = this.props.data;
-        //const hasData = !(isPending || isError);
-      //  let errorM;
-        const errorMessage = isError ? <BagRequest /> : null;
-     //   switch (errorMessage)
-      // {
-          //   case "400": {
-           //      errorM = <BagRequest />
-            //     return errorM;
-           //  }
-          //   default: return errorM;
-     //   }
+     
+        const errorMessage = isError.ErrorCode == '400' ? <BagRequest /> : isError.ErrorCode == '500' ? <InternalServerError /> : null;
+    
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
