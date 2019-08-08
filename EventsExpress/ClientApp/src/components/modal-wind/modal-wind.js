@@ -14,7 +14,9 @@ import PropTypes from "prop-types";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
 import register from "../../registerServiceWorker";
-import  reset  from '../../containers/header-profile'
+import reset from '../../containers/header-profile'
+import { connect } from 'react-redux';
+import { TogleOpenWind } from '../../actions/modalWind';
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -33,9 +35,8 @@ const useStyles = makeStyles({
     maxWidth: 500
   }
 });
-export default function ModalWind(props) {
-    
-  const [open, setOpen] = React.useState(false); 
+ function ModalWind(props) {
+
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
     
@@ -43,11 +44,13 @@ export default function ModalWind(props) {
     setValue(newValue);
   }
   function handleClickOpen() {
-    setOpen(true);
+     
+   props.setStatus(true);
   }
 
   function handleClose() {
-      setOpen(false);
+     
+      props.setStatus(false);
     props.reset();
   }
   return (
@@ -56,7 +59,7 @@ export default function ModalWind(props) {
         Sign In/Up
       </Button>
           <Dialog
-              open={ open}
+              open={props.status.isOpen}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       
@@ -92,3 +95,15 @@ export default function ModalWind(props) {
     );
 
 }
+
+const mapStateToProps = (state) => ({
+    status: state.modal
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setStatus: (data) => dispatch(TogleOpenWind(data))
+          }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalWind)

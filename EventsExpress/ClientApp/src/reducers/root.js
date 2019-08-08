@@ -22,8 +22,9 @@ import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment'; 
 import * as Comments from './comment-list';
-
+import * as ModalWind from './ModalWind';
 const rootReducers = {
+    modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
     form: formReducer,

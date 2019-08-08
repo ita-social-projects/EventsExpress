@@ -23,7 +23,7 @@ export default class App extends Component {
             <Layout>
                 <Switch>
                       
-                    <Route path="/home/events" exact component={Home} />
+                    <Route path="/home/events"  component={Home} />
                         <Route
                          exact
                          path="/"

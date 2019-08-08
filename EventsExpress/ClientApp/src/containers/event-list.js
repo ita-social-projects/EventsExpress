@@ -18,9 +18,16 @@ class EventListWrapper extends Component{
         const { data, isPending, isError } = this.props;
         const { items } = this.props.data;
         //const hasData = !(isPending || isError);
-
-        const errorMessage = isError ? <BagRequest/> : null;
-
+      //  let errorM;
+        const errorMessage = isError ? <BagRequest /> : null;
+     //   switch (errorMessage)
+      // {
+          //   case "400": {
+           //      errorM = <BagRequest />
+            //     return errorM;
+           //  }
+          //   default: return errorM;
+     //   }
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        

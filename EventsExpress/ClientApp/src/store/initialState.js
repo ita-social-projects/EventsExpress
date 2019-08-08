@@ -1,5 +1,8 @@
 
 const initialState = {
+    modalWind:{
+        isOpen: false 
+    },
     user:{
         id: null,
         name: null,
