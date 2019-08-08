@@ -5,12 +5,22 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
+import AddEventWrapper from '../../containers/add-event';
+import EventListWrapper from '../../containers/event-list';
+import { AddComponent } from '../home/home';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './User-profile.css';
 
 
 export default class UsertemView extends Component {
 
-    getAge = (birthday) => {
+    getAge = birthday => {
         let today = new Date();
         let birthDate = new Date(birthday);
         var age = today.getFullYear() - birthDate.getFullYear();
@@ -21,96 +31,93 @@ export default class UsertemView extends Component {
         return age;
     }
 
-    renderCategories = (arr) => {
-        return arr.map((x) => (<span key={x.id}>#{x.name}</span>)
-        );
-    } 
+    
 
-    renderEvents = (arr) => {
-        return arr.map((x) => (<Event key={x.id} item={x} />)
-        );
-    }
-
+    renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
+    renderEvents = arr => arr.map(item => <Event key={item.id} item={item} />)
+        
     render() {
         const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
         const categories_list = this.renderCategories(categories);
-        console.log(this.props)
-
-        
-        
-        
+                
         return <>
+            {(id === this.props.current_user) && <AddComponent />}
             <div className="row box info">
-                {!(id === this.props.current_user) && 
+                
+                <div className="col-3">
+                    <h6><strong><p className="font-weight-bolder" >User Name:</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >Age:</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >Gender:</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >Email:</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
+                </div>
+                <div className="col-3">
+                    <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6>
+                    <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6>
+                </div>
+                {!(id === this.props.current_user) &&
                     <div className="col-3">
-                    <div className="d-flex align-items-center attitude">
-                        <Avatar
-                            alt="Тут аватар"
-                            src={userPhoto}
+                        <div className="d-flex align-items-center attitude">
+                            <Avatar
+                                alt="Тут аватар"
+                                src={userPhoto}
 
-                            className='bigAvatar'
-                        />
-                    </div>
+                                className='bigAvatar'
+                            />
+                        </div>
                         {attitude == '2' && <div className="row attitude">
-                        <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                        <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                    </div>}
+                            <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                            <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                        </div>}
                         {attitude == '1' && <div className="row attitude">
-                        <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                        <button className="btn btn-light">Dislike</button>
-                        <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                    </div>}
+                            <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                            <button className="btn btn-light">Dislike</button>
+                            <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                        </div>}
                         {attitude == '0' && <div className="row attitude">
-                        <button className="btn btn-light">Like</button>
-                        <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                        <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                    </div>}
+                            <button className="btn btn-light">Like</button>
+                            <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                            <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                        </div>}
                     </div>
                 }
-                
+
                 {(id === this.props.current_user) &&
                     <div className="col-2">
                     </div>
                 }
-                <div className="col-3">
-                    <h5><strong><p className="font-weight-bolder" >User Name:</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >Age:</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >Gender:</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >Email:</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >Interests:</p></strong></h5>
-                </div>
-                <div className="col-3">
-                    <h5><strong><p className="font-weight-bolder" >{name}</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >{email}</p></strong></h5>
-                    <h5><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h5>
-                </div>
-
             </div>
-            <div className="row events">
-                <div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-light-blue form-check-label active">
-                        <input class="form-check-input" type="radio" name="options" id="option1" autocomplete="off" onClick={this.props.onFuture} checked />
-    Preselected
-  </label>
-  <label class="btn btn-light-blue form-check-label">
-                        <input class="form-check-input" type="radio" name="options" id="option2" autocomplete="off" onClick={this.props.onVisited}/> Radio
-  </label>
-  <label class="btn btn-light-blue form-check-label">
-    <input class="form-check-input" type="radio" name="options" id="option3" autocomplete="off"/> Radio
-  </label>
-</div>
-                <button onClick={this.props.onFuture} className="btn btn-outline-info active">Future</button>
-                <button onClick={this.props.onPast} className="btn blue-gradient">Past</button>
-                <button onClick={this.props.onVisited} className="btn btn-outline-info">Visited</button>
-                <button onClick={this.props.onToGo} className="btn btn-outline-info">To Go</button>
-            </div>
-            <div className="row box ">
-                <div className="shadow p-3 mb-5 bg-white rounded">
-                    {(this.props.events) ? this.renderEvents(this.props.events) : null}
+            <div className="row">
+                <div className="col-2 check">
+                    <div class="funkyradio">
+                        <div class="funkyradio-primary">
+                            <input type="radio" name="radio" id="radio2" onChange={this.props.onFuture}/>
+                            <label for="radio2">Future events</label>
+                        </div>
+                        <div class="funkyradio-primary">
+                            <input type="radio" name="radio" id="radio3" onChange={this.props.onPast}/>
+                            <label for="radio3">Archive of events</label>
+                        </div>
+                        <div class="funkyradio-primary">
+                            <input type="radio" name="radio" id="radio4" onChange={this.props.onVisited}/>
+                            <label for="radio4">Visited events</label>
+                        </div>
+                        <div class="funkyradio-primary">
+                            <input type="radio" name="radio" id="radio5" onChange={this.props.onToGo}/>
+                            <label for="radio5">Events to go</label>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-9">
+                    <div className="shadow p-3 mb-5 bg-white rounded">
+                        {(this.props.events && this.props.events.length > 0) ? this.renderEvents(this.props.events) : <h6><strong><p className="font-weight-bolder" >No events yet!</p></strong></h6>}
+                    </div>
                 </div>
             </div>
         </>
     }
 }
+

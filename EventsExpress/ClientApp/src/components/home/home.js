@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { connect } from 'react-redux';
 
 
-function AddComponent(props) {
+export function AddComponent(props) {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
@@ -51,9 +51,6 @@ class Home extends Component{
         
     return(
         <div>
-            {this.props.id &&
-            <AddComponent/>
-            }
             <EventListWrapper /> 
           
         </div>
