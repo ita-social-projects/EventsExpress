@@ -115,7 +115,7 @@ export default class EventsExpressService {
     }
 
     setCategoryDelete = async (data) => {
-        const res = await this.setResource(`category/delete/${data.id}`);
+        const res = await this.setResource(`category/delete/${data}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -123,7 +123,6 @@ export default class EventsExpressService {
     }
 
     setCommentDelete = async (data) => {
-        console.log(data);
         const res = await this.setResource(`comment/delete/${data.id}`);
         if (!res.ok) {
             return { error: await res.text() };
@@ -134,7 +133,7 @@ export default class EventsExpressService {
     setCategory = async (data) => {
         const res = await this.setResource('category/edit', {
             Id: data.Id,
-            Name: data.category
+            Name: data.Name
         });
         if (!res.ok) {
             return { error: await res.text() };

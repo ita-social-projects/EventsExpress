@@ -31,7 +31,7 @@ const LeftSidebar = (props) =>{
                         {props.user.id &&
                             <>
                             <NavItem to={'/profile'} icon={'fa fa-user'} text={"Profile"} />
-                            <NavItem to={'/search/users'} icon={'fa fa-users'} text={"Seach Users"} />
+                            <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Seach Users"} />
                       </>
                             
                             }

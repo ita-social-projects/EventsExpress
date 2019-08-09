@@ -3,10 +3,16 @@ import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
 import UserInfo from '../components/user-info'
+import { UserBlock } from '../components/user-info/user-block'
 import UserRoleWrapper from '../containers/user-role'
-
+import IconButton from "@material-ui/core/IconButton";
 
 class UserInfoWpapper extends Component {
+    constructor(props) {
+        super(props);
+
+        this.isCurrentUser = props.user.id === props.currentUser 
+    }
 
     block = () => this.props.block(this.props.user.id)
 
@@ -14,35 +20,37 @@ class UserInfoWpapper extends Component {
 
 
     render() {
-        const { user, currentUser } = this.props;
+        const { user, currentUser, editedUser } = this.props;
         
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
-                <UserInfo user={user} />
+                <UserInfo key={user.id} user={user} />
 
-                <UserRoleWrapper key={user.id + user.role.id} user={user} currentUser={currentUser} />
+                <UserRoleWrapper 
+                    key={user.id + user.role.id} 
+                    user={user} 
+                    isCurrentUser={this.isCurrentUser} 
+                    isEdit={user.id === editedUser}
+                />
                 
-                <td className="align-middle">
-                    {(user.id !== currentUser.id)
-                        ? <div className="d-flex justify-content-center align-items-center">
-                            {(user.isBlocked == true)
-                                ? <Fab size="small" onClick={this.unblock} >
-                                    <i className="fas fa-lock" ></i>
-                                </Fab>
-                                : <Fab size="small" onClick={this.block} >
-                                    <i className="fas fa-unlock-alt" ></i>
-                                </Fab>}
-                        </div>
-                        : <div> </div>
-                    }
-                </td>
+                <UserBlock 
+                    user={user}
+                    isCurrentUser={this.isCurrentUser}
+                    block={this.block}
+                    unblock={this.unblock}
+                />
+
+
             </tr>
         )
     }
 }
 
+
+
 const mapStateToProps = (state) => ({
-    currentUser: state.user,
+    currentUser: state.user.id,
+    editedUser: state.users.editedUser,
     roles: state.roles.data
 });
 

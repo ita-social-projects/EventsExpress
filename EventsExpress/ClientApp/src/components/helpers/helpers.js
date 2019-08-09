@@ -11,6 +11,19 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+
+
+export const radioButton = ({ input, ...rest }) => (
+    <FormControl>
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+            <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+            <FormControlLabel value="all" control={<Radio />} label="All"  />
+        </RadioGroup>
+    </FormControl>
+)
 
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -139,22 +152,23 @@ export const renderSelectField = ({
   children,
   ...custom
 }) => (
-    <FormControl error={touched && error}>
-      <InputLabel htmlFor="age-native-simple">Role</InputLabel>
-      <Select
-        native
-        {...input}
-        {...custom}
-        inputProps={{
-          name: 'Role',
-          id: 'age-native-simple'
-        }}
-      >
-        {children}
-      </Select>
-      {renderFromHelper({ touched, error })}
-    </FormControl>
-  )
+        <FormControl error={touched && error}>
+            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+            <Select
+                fullWidth
+                native
+                {...input}
+                {...custom}
+                inputProps={{
+                  name: { label },
+                  id: 'age-native-simple'
+                }}
+            >
+                {children}
+            </Select>
+            {renderFromHelper({ touched, error })}
+        </FormControl>
+    )
 
 const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {

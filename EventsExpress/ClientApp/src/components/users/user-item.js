@@ -1,10 +1,13 @@
 ﻿import React, { Component } from 'react';
+import UserInfoCard from '../user-info/User-info-card'
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+
 const limit = 2;
 const pageCount = 3;
 
-export default class Paginator extends Component {
+
+export default class UserItemList extends Component {
     constructor() {
         super();
         this.state = {
@@ -12,18 +15,24 @@ export default class Paginator extends Component {
         };
     }
 
-    handlePageChange = (page, e) => {
-        console.log("chanhe page" + page);
+    handlePageChange = (page, e) => { 
         this.props.callback(window.location.search.replace(/(page=)\w/gm, 'page=' + page));
         this.setState({
             currentPage: page
-           
         });
     };
+
+
+    renderUsers = (arr) => {
+        return arr.map(user =>
+            <UserInfoCard key={user.id} user={user} />);
+    }
+
     render() {
         console.log(window.location);
         const { page, totalPages } = this.props;
         return <>
+            {this.renderUsers(this.props.users)}
 
             <ul class="pagination justify-content-center">
                 <Pagination
@@ -44,15 +53,16 @@ export default class Paginator extends Component {
                     }) => (
 
                             <div>
-                                <Link class="btn btn-primary"
-                                    to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
-                                    {...getPageItemProps({
-                                        pageValue: 1,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    first
-                              </Link>
+                                {hasPreviousPage && (
+                                    <Link class="btn btn-primary"
+                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
+                                        {...getPageItemProps({
+                                            pageValue: 1,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        first
+                              </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link class="btn btn-primary"
@@ -100,16 +110,17 @@ export default class Paginator extends Component {
                                         {">"}
                                     </Link>
                                 )}
-                                <Link class="btn btn-primary"
-                                    to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
+                                {hasNextPage && (
+                                    <Link class="btn btn-primary"
+                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
 
-                                    {...getPageItemProps({
-                                        pageValue: this.props.totalPages,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    last
-                                </Link>
+                                        {...getPageItemProps({
+                                            pageValue: this.props.totalPages,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        last
+                                </Link>)}
                             </div>
                         )}
                 </Pagination>

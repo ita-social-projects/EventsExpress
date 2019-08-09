@@ -68,6 +68,7 @@ const initialState = {
     categories: {
         isPending: false,
         isError: false,
+        editedCategory: null,
         data: []
     },
     countries: {
@@ -83,10 +84,10 @@ const initialState = {
     users: {
         isPending: false,
         isError: false,
+        editedUser: null,
         data: {
             items: [],
             pageViewModel: {}
-
         }
     },
     add_comment: {
