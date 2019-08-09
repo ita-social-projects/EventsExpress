@@ -86,10 +86,9 @@ class EventForm extends Component {
           <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
           <div className="meta-wrap m-2">
             <p className="meta">
-              <span>From
-                                         <Field name='dateFrom' component={renderDatePicker} /></span>
+              <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
               {values.dateFrom != null &&
-                <span>To<Field name='dateTo' defaultValue={new Date(values.dateFrom)} component={renderDatePicker} /></span>
+                <span>To<Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
               }
             </p>
           </div>

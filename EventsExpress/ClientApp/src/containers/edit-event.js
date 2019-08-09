@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {getFormValues, reset, formValues} from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-
+import { resetEvent } from '../actions/event-item-view';
 import get_categories from '../actions/category-list';
 
 class EditEventWrapper extends Component{
@@ -20,6 +20,10 @@ class EditEventWrapper extends Component{
         if(!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess){
             this.props.reset();
         }
+    }
+
+    componentWillUnmount(){
+        this.props.reset();
     }
 
     onSubmit = (values) => {
@@ -55,6 +59,7 @@ const mapDispatchToProps = (dispatch) => {
         get_countries: () => dispatch(get_countries()),
         get_cities: (country) => dispatch(get_cities(country)),
         get_categories: () => dispatch(get_categories()),
+        resetEvent: () => dispatch(resetEvent()),
         reset: () => {
             dispatch(reset('event-form'));
             dispatch(setEventPending(true));

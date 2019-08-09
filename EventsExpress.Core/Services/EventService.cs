@@ -135,6 +135,16 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(EventDTO e)
         {
+            if(e.DateFrom == new DateTime())
+            {
+                e.DateFrom = DateTime.Today;
+            }
+
+            if (e.DateTo == new DateTime())
+            {
+                e.DateTo = DateTime.Today;
+            }
+
             Event evnt = _mapper.Map<EventDTO, Event>(e);
             evnt.Photo = await _photoService.AddPhoto(e.Photo);
 
