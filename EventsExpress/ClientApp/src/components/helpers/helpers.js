@@ -22,11 +22,11 @@ export const validate = values => {
     'email',
     'password',
     'RepeatPassword',
-    'image',
     'title',
     'description',
     'categories',
-    'country'
+    'country', 
+    'city'
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
@@ -54,7 +54,6 @@ export const validate = values => {
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
   console.log(value, defaultValue);
   value = value || defaultValue || new Date();
-  defaultValue = defaultValue;
   minValue = minValue || new Date();
   return <DatePicker
     onChange={onChange}

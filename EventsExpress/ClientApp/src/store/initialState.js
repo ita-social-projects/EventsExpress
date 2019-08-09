@@ -112,7 +112,9 @@ const initialState = {
         isPending: true,
         isError: false,
         data: {
-            dateFrom: null
+            dateFrom: null,
+            dateTo: null,
+            photoUrl: null
         }
     }
 };

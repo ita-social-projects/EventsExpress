@@ -214,7 +214,7 @@ namespace EventsExpress.Core.Services
         {
 
 
-            IQueryable<Event> events = Db.EventRepository.Get(includeProperties: "Photo,Owner,City.Country,Categories.Category");
+            IQueryable<Event> events = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             if (model.KeyWord != null)
             {

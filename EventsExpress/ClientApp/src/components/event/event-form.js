@@ -9,7 +9,7 @@ import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
 import { renderMultiselect, renderSelectLocationField } from '../helpers/helpers';
-import {connect } from 'react-redux';
+import { connect } from 'react-redux';
 
 momentLocaliser(moment)
 const enhanceWithPreview = files =>
@@ -42,7 +42,26 @@ class EventForm extends Component {
     this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
   };
 
-  resetForm = () => this.setState({ imagefile: [] }, () => this.props.reset());
+  componentDidMount = () => {
+
+    let values = this.props.form_values || this.props.initialValues;
+
+    if (this.props.isCreated) {
+      const imagefile = {
+        file: '',
+        name: '',
+        preview: values.photoUrl,
+        size: ''
+      };
+      this.setState({ imagefile: [imagefile] });
+    }
+  }
+
+  componentWillUnmount() {
+    this.resetForm();
+  }
+
+  resetForm = () => this.setState({ imagefile: [] });
 
   renderLocations = (arr) => {
     return arr.map((item) => {
@@ -56,28 +75,34 @@ class EventForm extends Component {
     const { countries, form_values, all_categories, data } = this.props;
     let values = form_values || this.props.initialValues;
     let countries_list = this.renderLocations(countries);
+    if(this.props.Event.isEventSuccess){
+    this.resetForm();
+    }
 
     return (
       <form onSubmit={this.props.handleSubmit} encType="multipart/form-data">
         <div className="text text-2 pl-md-4">
           <Field
+          ref={(x) => {this.image = x; }}
+            id="image-field"
             name="image"
             component={DropZoneField}
             type="file"
             imagefile={this.state.imagefile}
             handleOnDrop={this.handleOnDrop}
-            // validate={[imageIsRequired]}
+
+            validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
           />
           <button
             type="button"
             className="uk-button uk-button-default uk-button-large clear"
-            disabled={this.props.pristine || this.props.submitting}
+            disabled={this.props.submitting}
             onClick={this.resetForm}
             style={{ float: "right" }}
           >
             Clear
                           </button>
-                          
+
           <div className="mt-2">
             <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
           </div>
@@ -91,31 +116,31 @@ class EventForm extends Component {
           </div>
 
           <div className="mt-2">
-          <Field name='description' component={renderTextField} type="input" label="Description" />
+            <Field name='description' component={renderTextField} type="input" label="Description" />
           </div>
           <div className="mt-2">
-          <Field
-            name="categories"
-            component={renderMultiselect}
-            data={all_categories.data}
-            valueField={"id"}
-            textField={"name"}
-            className="form-control mt-2"
-            placeholder='#hashtags'
-          />
+            <Field
+              name="categories"
+              component={renderMultiselect}
+              data={all_categories.data}
+              valueField={"id"}
+              textField={"name"}
+              className="form-control mt-2"
+              placeholder='#hashtags'
+            />
           </div>
           <div className="mt-2">
-            <Field onChange={this.props.onChangeCountry} 
-            name='countryId' 
-            data={countries} 
-            text='Country' 
-            component={renderSelectLocationField} />
+            <Field onChange={this.props.onChangeCountry}
+              name='countryId'
+              data={countries}
+              text='Country'
+              component={renderSelectLocationField} />
           </div>
           {values.countryId != null &&
-          <div className="mt-2">
-            <Field name='cityId' data={this.props.cities} text='City' component={renderSelectLocationField} />
-          </div>
-          } 
+            <div className="mt-2">
+              <Field name='cityId' data={this.props.cities} text='City' component={renderSelectLocationField} />
+            </div>
+          }
         </div>
 
 
@@ -131,17 +156,16 @@ const mapStateToProps = (state) => ({
   initialValues: state.event.data
 });
 
-const mapDispatchToProps = (dispatch) => { 
- return {
+const mapDispatchToProps = (dispatch) => {
+  return {
 
- } 
+  }
 };
 
 const asd = reduxForm({
   form: 'event-form',
   validate: validate,
-  enableReinitialize: true,
-  // initialValues: {}
+  enableReinitialize: true
 })(EventForm);
 const qwe = connect(mapStateToProps, mapDispatchToProps)(asd);
 

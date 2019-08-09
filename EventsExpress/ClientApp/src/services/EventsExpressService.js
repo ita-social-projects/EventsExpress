@@ -12,7 +12,9 @@ export default class EventsExpressService {
 
             file.append('Id', data.id);
         }
+        if(data.image != null){
         file.append('Photo', data.image.file);
+        }
         file.append('Title', data.title);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);

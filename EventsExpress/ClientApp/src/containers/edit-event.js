@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import EventForm from '../components/event/event-form';
-import add_event from '../actions/add-event';
+import { edit_event } from '../actions/add-event';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
 import {getFormValues, reset, formValues} from 'redux-form';
@@ -40,7 +40,14 @@ class EditEventWrapper extends Component{
 
     render(){   
         return <>
-                <EventForm data={this.props.initialValues} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
+                <EventForm data={this.props.initialValues} 
+                all_categories={this.props.all_categories} 
+                cities={this.props.cities.data} 
+                onChangeCountry={this.onChangeCountry} 
+                onSubmit={this.onSubmit} 
+                countries={this.props.countries.data} 
+                form_values={this.props.form_values}
+                isCreated={true} />
                </>
     }
 }
@@ -55,7 +62,7 @@ const mapStateToProps = (state) => ({user_id: state.user.id,
 
 const mapDispatchToProps = (dispatch) => { 
     return {
-        add_event: (data) => dispatch(add_event(data)),
+        add_event: (data) => dispatch(edit_event(data)),
         get_countries: () => dispatch(get_countries()),
         get_cities: (country) => dispatch(get_cities(country)),
         get_categories: () => dispatch(get_categories()),

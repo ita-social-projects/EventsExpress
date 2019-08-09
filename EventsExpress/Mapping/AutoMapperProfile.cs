@@ -21,9 +21,23 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
                 .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
+            CreateMap<EventDTO, EventPreviewDto>()
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count()))
+                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
+                .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
+                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
+                .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto()
+                {
+                    Id = src.OwnerId,
+                    Birthday = src.Owner.Birthday,
+                    PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
+                    Username = src.Owner.Name
+                }));
             CreateMap<EventDTO, EventDto>()
 
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoBytes.ToRenderablePictureString()))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.PhotoBytes.Img.ToRenderablePictureString()))
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x => new UserPreviewDto {
                     Id = x.User.Id,
                     Username = x.User.Name,
@@ -91,7 +105,7 @@ namespace EventsExpress.Mapping
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
-                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo.Thumb));
+                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo));
 
             CreateMap<UserDTO, UserPreviewDto>()
                 .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))

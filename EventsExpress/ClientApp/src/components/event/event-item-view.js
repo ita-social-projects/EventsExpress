@@ -4,12 +4,17 @@ import 'moment-timezone';
 import ReactRoterDOM from 'react-router-dom';
 import Event from './event-item';
 import '../layout/colorlib.css';
+import './event-item-view.css';
 
+import Fab from '@material-ui/core/Fab';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
 import { AddComponent } from '../home/home' 
 export default class EventItemView extends Component {
+
+    state = { edit: false }
+
 
     renderCategories = (arr) => {
         return arr.map((x) => (<span key={x.id}>#{x.name}</span>)
@@ -40,6 +45,10 @@ export default class EventItemView extends Component {
         return age;
     }
 
+    onEdit = () => {
+        this.setState({edit: true});
+    }
+
     render() {
         const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors } = this.props.data;
 
@@ -49,7 +58,7 @@ export default class EventItemView extends Component {
 
         const categories_list = this.renderCategories(categories);
 
-
+        let edit = false;
 
         let i_join = visitors.find(
             x => x.id == current_user.id
@@ -57,7 +66,7 @@ export default class EventItemView extends Component {
 
         let flag = i_join == null;
         return <>
-            <div className="row box">
+            {/* <div className="row box">
                 <div className="col-6 overflow-auto shadow p-3 mb-5 bg-white rounded">
                     <img src={photoUrl} className="img-thumbnail" />
                     <p>{categories_list}</p>
@@ -108,7 +117,55 @@ export default class EventItemView extends Component {
                         <Comment match={this.props.match}/>
                     </div>
                 </div>
+            </div> */}
+
+        <div className="container-fluid mt-1">
+            <div className="row">
+            <div className="col-9">
+                <div className="col-12">
+                    <img src={photoUrl} alt="Norway" style={{width: '100%'}} />
+                    <div class="text-block"> 
+                        <span className="title">{title}</span><br/>
+                        <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> - <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></span><br/>
+                        <span>{country} {city}</span><br/>
+                        {categories_list}
+                    </div>
+                    <div className="button-block">
+                        {current_user.id != user.id && current_user.id != null &&
+                            <>
+                                {flag == true &&
+                                    <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
+                                }
+                                {!flag &&
+                                    <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
+                                }
+                            </>
+                        }
+                        {current_user.id === user.id && !this.state.edit &&
+                                    <button onClick={this.onEdit} className="btn btn-join">Edit</button>
+                        }
+                    </div>
+                </div>
+                {this.state.edit &&
+                     <AddComponent title={'Edit Event'} />
+                    }
+                    {!this.state.edit && <>
+                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+
+                        {description}
+                    </div>
+                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                            <Comment match={this.props.match}/>
+                    </div>
+                    </>
+                    }
             </div>
+            <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
+                {this.renderUsers(visitors)}
+            </div>
+
+            </div>
+        </div>
         </>
     }
 }

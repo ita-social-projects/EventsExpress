@@ -61,28 +61,20 @@ namespace EventsExpress.Controllers
 
             return Ok(res);
         }
-
-        //[AllowAnonymous]
-        //[HttpGet("[action]")]
-        //public IActionResult All()
-        //{
-        //    var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events());
-
-        //    return Ok(res);
-        //}
+               
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel model)
         {
-            model.PageSize = 4;
+            model.PageSize = 6;
 
             int Count;
 
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(model, out Count));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(model, out Count));
                     
 
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
+            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
             {
                 PageViewModel = pageViewModel,
                 items = res

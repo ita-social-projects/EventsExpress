@@ -43,8 +43,10 @@ export default class EventList extends Component{
       const items = this.renderItems(data_list);
       const { page, totalPages } = this.props;
       return <>
+        <div className="row">
           {items}
-
+          </div>
+          <br/>
           <ul class="pagination justify-content-center">
               <Pagination
                   total={totalPages * limit}

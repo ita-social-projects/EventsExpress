@@ -21,6 +21,10 @@ class AddEventWrapper extends Component{
         }
     }
 
+    componentWillUnmount = () =>{
+        this.props.reset();
+    }
+
     onSubmit = (values) => {
         console.log(values);
         this.props.add_event({ ...values, user_id: this.props.user_id });
@@ -34,7 +38,15 @@ class AddEventWrapper extends Component{
 
     render(){   
         return <>
-                <EventForm data={{}} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
+                <EventForm data={{}} 
+                all_categories={this.props.all_categories} 
+                cities={this.props.cities.data} 
+                onChangeCountry={this.onChangeCountry} 
+                onSubmit={this.onSubmit} 
+                countries={this.props.countries.data} 
+                form_values={this.props.form_values}
+                Event={this.props.add_event_status}
+                isCreated={false} />
                </>
     }
 }
