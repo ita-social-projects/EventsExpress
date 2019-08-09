@@ -28,6 +28,16 @@ export default class EventsExpressService{
         return res;
     }
 
+    auth = async (data) => {
+        console.log('auth', data);
+        const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
+
     setUserFromEvent = async (data) => {
         const res = await this.setResource('event/DeleteUserFromEvent?userId='+data.userId+'&eventId='+data.eventId);
         if(!res.ok){
@@ -54,6 +64,7 @@ export default class EventsExpressService{
         return await res.text();
     }
 
+    
 
     setLogin = async (data) => {
         const res = await this.setResource('Authentication/login', data);

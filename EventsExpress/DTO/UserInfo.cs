@@ -17,7 +17,7 @@ namespace EventsExpress.DTO
         public string Role { get; set; }
         public string PhotoUrl { get; set; }
         public string Token { get; set; }
-
+        public bool AfterEmailConfirmation { get; set; } = false;
         public IEnumerable<CategoryDto> Categories { get; set; }
 
     }

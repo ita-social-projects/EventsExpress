@@ -9,6 +9,7 @@ import EventListWrapper from '../../containers/event-list';
 import EventItemViewWrapper from '../../containers/event-item-view';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 import Layout from '../layout';
+import Authentication from '../Authentication/authentication';
 
 
 export default class App extends Component {
@@ -22,8 +23,7 @@ export default class App extends Component {
                         <Route path="/event/:id" component={EventItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users/" component={UsersWrapper} />
-                <Route path="/admin/events/" component={EventListWrapper} />
-
+                        <Route path="/authentication/:id/:token" component={Authentication} />
                 </Layout>
         );
     }

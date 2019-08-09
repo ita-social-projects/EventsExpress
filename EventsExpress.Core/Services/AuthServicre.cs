@@ -54,7 +54,16 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, token, "");
         }
 
-        
+        public OperationResult FirstAuth(UserDTO userDto)
+        {
+            if (userDto==null)
+            {
+                return new OperationResult(false, $"User with email: {userDto.Email} not found", "email");
+            }
+            var token = this.GenerateJWT(userDto);
+
+            return new OperationResult(true,token,"");
+        }
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {

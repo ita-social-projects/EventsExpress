@@ -22,12 +22,17 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private IUserService _userService;
+        private IAuthServicre _authServicre;
         private IMapper  _mapper;
 
-        public AuthenticationController(IUserService userSrv, IMapper mapper)
+        public AuthenticationController(IUserService userSrv,
+            IMapper mapper,
+            IAuthServicre authServicre
+            )
         {
             _userService = userSrv;
             _mapper = mapper;
+            _authServicre = authServicre;
         }
 
         [AllowAnonymous]
@@ -122,7 +127,7 @@ namespace EventsExpress.Controllers
 
 
         [AllowAnonymous]
-        [HttpGet("[action]/{userid}/{token}")]
+        [HttpPost("[action]/{userid}/{token}")]
         public async Task<IActionResult> Verify(string userid, string token)
         {
             var cache = new CacheDTO { Token = token };
@@ -138,7 +143,20 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return Ok();
+            if (result.Successed)
+            {
+                var user = _userService.GetById( cache.UserId);
+
+                var responce = _mapper.Map<UserDTO, UserInfo>(user);
+                responce.Token = _authServicre.FirstAuth(user).Message;
+                responce.AfterEmailConfirmation = true;
+
+                return Ok(responce);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpPost("[action]")]

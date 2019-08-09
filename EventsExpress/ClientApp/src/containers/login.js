@@ -1,22 +1,26 @@
 ﻿import { connect } from 'react-redux';
-import React, {Component} from 'react';
+import React, { Component, Fragment } from 'react';
 import Login  from '../components/login';
 import login from '../actions/login';
 
+import { useAlert } from "react-alert";
 
 class LoginWrapper extends Component {
   submit = values => {
     this.props.login(values.email, values.password);
-  };
+    };
+   
   render() {
-
-    let { isLoginPending, isLoginSuccess, loginError } = this.props;
+      alert = useAlert;
+      let { isLoginPending, isLoginSuccess, loginError, isFirstLogin } = this.props;
     
     return <div>
               <Login onSubmit={this.submit} />
               {loginError && 
               <p className="text-danger text-center">{loginError}</p>
               }
+       
+        }
            </div>
     ;
   }

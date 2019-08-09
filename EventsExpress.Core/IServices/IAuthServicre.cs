@@ -12,7 +12,7 @@ namespace EventsExpress.Core.IServices
     public interface IAuthServicre
     {
         OperationResult Authenticate(string email, string password);
-        
+        OperationResult FirstAuth(UserDTO userDto);
         UserDTO GetCurrentUser(ClaimsPrincipal userClaims);
         bool CheckPassword(string currentPassword, string oldPassword);
     }

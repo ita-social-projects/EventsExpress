@@ -105,6 +105,12 @@ const initialState = {
         isPending: false,
         isError: false,
         isSucces:null,
+    },
+    authenticate:{
+        isPending:false,
+        isSucces:false,
+        isError:null,
+        data:[]
     }
 
 

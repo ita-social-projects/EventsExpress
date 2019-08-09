@@ -24,6 +24,7 @@ import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment'; 
 import * as Comments from './comment-list';
 import * as RecoverPassword from './editReducers/recoverPasswordReducer'
+import * as Auth from './authenticationReducer';
 
 const rootReducers = {
     user: User.reducer,
@@ -52,8 +53,8 @@ const rootReducers = {
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     delete_comment: DeleteComment.reducer,
-    recoverPassword: RecoverPassword.reducer
-    
+    recoverPassword: RecoverPassword.reducer,
+    authenticate: Auth.reducer
 };
 
 

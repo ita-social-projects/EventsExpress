@@ -8,11 +8,15 @@ import { editGender } from '../actions/EditProfile/EditGender';
 import { editUsername } from '../actions/EditProfile/editUsername';
 import { changeAvatar } from '../actions/EditProfile/change-avatar';
 
+import { authenticate } from '../actions/authentication';
 
 export const reducer = (state = initialState.user, action) => {
     //state = state || initialState.user;
     switch (action.type) {
         case SET_USER:
+            return action.payload;
+
+        case authenticate.SET_AUTHENTICATE:
             return action.payload;
 
         case SET_LOGOUT:

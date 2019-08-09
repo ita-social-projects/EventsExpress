@@ -156,8 +156,11 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = Db.UserRepository.Get(id);
-            return _mapper.Map<UserDTO>(user);
+            var user = Db.UserRepository.Filter(
+                            filter: o => o.Id == id,
+                            includeProperties: "Role,Categories.Category,Photo"
+                            ).AsNoTracking().FirstOrDefault();
+            return _mapper.Map<User, UserDTO>(user);
         }
 
         public UserDTO GetByEmail(string email)

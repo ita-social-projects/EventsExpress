@@ -9,19 +9,24 @@ export const reducer = (
     action) => {
     switch (action.type) {
         case changePassword.PENDING:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 isChangePasswordPending: action.isChangePasswordPending
-            });
+            };
 
         case changePassword.SUCCESS:
-            return Object.assign({}, state, {
-                isChangePasswordSuccess: action.isChangePasswordSuccess
-            });
+            return {
+                ...state,
+                isChangePasswordSuccess: action.isChangePasswordSuccess,
+                ChangePasswordError: null
+            };
 
         case changePassword.ERROR:
-            return Object.assign({}, state, {
-                ChangePasswordError: action.ChangePasswordError
-            });
+            return {
+                ...state, 
+                ChangePasswordError: action.ChangePasswordError,
+                isChangePasswordSuccess:false
+            };
 
         default:
             return state;

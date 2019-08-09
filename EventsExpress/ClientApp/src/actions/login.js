@@ -1,10 +1,12 @@
 import EventsExpressService from '../services/EventsExpressService';
+import { func } from 'prop-types';
 
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
 export const SET_LOGIN_ERROR = "SET_LOGIN_ERROR";
 export const SET_USER = "SET_USER";
+
 
 
 const api_serv = new EventsExpressService();
@@ -18,9 +20,10 @@ export default function login(email, password) {
     res.then(response => {
       if(response.error == null){
           dispatch(setUser(response));
-          
           dispatch(setLoginSuccess(true));
+
           
+
           localStorage.setItem('token', response.token);
         }else{
           dispatch(setLoginError(response.error));

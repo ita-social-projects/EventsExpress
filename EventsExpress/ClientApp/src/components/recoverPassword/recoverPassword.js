@@ -20,8 +20,8 @@ class RecoverPassword extends React.Component {
         return (
             <form onSubmit={handleSubmit}>
                 <DialogContentText>
-                    If you forgot your password please enter <br/>your email address here. We will send updates
-                   <br/> occasionally.
+                    If you forgot your password please enter your  <br /> email address here. We will send you new<br/> password.
+                    
                   </DialogContentText>
                 <div>
                     <Field
