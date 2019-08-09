@@ -48,7 +48,7 @@ function updateBirthday(data) {
         };
     }
 
-    function setEditBirthdayError(data) {
+export    function setEditBirthdayError(data) {
         return {
             type: editBirthday.ERROR,
             payload: data

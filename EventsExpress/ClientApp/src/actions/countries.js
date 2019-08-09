@@ -34,7 +34,7 @@ function setCountryPending(data){
     } 
 }  
 
-function setCountryError(data){
+export function setCountryError(data){
     return {
         type: SET_COUNTRY_ERROR,
         payload: data

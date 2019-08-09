@@ -89,7 +89,7 @@ function getEvent(data) {
   }
 }
 
-function getEventError(data) {
+export function getEventError(data) {
   return {
     type: GET_EVENT_ERROR,
     payload: data

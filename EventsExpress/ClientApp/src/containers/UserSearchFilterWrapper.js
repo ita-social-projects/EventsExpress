@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserSearchFilter from '../components/users/UserSearchFilter';
-import get_users from '../actions/users';
+import { get_SearchUsers } from '../actions/users';
 import history from '../history';
 class UserSearchFilterWrapper extends Component {
 
@@ -31,7 +31,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        search: (values) => dispatch(get_users(values))
+        search: (values) => dispatch(get_SearchUsers(values))
     }
 };
 

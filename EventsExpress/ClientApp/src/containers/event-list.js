@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import get_events from '../actions/event-list';
-import BagRequest from '../components/Route guard/400'
+import BadRequest from '../components/Route guard/400'
 import InternalServerError from '../components/Route guard/500'
+import Unauthorized from '../components/Route guard/401'
+import Forbidden from '../components/Route guard/403'
 
 class EventListWrapper extends Component{
 
@@ -18,11 +20,10 @@ class EventListWrapper extends Component{
 
         const { data, isPending, isError } = this.props;
         const { items } = this.props.data;
-     
-        const errorMessage = isError.ErrorCode == '400' ? <BagRequest /> : isError.ErrorCode == '500' ? <InternalServerError /> : null;
-    
+        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <InternalServerError /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
+
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !errorMessage ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
         return <>
             {errorMessage}

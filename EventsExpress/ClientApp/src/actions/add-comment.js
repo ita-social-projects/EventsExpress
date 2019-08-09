@@ -18,7 +18,7 @@ export default function add_comment(data) {
                 dispatch(setCommentSuccess(true));
                 dispatch(get_comments(data.eventId,1));
             } else {
-                dispatch(setCommentError(response.error));
+                dispatch(set2CommentError(response.error));
             }
         });
     }
@@ -39,7 +39,7 @@ export function setCommentPending(data) {
     };
 }
 
-export function setCommentError(data) {
+export function set2CommentError(data) {
     return {
         type: SET_COMMENT_ERROR,
         payload: data

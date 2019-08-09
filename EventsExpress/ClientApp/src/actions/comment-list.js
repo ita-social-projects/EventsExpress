@@ -20,7 +20,7 @@ export default function get_comments(data, page) {
                 dispatch(getComments(response));
 
             } else {
-                dispatch(setCommentError(response.error));
+                dispatch(set1CommentError(response.error));
             }
         });
     }
@@ -40,7 +40,7 @@ function getComments(data) {
     }
 }
 
-function setCommentError(data) {
+export function set1CommentError(data) {
     return {
         type: SET_COMMENTS_ERROR,
         payload: data

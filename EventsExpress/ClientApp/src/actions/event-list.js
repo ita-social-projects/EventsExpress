@@ -40,7 +40,7 @@ function getEvents(data){
       }
   }
 
-function setEventError(data ){
+export function setEventError(data ){
     return{
         type: SET_EVENTS_ERROR,
         payload: data

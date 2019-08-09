@@ -50,7 +50,7 @@ function setEditUsernameSuccess(data) {
     };
 }
 
-function setEditUsernameError(data) {
+export function setEditUsernameError(data) {
     return {
         type: editUsername.ERROR,
         payload: data

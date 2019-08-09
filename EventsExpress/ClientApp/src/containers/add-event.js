@@ -9,6 +9,10 @@ import { setEventError, setEventPending, setEventSuccess } from '../actions/add-
 
 import get_categories from '../actions/category-list';
 
+
+
+
+
 class AddEventWrapper extends Component{
     
     componentDidMount = () =>{
@@ -32,8 +36,10 @@ class AddEventWrapper extends Component{
         this.props.get_cities(e.target.value);
     }
 
-    render(){   
+    render() {
+      
         return <>
+          
                 <EventForm data={{}} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
                </>
     }
