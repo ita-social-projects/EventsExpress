@@ -32,10 +32,10 @@ export default class App extends Component {
                              <Redirect to="/home/events?page=1" />
                          )}
                          /> 
+                    
                         <Route path="/profile/" component={Profile} />
-                     
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
-                <Route path="/user/:id" component={UserItemViewWrapper} />
+                        <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
                         <Route path="/admin/events" component={Home} />

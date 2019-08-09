@@ -5,16 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
-import AddEventWrapper from '../../containers/add-event';
-import EventListWrapper from '../../containers/event-list';
 import { AddComponent } from '../home/home';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './User-profile.css';
 
 

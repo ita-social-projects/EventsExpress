@@ -79,7 +79,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository.Filter(filter: x => x.Id == id, includeProperties: "Photo,Categories.Category,Events").FirstOrDefault());
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events").Where(x => x.Id == id).FirstOrDefault());
             return user;
         }
 
@@ -252,7 +252,7 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-            Relationship current_attitude = Db.RelationshipRepository.Filter(filter: x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault();
+            Relationship current_attitude = Db.RelationshipRepository.Get().Where(x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault();
 
             if (current_attitude == null)
             {
@@ -276,7 +276,7 @@ namespace EventsExpress.Core.Services
 
         public AttitudeDTO GetAttitude(AttitudeDTO attitude)
         {            
-            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Filter(filter: x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault());
+            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get().Where(x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault());
 
             return rel;
         }
@@ -284,7 +284,7 @@ namespace EventsExpress.Core.Services
         public ProfileDTO GetProfileById(Guid id, Guid FromId)
         {
             var user = _mapper.Map<UserDTO, ProfileDTO>(this.GetById(id));
-            Relationship rel = Db.RelationshipRepository.Filter(filter: x => x.UserFromId == FromId).Where(y => y.UserToId == id).FirstOrDefault();
+            Relationship rel = Db.RelationshipRepository.Get().Where(x => x.UserFromId == FromId).Where(y => y.UserToId == id).FirstOrDefault();
             if (rel != null)
                 user.Attitude = (byte)rel.Attitude;
             else user.Attitude = 2;

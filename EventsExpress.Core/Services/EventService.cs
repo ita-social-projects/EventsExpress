@@ -264,7 +264,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
         {  
-            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").ToList();
+            var evv = Db.EventRepository.Get( includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
 
         }
@@ -288,27 +288,27 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").ToList();
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).ToList();
             var evven = evv.Where(x => x.DateTo >= DateTime.UtcNow).ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evven);
         }
 
         public IEnumerable<EventDTO> PastEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Filter(filter: e => e.OwnerId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").ToList();
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).ToList();
             var evven = evv.Where(x => x.DateTo < DateTime.UtcNow).ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evven);
         }
 
         public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Filter(filter: e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(x => x.DateTo >= DateTime.UtcNow).ToList();
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId).Where(x => x.DateTo >= DateTime.UtcNow).ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
         }
 
         public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Filter(filter: e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId, includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(x => x.DateTo < DateTime.UtcNow).ToList();
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId).Where(x => x.DateTo < DateTime.UtcNow).ToList();
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
         }
     }

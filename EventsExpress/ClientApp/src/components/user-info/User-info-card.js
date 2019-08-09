@@ -5,7 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import genders from '../../constants/GenderConstants'
+import genders from '../../constants/GenderConstants';
+import { Link } from 'react-router-dom';
 import './user-info.css'
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,6 +48,7 @@ export default class UserInfoCard extends Component {
     render() {
         const { user } = this.props;
         const classes = useStyles;
+        console.log(user);
         return (
             <>
                 <br />
@@ -69,7 +71,7 @@ export default class UserInfoCard extends Component {
                                 <Grid item xs container direction="column" spacing={2}>
                                     <Grid item xs>
                                                 <Typography gutterBottom variant="subtitle1">
-                                                    {(user.username) ? user.username : user.email.substring(0, user.email.search("@"))}
+                                                    {(user.username) ? <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.username}</h4></Link></p> : <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.email.substring(0, user.email.search("@"))}</h4></Link></p>}
                 </Typography>
                                                 <Typography variant="body2" gutterBottom>
                                                     {genders[user.gender]}

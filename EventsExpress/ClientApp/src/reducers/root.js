@@ -52,7 +52,7 @@ const rootReducers = {
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,
-    change_avatar: ChangeAvatar.reducer 
+    change_avatar: ChangeAvatar.reducer, 
     delete_comment: DeleteComment.reducer,
     profile: Profile.reducer,
     events_for_profile: EventsForProfile.reducer
