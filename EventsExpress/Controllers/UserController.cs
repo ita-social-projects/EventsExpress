@@ -34,7 +34,7 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Get([FromQuery]UsersFilterViewModel model)
         {
 

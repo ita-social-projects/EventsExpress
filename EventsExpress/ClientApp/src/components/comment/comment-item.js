@@ -26,25 +26,36 @@ export default class commentItem extends Component {
 
     render() {
         const { text, userPhoto, date, userName, userId } = this.props.item;
+        const { user } = this.props;
+        console.log(user);
+        console.log(userId);
+        console.log(user === userId);
         return (
             <div>
-                <div class="comment-container">
-                    <div class="row">
-                        <div class="photo-container">
+                <div>
+                    <div className="row">
+                        {!(user === userId) && <div class="photo-container">
                             <Avatar
                                 alt="Тут аватар"
                                 src={userPhoto}
                             />
-                            <h1 class="text-secondary comment-text"> {this.getTime(date)}</h1>
-                        </div>
-                        <div class="">
+                            <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
+                        </div>}
+                        <div className="mybutton">
                             <p>
-                                <Link to={'/user/' + userId} className="btn-custom"><a class="float-left"><strong class="text-primary">{userName}</strong></a></Link>
+                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong class="text-primary">{userName}</strong></a></Link>
                             </p>
-                            <div class="clearfix"></div>
+                            <div className="clearfix"></div>
                             
                             <p>{text}</p>
                         </div>
+                        {(user === userId) && <div class="photo-container">
+                            <Avatar
+                                alt="Тут аватар"
+                                src={userPhoto}
+                            />
+                            <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
+                        </div>}
                     </div>
                 </div>
             </div>

@@ -103,8 +103,8 @@ export default class UsertemView extends Component {
                     </div>
                 </div>
                 <div className="col-9">
-                    <div className="shadow p-3 mb-5 bg-white rounded">
-                        {(this.props.events && this.props.events.length > 0) ? this.renderEvents(this.props.events) : <h6><strong><p className="font-weight-bolder" >No events yet!</p></strong></h6>}
+                    <div className="shadow p-5 mb-5 bg-white rounded">
+                        {(this.props.events && this.props.events.length > 0) ? this.renderEvents(this.props.events) : <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
                     </div>
                 </div>
             </div>
