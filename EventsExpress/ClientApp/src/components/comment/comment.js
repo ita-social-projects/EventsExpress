@@ -10,10 +10,9 @@ export default class Comment extends Component {
 
         return (
             <div>
-                <div className="text-box overflow-auto "><CommentListWrapper /></div>
-                
-                            
                 <AddComment />
+                <CommentListWrapper match={this.props.match} /> 
+
             </div>
 
         );

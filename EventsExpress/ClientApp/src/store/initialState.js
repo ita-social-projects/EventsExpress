@@ -1,5 +1,8 @@
 
 const initialState = {
+    modalWind:{
+        isOpen: false 
+    },
     user:{
         id: null,
         name: null,
@@ -11,6 +14,11 @@ const initialState = {
         photoUrl: null,
         token: null,
         categories: []
+    },
+    roles: {
+        isPending: false,
+        isError: false,
+        data: []
     },
     login:{
         isLoginPending: false,
@@ -26,6 +34,15 @@ const initialState = {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
+    },
+    events: {
+        isPending: true,
+        isError: false,
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     change_avatar: {
         isPending: false,
@@ -45,11 +62,6 @@ const initialState = {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
-    },
-    events: {
-        isPending: false,
-        isError: false,
-        data: []
     },
     add_category: {
         isCategoryPending: false,
@@ -74,7 +86,11 @@ const initialState = {
     users: {
         isPending: false,
         isError: false,
-        data: []
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     add_comment: {
         isCommentPending: false,
@@ -84,7 +100,11 @@ const initialState = {
     comments: {
         isPending: false,
         isError: false,
-        data: []
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     delete_comment: {
         isCommentDeletePending: false,
@@ -94,7 +114,9 @@ const initialState = {
     event: {
         isPending: true,
         isError: false,
-        data: null
+        data: {
+            dateFrom: null
+        } 
     },
     profile: {
         isPending: true,

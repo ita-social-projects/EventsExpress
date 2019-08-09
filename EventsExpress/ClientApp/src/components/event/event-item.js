@@ -33,7 +33,7 @@ export default class Event extends Component {
                         <p className="mb-4">{description}</p>
                     </div>
                     <p>{this.renderCategories(categories)}</p>
-                    <p><Link to={'/event/' + id} className="btn-custom">Read More</Link></p>
+                    <p><Link to={'/event/' + id+'/'+1} className="btn-custom">Read More</Link></p>
                 </div>
             </div>
         );

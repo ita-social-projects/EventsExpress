@@ -9,7 +9,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface ICommentService
     {
-        IEnumerable<CommentDTO> GetCommentByEventId(Guid id);
+        IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize,  out int count);
         Task<OperationResult> Edit(CommentDTO comment);
         Task<OperationResult> Delete(Guid id);
         Task<OperationResult> Create(CommentDTO comment);

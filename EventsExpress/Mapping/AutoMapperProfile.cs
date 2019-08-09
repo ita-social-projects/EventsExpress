@@ -47,7 +47,12 @@ namespace EventsExpress.Mapping
                                                             })); 
 
 
-            CreateMap<UserDTO, UserPreviewDto>()
+            CreateMap<UserDTO, UserManageDto>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
+                .ForMember(dest => dest.Role, opts => opts.MapFrom(src => new RoleDto { Id = src.RoleId, Name = src.Role.Name }))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
             CreateMap<City, Location>()
@@ -121,6 +126,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => (Attitude)src.Attitude));
 
 
+
+            CreateMap<Role, RoleDto>();
         }
     }
 }

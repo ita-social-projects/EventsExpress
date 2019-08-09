@@ -19,6 +19,7 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> ChangeRole(Guid uId, Guid rId);
         Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar);
         Task<OperationResult> Unblock(Guid uId);
+        Task<OperationResult> Block(Guid uId);
 
         UserDTO GetById(Guid id);
         ProfileDTO GetProfileById(Guid id, Guid FromId);
@@ -27,7 +28,7 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
 
-        IEnumerable<UserDTO> GetAll();
+        IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int Count);
         IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories);
         IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter);
 

@@ -1,7 +1,7 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_EVENT_ERROR,GET_EVENT_PENDING,GET_EVENT_SUCCESS
+    GET_EVENT_ERROR,GET_EVENT_PENDING,GET_EVENT_SUCCESS, RESET_EVENT
 }from '../actions/event-item-view';
 
 export const reducer = (
@@ -26,6 +26,10 @@ export const reducer = (
               isPending: false,
               data: action.payload
           }
+       case RESET_EVENT:
+            return {
+                ...initialState.event
+            }
        default: 
           return state;
     }

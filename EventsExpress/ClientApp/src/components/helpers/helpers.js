@@ -5,7 +5,25 @@ import 'react-widgets/dist/css/react-widgets.css';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {  } from 'redux-form';
+import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
 
+
+export const radioButton = ({ input, ...rest }) => (
+    <FormControl>
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+            <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+            <FormControlLabel value="all" control={<Radio />} label="All"  />
+        </RadioGroup>
+    </FormControl>
+)
 
 export const validate = values => {
   const errors = {}
@@ -15,7 +33,6 @@ export const validate = values => {
     'RepeatPassword',
     'image',
     'title',
-    'date_from',
     'description',
     'categories',
     'country'
@@ -25,12 +42,12 @@ export const validate = values => {
       errors[field] = 'Required'
     }
   })
-  if(new Date(values.date_from).getTime() <= Date.now()){
-    errors.date_from  = 'Date is incorrect';
-  }
-  if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
-    errors.date_to = 'Date is too low of start';
-  }
+  // if(new Date(values.date_from).getTime() <= new Date().getTime()){
+  //   errors.date_from  = 'Date is incorrect';
+  // }
+  // if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
+  //   errors.date_to = 'Date is too low of start';
+  // }
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
@@ -43,12 +60,17 @@ export const validate = values => {
   return errors
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>
-<DatePicker
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) =>{
+console.log(value, defaultValue);
+value =  value || defaultValue || new Date();
+defaultValue = defaultValue;
+minValue = minValue || new Date();
+return <DatePicker
   onChange={onChange}
-  minDate={defaultValue || new Date()}
-  selected={value || defaultValue || new Date()}
+  minDate={new Date(minValue)}
+  selected={ new Date(value) || new Date()}
 />
+}
 
  export const maxLength = max => value =>
     value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -69,8 +91,8 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
 
 export const renderTextField = ({
   label,
+  defaultValue,
     input,
-  value,
   meta: { touched, invalid, error },
   ...custom
 }) => (
@@ -79,14 +101,59 @@ export const renderTextField = ({
     label={label}
     placeholder={label}
     error={touched && invalid}
-            defaultValue={value}
+    defaultValue={defaultValue}
+    value={defaultValue}
     helperText={touched && error}
     {...input}
     {...custom}
   />
 )
 
+ export const renderSelectField = ({
+    input,
+    label,
+    meta: { touched, error },
+    children,
+    ...custom
+}) => (
+        <FormControl error={touched && error}>
+             <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+            <Select
+                native
+                {...input}
+                {...custom}
+                 inputProps={{
+                     name: { label },
+                    id: 'age-native-simple'
+                }}
+            >
+                {children}
+            </Select>
+            {renderFromHelper({ touched, error })}
+        </FormControl>
+    )
 
+const renderFromHelper = ({ touched, error }) => {
+    if (!(touched && error)) {
+        return
+    } else {
+        return <FormHelperText>{touched && error}</FormHelperText>
+    }
+}
+
+export const renderCheckbox = ({ input, label }) => (
+    <div>
+        <FormControlLabel
+            control={
+                <Checkbox
+                    checked={input.value ? true : false}
+                    onChange={input.onChange}
+                />
+            }
+            label={label}
+        />
+    </div>
+)
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

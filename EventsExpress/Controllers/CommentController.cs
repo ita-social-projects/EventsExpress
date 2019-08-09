@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.EF;
 using EventsExpress.DTO;
+using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +19,10 @@ namespace EventsExpress.Controllers
     {
         private ICommentService _commentService;
         private IMapper _mapper;
-
+      
         public CommentController(ICommentService commentService,
                     IMapper mapper)
-        {
+        { 
             _commentService = commentService;
             _mapper = mapper;
         }
@@ -53,12 +55,22 @@ namespace EventsExpress.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("[action]/{id}")]
-        public IActionResult All(Guid id)
+        [HttpGet("[action]/{id}/")]
+        public IActionResult All(Guid id, int page = 1)
         {
-            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id));
+            int pageSize = 5;
+            int count;
+            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id, page, pageSize, out count));
 
-            return Ok(res);
+          
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>
+            {
+                PageViewModel = pageViewModel,
+                items = res
+            };
+            return Ok(viewModel);
         }
     }
     

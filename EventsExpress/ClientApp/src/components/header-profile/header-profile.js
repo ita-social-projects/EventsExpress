@@ -22,7 +22,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl } = this.props.user;
+        const { id, name, photoUrl, email } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -33,12 +33,18 @@ export default class HeaderProfile extends Component {
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">
-                        <Avatar
-                            alt="Тут аватар"
-                            src={photoUrl}
-
-                            className='bigAvatar'
-                        />
+                        {photoUrl
+                            ? <Avatar
+                                src={photoUrl}
+                                className='bigAvatar'
+                            />
+                            : <Avatar className='bigAvatar'>
+                                <h1 className="display-1 text-light">
+                                    {email.charAt(0).toUpperCase()}
+                                </h1>
+                            </Avatar>}
+                        
+                        
                         <h4>{name}</h4>
                         
                         <div>

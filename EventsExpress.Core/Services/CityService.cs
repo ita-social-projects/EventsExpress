@@ -20,7 +20,7 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public IQueryable<City> GetCitiesByCountryId(Guid id) => Db.CityRepository.Filter(filter: c => c.CountryId == id);
+        public IQueryable<City> GetCitiesByCountryId(Guid id) => Db.CityRepository.Get().Where(c => c.CountryId == id);
 
         public IQueryable<City> GetAll() => Db.CityRepository.Get();
 

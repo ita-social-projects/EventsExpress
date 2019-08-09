@@ -1,5 +1,5 @@
 ﻿import React, {Component} from 'react';
-import { EventForm } from '../components/event/event-form';
+import EventForm from '../components/event/event-form';
 import add_event from '../actions/add-event';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
@@ -22,6 +22,7 @@ class AddEventWrapper extends Component{
     }
 
     onSubmit = (values) => {
+        console.log(values);
         this.props.add_event({ ...values, user_id: this.props.user_id });
         console.log(this.props.add_event_status);
 
@@ -33,7 +34,7 @@ class AddEventWrapper extends Component{
 
     render(){   
         return <>
-                <EventForm all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
+                <EventForm data={{}} all_categories={this.props.all_categories} cities={this.props.cities.data} onChangeCountry={this.onChangeCountry} onSubmit={this.onSubmit} countries={this.props.countries.data} form_values={this.props.form_values} />
                </>
     }
 }
