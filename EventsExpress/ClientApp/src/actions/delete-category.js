@@ -60,7 +60,7 @@ function setCategoryDeletePending(data) {
     };
 }
 
-function setCategoryDeleteError(data) {
+export function setCategoryError(data) {
     return {
         type: SET_CATEGORY_DELETE_ERROR,
         payload: data

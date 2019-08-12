@@ -35,6 +35,37 @@ namespace EventsExpress.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
+        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel model)
+        {
+
+
+            if (model.PageSize == 0)
+            {
+                model.PageSize = 4;
+            }
+
+            int Count;
+
+            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out Count));
+
+
+
+            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
+            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            {
+                return BadRequest();
+            }
+            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
+            {
+                PageViewModel = pageViewModel,
+                items = res
+            };
+    
+            return Ok(viewModel);
+
+        }
+        [HttpGet("[action]")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Get([FromQuery]UsersFilterViewModel model)
         {
 

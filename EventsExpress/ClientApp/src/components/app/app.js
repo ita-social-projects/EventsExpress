@@ -16,6 +16,7 @@ import NotFound from '../Route guard/404'
 import BadRequest from '../Route guard/400'
 import { Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
+import EventsForAdmin from '../../components/event/EventsForAdmin'
 export default class App extends Component {
 
     render() {
@@ -38,7 +39,7 @@ export default class App extends Component {
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
-                        <Route path="/admin/events" component={Home} />
+                    <Route path="/admin/events" component={EventsForAdmin} />
                     <Route path="/search/users" component={SearchUserWrapper} />
                     <Route component={NotFound} />
                 </Switch>

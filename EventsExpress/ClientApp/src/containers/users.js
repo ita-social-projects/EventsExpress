@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
-import get_users from '../actions/users';
+import {get_users } from '../actions/users';
 import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
-import BagRequest from '../components/Route guard/400'
+import BadRequest from '../components/Route guard/400'
 import InternalServerError from '../components/Route guard/500'
+import Unauthorized from '../components/Route guard/401';
+import Forbidden from '../components/Route guard/403'
+import NotFound from '../components/Route guard/404';
+import { Redirect } from 'react-router'
 class UsersWrapper extends Component{
-
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.users.isError.ErrorCode == '500') {
+            this.getUsers(this.props.params);
+        }
+    }
     componentDidMount() {
        
         this.getUsers(this.props.params);
@@ -17,19 +25,20 @@ class UsersWrapper extends Component{
     render() {
         const {isPending, isError } = this.props.users;
         const spinner = isPending ? <Spinner /> : null;
-      
-        const errorMessage = isError.ErrorCode == '400' ? <BagRequest /> : isError.ErrorCode == '500' ? <InternalServerError /> : null;
-       
+        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/admin/users?page=1" /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
+        const content = (errorMessage == null) ? <Users users={this.props.users.data.items} page={this.props.users.data.pageViewModel.pageNumber} totalPages={this.props.users.data.pageViewModel.totalPages} callback={this.getUsers} />
+            : null;
+        const filter = (isError.ErrorCode != '403') ? < UsersFilterWrapper /> : null;
         return <>
             <div className="row">
                 {spinner}
                 
                 <div className='col-9'>
-                    <Users users={this.props.users.data.items} page={this.props.users.data.pageViewModel.pageNumber} totalPages={this.props.users.data.pageViewModel.totalPages} callback={this.getUsers} />
                     {errorMessage}
+                    {content}
                 </div>
                 <div className="col-3">
-             < UsersFilterWrapper/>
+                    {filter}
                 </div> 
             </div>
         </>

@@ -9,7 +9,7 @@ export const GET_USERS_ERROR = "GET_USERS_ERROR";
 
 const api_serv = new EventsExpressService();
 
-export default function get_users(filters) {
+export function get_users(filters) {
     return dispatch => {
         dispatch(getUsersPending(true));
         dispatch(getUsersError(false));
@@ -25,6 +25,23 @@ export default function get_users(filters) {
     }
   }
 
+export function get_SearchUsers(filters) {
+    console.log(filters);
+    return dispatch => {
+        dispatch(getUsersPending(true));
+        dispatch(getUsersError(false));
+        const res1 = api_serv.getSearchUsers(filters);
+        res1.then(response => {
+            if (response.error == null) {
+                dispatch(getUsers(response));
+
+            } else {
+                dispatch(getUsersError(response.error));
+            }
+        });
+    }
+}
+
 function getUsersPending(data){
     return {
         type: GET_USERS_PENDING,
@@ -39,7 +56,7 @@ function getUsers(data){
       }
   }
 
-function getUsersError(data){
+export function getUsersError(data){
     return{
         type: GET_USERS_ERROR,
         payload: data

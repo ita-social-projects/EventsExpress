@@ -3,7 +3,7 @@ import './css/error.css';
 import { Link } from 'react-router-dom'
 import EventListWrapper from '../../containers/event-list'
 
-export default class NotFound extends Component {
+export default class BagRequest extends Component {
     render() {
         return <>
             <div id="notfound">
@@ -11,7 +11,7 @@ export default class NotFound extends Component {
                     <div className="notfound-404">
                         <h1>Oops!</h1>
                     </div>            
-                    <h2>400! - Bad Request</h2>   
+                    <h2>Sorry, no result were found!</h2>   
                 </div>
             </div>
         </>

@@ -27,10 +27,11 @@ class EventItemViewWrapper extends Component{
     }
 
     render(){   
-    
+   
+
         const {data, isPending, isError} = this.props.event;
         // const hasData = !(isPending || isError);
-
+      
         // const errorMessage = isError ? <ErrorIndicator/> : null;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventItemView match={this.props.match} onLeave={this.onLeave} onJoin={this.onJoin} data={data} current_user={this.props.current_user} /> : null;
@@ -38,7 +39,7 @@ class EventItemViewWrapper extends Component{
         return <>
                 {spinner}
                 {content}
-               </>
+                </>
     }
 }
 

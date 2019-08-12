@@ -3,6 +3,9 @@ const initialState = {
     modalWind:{
         isOpen: false 
     },
+    resetError: {
+        isError: false,
+    },
     user:{
         id: null,
         name: null,

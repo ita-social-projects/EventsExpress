@@ -41,7 +41,7 @@ function setRolesSuccess(data) {
     }
 }
 
-function setRolesError(data) {
+export function setRolesError(data) {
     return {
         type: getRoles.ERROR,
         payload: data

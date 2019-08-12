@@ -86,6 +86,30 @@ namespace EventsExpress.Controllers
         
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("[action]")]
+        public IActionResult AllForAdmin([FromQuery]EventFilterViewModel model)
+        {
+            model.PageSize = 4;
+
+            int Count;
+
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(model, out Count));
+
+
+            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
+            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            {
+                return BadRequest();
+            }
+            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
+            {
+                PageViewModel = pageViewModel,
+                items = res
+            };
+            return Ok(viewModel);
+
+        }
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)

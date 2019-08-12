@@ -13,6 +13,7 @@
     "material-ui": "^0.20.2",
     "material-ui-flat-pagination": "^3.2.0",
     "material-ui-pagination": "^1.1.6",
+    "mdbreact": "^4.19.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "progress": "^2.0.3",

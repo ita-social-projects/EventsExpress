@@ -7,7 +7,7 @@ export  function TogleOpenWind(data) {
     }
 }
 
-function isOpen(data){
+export function isOpen(data){
     return {
         type: SET_OPEN_STATUS,
         payload: data

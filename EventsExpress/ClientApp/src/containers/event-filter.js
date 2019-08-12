@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { renderTextField } from '../components/helpers/helpers';
 import { reduxForm, Field, getFormValues } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
-import get_events from '../actions/event-list';
+import { get_events } from '../actions/event-list';
 import history from '../history';
 
 import get_categories from '../actions/category-list';

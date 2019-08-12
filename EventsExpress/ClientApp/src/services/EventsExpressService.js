@@ -93,6 +93,11 @@ export default class EventsExpressService {
         const res = await this.getResource('users/GetUserById?id=' + id);
         return res;
     }
+    getSearchUsers = async (filter) => {
+        const res = await this.getResource(`users/searchUsers${filter}`);
+        console.log(res);
+        return res;
+    }
     getCountries = async () => {
         const res = await this.getResource('locations/countries');
         return res;
@@ -158,6 +163,10 @@ export default class EventsExpressService {
 
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
+        return res;
+    }
+    getAllEventsForAdmin = async (filters) => {
+        const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;
     }
 

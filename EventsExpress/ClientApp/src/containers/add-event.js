@@ -15,6 +15,10 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Snackbar from '@material-ui/core/Snackbar';
 import get_categories from '../actions/category-list';
 
+
+
+
+
 class AddEventWrapper extends Component{
     
     state = {
