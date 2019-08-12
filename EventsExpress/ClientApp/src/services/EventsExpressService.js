@@ -162,6 +162,10 @@ export default class EventsExpressService {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+    getAllEventsForAdmin = async (filters) => {
+        const res = await this.getResource(`event/AllForAdmin${filters}`);
+        return res;
+    }
 
     getAllCategories = async () => {
         const res = await this.getResource('category/all');

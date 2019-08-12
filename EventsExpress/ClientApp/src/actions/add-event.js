@@ -1,5 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
-import get_events from './event-list';
+import { get_events } from './event-list';
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
 export const SET_EVENT_ERROR = "SET_EVENT_ERROR";

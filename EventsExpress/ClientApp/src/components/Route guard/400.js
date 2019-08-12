@@ -11,7 +11,7 @@ export default class BagRequest extends Component {
                     <div class="notfound-404">
                         <h1>Oops!</h1>
                     </div>            
-                    <h2>400! - Bad Request</h2>   
+                    <h2>Sorry, no result were found!</h2>   
                 </div>
             </div>
         </>
