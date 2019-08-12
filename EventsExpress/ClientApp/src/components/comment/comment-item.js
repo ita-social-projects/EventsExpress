@@ -27,14 +27,11 @@ export default class commentItem extends Component {
     render() {
         const { text, userPhoto, date, userName, userId } = this.props.item;
         const { user } = this.props;
-        console.log(user);
-        console.log(userId);
-        console.log(user === userId);
         return (
             <div>
                 <div>
                     <div className="row">
-                        {!(user === userId) && <div class="photo-container">
+                        {!(user === userId) && <div className="photo-container">
                             <Avatar
                                 alt="Тут аватар"
                                 src={userPhoto}
@@ -43,13 +40,13 @@ export default class commentItem extends Component {
                         </div>}
                         <div className="mybutton">
                             <p>
-                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong class="text-primary">{userName}</strong></a></Link>
+                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong className="text-primary">{userName}</strong></a></Link>
                             </p>
                             <div className="clearfix"></div>
                             
                             <p>{text}</p>
                         </div>
-                        {(user === userId) && <div class="photo-container">
+                        {(user === userId) && <div className="photo-container">
                             <Avatar
                                 alt="Тут аватар"
                                 src={userPhoto}

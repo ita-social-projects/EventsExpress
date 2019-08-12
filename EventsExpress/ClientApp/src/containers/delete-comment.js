@@ -14,13 +14,11 @@ class commentItemWrapper extends React.Component {
     }
     submit = () => {
         let value = this.props.item;
-        console.log('delete: ');
         this.props.deleteComm({ id: value.id, eventId: this.props.eventId });
     };
 
     render() {
         const { id } = this.props.item;
-        console.log(this.props.item.userId);
         return (
             <div className="ItemComment">
                 {!(this.props.item.userId === this.props.userId)

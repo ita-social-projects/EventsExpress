@@ -1,10 +1,9 @@
-import React from "react";
-import SelectCategoriesWrapper from '../SelectCategories';
-import add_UserCategory from '../../actions/EditProfile/addUserCategory';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import ChangeAvatar from '../../components/profile/editProfile/change-avatar';
 import change_avatar from '../../actions/EditProfile/change-avatar';
-class ChangeAvatarWrapper extends React.Component {
+
+class ChangeAvatarWrapper extends Component {
     submit = values => {
 
         this.props.change_avatar(values);
@@ -15,7 +14,8 @@ class ChangeAvatarWrapper extends React.Component {
     }
 }
 
-const mapStateToProps = () => { }
+const mapStateToProps = (state) => ({
+ })
 
 const mapDispatchToProps = dispatch => {
     return {

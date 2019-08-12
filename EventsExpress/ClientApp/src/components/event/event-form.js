@@ -8,7 +8,7 @@ import moment, { now } from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import { renderMultiselect, renderSelectLocationField } from '../helpers/helpers';
+import { renderMultiselect, renderSelectLocationField, renderTextArea } from '../helpers/helpers';
 import { connect } from 'react-redux';
 
 momentLocaliser(moment)
@@ -37,7 +37,7 @@ class EventForm extends Component {
       file: newImageFile[0],
       name: newImageFile[0].name,
       preview: URL.createObjectURL(newImageFile[0]),
-      size: newImageFile[0].size
+      size: 1
     };
     this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
   };
@@ -51,7 +51,7 @@ class EventForm extends Component {
         file: '',
         name: '',
         preview: values.photoUrl,
-        size: ''
+        size: 1
       };
       this.setState({ imagefile: [imagefile] });
     }
@@ -65,7 +65,6 @@ class EventForm extends Component {
 
   renderLocations = (arr) => {
     return arr.map((item) => {
-
       return <option value={item.id}>{item.name}</option>;
     });
   }
@@ -93,30 +92,28 @@ class EventForm extends Component {
 
             validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
           />
-          <button
+          <Button
             type="button"
-            className="uk-button uk-button-default uk-button-large clear"
+            color="primary"
             disabled={this.props.submitting}
             onClick={this.resetForm}
             style={{ float: "right" }}
           >
             Clear
-                          </button>
+                          </Button>
 
           <div className="mt-2">
             <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
           </div>
           <div className="meta-wrap m-2">
-            <p className="meta">
               <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
               {values.dateFrom != null &&
                 <span>To<Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
               }
-            </p>
           </div>
 
           <div className="mt-2">
-            <Field name='description' component={renderTextField} type="input" label="Description" />
+            <Field name='description' component={renderTextArea} type="input" label="Description" />
           </div>
           <div className="mt-2">
             <Field
@@ -144,7 +141,7 @@ class EventForm extends Component {
         </div>
 
 
-        <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
+        <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
           Save
                 </Button>
       </form>

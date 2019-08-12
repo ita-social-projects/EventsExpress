@@ -11,7 +11,7 @@ import get_categories from '../actions/category-list';
 
 class EditEventWrapper extends Component{
     
-    componentDidMount = () =>{
+    componentWillMount = () =>{
         this.props.get_countries();
         this.props.get_categories();
         this.props.get_cities(this.props.initialValues.countryId);
@@ -27,11 +27,7 @@ class EditEventWrapper extends Component{
     }
 
     onSubmit = (values) => {
-        console.log(values);
-
         this.props.add_event({ ...values, user_id: this.props.user_id, id: this.props.initialValues.id });
-        console.log(this.props.add_event_status);
-
     }
 
     onChangeCountry = (e) => {
@@ -47,6 +43,7 @@ class EditEventWrapper extends Component{
                 onSubmit={this.onSubmit} 
                 countries={this.props.countries.data} 
                 form_values={this.props.form_values}
+                Event={{}}
                 isCreated={true} />
                </>
     }

@@ -17,7 +17,6 @@ export default class Users extends Component {
     }
 
     handlePageChange = (page, e) => {
-        console.log("chanhe page" + page);
         this.props.callback(window.location.search.replace(/(page=)\w/gm, 'page=' + page));
         this.setState({
             currentPage: page
@@ -32,7 +31,6 @@ export default class Users extends Component {
 
     render() {
         const { page, totalPages } = this.props;
-        console.log(window.location);
         return <>
             <table className="table">
                 <thead className="bg-light">
@@ -50,7 +48,7 @@ export default class Users extends Component {
                 </tbody>
                 
             </table>
-            <ul class="pagination justify-content-center">
+            <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
                     limit={limit}
@@ -70,7 +68,7 @@ export default class Users extends Component {
 
                             <div>
                                 {hasPreviousPage && (
-                                <Link class="btn btn-primary"
+                                <Link className="btn btn-primary"
                                     to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
                                     {...getPageItemProps({
                                         pageValue: 1,
@@ -81,7 +79,7 @@ export default class Users extends Component {
                               </Link>)}
 
                                 {hasPreviousPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page - 1))}
 
                                         {...getPageItemProps({
@@ -99,7 +97,7 @@ export default class Users extends Component {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
                                     return (
-                                        <Link class="btn btn-primary"
+                                        <Link className="btn btn-primary"
                                             to={window.location.search.replace(/(page=)\w/gm, 'page=' + page)}
 
                                             {...getPageItemProps({
@@ -115,7 +113,7 @@ export default class Users extends Component {
                                 })}
 
                                 {hasNextPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page + 1))}
 
                                         {...getPageItemProps({
@@ -127,7 +125,7 @@ export default class Users extends Component {
                                     </Link>
                                 )}
                                 {hasNextPage && (
-                                <Link class="btn btn-primary"
+                                <Link className="btn btn-primary"
                                     to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
 
                                     {...getPageItemProps({

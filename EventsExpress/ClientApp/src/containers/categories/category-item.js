@@ -68,7 +68,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        delete_category: () => {console.log(props.item.id); dispatch(delete_category(props.item.id))},
+        delete_category: () => dispatch(delete_category(props.item.id)),
         save_category: (data) => dispatch(add_category(data)),
         set_category_edited: () => dispatch(set_edited_category(props.item.id)),
         edit_cansel: () => dispatch(set_edited_category(null))

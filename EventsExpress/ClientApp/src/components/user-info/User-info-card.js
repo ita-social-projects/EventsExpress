@@ -48,7 +48,6 @@ export default class UserInfoCard extends Component {
     render() {
         const { user } = this.props;
         const classes = useStyles;
-        console.log(user);
         return (
             <>
                 <br />
@@ -61,7 +60,7 @@ export default class UserInfoCard extends Component {
                     <Paper className={classes.paper}>
                         <Grid container spacing={1}>
                             <Grid item>
-                                        <ButtonBase classN ame={classes.Avatar}>
+                                        <ButtonBase className={classes.Avatar}>
                                     {user.photoUrl
                                                 ? <Avatar className='MiddleAvatar' src={user.photoUrl} />
                                                 : <Avatar className='MiddleAvatar' >{user.email.charAt(0).toUpperCase()}</Avatar>}
@@ -71,7 +70,7 @@ export default class UserInfoCard extends Component {
                                 <Grid item xs container direction="column" spacing={2}>
                                     <Grid item xs>
                                                 <Typography gutterBottom variant="subtitle1">
-                                                    {(user.username) ? <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.username}</h4></Link></p> : <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.email.substring(0, user.email.search("@"))}</h4></Link></p>}
+                                                    {(user.username) ? <p><Link to={'/user/' + user.id} className="btn-custom">{user.username}</Link></p>:<p><Link to={'/user/' + user.id} className="btn-custom">{user.email.substring(0, user.email.search("@"))}</Link></p>}
                 </Typography>
                                                 <Typography variant="body2" gutterBottom>
                                                     {genders[user.gender]}

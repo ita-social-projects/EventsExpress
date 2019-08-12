@@ -14,8 +14,7 @@ class EventFilterWrapper extends Component {
         this.props.get_categories();
     }
     
-    onSubmit = (filters) => {
-        console.log(filters);       
+    onSubmit = (filters) => {  
         var search_string = '?page=1';
         if (filters != null) {
             if (filters.search != null) {

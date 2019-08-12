@@ -14,12 +14,10 @@ class EventFilter extends Component {
         return <>
             <form onSubmit={this.props.handleSubmit} className="box">
                 <Field name='search' component={renderTextField} type="input" label="Search" />
-                <p className="meta">
                     <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>              
                     {values.dateFrom != null &&
                 <span>To<br/><Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
               }
-                </p>
                 <Field
                     name="categories"
                     component={renderMultiselect}

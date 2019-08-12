@@ -15,7 +15,7 @@ class AddUserCategory extends React.Component {
     }
 }
 
-const mapStateToProps = () => { }
+const mapStateToProps = () => ({ })
 
 const mapDispatchToProps = dispatch => {
     return {

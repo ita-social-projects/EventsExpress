@@ -18,13 +18,13 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 
 export const radioButton = ({ input, ...rest }) => (
-    <FormControl>
-        <RadioGroup {...input} {...rest}>
-            <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
-            <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
-            <FormControlLabel value="all" control={<Radio />} label="All"  />
-        </RadioGroup>
-    </FormControl>
+  <FormControl>
+    <RadioGroup {...input} {...rest}>
+      <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+      <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+      <FormControlLabel value="all" control={<Radio />} label="All" />
+    </RadioGroup>
+  </FormControl>
 )
 
 
@@ -37,7 +37,7 @@ export const validate = values => {
     'title',
     'description',
     'categories',
-    'country', 
+    'country',
     'city'
   ]
   requiredFields.forEach(field => {
@@ -64,7 +64,6 @@ export const validate = values => {
 }
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
-  console.log(value, defaultValue);
   value = value || defaultValue || new Date();
   minValue = minValue || new Date();
   return <DatePicker
@@ -79,39 +78,43 @@ export const renderDatePicker = ({ input: { onChange, value }, defaultValue, min
 export const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined
 
-  export const maxLength15 = maxLength(15)
+export const maxLength15 = maxLength(15)
 
-  export const minLength = min => value =>
+export const minLength = min => value =>
   value && value.length < min ? `Must be ${min} characters or more` : undefined
 
-  export const minLength2 = minLength(6)
+export const minLength2 = minLength(6)
 
 export const renderSelectLocationField = ({
   input,
   label,
   text,
   data,
-  meta: { touched, error },
+  meta: { touched, invalid, error },
   children,
   ...custom
 }) => (
-  <FormControl error={touched && error}>
-    <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-    <Select
-      native
-      {...input}
-      {...custom}
-      inputProps={{
-        name: text.toLowerCase() + 'Id',
-        id: 'age-native-simple'
-      }}
-    >
-      <option value=""></option>
-      {data.map(x => <option value={x.id}>{x.name}</option>)}
-    </Select>
-    {renderFromHelper({ touched, error })}
-  </FormControl>
-)
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+      <Select
+        native
+        
+        error={touched && invalid}
+
+        helperText={touched && error}
+        {...input}
+        {...custom}
+        inputProps={{
+          name: text.toLowerCase() + 'Id',
+          id: 'age-native-simple'
+        }}
+      >
+        <option value=""></option>
+        {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  )
 
 
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
@@ -124,14 +127,37 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
     placeholder={placeholder}
   />
 
+export const renderTextArea = ({
+    label,
+    defaultValue,
+    input,
+    rows,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+  <TextField
+  label={label}
+  defaultValue={defaultValue}
+  multiline
+  rows="4"
+  fullWidth
+  {...input}
+  error={touched && invalid}
+  
+  helperText={touched && error}
+  variant="outlined"
+/>)
+
 export const renderTextField = ({
   label,
   defaultValue,
   input,
+  rows,
   meta: { touched, invalid, error },
   ...custom
 }) => (
     <TextField
+      rows={rows}
       fullWidth
       label={label}
       placeholder={label}
@@ -147,27 +173,31 @@ export const renderTextField = ({
 export const renderSelectField = ({
   input,
   label,
-  meta: { touched, error },
+  meta: { touched, invalid, error },
   children,
   ...custom
 }) => (
-        <FormControl error={touched && error}>
-            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
-            <Select
-                fullWidth
-                native
-                {...input}
-                {...custom}
-                inputProps={{
-                  name: { label },
-                  id: 'age-native-simple'
-                }}
-            >
-                {children}
-            </Select>
-            {renderFromHelper({ touched, error })}
-        </FormControl>
-    )
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+      <Select
+        fullWidth
+        native
+        
+        error={touched && invalid}
+
+        helperText={touched && error}
+        {...input}
+        {...custom}
+        inputProps={{
+          name: { label },
+          id: 'age-native-simple'
+        }}
+      >
+        {children}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  )
 
 const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {

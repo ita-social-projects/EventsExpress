@@ -14,8 +14,6 @@ export default class CommentList extends Component {
         };
     }
     handlePageChange = (page,  e) => {
-        console.log("chanhe page" + page);
-        console.log("evId " + this.props.evId);
         this.props.callback(this.props.evId, page);
         this.setState({
             currentPage: page
@@ -37,7 +35,7 @@ export default class CommentList extends Component {
         const { page, totalPages } = this.props;
         return <>
            
-            <ul class="pagination justify-content-center">
+            <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
                     limit={limit}
@@ -58,7 +56,7 @@ export default class CommentList extends Component {
                             <div>
 
                                 {hasPreviousPage && (
-                                <Link class="btn btn-primary"
+                                <Link className="btn btn-primary"
                                     to={window.location.pathname.replace(/[/].$/g, '/' + page)}
                                     {...getPageItemProps({
                                         pageValue: 1,
@@ -69,7 +67,7 @@ export default class CommentList extends Component {
                               </Link>)}
 
                                 {hasPreviousPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
                                         {...getPageItemProps({
@@ -87,7 +85,7 @@ export default class CommentList extends Component {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
                                     return (
-                                        <Link class="btn btn-primary"
+                                        <Link className="btn btn-primary"
                                             to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
                                             {...getPageItemProps({
@@ -103,7 +101,7 @@ export default class CommentList extends Component {
                                 })}
 
                                 {hasNextPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
                                         {...getPageItemProps({
@@ -115,7 +113,7 @@ export default class CommentList extends Component {
                                     </Link>
                                 )}
                                 {hasNextPage && (
-                                <Link class="btn btn-primary"
+                                <Link className="btn btn-primary"
                                     to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
                                     {...getPageItemProps({

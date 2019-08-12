@@ -29,12 +29,11 @@ export default class UserItemList extends Component {
     }
 
     render() {
-        console.log(window.location);
         const { page, totalPages } = this.props;
         return <>
             {this.renderUsers(this.props.users)}
 
-            <ul class="pagination justify-content-center">
+            <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
                     limit={limit}
@@ -54,7 +53,7 @@ export default class UserItemList extends Component {
 
                             <div>
                                 {hasPreviousPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
                                         {...getPageItemProps({
                                             pageValue: 1,
@@ -65,7 +64,7 @@ export default class UserItemList extends Component {
                               </Link>)}
 
                                 {hasPreviousPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page - 1))}
 
                                         {...getPageItemProps({
@@ -83,7 +82,7 @@ export default class UserItemList extends Component {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
                                     return (
-                                        <Link class="btn btn-primary"
+                                        <Link className="btn btn-primary"
                                             to={window.location.search.replace(/(page=)\w/gm, 'page=' + page)}
 
                                             {...getPageItemProps({
@@ -99,7 +98,7 @@ export default class UserItemList extends Component {
                                 })}
 
                                 {hasNextPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page + 1))}
 
                                         {...getPageItemProps({
@@ -111,7 +110,7 @@ export default class UserItemList extends Component {
                                     </Link>
                                 )}
                                 {hasNextPage && (
-                                    <Link class="btn btn-primary"
+                                    <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
 
                                         {...getPageItemProps({

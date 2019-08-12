@@ -10,7 +10,7 @@ import Fab from '@material-ui/core/Fab';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
-import { AddComponent } from '../home/home' 
+import EditEventWrapper from '../../containers/edit-event'; 
 export default class EventItemView extends Component {
 
     state = { edit: false }
@@ -126,7 +126,7 @@ export default class EventItemView extends Component {
             <div className="col-9">
                 <div className="col-12">
                     <img src={photoUrl} alt="Norway" style={{width: '100%'}} />
-                    <div class="text-block"> 
+                    <div className="text-block"> 
                         <span className="title">{title}</span><br/>
                         <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> - <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></span><br/>
                         <span>{country} {city}</span><br/>
@@ -149,7 +149,9 @@ export default class EventItemView extends Component {
                     </div>
                 </div>
                 {this.state.edit &&
-                     <AddComponent title={'Edit Event'} />
+                    <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+                        <EditEventWrapper />
+                     </div>
                     }
                     {!this.state.edit && <>
                     <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

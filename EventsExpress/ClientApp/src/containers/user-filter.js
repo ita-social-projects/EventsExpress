@@ -8,7 +8,6 @@ import history from '../history';
 class UsersFilterWrapper extends Component {
    
     onSubmit = (filters) => {
-        console.log(filters);
         var search_string = '?page=1';
         if (filters != null) {
             if (filters.search != null) {
@@ -30,7 +29,6 @@ class UsersFilterWrapper extends Component {
                 search_string += '&PageSize=' + filters.PageSize;
             }
         }
-        console.log(search_string);
         this.props.search(search_string);
         history.push(search_string);
 

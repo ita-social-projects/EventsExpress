@@ -28,7 +28,6 @@ export default class EventsExpressService {
         }
         let i = 0;
         data.categories.map(x => {
-            console.log(i);
             file.append('Categories[' + i + '].Id', x.id);
             i++;
         })
@@ -88,7 +87,6 @@ export default class EventsExpressService {
 
     getUsers = async (filter) => {
         const res = await this.getResource(`users/get${filter}`);
-        console.log(res);
         return res;
     }
     getUserById = async (id) => {
@@ -165,13 +163,11 @@ export default class EventsExpressService {
 
     getAllCategories = async () => {
         const res = await this.getResource('category/all');
-        console.log(res);
         return res;
     }
 
     getAllComments = async (data, page) => {
         const res = await this.getResource(`comment/all/${data}?page=${page}`);
-        console.log(res);
         return res;
     }
 
@@ -246,7 +242,6 @@ export default class EventsExpressService {
     }
 
     setUserCategory = async (data) => {
-        console.log(data);
         const res = await this.setResource('Users/EditUserCategory', {
             Categories: data.Categories
         });

@@ -10,7 +10,6 @@ export const SET_COMMENTS_ERROR = "SET_COMMENTS_ERROR";
 const api_serv = new EventsExpressService();
 
 export default function get_comments(data, page) {
-    console.log(data, page)
     return dispatch => {
         dispatch(setCommentPending(true));
 

@@ -15,8 +15,7 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
 
-        EventDTO EventById(Guid eventId);
-        EventDTO Details(Guid id);
+        EventDTO EventById(Guid eventId);       
 
         IEnumerable<EventDTO>  Events(EventFilterViewModel model, out int Count);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);

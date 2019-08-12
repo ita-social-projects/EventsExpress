@@ -53,14 +53,10 @@ export function AddComponent(props) {
 class Home extends Component {
 
     render() {
-        console.log('Home', this.props.location);
 
         return (
             <div className="row">
                 <div className='col-9'>
-                    {this.props.id &&
-                        <AddComponent title={'Add Event'} />
-                    }
                     <EventListWrapper params={this.props.location.search} />
                 </div>
                 <div className="col-3">

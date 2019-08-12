@@ -6,14 +6,12 @@ import history from '../history';
 class UserSearchFilterWrapper extends Component {
 
     onSubmit = (filters) => {
-        console.log(filters);
         var search_string = '?page=1';
         if (filters != null) {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
             }
         }
-        console.log(search_string);
         this.props.search(search_string);
         history.push(search_string);
 

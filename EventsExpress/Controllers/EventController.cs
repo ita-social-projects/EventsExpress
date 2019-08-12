@@ -77,7 +77,7 @@ namespace EventsExpress.Controllers
             if (pageViewModel.PageNumber > pageViewModel.TotalPages) {
                 return BadRequest();
             }
-            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
+            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
             {
                 PageViewModel = pageViewModel,
                 items = res
@@ -104,7 +104,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult FutureEvents(Guid id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.FutureEventsByUserId(id));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id));
 
             return Ok(res);
         }
@@ -113,7 +113,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult PastEvents(Guid id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.PastEventsByUserId(id));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id));
 
             return Ok(res);
         }
@@ -122,7 +122,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult EventsToGo(Guid id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.EventsToGoByUserId(id));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id));
 
             return Ok(res);
         }
@@ -131,7 +131,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult VisitedEvents(Guid id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.VisitedEventsByUserId(id));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id));
 
             return Ok(res);
         }

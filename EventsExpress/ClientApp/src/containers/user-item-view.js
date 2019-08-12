@@ -8,10 +8,17 @@ import get_future_events, { get_past_events, get_visited_events, get_events_togo
 
 class UserItemViewWrapper extends Component{
     
-    componentDidMount(){    
+    state = {
+        flag: false
+    }
+
+    componentWillMount(){    
         const { id } = this.props.match.params;
-        console.log(id);
         this.props.get_user(id);
+    }    
+    componentWillUpdate = (newProps) => { 
+        if(newProps.match.params.id !== this.props.match.params.id)
+           this.props.get_user(newProps.match.params.id);
     }
 
     onLike = () => {
@@ -27,19 +34,27 @@ class UserItemViewWrapper extends Component{
     }
 
     onFuture = () => {
+        this.setState({flag: false});
         this.props.get_future_events(this.props.profile.data.id);
     }
 
     onPast = () => {
+        this.setState({flag: false});
         this.props.get_past_events(this.props.profile.data.id);
     }
 
     onVisited = () => {
+        this.setState({flag: false});
         this.props.get_visited_events(this.props.profile.data.id);
     }
 
     onToGo = () => {
+        this.setState({flag: false});
         this.props.get_events_togo(this.props.profile.data.id);
+    }
+
+    onAddEvent = () => {
+        this.setState({flag: true});
     }
 
     render(){   
@@ -47,6 +62,8 @@ class UserItemViewWrapper extends Component{
         const {data, isPending, isError} = this.props.profile;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <Profile
+            onAddEvent={this.onAddEvent}
+            add_event_flag={this.state.flag}
             onLike={this.onLike}
             onDislike={this.onDislike}
             onReset={this.onReset}
@@ -69,7 +86,7 @@ class UserItemViewWrapper extends Component{
 const mapStateToProps = (state) => ({
     profile: state.profile,
     current_user: state.user.id,
-    events: state.events_for_profile.data
+    events: state.events_for_profile
 });
 
 const mapDispatchToProps = (dispatch) => { 

@@ -14,7 +14,6 @@ export default function edit_Username(data) {
    
 
     return dispatch => {
-        console.log(data);
         dispatch(setEditUsernamePending(true));
         const res = api_serv.setUsername(data);
         res.then(response => {

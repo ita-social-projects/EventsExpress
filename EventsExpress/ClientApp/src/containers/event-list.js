@@ -9,14 +9,19 @@ import InternalServerError from '../components/Route guard/500'
 class EventListWrapper extends Component{
 
     componentDidMount() {
-        console.log('bbb', this.props.params);
         this.getEvents(this.props.params);
     }
-    getEvents = (page) => this.props.get_events(page);
+
+    componentWillUpdate = (newProps) => {
+        if(newProps.params !== this.props.params)
+            this.getEvents(newProps.params);
+    }
+    
+
+    getEvents = (filter) => this.props.get_events(filter);
     
 
     render() {
-        console.log('ccc', this.props.params);
         const { data, isPending, isError } = this.props;
         const { items } = this.props.data;
      
@@ -37,7 +42,7 @@ const mapStateToProps = (state) => (state.events);
 
 const mapDispatchToProps = (dispatch) => { 
     return {
-        get_events: (page) => dispatch(get_events(page))
+        get_events: (filter) => dispatch(get_events(filter))
     } 
 };
 

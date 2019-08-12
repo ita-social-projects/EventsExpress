@@ -10,7 +10,6 @@ export const SET_EVENTS_ERROR = "SET_EVENTS_ERROR";
 const api_serv = new EventsExpressService();
 
 export default function get_events(filters="?page=1") {
-    console.log(filters);
     return dispatch => {
         dispatch(setEventPending(true));
         dispatch(setEventError(false));

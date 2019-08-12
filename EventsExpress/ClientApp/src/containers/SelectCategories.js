@@ -8,16 +8,13 @@ class SelectCategoriesWrapper extends Component {
     componentDidMount = () => this.props.get_categories();
 
     submit = values => {
-        console.log(values);
         if (this.props.callback) {
             this.props.callback(values);
         }
     };
 
     render() {
-        let { IsSelectCategoriesSeccess, IsSelectCategoriesError } = this.props
-        console.log(this.props);
-
+        let { IsSelectCategoriesSeccess, IsSelectCategoriesError } = this.props;
         return <SelectCategories items={this.props.allCategories.data} onSubmit={this.submit} />;
     }
 }

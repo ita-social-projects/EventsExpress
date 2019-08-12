@@ -16,9 +16,7 @@ export default function add_event(data) {
       const res = api_serv.setEvent(data);
       res.then(response => {
         if(response.error == null){
-            
             dispatch(setEventSuccess(true));
-            dispatch(get_events());
           }else{
             dispatch(setEventError(response.error));
           }

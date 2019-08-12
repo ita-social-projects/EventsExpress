@@ -10,7 +10,6 @@ class CommentWrapper extends React.Component {
 
     }
     submit = values => {
-        console.log(values);
         this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId });
     };
     render() {
