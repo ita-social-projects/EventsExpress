@@ -13,11 +13,10 @@ import { Redirect } from 'react-router'
 class UsersWrapper extends Component{
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {
-            this.getUsers(this.props.params);
+            this.getUsers('?page=1');
         }
     }
     componentDidMount() {
-       
         this.getUsers(this.props.params);
     }
     getUsers = (page) => this.props.get_users(page);

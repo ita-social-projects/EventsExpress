@@ -14,11 +14,10 @@ import { Redirect } from 'react-router'
 class SearchUsers extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {
-            this.getUsers(this.props.params);
+            this.getUsers("?page=1");
         }
     }
-    componentDidMount() {
-
+    componentWillMount() {
         this.getUsers(this.props.params);
     }
     getUsers = (page) => this.props.get_SearchUsers(page);

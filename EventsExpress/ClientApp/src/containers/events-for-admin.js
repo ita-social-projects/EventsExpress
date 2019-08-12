@@ -12,12 +12,12 @@ import history from '../history';
 
 
 class AdminEventListWrapper extends Component {
-    componentDidUpdate(prevProps, prevState) {
+    componentWillUpdate(prevProps, prevState) {
         if (this.props.isError.ErrorCode == '500') {
-            this.getEvents(this.props.params);
+            this.getEvents("?page=1");
         }
     }
-    componentDidMount() {
+    componentWillMount() {
         this.getEvents(this.props.params);
     }
     getEvents = (page) => this.props.get_eventsForAdmin(page);

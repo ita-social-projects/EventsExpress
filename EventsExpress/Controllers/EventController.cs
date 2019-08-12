@@ -94,7 +94,7 @@ namespace EventsExpress.Controllers
 
             int Count;
 
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.Events(model, out Count));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(model, out Count));
 
 
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
@@ -102,7 +102,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest();
             }
-            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
+            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
             {
                 PageViewModel = pageViewModel,
                 items = res
