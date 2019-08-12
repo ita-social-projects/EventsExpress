@@ -3,6 +3,7 @@ import './profile.css';
 import EditUsernameContainer from '../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../containers/editProfileContainers/editBirthdayContainer';
+import ChangePasswordContainer from '../../containers/editProfileContainers/changePasswordContainer';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -146,7 +147,7 @@ const useStyles = makeStyles(theme => ({
                 </ExpansionPanelDetails>
 
             </ExpansionPanel>
-            
+            <ChangePasswordContainer/>
         </div>
     );
 }

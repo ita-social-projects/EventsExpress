@@ -1,6 +1,7 @@
 import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
+import Button from "@material-ui/core/Button";
 import { connect } from 'react-redux';
 
 
@@ -65,12 +66,12 @@ class ChangeAvatar extends React.Component {
         style={{ float: "right" }}
       >
         Clear
-      </button>
+      </Button>
 
             <div>
-                <button type="submit" disabled={pristine || submitting}>
+                <Button  color="primary" type="submit" disabled={pristine || submitting}>
                     Submit
-                </button>
+                </Button >
             </div>
         </form>
     );

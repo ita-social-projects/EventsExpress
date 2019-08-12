@@ -133,7 +133,25 @@ const initialState = {
         isPending: true,
         isError: false,
         data: null
+    },
+    changePassword: {
+        isPending: false,
+        isError: false,
+        data: []
+    },
+    recoverPassword: {
+        isPending: false,
+        isError: false,
+        isSucces:null,
+    },
+    authenticate:{
+        isPending:false,
+        isSucces:false,
+        isError:null,
+        data:[]
     }
+
+
 };
 
 export default initialState;

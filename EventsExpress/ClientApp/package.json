@@ -18,6 +18,7 @@
     "moment-timezone": "^0.5.26",
     "progress": "^2.0.3",
     "react": "^16.8.6",
+    "react-alert": "^5.5.0",
     "react-bootstrap": "^0.32.4",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",

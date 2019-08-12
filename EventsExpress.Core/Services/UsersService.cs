@@ -11,6 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MediatR;
+using EventsExpress.Core.Notifications;
+using Microsoft.Extensions.Caching.Memory;
+using EventsExpress.Core.NotificationHandlers;
+using EventsExpress.Db.Helpers;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.Services
@@ -21,7 +26,19 @@ namespace EventsExpress.Core.Services
 
         private readonly IMapper _mapper;
         private IPhotoService _photoService;
+        private readonly IMediator _mediator;
+        private CacheHelper _cacheHelper;
+        private IEmailService _emailService;            
         private IEventService _eventService;
+
+        public UserService(IUnitOfWork uow,
+            IMapper mapper,
+            IPhotoService photoSrv,
+            IMediator mediator,
+            CacheHelper cacheHelper,
+            IEmailService emailService,
+            IEventService eventService
+            )
 
 
         public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv, IEventService eventService)
@@ -46,10 +63,74 @@ namespace EventsExpress.Core.Services
             if (result.Email == user.Email && result.Id != null)
             {
                 await Db.SaveAsync();
+                userDto.Id = result.Id;
+                await _mediator.Publish(new RegisterVerificationMessage(userDto));
                 return new OperationResult(true, "Registration succeeded", "");
             }
 
             return new OperationResult(false, "Registration is failed", "");
+        }
+
+        public async Task<OperationResult> Verificate(CacheDTO cacheDto)
+        {
+            var user = Db.UserRepository.Get(cacheDto.UserId);
+            if (user == null)
+            {
+                return new OperationResult(false, "Invalid user Id", "userId");
+            }
+           // _cacheHelper.GetValue(cacheDto.UserId);
+
+            if (string.IsNullOrEmpty(cacheDto.Token))
+            {
+                return new OperationResult(false,"Token is null or empty","verification token");
+            }
+
+            if (cacheDto.Token == _cacheHelper.GetValue(cacheDto.UserId).Token)
+            {
+                user.EmailConfirmed = true;
+                await Db.SaveAsync();
+
+                _cacheHelper.Delete(cacheDto.UserId);
+                return new OperationResult(true, "Verify succeeded", "");
+            }
+
+            return new OperationResult(false, "Validation failed", "");
+        }
+
+        public async Task<OperationResult> PasswordRecover(UserDTO userDto)
+        {
+            if (userDto == null)
+            {
+                return new OperationResult(false, "Not found", "");
+            }
+            var user = Db.UserRepository.Get(userDto.Id);
+            if (user == null)
+            {
+                return new OperationResult(false, "Not found", "");
+            }
+
+            var newPassword = Guid.NewGuid().ToString();
+
+            user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+
+            try
+            {
+                await Db.SaveAsync();
+                await _emailService.SendEmailAsync(new EmailDTO
+                {
+                    RecepientEmail = user.Email,
+                    SenderEmail = "noreply@EventExpress.com",
+                    MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}"
+
+                });
+                return new OperationResult(true, "Password Changed", "");
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, "Something is wrong", "");
+            }
+
+            
         }
 
         public async Task<OperationResult> Update(UserDTO userDTO)

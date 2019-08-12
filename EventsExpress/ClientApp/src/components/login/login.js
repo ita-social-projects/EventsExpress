@@ -3,17 +3,25 @@ import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
+import { Link } from 'react-router-dom';
+import Modalwind2 from '../recoverPassword/modalwind2';
+
 
 
 const { validate, renderTextField, asyncValidate } = Module;
 
 class Login extends Component {
   constructor(props) {
-    super(props);
-  }
-  render() {
+      super(props);
+
+    }
+
+    openModal = () => (<Modalwind2/>)
     
-    const {pristine, reset, submitting} = this.props;
+  render() {
+     
+      const { pristine, reset, submitting } = this.props;
+
     return (
       <div className="auth">
         <form onSubmit={this.props.handleSubmit}>
@@ -31,7 +39,8 @@ class Login extends Component {
               label="Password:"
               type="password"
             />
-          </div>
+           </div>
+                
           <div>
             <DialogActions>          
         <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
@@ -42,7 +51,10 @@ class Login extends Component {
               </Button>
             </DialogActions>
           </div>    
-        </form>
+            </form>
+            <div>
+                <Modalwind2 />
+            </div>
       </div>
     );
   }

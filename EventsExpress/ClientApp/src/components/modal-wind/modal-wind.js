@@ -59,11 +59,10 @@ const useStyles = makeStyles({
         Sign In/Up
       </Button>
           <Dialog
-              open={props.status.isOpen}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      
-      >
+              open={ open}
+              onClose={handleClose}
+              aria-labelledby="form-dialog-title"
+          >
       
           <Paper square className={classes.root}>
             <Tabs
@@ -78,7 +77,7 @@ const useStyles = makeStyles({
             </Tabs>
             {value === 0 && (
               <TabContainer>
-                <LoginWrapper />
+                <LoginWrapper  />
               </TabContainer>
             )}
             {value === 1 && (

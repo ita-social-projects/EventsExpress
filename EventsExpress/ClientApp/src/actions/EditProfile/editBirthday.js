@@ -17,7 +17,8 @@ export default function edit_Birthday(data) {
             if (response.error == null) {
 
                 dispatch(setEditBirthdaySuccess(true));
-                dispatch(updateBirthday(data));
+                console.log(data);
+                dispatch(updateBirthday(data.Birthday));
             } else {
                 dispatch(setEditBirthdayError(response.error));
             }

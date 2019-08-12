@@ -8,14 +8,18 @@ export const changeAvatar = {
 
 const api_serv = new EventsExpressService();
 
-export default function change_avatar(data) {
+export default  function change_avatar(data) {
     return dispatch => {
         dispatch(setAvatarPending(true));
         const res = api_serv.setAvatar(data);
+        console.log(res);
         res.then(response => {
             if (response.error == null) {
                 dispatch(setAvatarSuccess(true));
-                dispatch(updateAvatar(data));
+                //console.log( response.text());
+                console.log(response);
+                
+                dispatch(updateAvatar(response));
             } else {
                 dispatch(setAvatarError(response.error));
             }

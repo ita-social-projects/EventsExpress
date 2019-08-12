@@ -38,7 +38,13 @@ export const validate = values => {
     'description',
     'categories',
     'country',
-    'city'
+    'city',
+     'RepeatPassword',
+     'oldPassword',
+     'newPassword',
+     'repeatPassword',
+      'Birthday',
+      'UserName'
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
@@ -59,9 +65,27 @@ export const validate = values => {
   }
   if (values.password !== values.RepeatPassword) {
     errors.RepeatPassword = 'Passwords do not match';
-  }
+    }
+    if (values.newPassword !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords do not match';
+    }
+    if (new Date(values.Birthday).getTime <= Date.now()) {
+        errors.Birthday = 'Date is incorrect';
+    }
+   
+    
   return errors
 }
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, }) =>
+    <DatePicker
+        onChange={onChange}
+        selected={value || defaultValue || new Date()}
+    
+    peekNextMonth
+    showMonthDropdown
+    showYearDropdown
+    dropdownMode="select"
+/>
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
   value = value || defaultValue || new Date();
@@ -84,6 +108,7 @@ export const minLength = min => value =>
   value && value.length < min ? `Must be ${min} characters or more` : undefined
 
 export const minLength2 = minLength(6)
+export const minLength3 = minLength(4)
 
 export const renderSelectLocationField = ({
   input,

@@ -1,4 +1,5 @@
-import React, {Component} from "react";
+import React, { Component, Fragment } from "react";
+import { useAlert } from "react-alert";
 import DialogActions from "@material-ui/core/DialogActions";
 import Module  from '../helpers';
 import { Field, reduxForm } from "redux-form";
@@ -6,12 +7,14 @@ import Button from "@material-ui/core/Button";
 import { minLength2, maxLength15 } from '../helpers/helpers'
 const { validate, renderTextField, asyncValidate } = Module;
 
+
  class Register extends Component {
   constructor(props) {
     super(props);
 
   }
-  render() {
+     render() {
+         alert = useAlert;
     const {pristine, reset , submitting} = this.props;
     return (
       <div className="register">
@@ -47,7 +50,7 @@ const { validate, renderTextField, asyncValidate } = Module;
             <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
                CLEAR
         </Button >
-              <Button fullWidth={true} type="submit" color="primary">
+                        <Button fullWidth={true} type="submit" color="primary" >
                 Sign Up
               </Button> </DialogActions>
           </div>

@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import TextField from "@material-ui/core/TextField";
-
+import Button from "@material-ui/core/Button";
 
 const renderTextField = (
     { input, label, meta: { touched, error }, ...custom },
@@ -28,15 +28,17 @@ const EditUsername = props => {
                     name="UserName"
                     component={renderTextField}
                     label="UserName"
+                    
+
                 />
             </div>
 
 
             <div>
-                <button type="submit" disabled={pristine || submitting}>Submit</button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}>
+                <Button type="submit" color="primary" disabled={pristine || submitting}>Submit</Button>
+                <Button type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
                     Clear
-        </button>
+        </Button>
             </div>
         </form>
     );
@@ -44,5 +46,5 @@ const EditUsername = props => {
 
 export default reduxForm({
     form: 'EditUsername', // a unique identifier for this form
-
+    
 })(EditUsername);

@@ -22,12 +22,17 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private IUserService _userService;
+        private IAuthServicre _authServicre;
         private IMapper  _mapper;
 
-        public AuthenticationController(IUserService userSrv, IMapper mapper)
+        public AuthenticationController(IUserService userSrv,
+            IMapper mapper,
+            IAuthServicre authServicre
+            )
         {
             _userService = userSrv;
             _mapper = mapper;
+            _authServicre = authServicre;
         }
 
         [AllowAnonymous]
@@ -94,8 +99,91 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
+
+            return Ok();
+        }
+   
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> PasswordRecovery(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest();
+            }
+            var user = _userService.GetByEmail(email);
+            if (user == null)
+            {
+                return BadRequest("User with this email is not found");
+            }
+            var res = await _userService.PasswordRecover(user);
+            if (!res.Successed)
+            {
+                return BadRequest(res.Message);
+            }
+
             return Ok();
         }
 
+
+        [AllowAnonymous]
+        [HttpPost("[action]/{userid}/{token}")]
+        public async Task<IActionResult> Verify(string userid, string token)
+        {
+            var cache = new CacheDTO { Token = token };
+
+            var res = Guid.TryParse(userid, out cache.UserId);
+            if (!res)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userService.Verificate(cache);
+            if (!result.Successed)
+            {
+                return BadRequest(ModelState);
+            }
+            if (result.Successed)
+            {
+                var user = _userService.GetById( cache.UserId);
+
+                var responce = _mapper.Map<UserDTO, UserInfo>(user);
+                responce.Token = _authServicre.FirstAuth(user).Message;
+                responce.AfterEmailConfirmation = true;
+
+                return Ok(responce);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangePassword
+            (ChangePasswordDto changePasswordDto, [FromServices] IAuthServicre _authServise
+            )
+        {
+            var user = _authServise.GetCurrentUser(HttpContext.User);
+
+            var check = _authServise.CheckPassword(changePasswordDto.OldPassword, user.PasswordHash);
+
+            if (check == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            user.PasswordHash = PasswordHasher.GenerateHash(changePasswordDto.NewPassword);
+
+            var result = await _userService.Update(user);
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok();
+        }
+        
     }
 }

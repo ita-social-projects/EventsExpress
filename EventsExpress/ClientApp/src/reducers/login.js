@@ -2,9 +2,6 @@ import { SET_LOGIN_PENDING, SET_LOGIN_SUCCESS, SET_LOGIN_ERROR} from "../actions
 import { SET_LOGOUT } from '../actions/logout';
 import initialState from '../store/initialState';
 
-
-  
-
 export const reducer = (
   state = initialState.login,
   action
@@ -32,7 +29,9 @@ export const reducer = (
     case SET_LOGOUT:
       return Object.assign({}, state, {
         isLoginSuccess: !action.isLoginSuccess
-      });
+          });
+
+
 
     default:
       return state;

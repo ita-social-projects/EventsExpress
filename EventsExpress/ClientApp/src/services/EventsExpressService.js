@@ -38,6 +38,16 @@ export default class EventsExpressService {
         return res;
     }
 
+    auth = async (data) => {
+        console.log('auth', data);
+        const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
+
     setUserFromEvent = async (data) => {
         const res = await this.setResource('event/DeleteUserFromEvent?userId=' + data.userId + '&eventId=' + data.eventId);
         if (!res.ok) {
@@ -61,7 +71,7 @@ export default class EventsExpressService {
         if (!res.ok) {
             return { error: await res.text() };
         }
-        return res;
+        return await res.text();
     }
 
     setLogin = async (data) => {
@@ -70,6 +80,16 @@ export default class EventsExpressService {
             return { error: await res.text() };
         }
         return await res.json();
+    }
+
+    setRecoverPassword = async (data) => {
+        console.log("SERVICE:")
+        console.log(data)
+        const res = await this.setResource('Authentication/PasswordRecovery/?email=' + data.email);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res;
     }
 
     setRegister = async (data) => {
@@ -232,7 +252,8 @@ export default class EventsExpressService {
 
     setBirthday = async (data) => {
         const res = await this.setResource('Users/EditBirthday', {
-            Birthday: data.Birthday
+            Birthday: new Date(data.Birthday).toDateString()
+
         });
         if (!res.ok) {
             return { error: await res.text() };
@@ -285,6 +306,16 @@ export default class EventsExpressService {
         if (!res.ok) {
             return { error: await res.text() };
         }
+        return res;
+    }
+
+    setChangePassword = async (data) => {
+        
+        const res = await this.setResource('Authentication/ChangePassword', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        
         return res;
     }
 

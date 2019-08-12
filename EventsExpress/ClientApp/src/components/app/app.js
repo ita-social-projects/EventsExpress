@@ -17,6 +17,9 @@ import BadRequest from '../Route guard/400'
 import { Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import EventsForAdmin from '../../components/event/EventsForAdmin'
+import Authentication from '../Authentication/authentication';
+
+
 export default class App extends Component {
 
     render() {
@@ -42,6 +45,8 @@ export default class App extends Component {
                     <Route path="/admin/events" component={EventsForAdmin} />
                     <Route path="/search/users" component={SearchUserWrapper} />
                     <Route component={NotFound} />
+                        <Route path="/admin/users/" component={UsersWrapper} />
+                        <Route path="/authentication/:id/:token" component={Authentication} />
                 </Switch>
                 
                 </Layout>

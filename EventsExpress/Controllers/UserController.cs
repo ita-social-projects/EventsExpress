@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
@@ -287,7 +289,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
-            return Ok();
+            return Ok(updatedPhoto);
         }
 
     }
