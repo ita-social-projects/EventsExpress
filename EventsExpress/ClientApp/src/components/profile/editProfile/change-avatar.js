@@ -58,7 +58,7 @@ class ChangeAvatar extends React.Component {
           handleOnDrop={this.handleOnDrop}
           validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
         />        
-        <button
+        <Button
         type="button"
         className="uk-button uk-button-default uk-button-large clear"
         disabled={this.props.submitting}

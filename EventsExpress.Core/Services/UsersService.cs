@@ -38,15 +38,15 @@ namespace EventsExpress.Core.Services
             CacheHelper cacheHelper,
             IEmailService emailService,
             IEventService eventService
-            )
-
-
-        public UserService(IUnitOfWork uow, IMapper mapper, IPhotoService photoSrv, IEventService eventService)
+            )                                                                                                     
         {
             Db = uow;
             _mapper = mapper;
             _photoService = photoSrv;
             _eventService = eventService;
+            _mediator = mediator;
+            _cacheHelper = cacheHelper;
+            _emailService = emailService;
         }
 
         public async Task<OperationResult> Create(UserDTO userDto)

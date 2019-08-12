@@ -59,7 +59,7 @@ const useStyles = makeStyles({
         Sign In/Up
       </Button>
           <Dialog
-              open={ open}
+              open={props.status.isOpen}
               onClose={handleClose}
               aria-labelledby="form-dialog-title"
           >

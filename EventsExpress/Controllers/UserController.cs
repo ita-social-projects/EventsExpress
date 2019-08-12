@@ -243,11 +243,14 @@ namespace EventsExpress.Controllers
             newAva = HttpContext.Request.Form.Files[0];
             
             var result = await _userService.ChangeAvatar(user.Id, newAva);
-            if (result.Successed)
+
+            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+            if (!result.Successed)
             {
-                return Ok();
+                return BadRequest(result.Message);
             }
-            return BadRequest(result.Message);
+
+            return Ok(updatedPhoto);
         }
 
         #endregion
@@ -289,7 +292,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
-            return Ok(updatedPhoto);
+            return Ok();
         }
 
     }
