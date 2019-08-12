@@ -64,7 +64,7 @@ export default class Event extends Component {
         const { city, country } = this.props.item;
     
         return (
-            <div className="col-md-6 col-lg-4 col-sm-6 col-xl-4 mt-3">
+            <div className="col-4 mt-3">
             <Card className={classes.card}>
                 <CardHeader
                     avatar={

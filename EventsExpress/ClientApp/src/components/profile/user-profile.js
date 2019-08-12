@@ -113,7 +113,6 @@ export default class UsertemView extends Component {
                         }
                     </div>
                     {this.props.add_event_flag ? 
-                    
                     <div className="row shadow p-5 mb-5 bg-white rounded">
                         <AddEventWrapper /> 
                      </div>
