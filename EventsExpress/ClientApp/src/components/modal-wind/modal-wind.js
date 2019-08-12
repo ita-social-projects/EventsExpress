@@ -81,7 +81,7 @@ const useStyles = makeStyles({
               </TabContainer>
             )}
             {value === 1 && (
-                      <TabContainer>
+              <TabContainer>
                           <RegisterWrapper handleClose={handleClose} />
               </TabContainer>
             )}

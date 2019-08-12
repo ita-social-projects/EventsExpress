@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { MDBNotification, MDBContainer } from "mdbreact";
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
 import logout from '../../actions/logout';
