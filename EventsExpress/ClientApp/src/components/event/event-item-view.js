@@ -29,7 +29,7 @@ export default class EventItemView extends Component {
                     src={x.photoUrl}
 
                     className='littleAvatar'
-                /><h4>{x.username} {this.getAge(x.birthday)}</h4>
+                /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
             </div>)
         );
     }
@@ -92,7 +92,9 @@ export default class EventItemView extends Component {
                             src={user.photoUrl}
 
                             className='littleAvatar'
-                        /><h4>{user.username} {this.getAge(user.birthday)}</h4>
+                        />
+                        <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.username} {this.getAge(user.birthday)}</h4></Link></p>
+                        
                     </div>
 
                     <h4>Visitors:</h4>

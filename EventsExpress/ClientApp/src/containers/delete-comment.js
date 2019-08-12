@@ -15,26 +15,28 @@ class commentItemWrapper extends React.Component {
     submit = () => {
         let value = this.props.item;
         console.log('delete: ');
-        console.log(value.id);
         this.props.deleteComm({ id: value.id, eventId: this.props.eventId });
     };
 
     render() {
         const { id } = this.props.item;
+        console.log(this.props.item.userId);
         return (
             <div className="ItemComment">
-                <CommentItem item={this.props.item} />
-                {this.props.item.userId === this.props.userId &&
-                    <div>
-                        <div>
+                {!(this.props.item.userId === this.props.userId)
+                    ? <CommentItem item={this.props.item} user={this.props.userId} />
+                    : <div className="comment-container">
+                        <div className="mybutton">
                             <Fab
                                 size="small"
                                 onClick={this.submit}
                                 aria-label="Delete">
                                 <i className="fa fa-trash"></i>
-                        </Fab>
+                            </Fab>
                         </div>
-                    </div>}
+                        <CommentItem item={this.props.item} user={this.props.userId} />
+                    </div>
+                }
             </div>
         )
     }

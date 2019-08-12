@@ -13,6 +13,7 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ModalWind from '../modal-wind';
+import { Link } from 'react-router-dom';
 
 import './header-profile.css';
 
@@ -47,13 +48,13 @@ export default class HeaderProfile extends Component {
                         <h4>{name}</h4>
                         
                         <div>
-                            <IconButton
+                            <Link to={'/profile' }><IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                             >
                                 <Create />
-                            </IconButton>
+                            </IconButton></Link>
                             <IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"

@@ -22,8 +22,12 @@ import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment'; 
 import * as Comments from './comment-list';
+import * as Profile from './user-item-view';
+import * as EventsForProfile from './events-for-profile';
 
+import * as ModalWind from './ModalWind';
 const rootReducers = {
+    modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
     form: formReducer,
@@ -47,9 +51,11 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
-    delete_comment: DeleteComment.reducer,
     roles: Roles.reducer,
-    change_avatar: ChangeAvatar.reducer 
+    change_avatar: ChangeAvatar.reducer, 
+    delete_comment: DeleteComment.reducer,
+    profile: Profile.reducer,
+    events_for_profile: EventsForProfile.reducer
 };
 
 

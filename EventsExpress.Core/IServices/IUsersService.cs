@@ -22,6 +22,7 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Block(Guid uId);
 
         UserDTO GetById(Guid id);
+        ProfileDTO GetProfileById(Guid id, Guid FromId);
 
         UserDTO GetByEmail(string email);
 
@@ -30,5 +31,8 @@ namespace EventsExpress.Core.IServices
         IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int Count);
         IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories);
         IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter);
+
+        Task<OperationResult> SetAttitude(AttitudeDTO attitude);
+        AttitudeDTO GetAttitude(AttitudeDTO attitude);
     }
 }

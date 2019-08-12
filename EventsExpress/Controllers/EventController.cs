@@ -72,9 +72,12 @@ namespace EventsExpress.Controllers
 
             var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(model, out Count));
                     
-
+            
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
+            if (pageViewModel.PageNumber > pageViewModel.TotalPages) {
+                return BadRequest();
+            }
+            IndexViewModel<EventDto> viewModel = new IndexViewModel<EventDto>
             {
                 PageViewModel = pageViewModel,
                 items = res
@@ -97,5 +100,40 @@ namespace EventsExpress.Controllers
             return BadRequest(res.Message);
         }
 
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult FutureEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.FutureEventsByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult PastEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.PastEventsByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult EventsToGo(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.EventsToGoByUserId(id));
+
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult VisitedEvents(Guid id)
+        {
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventDto>>(_eventService.VisitedEventsByUserId(id));
+
+            return Ok(res);
+        }
     }
 }

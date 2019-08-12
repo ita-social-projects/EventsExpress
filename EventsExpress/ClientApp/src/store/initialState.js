@@ -1,5 +1,8 @@
 
 const initialState = {
+    modalWind:{
+        isOpen: false 
+    },
     user:{
         id: null,
         name: null,
@@ -117,6 +120,16 @@ const initialState = {
             dateTo: null,
             photoUrl: null
         }
+    },
+    profile: {
+        isPending: true,
+        isError: false,
+        data: null
+    },
+    events_for_profile: {
+        isPending: true,
+        isError: false,
+        data: null
     }
 };
 

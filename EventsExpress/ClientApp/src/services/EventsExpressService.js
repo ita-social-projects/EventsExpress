@@ -86,9 +86,13 @@ export default class EventsExpressService {
         return res;
     }
 
-    getUsers = async (page) => {
-        const res = await this.getResource(`users/get${page}`);
+    getUsers = async (filter) => {
+        const res = await this.getResource(`users/get${filter}`);
         console.log(res);
+        return res;
+    }
+    getUserById = async (id) => {
+        const res = await this.getResource('users/GetUserById?id=' + id);
         return res;
     }
     getCountries = async () => {
@@ -171,6 +175,26 @@ export default class EventsExpressService {
         return res;
     }
 
+    getVisitedEvents = async (id) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id);
+        return res;
+    }
+
+    getFutureEvents = async (id) => {
+        const res = await this.getResource('event/futureEvents?id=' + id);
+        return res;
+    }
+
+    getPastEvents = async (id) => {
+        const res = await this.getResource('event/pastEvents?id=' + id);
+        return res;
+    }
+
+    getEventsToGo = async (id) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id);
+        return res;
+    }
+
     getResource = async (url) => {
         const res = await fetch(this._baseUrl + url, {
             method: "get",
@@ -180,7 +204,13 @@ export default class EventsExpressService {
             }),
         });
         if (!res.ok) {
-            return { error: "Invalid data" }
+            return {
+                error:
+                {
+                    ErrorCode: res.status,
+                    massage: await res.statusText
+                }
+            }
         }
         return await res.json();
     }
@@ -236,6 +266,18 @@ export default class EventsExpressService {
 
     setUserUnblock = async (id) => {
         const res = await this.setResource('Users/Unblock/?userId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+    
+    setAttitude = async (data) => {
+        const res = await this.setResource('users/SetAttitude', {
+            UserFromId: data.userFromId,
+            UserToId: data.userToId,
+            Attitude: data.attitude
+        });
         if (!res.ok) {
             return { error: await res.text() };
         }

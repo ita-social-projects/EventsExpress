@@ -22,6 +22,11 @@ namespace EventsExpress.Core.IServices
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
         IEnumerable<EventDTO> UpcomingEvents(int? num);
 
+        IEnumerable<EventDTO> FutureEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> PastEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> EventsToGoByUserId(Guid userId);
+
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
         

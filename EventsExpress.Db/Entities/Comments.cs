@@ -14,6 +14,9 @@ namespace EventsExpress.Db.Entities
         public Guid EventId { get; set; }
         public virtual Event Event { get; set; }
 
+        public Guid? ParentId { get; set; }
+        public virtual IEnumerable<Comments> Children { get; set; }
+
         public DateTime Date { get; set; }
     }
 }
