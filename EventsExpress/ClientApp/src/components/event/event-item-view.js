@@ -66,61 +66,6 @@ export default class EventItemView extends Component {
 
         let flag = i_join == null;
         return <>
-            {/* <div className="row box">
-                <div className="col-6 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                    <img src={photoUrl} className="img-thumbnail" />
-                    <p>{categories_list}</p>
-                    {current_user.id != user.id && current_user.id != null &&
-                        <>
-                            {flag == true &&
-                                <button onClick={this.props.onJoin} className="btn btn-info">Join</button>
-                            }
-                            {!flag &&
-                                <button onClick={this.props.onLeave} className="btn btn-info">Leave</button>
-                            }
-                        </>
-                    }
-                    {current_user.id === user.id &&
-                     <AddComponent title={'Edit Event'} />
-                    }
-
-                    <h4>Created by:</h4>
-                    <hr />
-                    <div className="d-flex align-items-center">
-                        <Avatar
-                            alt="Тут аватар"
-                            src={user.photoUrl}
-
-                            className='littleAvatar'
-                        />
-                        <p><Link to={'/user/' + user.id} className="btn-custom"><h4>{user.username} {this.getAge(user.birthday)}</h4></Link></p>
-                        
-                    </div>
-
-                    <h4>Visitors:</h4>
-                    <hr />
-                    {this.renderUsers(visitors)}
-                </div>
-                <div className="col-6">
-                    <div className="text-box overflow-auto scrollbar-near-moon shadow p-3 mb-5 bg-white roundeds">
-                    <h3><strong><p className="text-center font-weight-bolder" >{title}</p></strong></h3>
-
-                    <h3><p className="text-center"><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment></p></h3>
-
-                    <h3><p className="text-center">{country} {city}</p></h3>
-                    </div>
-                    <div className="text-box overflow-auto scrollbar-near-moon shadow p-3 mb-5 bg-white rounded">
-                        <p>{description}</p>
-                    </div>
-
-                    <h2><p className="text-center">Comments</p></h2>
-
-                    <div className="text-box overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        <Comment match={this.props.match}/>
-                    </div>
-                </div>
-            </div> */}
-
         <div className="container-fluid mt-1">
             <div className="row">
             <div className="col-9">
@@ -133,19 +78,21 @@ export default class EventItemView extends Component {
                         {categories_list}
                     </div>
                     <div className="button-block">
-                        {current_user.id != user.id && current_user.id != null &&
-                            <>
-                                {flag == true &&
-                                    <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
-                                }
-                                {!flag &&
-                                    <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
-                                }
-                            </>
-                        }
-                        {current_user.id === user.id && !this.state.edit &&
-                                    <button onClick={this.onEdit} className="btn btn-join">Edit</button>
-                        }
+                        
+                            {new Date(dateFrom).getTime() > new Date().getTime() && current_user.id != user.id && current_user.id != null &&
+                                <>
+                                    {flag == true &&
+                                        <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
+                                    }
+                                    {!flag &&
+                                        <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
+                                    }
+                                </>
+                            }
+                            {dateFrom > new Date() &&  current_user.id === user.id && !this.state.edit &&
+                                        <button onClick={this.onEdit} className="btn btn-join">Edit</button>
+                            }
+                        
                     </div>
                 </div>
                 {this.state.edit &&

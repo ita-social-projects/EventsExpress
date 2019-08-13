@@ -13,7 +13,7 @@ namespace EventsExpress.Core.Notifications
 
         public EventCreatedMessage(EventDTO eventDTO)
         {
-            Message = $"new event was Created: id {eventDTO.Id}";
+            Message = $"New event was Created: id is {eventDTO.Id}";
             Event = eventDTO;
         }
     }

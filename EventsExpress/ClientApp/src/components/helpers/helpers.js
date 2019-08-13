@@ -37,8 +37,8 @@ export const validate = values => {
     'title',
     'description',
     'categories',
-    'country',
-    'city',
+    'countryId',
+    'cityId',
      'RepeatPassword',
      'oldPassword',
      'newPassword',
@@ -118,16 +118,13 @@ export const renderSelectLocationField = ({
   meta: { touched, invalid, error },
   children,
   ...custom
-}) => (
+}) =>
     <FormControl error={touched && error}>
       <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
       <Select
         native
-        
-        error={touched && invalid}
-
-        helperText={touched && error}
         {...input}
+        onBlur={() => input.onBlur()}
         {...custom}
         inputProps={{
           name: text.toLowerCase() + 'Id',
@@ -139,10 +136,12 @@ export const renderSelectLocationField = ({
       </Select>
       {renderFromHelper({ touched, error })}
     </FormControl>
-  )
 
 
-export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
+
+export const renderMultiselect = ({ input, data, valueField, textField, placeholder, 
+  meta: { touched, invalid, error } }) =>
+  <>
   <Multiselect {...input}
     onBlur={() => input.onBlur()}
     value={input.value || []}
@@ -151,6 +150,8 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
     textField={textField}
     placeholder={placeholder}
   />
+  {renderFromHelper({ touched, error })}
+  </>
 
 export const renderTextArea = ({
     label,
@@ -228,7 +229,7 @@ const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {
     return
   } else {
-    return <FormHelperText>{touched && error}</FormHelperText>
+    return <FormHelperText className="text-danger">{touched && error}</FormHelperText>
   }
 }
 

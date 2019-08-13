@@ -1,8 +1,8 @@
 ﻿import React from "react";
 import ChangePassword from "../../components/profile/editProfile/ChangePassword";
 import { connect } from "react-redux";
-import changePassword from "../../actions/EditProfile/changePassword";
-
+import changePassword , {setChangePasswordError, setChangePasswordPending,setChangePasswordSuccess} from "../../actions/EditProfile/changePassword";
+import { reset} from 'redux-form';
 class ChangePasswordContainer extends React.Component {
     submit = value => {
         console.log(value);
@@ -28,7 +28,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        changePassword: (date) => dispatch(changePassword(date))
+        changePassword: (date) => dispatch(changePassword(date)),
+        reset: () => {
+            dispatch(reset('ChangePassword'));
+        }  
     };
 };
 

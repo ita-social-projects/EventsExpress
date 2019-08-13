@@ -1,5 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-
+import { reset} from 'redux-form';
 export const changePassword = {
     PENDING: "SET_CHANGEPASSWORD_PENDING",
     SUCCESS: "SET_CHANGEPASSWORD_SUCCESS",
@@ -15,9 +15,8 @@ export default function change_Password(data) {
         const res = api_serv.setChangePassword(data);
         res.then(response => {
             if (response.error == null) {
-
                 dispatch(setChangePasswordSuccess(true));
-                dispatch(changePasswordUpdate(data));
+                dispatch(reset('ChangePassword'));
             } else {
                 dispatch(setChangePasswordError(response.error));
             }
@@ -27,28 +26,28 @@ export default function change_Password(data) {
 }
 
 
-function changePasswordUpdate(data) {
+export function   changePasswordUpdate(data) {
     return {
         type: changePassword.UPDATE,
         payload: data
     };
 }
 
-function setChangePasswordPending(data) {
+export function setChangePasswordPending(data) {
     return {
         type: changePassword.PENDING,
         payload: data
     };
 }
 
-function setChangePasswordSuccess(data) {
+export function setChangePasswordSuccess(data) {
     return {
         type: changePassword.SUCCESS,
         payload: data
     };
 }
 
-function setChangePasswordError(data) {
+export function setChangePasswordError(data) {
     return {
         type: changePassword.ERROR,
         payload: data

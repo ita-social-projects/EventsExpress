@@ -167,7 +167,7 @@ namespace EventsExpress.Core.Services
                 await Db.SaveAsync();
 
                 e.Id = result.Id;
-                //await _mediator.Publish(new EventCreatedMessage(e));
+                await _mediator.Publish(new EventCreatedMessage(e));
                 return new OperationResult(true);
             }
             catch (Exception ex)
