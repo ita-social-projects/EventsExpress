@@ -17,7 +17,7 @@ export default function delete_comment(data) {
             if (response.error == null) {
 
                 dispatch(setCommentSuccess(true));
-                dispatch(get_comments(data.eventId));
+                dispatch(get_comments(data.eventId, 1));
             } else {
                 dispatch(set3CommentError(response.error));
             }

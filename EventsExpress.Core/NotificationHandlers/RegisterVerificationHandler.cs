@@ -34,7 +34,7 @@ namespace EventsExpress.Core.NotificationHandlers
             
             Debug.WriteLine("messagehandled");
             var token = Guid.NewGuid().ToString();
-            string theEmailLink= "http://localhost:57293/authentication/" + notification.User.Id.ToString() + "/" + token;
+            string theEmailLink= "http://localhost:64144/authentication/" + notification.User.Id.ToString() + "/" + token;
 
             _cacheHepler.Add(new CacheDTO
             {
@@ -47,7 +47,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 await _sender.SendEmailAsync(new EmailDTO {
                     SenderEmail = "noreply@EventExpress.com",
                     RecepientEmail = notification.User.Email,
-                    MessageText = theEmailLink
+                    MessageText = $"For confirm your email you can follow the <a href='{theEmailLink}'>link</>"
                 });
 
                 var x = _cacheHepler.GetValue(notification.User.Id);

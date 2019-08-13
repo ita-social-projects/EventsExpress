@@ -162,7 +162,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events").Where(x => x.Id == id).FirstOrDefault());
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events,Role").Where(x => x.Id == id).FirstOrDefault());
             return user;
         }
 
@@ -210,10 +210,10 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
         {
-            var categoryNames = new List<string> { "Golf", "Summer" };
+            var categoryIds = categories.Select(x => x.Id);
 
             var users = Db.UserRepository.Get(includeProperties: "Categories.Category")
-                .Where(user => user.Categories.Any(category => categoryNames.Contains(category.Category.Name)))
+                .Where(user => user.Categories.Any(category => categoryIds.Contains(category.Category.Id)))
                 .ToList();
 
             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);

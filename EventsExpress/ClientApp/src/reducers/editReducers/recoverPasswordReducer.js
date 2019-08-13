@@ -13,7 +13,8 @@ export const reducer = (state = initialState.recoverPassword, action) => {
             return {
                 ...state,
                 isPending: false,
-                isSucces: true
+                isSucces: true,
+                isError: false
             }
 
         case recoverPassword.ERROR:

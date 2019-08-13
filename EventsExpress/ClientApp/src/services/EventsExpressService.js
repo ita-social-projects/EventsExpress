@@ -41,6 +41,7 @@ export default class EventsExpressService {
     auth = async (data) => {
         console.log('auth', data);
         const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
+        console.log(res);
         if (!res.ok) {
             return { error: await res.text() };
         }

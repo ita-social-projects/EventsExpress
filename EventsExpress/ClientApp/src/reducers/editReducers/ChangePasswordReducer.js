@@ -17,7 +17,8 @@ export const reducer = (
         case changePassword.SUCCESS:
             return {
                 ...state,
-                isChangePasswordSuccess: action.isChangePasswordSuccess,
+                isChangePasswordPending: false,
+                isChangePasswordSuccess: false,
                 ChangePasswordError: null
             };
 

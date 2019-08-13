@@ -117,7 +117,7 @@ export default class UsertemView extends Component {
                         <AddEventWrapper /> 
                      </div>
                     :
-                    <div className="row shadow p-5 mb-5 bg-white rounded">
+                    <div className="shadow p-5 mb-5 bg-white rounded">
                         {(data && data.length > 0) ? <>{spinner}{content}</> : <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
                     </div>
                     }

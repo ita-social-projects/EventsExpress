@@ -17,6 +17,7 @@ export const reducer = (state = initialState.user, action) => {
             return action.payload;
 
         case authenticate.SET_AUTHENTICATE:
+            localStorage.setItem("token", action.payload.token);
             return action.payload;
 
         case SET_LOGOUT:

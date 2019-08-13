@@ -1,24 +1,21 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import _authenticate from '../../actions/authentication';
-
+import history from '../../history';
  class Authentication extends Component {
 
     componentWillMount = () => {
-
-        console.log("componentWillMount");
         const { id, token } = this.props.match.params;
-
-        console.log({ userId: id, token: token });
         this.props.auth({ userId: id, token: token })
-        
-
     }
 
     render() {
         return (
-            <>
-            </>
+            <div className="mt-5 b-inline-block">
+                <div className='h3 text-center alert alert-success'>
+                    Our congratulation, Your registration was successful! 
+                </div>
+            </div>
             )
     }
 }

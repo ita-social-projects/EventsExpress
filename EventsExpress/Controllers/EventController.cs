@@ -90,7 +90,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult AllForAdmin([FromQuery]EventFilterViewModel model)
         {
-            model.PageSize = 4;
+            model.PageSize = 6;
 
             int Count;
 

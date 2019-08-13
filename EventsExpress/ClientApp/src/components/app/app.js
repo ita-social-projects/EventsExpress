@@ -28,7 +28,7 @@ export default class App extends Component {
 
             <Layout>
                 <Switch>
-                    <Route path="/home/events" exact component={Home} />
+                    <Route path="/home/events" component={Home} />
                         <Route
                          exact
                          path="/"
@@ -44,9 +44,9 @@ export default class App extends Component {
                         <Route path="/admin/users" component={UserPWrapper} />
                     <Route path="/admin/events" component={EventsForAdmin} />
                     <Route path="/search/users" component={SearchUserWrapper} />
-                    <Route component={NotFound} />
                         <Route path="/admin/users/" component={UsersWrapper} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
+                    <Route component={NotFound} />
                 </Switch>
                 
                 </Layout>

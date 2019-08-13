@@ -16,7 +16,7 @@ export default class UserItemList extends Component {
     }
 
     handlePageChange = (page, e) => { 
-        this.props.callback(window.location.search.replace(/(page=)\w/gm, 'page=' + page));
+        this.props.callback(window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page));
         this.setState({
             currentPage: page
         });
@@ -54,7 +54,7 @@ export default class UserItemList extends Component {
                             <div>
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
-                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + 1)}
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + 1)}
                                         {...getPageItemProps({
                                             pageValue: 1,
                                             onPageChange: this.handlePageChange
@@ -65,7 +65,7 @@ export default class UserItemList extends Component {
 
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
-                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page - 1))}
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page - 1))}
 
                                         {...getPageItemProps({
                                             pageValue: previousPage,
@@ -81,25 +81,42 @@ export default class UserItemList extends Component {
                                     if (currentPage === page) {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
-                                    return (
-                                        <Link className="btn btn-primary"
-                                            to={window.location.search.replace(/(page=)\w/gm, 'page=' + page)}
+                                    if (totalPages != 1) {
+                                        return (
+                                            <Link className="btn btn-primary"
+                                                to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
 
-                                            {...getPageItemProps({
-                                                pageValue: page,
-                                                key: page,
-                                                style: activePage,
-                                                onPageChange: this.handlePageChange
-                                            })}
-                                        >
-                                            {page}
-                                        </Link>
-                                    );
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                                {page}
+                                            </Link>
+                                        );
+                                    } else {
+
+                                        return (
+                                            <Link
+                                                to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
+
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                            </Link>
+                                        );
+                                    }
                                 })}
 
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
-                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + (page + 1))}
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page + 1))}
 
                                         {...getPageItemProps({
                                             pageValue: nextPage,
@@ -111,7 +128,7 @@ export default class UserItemList extends Component {
                                 )}
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
-                                        to={window.location.search.replace(/(page=)\w/gm, 'page=' + this.props.totalPages)}
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + this.props.totalPages)}
 
                                         {...getPageItemProps({
                                             pageValue: this.props.totalPages,
