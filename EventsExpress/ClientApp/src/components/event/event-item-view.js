@@ -79,7 +79,7 @@ export default class EventItemView extends Component {
                     </div>
                     <div className="button-block">
                         
-                            {new Date(dateFrom).getTime() > new Date().getTime() && current_user.id != user.id && current_user.id != null &&
+                            {new Date(dateFrom).getTime() >= new Date().getTime() && current_user.id != user.id && current_user.id != null &&
                                 <>
                                     {flag == true &&
                                         <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
@@ -89,7 +89,7 @@ export default class EventItemView extends Component {
                                     }
                                 </>
                             }
-                            {dateFrom > new Date() &&  current_user.id === user.id && !this.state.edit &&
+                            {new Date(dateFrom).getTime() >= new Date().getTime() &&current_user.id === user.id && !this.state.edit &&
                                         <button onClick={this.onEdit} className="btn btn-join">Edit</button>
                             }
                         
