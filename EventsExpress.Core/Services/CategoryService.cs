@@ -32,9 +32,9 @@ namespace EventsExpress.Core.Services
 
         public async  Task<OperationResult> Create(string title)
         {
-            if (title == null)
+            if (string.IsNullOrEmpty(title))
             {
-                return new OperationResult(false, "Incorrect data!", "");
+                return new OperationResult(false, "Incorrect category name!", "");
             }
 
             if (Db.CategoryRepository.Get().Any(c => c.Name == title))
