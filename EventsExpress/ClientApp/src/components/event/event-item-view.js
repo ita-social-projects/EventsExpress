@@ -59,7 +59,7 @@ export default class EventItemView extends Component {
         const categories_list = this.renderCategories(categories);
 
         let edit = false;
-
+        console.log();
         let i_join = visitors.find(
             x => x.id == current_user.id
         );
@@ -73,13 +73,13 @@ export default class EventItemView extends Component {
                     <img src={photoUrl} alt="Norway" style={{width: '100%'}} />
                     <div className="text-block"> 
                         <span className="title">{title}</span><br/>
-                        <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> - <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></span><br/>
+                        <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br/>
                         <span>{country} {city}</span><br/>
                         {categories_list}
                     </div>
                     <div className="button-block">
                         
-                            {new Date(dateFrom).getTime() >= new Date().getTime() && current_user.id != user.id && current_user.id != null &&
+                            {new Date(dateFrom) >= new Date().setHours(0,0,0,0) && current_user.id != user.id && current_user.id != null &&
                                 <>
                                     {flag == true &&
                                         <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
@@ -89,7 +89,7 @@ export default class EventItemView extends Component {
                                     }
                                 </>
                             }
-                            {new Date(dateFrom).getTime() >= new Date().getTime() &&current_user.id === user.id && !this.state.edit &&
+                            {new Date(dateFrom) >= new Date().setHours(0,0,0,0) &&current_user.id === user.id && !this.state.edit &&
                                         <button onClick={this.onEdit} className="btn btn-join">Edit</button>
                             }
                         
