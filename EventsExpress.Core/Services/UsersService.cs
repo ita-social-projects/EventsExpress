@@ -51,6 +51,8 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(UserDTO userDto)
         {
+           
+
             if (Db.UserRepository.Get().FirstOrDefault(u => u.Email == userDto.Email) != null)
             {
                 return new OperationResult(false, "Emali is exist in database", "Email");
@@ -78,7 +80,7 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-           // _cacheHelper.GetValue(cacheDto.UserId);
+           
 
             if (string.IsNullOrEmpty(cacheDto.Token))
             {

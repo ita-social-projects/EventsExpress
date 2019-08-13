@@ -29,10 +29,10 @@ namespace EventsExpress.Test.ServiceTests
             category = new Category() { Id= new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName"  };
 
             categoryDto = new CategoryDto() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019A"), Name = "RandomName2" };
-            //categoryDTO = new CategoryDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019C"), Name = "RandomName3" };
+            categoryDTO = new CategoryDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019C"), Name = "RandomName3" };
 
             mockUnitOfWork.Setup(u => u.CategoryRepository
-            .Get()).Returns(new List<Category>()
+            .Get("")).Returns(new List<Category>()
                 {
                     new Category { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" }
                 }
@@ -117,7 +117,20 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsFalse(result.Result.Successed);
         }
 
+        [Test]
+        public void Edit_NotExistingId_ReturnFalse()
+        {
+            CategoryDTO newCategory = new CategoryDTO() { Name = "newName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019F") };
+            var result = service.Edit(newCategory);
+            Assert.IsFalse(result.Result.Successed);
+        }
 
+        [Test]
+        public void Edit_ValidDto_Success()
+        {
+            var result = service.Edit(categoryDTO);
+            Assert.IsFalse(result.Result.Successed);
+        }
 
     }
 }
