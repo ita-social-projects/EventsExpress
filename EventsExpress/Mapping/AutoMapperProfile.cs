@@ -14,8 +14,9 @@ namespace EventsExpress.Mapping
         public AutoMapperProfile()
         {
             CreateMap<User, UserDTO>()
-
-                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories));
+                
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
+                .ForMember(dest => dest.Events, opts => opts.Ignore());
 
             CreateMap<CategoryDTO, Category>().ReverseMap();
             CreateMap<CategoryDto, CategoryDTO>().ReverseMap();

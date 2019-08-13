@@ -211,11 +211,11 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
         {
-            var categoryIds = categories.Select(x => x.Id);
+            var categoryIds = categories.Select(x => x.Id).ToList();
 
-            var users = Db.UserRepository.Get(includeProperties: "Categories.Category")
-                .Where(user => user.Categories.Any(category => categoryIds.Contains(category.Category.Id)))
-                .ToList();
+            var users = Db.UserRepository.Get(includeProperties: "Photo,Role,Categories.Category")
+                .Where(user => user.Categories.Any(category => categoryIds.Contains(category.Category.Id))).Distinct()
+                .AsEnumerable();
 
             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
         }
