@@ -91,20 +91,37 @@ export default class EventList extends Component {
                                     if (currentPage === page) {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
-                                    return (
-                                        <Link className="btn btn-primary"
-                                            to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
+                                    if (totalPages != 1) {
+                                        return (
+                                            <Link className="btn btn-primary"
+                                                to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
 
-                                            {...getPageItemProps({
-                                                pageValue: page,
-                                                key: page,
-                                                style: activePage,
-                                                onPageChange: this.handlePageChange
-                                            })}
-                                        >
-                                            {page}
-                                        </Link>
-                                    );
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                                {page}
+                                            </Link>
+                                        );
+                                    } else {
+
+                                        return (
+                                            <Link
+                                                to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
+
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                            </Link>
+                                        );
+                                    }
                                 })}
 
                                 {hasNextPage && (

@@ -30,7 +30,7 @@ class UsersFilterWrapper extends Component {
             }
         }
         this.props.search(search_string);
-        history.push(search_string);
+        history.push(window.location.pathname + search_string);
 
     }
 

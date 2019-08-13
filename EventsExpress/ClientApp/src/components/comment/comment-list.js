@@ -84,20 +84,37 @@ export default class CommentList extends Component {
                                     if (currentPage === page) {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
-                                    return (
-                                        <Link className="btn btn-primary"
-                                            to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                    if (totalPages != 1) {
+                                        return (
+                                            <Link className="btn btn-primary"
+                                                to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
-                                            {...getPageItemProps({
-                                                pageValue: page,
-                                                key: page,
-                                                style: activePage,
-                                                onPageChange: this.handlePageChange
-                                            })}
-                                        >
-                                            {page}
-                                        </Link>
-                                    );
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                                {page}
+                                            </Link>
+                                        );
+                                    } else {
+                                        return (
+                                            <Link 
+                                                to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+
+                                                {...getPageItemProps({
+                                                    pageValue: page,
+                                                    key: page,
+                                                    style: activePage,
+                                                    onPageChange: this.handlePageChange
+                                                })}
+                                            >
+                                              
+                                            </Link>
+                                        );
+                                    }
                                 })}
 
                                 {hasNextPage && (
