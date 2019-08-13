@@ -53,7 +53,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             mockMapper.Setup(m => m.Map<CategoryDto, Category>(new CategoryDto()))
                 .Returns(new Category());
-            mockUnitOfWork.Setup(u=>u.CategoryRepository.)
+         
             mockUnitOfWork.Setup(u => u.CategoryRepository.Insert(new Category()));
             mockUnitOfWork.Setup(u => u.SaveAsync());
 
