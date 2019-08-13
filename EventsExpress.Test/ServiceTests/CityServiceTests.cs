@@ -8,6 +8,8 @@ using Moq;
 using NUnit.Framework.Internal;
 using System.Threading.Tasks;
 using EventsExpress.DTO;
+using System.Linq;
+
 namespace EventsExpress.Test.ServiceTests
 {
     [TestFixture]
@@ -50,14 +52,59 @@ namespace EventsExpress.Test.ServiceTests
             City city = new City() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
 
             mockUnitOfWork.Setup(c => c.CountryRepository.Get(city.CountryId)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
-            // mockUnitOfWork.Setup(c => c.CityRepository.Filter(filter: x=> x.CountryId == country.Id ));
-            Guid guid = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
-          //  mockUnitOfWork.Setup(c => c.CityRepository.Filter(filter: x => x.CountryId == guid));
+
+            mockUnitOfWork.Setup(p => p.CityRepository.Get("")).Returns(new List<City>()
+               {
+                   new City { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") }
+               }
+               .AsQueryable());
             mockUnitOfWork.Setup(c => c.CityRepository.Insert(city));
-            mockUnitOfWork.Setup(u => u.SaveAsync());
+       
             var res = cityService.CreateCityAsync(city);
 
             Assert.IsTrue(res.Result.Successed);
+        }
+
+        [Test]
+        public void Insert_EmptyObject_ReturnsFalse()
+        {
+            City city = new City() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
+
+            mockUnitOfWork.Setup(c => c.CountryRepository.Get(city.CountryId)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
+
+            mockUnitOfWork.Setup(p => p.CityRepository.Get("")).Returns(new List<City>()
+               {
+                   new City { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Name", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") }
+               }
+               .AsQueryable());
+            mockUnitOfWork.Setup(c => c.CityRepository.Insert(city));
+
+            var res = cityService.CreateCityAsync(new City());
+
+            Assert.IsFalse(res.Result.Successed);
+        }
+
+         [Test]
+        public void InsertExisting_Object_ReturnsFalse()
+        {
+            City city = new City() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
+
+            mockUnitOfWork.Setup(c => c.CountryRepository.Get(city.CountryId)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
+
+            mockUnitOfWork.Setup(p => p.CityRepository.Get("")).Returns(new List<City>()
+               {
+                   new City {
+                       Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"),
+                       Name = "City1",
+                       CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")
+                   }
+               } 
+               .AsQueryable());
+            mockUnitOfWork.Setup(c => c.CityRepository.Insert(city));
+
+            var res = cityService.CreateCityAsync(city);
+
+            Assert.IsFalse(res.Result.Successed);
         }
     }
 }
