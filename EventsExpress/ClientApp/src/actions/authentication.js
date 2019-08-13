@@ -14,7 +14,7 @@ export default function _authenticate(data){
         dispatch(setAuthenticatePending(true));
 
         const res = api_serv.auth(data);
-
+        
         res.then(responce=>{
             if (responce.error == null) {
                 console.log('res', responce);

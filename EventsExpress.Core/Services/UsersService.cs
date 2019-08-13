@@ -160,7 +160,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events").Where(x => x.Id == id).FirstOrDefault());
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events,Role").Where(x => x.Id == id).FirstOrDefault());
             return user;
         }
 
