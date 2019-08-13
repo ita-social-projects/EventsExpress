@@ -356,7 +356,8 @@ namespace EventsExpress.Core.Services
 
         public AttitudeDTO GetAttitude(AttitudeDTO attitude)
         {            
-            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get().Where(x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault());
+            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get()
+                .Where(x => (x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId)).FirstOrDefault());
 
             return rel;
         }
@@ -364,10 +365,16 @@ namespace EventsExpress.Core.Services
         public ProfileDTO GetProfileById(Guid id, Guid FromId)
         {
             var user = _mapper.Map<UserDTO, ProfileDTO>(this.GetById(id));
-            Relationship rel = Db.RelationshipRepository.Get().Where(x => x.UserFromId == FromId).Where(y => y.UserToId == id).FirstOrDefault();
+            Relationship rel = Db.RelationshipRepository.Get()
+                .Where(x => (x.UserFromId == FromId && x.UserToId == id)).FirstOrDefault();
             if (rel != null)
+            {
                 user.Attitude = (byte)rel.Attitude;
-            else user.Attitude = 2;
+            }
+            else
+            {
+                user.Attitude = 2;
+            }
             return user;
         }
     }

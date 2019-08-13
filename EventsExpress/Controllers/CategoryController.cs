@@ -18,12 +18,13 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-
         private ICategoryService _categoryService;
         private IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService,
-                    IMapper mapper)
+        public CategoryController(
+            ICategoryService categoryService,
+            IMapper mapper
+            )
         {
             _categoryService = categoryService;
             _mapper = mapper;

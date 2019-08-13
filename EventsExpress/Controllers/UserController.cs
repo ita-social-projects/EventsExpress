@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
@@ -39,18 +37,13 @@ namespace EventsExpress.Controllers
         [Authorize]
         public IActionResult SearchUsers([FromQuery]UsersFilterViewModel model)
         {
-
-
             if (model.PageSize == 0)
             {
                 model.PageSize = 4;
             }
 
             int Count;
-
             var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out Count));
-
-
 
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
             if (pageViewModel.PageNumber > pageViewModel.TotalPages)
@@ -64,23 +57,18 @@ namespace EventsExpress.Controllers
             };
     
             return Ok(viewModel);
-
         }
+
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
         public IActionResult Get([FromQuery]UsersFilterViewModel model)
         {
-
-
             if (model.PageSize == 0) {
-                model.PageSize = 4;
+                model.PageSize = 10;
             }
-
             int Count;
 
             var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out Count));
-
-
 
             PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
             if (pageViewModel.PageNumber > pageViewModel.TotalPages)
@@ -96,14 +84,6 @@ namespace EventsExpress.Controllers
     
         }
 
-        [HttpGet("blocked")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult GetBlockedUsers()
-        {
-            var users = _userService.Get(u => u.IsBlocked);
-
-            return Ok(users);
-        }
 
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
@@ -134,8 +114,6 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid userId)
         {
-            //Guid id;
-            //Guid.TryParse(userId, out id);
             var result = await _userService.Block(userId);
 
             if (!result.Successed)
@@ -255,15 +233,6 @@ namespace EventsExpress.Controllers
 
         #endregion
 
-        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            string email = userClaims.FindFirstValue(ClaimTypes.Email);
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            return _userService.GetByEmail(email);
-        }
 
         [AllowAnonymous]
         [HttpGet("[action]")]
@@ -293,6 +262,17 @@ namespace EventsExpress.Controllers
                 return BadRequest(result.Message);
             }
             return Ok();
+        }
+
+
+        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
+        {
+            string email = userClaims.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+            return _userService.GetByEmail(email);
         }
 
     }
