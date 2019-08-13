@@ -41,9 +41,9 @@ function Modalwind2(props) {
 
     return (
         <div>
-            <span variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button  color="primary" onClick={handleClickOpen}>
                 Forgot password
-            </span>
+            </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}

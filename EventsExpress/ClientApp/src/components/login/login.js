@@ -20,7 +20,7 @@ class Login extends Component {
     
   render() {
      
-      const { pristine, reset, submitting } = this.props;
+    const { pristine, reset, submitting } = this.props;
 
     return (
       <div className="auth">
@@ -43,18 +43,18 @@ class Login extends Component {
                 
           <div>
             <DialogActions>          
-        <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
-       CLEAR
-        </Button >
+              <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
+                CLEAR
+              </Button >
               <Button fullWidth={true} type="submit" value="Login" color="primary">
                 Sign In
               </Button>
             </DialogActions>
           </div>    
-            </form>
-            <div>
-                <Modalwind2 />
-            </div>
+        </form>
+        <div className="text-center">
+          <Modalwind2 />
+        </div>
       </div>
     );
   }

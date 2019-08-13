@@ -20,7 +20,7 @@ class LoginWrapper extends Component {
               <p className="text-danger text-center">{loginError}</p>
               }
        
-        }
+        
            </div>
     ;
   }

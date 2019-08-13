@@ -31,7 +31,7 @@ function getCityPending(data){
     } 
 }  
 
-function getCityError(data){
+export function getCityError(data){
     return {
         type: GET_CITY_ERROR,
         payload: data

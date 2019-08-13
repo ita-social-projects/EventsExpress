@@ -21,15 +21,20 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Unblock(Guid uId);
          Task<OperationResult> Verificate(CacheDTO cacheDto);
         Task<OperationResult> PasswordRecover(UserDTO userDto);
+        Task<OperationResult> Block(Guid uId);
 
         UserDTO GetById(Guid id);
+        ProfileDTO GetProfileById(Guid id, Guid FromId);
 
         UserDTO GetByEmail(string email);
 
         Task<OperationResult> EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
 
-        IEnumerable<UserDTO> GetAll();
+        IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int Count);
         IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories);
         IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter);
+
+        Task<OperationResult> SetAttitude(AttitudeDTO attitude);
+        AttitudeDTO GetAttitude(AttitudeDTO attitude);
     }
 }

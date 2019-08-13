@@ -15,7 +15,6 @@ class RegisterWrapper extends React.Component {
 
 
     submit = values => {
-        console.log(values);
         this.props.register(values.email, values.password); 
   };
   render() {

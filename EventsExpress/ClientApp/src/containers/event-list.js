@@ -2,24 +2,44 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import get_events from '../actions/event-list';
+import { get_events } from '../actions/event-list';
+import BadRequest from '../components/Route guard/400'
+import InternalServerError from '../components/Route guard/500'
+import Unauthorized from '../components/Route guard/401'
+import Forbidden from '../components/Route guard/403'
+import { Redirect } from 'react-router'
+import history from '../history';
 
 
 class EventListWrapper extends Component{
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.isError.ErrorCode=='500') {
+            this.getEvents(this.props.params);
+        }
+    }
+    componentDidMount() {
+        this.getEvents(this.props.params);
+    }
 
-    componentDidMount = () => this.props.get_events();
-
-    render(){   
+    componentWillUpdate = (newProps) => {
+        if(newProps.params !== this.props.params)
+            this.getEvents(newProps.params);
+    }
     
-        const {data, isPending, isError} = this.props;
-        // const hasData = !(isPending || isError);
 
-        // const errorMessage = isError ? <ErrorIndicator/> : null;
-        
+    getEvents = (filter) => this.props.get_events(filter);
+    
+
+    render() {
+        const { data, isPending, isError } = this.props;
+        const { items } = this.props.data;
+        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/home/events?page=1"/>: isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
+
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList data_list={data} /> : null;
-    
+        const content = !errorMessage ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+       
         return <>
+            {errorMessage}
                 {spinner}
                 {content}
                </>
@@ -30,8 +50,8 @@ const mapStateToProps = (state) => (state.events);
 
 const mapDispatchToProps = (dispatch) => { 
     return {
-        get_events: () => dispatch(get_events())
+        get_events: (filter) => dispatch(get_events(filter))
     } 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventListWrapper);
+    export default connect(mapStateToProps, mapDispatchToProps)(EventListWrapper);

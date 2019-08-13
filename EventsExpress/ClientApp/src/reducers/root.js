@@ -16,6 +16,7 @@ import * as Categories from './category-list';
 import * as Countries from './countries';
 import * as Cities from './cities';
 import * as Users from './users';
+import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import { changePassword } from '../actions/EditProfile/changePassword';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
@@ -25,8 +26,12 @@ import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
 import * as RecoverPassword from './editReducers/recoverPasswordReducer'
 import * as Auth from './authenticationReducer';
+import * as Profile from './user-item-view';
+import * as EventsForProfile from './events-for-profile';
 
+import * as ModalWind from './ModalWind';
 const rootReducers = {
+    modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
     form: formReducer,
@@ -52,6 +57,11 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
+    roles: Roles.reducer,
+    change_avatar: ChangeAvatar.reducer, 
+    delete_comment: DeleteComment.reducer,
+    profile: Profile.reducer,
+    events_for_profile: EventsForProfile.reducer,
     delete_comment: DeleteComment.reducer,
     recoverPassword: RecoverPassword.reducer,
     authenticate: Auth.reducer

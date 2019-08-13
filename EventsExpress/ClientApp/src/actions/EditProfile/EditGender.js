@@ -50,7 +50,7 @@ function updateGender(data) {
         };
     }
 
-    function setEditGenderError(data) {
+export   function setEditGenderError(data) {
         return {
             type: editGender.ERROR,
             payload: data

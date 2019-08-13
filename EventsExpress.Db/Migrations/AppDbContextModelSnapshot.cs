@@ -15,7 +15,7 @@ namespace EventsExpress.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -54,15 +54,21 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("CommentsId");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<Guid>("EventId");
+
+                    b.Property<Guid?>("ParentId");
 
                     b.Property<string>("Text");
 
                     b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommentsId");
 
                     b.HasIndex("EventId");
 
@@ -309,6 +315,10 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
+                    b.HasOne("EventsExpress.Db.Entities.Comments")
+                        .WithMany("Children")
+                        .HasForeignKey("CommentsId");
+
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")

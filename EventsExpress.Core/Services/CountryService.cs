@@ -27,7 +27,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> CreateCountryAsync(Country country)
         {
-            if (Db.CountryRepository.Filter(filter: c => c.Name == country.Name).FirstOrDefault() != null)
+            if (Db.CountryRepository.Get().FirstOrDefault(c => c.Name == country.Name) != null)
             {
                 return new OperationResult(false, "Country is already exist", "");
             }

@@ -49,7 +49,7 @@ function setAvatarSuccess(data) {
     };
 }
 
-function setAvatarError(data) {
+export function setAvatarError(data) {
     return {
         type: changeAvatar.ERROR,
         payload: data

@@ -4,7 +4,28 @@ import Multiselect from 'react-widgets/lib/Multiselect';
 import 'react-widgets/dist/css/react-widgets.css';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import {  } from 'redux-form';
+import Select from '@material-ui/core/Select'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+
+import { makeStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+
+export const radioButton = ({ input, ...rest }) => (
+  <FormControl>
+    <RadioGroup {...input} {...rest}>
+      <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+      <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+      <FormControlLabel value="all" control={<Radio />} label="All" />
+    </RadioGroup>
+  </FormControl>
+)
 
 
 export const validate = values => {
@@ -13,12 +34,11 @@ export const validate = values => {
     'email',
     'password',
     'RepeatPassword',
-    'image',
     'title',
-    'date_from',
     'description',
     'categories',
     'country',
+    'city',
      'RepeatPassword',
      'oldPassword',
      'newPassword',
@@ -31,19 +51,19 @@ export const validate = values => {
       errors[field] = 'Required'
     }
   })
-  if(new Date(values.date_from).getTime() <= Date.now()){
-    errors.date_from  = 'Date is incorrect';
-  }
-  if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
-    errors.date_to = 'Date is too low of start';
-  }
+  // if(new Date(values.date_from).getTime() <= new Date().getTime()){
+  //   errors.date_from  = 'Date is incorrect';
+  // }
+  // if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
+  //   errors.date_to = 'Date is too low of start';
+  // }
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
   ) {
     errors.email = 'Invalid email address'
-    }
-  if(values.password!== values.RepeatPassword){
+  }
+  if (values.password !== values.RepeatPassword) {
     errors.RepeatPassword = 'Passwords do not match';
     }
     if (values.newPassword !== values.repeatPassword) {
@@ -67,52 +87,164 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, }
     dropdownMode="select"
 />
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, showTime }) =>
-<DatePicker
-  onChange={onChange}
-    
-  minDate={defaultValue || new Date()}
-  selected={value || defaultValue || new Date()}
-/>
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
+  value = value || defaultValue || new Date();
+  minValue = minValue || new Date();
+  return <DatePicker
+    onChange={onChange}
+    minDate={new Date(minValue)}
+    selected={new Date(value) || new Date()}
+  />
+}
 
- export const maxLength = max => value =>
-    value && value.length > max ? `Must be ${max} characters or less` : undefined
+
+
+export const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+
 export const maxLength15 = maxLength(15)
+
 export const minLength = min => value =>
-    value && value.length < min ? `Must be ${min} characters or more` : undefined
+  value && value.length < min ? `Must be ${min} characters or more` : undefined
+
 export const minLength2 = minLength(6)
 export const minLength3 = minLength(4)
 
+export const renderSelectLocationField = ({
+  input,
+  label,
+  text,
+  data,
+  meta: { touched, invalid, error },
+  children,
+  ...custom
+}) => (
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+      <Select
+        native
+        
+        error={touched && invalid}
+
+        helperText={touched && error}
+        {...input}
+        {...custom}
+        inputProps={{
+          name: text.toLowerCase() + 'Id',
+          id: 'age-native-simple'
+        }}
+      >
+        <option value=""></option>
+        {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  )
+
+
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder }) =>
-    <Multiselect {...input}
-        onBlur={() => input.onBlur()}
-        value={input.value || []} 
-        data={data}
-        valueField={valueField}
-        textField={textField}
-        placeholder={placeholder}
-    />
+  <Multiselect {...input}
+    onBlur={() => input.onBlur()}
+    value={input.value || []}
+    data={data}
+    valueField={valueField}
+    textField={textField}
+    placeholder={placeholder}
+  />
+
+export const renderTextArea = ({
+    label,
+    defaultValue,
+    input,
+    rows,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+  <TextField
+  label={label}
+  defaultValue={defaultValue}
+  multiline
+  rows="4"
+  fullWidth
+  {...input}
+  error={touched && invalid}
+  
+  helperText={touched && error}
+  variant="outlined"
+/>)
 
 export const renderTextField = ({
   label,
-    input,
-  value,
+  defaultValue,
+  input,
+  rows,
   meta: { touched, invalid, error },
   ...custom
 }) => (
-  <TextField
-   fullWidth
-    label={label}
-    placeholder={label}
-    error={touched && invalid}
-            defaultValue={value}
-    helperText={touched && error}
-    {...input}
-    {...custom}
-  />
+    <TextField
+      rows={rows}
+      fullWidth
+      label={label}
+      placeholder={label}
+      error={touched && invalid}
+      defaultValue={defaultValue}
+      value={defaultValue}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  )
+
+export const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, invalid, error },
+  children,
+  ...custom
+}) => (
+    <FormControl error={touched && error}>
+      <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+      <Select
+        fullWidth
+        native
+        
+        error={touched && invalid}
+
+        helperText={touched && error}
+        {...input}
+        {...custom}
+        inputProps={{
+          name: { label },
+          id: 'age-native-simple'
+        }}
+      >
+        {children}
+      </Select>
+      {renderFromHelper({ touched, error })}
+    </FormControl>
+  )
+
+const renderFromHelper = ({ touched, error }) => {
+  if (!(touched && error)) {
+    return
+  } else {
+    return <FormHelperText>{touched && error}</FormHelperText>
+  }
+}
+
+export const renderCheckbox = ({ input, label }) => (
+  <div>
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={input.value ? true : false}
+          onChange={input.onChange}
+        />
+      }
+      label={label}
+    />
+  </div>
 )
-
-
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 

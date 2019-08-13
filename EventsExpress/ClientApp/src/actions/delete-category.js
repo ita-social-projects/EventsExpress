@@ -4,43 +4,61 @@ import get_categories from './category-list';
 export const SET_CATEGORY_DELETE_PENDING = "SET_CATEGORY_DELETE_PENDING";
 export const SET_CATEGORY_DELETE_SUCCESS = "SET_CATEGORY_DELETE_SUCCESS";
 export const SET_CATEGORY_DELETE_ERROR = "SET_CATEGORY_DELETE_ERROR";
+export const SET_CATEGORY_EDITED = "SET_CATEGORY_EDITED";
 
-export default function delete_category(data) {
 
+
+
+export function delete_category(data) {
     const api_serv = new EventsExpressService();
 
     return dispatch => {
-        dispatch(setCategoryPending(true));
+        dispatch(setCategoryDeletePending(true));
 
         const res = api_serv.setCategoryDelete(data);
         res.then(response => {
             if (response.error == null) {
 
-                dispatch(setCategorySuccess(true));
+                dispatch(setCategoryDeleteSuccess(true));
                 dispatch(get_categories());
             } else {
-                dispatch(setCategoryError(response.error));
+                dispatch(setCategoryDeleteError(response.error));
             }
         });
     }
 }
 
+export function set_edited_category(id) {
+    return dispatch => {
+        dispatch(setCategoryEdited(id));
+        dispatch(setCategoryDeletePending(false));
+        dispatch(setCategoryDeleteError(null));
+        dispatch(setCategoryDeleteSuccess(false));
+    }
+}
 
-function setCategorySuccess(data) {
+function setCategoryEdited(data) {
+    return {
+        type: SET_CATEGORY_EDITED,
+        payload: data
+    };
+}
+
+function setCategoryDeleteSuccess(data) {
     return {
         type: SET_CATEGORY_DELETE_SUCCESS,
         payload: data
     };
 }
 
-function setCategoryPending(data) {
+function setCategoryDeletePending(data) {
     return {
         type: SET_CATEGORY_DELETE_PENDING,
         payload: data
     };
 }
 
-function setCategoryError(data) {
+export function setCategoryDeleteError(data) {
     return {
         type: SET_CATEGORY_DELETE_ERROR,
         payload: data

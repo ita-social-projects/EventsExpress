@@ -1,27 +1,17 @@
 ﻿import React, { Component } from 'react';
-import EventsExpressService from '../../services/EventsExpressService';
-import CategoryItemWrapper from '../../containers/delete-category';
+import CategoryItemWrapper from '../../containers/categories/category-item';
 
 
 export default class CategoryList extends Component {
 
-    renderItems = (arr) => {
-         return arr.map((item) => {
-     
-           return (
-               <CategoryItemWrapper key={item.id} item={item} />
-           );
-         });
-    }
+    renderItems = arr => arr.map(item => <CategoryItemWrapper 
+        key={item.id} 
+        item={item} />);
+    
     render() {
         const { data_list } = this.props;
 
-        const items = this.renderItems(data_list);
-
-        return <>
-            <div className="listbox">
-                {items}
-                </div>
-        </>
+        return this.renderItems(data_list)
+               
     }
 }

@@ -23,7 +23,7 @@ namespace EventsExpress.Core.DTOs
         public virtual Guid? PhotoId { get; set; }
         public virtual Photo Photo { get; set; }
 
-        public IEnumerable<Event> Events { get; set; }
+        public IEnumerable<EventDTO> Events { get; set; }
 
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
 

@@ -3,6 +3,7 @@ import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { renderTextField } from '../helpers/helpers';
+import './Comment.css';
 
 class Comment extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class Comment extends React.Component {
 
     render() {
         return (
-            <div className="comment">
+            <div className="add-form">
                 <form name="addComment" onSubmit={this.props.handleSubmit}>
                     <div>
                         <Field
