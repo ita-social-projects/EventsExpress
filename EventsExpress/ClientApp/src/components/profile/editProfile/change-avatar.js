@@ -2,13 +2,8 @@ import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
+import { connect } from 'react-redux';
 
-const enhanceWithPreview = files =>
-  files.map(file =>
-    Object.assign({}, file, {
-      preview: URL.createObjectURL(file),
-    })
-  )
 
   const imageIsRequired = value => (!value ? "Required" : undefined);
 
@@ -28,12 +23,26 @@ class ChangeAvatar extends React.Component {
           file: newImageFile[0],
           name: newImageFile[0].name,
           preview: URL.createObjectURL(newImageFile[0]),
-          size: newImageFile[0].size
+          size: 1
         };
         this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
       };
     
       resetForm = () => this.setState({ imagefile: [] }, () => this.props.reset());
+
+      componentWillMount = () => {
+          const imagefile = {
+            file: '',
+            name: '',
+            preview: this.props.current_photo,
+            size: 1
+          };
+          this.setState({ imagefile: [imagefile] });
+        }
+
+    componentWillUnmount = () => {
+      this.resetForm();
+    }
 
     render(){
 
@@ -47,11 +56,12 @@ class ChangeAvatar extends React.Component {
           type="file"
           imagefile={this.state.imagefile}
           handleOnDrop={this.handleOnDrop}
-          validate={[imageIsRequired]}
+          validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
         />        
-            <Button
-                type="button" color="primary"
-        disabled={this.props.pristine || this.props.submitting}
+        <Button
+        type="button"
+        className="uk-button uk-button-default uk-button-large clear"
+        disabled={this.props.submitting}
         onClick={this.resetForm}
         style={{ float: "right" }}
       >
@@ -67,6 +77,21 @@ class ChangeAvatar extends React.Component {
     );
     }
 };
+
+
+const mapStateToProps = (state) => ({
+  current_photo: state.user.photoUrl
+})
+
+const mapDispatchToProps = dispatch => {
+  return {
+  };
+}
+
+ChangeAvatar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChangeAvatar);
 
 export default reduxForm({
     form: "change-avatar" // a unique identifier for this form

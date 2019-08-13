@@ -1,20 +1,22 @@
 ﻿import EventsExpressService from '../services/EventsExpressService';
 import get_categories from './category-list';
+
+
 export const SET_CATEGORY_PENDING = "SET_CATEGORY_PENDING";
 export const SET_CATEGORY_SUCCESS = "SET_CATEGORY_SUCCESS";
 export const SET_CATEGORY_ERROR = "SET_CATEGORY_ERROR";
 
 const api_serv = new EventsExpressService();
 
-export default function add_category(data) {
 
+export function add_category(data) {
     return dispatch => {
         dispatch(setCategoryPending(true));
 
         const res = api_serv.setCategory(data);
+        
         res.then(response => {
             if (response.error == null) {
-
                 dispatch(setCategorySuccess(true));
                 dispatch(get_categories());
             } else {
@@ -25,16 +27,16 @@ export default function add_category(data) {
 }
 
 
-export function setCategorySuccess(data) {
+export function setCategoryPending(data) {
     return {
-        type: SET_CATEGORY_SUCCESS,
+        type: SET_CATEGORY_PENDING,
         payload: data
     };
 }
 
-export function setCategoryPending(data) {
+export function setCategorySuccess(data) {
     return {
-        type: SET_CATEGORY_PENDING,
+        type: SET_CATEGORY_SUCCESS,
         payload: data
     };
 }

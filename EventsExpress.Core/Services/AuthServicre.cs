@@ -97,7 +97,7 @@ namespace EventsExpress.Core.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1440),
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
                         _signingEncodingKey.SigningAlgorithm)

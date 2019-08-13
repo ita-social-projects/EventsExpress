@@ -5,6 +5,7 @@ import EventsExpressService from '../services/EventsExpressService';
 export const GET_EVENT_PENDING = "GET_EVENT_PENDING";
 export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";
 export const GET_EVENT_ERROR = "GET_EVENT_ERROR";
+export const RESET_EVENT = "RESET_EVENT";
 
 
 const api_serv = new EventsExpressService();
@@ -67,6 +68,13 @@ export function join(userId, eventId) {
   }
 }
 
+export function resetEvent(){
+  return {
+    type: RESET_EVENT,
+    payload: {}
+  }
+}
+
 function getEventPending(data) {
   return {
     type: GET_EVENT_PENDING,
@@ -81,7 +89,7 @@ function getEvent(data) {
   }
 }
 
-function getEventError(data) {
+export function getEventError(data) {
   return {
     type: GET_EVENT_ERROR,
     payload: data

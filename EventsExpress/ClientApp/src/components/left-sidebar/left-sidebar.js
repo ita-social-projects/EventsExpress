@@ -27,19 +27,21 @@ const LeftSidebar = (props) =>{
 
                     <ul className="list-unstyled">
                         
-                        <NavItem to={'/'} icon={'fa fa-home'} text={"Home"} />
-                            {props.user.id &&
-                            <NavItem to={'/profile'} icon={'fa fa-user'} text={"Profile"} />
+                        <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} />
+                        {props.user.id &&
+                            <>
+                            <NavItem to={'/user/' + props.user.id} icon={'fa fa-user'} text={"Profile"} />
+                            <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Seach Users"} />
+                      </>
                             
                             }
                         {props.user.role === "Admin" &&
                         <>
                             <NavItem to={'/admin/categories/'} icon={'fa fa-hashtag'} text={"Categories"} />
                             
-                            <NavItem to={'/admin/users/'} icon={'fa fa-users'} text={"Users"} />
+                            <NavItem to={'/admin/users?page=1'} icon={'fa fa-users'} text={"Users"} />
                             
-                            <NavItem to={'/admin/events/'} icon={'fa fa-calendar'} text={"Events"} />
-                            
+                            <NavItem to={'/admin/events?page=1'} icon={'fa fa-calendar'} text={"Events"} />
                         </>
                         }
 

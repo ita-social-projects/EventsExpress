@@ -19,7 +19,7 @@ export default function delete_comment(data) {
                 dispatch(setCommentSuccess(true));
                 dispatch(get_comments(data.eventId));
             } else {
-                dispatch(setCommentError(response.error));
+                dispatch(set3CommentError(response.error));
             }
         });
     }
@@ -40,7 +40,7 @@ function setCommentPending(data) {
     };
 }
 
-function setCommentError(data) {
+export function set3CommentError(data) {
     return {
         type: SET_COMMENT_DELETE_ERROR,
         payload: data

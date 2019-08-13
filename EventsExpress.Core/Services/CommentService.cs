@@ -26,10 +26,12 @@ namespace EventsExpress.Core.Services
             _userService = userService;
         }
 
-        public IEnumerable<CommentDTO> GetCommentByEventId(Guid id)
+        public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize ,out int count)
         {
-           var comments = _mapper.Map<IEnumerable<Comments>, IEnumerable<CommentDTO>>(Db.CommentsRepository.Filter(filter: x => x.EventId == id, includeProperties: "User.Photo"));/*Get().AsQueryable().Where(x => x.EventId == id))*/
-            return comments;
+            IQueryable<Comments> comments = Db.CommentsRepository.Get(includeProperties: "User.Photo").Where(x => x.EventId == id).Skip((page - 1) * pageSize).Take(pageSize);/*Get().AsQueryable().Where(x => x.EventId == id))*/
+            count = Db.CommentsRepository.Get( includeProperties: "User.Photo").Where(x => x.EventId == id).Count();
+            return _mapper.Map<IEnumerable<CommentDTO>>(comments);
+          
         }
 
         public async Task<OperationResult> Create(CommentDTO comment)

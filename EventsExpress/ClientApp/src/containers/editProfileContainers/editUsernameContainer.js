@@ -5,7 +5,6 @@ import editUsername from "../../actions/EditProfile/editUsername";
 
 class EditUsernameContainer extends React.Component {
     submit = value => {
-        console.log(value);
         this.props.editUsername(value);
     }
 

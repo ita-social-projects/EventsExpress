@@ -18,8 +18,11 @@ namespace EventsExpress.DTO
         public IFormFile Photo { get; set; }
         public string PhotoUrl { get; set; }
         public UserPreviewDto User { get; set; }
-        public Location Location { get; set; }
-                                                               
+        public string Country { get; set; }
+        public string City { get; set; }
+        public Guid CityId { get; set; }
+        public Guid CountryId { get; set; }
+                                              
         public IEnumerable<CategoryDto> Categories { get; set; }
         public IEnumerable<UserPreviewDto> Visitors { get; set; }
     }

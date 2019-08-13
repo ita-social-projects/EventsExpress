@@ -41,9 +41,15 @@ namespace EventsExpress.Db.Repo
         }
 
 
-        public IQueryable<T> Get()
+        public IQueryable<T> Get(string includeProperties = "")
         {
-            return entities;
+            IQueryable<T> query = entities;
+            foreach (var includeProperty in 
+                includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return query;
         }
 
 
@@ -51,33 +57,6 @@ namespace EventsExpress.Db.Repo
         {
             return entities.Find(id);
         }
-
-
-        public virtual IQueryable<T> Filter(int? skip = null,
-          int? take = null,
-          Expression<Func<T, bool>> filter = null,
-          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-          string includeProperties = "")
-        {
-            IQueryable<T> query = entities;
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            orderBy?.Invoke(query);
-
-            if (skip != null && take != null)
-                return query.Skip(skip.Value).Take(take.Value);
-            return query;
-        }                          
         
         public T Delete(T entity)
         {

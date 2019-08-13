@@ -46,7 +46,7 @@ function setAddUserCategorySuccess(data) {
     };
 }
 
-function setAddUserCategoryError(data) {
+export function setAddUserCategoryError(data) {
     return {
         type: addUserCategory.ERROR,
         payload: data

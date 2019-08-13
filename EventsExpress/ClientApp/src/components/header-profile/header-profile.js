@@ -13,6 +13,7 @@ import Menu from "@material-ui/core/Menu";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ModalWind from '../modal-wind';
+import { Link } from 'react-router-dom';
 
 import './header-profile.css';
 
@@ -21,7 +22,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl } = this.props.user;
+        const { id, name, photoUrl, email } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -32,23 +33,28 @@ export default class HeaderProfile extends Component {
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">
-                        <Avatar
-                            key={id + photoUrl}
-                            alt="Тут аватар"
-                            src={photoUrl}
-
-                            className='bigAvatar'
-                        />
+                        {photoUrl
+                            ? <Avatar
+                                src={photoUrl}
+                                className='bigAvatar'
+                            />
+                            : <Avatar className='bigAvatar'>
+                                <h1 className="display-1 text-light">
+                                    {email.charAt(0).toUpperCase()}
+                                </h1>
+                            </Avatar>}
+                        
+                        
                         <h4>{name}</h4>
                         
                         <div>
-                            <IconButton
+                            <Link to={'/profile' }><IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                             >
                                 <Create />
-                            </IconButton>
+                            </IconButton></Link>
                             <IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"

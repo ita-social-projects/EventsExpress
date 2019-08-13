@@ -2,6 +2,7 @@
 using EventsExpress.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.IServices
@@ -14,12 +15,16 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
 
-        EventDTO EventById(Guid eventId);
-        EventDTO Details(Guid id);
+        EventDTO EventById(Guid eventId);       
 
-        IEnumerable<EventDTO> Events();
+        IEnumerable<EventDTO>  Events(EventFilterViewModel model, out int Count);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
         IEnumerable<EventDTO> UpcomingEvents(int? num);
+
+        IEnumerable<EventDTO> FutureEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> PastEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId);
+        IEnumerable<EventDTO> EventsToGoByUserId(Guid userId);
 
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
