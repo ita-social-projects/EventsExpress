@@ -16,7 +16,7 @@ import AddUserCategory from '../../containers/editProfileContainers/addUserCateg
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
-
+import Moment from 'react-moment';
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -111,7 +111,7 @@ const useStyles = makeStyles(theme => ({
                     id="panel3bh-header"
                 >
                     <Typography className={classes.heading}>Age</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.birthday}</Typography>
+                    <Typography className={classes.secondaryHeading}><Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment></Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 

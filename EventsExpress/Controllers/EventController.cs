@@ -124,36 +124,36 @@ namespace EventsExpress.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid userId)
+        public IActionResult FutureEvents(Guid Id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(userId));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(Id));
 
             return Ok(res);
         }
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult PastEvents(Guid userId)
+        public IActionResult PastEvents(Guid Id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(userId));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(Id));
 
             return Ok(res);
         }
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult EventsToGo(Guid userId)
+        public IActionResult EventsToGo(Guid Id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(userId));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(Id));
 
             return Ok(res);
         }
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult VisitedEvents(Guid userId)
+        public IActionResult VisitedEvents(Guid Id)
         {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(userId));
+            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(Id));
 
             return Ok(res);
         }
