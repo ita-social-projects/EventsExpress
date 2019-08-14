@@ -30,8 +30,8 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Edit(CommentDto model)
         {
 
-            var res = model.Id == Guid.Empty ? await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model))
-                                       : await _commentService.Edit(_mapper.Map<CommentDto, CommentDTO>(model));
+            var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
+                                       
             if (res.Successed)
             {
                 return Ok();

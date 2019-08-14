@@ -32,16 +32,11 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper = new Mock<CacheHelper>();
 
             service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
-
-            user = new User() {Email="aaa@gmail.com", Id= '76ada198-0ad5-45d0-f173-08d704560843' };
+           
 
         }
 
-        [Test]
-        public void Create_EmeilExisting_returnFalse()
-        {
-            mockUnitOfWork.Setup(u=>u.UserRepository.Filter());
-        }
+        
     }
 
 }

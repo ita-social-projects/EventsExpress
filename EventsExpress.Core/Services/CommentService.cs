@@ -34,17 +34,17 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(CommentDTO comment)
         {
-            if (comment.Text == null)
+            if (string.IsNullOrEmpty(comment.Text))
             {
                 return new OperationResult(false, "Incorrect text!", "");
             }
 
-            if (comment.UserId == null)
+            if (Db.UserRepository.Get(comment.UserId) == null)
             {
                 return new OperationResult(false, "Current user does not exist!", "");
             }
 
-            if (comment.EventId == null)
+            if (Db.EventRepository.Get(comment.EventId) == null)
             {
                 return new OperationResult(false, "Wrong event id!", "");
             }
@@ -54,27 +54,6 @@ namespace EventsExpress.Core.Services
                                                           UserId = comment.UserId,
                                                           EventId = comment.EventId,
             });
-
-            await Db.SaveAsync();
-
-            return new OperationResult(true, "", "");
-        }
-
-        public async Task<OperationResult> Edit(CommentDTO comment)
-        {
-            if (comment.Id == null)
-            {
-                return new OperationResult(false, "Id field is '0'", "");
-            }
-
-            Comments oldComment = Db.CommentsRepository.Get(comment.Id);
-            if (oldComment == null)
-            {
-                return new OperationResult(false, "Not found", "");
-            }
-
-            oldComment.Text = comment.Text;
-            oldComment.Date = DateTime.Now;
 
             await Db.SaveAsync();
 
@@ -95,10 +74,8 @@ namespace EventsExpress.Core.Services
             }
 
             var result = Db.CommentsRepository.Delete(comment);
-            if (result.Id != id)
-                return new OperationResult(false, "", "");
             await Db.SaveAsync();
-            return new OperationResult(true, "", "");
+            return new OperationResult(true);
         }
     }
 }
