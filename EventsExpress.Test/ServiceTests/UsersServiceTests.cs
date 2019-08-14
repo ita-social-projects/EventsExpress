@@ -131,9 +131,14 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void PasswordRecocovery_UserNull_ReturnFalse()
+        public void Verificat_UserIsNull_ReturnFalse()
         {
+            mockUnitOfWork.Setup(u => u.UserRepository.Get(It.IsAny<Guid>()))
+                .Returns((User)null);
 
+            var result = service.Verificate(new CacheDTO());
+
+            Assert.IsFalse(result.Result.Successed);
         }
 
     }
