@@ -91,7 +91,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Update_EmeilIsNull_ReturnFalse()
+        public void Update_EmailIsNull_ReturnFalse()
         {
             UserDTO newUser = new UserDTO() { };
             var result = service.Update(newUser);
@@ -100,7 +100,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Update_EmeilIsEmpty_ReturnFalser()
+        public void Update_EmailIsEmpty_ReturnFalse()
         {
             UserDTO newUser = new UserDTO() { Email=""};
             var result = service.Update(newUser);
