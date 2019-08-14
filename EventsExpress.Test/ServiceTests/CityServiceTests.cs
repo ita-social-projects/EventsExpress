@@ -85,7 +85,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsFalse(res.Result.Successed);
         }
 
-         [Test]
+        [Test]
         public void InsertExisting_Object_ReturnsFalse()
         {
             City city = new City() { Id = new Guid(GuidId), Name = "City1", CountryId = new Guid(GuidId) };

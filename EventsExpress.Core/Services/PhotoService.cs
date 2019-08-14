@@ -20,10 +20,7 @@ namespace EventsExpress.Core.Services
         private WidthsConfig _widthsConfig;
 
 
-        public PhotoService(
-            IUnitOfWork uow,
-            IHostingEnvironment appEnvironment
-            )
+        public PhotoService(IUnitOfWork uow)
         {
             Db = uow;
             _widthsConfig = new WidthsConfig() { thumbnail = 400, image = 1200};
@@ -31,6 +28,11 @@ namespace EventsExpress.Core.Services
 
         public async Task<Photo> AddPhoto(IFormFile uploadedFile)
         {
+            if (!IsValidImage(uploadedFile))
+            {
+                throw new ArgumentException();
+            }
+
             byte[] imgData;
             using (var reader = new BinaryReader(uploadedFile.OpenReadStream()))
             {
@@ -63,7 +65,7 @@ namespace EventsExpress.Core.Services
 
         #region UploadHelpers...
 
-        private bool IsValidImage(IFormFile file) => (file != null || file.IsImage());
+        private bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
 
 
