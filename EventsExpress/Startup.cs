@@ -65,7 +65,6 @@ namespace EventsExpress
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration
-                    //.GetConnectionString("AzureSQLServer")));
                     .GetConnectionString("DefaultConnection")));
 
             #region Configure our services...

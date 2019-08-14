@@ -22,17 +22,18 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private IUserService _userService;
-        private IAuthServicre _authServicre;
+        private IAuthServicre _authService;
         private IMapper  _mapper;
 
-        public AuthenticationController(IUserService userSrv,
+        public AuthenticationController(
+            IUserService userSrv,
             IMapper mapper,
-            IAuthServicre authServicre
+            IAuthServicre authSrv
             )
         {
             _userService = userSrv;
             _mapper = mapper;
-            _authServicre = authServicre;
+            _authService = authSrv;
         }
 
         [AllowAnonymous]
@@ -57,7 +58,6 @@ namespace EventsExpress.Controllers
 
             var user = _userService.GetByEmail(authRequest.Email);
             var responce = _mapper.Map<UserDTO, UserInfo>(user);
-            //responce.Categories = user.Categories.Select(x => x.Category);
 
             responce.Token = result.Message;
 
@@ -67,17 +67,11 @@ namespace EventsExpress.Controllers
 
         [Authorize]
         [HttpPost("login_token")]
-        public IActionResult Post(
-            [FromServices] IAuthServicre _authServise
-            )
+        public IActionResult Post()
         {
-            var s = User.Identity.Name;     
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
-            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);  
-                                                                       
             var responce = _mapper.Map<UserDTO, UserInfo>(user);
-
-            //responce.Token = result.Message;
 
             return Ok(responce);
         }
@@ -99,7 +93,6 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
-
             return Ok();
         }
    
@@ -117,11 +110,11 @@ namespace EventsExpress.Controllers
                 return BadRequest("User with this email is not found");
             }
             var res = await _userService.PasswordRecover(user);
+
             if (!res.Successed)
             {
                 return BadRequest(res.Message);
             }
-
             return Ok();
         }
 
@@ -148,7 +141,8 @@ namespace EventsExpress.Controllers
                 var user = _userService.GetById( cache.UserId);
 
                 var responce = _mapper.Map<UserDTO, UserInfo>(user);
-                responce.Token = _authServicre.FirstAuth(user).Message;
+
+                responce.Token = _authService.FirstAuth(user).Message;
                 responce.AfterEmailConfirmation = true;
 
                 return Ok(responce);
@@ -160,15 +154,13 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> ChangePassword
-            (ChangePasswordDto changePasswordDto, [FromServices] IAuthServicre _authServise
-            )
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
-            var user = _authServise.GetCurrentUser(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
-            var check = _authServise.CheckPassword(changePasswordDto.OldPassword, user.PasswordHash);
+            var check = _authService.CheckPassword(changePasswordDto.OldPassword, user.PasswordHash);
 
-            if (check == false)
+            if (!check)
             {
                 return BadRequest(ModelState);
             }

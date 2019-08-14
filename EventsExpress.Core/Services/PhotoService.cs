@@ -8,9 +8,7 @@ using ImageProcessor.Imaging.Formats;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,7 +17,6 @@ namespace EventsExpress.Core.Services
     public class PhotoService : IPhotoService
     {
         private IUnitOfWork Db;
-        private IHostingEnvironment _appEnvironment;
         private WidthsConfig _widthsConfig;
 
 
@@ -29,7 +26,6 @@ namespace EventsExpress.Core.Services
             )
         {
             Db = uow;
-            _appEnvironment = appEnvironment;
             _widthsConfig = new WidthsConfig() { thumbnail = 400, image = 1200};
         }
 
@@ -89,7 +85,7 @@ namespace EventsExpress.Core.Services
                         }
 
                         createdImage
-                            .Format(new JpegFormat {  })
+                            .Format(new JpegFormat { })
                             .Save(resultImage);
                     }
 

@@ -42,9 +42,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email} is not confirmed, please confirm", "");
             }
 
-            // validate password
-            var passwordValid = this.VerifyPassword(password, user.PasswordHash);
-            if (!passwordValid)
+            if (!this.VerifyPassword(password, user.PasswordHash))
             {
                 return new OperationResult(false, "Invalid password", "Password");
             }
@@ -54,16 +52,18 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, token, "");
         }
 
+
         public OperationResult FirstAuth(UserDTO userDto)
         {
-            if (userDto==null)
+            if (userDto == null)
             {
                 return new OperationResult(false, $"User with email: {userDto.Email} not found", "email");
             }
             var token = this.GenerateJWT(userDto);
 
-            return new OperationResult(true,token,"");
+            return new OperationResult(true, token, "");
         }
+
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
@@ -75,16 +75,16 @@ namespace EventsExpress.Core.Services
             return _userService.GetByEmail(email);
         }
 
-        public bool CheckPassword(string currentPassword,string oldPassword)
+
+        public bool CheckPassword(string currentPassword, string oldPassword)
         {
             string newPass = PasswordHasher.GenerateHash(currentPassword);
             return newPass == oldPassword;
         }
 
-        private bool VerifyPassword(string actualPassword, string hashedPassword)
-        {
-            return hashedPassword == PasswordHasher.GenerateHash(actualPassword);
-        }
+
+        private bool VerifyPassword(string actualPassword, string hashedPassword) => 
+            (hashedPassword == PasswordHasher.GenerateHash(actualPassword));
 
 
         private string GenerateJWT(UserDTO user)

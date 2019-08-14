@@ -31,9 +31,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CommentDto model)
         {
-
-            var res = model.Id == Guid.Empty ? await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model))
-                                       : await _commentService.Edit(_mapper.Map<CommentDto, CommentDTO>(model));
+            var res = model.Id == Guid.Empty 
+                ? await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model))
+                : await _commentService.Edit(_mapper.Map<CommentDto, CommentDTO>(model));
             if (res.Successed)
             {
                 return Ok();
@@ -61,8 +61,6 @@ namespace EventsExpress.Controllers
             int pageSize = 5;
             int count;
             var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id, page, pageSize, out count));
-
-          
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>

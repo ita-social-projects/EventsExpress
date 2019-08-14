@@ -44,7 +44,8 @@ namespace EventsExpress.Core.NotificationHandlers
 
             try
             {
-                await _sender.SendEmailAsync(new EmailDTO {
+                await _sender.SendEmailAsync(new EmailDTO
+                {
                     SenderEmail = "noreply@EventExpress.com",
                     RecepientEmail = notification.User.Email,
                     MessageText = $"For confirm your email you can follow the <a href='{theEmailLink}'>link</>"
