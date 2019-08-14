@@ -146,7 +146,14 @@ namespace EventsExpress.Core.Services
             }
 
             Event evnt = _mapper.Map<EventDTO, Event>(e);
-            evnt.Photo = await _photoService.AddPhoto(e.Photo);
+            try
+            {
+                evnt.Photo = await _photoService.AddPhoto(e.Photo);
+            }
+            catch
+            {
+                return new OperationResult(false, "Invalid file", "");
+            }
 
             List<EventCategory> eventCategories = new List<EventCategory>();
             if (e.Categories != null)
@@ -188,7 +195,14 @@ namespace EventsExpress.Core.Services
             if (e.Photo != null && evnt.Photo != null) 
             {
                 await _photoService.Delete(evnt.Photo.Id);
-                evnt.Photo = await _photoService.AddPhoto(e.Photo);
+                try
+                {
+                    evnt.Photo = await _photoService.AddPhoto(e.Photo);
+                }
+                catch
+                {
+                    return new OperationResult(false, "Invalid file", "");
+                }
             }
                                     
             List<EventCategory> eventCategories = new List<EventCategory>();

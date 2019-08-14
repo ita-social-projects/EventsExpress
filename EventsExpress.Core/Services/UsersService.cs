@@ -259,7 +259,14 @@ namespace EventsExpress.Core.Services
 
             if (user.Photo != null)
             {
-                await _photoService.Delete(user.Photo.Id);
+                try
+                {
+                    await _photoService.Delete(user.Photo.Id);
+                }
+                catch
+                {
+                    return new OperationResult(false, "Bad image file", "Id");
+                }
             }
             user.Photo = await _photoService.AddPhoto(avatar);
 
