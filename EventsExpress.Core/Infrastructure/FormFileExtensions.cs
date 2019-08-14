@@ -10,7 +10,7 @@ namespace EventsExpress.Core.Infrastructure
 {
     public static class FormFileExtensions
     {
-        public const int ImageMinimumBytes = 512;
+        public const int ImageMinimumBytes = 4096;
 
         public static bool IsImage(this IFormFile postedFile)
         {

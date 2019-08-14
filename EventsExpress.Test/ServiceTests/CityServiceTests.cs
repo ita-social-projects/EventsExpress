@@ -50,7 +50,7 @@ namespace EventsExpress.Test.ServiceTests
         {
            
             City city = new City() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
-
+            
             mockUnitOfWork.Setup(c => c.CountryRepository.Get(city.CountryId)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
 
             mockUnitOfWork.Setup(p => p.CityRepository.Get("")).Returns(new List<City>()
@@ -84,7 +84,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsFalse(res.Result.Successed);
         }
 
-         [Test]
+        [Test]
         public void InsertExisting_Object_ReturnsFalse()
         {
             City city = new City() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
