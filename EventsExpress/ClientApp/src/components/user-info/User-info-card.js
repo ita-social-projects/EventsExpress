@@ -39,7 +39,10 @@ const useStyles = makeStyles(theme => ({
     var m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age = age - 1;
-    }
+     }
+     if (age >= 100) {
+         age = "---";
+     }
     return age;
 }
 export default class UserInfoCard extends Component {

@@ -68,12 +68,14 @@ export default class Event extends Component {
             <Card className={classes.card}>
                 <CardHeader
                     avatar={
-                        <Tooltip title={user.username}>
-                        <Avatar aria-label="recipe"
+                            <Tooltip title={user.username}>
+                                <Link to={'/user/' + user.id} className="btn-custom">
+                                    <Avatar aria-label="recipe"
                         src={user.photoUrl}
                          className={classes.avatar} >
                              {user.username[0].toUpperCase()}
-                        </Avatar>
+                                    </Avatar>
+                                    </Link>
                         </Tooltip>
                         }
                         

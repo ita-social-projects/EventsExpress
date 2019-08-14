@@ -42,6 +42,9 @@ export default class EventItemView extends Component {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age = age - 1;
         }
+        if (age >= 100) {
+            age = "---";
+        }
         return age;
     }
 
