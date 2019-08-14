@@ -53,6 +53,13 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
+            var us = Db.UserRepository.Get(userId);
+
+            if(us == null)
+            {                     
+                return new OperationResult(false, "User not found!", "userID");
+            }
+
             if (ev.Visitors == null)
             {
                 ev.Visitors = new List<UserEvent>();
@@ -95,7 +102,6 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-
         public async Task<OperationResult> Delete(Guid id)
         {
             if (id == null)
@@ -111,31 +117,16 @@ namespace EventsExpress.Core.Services
             var result = Db.EventRepository.Delete(ev);
             await Db.SaveAsync();
 
-            if (result == null)
-            {
+            if (result != null)
+            {                                
                 return new OperationResult(true);
-            }
-            else {
-                return new OperationResult(false, "Error!", "");
-            }
-        }
-
-        public IEnumerable<EventDTO> UpcomingEvents(int? num)
-        {
-            var ev = Db.EventRepository.Get()
-                .Where(e => e.DateTo <= DateTime.UtcNow)
-                .OrderBy(e => e.DateFrom)
-                .Skip(0)
-                .Take((int)num)
-                .AsEnumerable();
-                
-
-            return _mapper.Map<IEnumerable<EventDTO>>(ev);
+            }                                          
+            return new OperationResult(false, "Error!", "");
         }
 
         public async Task<OperationResult> Create(EventDTO e)
         {
-            if(e.DateFrom == new DateTime())
+            if (e.DateFrom == new DateTime())
             {
                 e.DateFrom = DateTime.Today;
             }
@@ -192,7 +183,7 @@ namespace EventsExpress.Core.Services
             evnt.DateTo = e.DateTo;
             evnt.CityId = e.CityId;
 
-            if (e.Photo != null && evnt.Photo != null) 
+            if (e.Photo != null && evnt.Photo != null)
             {
                 await _photoService.Delete(evnt.Photo.Id);
                 try
@@ -204,7 +195,7 @@ namespace EventsExpress.Core.Services
                     return new OperationResult(false, "Invalid file", "");
                 }
             }
-                                    
+
             List<EventCategory> eventCategories = new List<EventCategory>();
 
             if (e.Categories != null)
@@ -222,6 +213,27 @@ namespace EventsExpress.Core.Services
 
             await Db.SaveAsync();
             return new OperationResult(true);
+        }
+
+        public EventDTO EventById(Guid eventId)
+        {
+            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").FirstOrDefault(x => x.Id == eventId);
+
+            var res = _mapper.Map<EventDTO>(evv);
+            return res;
+        }
+
+        public IEnumerable<EventDTO> UpcomingEvents(int? num)
+        {
+            var ev = Db.EventRepository.Get()
+                .Where(e => e.DateTo <= DateTime.UtcNow)
+                .OrderBy(e => e.DateFrom)
+                .Skip(0)
+                .Take((int)num)
+                .AsEnumerable();
+                
+
+            return _mapper.Map<IEnumerable<EventDTO>>(ev);
         }
 
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int Count)
@@ -270,14 +282,6 @@ namespace EventsExpress.Core.Services
                       
             return IEvents;
            
-        }
-
-        public EventDTO EventById(Guid eventId)
-        {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").FirstOrDefault(x => x.Id == eventId);
-
-            var res = _mapper.Map<EventDTO>(evv);
-            return res;
         }
 
         public IEnumerable<EventDTO> EventsByUserId(Guid userId)
