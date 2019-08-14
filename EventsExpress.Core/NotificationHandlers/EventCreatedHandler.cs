@@ -36,7 +36,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         SenderEmail = "noreply@eventService.com",
                         RecepientEmail = u.Email,
-                        MessageText = $"The <a href='http://localhost:64144/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
+                        MessageText = $"The <a href='http://localhost:61985/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
                     });
                 }
             }
