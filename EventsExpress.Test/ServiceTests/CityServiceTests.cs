@@ -131,7 +131,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsFalse(res.Result.Successed);
         }
         [Test]
-        public void Update_CityCounttiIdNull_false()
+        public void Update_CityCountryIdNull_false()
         {
             City city = new City() { Id= new Guid(),  Name = "City1", CountryId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
 
