@@ -246,7 +246,7 @@ namespace EventsExpress.Core.Services
             {
                 events = events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord));
             }
-            if(model.DateFrom != new DateTime())
+            if(model.DateFrom != DateTime.MinValue)
             {
                 events = events.Where(x => x.DateFrom >= model.DateFrom);
             }
@@ -255,7 +255,7 @@ namespace EventsExpress.Core.Services
                 events = events.Where(x => x.DateFrom >= DateTime.Today);
             }
 
-            if (model.DateTo != new DateTime())
+            if (model.DateTo != DateTime.MinValue)
             {
                 events = events.Where(x => x.DateTo <= model.DateTo);
             }                 
@@ -278,9 +278,9 @@ namespace EventsExpress.Core.Services
 
             Count = events.Count();
 
-            var IEvents = _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            var result = _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
                       
-            return IEvents;
+            return result;
            
         }
 

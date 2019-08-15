@@ -179,33 +179,16 @@ namespace EventsExpress.Core.Services
 
 
             IQueryable<User> users = Db.UserRepository.Get(includeProperties: "Photo,Role");
-            if (model.KeyWord != null)
-            {
-                users = users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord));
-            }
-            if (model.Role != null)
-            {
-                users = users.Where(x => x.Role.Name.Contains(model.Role));
-            }
 
-            if (model.Blocked == true)
-            {
-                users = users.Where(x => x.IsBlocked == model.Blocked);
-            }
-            if (model.UnBlocked == true)
-            {
-                users = users.Where(x => x.IsBlocked == !(model.UnBlocked));
-            }
-            if (model.All == true)
-            {
-              var  Allusers = users;
-            }
-           
-    
+            users = (model.KeyWord != null) ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord)) : users;
+            users = (model.Role != null) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
+            users = (model.Blocked) ? users.Where(x => x.IsBlocked == model.Blocked) : users;
+            users = (model.UnBlocked) ? users.Where(x => x.IsBlocked == !(model.UnBlocked)) : users;
+          
             count = users.Count();
-            var IUsers = _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
 
-            return IUsers;
+            return _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+
         }
 
         public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
