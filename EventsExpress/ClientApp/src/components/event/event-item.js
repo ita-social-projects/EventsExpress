@@ -107,7 +107,12 @@ export default class Event extends Component {
                 <CardActions disableSpacing>
                     <div className="flex flex-column">
                         {this.renderCategories(categories.slice(0,2))}
-                    </div>
+                        </div>
+                        {(role == "Admin")
+                            ?
+                            : null
+
+                        }
                     <Link to={'/event/'+id+'/'+1}>
                         <IconButton className={classes.button} aria-label="view">
                             <i className="fa fa-eye"></i>

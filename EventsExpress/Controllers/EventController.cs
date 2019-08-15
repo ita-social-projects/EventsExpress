@@ -122,6 +122,28 @@ namespace EventsExpress.Controllers
             return BadRequest(res.Message);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> BlockEvent(Guid eventId)
+        {
+            var result = await _eventService.BlockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnblockEvent(Guid eventId)
+        {
+            var result = await _eventService.UnblockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult FutureEvents(Guid userId)

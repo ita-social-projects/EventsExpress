@@ -124,6 +124,35 @@ namespace EventsExpress.Core.Services
             return new OperationResult(false, "Error!", "");
         }
 
+        public async Task<OperationResult> BlockEvent(Guid eID)
+        {
+            var uEvent = Db.EventRepository.Get(eID);
+            if (uEvent == null)
+            {
+                return new OperationResult(false, "Invalid event id", "eventId");
+            }
+            uEvent.IsBlocked = true;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> UnblockEvent(Guid eId)
+        {
+            var uEvent = Db.EventRepository.Get(eId);
+            if (uEvent == null)
+            {
+                return new OperationResult(false, "Invalid event Id", "eventId");
+            }
+
+            uEvent.IsBlocked = false;
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
+        }
+
         public async Task<OperationResult> Create(EventDTO e)
         {
             if (e.DateFrom == new DateTime())

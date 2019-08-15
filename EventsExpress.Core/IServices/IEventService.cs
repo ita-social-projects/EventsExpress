@@ -14,6 +14,8 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Create(EventDTO e);
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
+        Task<OperationResult> BlockEvent(Guid eID);
+        Task<OperationResult> UnblockEvent(Guid eId);
 
         EventDTO EventById(Guid eventId);       
 

@@ -110,7 +110,7 @@ const useStyles = makeStyles(theme => ({
                     aria-controls="panel3bh-content"
                     id="panel3bh-header"
                 >
-                    <Typography className={classes.heading}>Age</Typography>
+                    <Typography className={classes.heading}>Date of birth</Typography>
                     <Typography className={classes.secondaryHeading}>{props.birthday}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
