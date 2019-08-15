@@ -33,52 +33,47 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet("[action]")]
-        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel model)
+        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel filter)
         {
-            if (model.PageSize == 0)
+            filter.PageSize = 4;
+            try
             {
-                model.PageSize = 4;
+                var viewModel = new IndexViewModel<UserManageDto>
+                {
+                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                };
+                return Ok(viewModel);
             }
-
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out int Count));
-
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            catch (ArgumentOutOfRangeException)
             {
                 return BadRequest();
             }
-            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-    
-            return Ok(viewModel);
         }
 
         #region Users managment by Admin
 
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get([FromQuery]UsersFilterViewModel model)
+        public IActionResult Get([FromQuery]UsersFilterViewModel filter)
         {
-            if (model.PageSize == 0) {
-                model.PageSize = 10;
+            if (filter.PageSize == 0)
+            {
+                filter.PageSize = 10;
             }
-
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out int Count));
-
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            try
+            {
+                var viewModel = new IndexViewModel<UserManageDto>
+                {
+                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
             {
                 return BadRequest();
             }
-            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-            return Ok(viewModel);
         }
 
 

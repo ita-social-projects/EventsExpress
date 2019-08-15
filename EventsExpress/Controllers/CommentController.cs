@@ -66,7 +66,7 @@ namespace EventsExpress.Controllers
             IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>
             {
                 PageViewModel = pageViewModel,
-                items = res
+                Items = res
             };
             return Ok(viewModel);
         }

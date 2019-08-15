@@ -13,8 +13,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MediatR;
 using EventsExpress.Core.Notifications;
-using Microsoft.Extensions.Caching.Memory;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Db.Helpers;
 using EventsExpress.Db.Enums;
 
@@ -25,25 +23,22 @@ namespace EventsExpress.Core.Services
         public IUnitOfWork Db { get; set; }
 
         private readonly IMapper _mapper;
-        private IPhotoService _photoService;
+        private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
-        private CacheHelper _cacheHelper;
-        private IEmailService _emailService;            
-        private IEventService _eventService;
+        private readonly CacheHelper _cacheHelper;
+        private readonly IEmailService _emailService;
 
         public UserService(IUnitOfWork uow,
             IMapper mapper,
             IPhotoService photoSrv,
             IMediator mediator,
             CacheHelper cacheHelper,
-            IEmailService emailService,
-            IEventService eventService
+            IEmailService emailService
             )                                                                                                     
         {
             Db = uow;
             _mapper = mapper;
             _photoService = photoSrv;
-            _eventService = eventService;
             _mediator = mediator;
             _cacheHelper = cacheHelper;
             _emailService = emailService;
@@ -51,52 +46,50 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(UserDTO userDto)
         {
-           
-
-            if (Db.UserRepository.Get().FirstOrDefault(u => u.Email == userDto.Email) != null)
+            if (GetByEmail(userDto.Email) != null)
             {
-                return new OperationResult(false, "Emali is exist in database", "Email");
+                return new OperationResult(false, "Email is exist in database", "Email");
             }
-            User user = _mapper.Map<UserDTO, User>(userDto);
+            var user = _mapper.Map<UserDTO, User>(userDto);
 
             user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
-            var result = Db.UserRepository.Insert(user);
 
-            if (result.Email == user.Email && result.Id != null)
+            var result = Db.UserRepository.Insert(user);
+            if (result.Email == user.Email && result.Id != Guid.Empty)
             {
-                await Db.SaveAsync();
-                userDto.Id = result.Id;
-                await _mediator.Publish(new RegisterVerificationMessage(userDto));
-                return new OperationResult(true, "Registration succeeded", "");
+                return new OperationResult(false, "Registration is failed", "");
             }
 
-            return new OperationResult(false, "Registration is failed", "");
+            await Db.SaveAsync();
+            userDto.Id = result.Id;
+
+            await _mediator.Publish(new RegisterVerificationMessage(userDto));
+
+            return new OperationResult(true, "Registration succeeded", "");
         }
 
-        public async Task<OperationResult> Verificate(CacheDTO cacheDto)
+        public async Task<OperationResult> ConfirmEmail(CacheDTO cacheDto)
         {
             var user = Db.UserRepository.Get(cacheDto.UserId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-           
-
+            
             if (string.IsNullOrEmpty(cacheDto.Token))
             {
-                return new OperationResult(false,"Token is null or empty","verification token");
+                return new OperationResult(false,"Token is null or empty", "verification token");
             }
 
             if (cacheDto.Token == _cacheHelper.GetValue(cacheDto.UserId).Token)
             {
-                user.EmailConfirmed = true;
-                await Db.SaveAsync();
-
-                _cacheHelper.Delete(cacheDto.UserId);
-                return new OperationResult(true, "Verify succeeded", "");
+                return new OperationResult(false, "Validation failed", "");
             }
 
-            return new OperationResult(false, "Validation failed", "");
+            user.EmailConfirmed = true;
+            await Db.SaveAsync();
+            _cacheHelper.Delete(cacheDto.UserId);
+            return new OperationResult(true, "Verify succeeded", "");
         }
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
@@ -162,26 +155,22 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get(includeProperties: "Photo,Categories.Category,Events,Role").Where(x => x.Id == id).FirstOrDefault());
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get("Photo,Categories.Category,Events,Role").Where(x => x.Id == id).FirstOrDefault());
             return user;
         }
 
         public UserDTO GetByEmail(string email)
         {
-            var user = Db.UserRepository.Get(
-                includeProperties: "Role,Categories.Category,Photo"
-                ).Where(o => o.Email == email).AsNoTracking().FirstOrDefault();
+            var user = Db.UserRepository.Get("Role,Categories.Category,Photo").Where(o => o.Email == email).AsNoTracking().FirstOrDefault();
             return _mapper.Map<UserDTO>(user);
         }
 
         public IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int count)
         {
+            var users = Db.UserRepository.Get("Photo,Role");
 
-
-            IQueryable<User> users = Db.UserRepository.Get(includeProperties: "Photo,Role");
-
-            users = (model.KeyWord != null) ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord)) : users;
-            users = (model.Role != null) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
+            users = !string.IsNullOrEmpty(model.KeyWord) ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord)) : users;
+            users = !string.IsNullOrEmpty(model.Role) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
             users = (model.Blocked) ? users.Where(x => x.IsBlocked == model.Blocked) : users;
             users = (model.UnBlocked) ? users.Where(x => x.IsBlocked == !(model.UnBlocked)) : users;
           

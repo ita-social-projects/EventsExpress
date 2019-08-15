@@ -118,7 +118,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var result = await _userService.Verificate(cache);
+            var result = await _userService.ConfirmEmail(cache);
 
             if (!result.Successed)
             {

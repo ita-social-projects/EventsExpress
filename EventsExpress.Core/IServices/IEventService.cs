@@ -19,7 +19,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDTO>  Events(EventFilterViewModel model, out int Count);
         IEnumerable<EventDTO> EventsByUserId(Guid userId);
-        IEnumerable<EventDTO> UpcomingEvents(int? num);
+
 
         IEnumerable<EventDTO> FutureEventsByUserId(Guid userId);
         IEnumerable<EventDTO> PastEventsByUserId(Guid userId);
