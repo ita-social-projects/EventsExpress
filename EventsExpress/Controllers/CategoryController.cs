@@ -50,9 +50,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CategoryDto model)
         {
-            if (string.IsNullOrEmpty(model.Name))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Category cannot be empty!");
+                return BadRequest(ModelState);
             }
             var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
                                        : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));

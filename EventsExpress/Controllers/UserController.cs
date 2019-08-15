@@ -123,6 +123,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
+            if (ModelState.IsValid) {
+                return BadRequest(ModelState);
+            }
             var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
             if (user == null)
             {
@@ -148,6 +151,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -168,6 +175,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -188,6 +199,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -207,6 +222,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangeAvatar([FromForm]IFormFile newAva)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {

@@ -31,7 +31,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CommentDto model)
         {
-
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
             var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
                                        
             if (res.Successed)

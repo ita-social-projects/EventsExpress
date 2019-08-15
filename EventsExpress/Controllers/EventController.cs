@@ -32,7 +32,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
-
+         
             var res = model.Id == Guid.Empty ? await _eventService.Create(_mapper.Map<EventDto, EventDTO>(model))
                 : await _eventService.Edit(_mapper.Map<EventDto, EventDTO>(model));
             if (res.Successed)

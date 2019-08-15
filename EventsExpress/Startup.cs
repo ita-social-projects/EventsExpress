@@ -96,6 +96,11 @@ namespace EventsExpress
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
+            services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
+            services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
+            services.AddTransient<IValidator<EventDto>, EventDtoValidator>();
+            services.AddTransient<IValidator<UserInfo>, UserInfoValidator>();
+      
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
