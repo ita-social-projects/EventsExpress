@@ -27,7 +27,7 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
         {
-            var users = _userService.GetCategoriesFollowers(notification.Event.Categories);
+            var users = _userService.GetUsersByCategories(notification.Event.Categories);
             try
             {
                 foreach (var u in users)

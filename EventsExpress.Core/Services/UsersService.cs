@@ -44,6 +44,7 @@ namespace EventsExpress.Core.Services
             _emailService = emailService;
         }
 
+
         public async Task<OperationResult> Create(UserDTO userDto)
         {
             if (GetByEmail(userDto.Email) != null)
@@ -68,6 +69,7 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Registration succeeded", "");
         }
 
+
         public async Task<OperationResult> ConfirmEmail(CacheDTO cacheDto)
         {
             var user = Db.UserRepository.Get(cacheDto.UserId);
@@ -91,6 +93,7 @@ namespace EventsExpress.Core.Services
             _cacheHelper.Delete(cacheDto.UserId);
             return new OperationResult(true, "Verify succeeded", "");
         }
+
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
         {
@@ -128,6 +131,7 @@ namespace EventsExpress.Core.Services
             
         }
 
+
         public async Task<OperationResult> Update(UserDTO userDTO)
         {
             if (string.IsNullOrEmpty(userDTO.Email))
@@ -153,19 +157,16 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public UserDTO GetById(Guid id)
-        {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get("Photo,Categories.Category,Events,Role").Where(x => x.Id == id).FirstOrDefault());
-            return user;
-        }
 
-        public UserDTO GetByEmail(string email)
-        {
-            var user = Db.UserRepository.Get("Role,Categories.Category,Photo").Where(o => o.Email == email).AsNoTracking().FirstOrDefault();
-            return _mapper.Map<UserDTO>(user);
-        }
+        public UserDTO GetById(Guid id) =>
+            _mapper.Map<UserDTO>(Db.UserRepository.Get("Photo,Categories.Category,Events,Role").FirstOrDefault(x => x.Id == id));
 
-        public IEnumerable<UserDTO> GetAll(UsersFilterViewModel model, out int count)
+
+        public UserDTO GetByEmail(string email) =>
+            _mapper.Map<UserDTO>(Db.UserRepository.Get("Role,Categories.Category,Photo").AsNoTracking().FirstOrDefault(o => o.Email == email));
+            
+
+        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count)
         {
             var users = Db.UserRepository.Get("Photo,Role");
 
@@ -177,32 +178,27 @@ namespace EventsExpress.Core.Services
             count = users.Count();
 
             return _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
-
         }
 
-        public IEnumerable<UserDTO> GetCategoriesFollowers(IEnumerable<CategoryDTO> categories)
+
+        public IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories)
         {
             var categoryIds = categories.Select(x => x.Id).ToList();
 
-            var users = Db.UserRepository.Get(includeProperties: "Photo,Role,Categories.Category")
-                .Where(user => user.Categories.Any(category => categoryIds.Contains(category.Category.Id))).Distinct()
+            var users = Db.UserRepository.Get("Photo,Role,Categories.Category")
+                .Where(user => user.Categories
+                    .Any(category => categoryIds.Contains(category.Category.Id)))
+                .Distinct()
                 .AsEnumerable();
 
             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
         }
 
-        public IEnumerable<UserDTO> Get(Expression<Func<User, bool>> filter)
-        {
-            var users = Db.UserRepository.Get().Where(filter);
-
-            var result = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
-            return result;
-        }
 
         public async Task<OperationResult> ChangeRole(Guid uId, Guid rId)
         {
-            var role = Db.RoleRepository.Get(rId);
-            if (role == null)
+            var newRole = Db.RoleRepository.Get(rId);
+            if (newRole == null)
             {
                 return new OperationResult(false, "Invalid role Id", "roleId");
             }
@@ -213,17 +209,16 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
 
-            user.Role = role;
+            user.Role = newRole;
             await Db.SaveAsync();
 
             return new OperationResult(true);
         }
 
+
         public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
         {
-            var user = Db.UserRepository
-                .Get(includeProperties: "Photo").Where(u => u.Id == uId)
-                .FirstOrDefault();
+            var user = Db.UserRepository.Get("Photo").FirstOrDefault(u => u.Id == uId);
             if (user == null)
             {
                 return new OperationResult(false, "User not found", "Id");
@@ -231,22 +226,21 @@ namespace EventsExpress.Core.Services
 
             if (user.Photo != null)
             {
-                try
-                {
-                    await _photoService.Delete(user.Photo.Id);
-                }
-                catch
-                {
-                    return new OperationResult(false, "Bad image file", "Id");
-                }
+                await _photoService.Delete(user.Photo.Id);
             }
-            user.Photo = await _photoService.AddPhoto(avatar);
-
-            Db.UserRepository.Update(user);
-
-            await Db.SaveAsync();
-            return new OperationResult(true);
+            try
+            {
+                user.Photo = await _photoService.AddPhoto(avatar);
+                Db.UserRepository.Update(user);
+                await Db.SaveAsync();
+                return new OperationResult(true);
+            }
+            catch
+            {
+                return new OperationResult(false, "Bad image file", "Id");
+            }
         }
+
 
         public async Task<OperationResult> Unblock(Guid uId)
         {
@@ -257,11 +251,11 @@ namespace EventsExpress.Core.Services
             }
 
             user.IsBlocked = false;
-
             await Db.SaveAsync();
 
             return new OperationResult(true);
         }
+
 
         public async Task<OperationResult> Block(Guid uId)
         {
@@ -272,15 +266,16 @@ namespace EventsExpress.Core.Services
             }
 
             user.IsBlocked = true;
-
             await Db.SaveAsync();
 
             return new OperationResult(true);
         }
 
+
         public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
         {
-            User u = Db.UserRepository.Get(includeProperties: "Categories").Single(user => user.Id == userDTO.Id);
+            User u = Db.UserRepository.Get("Categories").Single(user => user.Id == userDTO.Id);
+
             var temp = new List<UserCategory>();
             foreach (var c in categories)
             {
@@ -289,8 +284,8 @@ namespace EventsExpress.Core.Services
                     UserId = u.Id,
                     CategoryId = c.Id
                 });
-
-            }
+            };
+            
             u.Categories = temp;
             try
             {
@@ -305,17 +300,18 @@ namespace EventsExpress.Core.Services
             }
         }
 
+
         public async Task<OperationResult> SetAttitude(AttitudeDTO attitude)
         {
-            if (attitude.UserFromId == null || attitude.UserToId == null)
+            if (attitude.UserFromId == Guid.Empty || attitude.UserToId == Guid.Empty)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-            Relationship current_attitude = Db.RelationshipRepository.Get().Where(x => x.UserFromId == attitude.UserFromId).Where(y => y.UserToId == attitude.UserToId).FirstOrDefault();
 
-            if (current_attitude == null)
+            var currentAttitude = Db.RelationshipRepository.Get().FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId);
+            if (currentAttitude == null)
             {
-                Relationship rel = _mapper.Map<AttitudeDTO, Relationship>(attitude);
+                var rel = _mapper.Map<AttitudeDTO, Relationship>(attitude);
                 try
                 {
                     Db.RelationshipRepository.Insert(rel);
@@ -323,37 +319,31 @@ namespace EventsExpress.Core.Services
 
                     return new OperationResult(true);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return new OperationResult(false, "Set failing", "");
                 }
             }
-            current_attitude.Attitude = (Attitude)attitude.Attitude;
+            currentAttitude.Attitude = (Attitude)attitude.Attitude;
             await Db.SaveAsync();
             return new OperationResult(true);
         }
 
-        public AttitudeDTO GetAttitude(AttitudeDTO attitude)
-        {            
-            AttitudeDTO rel = _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get()
-                .Where(x => (x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId)).FirstOrDefault());
 
-            return rel;
-        }
+        public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
+            _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get().FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
+
 
         public ProfileDTO GetProfileById(Guid id, Guid FromId)
         {
-            var user = _mapper.Map<UserDTO, ProfileDTO>(this.GetById(id));
-            Relationship rel = Db.RelationshipRepository.Get()
-                .Where(x => (x.UserFromId == FromId && x.UserToId == id)).FirstOrDefault();
-            if (rel != null)
-            {
-                user.Attitude = (byte)rel.Attitude;
-            }
-            else
-            {
-                user.Attitude = 2;
-            }
+            var user = _mapper.Map<UserDTO, ProfileDTO>(GetById(id));
+
+            var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == FromId && x.UserToId == id));
+
+            user.Attitude = (rel != null)
+                ? (byte) rel.Attitude
+                : (byte) 2;
+            
             return user;
         }
     }

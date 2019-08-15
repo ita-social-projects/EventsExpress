@@ -13,7 +13,7 @@ namespace EventsExpress.Core.DTOs
 
     }
 
-   public class UsersFilterViewModel
+    public class UsersFilterViewModel
     {
         public int Page { get; set; }
 
@@ -26,8 +26,6 @@ namespace EventsExpress.Core.DTOs
         public bool Blocked { get; set; }
 
         public bool UnBlocked { get; set; }
-
-        public bool All { get; set; }
 
         public SortBy SortBy { get; set; }
     }

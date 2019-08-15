@@ -22,8 +22,8 @@ namespace EventsExpress.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IMapper _mapper;
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
      
         public UsersController(IUserService userSrv, IMapper mapper)
         {         
@@ -40,7 +40,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
@@ -65,7 +65,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
@@ -95,7 +95,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Unblock(Guid userId)
         {
             var result = await _userService.Unblock(userId);
-
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
@@ -108,7 +107,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Block(Guid userId)
         {
             var result = await _userService.Block(userId);
-
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
