@@ -54,8 +54,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("CommentsId");
-
                     b.Property<DateTime>("Date");
 
                     b.Property<Guid>("EventId");
@@ -68,9 +66,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentsId");
-
                     b.HasIndex("EventId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
@@ -315,14 +313,14 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.Comments")
-                        .WithMany("Children")
-                        .HasForeignKey("CommentsId");
-
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.Comments")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithMany()

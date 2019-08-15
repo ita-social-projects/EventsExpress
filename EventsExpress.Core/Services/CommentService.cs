@@ -26,10 +26,16 @@ namespace EventsExpress.Core.Services
             _userService = userService;
         }
 
-        public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize ,out int count)
+        public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
-            IQueryable<Comments> comments = Db.CommentsRepository.Get(includeProperties: "User.Photo").Where(x => x.EventId == id).Skip((page - 1) * pageSize).Take(pageSize);/*Get().AsQueryable().Where(x => x.EventId == id))*/
-            count = Db.CommentsRepository.Get( includeProperties: "User.Photo").Where(x => x.EventId == id).Count();
+            var comments = Db.CommentsRepository
+                .Get("User.Photo,Children")
+                .Where(x => x.CommentsId == null)
+                .Where(x => x.EventId == id)
+                .Skip((page - 1) * pageSize).Take(pageSize).AsEnumerable();
+            count = Db.CommentsRepository.Get()
+                .Where(x => x.CommentsId == null)
+                .Where(x => x.EventId == id).Count();
             return _mapper.Map<IEnumerable<CommentDTO>>(comments);
           
         }
@@ -51,10 +57,13 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Wrong event id!", "");
             }
             
+
+
             Db.CommentsRepository.Insert(new Comments() { Text = comment.Text,
                                                           Date = DateTime.Now,
                                                           UserId = comment.UserId,
                                                           EventId = comment.EventId,
+                                                          CommentsId = comment.CommentsId
             });
 
             await Db.SaveAsync();
