@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 
 namespace EventsExpress.Core.Services
@@ -42,28 +43,38 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email} is not confirmed, please confirm", "");
             }
 
-            if (!this.VerifyPassword(password, user.PasswordHash))
+            if (!VerifyPassword(user, password))
             {
                 return new OperationResult(false, "Invalid password", "Password");
             }
 
-            var token = this.GenerateJWT(user);
+            var token = GenerateJwt(user);
 
             return new OperationResult(true, token, "");
         }
 
 
-        public OperationResult FirstAuth(UserDTO userDto)
+        public OperationResult FirstAuthenticate(UserDTO userDto)
         {
             if (userDto == null)
             {
                 return new OperationResult(false, $"User with email: {userDto.Email} not found", "email");
             }
-            var token = this.GenerateJWT(userDto);
+            var token = GenerateJwt(userDto);
 
             return new OperationResult(true, token, "");
         }
 
+        public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        {
+            if (VerifyPassword(userDto, oldPassword))
+            {
+                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+
+                return await _userService.Update(userDto);
+            }
+            return new OperationResult(false, "Invalid password", "");
+        }
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
@@ -76,20 +87,13 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public bool CheckPassword(string currentPassword, string oldPassword)
+        private bool VerifyPassword(UserDTO user, string actualPassword) => 
+            (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
+
+
+        private string GenerateJwt(UserDTO user)
         {
-            string newPass = PasswordHasher.GenerateHash(currentPassword);
-            return newPass == oldPassword;
-        }
-
-
-        private bool VerifyPassword(string actualPassword, string hashedPassword) => 
-            (hashedPassword == PasswordHasher.GenerateHash(actualPassword));
-
-
-        private string GenerateJWT(UserDTO user)
-        {
-            var claims = new Claim[]
+            var claims = new []
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
@@ -103,8 +107,7 @@ namespace EventsExpress.Core.Services
                         _signingEncodingKey.SigningAlgorithm)
             );
 
-            string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwtToken;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

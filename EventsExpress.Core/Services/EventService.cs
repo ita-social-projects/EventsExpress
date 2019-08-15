@@ -223,18 +223,6 @@ namespace EventsExpress.Core.Services
             return res;
         }
 
-        public IEnumerable<EventDTO> UpcomingEvents(int? num)
-        {
-            var ev = Db.EventRepository.Get()
-                .Where(e => e.DateTo <= DateTime.UtcNow)
-                .OrderBy(e => e.DateFrom)
-                .Skip(0)
-                .Take((int)num)
-                .AsEnumerable();
-                
-
-            return _mapper.Map<IEnumerable<EventDTO>>(ev);
-        }
 
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int Count)
         {

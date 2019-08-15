@@ -39,7 +39,7 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper = new Mock<CacheHelper>();
             mockEventService = new Mock<IEventService>();
 
-            service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object,mockEventService.Object);
+            service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
 
             userDTO = new UserDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" };
             user = new User() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" };
@@ -67,7 +67,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Verificate_CacheDtoNull_ReturnFalse()
         {
             CacheDTO cache = new CacheDTO() { };
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -76,7 +76,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Verificate_CacheDtoEmpty_ReturnFalse()
         {
             CacheDTO cache = new CacheDTO() { Token=""};
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -136,7 +136,7 @@ namespace EventsExpress.Test.ServiceTests
             mockUnitOfWork.Setup(u => u.UserRepository.Get(It.IsAny<Guid>()))
                 .Returns((User)null);
 
-            var result = service.Verificate(new CacheDTO());
+            var result = service.ConfirmEmail(new CacheDTO());
 
             Assert.IsFalse(result.Result.Successed);
         }
