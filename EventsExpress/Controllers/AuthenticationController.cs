@@ -156,6 +156,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = _authService.GetCurrentUser(HttpContext.User);
 
             var check = _authService.CheckPassword(changePasswordDto.OldPassword, user.PasswordHash);

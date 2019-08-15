@@ -20,6 +20,10 @@ using EventsExpress.Mapping;
 using System.Reflection;
 using MediatR;
 using EventsExpress.Core.NotificationHandlers;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using EventsExpress.DTO;
+using EventsExpress.Validation;
 
 namespace EventsExpress
 {
@@ -87,16 +91,17 @@ namespace EventsExpress
 
             #endregion
 
-            services.AddMvc()
+            services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
+            services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
 
-           
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
            
 
