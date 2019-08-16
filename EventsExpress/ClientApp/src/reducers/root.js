@@ -28,9 +28,11 @@ import * as RecoverPassword from './editReducers/recoverPasswordReducer'
 import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
+import * as authReducer from './authReducer';
 
 import * as ModalWind from './ModalWind';
 const rootReducers = {
+    auth: authReducer.authReducer,
     modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,

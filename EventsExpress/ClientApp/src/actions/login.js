@@ -33,6 +33,29 @@ export default function login(email, password) {
 }
 
 
+export  function loginGoogle(token) {
+
+    return dispatch => {
+        dispatch(setLoginPending(true));
+
+        const res = api_serv.setLoginGoogle({ token });
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setUser(response));
+                dispatch(setLoginSuccess(true));
+
+
+
+                localStorage.setItem('token', response.token);
+            } else {
+                dispatch(setLoginError(response.error));
+            }
+        });
+    }
+}
+
+
+
 
 
   export function setUser(data) {

@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.DTO
 {
-    public class LoginDto
+    public class UserView
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-       
+        public string tokenId { get; set; }
     }
 }

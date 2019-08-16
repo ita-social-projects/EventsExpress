@@ -10,6 +10,8 @@ namespace EventsExpress.Db.Entities
         public string Name { get; set; }
         public string PasswordHash { get; set; }
         public string Email { get; set; }
+        public string oauthSubject { get; set; }
+        public string oauthIssuer { get; set; }
         public bool EmailConfirmed { get; set; }
         public string Phone { get; set; }
         public DateTime Birthday { get; set; }

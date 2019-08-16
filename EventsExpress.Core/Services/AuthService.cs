@@ -1,10 +1,13 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -23,8 +26,30 @@ namespace EventsExpress.Core.Services
             _userService = userSrv;
             _signingEncodingKey = signingEncodingKey;
         }
-
-
+       
+        public async Task<UserDTO> AuthenticateGoogle(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload)
+        {
+            await Task.Delay(1);
+            return this.FindUserOrAdd(payload);
+        }
+        private UserDTO FindUserOrAdd(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload)
+        {
+            var user = _userService.GetByEmail(payload.Email);
+            if (user == null)
+            {
+                user = new UserDTO()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = payload.Name,
+                    Email = payload.Email,
+                    oauthSubject = payload.Subject,
+                    oauthIssuer = payload.Issuer
+                };
+              
+            }
+            return user;
+        }
+       
         public OperationResult Authenticate(string email, string password)
         {
             var user = _userService.GetByEmail(email);

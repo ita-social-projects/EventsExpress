@@ -26,7 +26,9 @@ const initialState = {
     login:{
         isLoginPending: false,
         isLoginSuccess: false,
-        loginError: null
+        loginError: null,
+        user: '',
+        isAuthenticated: false
     },
     register:{
         isRegisterPending: false,

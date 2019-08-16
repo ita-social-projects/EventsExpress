@@ -1,12 +1,19 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.MOdel;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
+using EventsExpress.Helpers;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EventsExpress.Controllers
 {
@@ -29,8 +36,46 @@ namespace EventsExpress.Controllers
             _authService = authSrv;
         }
 
-
         [AllowAnonymous]
+        [HttpPost("google")]
+        public async Task<IActionResult> Google([FromBody]UserView userView)
+        {
+            try
+            {
+                //SimpleLogger.Log("userView = " + userView.tokenId);
+                var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+                var user = await _authService.AuthenticateGoogle(payload);
+                SimpleLogger.Log(payload.ExpirationTimeSeconds.ToString());
+
+                var claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, Security.Encrypt(AppSettings.appSettings.JwtEmailEncryption,user.Email)),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppSettings.appSettings.JWTSecretKey));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                var token = new JwtSecurityToken(String.Empty,
+                  String.Empty,
+                  claims,
+                  expires: DateTime.Now.AddSeconds(55 * 60),
+                  signingCredentials: creds);
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token)
+                });
+            }
+            catch (Exception ex)
+            {
+                Helpers.SimpleLogger.Log(ex);
+                BadRequest(ex.Message);
+            }
+            return BadRequest();
+        }
+    
+
+    [AllowAnonymous]
         [HttpPost("[action]")]
         public IActionResult Login(LoginDto authRequest)
         {

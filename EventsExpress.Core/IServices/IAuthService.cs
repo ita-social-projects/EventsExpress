@@ -1,5 +1,6 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Db.Entities;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface IAuthService
     {
+        Task<UserDTO> AuthenticateGoogle(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload);
         OperationResult Authenticate(string email, string password);
         OperationResult FirstAuthenticate(UserDTO userDto);
         Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword);

@@ -24,6 +24,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using EventsExpress.DTO;
 using EventsExpress.Validation;
+using System.Text;
 
 namespace EventsExpress
 {
@@ -41,7 +42,7 @@ namespace EventsExpress
         {
             #region Authorization and Autontification configuring...
 
-            var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTSecretKey"));
+            var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("AppSettings:JWTSecretKey"));
 
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
@@ -51,6 +52,8 @@ namespace EventsExpress
                 .AddMemoryCache()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -63,6 +66,7 @@ namespace EventsExpress
 
                         ClockSkew = TimeSpan.FromSeconds(5)
                     };
+
                 });
 
             #endregion
@@ -90,9 +94,12 @@ namespace EventsExpress
             services.AddSingleton<CacheHelper>();
 
             #endregion
-
+            services.AddCors();
             services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+           
+            
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
@@ -125,8 +132,13 @@ namespace EventsExpress
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
             app.UseAuthentication();
+          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
