@@ -7,7 +7,6 @@ using EventsExpress.Db.IRepo;
 using EventsExpress.Db.Repo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -76,22 +75,25 @@ namespace EventsExpress
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEventService, EventService>();
-
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<IPhotoService, PhotoService> ();
             services.AddTransient<ICommentService, CommentService>();
+
+            services.AddTransient<IPhotoService, PhotoService> ();
+            services.Configure<ImageWidthsModel>(Configuration.GetSection("ImageWidths"));
+
+            services.AddTransient<IEmailService, EmailService>();
 
             services.AddSingleton<CacheHelper>();
 
             #endregion
 
-            services.AddMvc().AddFluentValidation()
+            services.AddMvc()
+                .AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
@@ -100,6 +102,7 @@ namespace EventsExpress
             services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
             services.AddTransient<IValidator<EventDto>, EventDtoValidator>();
             services.AddTransient<IValidator<UserInfo>, UserInfoValidator>();
+            services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
       
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -109,7 +112,6 @@ namespace EventsExpress
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
            
-
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
 

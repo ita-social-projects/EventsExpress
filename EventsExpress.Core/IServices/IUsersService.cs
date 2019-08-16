@@ -12,7 +12,7 @@ namespace EventsExpress.Core.IServices
     public interface IUserService
     {
         Task<OperationResult> Create(UserDTO userDto);
-        Task<OperationResult> Update(UserDTO userDTO);
+        Task<OperationResult> Update(UserDTO userDto);
 
         Task<OperationResult> ChangeRole(Guid uId, Guid rId);
         Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar);
@@ -27,11 +27,9 @@ namespace EventsExpress.Core.IServices
         UserDTO GetById(Guid id);
         UserDTO GetByEmail(string email);
 
-        ProfileDTO GetProfileById(Guid id, Guid FromId);
+        ProfileDTO GetProfileById(Guid id, Guid fromId);
 
         IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count);
         IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories);
-        
-        AttitudeDTO GetAttitude(AttitudeDTO attitude);
     }
 }

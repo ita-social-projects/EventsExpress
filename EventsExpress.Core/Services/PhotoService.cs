@@ -5,25 +5,28 @@ using EventsExpress.Db.IRepo;
 using ImageProcessor;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+
 
 namespace EventsExpress.Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        private IUnitOfWork Db;
-        private WidthsConfig _widthsConfig;
+        private readonly IUnitOfWork Db;
+        private readonly IOptions<ImageWidthsModel> _widthOptions;
 
-
-        public PhotoService(IUnitOfWork uow)
+        public PhotoService(
+            IUnitOfWork uow,
+            IOptions<ImageWidthsModel> opt
+            )
         {
             Db = uow;
-            _widthsConfig = new WidthsConfig() { thumbnail = 400, image = 1200};
+            _widthOptions = opt;
         }
 
         public async Task<Photo> AddPhoto(IFormFile uploadedFile)
@@ -39,14 +42,13 @@ namespace EventsExpress.Core.Services
                 imgData = reader.ReadBytes((int)uploadedFile.Length);
             }
 
-            Photo photo = new Photo
+            var photo = new Photo
             {
-                Thumb = Resize(imgData, _widthsConfig.thumbnail),
-                Img = Resize(imgData, _widthsConfig.image),
+                Thumb = Resize(imgData, _widthOptions.Value.Thumbnail),
+                Img = Resize(imgData, _widthOptions.Value.Image),
             };
 
             Db.PhotoRepository.Insert(photo);
-
             await Db.SaveAsync();
 
             return photo;
@@ -62,14 +64,12 @@ namespace EventsExpress.Core.Services
                     await Db.SaveAsync();
             }
         }
+        
 
-        #region UploadHelpers...
+        private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
-        private bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
-
-
-
-        private byte[] Resize(byte[] originalImage, int width)
+        
+        private static byte[] Resize(byte[] originalImage, int width)
         {
             using (var originalImageStream = new MemoryStream(originalImage))
             {
@@ -96,13 +96,5 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        #endregion
-
     }
-}
-
-class WidthsConfig
-{
-    public int thumbnail { get; set; } 
-    public int image { get; set; }
 }

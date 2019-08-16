@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.Entities;
 using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace EventsExpress.Controllers
 {
@@ -17,8 +12,8 @@ namespace EventsExpress.Controllers
     public class RolesController : ControllerBase
     {
 
-        private IRoleService _roleService;
-        private IMapper _mapper;
+        private readonly IRoleService _roleService;
+        private readonly IMapper _mapper;
 
         public RolesController(IRoleService roleService,
                     IMapper mapper)
@@ -32,7 +27,7 @@ namespace EventsExpress.Controllers
         [HttpGet]
         public IActionResult All()
         {
-            var res = _mapper.Map<IEnumerable<Role>, IEnumerable<RoleDto>>(_roleService.All());
+            var res = _mapper.Map<IEnumerable<RoleDto>>(_roleService.All());
 
             return Ok(res);
         }

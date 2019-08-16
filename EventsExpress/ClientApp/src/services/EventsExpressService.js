@@ -111,7 +111,7 @@ export default class EventsExpressService {
         return res;
     }
     getUserById = async (id) => {
-        const res = await this.getResource('users/GetUserById?id=' + id);
+        const res = await this.getResource('users/GetUserProfileById?id=' + id);
         return res;
     }
     getSearchUsers = async (filter) => {

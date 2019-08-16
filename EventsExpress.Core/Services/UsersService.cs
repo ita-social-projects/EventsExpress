@@ -51,12 +51,12 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Email is exist in database", "Email");
             }
-            var user = _mapper.Map<UserDTO, User>(userDto);
+            var user = _mapper.Map<User>(userDto);
 
             user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
 
             var result = Db.UserRepository.Insert(user);
-            if (result.Email == user.Email && result.Id != Guid.Empty)
+            if (result.Email != user.Email || result.Id == Guid.Empty)
             {
                 return new OperationResult(false, "Registration failed", "");
             }
@@ -267,19 +267,12 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
         {
-            User u = Db.UserRepository.Get("Categories").Single(user => user.Id == userDTO.Id);
+            var u = Db.UserRepository.Get("Categories").Single(user => user.Id == userDTO.Id);
 
-            var temp = new List<UserCategory>();
-            foreach (var c in categories)
-            {
-                temp.Add(new UserCategory
-                {
-                    UserId = u.Id,
-                    CategoryId = c.Id
-                });
-            };
-            
-            u.Categories = temp;
+            var newCategories = categories.Select(x => new UserCategory{ UserId = u.Id, CategoryId = x.Id })
+                .ToList();
+            u.Categories = newCategories;
+
             try
             {
                 Db.UserRepository.Update(u);
@@ -287,7 +280,7 @@ namespace EventsExpress.Core.Services
 
                 return new OperationResult(true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new OperationResult(false, "Update failing", "");
             }
@@ -296,11 +289,6 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> SetAttitude(AttitudeDTO attitude)
         {
-            if (attitude.UserFromId == Guid.Empty || attitude.UserToId == Guid.Empty)
-            {
-                return new OperationResult(false, "Invalid user Id", "userId");
-            }
-
             var currentAttitude = Db.RelationshipRepository.Get().FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId);
             if (currentAttitude == null)
             {
@@ -327,11 +315,11 @@ namespace EventsExpress.Core.Services
             _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get().FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
 
 
-        public ProfileDTO GetProfileById(Guid id, Guid FromId)
+        public ProfileDTO GetProfileById(Guid id, Guid fromId)
         {
             var user = _mapper.Map<UserDTO, ProfileDTO>(GetById(id));
 
-            var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == FromId && x.UserToId == id));
+            var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == fromId && x.UserToId == id));
 
             user.Attitude = (rel != null)
                 ? (byte) rel.Attitude

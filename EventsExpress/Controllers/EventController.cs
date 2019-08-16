@@ -33,8 +33,8 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
             var result = model.Id == Guid.Empty 
-                ? await _eventService.Create(_mapper.Map<EventDto, EventDTO>(model))
-                : await _eventService.Edit(_mapper.Map<EventDto, EventDTO>(model));
+                ? await _eventService.Create(_mapper.Map<EventDTO>(model))
+                : await _eventService.Edit(_mapper.Map<EventDTO>(model));
             if (result.Successed)
             {
                 return Ok();
@@ -46,7 +46,7 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) => 
-            Ok(_mapper.Map<EventDTO, EventDto>(_eventService.EventById(id)));
+            Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
                
         [AllowAnonymous]
@@ -58,7 +58,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
@@ -80,7 +80,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
@@ -120,40 +120,24 @@ namespace EventsExpress.Controllers
         #region Get event-sets for user profile
 
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid id)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id));
-
-            return Ok(res);
-        }
+        public IActionResult FutureEvents(Guid id) =>
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id)));
 
 
         [HttpGet("[action]")]
-        public IActionResult PastEvents(Guid id)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id));
-
-            return Ok(res);
-        }
+        public IActionResult PastEvents(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id)));
 
 
         [HttpGet("[action]")]
-        public IActionResult EventsToGo(Guid id)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id));
-
-            return Ok(res);
-        }
+        public IActionResult EventsToGo(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id)));
 
 
         [HttpGet("[action]")]
-        public IActionResult VisitedEvents(Guid id)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id));
-
-            return Ok(res);
-        }
-
+        public IActionResult VisitedEvents(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
+        
         #endregion
 
     }

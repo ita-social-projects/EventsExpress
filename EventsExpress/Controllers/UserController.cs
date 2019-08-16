@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -14,6 +9,10 @@ using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace EventsExpress.Controllers
 {
@@ -25,12 +24,12 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-     
+
         public UsersController(
-            IUserService userSrv, 
-            IAuthService authSrv, 
+            IUserService userSrv,
+            IAuthService authSrv,
             IMapper mapper)
-        {         
+        {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
@@ -45,7 +44,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
@@ -70,7 +69,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
@@ -203,14 +202,14 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var newCategories = _mapper.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(userInfo.Categories);
+            var newCategories = _mapper.Map<IEnumerable<Category>>(userInfo.Categories);
 
             var result = await _userService.EditFavoriteCategories(user, newCategories);
             if (result.Successed)
             {
                 return Ok();
             }
-            return BadRequest();      
+            return BadRequest();
         }
 
         [HttpPost("[action]")]
@@ -223,7 +222,7 @@ namespace EventsExpress.Controllers
             }
 
             newAva = HttpContext.Request.Form.Files[0];
-            
+
             var result = await _userService.ChangeAvatar(user.Id, newAva);
             if (!result.Successed)
             {
@@ -237,19 +236,11 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet("[action]")]
-        public IActionResult GetUserById(Guid id)
+        public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<ProfileDTO, ProfileDto>(_userService.GetProfileById(id, user.Id));
+            var res = _mapper.Map<ProfileDto>(_userService.GetProfileById(id, user.Id));
 
-            return Ok(res);
-        }
-
-        
-        [HttpGet("[action]")]
-        public IActionResult GetAttitude(AttitudeDto attitude)
-        {
-            var res = _mapper.Map<AttitudeDTO, AttitudeDto>(_userService.GetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)));
             return Ok(res);
         }
 
@@ -257,7 +248,11 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
-            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)); 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
@@ -268,7 +263,7 @@ namespace EventsExpress.Controllers
 
         // HELPERS: 
         private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
-        
+
 
     }
 }

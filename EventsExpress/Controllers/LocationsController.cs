@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EventsExpress.Core.IServices;
+﻿using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace EventsExpress.Controllers
 {
@@ -15,8 +12,8 @@ namespace EventsExpress.Controllers
     [Route("api/[controller]")]
     public class LocationsController : ControllerBase
     {
-        private ICountryService _countryService;
-        private ICityService _cityService;
+        private readonly ICountryService _countryService;
+        private readonly ICityService _cityService;
 
         public LocationsController(
             ICountryService countrySrv,
@@ -41,9 +38,9 @@ namespace EventsExpress.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = country.Id == null ?
-                    await _countryService.CreateCountryAsync(country) :
-                    await _countryService.EditCountryAsync(country);
+                var result = country.Id == Guid.Empty
+                    ? await _countryService.CreateCountryAsync(country)
+                    : await _countryService.EditCountryAsync(country);
 
                 if (result.Successed)
                 {
@@ -56,7 +53,7 @@ namespace EventsExpress.Controllers
         [HttpPost("countries/delete")]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
-            if (id != null)
+            if (id != Guid.Empty)
             {
                 var result = await _countryService.DeleteAsync(id);
                 if (result.Successed)
@@ -83,7 +80,7 @@ namespace EventsExpress.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = city.Id == null ?
+                var result = city.Id == Guid.Empty ?
                     await _cityService.CreateCityAsync(city) :
                     await _cityService.EditCityAsync(city);
 
@@ -98,7 +95,7 @@ namespace EventsExpress.Controllers
         [HttpPost("cities/delete")]
         public async Task<IActionResult> DeleteCity(Guid id)
         {
-            if (id != null)
+            if (id != Guid.Empty)
             {
                 var result = await _cityService.DeleteCityAsync(id);
                 if (result.Successed)

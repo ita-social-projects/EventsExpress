@@ -4,15 +4,12 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using EventsExpress.Core.Notifications;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -105,48 +102,40 @@ namespace EventsExpress.Core.Services
             return new OperationResult(false, "Error!", "");
         }
 
-        public async Task<OperationResult> Create(EventDTO e)
+        public async Task<OperationResult> Create(EventDTO eventDTO)
         {
-            if (e.DateFrom == new DateTime())
+            if (eventDTO.DateFrom == DateTime.MinValue)
             {
-                e.DateFrom = DateTime.Today;
+                eventDTO.DateFrom = DateTime.Today;
             }
 
-            if (e.DateTo == new DateTime())
+            if (eventDTO.DateTo == DateTime.MinValue)
             {
-                e.DateTo = DateTime.Today;
+                eventDTO.DateTo = DateTime.Today;
             }
 
-            Event evnt = _mapper.Map<EventDTO, Event>(e);
+            var ev = _mapper.Map<EventDTO, Event>(eventDTO);
             try
             {
-                evnt.Photo = await _photoService.AddPhoto(e.Photo);
+                ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
             }
             catch
             {
                 return new OperationResult(false, "Invalid file", "");
             }
-
-            List<EventCategory> eventCategories = new List<EventCategory>();
-            if (e.Categories != null)
-            {
-                foreach (var item in e.Categories)
-                {
-                    eventCategories.Add(new EventCategory
-                    {
-                        Event = evnt,
-                        CategoryId = item.Id
-                    });
-                }
-            }
-            evnt.Categories = eventCategories;
+                
+            var eventCategories = eventDTO.Categories?
+                .Select(x => new EventCategory{ Event = ev, CategoryId = x.Id })
+                .ToList();
+            ev.Categories = eventCategories;
+            
             try
             {
-                var result = Db.EventRepository.Insert(evnt);
+                var result = Db.EventRepository.Insert(ev);
                 await Db.SaveAsync();
 
-                e.Id = result.Id;
-                await _mediator.Publish(new EventCreatedMessage(e));
+                eventDTO.Id = result.Id;
+                await _mediator.Publish(new EventCreatedMessage(eventDTO));
                 return new OperationResult(true);
             }
             catch (Exception ex)
@@ -157,19 +146,19 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var evnt = Db.EventRepository.Get(includeProperties: "Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
-            evnt.Title = e.Title;
-            evnt.Description = e.Description;
-            evnt.DateFrom = e.DateFrom;
-            evnt.DateTo = e.DateTo;
-            evnt.CityId = e.CityId;
+            var ev = Db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
+            ev.Title = e.Title;
+            ev.Description = e.Description;
+            ev.DateFrom = e.DateFrom;
+            ev.DateTo = e.DateTo;
+            ev.CityId = e.CityId;
 
-            if (e.Photo != null && evnt.Photo != null)
+            if (e.Photo != null && ev.Photo != null)
             {
-                await _photoService.Delete(evnt.Photo.Id);
+                await _photoService.Delete(ev.Photo.Id);
                 try
                 {
-                    evnt.Photo = await _photoService.AddPhoto(e.Photo);
+                    ev.Photo = await _photoService.AddPhoto(e.Photo);
                 }
                 catch
                 {
@@ -177,39 +166,25 @@ namespace EventsExpress.Core.Services
                 }
             }
 
-            List<EventCategory> eventCategories = new List<EventCategory>();
+            var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
+                .ToList();
 
-            if (e.Categories != null)
-            {
-                foreach (var item in e.Categories)
-                {
-                    eventCategories.Add(new EventCategory
-                    {
-                        EventId = evnt.Id,
-                        CategoryId = item.Id
-                    });
-                }
-            }
-            evnt.Categories = eventCategories;
+            ev.Categories = eventCategories;
 
             await Db.SaveAsync();
             return new OperationResult(true);
         }
 
-        public EventDTO EventById(Guid eventId)
+        public EventDTO EventById(Guid eventId) =>
+            _mapper.Map<EventDTO>(Db.EventRepository
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .FirstOrDefault(x => x.Id == eventId));
+
+        
+
+        public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
         {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").FirstOrDefault(x => x.Id == eventId);
-
-            var res = _mapper.Map<EventDTO>(evv);
-            return res;
-        }
-
-
-        public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int Count)
-        {
-
-
-            IQueryable<Event> events = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord)) : events;
             events = (model.DateFrom != DateTime.MinValue) ? events.Where(x => x.DateFrom >= model.DateFrom) : events.Where(x => x.DateFrom >= DateTime.Today);
@@ -217,59 +192,57 @@ namespace EventsExpress.Core.Services
 
             if(model.Categories != null)
             {
-                var categories = model.Categories.Split(",");
-                List<Guid> categories_id = new List<Guid>(); 
-                foreach (var x in categories)
-                {
-                    Guid item;
-                    var res = Guid.TryParse(x, out item);
-                    if (res)
-                    {
-                        categories_id.Add(item);
-                    }
-                }                                                                       
-                events = events.Where(x => x.Categories.Any(category => categories_id.Contains(category.CategoryId)));  
+                var categoryIds = model.Categories.Split(",")
+                    .Select(x => (Guid.TryParse(x, out Guid item)) ? item : Guid.Empty)
+                    .Where(x => x != Guid.Empty)
+                    .ToList();
+
+                events = events.Where(x => x.Categories.Any(category => categoryIds.Contains(category.CategoryId)));  
             }
 
-            Count = events.Count();
+            count = events.Count();
 
-           return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
         }
 
-        public IEnumerable<EventDTO> EventsByUserId(Guid userId)
-        {  
-            var evv = Db.EventRepository.Get( includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).OrderBy(x => x.DateFrom).ToList();
-            return _mapper.Map<IEnumerable<EventDTO>>(evv);
-
-        }
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).OrderBy(x => x.DateFrom).ToList();
-            var evven = evv.Where(x => x.DateFrom >= DateTime.Today).ToList();
-            return _mapper.Map<IEnumerable<EventDTO>>(evven);
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => e.OwnerId == userId && e.DateFrom >= DateTime.Today)
+                .OrderBy(e => e.DateFrom)
+                .AsEnumerable();
+           
+            return _mapper.Map<IEnumerable<EventDTO>>(events);
         }
 
         public IEnumerable<EventDTO> PastEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo").Where(e => e.OwnerId == userId).OrderBy(x => x.DateFrom).ToList();
-            var evven = evv.Where(x => x.DateFrom < DateTime.Today).ToList();
-            return _mapper.Map<IEnumerable<EventDTO>>(evven);
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => e.OwnerId == userId && e.DateFrom < DateTime.Today)
+                .OrderBy(e => e.DateFrom)
+                .AsEnumerable();
+            
+            return _mapper.Map<IEnumerable<EventDTO>>(events);
         }
 
         public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                .Where(e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId)
-                .Where(x => x.DateFrom < DateTime.Today).ToList();
-            return _mapper.Map<IEnumerable<EventDTO>>(evv);
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom < DateTime.Today)
+                .OrderBy(e => e.DateFrom)
+                .AsEnumerable();
+
+            return _mapper.Map<IEnumerable<EventDTO>>(events);
         }
 
         public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Get(includeProperties: "Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                .Where(e => e.Visitors.Where(x => x.UserId == userId)
-                .FirstOrDefault().UserId == userId).Where(x => x.DateFrom >= DateTime.Today).OrderBy(x => x.DateFrom).ToList();
+            var evv = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom >= DateTime.Today)
+                .OrderBy(e => e.DateFrom)
+                .AsEnumerable();
+
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
         }
     }
