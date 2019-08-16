@@ -18,7 +18,8 @@ import { Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import EventsForAdmin from '../../components/event/EventsForAdmin'
 import Authentication from '../Authentication/authentication';
-
+import Chat from '../chat';
+import UserChats from '../chat/user_chats';
 
 export default class App extends Component {
 
@@ -42,10 +43,12 @@ export default class App extends Component {
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
-                    <Route path="/admin/events" component={EventsForAdmin} />
-                    <Route path="/search/users" component={SearchUserWrapper} />
-                        <Route path="/admin/users/" component={UsersWrapper} />
+                        <Route path="/admin/events" component={EventsForAdmin} />
+                        <Route path="/search/users" component={SearchUserWrapper} />
+                        <Route path="/admin/users" component={UsersWrapper} />
+                        <Route path="/user_chats" component={UserChats} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
+                        <Route path="/chat/:chatId" component={Chat} />
                     <Route component={NotFound} />
                 </Switch>
                 

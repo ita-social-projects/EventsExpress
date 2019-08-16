@@ -20,6 +20,8 @@ using EventsExpress.Mapping;
 using System.Reflection;
 using MediatR;
 using EventsExpress.Core.NotificationHandlers;
+using EventsExpress.Core.ChatHub;
+using System.Threading.Tasks;
 
 namespace EventsExpress
 {
@@ -59,6 +61,23 @@ namespace EventsExpress
 
                         ClockSkew = TimeSpan.FromSeconds(5)
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/chatRoom")))
+                            {
+                                // Read the token out of the query string
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             #endregion
@@ -74,7 +93,7 @@ namespace EventsExpress
             services.AddTransient<IAuthServicre, AuthServicre>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEventService, EventService>();
-
+            services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ICountryService, CountryService>();
@@ -98,7 +117,8 @@ namespace EventsExpress
 
            
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
-           
+
+            services.AddSignalR();
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
         }
@@ -114,7 +134,7 @@ namespace EventsExpress
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }
+            }                             
 
             app.UseAuthentication();
 
@@ -127,6 +147,10 @@ namespace EventsExpress
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+            });
+            app.UseSignalR(routes =>
+            {          
+                routes.MapHub<ChatRoom>("/chatRoom");
             });
 
             app.UseSpa(spa =>

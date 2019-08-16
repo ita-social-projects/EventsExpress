@@ -28,8 +28,10 @@ import * as RecoverPassword from './editReducers/recoverPasswordReducer'
 import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
-
+import * as Chats from './chats';
+import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
+
 const rootReducers = {
     modal: ModalWind.reducer,
     user: User.reducer,
@@ -64,7 +66,9 @@ const rootReducers = {
     events_for_profile: EventsForProfile.reducer,
     delete_comment: DeleteComment.reducer,
     recoverPassword: RecoverPassword.reducer,
-    authenticate: Auth.reducer
+    authenticate: Auth.reducer,
+    chats: Chats.reducer,
+    chat: Chat.reducer
 };
 
 
