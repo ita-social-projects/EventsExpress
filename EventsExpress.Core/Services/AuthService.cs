@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
-    public class AuthServicre : IAuthServicre
+    public class AuthService : IAuthService
     {
         private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
 
-        public AuthServicre(
+        public AuthService(
             IUserService userSrv, 
             IJwtSigningEncodingKey signingEncodingKey)
         {

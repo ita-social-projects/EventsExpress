@@ -71,7 +71,7 @@ namespace EventsExpress
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddTransient<IAuthServicre, AuthServicre>();
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEventService, EventService>();
 

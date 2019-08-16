@@ -23,11 +23,16 @@ namespace EventsExpress.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
      
-        public UsersController(IUserService userSrv, IMapper mapper)
+        public UsersController(
+            IUserService userSrv, 
+            IAuthService authSrv, 
+            IMapper mapper)
         {         
             _userService = userSrv;
+            _authService = authSrv;
             _mapper = mapper;
         }
 
@@ -121,20 +126,18 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
-            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+            if (string.IsNullOrEmpty(userInfo.Name))
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            string newName = userInfo.Name;
-            if (string.IsNullOrEmpty(newName))
-            {
-                return BadRequest();
-            } 
-
-            user.Name = newName;
-
+            user.Name = userInfo.Name;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -152,9 +155,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            DateTime newBirthday = userInfo.Birthday;
-            user.Birthday = newBirthday;
-
+            user.Birthday = userInfo.Birthday;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -172,9 +173,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            byte newGender = userInfo.Gender;
-            user.Gender = (Gender)newGender;
-
+            user.Gender = (Gender)userInfo.Gender;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -192,7 +191,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            IEnumerable<Category> newCategories = _mapper.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(userInfo.Categories);
+            var newCategories = _mapper.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(userInfo.Categories);
 
             var result = await _userService.EditFavoriteCategories(user, newCategories);
             if (result.Successed)
@@ -214,13 +213,11 @@ namespace EventsExpress.Controllers
             newAva = HttpContext.Request.Form.Files[0];
             
             var result = await _userService.ChangeAvatar(user.Id, newAva);
-
-            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
-
+            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
             return Ok(updatedPhoto);
         }
 
@@ -256,17 +253,10 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        // HELPERS: 
 
-        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            string email = userClaims.FindFirstValue(ClaimTypes.Email);
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            return _userService.GetByEmail(email);
-        }
+        // HELPERS: 
+        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        
 
     }
 }

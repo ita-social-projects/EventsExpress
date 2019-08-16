@@ -15,13 +15,13 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IAuthServicre _authService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
-            IAuthServicre authSrv
+            IAuthService authSrv
             )
         {
             _userService = userSrv;

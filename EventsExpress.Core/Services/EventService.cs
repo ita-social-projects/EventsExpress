@@ -20,14 +20,12 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUnitOfWork Db;
         private readonly IMapper _mapper;
-        private readonly IHostingEnvironment _appEnvironment;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
 
         public EventService(
             IUnitOfWork unitOfWork, 
             IMapper mapper, 
-            IHostingEnvironment hostingEnvironment,
             IMediator mediator,
             IPhotoService photoSrv
             )
@@ -36,7 +34,6 @@ namespace EventsExpress.Core.Services
             _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
-            _appEnvironment = hostingEnvironment;
         }
        
 
@@ -44,17 +41,13 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
-            var ev = Db.EventRepository
-               .Get(includeProperties: "Visitors")
-               .FirstOrDefault(e => e.Id == eventId);
-
+            var ev = Db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
             var us = Db.UserRepository.Get(userId);
-
             if(us == null)
             {                     
                 return new OperationResult(false, "User not found!", "userID");
@@ -64,7 +57,6 @@ namespace EventsExpress.Core.Services
             {
                 ev.Visitors = new List<UserEvent>();
             }
-
             ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
             await Db.SaveAsync();
 
@@ -73,42 +65,31 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
-            var ev = Db.EventRepository
-               .Get(includeProperties: "Visitors")
-               .FirstOrDefault(e => e.Id == eventId);
-
+            var ev = Db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
-            if (ev.Visitors == null)
-            {
-                ev.Visitors = new List<UserEvent>();
-                return new OperationResult(false, "Visitor not found!", "visitorId");
-            }
-
-            var v = ev.Visitors.FirstOrDefault(x => x.UserId == userId);
-            if(v != null)
+            var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);
+            if (v != null)
             {
                 ev.Visitors.Remove(v);
-            }
-            else
-            { 
-                return new OperationResult(false, "Visitor not found!", "visitorId");
-            }
-            await Db.SaveAsync();
+                await Db.SaveAsync();
 
-            return new OperationResult(true);
+                return new OperationResult(true);
+            }
+
+            return new OperationResult(false, "Visitor not found!", "visitorId");
         }
 
         public async Task<OperationResult> Delete(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return new OperationResult(false, "Id field is '0'", "");
             }
-            Event ev = Db.EventRepository.Get(id);
+            var ev = Db.EventRepository.Get(id);
             if (ev == null)
             {
                 return new OperationResult(false, "Not found", "");

@@ -58,7 +58,7 @@ namespace EventsExpress.Core.Services
             var result = Db.UserRepository.Insert(user);
             if (result.Email == user.Email && result.Id != Guid.Empty)
             {
-                return new OperationResult(false, "Registration is failed", "");
+                return new OperationResult(false, "Registration failed", "");
             }
 
             await Db.SaveAsync();
@@ -66,7 +66,7 @@ namespace EventsExpress.Core.Services
 
             await _mediator.Publish(new RegisterVerificationMessage(userDto));
 
-            return new OperationResult(true, "Registration succeeded", "");
+            return new OperationResult(true, "Registration success", "");
         }
 
 
@@ -97,10 +97,6 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
         {
-            if (userDto == null)
-            {
-                return new OperationResult(false, "Not found", "");
-            }
             var user = Db.UserRepository.Get(userDto.Id);
             if (user == null)
             {
@@ -108,7 +104,6 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-
             user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
 
             try
@@ -123,12 +118,10 @@ namespace EventsExpress.Core.Services
                 });
                 return new OperationResult(true, "Password Changed", "");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new OperationResult(false, "Something is wrong", "");
             }
-
-            
         }
 
 

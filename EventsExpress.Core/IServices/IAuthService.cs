@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.Core.IServices
 {
-    public interface IAuthServicre
+    public interface IAuthService
     {
         OperationResult Authenticate(string email, string password);
         OperationResult FirstAuthenticate(UserDTO userDto);
