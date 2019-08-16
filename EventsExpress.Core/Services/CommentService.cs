@@ -36,11 +36,6 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(CommentDTO comment)
         {
-            if (string.IsNullOrEmpty(comment.Text))
-            {
-                return new OperationResult(false, "Incorrect text!", "");
-            }
-
             if (Db.UserRepository.Get(comment.UserId) == null)
             {
                 return new OperationResult(false, "Current user does not exist!", "");
