@@ -58,11 +58,13 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]/{id}/")]
         public IActionResult All(Guid id, int page = 1)
         {
-            int pageSize = 50;
+            int pageSize = 5;
             int count;
             var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(
                 _commentService.GetCommentByEventId(id, page, pageSize, out count));
-
+            foreach (var com in res) {
+                com.Children = _mapper.Map<IEnumerable<CommentDto>>(com.Children);
+            }
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>
             {

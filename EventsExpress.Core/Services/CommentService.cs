@@ -16,14 +16,11 @@ namespace EventsExpress.Core.Services
     {
         public IUnitOfWork Db { get; set; }
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
 
-
-        public CommentService(IUnitOfWork uow, IMapper mapper, IUserService userService)
+        public CommentService(IUnitOfWork uow, IMapper mapper)
         {
             Db = uow;
             _mapper = mapper;
-            _userService = userService;
         }
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
@@ -36,8 +33,12 @@ namespace EventsExpress.Core.Services
             count = Db.CommentsRepository.Get()
                 .Where(x => x.CommentsId == null)
                 .Where(x => x.EventId == id).Count();
-            return _mapper.Map<IEnumerable<CommentDTO>>(comments);
-          
+            var com = _mapper.Map<IEnumerable<CommentDTO>>(comments);
+            foreach (var c in com)
+            {
+                c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
+            }
+            return com;
         }
 
         public async Task<OperationResult> Create(CommentDTO comment)
@@ -78,12 +79,18 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is null", "");
             }
 
-            Comments comment = Db.CommentsRepository.Get(id);
+            var comment = Db.CommentsRepository.Get("Children").Where(x => x.Id == id).FirstOrDefault();
             if (comment == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
-
+            if (comment.Children != null)
+            {
+                foreach (var com in comment.Children)
+                {
+                    var res = Db.CommentsRepository.Delete(Db.CommentsRepository.Get(com.Id));
+                }
+            }
             var result = Db.CommentsRepository.Delete(comment);
             await Db.SaveAsync();
             return new OperationResult(true);

@@ -11,6 +11,7 @@ export const reducer = (state = initialState.add_comment, action) => {
         case SET_COMMENT_ERROR:
             return {
                 ...state,
+                isCommentPending: false,
                 commentError: action.payload
             };
         case SET_COMMENT_PENDING:
@@ -21,8 +22,8 @@ export const reducer = (state = initialState.add_comment, action) => {
         case SET_COMMENT_SUCCESS:
             return {
                 ...state,
-                isCommentSuccess: action.payload,
-                commentError: null
+                isCommentPending: false,
+                isCommentSuccess: action.payload
             };
     }
     return state;

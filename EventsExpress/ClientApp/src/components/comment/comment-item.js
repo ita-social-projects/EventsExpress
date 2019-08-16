@@ -31,13 +31,13 @@ export default class commentItem extends Component {
             <div>
                 <div>
                     <div className="row">
-                        {!(user === userId) && <div className="photo-container">
+                        <div className="photo-container">
                             <Avatar
                                 alt="Тут аватар"
                                 src={userPhoto}
                             />
                             <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
-                        </div>}
+                        </div>
                         <div className="mybutton">
                             <p>
                                 <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong className="text-primary">{userName}</strong></a></Link>
@@ -46,14 +46,7 @@ export default class commentItem extends Component {
                             
                             <p>{text}</p>
                         </div>
-                        {(user === userId) && <div className="photo-container">
-                            <Avatar
-                                alt="Тут аватар"
-                                src={userPhoto}
-                            />
-                            <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
-                        </div>}
-                    </div>
+                    </div>   
                 </div>
             </div>
         );

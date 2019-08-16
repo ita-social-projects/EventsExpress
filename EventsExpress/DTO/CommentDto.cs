@@ -22,6 +22,8 @@ namespace EventsExpress.DTO
 
         public string UserName { get; set; }
 
-        public Guid CommentsId { get; set; }
+        public Guid? CommentsId { get; set; }
+
+        public IEnumerable<CommentDto> Children { get; set; }
     }
 }
