@@ -21,6 +21,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconDecorator from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip'; 
 import Badge from '@material-ui/core/Badge';
+import EventManagmentWrapper from '../../containers/event-info';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -106,18 +107,19 @@ export default class Event extends Component {
                 </CardContent>
                 <CardActions disableSpacing>
                     <div className="flex flex-column">
-                        {this.renderCategories(categories.slice(0,2))}
-                        </div>
-                        {(role == "Admin")
-                            ?
-                            : null
-
-                        }
+                        
                     <Link to={'/event/'+id+'/'+1}>
                         <IconButton className={classes.button} aria-label="view">
                             <i className="fa fa-eye"></i>
                         </IconButton>
                     </Link>
+                    {this.renderCategories(categories.slice(0,2))}
+                        </div>
+                        {(this.props.current_user.role=="Admin")
+                            ? <EventManagmentWrapper eventItem={this.props.item} />
+                            : null
+
+                        }
                 </CardActions>
             </Card>
             </div>

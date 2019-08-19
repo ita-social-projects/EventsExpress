@@ -1,49 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {block_event,unblock_event} from '../actions/event-item-view';
-import {EventBlock} from '../components/event/event-block';
-import EventItemView from '../components/event/event-item-view';
+import EventBlock from '../components/event/event-block';
+import EventItemViewWrapper from '../containers/event-item-view';
 
-class EventInfoWrapper extends Component{
+class EventManagmentWrapper extends Component{
     constructor(props){
         super(props);
-        this.isCurrentUser=props.event.id===props.currentEvent
+        
     }
 
-    block = ()=>this.props.block(this.props.user.id)
+    block = ()=> {
+        console.log('BLOCK:\nId:');
+        console.log(this.props);
+        this.props.block()
+    }
 
-    unblock=()=>this.props.unblock(this.props.event.id)
+    unblock=()=>this.props.unblock()
 
     render(){
-        const{event, editedEvent}=this.props
 
         return(
-            <tr className={(user.isBlocked==true)?"bg-warning":""}>
-              <EventItemView key={event.id} event={event} />
+            <div className={(this.props.eventItem.isBlocked==true)?"bg-warning":""}>
+              
 
               <EventBlock
-                event={event}
-                isCurrentUser={this.isCurrentUser}
+                event={this.props.eventItem}               
                 block={this.block}
                 unblock={this.unblock}
               />  
 
-            </tr>
+            </div>
         )
     }
 }
 
 const mapStateToProps=(state)=>({
-    currentEvent:state.event.id,
-    editedEvent:state.events.editedEvent,
-    roles:state.roles.data
 });
 
-const mapDispatchToProps=(dispatch)=>{
+const mapDispatchToProps=(dispatch, props)=>{
     return{
-        block:(id)=>dispatch(block_event(id)),
-        unblock:(id)=>dispatch(unblock_event(id))
+        block: () => dispatch(block_event(props.eventItem.id)),
+        unblock: () => dispatch(unblock_event(props.eventItem.id))
     };
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(EventInfoWrapper)
+export default connect(mapStateToProps,mapDispatchToProps)(EventManagmentWrapper)

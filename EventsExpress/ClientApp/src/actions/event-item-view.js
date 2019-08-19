@@ -86,7 +86,7 @@ export function unblock_event(id) {
   return dispatch => {
       dispatch(setUnBlockEventPending(true));
 
-      //const res = api_serv.setUserUnblock(id);
+      const res = api_serv.setEventUnblock(id);
 
       res.then(response => {
           if (response.error == null) {
@@ -104,7 +104,7 @@ export function block_event(id) {
   return dispatch => {
       dispatch(setBlockEventPending(true));
 
-      //const res = api_serv.setUserBlock(id);
+      const res = api_serv.setEventBlock(id);
 
       res.then(response => {
           if (response.error == null) {
@@ -168,7 +168,7 @@ function setBlockEventError(data) {
 
 function updateBlockedEvent(id) {
   return {
-      type: blockUser.UPDATE,
+      type: blockEvent.UPDATE,
       payload: id
   }
 } 

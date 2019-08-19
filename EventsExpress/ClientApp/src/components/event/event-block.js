@@ -1,10 +1,10 @@
 import React from 'react';
 import IconButton from "@material-ui/core/IconButton";
 
-export function EventBlock(props){
+export default function EventBlock(props){
     const {event,block,unblock}=props;
 
-    return
+    return(
      <td className="align-middle">
          <div className="d-flex justify-content-center align-items-center">
              {(event.IsBlocked==true)
@@ -16,5 +16,5 @@ export function EventBlock(props){
                 </IconButton>
              }
          </div>
-    </td>
+    </td>)
 }

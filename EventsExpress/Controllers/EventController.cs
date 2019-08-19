@@ -123,7 +123,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> BlockEvent(Guid eventId)
+        public async Task<IActionResult> Block(Guid eventId)
         {
             var result = await _eventService.BlockEvent(eventId);
             if (!result.Successed)
@@ -134,7 +134,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UnblockEvent(Guid eventId)
+        public async Task<IActionResult> Unblock(Guid eventId)
         {
             var result = await _eventService.UnblockEvent(eventId);
             if (!result.Successed)

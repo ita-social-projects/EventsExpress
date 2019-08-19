@@ -13,7 +13,7 @@ import history from '../history';
 
 class EventListWrapper extends Component{
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.isError.ErrorCode=='500') {
+        if (this.props.events.isError.ErrorCode=='500') {
             this.getEvents(this.props.params);
         }
     }
@@ -31,12 +31,21 @@ class EventListWrapper extends Component{
     
 
     render() {
-        const { data, isPending, isError } = this.props;
-        const { items } = this.props.data;
-        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/home/events?page=1"/>: isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
+        let current_user = this.props.current_user.id != null ? this.props.current_user :{} ;
+        const { data, isPending, isError } = this.props.events;
+        const { items } = this.props.events.data;
+        const errorMessage = isError.ErrorCode == '403' 
+            ? <Forbidden /> 
+            : isError.ErrorCode == '500' 
+                ? <Redirect from="*" to="/home/events?page=1"/>
+                : isError.ErrorCode == '401' 
+                    ? <Unauthorized /> 
+                    : isError.ErrorCode == '400' 
+                        ? <BadRequest /> 
+                        : null;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage ? <EventList  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !errorMessage ? <EventList current_user={current_user}  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
        
         return <>
             {errorMessage}
@@ -46,7 +55,12 @@ class EventListWrapper extends Component{
     }
 }
 
-const mapStateToProps = (state) => (state.events);
+const mapStateToProps = (state) => {
+    return {
+        events: state.events,
+        current_user: state.user
+    }    
+};
 
 const mapDispatchToProps = (dispatch) => { 
     return {
