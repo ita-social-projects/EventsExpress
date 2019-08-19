@@ -8,10 +8,10 @@ namespace EventsExpress.Core.IServices
 {
     public interface IAuthService
     {
-        Task<UserDTO> AuthenticateGoogle(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload);
         OperationResult Authenticate(string email, string password);
         OperationResult FirstAuthenticate(UserDTO userDto);
         Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword);
         UserDTO GetCurrentUser(ClaimsPrincipal userClaims);
+        OperationResult AuthenticateGoogleUser(string email);
     }
 }

@@ -40,38 +40,33 @@ namespace EventsExpress.Controllers
         [HttpPost("google")]
         public async Task<IActionResult> Google([FromBody]UserView userView)
         {
-            try
-            {
-                //SimpleLogger.Log("userView = " + userView.tokenId);
-                var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
-                var user = await _authService.AuthenticateGoogle(payload);
-                SimpleLogger.Log(payload.ExpirationTimeSeconds.ToString());
+           
+            var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
 
-                var claims = new[]
+            var userExist = _userService.GetByEmail(payload.Email);
+            if (userExist == null) {
+                var user = new UserDTO()
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, Security.Encrypt(AppSettings.appSettings.JwtEmailEncryption,user.Email)),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    Id = Guid.NewGuid(),
+                    Name = payload.Name,
+                    Email = payload.Email,
+                    EmailConfirmed = true
                 };
+                   await _userService.Create(user);
+            }
 
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppSettings.appSettings.JWTSecretKey));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(String.Empty,
-                  String.Empty,
-                  claims,
-                  expires: DateTime.Now.AddSeconds(55 * 60),
-                  signingCredentials: creds);
-                return Ok(new
+                var result = _authService.AuthenticateGoogleUser(payload.Email);
+                if (!result.Successed)
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token)
-                });
-            }
-            catch (Exception ex)
-            {
-                Helpers.SimpleLogger.Log(ex);
-                BadRequest(ex.Message);
-            }
-            return BadRequest();
+                    return BadRequest(result.Message);
+                }
+
+                var Authuser = _userService.GetByEmail(payload.Email);
+
+                var userInfo = _mapper.Map<UserDTO, UserInfo>(Authuser);
+                userInfo.Token = result.Message;
+
+                return Ok(userInfo);     
         }
     
 

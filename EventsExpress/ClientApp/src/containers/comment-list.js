@@ -23,11 +23,11 @@ class CommentListWrapper extends Component {
         const { data, isPending, isError } = this.props.comments;
         const spinner = isPending ? <Spinner /> : null;
       
-       const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <InternalServerError /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
+      // const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <InternalServerError /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
 
         const content = !isPending ? <CommentList evId={this.props.eventId} data_list={data.items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getComments} /> : null;
         return <>
-            {errorMessage}
+          
             {spinner}
             {content}
         </>

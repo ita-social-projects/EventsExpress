@@ -56,15 +56,17 @@ namespace EventsExpress.Core.Services
             user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
 
             var result = Db.UserRepository.Insert(user);
-            if (result.Email == user.Email && result.Id != Guid.Empty)
+            if (result.Email != user.Email || result.Id == Guid.Empty)
             {
                 return new OperationResult(false, "Registration failed", "");
             }
 
             await Db.SaveAsync();
             userDto.Id = result.Id;
-
-            await _mediator.Publish(new RegisterVerificationMessage(userDto));
+            if (!userDto.EmailConfirmed)
+            {
+                await _mediator.Publish(new RegisterVerificationMessage(userDto));
+            }
 
             return new OperationResult(true, "Registration success", "");
         }

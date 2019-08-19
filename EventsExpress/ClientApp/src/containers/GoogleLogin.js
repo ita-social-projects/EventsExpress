@@ -1,9 +1,10 @@
 ﻿import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { connect } from "react-redux";
-import { login } from "../actions/authActions";
+import {setUser } from "../actions/login";
 import config from '../config.json';
 import { withRouter, Redirect } from "react-router-dom";
+
 
 
 class LoginGoogle extends Component {
@@ -20,39 +21,28 @@ class LoginGoogle extends Component {
             mode: 'cors',
             cache: 'default'
         };
-        fetch(config.GOOGLE_AUTH_CALLBACK_URL, options)
+        fetch("http://localhost:61985/api/Authentication/Google", options)
             .then(r => {
                 r.json().then(user => {
                     const token = user.token;
                     console.log(token);
-                    this.props.login(token);
+                    localStorage.setItem('token', token);
+                    this.props.setUser(user);
                 });
             })
     };
 
     render() {
-        let content = !!this.props.auth.isAuthenticated ?
-            (
-                <div>
-                    <Redirect to={{
-                        pathname: '/'
-                    }} />
-                </div>
-            ) :
-            (
-                <div>
-                    <GoogleLogin
-                        clientId={config.GOOGLE_CLIENT_ID}
-                        buttonText="Google Login"
-                        onSuccess={this.googleResponse}
-                        onFailure={this.googleResponse}
-                    />
-                </div>
-            );
+       
 
         return (
             <div>
-                {content}
+                       <GoogleLogin
+                        clientId={config.GOOGLE_CLIENT_ID}
+                        buttonText="Google Login"
+                        onSuccess={this.googleResponse}
+                       
+                    />
             </div>
         );
     }
@@ -60,15 +50,13 @@ class LoginGoogle extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth
-    };
+       login: state.login
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: (token) => {
-            dispatch(login(token));
-        }
+        setUser: (data) => { dispatch(setUser(data)); }
     }
 };
 

@@ -27,29 +27,27 @@ namespace EventsExpress.Core.Services
             _signingEncodingKey = signingEncodingKey;
         }
        
-        public async Task<UserDTO> AuthenticateGoogle(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload)
+       
+       
+        public OperationResult AuthenticateGoogleUser(string email)
         {
-            await Task.Delay(1);
-            return this.FindUserOrAdd(payload);
-        }
-        private UserDTO FindUserOrAdd(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload)
-        {
-            var user = _userService.GetByEmail(payload.Email);
+            var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                user = new UserDTO()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = payload.Name,
-                    Email = payload.Email,
-                    oauthSubject = payload.Subject,
-                    oauthIssuer = payload.Issuer
-                };
-              
+                return new OperationResult(false, $"User with email: {email} not found", "email");
             }
-            return user;
+
+            if (user.IsBlocked)
+            {
+                return new OperationResult(false, $"{email}, your account was blocked.", "email");
+            }
+
+
+            var token = GenerateJwt(user);
+
+            return new OperationResult(true, token, "");
         }
-       
+
         public OperationResult Authenticate(string email, string password)
         {
             var user = _userService.GetByEmail(email);
