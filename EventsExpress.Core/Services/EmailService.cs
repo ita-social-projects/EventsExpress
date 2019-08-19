@@ -1,58 +1,45 @@
-﻿using EventsExpress.Core.DTOs;
+﻿using System.Net;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using EventsExpress.Core.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<EmailOptionsModel> _senderOptions;
 
-        public EmailService(IConfiguration iConfig)
+        public EmailService(IOptions<EmailOptionsModel> opt)
         {
-            _configuration = iConfig;
+            _senderOptions = opt;
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            var from = _configuration.GetValue<string>("EmailSenderOptions:GoogleAccount");
-            var pass = _configuration.GetValue<string>("EmailSenderOptions:Password");
 
-            var client = new SmtpClient("smtp.gmail.com", 587)
+        public Task SendEmailAsync(EmailDTO emailDto)
+        {
+            var from = _senderOptions.Value.Account;
+            var pass = _senderOptions.Value.Password;
+
+            var client = new SmtpClient
             {
+                Host = _senderOptions.Value.Host,
+                Port = _senderOptions.Value.Port,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new System.Net.NetworkCredential(@from, pass),
-                EnableSsl = true
+                UseDefaultCredentials = _senderOptions.Value.UseDefaultCredentials,
+                Credentials = (_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
+                EnableSsl = _senderOptions.Value.EnableSsl
             };
-            var mail = new MailMessage(@from, email)
+
+            var mail = new MailMessage(@from, emailDto.RecepientEmail)
             {
-                Subject = subject,
-                Body = message,
-                IsBodyHtml = true
+                Subject = emailDto.Subject,
+                Body = emailDto.MessageText,
+                IsBodyHtml = true,
             };
             return client.SendMailAsync(mail);
         }
-
-        public Task SendEmailAsync(EmailDTO emailDTO)
-        {
-            var client = new SmtpClient
-            {
-                Port = 2525,
-                Host = "localhost"
-            };
-            var email = new MailMessage()
-            {
-                From = new MailAddress(emailDTO.SenderEmail),
-                Body = emailDTO.MessageText,
-                IsBodyHtml = true,
-                Sender = new MailAddress(emailDTO.SenderEmail),
-            };
-            email.To.Add(new MailAddress(emailDTO.RecepientEmail));
-            return client.SendMailAsync(email);
-        }
-
     }
 }

@@ -34,7 +34,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     await _sender.SendEmailAsync(new EmailDTO
                     {
-                        SenderEmail = "noreply@eventService.com",
+                        Subject = "New event for you!",
                         RecepientEmail = u.Email,
                         MessageText = $"The <a href='http://localhost:61985/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
                     });

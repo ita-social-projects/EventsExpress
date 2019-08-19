@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;

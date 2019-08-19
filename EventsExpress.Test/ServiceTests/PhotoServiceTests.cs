@@ -24,7 +24,7 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
-            var mockOpt = new Mock<IOptions<ImageWidthsModel>>();
+            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
 
             photoService = new PhotoService(mockUnitOfWork.Object, mockOpt.Object);
 

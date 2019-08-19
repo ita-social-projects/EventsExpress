@@ -71,7 +71,7 @@ namespace EventsExpress.Core.Services
             var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);
             if (v != null)
             {
-                ev.Visitors.Remove(v);
+                (ev.Visitors).Remove(v);
                 await Db.SaveAsync();
 
                 return new OperationResult(true);

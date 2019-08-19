@@ -1,4 +1,5 @@
-﻿using EventsExpress.Core.Infrastructure;
+﻿using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
@@ -6,11 +7,11 @@ using ImageProcessor;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 
 
 namespace EventsExpress.Core.Services
@@ -18,11 +19,11 @@ namespace EventsExpress.Core.Services
     public class PhotoService : IPhotoService
     {
         private readonly IUnitOfWork Db;
-        private readonly IOptions<ImageWidthsModel> _widthOptions;
+        private readonly IOptions<ImageOptionsModel> _widthOptions;
 
         public PhotoService(
             IUnitOfWork uow,
-            IOptions<ImageWidthsModel> opt
+            IOptions<ImageOptionsModel> opt
             )
         {
             Db = uow;
@@ -54,21 +55,21 @@ namespace EventsExpress.Core.Services
             return photo;
         }
 
-       
+
         public async Task Delete(Guid id)
         {
             var photo = Db.PhotoRepository.Get(id);
             if (photo != null)
             {
-                    Db.PhotoRepository.Delete(photo);
-                    await Db.SaveAsync();
+                Db.PhotoRepository.Delete(photo);
+                await Db.SaveAsync();
             }
         }
-        
+
 
         private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
-        
+
         private static byte[] Resize(byte[] originalImage, int width)
         {
             using (var originalImageStream = new MemoryStream(originalImage))
@@ -77,17 +78,13 @@ namespace EventsExpress.Core.Services
                 {
                     using (var imageFactory = new ImageFactory())
                     {
-                        var createdImage = imageFactory
-                                .Load(originalImageStream);
+                        var createdImage = imageFactory.Load(originalImageStream);
 
                         if (createdImage.Image.Width > width)
                         {
-                            createdImage = createdImage
-                                .Resize(new ResizeLayer(new Size(width, 0), ResizeMode.Max));
+                            createdImage = createdImage.Resize(new ResizeLayer(new Size(width, 0), ResizeMode.Max));
                         }
-
-                        createdImage
-                            .Format(new JpegFormat { })
+                        createdImage.Format(new JpegFormat())
                             .Save(resultImage);
                     }
 

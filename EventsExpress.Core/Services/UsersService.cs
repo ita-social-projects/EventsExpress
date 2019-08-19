@@ -111,8 +111,8 @@ namespace EventsExpress.Core.Services
                 await Db.SaveAsync();
                 await _emailService.SendEmailAsync(new EmailDTO
                 {
+                    Subject = "EventExpress password recovery",
                     RecepientEmail = user.Email,
-                    SenderEmail = "noreply@EventExpress.com",
                     MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}"
 
                 });

@@ -7,6 +7,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 
 namespace EventsExpress.Core.Services
@@ -15,13 +16,17 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
+        private readonly IConfiguration _configuration;
 
         public AuthService(
             IUserService userSrv, 
-            IJwtSigningEncodingKey signingEncodingKey)
+            IJwtSigningEncodingKey signingEncodingKey,
+            IConfiguration config
+            )
         {
             _userService = userSrv;
             _signingEncodingKey = signingEncodingKey;
+            _configuration = config;
         }
 
 
@@ -65,6 +70,7 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, token, "");
         }
 
+
         public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
@@ -75,6 +81,7 @@ namespace EventsExpress.Core.Services
             }
             return new OperationResult(false, "Invalid password", "");
         }
+
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
@@ -87,12 +94,14 @@ namespace EventsExpress.Core.Services
         }
 
 
-        private bool VerifyPassword(UserDTO user, string actualPassword) => 
+        private static bool VerifyPassword(UserDTO user, string actualPassword) => 
             (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
 
 
         private string GenerateJwt(UserDTO user)
         {
+            var lifeTime = _configuration.GetValue<int>("JWTOptions:LifeTime");
+
             var claims = new []
             {
                 new Claim(ClaimTypes.Email, user.Email),
@@ -101,7 +110,7 @@ namespace EventsExpress.Core.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(3000),
+                expires: DateTime.Now.AddMinutes(lifeTime),
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
                         _signingEncodingKey.SigningAlgorithm)

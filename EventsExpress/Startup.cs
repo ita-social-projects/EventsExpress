@@ -40,7 +40,7 @@ namespace EventsExpress
         {
             #region Authorization and Autontification configuring...
 
-            var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTSecretKey"));
+            var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTOptions:SecretKey"));
 
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
@@ -84,9 +84,10 @@ namespace EventsExpress
             services.AddTransient<ICommentService, CommentService>();
 
             services.AddTransient<IPhotoService, PhotoService> ();
-            services.Configure<ImageWidthsModel>(Configuration.GetSection("ImageWidths"));
-
+            services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
+            
             services.AddTransient<IEmailService, EmailService>();
+            services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
 
             services.AddSingleton<CacheHelper>();
 

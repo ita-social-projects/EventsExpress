@@ -108,6 +108,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
+
             var res = await _eventService.DeleteUserFromEvent(userId, eventId);
             if (res.Successed)
             {
