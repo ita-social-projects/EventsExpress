@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IO;
 using AutoMapper;
 using EventsExpress.Mapping;
 using System.Reflection;
@@ -23,6 +24,7 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using EventsExpress.DTO;
 using EventsExpress.Validation;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace EventsExpress
 {
@@ -114,6 +116,17 @@ namespace EventsExpress
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
            
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "EventsExpress API", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                c.IncludeXmlComments(xmlPath);
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -134,6 +147,13 @@ namespace EventsExpress
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc(routes =>
             {

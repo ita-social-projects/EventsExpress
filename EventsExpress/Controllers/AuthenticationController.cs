@@ -29,9 +29,16 @@ namespace EventsExpress.Controllers
             _authService = authSrv;
         }
 
-
+        /// <summary>
+        /// This method allows to log in to the API and generate an authentication token.
+        /// </summary>
+        /// <param name="authRequest">Required</param>
+        /// <returns>UserInfo model</returns>
+        /// <response code="200">Return UserInfo model</response>
+        /// <response code="400">If login process failed</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
+        [Produces("application/json")]
         public IActionResult Login(LoginDto authRequest)
         {
             if (!ModelState.IsValid)
