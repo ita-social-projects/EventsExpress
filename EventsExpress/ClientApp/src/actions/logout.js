@@ -1,8 +1,14 @@
 
+
+import { reset_hub } from './chat';
 export const SET_LOGOUT = "SET_LOGOUT";
+
   export default function logout(){
     localStorage.clear();
-    return dispatch => dispatch(setLogout());
+    return dispatch => { 
+      dispatch(reset_hub());
+      dispatch(setLogout());
+    }
   }
 
   function setLogout() {

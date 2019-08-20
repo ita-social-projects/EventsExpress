@@ -3,15 +3,22 @@ import {connect} from 'react-redux';
 import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
-import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login'
+import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login';
 class HeaderProfileWrapper extends Component {
 
+  logout_reset = () =>{
+    console.log(
+      this.props.hub);
+    this.props.hub.stop(); 
+    this.props.logout();
+  }
+
     render() {
-        return <HeaderProfile user={this.props.user} onClick={this.props.logout} reset={this.props.reset} />;
+        return <HeaderProfile user={this.props.user} onClick={this.logout_reset} reset={this.props.reset} />;
     }
   }
 const mapStateToProps = state => {
-    return { ...state, user: state.user, register: state.register };
+    return { ...state, user: state.user, register: state.register, hub: state.hubConnection };
   };
   
   const mapDispatchToProps = dispatch => {

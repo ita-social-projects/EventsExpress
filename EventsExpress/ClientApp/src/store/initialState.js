@@ -149,9 +149,23 @@ const initialState = {
         isSucces:false,
         isError:null,
         data:[]
+    },
+    chats:{
+        isPending: false,
+        isSuccess:false,
+        isError:null,
+        data: []
+    },
+    hubConnection: null,
+    chat:{
+        isPending: false,
+        isSuccess:false,
+        isError:null,
+        data: {
+            messages: [],
+            users: []
+        }
     }
-
-
 };
 
 export default initialState;

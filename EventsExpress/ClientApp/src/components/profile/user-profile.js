@@ -10,9 +10,8 @@ import './User-profile.css';
 import EventList from '../event/event-list';
 import Spinner from '../spinner';
 import { AddComponent } from '../home/home';
-export default class UsertemView extends Component {
 
-
+export default class UserItemView extends Component {
 
     getAge = birthday => {
         let today = new Date();
@@ -66,6 +65,7 @@ export default class UsertemView extends Component {
                                 className='bigAvatar'
                             />
                         </div>
+                        <center>
                         {attitude == '2' && <div className="row attitude">
                             <button onClick={this.props.onLike} className="btn btn-info">Like</button>
                             <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
@@ -80,6 +80,8 @@ export default class UsertemView extends Component {
                             <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
                             <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
                         </div>}
+                        {/* <Link to={`/chat/${this.props.current_user}/${id}`}><button className="btn btn-info mt-1">Message</button></Link> */}
+                        </center>
                     </div>
                 }
 

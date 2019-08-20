@@ -7,7 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 class UserSearchFilter extends Component {
     render() {
         return <>
-            <form onSubmit={this.props.handleSubmit} className="box card p-2">
+            <form onSubmit={this.props.handleSubmit} className="shadow bg-white rounded mt-2 p-2">
                 <Field name='search' component={renderTextField} type="input" label="Search:" /> 
                 
                 <DialogActions>

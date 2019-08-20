@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190816120638_AddTitleOfChat")]
+    partial class AddTitleOfChat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,15 +159,15 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("ChatRoomId");
+                    b.Property<Guid>("ChatId");
+
+                    b.Property<Guid?>("ChatRoomId");
 
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<bool>("Edited");
 
                     b.Property<Guid?>("ParentId");
-
-                    b.Property<bool>("Seen");
 
                     b.Property<Guid>("SenderId");
 
@@ -424,8 +426,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.ChatRoom")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ChatRoomId");
 
                     b.HasOne("EventsExpress.Db.Entities.Message", "Parent")
                         .WithMany()

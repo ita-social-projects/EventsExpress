@@ -12,7 +12,7 @@ namespace EventsExpress.Mapping
     {
         public AutoMapperProfile()
         {
-            // USER MAPPING
+            #region USER MAPPING
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.Events, opts => opts.Ignore());
@@ -67,8 +67,9 @@ namespace EventsExpress.Mapping
 
             CreateMap<LoginDto, UserDTO>();
 
+            #endregion
 
-            // EVENT MAPPING
+            #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories,
@@ -124,27 +125,29 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
                 .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
+            #endregion
 
-            // CATEGORY MAPPING
+            #region CATEGORY MAPPING
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CategoryDTO, CategoryDto>().ReverseMap();
             CreateMap<CategoryDto, Category>();
+            #endregion
 
-
-            // COMMENT MAPPING
+            #region COMMENT MAPPING
             CreateMap<CommentDTO, Comments>().ReverseMap();
             CreateMap<CommentDTO, CommentDto>()
                 .ForMember(dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
             CreateMap<CommentDto, CommentDTO>();
+            #endregion
 
-
-            // ROLE MAPPING
+            #region ROLE MAPPING
             CreateMap<Role, RoleDto>();
 
+            #endregion
 
-            // ATTITUDE MAPPING
+            #region ATTITUDE MAPPING
             CreateMap<AttitudeDTO, AttitudeDto>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
 
@@ -153,6 +156,39 @@ namespace EventsExpress.Mapping
 
             CreateMap<AttitudeDTO, Relationship>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => (Attitude) src.Attitude));
+
+            #endregion
+
+            #region MESSAGE MAPPING         
+                                    
+            CreateMap<ChatRoom, UserChatDto>()                     
+                .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
+                .Select(x => new UserPreviewDto {
+                    Id = x.UserId,
+                    Birthday = x.User.Birthday,   
+                    PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
+                    Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@"))
+                })));
+
+            CreateMap<ChatRoom, ChatDto>()
+                .ForMember(dest => dest.Messages, opts => opts.MapFrom(src => src.Messages.Select(x => new MessageDto
+                {
+                    Id = x.Id,
+                    DateCreated = x.DateCreated,
+                    SenderId = x.SenderId,
+                    Text = x.Text  
+                })))
+                .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
+                .Select(x => new UserPreviewDto
+                {
+                    Id = x.UserId,
+                    Birthday = x.User.Birthday,
+                    PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
+                    Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@"))
+                })));
+
+
+            #endregion
         }
     }
 }

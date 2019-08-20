@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190815115628_ChatInit")]
+    partial class ChatInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,18 +32,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.ChatRoom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ChatRoom");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.City", b =>
@@ -150,36 +140,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("EventCategory");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ChatRoomId");
-
-                    b.Property<DateTime>("DateCreated");
-
-                    b.Property<bool>("Edited");
-
-                    b.Property<Guid?>("ParentId");
-
-                    b.Property<bool>("Seen");
-
-                    b.Property<Guid>("SenderId");
-
-                    b.Property<string>("Text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatRoomId");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Permission", b =>
@@ -332,24 +292,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("UserCategory");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("ChatId");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserChat");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
                 {
                     b.Property<Guid>("UserId");
@@ -420,23 +362,6 @@ namespace EventsExpress.Db.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.ChatRoom")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatRoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EventsExpress.Db.Entities.Message", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.Photo", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Report")
@@ -504,19 +429,6 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.ChatRoom", "Chat")
-                        .WithMany("Users")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "User")
-                        .WithMany("Chats")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
