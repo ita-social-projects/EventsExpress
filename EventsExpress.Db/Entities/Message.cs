@@ -6,7 +6,7 @@ namespace EventsExpress.Db.Entities
 {
     public class Message : BaseEntity
     {
-        public Guid ChatId { get; set; }    
+        public Guid ChatRoomId { get; set; }    
 
         public Guid SenderId { get; set; }
         public User Sender { get; set; }
@@ -16,6 +16,8 @@ namespace EventsExpress.Db.Entities
 
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public bool Edited { get; set; } = false;
+
+        public bool Seen { get; set; } = false;
 
         public string Text { get; set; }
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
@@ -39,9 +40,11 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public void Send(Guid Receiver, string Text)
+        public async Task<Message> Send(Guid chatId, Guid Sender, string Text)
         {
-            throw new NotImplementedException();
+            var msg = Db.MessageRepository.Insert(new Message { ChatRoomId = chatId, SenderId = Sender, Text = Text });
+            await Db.SaveAsync();
+            return msg;
         }
     }
 }

@@ -9,6 +9,7 @@ import configureStore from './store/configureStore';
 import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
 import { setUser } from './actions/login';
+import { initialConnection } from './actions/chat';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -30,6 +31,7 @@ async function AuthUser(token){
     });
     if(res.ok){
       store.dispatch(setUser(await res.json()));
+      store.dispatch(initialConnection());
     }else{
       localStorage.clear();
     }

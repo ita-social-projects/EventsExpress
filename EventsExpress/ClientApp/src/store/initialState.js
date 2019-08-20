@@ -156,12 +156,15 @@ const initialState = {
         isError:null,
         data: []
     },
+    hubConnection: null,
     chat:{
         isPending: false,
         isSuccess:false,
         isError:null,
-        hubConnection: null,
-        data: null
+        data: {
+            messages: [],
+            users: []
+        }
     }
 };
 

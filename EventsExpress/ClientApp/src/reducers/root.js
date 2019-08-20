@@ -31,7 +31,7 @@ import * as EventsForProfile from './events-for-profile';
 import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
-
+import * as Hub from './hub';
 const rootReducers = {
     modal: ModalWind.reducer,
     user: User.reducer,
@@ -68,7 +68,8 @@ const rootReducers = {
     recoverPassword: RecoverPassword.reducer,
     authenticate: Auth.reducer,
     chats: Chats.reducer,
-    chat: Chat.reducer
+    chat: Chat.reducer,
+    hubConnection: Hub.reducer
 };
 
 

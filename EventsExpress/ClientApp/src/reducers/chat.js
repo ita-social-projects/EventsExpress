@@ -1,7 +1,7 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, INITIAL_CONNECTION, RECEIVE_MESSAGE
+    GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, INITIAL_CONNECTION, RECEIVE_MESSAGE, RESET_CHAT
 }from '../actions/chat';
 
 export const reducer = (
@@ -9,15 +9,19 @@ export const reducer = (
     action
   ) => {
     switch (action.type) {
-      case INITIAL_CONNECTION:
-        return {
-            ...state,
-            hubConnection: action.payload
-        }
+      case RESET_CHAT:
+          return {
+              ...initialState.chat
+          }
       case RECEIVE_MESSAGE:
+          var new_msg = state.data.messages;
+          new_msg = new_msg.concat(action.payload);
           return {
             ...state,
-            data: action.payload
+            data:{
+                ...state.data, 
+              messages: new_msg
+              }
           }
       case GET_CHAT_ERROR:
           return {

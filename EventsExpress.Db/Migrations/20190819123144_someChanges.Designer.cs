@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190819123144_someChanges")]
+    partial class someChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,8 +73,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime>("Date");
 
                     b.Property<Guid>("EventId");
-
-                    b.Property<Guid?>("ParentId");
 
                     b.Property<string>("Text");
 
@@ -165,11 +165,11 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<Guid?>("ParentId");
 
-                    b.Property<bool>("Seen");
-
                     b.Property<Guid>("SenderId");
 
                     b.Property<string>("Text");
+
+                    b.Property<bool>("WasRead");
 
                     b.HasKey("Id");
 
