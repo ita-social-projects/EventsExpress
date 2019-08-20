@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {block_event,unblock_event} from '../actions/event-item-view';
 import EventBlock from '../components/event/event-block';
-import EventItemViewWrapper from '../containers/event-item-view';
+
 
 class EventManagmentWrapper extends Component{
     constructor(props){
@@ -16,7 +16,11 @@ class EventManagmentWrapper extends Component{
         this.props.block()
     }
 
-    unblock=()=>this.props.unblock()
+    unblock=()=> {
+        console.log('UNBLOCK:\nId:');
+        console.log(this.props);
+        this.props.unblock()
+    }
 
     render(){
 
@@ -25,7 +29,8 @@ class EventManagmentWrapper extends Component{
               
 
               <EventBlock
-                event={this.props.eventItem}               
+                key={this.props.eventItem.isBlocked}
+                eventItem={this.props.eventItem}               
                 block={this.block}
                 unblock={this.unblock}
               />  

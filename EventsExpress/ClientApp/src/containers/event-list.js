@@ -31,6 +31,7 @@ class EventListWrapper extends Component{
     
 
     render() {
+        console.log(this.props.events);
         let current_user = this.props.current_user.id != null ? this.props.current_user :{} ;
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;

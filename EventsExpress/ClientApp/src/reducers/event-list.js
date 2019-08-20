@@ -43,7 +43,7 @@ export const reducer = (
         newState.data.items=state.data.items.map((item)=>{
           if(item.id===action.payload){
             let updatedItem=item;
-            updatedItem.isBlocked=true;
+            updatedItem.isBlocked=false;
             return updatedItem;
           }
           return item;
