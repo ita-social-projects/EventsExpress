@@ -10,7 +10,9 @@ namespace EventsExpress.Core.IServices
     {
         Task<Message> Send(Guid chatId, Guid Sender, string Text);
 
+        Task<ChatRoom> GetChat(Guid chatId, Guid sender);
+
         IEnumerable<ChatRoom> GetUserChats(Guid userId);
-        ChatRoom GetChat(Guid chatId);
+        List<string> GetChatUserIds(Guid chatId);
     }
 }

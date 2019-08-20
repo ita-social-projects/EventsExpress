@@ -27,6 +27,7 @@ using EventsExpress.Validation;
 using Swashbuckle.AspNetCore.Swagger;
 using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress
 {
@@ -147,6 +148,7 @@ namespace EventsExpress
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

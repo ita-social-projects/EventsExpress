@@ -106,6 +106,7 @@ namespace EventsExpress.Core.Services
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),     
             };
 
             var token = new JwtSecurityToken(

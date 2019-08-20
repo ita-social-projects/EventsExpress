@@ -3,6 +3,7 @@ using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
@@ -28,8 +29,13 @@ namespace EventsExpress.Core.ChatHub
         public async Task Send(Guid chatId, string text)
         {
             var user = _authService.GetCurrentUser(Context.User);
-            var res = await _messageService.Send(chatId, user.Id, text); 
-            await Clients.All.SendAsync("ReceiveMessage", res);
+            var res = await _messageService.Send(chatId, user.Id, text);
+
+            //var chat = await _messageService.GetChat(res.ChatRoomId, user.Id);
+            var users = _messageService.GetChatUserIds(res.ChatRoomId);
+
+            await Clients.Users(users).SendAsync("ReceiveMessage", res);
+            //await Clients.Users(users).SendAsync("ReceiveMessage", res);
         }
     }
 }

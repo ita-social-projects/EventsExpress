@@ -80,7 +80,7 @@ export default class UserItemView extends Component {
                             <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
                             <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
                         </div>}
-                        {/* <Link to={`/chat/${this.props.current_user}/${id}`}><button className="btn btn-info mt-1">Message</button></Link> */}
+                        <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
                         </center>
                     </div>
                 }

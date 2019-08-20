@@ -40,9 +40,11 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetChat([FromQuery]Guid chatId)
-        {                                                                                                 
-            var res = _mapper.Map<ChatDto>(_messageService.GetChat(chatId));
+        public async Task<IActionResult> GetChat([FromQuery]Guid chatId)
+        {
+            var sender = _authService.GetCurrentUser(HttpContext.User);
+            var chat = await _messageService.GetChat(chatId, sender.Id);
+            var res = _mapper.Map<ChatDto>(chat);
             return Ok(res);
         }
     }

@@ -8,7 +8,7 @@ namespace EventsExpress.Db.Entities
     {
         public string Title { get; set; }
 
-        public IEnumerable<UserChat> Users { get; set; }
+        public ICollection<UserChat> Users { get; set; }
 
         public IEnumerable<Message> Messages { get; set; }   
     }
