@@ -131,7 +131,7 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Create(EventDTO e)
+        public async Task<OperationResult> Create(EventDTO eventDTO)
         {
             if (eventDTO.DateFrom == DateTime.MinValue)
             {

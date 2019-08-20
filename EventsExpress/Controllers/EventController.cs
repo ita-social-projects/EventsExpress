@@ -128,7 +128,7 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
             var result = await _eventService.UnblockEvent(eventId);
@@ -159,7 +159,7 @@ namespace EventsExpress.Controllers
         public IActionResult VisitedEvents(Guid id) => 
             Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
         
-        #endregion
+
 
     }
 }
