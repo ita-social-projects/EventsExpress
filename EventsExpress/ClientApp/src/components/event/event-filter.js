@@ -9,7 +9,7 @@ const { validate } = Module;
 class EventFilter extends Component {
     
     render() {
-        const { all_categories, form_values } = this.props;
+        const { all_categories, form_values,current_user } = this.props;
         let values = form_values || {};
         return <>
             <form onSubmit={this.props.handleSubmit} className="box">
@@ -27,6 +27,15 @@ class EventFilter extends Component {
                     className="form-control mt-2"
                     placeholder='#hashtags'
                 />
+                {
+                    (current_user.role=="Admin")?
+                        <Field
+                            name="eventmanagment"
+                            component={renderMultiselect}
+                            placeholder="event managment"
+                        />
+                        :null
+                }
                 <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>

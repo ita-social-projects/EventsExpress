@@ -27,14 +27,14 @@ export default class UserItemView extends Component {
     
 
     renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
-    renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
+    renderEvents = arr => arr.map(item => <div className="col-4"><Event current_user={this.props.current_user} key={item.id} item={item} /></div>)
         
     render() {
         const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
         const { isPending, data } = this.props.events;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList  data_list={data} /> : null;
+        const content = !isPending ? <EventList current_user={this.props.current_user} data_list={data} /> : null;
        
         const categories_list = this.renderCategories(categories);
                 

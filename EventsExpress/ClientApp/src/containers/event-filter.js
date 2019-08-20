@@ -43,14 +43,17 @@ class EventFilterWrapper extends Component {
             <EventFilter 
             all_categories={this.props.all_categories}
             onSubmit={this.onSubmit}
-            form_values={this.props.form_values} />
+            form_values={this.props.form_values} 
+            current_user={this.props.current_user}
+            />
         </>
     }
 }
 
 const mapStateToProps = (state) => ({
     all_categories: state.categories,
-    form_values: getFormValues('event-filter-form')(state)
+    form_values: getFormValues('event-filter-form')(state),
+    current_user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -80,7 +80,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
