@@ -3,6 +3,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
+using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,8 @@ namespace EventsExpress.Core.Services
             _userService = userSrv;
             _signingEncodingKey = signingEncodingKey;
         }
-       
-       
-       
-        public OperationResult AuthenticateGoogleUser(string email)
+
+        public OperationResult AuthenticateGoogleFacebookUser(string email)
         {
             var user = _userService.GetByEmail(email);
             if (user == null)
@@ -132,5 +131,7 @@ namespace EventsExpress.Core.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }

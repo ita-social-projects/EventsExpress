@@ -6,7 +6,6 @@ import config from '../config.json';
 import { withRouter, Redirect } from "react-router-dom";
 
 
-
 class LoginGoogle extends Component {
 
     onFailure = (error) => {
@@ -14,6 +13,7 @@ class LoginGoogle extends Component {
     };
 
     googleResponse = (response) => {
+        console.log(response);
         const tokenBlob = new Blob([JSON.stringify({ tokenId: response.tokenId }, null, 2)], { type: 'application/json' });
         const options = {
             method: 'POST',
@@ -21,7 +21,7 @@ class LoginGoogle extends Component {
             mode: 'cors',
             cache: 'default'
         };
-        fetch("http://localhost:61985/api/Authentication/Google", options)
+        fetch(config.GOOGLE_AUTH_CALLBACK_URL, options)
             .then(r => {
                 r.json().then(user => {
                     const token = user.token;
@@ -31,18 +31,17 @@ class LoginGoogle extends Component {
                 });
             })
     };
-
+  
     render() {
-       
-
-        return (
+      
+            return (
             <div>
                        <GoogleLogin
                         clientId={config.GOOGLE_CLIENT_ID}
                         buttonText="Google Login"
                         onSuccess={this.googleResponse}
-                       
-                    />
+                        version="3.2" 
+                /> 
             </div>
         );
     }

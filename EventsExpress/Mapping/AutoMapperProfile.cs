@@ -66,7 +66,7 @@ namespace EventsExpress.Mapping
             CreateMap<ProfileDTO, ProfileDto>().ReverseMap();
 
             CreateMap<LoginDto, UserDTO>();
-
+            CreateMap<UserView, UserDTO>();
 
             // EVENT MAPPING
             CreateMap<Event, EventDTO>()

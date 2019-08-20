@@ -24,6 +24,7 @@
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",
+    "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.0.5",
     "react-icons": "^3.7.0",
     "react-images-upload": "^1.2.7",

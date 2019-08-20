@@ -8,5 +8,7 @@ namespace EventsExpress.DTO
     public class UserView
     {
         public string tokenId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
     }
 }

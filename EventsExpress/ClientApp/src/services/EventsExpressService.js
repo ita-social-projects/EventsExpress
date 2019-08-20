@@ -82,8 +82,8 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
-    setGoogleLogin = async (data) => {
-        const res = await this.setResource('Authentication/google', data);
+    setFacebookLogin = async (data) => {
+        const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
             return { error: await res.text() };
         }

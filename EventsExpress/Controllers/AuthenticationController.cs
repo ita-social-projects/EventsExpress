@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.MOdel;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
 using EventsExpress.Helpers;
@@ -14,6 +16,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace EventsExpress.Controllers
 {
@@ -24,7 +27,7 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-
+      
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
@@ -32,30 +35,51 @@ namespace EventsExpress.Controllers
             )
         {
             _userService = userSrv;
-            _mapper = mapper;
+            _mapper = mapper; 
             _authService = authSrv;
         }
+        [AllowAnonymous]
+        [HttpPost("FacebookLogin")]
+        public async Task<IActionResult> FacebookLogin(UserView userView)
+        {
+            var UserExisting = _userService.GetByEmail(userView.Email);
 
+            if (UserExisting == null)
+            {
+            var user = _mapper.Map<UserView, UserDTO>(userView);
+                user.EmailConfirmed = true;
+            await _userService.Create(user);
+            }
+            var auth = _authService.AuthenticateGoogleFacebookUser(userView.Email);
+
+            if (!auth.Successed)
+            {
+                return BadRequest(auth.Message);
+            }
+            var User = _userService.GetByEmail(userView.Email);
+            var userInfo = _mapper.Map<UserDTO, UserInfo>(User);
+            userInfo.Token = auth.Message;
+
+            return Ok(userInfo);
+        }
         [AllowAnonymous]
         [HttpPost("google")]
         public async Task<IActionResult> Google([FromBody]UserView userView)
         {
            
-            var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+                 var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+                 var UserExisting = _userService.GetByEmail(payload.Email);
 
-            var userExist = _userService.GetByEmail(payload.Email);
-            if (userExist == null) {
-                var user = new UserDTO()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = payload.Name,
-                    Email = payload.Email,
-                    EmailConfirmed = true
-                };
-                   await _userService.Create(user);
-            }
+                    if (UserExisting == null)
+                    {
+                        var user = _mapper.Map<UserView, UserDTO>(userView);
+                        user.EmailConfirmed = true;
+                        user.Email = payload.Email;
+                        user.Name = payload.Name;
+                        await _userService.Create(user);
+                    }
 
-                var result = _authService.AuthenticateGoogleUser(payload.Email);
+                var result = _authService.AuthenticateGoogleFacebookUser(payload.Email);
                 if (!result.Successed)
                 {
                     return BadRequest(result.Message);
@@ -68,9 +92,9 @@ namespace EventsExpress.Controllers
 
                 return Ok(userInfo);     
         }
-    
+        
 
-    [AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public IActionResult Login(LoginDto authRequest)
         {

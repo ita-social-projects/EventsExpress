@@ -4,6 +4,7 @@ import Login  from '../components/login';
 import login from '../actions/login';
 import GoogleLogin from './GoogleLogin';
 import { useAlert } from "react-alert";
+import FacebookLogin from './FacebookLogin';
 
 class LoginWrapper extends Component {
   submit = values => {
@@ -18,9 +19,11 @@ class LoginWrapper extends Component {
               <Login onSubmit={this.submit} />
               {loginError && 
               <p className="text-danger text-center">{loginError}</p>
-              }
-       <GoogleLogin/>
-         
+        }
+        <div className="row">
+            <GoogleLogin />
+                <FacebookLogin />
+             </div>
            </div>
     ;
   }

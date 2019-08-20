@@ -31,6 +31,26 @@ export default function login(email, password) {
       });
   }
 }
+export function loginFacebook(email, name) {
+
+    return dispatch => {
+        dispatch(setLoginPending(true));
+
+        const res = api_serv.setFacebookLogin({ Email: email, Name: name });
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setUser(response));
+                dispatch(setLoginSuccess(true));
+
+
+
+                localStorage.setItem('token', response.token);
+            } else {
+                dispatch(setLoginError(response.error));
+            }
+        });
+    }
+}
 
 
   export function setUser(data) {
