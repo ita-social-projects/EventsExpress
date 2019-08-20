@@ -11,11 +11,11 @@ namespace EventsExpress.Core.ChatHub
 {
     public class ChatRoom : Hub
     {
-        private readonly IAuthServicre _authService;
+        private readonly IAuthService _authService;
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         public ChatRoom(
-                IAuthServicre authService,
+                IAuthService authService,
                 IUserService userService,
                 IMessageService messageService
             )

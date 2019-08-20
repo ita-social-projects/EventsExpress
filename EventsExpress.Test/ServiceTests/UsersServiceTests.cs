@@ -12,6 +12,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 using System.Linq;
 using EventsExpress.Core.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Test.ServiceTests
 {    [TestFixture]
@@ -38,25 +39,28 @@ namespace EventsExpress.Test.ServiceTests
             mockEmailService = new Mock<IEmailService>();
             mockCacheHelper = new Mock<CacheHelper>();
             mockEventService = new Mock<IEventService>();
-
+            
             service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
 
-            userDTO = new UserDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" };
-            user = new User() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" };
+            const string existingEmail = "existingEmail@gmail.com";
+            var id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
+            var name = "existingName";
 
-            mockUnitOfWork.Setup(u => u.UserRepository
-            .Get("")).Returns(new List<User>()
-                {
-                    new User { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"),Email="aaa@gmail.com" ,Name = "NameIsExist" }
-                }
-                .AsQueryable());
+            var existingUser = new User { Id = id, Name = name, Email = existingEmail};
+            var existingUserDTO = new UserDTO { Id = id, Name = name, Email = existingEmail };
 
+            mockUnitOfWork.Setup(u => u.UserRepository.Get("Role,Categories.Category,Photo"))
+                .Returns(new List<User> { existingUser }
+                    .AsQueryable());
+
+            mockMapper.Setup(m => m.Map<UserDTO>(existingUser))
+                .Returns(existingUserDTO);
         }
 
         [Test]
         public void Create_RepeatEmail_ReturnFalse()
         {
-            UserDTO newUser = new UserDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019A"), Email = "aaa@gmail.com" };
+            var newUser = new UserDTO { Email = "existingEmail@gmail.com" };
 
             var result = service.Create(newUser);
 

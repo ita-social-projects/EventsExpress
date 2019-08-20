@@ -17,11 +17,11 @@ namespace EventsExpress.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IMessageService _messageService;
-        private readonly IAuthServicre _authService;
+        private readonly IAuthService _authService;
 
         public ChatController(
             IMessageService messageService,
-            IAuthServicre authService,
+            IAuthService authService,
             IMapper mapper
             )
         {

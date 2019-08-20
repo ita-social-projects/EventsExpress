@@ -2,7 +2,7 @@
 {
     public class ImageOptionsModel
     {
-        public int Thumbnail { get; set; }
-        public int Image { get; set; }
+        public virtual int Thumbnail { get; set; }
+        public virtual int Image { get; set; }
     }
 }
