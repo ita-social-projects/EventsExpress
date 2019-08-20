@@ -5,14 +5,13 @@ using EventsExpress.Db.IRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
     public class CountryService : ICountryService
     {
-        public IUnitOfWork Db { get; set; }
+        private readonly IUnitOfWork Db;
 
         public CountryService(IUnitOfWork uow)
         {
@@ -27,7 +26,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> CreateCountryAsync(Country country)
         {
-            if (Db.CountryRepository.Get().FirstOrDefault(c => c.Name == country.Name) != null)
+            if (Db.CountryRepository.Get().Any(c => c.Name == country.Name))
             {
                 return new OperationResult(false, "Country is already exist", "");
             }
@@ -39,19 +38,18 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> EditCountryAsync(Country country)
         {
-            if (country.Id == null)
+            if (country.Id == Guid.Empty)
             {
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
 
-            Country oldCountry = Db.CountryRepository.Get(country.Id);
+            var oldCountry = Db.CountryRepository.Get(country.Id);
             if (oldCountry == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
 
             oldCountry.Name = country.Name;
-
             await Db.SaveAsync();
 
             return new OperationResult(true);
@@ -59,17 +57,17 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> DeleteAsync(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
-            Country country = Db.CountryRepository.Get(id);
+            var country = Db.CountryRepository.Get(id);
             if (country == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
 
-            var result = Db.CountryRepository.Delete(country);
+            Db.CountryRepository.Delete(country);
             await Db.SaveAsync();
             return new OperationResult(true);
         }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -14,6 +9,10 @@ using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace EventsExpress.Controllers
 {
@@ -22,63 +21,63 @@ namespace EventsExpress.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
-        private IMapper _mapper;
-     
-        public UsersController(IUserService userSrv, IMapper mapper)
-        {         
+        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
+
+        public UsersController(
+            IUserService userSrv,
+            IAuthService authSrv,
+            IMapper mapper)
+        {
             _userService = userSrv;
+            _authService = authSrv;
             _mapper = mapper;
         }
 
 
         [HttpGet("[action]")]
-        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel model)
+        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel filter)
         {
-            if (model.PageSize == 0)
+            filter.PageSize = 4;
+            try
             {
-                model.PageSize = 4;
+                var viewModel = new IndexViewModel<UserManageDto>
+                {
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                };
+                return Ok(viewModel);
             }
-
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out int Count));
-
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            catch (ArgumentOutOfRangeException)
             {
                 return BadRequest();
             }
-            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-    
-            return Ok(viewModel);
         }
 
         #region Users managment by Admin
 
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get([FromQuery]UsersFilterViewModel model)
+        public IActionResult Get([FromQuery]UsersFilterViewModel filter)
         {
-            if (model.PageSize == 0) {
-                model.PageSize = 10;
+            if (filter.PageSize == 0)
+            {
+                filter.PageSize = 10;
             }
-
-            var res = _mapper.Map<IEnumerable<UserDTO>, IEnumerable<UserManageDto>>(_userService.GetAll(model, out int Count));
-
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
+            try
+            {
+                var viewModel = new IndexViewModel<UserManageDto>
+                {
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
             {
                 return BadRequest();
             }
-            IndexViewModel<UserManageDto> viewModel = new IndexViewModel<UserManageDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-            return Ok(viewModel);
         }
 
 
@@ -100,7 +99,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Unblock(Guid userId)
         {
             var result = await _userService.Unblock(userId);
-
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
@@ -113,7 +111,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Block(Guid userId)
         {
             var result = await _userService.Block(userId);
-
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
@@ -128,20 +125,18 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
-            var user = _userService.GetByEmail(HttpContext.User.Claims?.First().Value);
+            if (string.IsNullOrEmpty(userInfo.Name))
+            {
+                return BadRequest();
+            }
+
+            var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            string newName = userInfo.Name;
-            if (string.IsNullOrEmpty(newName))
-            {
-                return BadRequest();
-            } 
-
-            user.Name = newName;
-
+            user.Name = userInfo.Name;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -153,15 +148,17 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            DateTime newBirthday = userInfo.Birthday;
-            user.Birthday = newBirthday;
-
+            user.Birthday = userInfo.Birthday;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -173,15 +170,17 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            byte newGender = userInfo.Gender;
-            user.Gender = (Gender)newGender;
-
+            user.Gender = (Gender)userInfo.Gender;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -193,20 +192,24 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            IEnumerable<Category> newCategories = _mapper.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(userInfo.Categories);
+            var newCategories = _mapper.Map<IEnumerable<Category>>(userInfo.Categories);
 
             var result = await _userService.EditFavoriteCategories(user, newCategories);
             if (result.Successed)
             {
                 return Ok();
             }
-            return BadRequest();      
+            return BadRequest();
         }
 
         [HttpPost("[action]")]
@@ -219,15 +222,13 @@ namespace EventsExpress.Controllers
             }
 
             newAva = HttpContext.Request.Form.Files[0];
-            
-            var result = await _userService.ChangeAvatar(user.Id, newAva);
 
-            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+            var result = await _userService.ChangeAvatar(user.Id, newAva);
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
-
+            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
             return Ok(updatedPhoto);
         }
 
@@ -235,19 +236,11 @@ namespace EventsExpress.Controllers
 
 
         [HttpGet("[action]")]
-        public IActionResult GetUserById(Guid id)
+        public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<ProfileDTO, ProfileDto>(_userService.GetProfileById(id, user.Id));
+            var res = _mapper.Map<ProfileDto>(_userService.GetProfileById(id, user.Id));
 
-            return Ok(res);
-        }
-
-        
-        [HttpGet("[action]")]
-        public IActionResult GetAttitude(AttitudeDto attitude)
-        {
-            var res = _mapper.Map<AttitudeDTO, AttitudeDto>(_userService.GetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)));
             return Ok(res);
         }
 
@@ -255,7 +248,11 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
-            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDto, AttitudeDTO>(attitude)); 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
@@ -263,17 +260,10 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        // HELPERS: 
 
-        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            string email = userClaims.FindFirstValue(ClaimTypes.Email);
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            return _userService.GetByEmail(email);
-        }
+        // HELPERS: 
+        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+
 
     }
 }

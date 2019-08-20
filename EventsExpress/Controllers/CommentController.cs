@@ -31,7 +31,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CommentDto model)
         {
-
+            if (!ModelState.IsValid) {
+                return BadRequest();
+            }
             var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
                                        
             if (res.Successed)
@@ -66,7 +68,7 @@ namespace EventsExpress.Controllers
             IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>
             {
                 PageViewModel = pageViewModel,
-                items = res
+                Items = res
             };
             return Ok(viewModel);
         }

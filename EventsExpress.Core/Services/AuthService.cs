@@ -6,21 +6,27 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 
 namespace EventsExpress.Core.Services
 {
-    public class AuthServicre : IAuthServicre
+    public class AuthService : IAuthService
     {
         private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
+        private readonly IConfiguration _configuration;
 
-        public AuthServicre(
+        public AuthService(
             IUserService userSrv, 
-            IJwtSigningEncodingKey signingEncodingKey)
+            IJwtSigningEncodingKey signingEncodingKey,
+            IConfiguration config
+            )
         {
             _userService = userSrv;
             _signingEncodingKey = signingEncodingKey;
+            _configuration = config;
         }
 
 
@@ -42,26 +48,38 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email} is not confirmed, please confirm", "");
             }
 
-            if (!this.VerifyPassword(password, user.PasswordHash))
+            if (!VerifyPassword(user, password))
             {
                 return new OperationResult(false, "Invalid password", "Password");
             }
 
-            var token = this.GenerateJWT(user);
+            var token = GenerateJwt(user);
 
             return new OperationResult(true, token, "");
         }
 
 
-        public OperationResult FirstAuth(UserDTO userDto)
+        public OperationResult FirstAuthenticate(UserDTO userDto)
         {
             if (userDto == null)
             {
                 return new OperationResult(false, $"User with email: {userDto.Email} not found", "email");
             }
-            var token = this.GenerateJWT(userDto);
+            var token = GenerateJwt(userDto);
 
             return new OperationResult(true, token, "");
+        }
+
+
+        public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        {
+            if (VerifyPassword(userDto, oldPassword))
+            {
+                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+
+                return await _userService.Update(userDto);
+            }
+            return new OperationResult(false, "Invalid password", "");
         }
 
 
@@ -76,20 +94,15 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public bool CheckPassword(string currentPassword, string oldPassword)
+        private static bool VerifyPassword(UserDTO user, string actualPassword) => 
+            (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
+
+
+        private string GenerateJwt(UserDTO user)
         {
-            string newPass = PasswordHasher.GenerateHash(currentPassword);
-            return newPass == oldPassword;
-        }
+            var lifeTime = _configuration.GetValue<int>("JWTOptions:LifeTime");
 
-
-        private bool VerifyPassword(string actualPassword, string hashedPassword) => 
-            (hashedPassword == PasswordHasher.GenerateHash(actualPassword));
-
-
-        private string GenerateJWT(UserDTO user)
-        {
-            var claims = new Claim[]
+            var claims = new []
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
@@ -97,14 +110,13 @@ namespace EventsExpress.Core.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(3000),
+                expires: DateTime.Now.AddMinutes(lifeTime),
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
                         _signingEncodingKey.SigningAlgorithm)
             );
 
-            string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-            return jwtToken;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

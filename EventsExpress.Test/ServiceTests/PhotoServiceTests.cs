@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using EventsExpress.Core.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -22,7 +24,9 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
-            photoService = new PhotoService(mockUnitOfWork.Object);
+            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
+
+            photoService = new PhotoService(mockUnitOfWork.Object, mockOpt.Object);
 
             mockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
         }

@@ -18,8 +18,8 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private ICategoryService _categoryService;
-        private IMapper _mapper;
+        private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
         public CategoryController(
             ICategoryService categoryService,
@@ -33,29 +33,35 @@ namespace EventsExpress.Controllers
 
         [HttpGet("[action]")]
         [AllowAnonymous]
-        public IActionResult All()
-        {
-            var res = _mapper.Map<IEnumerable<CategoryDTO>, IEnumerable<CategoryDto>>(_categoryService.GetAllCategories());
-            return Ok(res);
-        }
+        public IActionResult All() =>
+            Ok(_mapper.Map<IEnumerable<CategoryDto>>(_categoryService.GetAllCategories()));
 
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var res = await _categoryService.Delete(id);
-
-            return Ok(res);
-        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CategoryDto model)
         {
-            if (string.IsNullOrEmpty(model.Name))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Category cannot be empty!");
+                return BadRequest(ModelState);
             }
             var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
                                        : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
+            if (res.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest(res.Message);
+        }
+
+
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var res = await _categoryService.Delete(id);
             if (res.Successed)
             {
                 return Ok();

@@ -5,7 +5,6 @@ using AutoMapper;
 using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.EF;
 using EventsExpress.DTO;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -14,31 +13,83 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EventController : ControllerBase
     {
-
-        private IEventService _eventService;
-        private IMapper _mapper;
+        private readonly IEventService _eventService;
+        private readonly IMapper _mapper;
 
         public EventController(
             IEventService eventService,
-                    IMapper mapper, AppDbContext appDbContext)
+            IMapper mapper)
         {
             _eventService = eventService;
             _mapper = mapper;
-        }                    
+        }
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
-            var res = await _eventService.DeleteUserFromEvent(userId, eventId);
-            if (res.Successed)
+            var result = model.Id == Guid.Empty 
+                ? await _eventService.Create(_mapper.Map<EventDTO>(model))
+                : await _eventService.Edit(_mapper.Map<EventDTO>(model));
+            if (result.Successed)
             {
                 return Ok();
             }
-            return BadRequest();
+            return BadRequest(result.Message);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult Get(Guid id) => 
+            Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
+
+               
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult All([FromQuery]EventFilterViewModel filter)
+        {
+            filter.PageSize = 6;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                    
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("[action]")]
+        public IActionResult AllForAdmin([FromQuery]EventFilterViewModel filter)
+        {
+            filter.PageSize = 6;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                    
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
         }
 
 
@@ -54,72 +105,16 @@ namespace EventsExpress.Controllers
         }
 
 
-        [AllowAnonymous]
-        [HttpGet("[action]")]
-        public IActionResult Get(Guid id)
-        {
-            var res = _mapper.Map<EventDTO, EventDto>(_eventService.EventById(id));
-
-            return Ok(res);
-        }
-               
-        [AllowAnonymous]
-        [HttpGet("[action]")]
-        public IActionResult All([FromQuery]EventFilterViewModel model)
-        {
-            model.PageSize = 6;
-
-            int Count;
-
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(model, out Count));
-                    
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
-            {
-                return BadRequest();
-            }
-            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-            return Ok(viewModel);
-        
-        }
-
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("[action]")]
-        public IActionResult AllForAdmin([FromQuery]EventFilterViewModel model)
-        {
-            model.PageSize = 6;
-            int Count;
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.Events(model, out Count));
-
-            PageViewModel pageViewModel = new PageViewModel(Count, model.Page, model.PageSize);
-            if (pageViewModel.PageNumber > pageViewModel.TotalPages)
-            {
-                return BadRequest();
-            }
-            IndexViewModel<EventPreviewDto> viewModel = new IndexViewModel<EventPreviewDto>
-            {
-                PageViewModel = pageViewModel,
-                items = res
-            };
-            return Ok(viewModel);
-        }
-
-
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromForm]EventDto model)
-        {                                   
-            var res = model.Id == Guid.Empty ? await _eventService.Create(_mapper.Map<EventDto, EventDTO>(model))
-                                       : await _eventService.Edit(_mapper.Map<EventDto, EventDTO>(model));
+        public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        {
+
+            var res = await _eventService.DeleteUserFromEvent(userId, eventId);
             if (res.Successed)
             {
                 return Ok();
-            }                                
-            return BadRequest(res.Message);
+            }
+            return BadRequest();
         }
 
         [HttpPost("[action]")]
@@ -146,38 +141,25 @@ namespace EventsExpress.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid userId)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(userId));
+        public IActionResult FutureEvents(Guid id) =>
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id)));
 
-            return Ok(res);
-        }
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult PastEvents(Guid userId)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(userId));
+        public IActionResult PastEvents(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id)));
 
-            return Ok(res);
-        }
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult EventsToGo(Guid userId)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(userId));
+        public IActionResult EventsToGo(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id)));
 
-            return Ok(res);
-        }
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult VisitedEvents(Guid userId)
-        {
-            var res = _mapper.Map<IEnumerable<EventDTO>, IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(userId));
+        public IActionResult VisitedEvents(Guid id) => 
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
+        
+        #endregion
 
-            return Ok(res);
-        }
     }
 }

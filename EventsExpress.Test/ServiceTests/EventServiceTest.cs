@@ -28,14 +28,12 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
-            mockAppEnvironment = new Mock<IHostingEnvironment>();
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
 
             service = new EventService(
                 mockUnitOfWork.Object,
                 mockMapper.Object,
-                mockAppEnvironment.Object,
                 mockMediator.Object,
                 mockPhotoService.Object);
 

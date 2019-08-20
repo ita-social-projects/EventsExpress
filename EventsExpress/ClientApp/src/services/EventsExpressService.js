@@ -6,6 +6,16 @@ export default class EventsExpressService {
 
     _baseUrl = 'api/';
 
+    getChats = async () => {
+        const res = await this.getResource('chat/GetAllChats');
+        return res;
+    }
+    
+    getChat = async (chatId) => {
+        const res = await this.getResource(`chat/GetChat?chatId=${chatId}`);
+        return res;
+    }
+
     setEvent = async (data) => {
         let file = new FormData();
         if (data.id != null) {
@@ -127,7 +137,7 @@ export default class EventsExpressService {
         return res;
     }
     getUserById = async (id) => {
-        const res = await this.getResource('users/GetUserById?id=' + id);
+        const res = await this.getResource('users/GetUserProfileById?id=' + id);
         return res;
     }
     getSearchUsers = async (filter) => {

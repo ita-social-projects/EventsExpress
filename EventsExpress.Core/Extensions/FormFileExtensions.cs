@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace EventsExpress.Core.Infrastructure
+namespace EventsExpress.Core.Extensions
 {
     public static class FormFileExtensions
     {

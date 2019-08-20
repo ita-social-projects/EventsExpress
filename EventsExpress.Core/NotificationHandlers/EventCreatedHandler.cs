@@ -27,14 +27,14 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
         {
-            var users = _userService.GetCategoriesFollowers(notification.Event.Categories);
+            var users = _userService.GetUsersByCategories(notification.Event.Categories);
             try
             {
                 foreach (var u in users)
                 {
                     await _sender.SendEmailAsync(new EmailDTO
                     {
-                        SenderEmail = "noreply@eventService.com",
+                        Subject = "New event for you!",
                         RecepientEmail = u.Email,
                         MessageText = $"The <a href='http://localhost:61985/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
                     });
