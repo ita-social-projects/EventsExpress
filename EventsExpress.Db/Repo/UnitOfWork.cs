@@ -25,6 +25,8 @@ namespace EventsExpress.Db.Repo
         private IReportRepository _reportRepository;
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
+        private IChatRepository _chatRepository;
+        private IMessageRepository _messageRepository;
 
         public UnitOfWork(
             AppDbContext context
@@ -32,6 +34,12 @@ namespace EventsExpress.Db.Repo
         {
             Database = context;                   
         }
+
+        public IChatRepository ChatRepository =>
+           _chatRepository ?? (_chatRepository = new ChatRepository(Database));   
+
+        public IMessageRepository MessageRepository =>
+           _messageRepository ?? (_messageRepository = new MessageRepository(Database));
 
         public IEventRepository EventRepository =>
            _eventRepository ?? (_eventRepository = new EventRepository(Database));
