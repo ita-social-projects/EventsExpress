@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {  getFormValues } from 'redux-form';
+import { renderTextField } from '../components/helpers/helpers';
+import { reduxForm, Field, getFormValues } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import { get_events } from '../actions/event-list';
 import history from '../history';

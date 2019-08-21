@@ -1,5 +1,5 @@
 ﻿import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Login  from '../components/login';
 import login from '../actions/login';
 import GoogleLogin from './GoogleLogin';
@@ -13,7 +13,7 @@ class LoginWrapper extends Component {
    
   render() {
       alert = useAlert;
-      let {  loginError } = this.props;
+      let { isLoginPending, isLoginSuccess, loginError, isFirstLogin } = this.props;
     
     return <div>
               <Login onSubmit={this.submit} />

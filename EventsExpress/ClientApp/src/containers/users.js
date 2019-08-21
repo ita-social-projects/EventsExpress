@@ -5,8 +5,10 @@ import Users from '../components/users';
 import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
 import BadRequest from '../components/Route guard/400'
+import InternalServerError from '../components/Route guard/500'
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403'
+import NotFound from '../components/Route guard/404';
 import { Redirect } from 'react-router'
 class UsersWrapper extends Component{
     componentDidUpdate(prevProps, prevState) {

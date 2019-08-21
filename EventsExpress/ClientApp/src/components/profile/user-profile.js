@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
+import Moment from 'react-moment';
 import 'moment-timezone';
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
@@ -7,6 +9,7 @@ import AddEventWrapper from '../../containers/add-event';
 import './User-profile.css';
 import EventList from '../event/event-list';
 import Spinner from '../spinner';
+import { AddComponent } from '../home/home';
 
 export default class UserItemView extends Component {
 
@@ -52,7 +55,7 @@ export default class UserItemView extends Component {
                     <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6>
                     <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6>
                 </div>
-                {(id !== this.props.current_user) &&
+                {!(id === this.props.current_user) &&
                     <div className="col-3">
                         <div className="d-flex align-items-center attitude">
                             <Avatar

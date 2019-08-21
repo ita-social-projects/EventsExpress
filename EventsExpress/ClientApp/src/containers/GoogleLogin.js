@@ -3,10 +3,14 @@ import { GoogleLogin } from 'react-google-login';
 import { connect } from "react-redux";
 import {setUser } from "../actions/login";
 import config from '../config.json';
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
 
 class LoginGoogle extends Component {
+
+    onFailure = (error) => {
+        alert(error);
+    };
 
     googleResponse = (response) => {
         console.log(response);
@@ -41,7 +45,7 @@ class LoginGoogle extends Component {
             </div>
         );
     }
-}
+};
 
 const mapStateToProps = (state) => {
     return {

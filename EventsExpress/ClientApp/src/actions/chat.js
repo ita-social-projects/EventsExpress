@@ -1,5 +1,7 @@
 import EventsExpressService from '../services/EventsExpressService';
 import * as SignalR from '@aspnet/signalr';
+
+import { bindActionCreators } from 'redux';
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
 export const GET_CHAT_ERROR = "GET_CHAT_ERROR";

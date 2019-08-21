@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { renderTextField } from '../components/helpers/helpers';
+import { reduxForm, Field } from 'redux-form';
 import UsersFilters from '../components/users/UsersFilters';
 import { get_users } from '../actions/users';
 import history from '../history';

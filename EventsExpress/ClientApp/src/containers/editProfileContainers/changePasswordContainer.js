@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import ChangePassword from "../../components/profile/editProfile/ChangePassword";
 import { connect } from "react-redux";
-import changePassword  from "../../actions/EditProfile/changePassword";
+import changePassword , {setChangePasswordError, setChangePasswordPending,setChangePasswordSuccess} from "../../actions/EditProfile/changePassword";
 import { reset} from 'redux-form';
 class ChangePasswordContainer extends React.Component {
     submit = value => {
@@ -12,7 +12,7 @@ class ChangePasswordContainer extends React.Component {
 
 
     render() {
-   
+        let { isEditBirthdayPending, isEditBirthdaySuccess, EditBirthdayError } = this.props;
 
         return <ChangePassword onSubmit={this.submit} />;
     }

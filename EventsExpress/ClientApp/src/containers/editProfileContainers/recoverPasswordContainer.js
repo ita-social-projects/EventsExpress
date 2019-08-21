@@ -16,7 +16,7 @@ class RecoverPasswordContainer extends React.Component {
     }
 
     render() {
-        let { status } = this.props;
+        let { isRecoverPasswordPending, isRecoverPasswordSuccess, RecoverPasswordError, status } = this.props;
         
         
 

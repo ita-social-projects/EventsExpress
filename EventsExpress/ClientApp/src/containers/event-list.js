@@ -4,6 +4,7 @@ import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event-list';
 import BadRequest from '../components/Route guard/400'
+import InternalServerError from '../components/Route guard/500'
 import Unauthorized from '../components/Route guard/401'
 import Forbidden from '../components/Route guard/403'
 import { Redirect } from 'react-router'

@@ -59,7 +59,7 @@ class UserItemViewWrapper extends Component{
 
     render(){   
     
-        const {data, isPending} = this.props.profile;
+        const {data, isPending, isError} = this.props.profile;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <Profile
             onAddEvent={this.onAddEvent}
