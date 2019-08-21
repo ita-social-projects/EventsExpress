@@ -7,7 +7,6 @@ import {getFormValues, reset} from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 
-import {  green } from '@material-ui/core/colors';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';

@@ -1,6 +1,4 @@
 import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-
 
 export default class EventsExpressService {
 
