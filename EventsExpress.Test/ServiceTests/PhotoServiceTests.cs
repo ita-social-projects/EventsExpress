@@ -33,6 +33,9 @@ namespace EventsExpress.Test.ServiceTests
         }
 
 
+        
+
+
         [Test]
         public void AddPhoto_ValidFormFile_DoesNotThrows()
         {
@@ -64,7 +67,6 @@ namespace EventsExpress.Test.ServiceTests
                     Headers = new HeaderDictionary(),
                     ContentType = GetContentType(fileName)
                 };
-
                 Assert.ThrowsAsync<ArgumentException>(async () => await _photoService.AddPhoto(file));
             }
         }

@@ -15,11 +15,12 @@ using EventsExpress.Core.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Test.ServiceTests
-{    [TestFixture]
+{
+    [TestFixture]
     class UsersServiceTests: TestInitializer
     {
         private UserService service;
-        private User user;
+        
 
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IMediator> mockMediator;
@@ -27,8 +28,8 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<CacheHelper> mockCacheHelper;
         private static Mock<IEventService> mockEventService;
 
-        UserDTO userDTO;
-        
+        private UserDTO existingUserDTO;
+        private User existingUser;
 
         [SetUp]
         protected override void Initialize()
@@ -46,13 +47,15 @@ namespace EventsExpress.Test.ServiceTests
             var id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
             var name = "existingName";
 
-            var existingUser = new User { Id = id, Name = name, Email = existingEmail};
-            var existingUserDTO = new UserDTO { Id = id, Name = name, Email = existingEmail };
+            existingUser = new User { Id = id, Name = name, Email = existingEmail};
+            existingUserDTO = new UserDTO { Id = id, Name = name, Email = existingEmail };
 
             mockUnitOfWork.Setup(u => u.UserRepository.Get("Role,Categories.Category,Photo"))
                 .Returns(new List<User> { existingUser }
                     .AsQueryable());
 
+            mockMapper.Setup(m => m.Map<User>(existingUserDTO))
+                .Returns(existingUser);
             mockMapper.Setup(m => m.Map<UserDTO>(existingUser))
                 .Returns(existingUserDTO);
         }
@@ -115,19 +118,16 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Update_Success_ReturnAnyException()
         {
-            mockMapper.Setup(m => m.Map<UserDTO, User>(userDTO))
-                .Returns(user);
-
-            mockUnitOfWork.Setup(u => u.UserRepository.Insert(user));
+            mockUnitOfWork.Setup(u => u.UserRepository.Insert(It.IsAny<User>()));
             mockUnitOfWork.Setup(u => u.SaveAsync());
 
-            Assert.DoesNotThrowAsync(async()=>await service.Update(userDTO));
+            Assert.DoesNotThrowAsync(async()=>await service.Update(existingUserDTO));
         }
 
-         [Test]
-         public void Update_InvalidId_ReturnFalse()
+        [Test]
+        public void Update_InvalidId_ReturnFalse()
         {
-            UserDTO newUser = new UserDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
+            var newUser = new UserDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
 
             var result = service.Update(newUser);
 
