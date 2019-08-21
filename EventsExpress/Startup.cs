@@ -46,7 +46,6 @@ namespace EventsExpress
             #region Authorization and Autontification configuring...
 
             var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTOptions:SecretKey"));
-            //var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("AppSettings:JWTSecretKey"));
 
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
