@@ -22,7 +22,8 @@ namespace EventsExpress.Core.Services
 
         public EventService(
             IUnitOfWork unitOfWork, 
-            IMapper mapper, 
+            IMapper mapper,
+            IHostingEnvironment @object,
             IMediator mediator,
             IPhotoService photoSrv
             )

@@ -92,6 +92,14 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    setFacebookLogin = async (data) => {
+        const res = await this.setResource('Authentication/FacebookLogin', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res.json();
+    }
+
 
     setRecoverPassword = async (data) => {
         console.log("SERVICE:")

@@ -66,6 +66,7 @@ namespace EventsExpress.Mapping
             CreateMap<ProfileDTO, ProfileDto>().ReverseMap();
 
             CreateMap<LoginDto, UserDTO>();
+            CreateMap<UserView, UserDTO>();
 
             #endregion
 
@@ -105,7 +106,7 @@ namespace EventsExpress.Mapping
                     new UserPreviewDto
                     {
                         Id = x.User.Id,
-                        Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@")),
+                        Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@")),
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null
                     })))

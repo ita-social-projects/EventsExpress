@@ -63,8 +63,10 @@ namespace EventsExpress.Core.Services
 
             await Db.SaveAsync();
             userDto.Id = result.Id;
-
-            await _mediator.Publish(new RegisterVerificationMessage(userDto));
+            if (!userDto.EmailConfirmed)
+            {
+                await _mediator.Publish(new RegisterVerificationMessage(userDto));
+            }
 
             return new OperationResult(true, "Registration success", "");
         }

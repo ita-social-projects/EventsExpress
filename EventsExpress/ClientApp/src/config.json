@@ -1,0 +1,6 @@
+﻿{
+  "GOOGLE_CLIENT_ID": "186919339940-1bo0injuj5mf3r1c3mejhrb49fceacar.apps.googleusercontent.com",
+
+  "GOOGLE_AUTH_CALLBACK_URL": "https://localhost:44343/api/Authentication/Google",
+  "FACEBOOK_AUTH_CALLBACK_URL": "https://localhost:44343/api/Authentication/FacebookLogin"
+}

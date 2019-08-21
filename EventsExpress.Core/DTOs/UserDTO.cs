@@ -17,7 +17,6 @@ namespace EventsExpress.Core.DTOs
         public DateTime Birthday { get; set; }
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
-        
         public virtual Guid RoleId { get; set; }
         public virtual Role Role { get; set; }
         public virtual Guid? PhotoId { get; set; }
