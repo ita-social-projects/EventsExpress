@@ -14,8 +14,8 @@ class UserChats extends Component{
         
         return arr.map(x => {
         
-            var user = x.users.find(y => y.id != this.props.current_user.id);
-            console.log(user);
+            const user = x.users.find(y => y.id != this.props.current_user.id);
+            const new_msg = this.props.notification.messages.filter(y => y.chatRoomId == x.id);
         return <>
         <div key={x.id} className="w-100">
         <Link to={`/chat/${x.id}`}>
@@ -25,7 +25,8 @@ class UserChats extends Component{
                         ? <Avatar className='SmallAvatar' src={user.photoUrl} />
                         : <Avatar className='SmallAvatar' >{user.username.charAt(0).toUpperCase()}</Avatar>}
                 </ButtonBase>
-                <p>{user.username}</p>    
+                <p>{user.username} </p>    
+                {new_msg.length > 0 && <p>You have {new_msg.length} unread messages</p>}
             </div>
         </Link>
         <hr/>
@@ -51,7 +52,8 @@ class UserChats extends Component{
 const mapStateToProps = (state) => ({
     chats: state.chats,
     chat: state.chat,
-    current_user: state.user
+    current_user: state.user,
+    notification: state.notification
 });
 
 const mapDispatchToProps = (dispatch) => { 

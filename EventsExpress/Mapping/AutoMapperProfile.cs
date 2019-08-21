@@ -190,7 +190,8 @@ namespace EventsExpress.Mapping
                     Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@"))
                 })));
 
-
+            CreateMap<Message, MessageDto>().ReverseMap();
+                
             #endregion
         }
     }

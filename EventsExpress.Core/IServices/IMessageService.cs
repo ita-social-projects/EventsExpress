@@ -13,6 +13,8 @@ namespace EventsExpress.Core.IServices
 
         Task<ChatRoom> GetChat(Guid chatId, Guid sender);
 
+        List<Message> GetUnreadMessages(Guid userId);
+
         Task<OperationResult> MsgSeen(List<Guid> messageIds);
         IEnumerable<ChatRoom> GetUserChats(Guid userId);
         List<string> GetChatUserIds(Guid chatId);

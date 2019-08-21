@@ -16,6 +16,12 @@ export default class EventsExpressService {
         return res;
     }
 
+    getUnreadMessages = async (userId) => {
+        const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
+        console.log(res);
+        return res;
+    }
+
     setEvent = async (data) => {
         let file = new FormData();
         if (data.id != null) {

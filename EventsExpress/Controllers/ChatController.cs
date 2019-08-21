@@ -47,5 +47,12 @@ namespace EventsExpress.Controllers
             var res = _mapper.Map<ChatDto>(chat);
             return Ok(res);
         }
+
+        [HttpGet("[action]")]
+        public IActionResult GetUnreadMessages([FromQuery]Guid userId)
+        {
+            var res = _mapper.Map<IEnumerable<MessageDto>>(_messageService.GetUnreadMessages(userId));
+            return Ok(res);
+        }
     }
 }

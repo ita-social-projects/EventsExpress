@@ -83,5 +83,12 @@ namespace EventsExpress.Core.Services
             }         
             return new OperationResult(true, "", Db.MessageRepository.Get(messageIds[0]).ChatRoomId.ToString());
         }
+
+        public List<Message> GetUnreadMessages(Guid userId)
+        {
+            var chats = GetUserChats(userId).Select(y => y.Id).ToList();
+            return Db.MessageRepository.Get("").Where(x => chats.Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen).ToList();
+
+        }
     }
 }

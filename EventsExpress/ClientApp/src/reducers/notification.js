@@ -1,8 +1,13 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, INITIAL_CONNECTION, RECEIVE_MESSAGE, RECEIVE_SEEN_MESSAGE, DELETE_OLD_NOTIFICATION
+     RECEIVE_MESSAGE, DELETE_OLD_NOTIFICATION
 }from '../actions/chat';
+
+import {
+    GET_UNREAD_MESSAGES, RESET_NOTIFICATION
+}from '../actions/chats';
+
 
 export const reducer = (
     state = initialState.notification,
@@ -15,6 +20,15 @@ export const reducer = (
             return {
                 ...state,
                 messages: new_msg
+            }
+        case GET_UNREAD_MESSAGES:
+            return {
+                ...state,
+                messages: action.payload
+            }
+        case RESET_NOTIFICATION: 
+            return {
+                ...initialState.notification
             }
         case DELETE_OLD_NOTIFICATION:
                 var new_msg = state.messages;
