@@ -5,11 +5,11 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsExpress", "EventsExpress\EventsExpress.csproj", "{A3C5B4D6-285E-4B24-A3E8-6E037BD9943E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsExpress.Core", "EventsExpress.Core\EventsExpress.Core.csproj", "{04DD73A4-DB76-4031-ABFB-1CB1B8A2D26B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsExpress.Core", "EventsExpress.Core\EventsExpress.Core.csproj", "{04DD73A4-DB76-4031-ABFB-1CB1B8A2D26B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsExpress.Db", "EventsExpress.Db\EventsExpress.Db.csproj", "{A51B291E-1A44-492B-ACD3-C0ECE87D106B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsExpress.Db", "EventsExpress.Db\EventsExpress.Db.csproj", "{A51B291E-1A44-492B-ACD3-C0ECE87D106B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsExpress.Test", "EventsExpress.Test\EventsExpress.Test.csproj", "{9C128A6D-2A04-4E0E-9B5B-4EADC3D87595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsExpress.Test", "EventsExpress.Test\EventsExpress.Test.csproj", "{9C128A6D-2A04-4E0E-9B5B-4EADC3D87595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
