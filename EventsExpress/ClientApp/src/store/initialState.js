@@ -166,6 +166,12 @@ const initialState = {
             messages: [],
             users: []
         }
+    },
+    alert:{
+        variant:null,
+        className:null,
+        message:null,
+        open:false
     }
 };
 

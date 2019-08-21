@@ -241,6 +241,8 @@ namespace EventsExpress.Core.Services
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord)) : events;
             events = (model.DateFrom != DateTime.MinValue) ? events.Where(x => x.DateFrom >= model.DateFrom) : events.Where(x => x.DateFrom >= DateTime.Today);
             events = (model.DateTo != DateTime.MinValue) ? events.Where(x => x.DateTo <= model.DateTo) : events;
+            events = (model.Blocked) ? events.Where(x => x.IsBlocked == model.Blocked) : events;
+            events = (model.Unblocked) ? events.Where(x => x.IsBlocked == !(model.Unblocked)) : events;
 
             if (model.Categories != null)
             {

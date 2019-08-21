@@ -31,5 +31,10 @@ namespace EventsExpress.Core
 
         public bool Blocked { get; set; }
 
+        public bool Unblocked { get; set; }
+
+
+
+
     }
 }

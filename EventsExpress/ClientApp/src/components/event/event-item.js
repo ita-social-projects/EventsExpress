@@ -21,7 +21,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconDecorator from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip'; 
 import Badge from '@material-ui/core/Badge';
-import EventManagmentWrapper from '../../containers/event-info';
+import EventManagmentWrapper from '../../containers/event-managment';
 
 
 const useStyles = makeStyles(theme => ({

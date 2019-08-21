@@ -1,6 +1,7 @@
 import EventsExpressService from '../services/EventsExpressService';
 import { func } from 'prop-types';
 import { initialConnection } from './chat';
+import {SetAlert} from './alert';
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
@@ -22,6 +23,7 @@ export default function login(email, password) {
           dispatch(setUser(response));
           dispatch(setLoginSuccess(true));
           dispatch(initialConnection());
+          dispatch(SetAlert({variant: "error", message: "This is an error message!"}));
           localStorage.setItem('token', response.token);
         }else{
           dispatch(setLoginError(response.error));
