@@ -12,7 +12,7 @@ class LoginWrapper extends Component {
    
   render() {
       alert = useAlert;
-      let { isLoginPending, isLoginSuccess, loginError, isFirstLogin } = this.props;
+      let { isLoginPending, isLoginSuccess, loginError, isFirstLogin } = this.props.login;
     
     return <div>
               <Login onSubmit={this.submit} />
@@ -26,7 +26,7 @@ class LoginWrapper extends Component {
   }
 }
 const mapStateToProps = state => {
-    return state.login;
+    return { login: state.login }
 };
 
 const mapDispatchToProps = dispatch => {

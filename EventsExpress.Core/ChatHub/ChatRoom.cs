@@ -30,12 +30,23 @@ namespace EventsExpress.Core.ChatHub
         {
             var user = _authService.GetCurrentUser(Context.User);
             var res = await _messageService.Send(chatId, user.Id, text);
-
-            //var chat = await _messageService.GetChat(res.ChatRoomId, user.Id);
+                                                                                 
             var users = _messageService.GetChatUserIds(res.ChatRoomId);
 
-            await Clients.Users(users).SendAsync("ReceiveMessage", res);
-            //await Clients.Users(users).SendAsync("ReceiveMessage", res);
+            await Clients.Users(users).SendAsync("ReceiveMessage", res);        
+        }
+
+        public async Task Seen(List<Guid> msgIds)
+        {
+
+            var res = await _messageService.MsgSeen(msgIds);
+                                                                   
+            if (res.Successed)
+            {
+                var users = _messageService.GetChatUserIds(Guid.Parse(res.Property));
+                await Clients.Users(users).SendAsync("WasSeen", msgIds);    
+            }
+
         }
     }
 }

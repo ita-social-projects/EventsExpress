@@ -1,4 +1,5 @@
-﻿using AutoMapper;                 
+﻿using AutoMapper;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
@@ -46,7 +47,7 @@ namespace EventsExpress.Core.Services
 
             var res = Db.ChatRepository
                 .Get("Users.User.Photo,Messages")
-                .FirstOrDefault(x => x.Id == chat.Id);
+                .FirstOrDefault(x => x.Id == chat.Id);     
             return res;
         }
            
@@ -66,6 +67,21 @@ namespace EventsExpress.Core.Services
         public List<string> GetChatUserIds(Guid chatId)
         {
             return Db.ChatRepository.Get("Users").FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
+        }
+
+        public async Task<OperationResult> MsgSeen(List<Guid> messageIds)
+        {
+            foreach(var x in messageIds)
+            {
+                var msg = Db.MessageRepository.Get(x);
+                if(msg == null)
+                {                          
+                    return new OperationResult(false, "Msg not found", "");
+                }
+                msg.Seen = true;
+                await Db.SaveAsync();
+            }         
+            return new OperationResult(true, "", Db.MessageRepository.Get(messageIds[0]).ChatRoomId.ToString());
         }
     }
 }

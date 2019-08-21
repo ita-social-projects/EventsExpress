@@ -1,4 +1,5 @@
-﻿using EventsExpress.Db.Entities;
+﻿using EventsExpress.Core.Infrastructure;
+using EventsExpress.Db.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace EventsExpress.Core.IServices
 
         Task<ChatRoom> GetChat(Guid chatId, Guid sender);
 
+        Task<OperationResult> MsgSeen(List<Guid> messageIds);
         IEnumerable<ChatRoom> GetUserChats(Guid userId);
         List<string> GetChatUserIds(Guid chatId);
     }

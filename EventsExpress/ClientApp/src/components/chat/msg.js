@@ -5,6 +5,10 @@ import React, { Component} from 'react';
 import './msg.css';
 class Msg extends Component{
 
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevProps, prevState);
+    }
+
     getTime = (time) => {
         let today = new Date();
         let times = new Date(time);
@@ -18,8 +22,8 @@ class Msg extends Component{
     }
 
    render(){
-        const { user, item, current_user } = this.props;
-
+        const { user, item, seenItem ,current_user } = this.props;
+        console.log(item);
         return <>
 
             {user.id != current_user.id ? 
@@ -37,7 +41,7 @@ class Msg extends Component{
             :
             <div className="d-flex justify-content-end mb-4">
                 <div className="msg_cotainer_send">
-                    {item.text}<br/>
+                    {item.text}{seenItem && <i className="fa fa-check"></i>}<br/>
                     <span className="msg_time_send">{this.getTime(item.dateCreated)}</span>
                 </div>
                 <div className="img_cont_msg">

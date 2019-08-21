@@ -174,8 +174,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Messages, opts => opts.MapFrom(src => src.Messages.Select(x => new MessageDto
                 {
                     Id = x.Id,
+                    ChatRoomId = x.ChatRoomId,
                     DateCreated = x.DateCreated,
                     SenderId = x.SenderId,
+                    Seen = x.Seen,
+                    Edited = x.Edited,
                     Text = x.Text  
                 })))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
