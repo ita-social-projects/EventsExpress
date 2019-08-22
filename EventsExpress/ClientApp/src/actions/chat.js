@@ -14,6 +14,7 @@ export const RESET_CHAT = "RESET_CHAT";
 export const RECEIVE_SEEN_MESSAGE = "RECEIVE_SEEN_MESSAGE";
 export const CONCAT_NEW_MSG = "CONCAT_NEW_MSG";
 export const DELETE_OLD_NOTIFICATION = "DELETE_OLD_NOTIFICATION";
+export const DELETE_SEEN_MSG_NOTIFICATION = "DELETE_SEEN_MSG_NOTIFICATION";
 
 const api_serv = new EventsExpressService();
 
@@ -54,6 +55,12 @@ export function initialConnection(props) {
             payload: hubConnection
         });
     }
+}
+export function deleteSeenMsgNotification(id){
+    return dispatch => dispatch({
+        type: DELETE_SEEN_MSG_NOTIFICATION,
+        payload: id
+    });
 }
 export function deleteOldNotififcation(data){
     return dispatch => dispatch({

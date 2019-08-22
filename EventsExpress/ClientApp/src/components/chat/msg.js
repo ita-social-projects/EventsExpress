@@ -2,11 +2,15 @@ import React, { Component} from 'react';
  import { connect } from 'react-redux';
  import ButtonBase from '@material-ui/core/ButtonBase';
  import Avatar from '@material-ui/core/Avatar';
+ import { deleteSeenMsgNotification } from '../../actions/chat';
 import './msg.css';
 class Msg extends Component{
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log(prevProps, prevState);
+    componentDidUpdate = () => {
+        if(this.props.notification.seen_messages.map(x => x.id).includes(this.props.item.id)){
+            this.props.item = this.props.notification.seen_messages.find(x => x.id == this.props.item.id);
+            this.props.deleteSeenMsgNotification(this.props.item.id);
+        }
     }
 
     getTime = (time) => {
@@ -54,11 +58,13 @@ class Msg extends Component{
 
 
 const mapStateToProps = (state) => ({
-    current_user: state.user
+    current_user: state.user,
+    notification: state.notification
 });
 
 const mapDispatchToProps = (dispatch) => { 
    return {
+       deleteSeenMsgNotification: (id) => dispatch(deleteSeenMsgNotification(id))
    } 
 };
 

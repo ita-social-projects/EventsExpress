@@ -3,7 +3,7 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 import ReactRoterDOM from 'react-router-dom';
 import Event from './event-item';
-import '../layout/colorlib.css';
+// import '../layout/colorlib.css';
 import './event-item-view.css';
 
 import Fab from '@material-ui/core/Fab';
