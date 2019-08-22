@@ -49,22 +49,22 @@ const useStyles1 = makeStyles(theme => ({
 
 export default   function MySnackbar(props) {
   const classes = useStyles1();
-  const { onClose, open, ...other } = props;
-  const { className, message, variant } = props.alert;
+  const { onClose,  ...other } = props;
+  const {message,open, variant, autoHideDuration} = props.alert;
   const Icon = variantIcon[variant];
   console.log(props);
-  return (alert.open) ? (    
+  return (    
     <Snackbar
     anchorOrigin={{
       vertical: "bottom",
       horizontal: "left"
     }}
-    open={props.open}
-    autoHideDuration={6000}
-    onClose={props.onClose}
+    open={open}
+    autoHideDuration={autoHideDuration == null ? 1000 : autoHideDuration}
+    onClose={onClose}
     >
     <SnackbarContent
-      className={clsx(classes[variant], className)}
+      className={clsx(classes[variant])}
       aria-describedby="client-snackbar"
       message={
         <span id="client-snackbar" className={classes.message}>
@@ -81,5 +81,5 @@ export default   function MySnackbar(props) {
     />
     </Snackbar>
     
-  ) : null;
+  ) 
 }

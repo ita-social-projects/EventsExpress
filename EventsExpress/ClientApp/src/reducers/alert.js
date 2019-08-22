@@ -6,18 +6,16 @@ export const reducer=(state = initialState.alert, action)=>{
         case _alert.SET:
             return {
                 variant: action.payload.variant,
-                className: action.payload.className,
                 message:action.payload.message,
-                open:true
-            };
-    
-        case _alert.RESET:
-            return {
-                variant:null,
-                className:null,
-                message:null,
+                autoHideDuration:action.payload.autoHideDuration,
                 open:false
-            }
+            };
+            case _alert.SETOPEN:
+                return {...state,
+                    open: action.payload
+                }
+        case _alert.RESET:
+            return initialState.alert;
         default:
             return state;
     };

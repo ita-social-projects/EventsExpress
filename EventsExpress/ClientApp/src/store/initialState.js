@@ -169,8 +169,8 @@ const initialState = {
     },
     alert:{
         variant:null,
-        className:null,
         message:null,
+        autoHideDuration: null,
         open:false
     }
 };
