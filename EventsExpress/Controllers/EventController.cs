@@ -28,7 +28,13 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method is for edit and create events
+        /// </summary>
+        /// <param name="model">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit/Create event proces success</response>
+        /// <response code="400">If Edit/Create process failed</response> 
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
@@ -42,13 +48,24 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
-
+        /// <summary>
+        /// This method have to return event
+        /// </summary>
+        /// <param name="id">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Return UserInfo model</response>
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) => 
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
-               
+        /// <summary>
+        /// This method have to return all events
+        /// </summary>
+        /// <param name="filter">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Return IEnumerable EventPreviewDto</response>
+        /// <response code="400">If return failed</response>       
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel filter)
@@ -70,7 +87,13 @@ namespace EventsExpress.Controllers
             }
         }
 
-
+        /// <summary>
+        /// This method have to return all events fro Admin
+        /// </summary>
+        /// <param name="filter">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Return IEnumerable EventPreviewDto</response>
+        /// <response code="400">If return failed</response>  
         [Authorize(Roles = "Admin")]
         [HttpGet("[action]")]
         public IActionResult AllForAdmin([FromQuery]EventFilterViewModel filter)
@@ -92,8 +115,14 @@ namespace EventsExpress.Controllers
             }
         }
 
-
-        [HttpPost("[action]")]
+        /// <summary>
+        /// This method have to add user to category
+        /// </summary>
+        /// <param name="userId">Required</param>
+        /// <param name="eventId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Adding user from event proces success</response>
+        /// <response code="400">If adding user from event process failed</response>        
         public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var res = await _eventService.AddUserToEvent(userId, eventId);
@@ -104,7 +133,14 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
-
+        /// <summary>
+        /// This method have to add user to category
+        /// </summary>
+        /// <param name="userId">Required</param>
+        /// <param name="eventId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Delete  user from event proces success</response>
+        /// <response code="400">If deleting user from event process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
@@ -117,6 +153,13 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// This method is to block event
+        /// </summary>
+        /// <param name="eventId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Block is succesful</response>
+        /// <response code="400">Block process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Block(Guid eventId)
         {
@@ -128,6 +171,13 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method is to unblock event
+        /// </summary>
+        /// <param name="eventId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Unblock is succesful</response>
+        /// <response code="400">Unblock process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {

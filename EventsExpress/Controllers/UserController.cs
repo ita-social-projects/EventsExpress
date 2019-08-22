@@ -35,7 +35,13 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method
+        /// </summary>
+        /// <param name="filter">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Return IEnumerable UserManageDto models</response>
+        /// <response code="400">Return failed</response>
         [HttpGet("[action]")]
         public IActionResult SearchUsers([FromQuery]UsersFilterViewModel filter)
         {
@@ -57,6 +63,13 @@ namespace EventsExpress.Controllers
 
         #region Users managment by Admin
 
+        /// <summary>
+        /// This metod have to return UserMangeDto
+        /// </summary>
+        /// <param name="filter">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Return  UserManageDto model</response>
+        /// <response code="400">Return failed</response>
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
         public IActionResult Get([FromQuery]UsersFilterViewModel filter)
@@ -80,7 +93,14 @@ namespace EventsExpress.Controllers
             }
         }
 
-
+        /// <summary>
+        /// This method have to change role of user
+        /// </summary>
+        /// <param name="userId">Required</param>
+        /// <param name="roleId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Change role success</response>
+        /// <response code="400">Change role failed</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
@@ -93,7 +113,13 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// This method is to block user
+        /// </summary>
+        /// <param name="userId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Block is succesful</response>
+        /// <response code="400">Block process failed</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid userId)
@@ -106,6 +132,13 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method is to unblock event
+        /// </summary>
+        /// <param name="userId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Unblock is succesful</response>
+        /// <response code="400">Unblock process failed</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid userId)
@@ -234,7 +267,13 @@ namespace EventsExpress.Controllers
 
         #endregion
 
-
+        /// <summary>
+        /// This method is for get user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Return profileDto</response>
+        
         [HttpGet("[action]")]
         public IActionResult GetUserProfileById(Guid id)
         {
@@ -244,8 +283,13 @@ namespace EventsExpress.Controllers
             return Ok(res);
         }
 
-
-        [HttpPost("[action]")]
+        /// <summary>
+        /// This method is to set attitide t user
+        /// </summary>
+        /// <param name="attitude"></param>
+        /// <returns></returns>
+        /// <response code="200">Attitude set success</response>    
+        /// <response code="400">Attitude set failed</response>
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
             if (!ModelState.IsValid)

@@ -60,7 +60,12 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-
+        /// <summary>
+        /// This method to refresh user status using only jwt access token
+        /// </summary>
+        /// <returns>UserInfo model</returns>
+        /// <response code="200">Return UserInfo model</response>
+        /// <response code="401">If token is invalid</response>
         [Authorize]
         [HttpPost("login_token")]
         public IActionResult Login()
@@ -70,7 +75,13 @@ namespace EventsExpress.Controllers
             return Ok(_mapper.Map<UserDTO, UserInfo>(user));
         }
 
-
+        /// <summary>
+        /// This method allows register user
+        /// </summary>
+        /// <param name="authRequest">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Register valid</response> 
+        /// <response code="400">If register process failed</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Register(LoginDto authRequest)
@@ -90,7 +101,13 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        
+        /// <summary>
+        /// This method is for password recovery
+        /// </summary>
+        /// <param name="email">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Password recovery succesful</response> 
+        /// <response code="400">If password recover process failed</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> PasswordRecovery(string email)
@@ -113,7 +130,14 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-
+        /// <summary>
+        /// This method is for email confirmation
+        /// </summary>
+        /// <param name="userid">Required</param>
+        /// <param name="token">Required</param>
+        /// <returns>Return UserInfo model</returns>
+        /// <response code="200">Return UserInfo model</response> 
+        /// <response code="400">If emeil confirm process failed</response>
         [AllowAnonymous]
         [HttpPost("verify/{userid}/{token}")]
         public async Task<IActionResult> EmailConfirm(string userid, string token)
@@ -141,7 +165,13 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-
+        /// <summary>
+        /// This method is for change password
+        /// </summary>
+        /// <param name="changePasswordDto">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Password change succesful</response> 
+        /// <response code="400">If assword change process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {

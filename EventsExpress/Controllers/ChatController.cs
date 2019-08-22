@@ -30,7 +30,11 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method have to return all chats
+        /// </summary>
+        /// <returns>UserChatDto model</returns>
+        /// <response code="200">UserChatDto model</response>
         [HttpGet("[action]")]
         public IActionResult GetAllChats()
         {
@@ -39,6 +43,12 @@ namespace EventsExpress.Controllers
             return Ok(res);
         }
 
+        /// <summary>
+        /// This method have to return chat
+        /// </summary>
+        /// <param name="chatId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">UserChatDto model</response>
         [HttpGet("[action]")]
         public IActionResult GetChat([FromQuery]Guid chatId)
         {                                                                                                 

@@ -60,7 +60,7 @@ export default   function MySnackbar(props) {
       horizontal: "left"
     }}
     open={open}
-    autoHideDuration={autoHideDuration == null ? 1000 : autoHideDuration}
+    autoHideDuration={autoHideDuration == null ? 5000 : autoHideDuration}
     onClose={onClose}
     >
     <SnackbarContent

@@ -13,5 +13,124 @@
             <response code="200">Return UserInfo model</response>
             <response code="400">If login process failed</response>
         </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.Login">
+            <summary>
+            This method to refresh user status using only jwt access token
+            </summary>
+            <returns>UserInfo model</returns>
+            <response code="200">Return UserInfo model</response>
+            <response code="401">If token is invalid</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.Register(EventsExpress.DTO.LoginDto)">
+            <summary>
+            This method allows register user
+            </summary>
+            <param name="authRequest">Required</param>
+            <returns></returns>
+            <response code="200">Register valid</response> 
+            <response code="400">If register process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.PasswordRecovery(System.String)">
+            <summary>
+            This method is for password recovery
+            </summary>
+            <param name="email">Required</param>
+            <returns></returns>
+            <response code="200">Password recovery succesful</response> 
+            <response code="400">If password recover process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.EmailConfirm(System.String,System.String)">
+            <summary>
+            This method is for email confirmation
+            </summary>
+            <param name="userid">Required</param>
+            <param name="token">Required</param>
+            <returns>Return UserInfo model</returns>
+            <response code="200">Return UserInfo model</response> 
+            <response code="400">If emeil confirm process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.ChangePassword(EventsExpress.DTO.ChangePasswordDto)">
+            <summary>
+            This method is for change password
+            </summary>
+            <param name="changePasswordDto">Required</param>
+            <returns></returns>
+            <response code="200">Password change succesful</response> 
+            <response code="400">If assword change process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.CategoryController.All">
+            <summary>
+            This method have to return all categories
+            </summary>
+            <returns>CategoryDto model</returns>
+            <response code="200">Return UserInfo model</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.CategoryController.Edit(EventsExpress.DTO.CategoryDto)">
+            <summary>
+            This method is for edit and create categories
+            </summary>
+            <param name="model">Required</param>
+            <returns></returns>
+            <response code="200">Edit/Create category proces success</response>
+            <response code="400">If Edit/Create process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.CategoryController.Delete(System.Guid)">
+            <summary>
+            This method is for delete category
+            </summary>
+            <param name="id">Required</param>
+            <returns></returns>
+            <response code="200">Delete category proces success</response>
+            <response code="400">If delete process failed</response> 
+        </member>
+        <member name="M:EventsExpress.Controllers.ChatController.GetAllChats">
+            <summary>
+            This method have to return all chats
+            </summary>
+            <returns>UserChatDto model</returns>
+            <response code="200">UserChatDto model</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.ChatController.GetChat(System.Guid)">
+            <summary>
+            This method have to return chat
+            </summary>
+            <param name="chatId">Required</param>
+            <returns></returns>
+            <response code="200">UserChatDto model</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.CommentController.Edit(EventsExpress.DTO.CommentDto)">
+            <summary>
+            This method is for edit and create comments
+            </summary>
+            <param name="model">Required</param>
+            <returns></returns>
+            <response code="200">Edit/Create comment proces success</response>
+            <response code="400">If Edit/Create process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.CommentController.Delete(System.Guid)">
+            <summary>
+            This method is for delete comment
+            </summary>
+            <param name="id">Required</param>
+            <returns></returns>
+            <response code="200">Delete comment proces success</response>
+            <response code="400">If delete process failed</response> 
+        </member>
+        <member name="M:EventsExpress.Controllers.CommentController.All(System.Guid,System.Int32)">
+            <summary>
+            This method have to return all comments
+            </summary>
+            <param name="id">Required</param>
+            <param name="page">Required</param>
+            <returns></returns>
+            <response code="200">Return CommentDto model</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.Edit(EventsExpress.DTO.EventDto)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
