@@ -7,7 +7,7 @@ import AddEventWrapper from '../../containers/add-event';
 import './User-profile.css';
 import EventList from '../event/event-list';
 import Spinner from '../spinner';
-
+import { Link } from 'react-router-dom'
 export default class UserItemView extends Component {
 
     getAge = birthday => {

@@ -43,10 +43,10 @@ export function loginFacebook(email, name) {
             if (response.error == null) {
                 dispatch(setUser(response));
                 dispatch(setLoginSuccess(true));
-
-
-
                 localStorage.setItem('token', response.token);
+                dispatch(initialConnection());
+
+                dispatch(getUnreadMessages(response.id));
             } else {
                 dispatch(setLoginError(response.error));
             }
