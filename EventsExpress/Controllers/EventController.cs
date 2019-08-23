@@ -6,6 +6,7 @@ using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
+using EventsExpress.Validation;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,6 +112,22 @@ namespace EventsExpress.Controllers
 
             var res = await _eventService.DeleteUserFromEvent(userId, eventId);
             if (res.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SetRate(RateDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _eventService.SetRate(model.UserId, model.EventId, model.Rate);
+            if (result.Successed)
             {
                 return Ok();
             }

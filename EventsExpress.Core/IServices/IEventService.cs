@@ -9,8 +9,6 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        bool Exists(Guid id);
-
         Task<OperationResult> Create(EventDTO eventDTO);
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
@@ -26,6 +24,9 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
-        
+        Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
+
+        bool UserIsVisitor(Guid userId, Guid eventId);
+        bool Exists(Guid eventId);
     }
 }

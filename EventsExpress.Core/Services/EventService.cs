@@ -33,9 +33,7 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
        
-
-        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
-
+        
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var ev = Db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
@@ -238,13 +236,47 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId)
         {
-            var evv = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom >= DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
 
-            return _mapper.Map<IEnumerable<EventDTO>>(evv);
+            return _mapper.Map<IEnumerable<EventDTO>>(events);
         }
+
+        public async Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate)
+        {
+            try
+            {
+                var ev = Db.EventRepository.Get("Rates").FirstOrDefault(e => e.Id == eventId);
+                ev.Rates = ev.Rates ?? new List<Rate>();
+                
+                var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
+                
+                if (currentRate == null)
+                {
+                    ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
+                }
+                else
+                {
+                    currentRate.Score = rate;
+                }
+                await Db.SaveAsync();
+                return new OperationResult(true);
+            }
+            catch (Exception e)
+            {
+                return new OperationResult(false, e.Message, "");
+            }
+        }
+
+        public bool UserIsVisitor(Guid userId, Guid eventId) => 
+            Db.EventRepository
+                .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;
+
+        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
     }
+
+    
 }
 
