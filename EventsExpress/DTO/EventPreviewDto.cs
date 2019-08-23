@@ -18,6 +18,7 @@ namespace EventsExpress.DTO
         public string City { get; set; }
         public Guid CityId { get; set; }
         public Guid CountryId { get; set; }
+        public bool IsBlocked { get; set; }
 
         public int CountVisitor { get; set; }
         public IEnumerable<CategoryDto> Categories { get; set; }

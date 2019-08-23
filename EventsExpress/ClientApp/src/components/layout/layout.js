@@ -1,6 +1,6 @@
 import React from 'react';
 import LeftSidebarWrapper from '../../containers/left-sidebar';
-
+import AlertContainer from '../../containers/alert';
 import RightSidebar from '../right-sidebar';
 import './layout.css';
 
@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
                     <div className="col-3 position-fixed">
 
                     <LeftSidebarWrapper />
+                    <AlertContainer/>
                     </div>
                     <div className="col-9 offset-3">
                         <div className="row">

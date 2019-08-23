@@ -80,7 +80,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
@@ -117,9 +117,29 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Block(Guid eventId)
+        {
+            var result = await _eventService.BlockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
 
-        #region Get event-sets for user profile
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Unblock(Guid eventId)
+        {
+            var result = await _eventService.UnblockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
 
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult FutureEvents(Guid id) =>
             Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id)));
@@ -139,7 +159,7 @@ namespace EventsExpress.Controllers
         public IActionResult VisitedEvents(Guid id) => 
             Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
         
-        #endregion
+
 
     }
 }

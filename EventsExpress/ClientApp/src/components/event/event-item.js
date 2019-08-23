@@ -21,11 +21,16 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconDecorator from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip'; 
 import Badge from '@material-ui/core/Badge';
+import EventManagmentWrapper from '../../containers/event-managment';
+
 
 const useStyles = makeStyles(theme => ({
+    
     card: {
       maxWidth: 345,
-      maxHeight: 200
+      maxHeight: 200,
+      backgroundColor: theme.palette.primary.dark
+      
     },
     media: {
       height: 0,
@@ -60,12 +65,13 @@ export default class Event extends Component {
         const classes = useStyles;
         // const [expanded, setExpanded] = React.useState();
       
-        const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor } = this.props.item;
+        const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor, isBlocked  } = this.props.item;
         const { city, country } = this.props.item;
-    
+        let divClassName = (isBlocked)?"bg-warning":"";
         return (
-            <div className="col-4 mt-3">
-            <Card className={classes.card}>
+            <div className={"col-4 mt-3" }>
+
+            <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
                     avatar={
                             <Tooltip title={user.username}>
@@ -102,17 +108,22 @@ export default class Event extends Component {
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {description.substr(0, 128) + '...'}
-        </Typography>
+                    </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <div className="flex flex-column">
+                    <div className="flex flex-column">                        
+                        <Link to={'/event/'+id+'/'+1}>
+                            <IconButton className={classes.button} aria-label="view">
+                                <i className="fa fa-eye"></i>
+                            </IconButton>
+                        </Link>
                         {this.renderCategories(categories.slice(0,2))}
                     </div>
-                    <Link to={'/event/'+id+'/'+1}>
-                        <IconButton className={classes.button} aria-label="view">
-                            <i className="fa fa-eye"></i>
-                        </IconButton>
-                    </Link>
+                    {(this.props.current_user.role=="Admin")
+                        ? <EventManagmentWrapper eventItem={this.props.item} />
+                        : null
+                    }
+                        
                 </CardActions>
             </Card>
             </div>

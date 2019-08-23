@@ -119,6 +119,7 @@ const initialState = {
         isPending: true,
         isError: false,
         data: {
+            
             dateFrom: null,
             dateTo: null,
             photoUrl: null
@@ -166,6 +167,12 @@ const initialState = {
             users: [], 
             id: null
         }
+    },
+    alert:{
+        variant:null,
+        message:null,
+        autoHideDuration: null,
+        open:false
     },
     notification:
     {

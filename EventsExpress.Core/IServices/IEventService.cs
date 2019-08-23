@@ -14,11 +14,14 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Create(EventDTO eventDTO);
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
+        Task<OperationResult> BlockEvent(Guid eID);
+        Task<OperationResult> UnblockEvent(Guid eId);
 
         EventDTO EventById(Guid eventId);       
 
         IEnumerable<EventDTO>  Events(EventFilterViewModel model, out int count);
-        
+        IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count);
+
         IEnumerable<EventDTO> FutureEventsByUserId(Guid userId);
         IEnumerable<EventDTO> PastEventsByUserId(Guid userId);
         IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId);

@@ -54,6 +54,22 @@ export default class EventsExpressService {
         return res;
     }
 
+    setEventBlock = async (id) => {
+        const res = await this.setResource('Event/Block/?eventId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventUnblock = async (id) => {
+        const res = await this.setResource('Event/Unblock/?eventId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
     auth = async (data) => {
         console.log('auth', data);
         const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
