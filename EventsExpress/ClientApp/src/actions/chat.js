@@ -1,7 +1,7 @@
 import EventsExpressService from '../services/EventsExpressService';
 import * as SignalR from '@aspnet/signalr';
 import { connect } from 'react-redux';
-
+import { SetAlert } from './alert';
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
@@ -42,6 +42,9 @@ export function initialConnection(props) {
             .start()
             .then(() =>{ hubConnection.on('ReceiveMessage', (data) => {
                     dispatch(ReceiveMsg(data));
+                    if(data.senderId != localStorage.getItem('id')){
+                    dispatch(SetAlert({variant: 'info', message: "You receive new message", autoHideDuration: 5000}));
+                    }
             });
             hubConnection.on('wasSeen', (data) => {
                 dispatch(ReceiveSeenMsg(data));

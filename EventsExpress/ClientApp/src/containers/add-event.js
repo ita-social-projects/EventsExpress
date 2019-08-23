@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {getFormValues, reset} from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-
+import { SetAlert } from '../actions/alert';
 import {  green } from '@material-ui/core/colors';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
@@ -33,6 +33,7 @@ class AddEventWrapper extends Component{
         if(!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess){
             this.props.reset();
             this.props.resetEventStatus();
+            this.props.alert({variant: 'success', message: 'Your event was created!', autoHideDuration: 5000});
         }
     }
 
@@ -69,46 +70,9 @@ class AddEventWrapper extends Component{
                 form_values={this.props.form_values}
                 Event={this.props.add_event_status}
                 isCreated={false} />
-                   <Snackbar
-                        anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                        }}
-                        open={this.state.open}
-                        autoHideDuration={6000}
-                        onClose={this.handleClose}
-                    >
-                        <MySnackbarContentWrapper
-                        onClose={this.handleClose}
-                        message="Add Event Success!"
-                        />
-                    </Snackbar>
                </>
     }
 }
-
-function MySnackbarContentWrapper(props) {
-  const { message, onClose, variant, ...other } = props;
-
-  return (
-    <SnackbarContent
-      aria-describedby="client-snackbar"
-      message={
-        <span id="client-snackbar" >
-          <CheckCircleIcon />
-          {message}
-        </span>
-      }
-      action={[
-        <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>,
-      ]}
-      {...other}
-    />
-  );
-}
-
 
 const mapStateToProps = (state) => ({user_id: state.user.id,
      add_event_status: state.add_event, 
@@ -126,6 +90,7 @@ const mapDispatchToProps = (dispatch) => {
         reset: () => {
             dispatch(reset('event-form'));
         },
+        alert: (data) => dispatch(SetAlert(data)),
         resetEventStatus: () => {
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));

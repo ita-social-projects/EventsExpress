@@ -30,7 +30,7 @@ namespace EventsExpress.Core.ChatHub
         {
             var user = _authService.GetCurrentUser(Context.User);
             var res = await _messageService.Send(chatId, user.Id, text);
-                                                                                 
+
             var users = _messageService.GetChatUserIds(res.ChatRoomId);
 
             await Clients.Users(users).SendAsync("ReceiveMessage", res);        

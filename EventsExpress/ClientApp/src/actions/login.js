@@ -26,6 +26,7 @@ export default function login(email, password) {
          
           localStorage.setItem('token', response.token);
           
+          localStorage.setItem('id', response.id);
           dispatch(initialConnection());
 
           dispatch(getUnreadMessages(response.id));
