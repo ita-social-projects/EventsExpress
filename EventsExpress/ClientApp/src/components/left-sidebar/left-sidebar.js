@@ -17,14 +17,32 @@ const NavItem = ({to, icon, text}) => {
 }
 
 
-const LeftSidebar = (props) =>{
+const LeftSidebar = (props) => {
+    
+    function onClick() {
+        console.log('click', document.getElementsByTagName('body')[0].classList, document.getElementsByTagName('body')[0].classList.contains('offcanvas'));
+        if (document.getElementsByTagName('body')[0].classList.contains('offcanvas')) {
+            console.log(document.getElementById('sidebarCollapse'));
+            document.getElementById('sidebarCollapse').classList.remove('active');
+            console.log('remove');
+            document.getElementsByTagName('body')[0].classList.remove('offcanvas');
+
+            console.log('remove');
+        } else {
+            document.getElementById('sidebarCollapse').classList.add('active');
+            document.getElementsByTagName('body')[0].className += " offcanvas";
+        }
+    }
+    
+    
+
     return (
-    <div id="colorlib-page">
-            <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  
+        <div id="colorlib-page">
+            <button id="sidebarCollapse" onClick={onClick} className="js-colorlib-nav-toggle colorlib-nav-toggle" type="button" > <i></i> </button>  
             <div id="colorlib-aside" role="complementary" className="js-fullheight">
                 <HeaderProfileWrapper/>
                 <nav id="colorlib-main-menu" role="navigation">
-
+                    <hr/>
                     <ul className="list-unstyled">
                         
                         <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} />

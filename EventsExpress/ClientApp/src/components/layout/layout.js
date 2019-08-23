@@ -12,8 +12,9 @@ const Layout = ({ children }) => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-3 position-fixed">
-
-                    <LeftSidebarWrapper />
+                        
+                            <LeftSidebarWrapper />
+                        
                     <AlertContainer/>
                     </div>
                     <div className="col-9 offset-3">
