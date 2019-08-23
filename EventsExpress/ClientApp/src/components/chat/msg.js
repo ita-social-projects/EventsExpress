@@ -2,8 +2,16 @@ import React, { Component} from 'react';
  import { connect } from 'react-redux';
  import ButtonBase from '@material-ui/core/ButtonBase';
  import Avatar from '@material-ui/core/Avatar';
+ import { deleteSeenMsgNotification } from '../../actions/chat';
 import './msg.css';
 class Msg extends Component{
+
+    componentDidUpdate = () => {
+        if(this.props.notification.seen_messages.map(x => x.id).includes(this.props.item.id)){
+            this.props.item = this.props.notification.seen_messages.find(x => x.id == this.props.item.id);
+            this.props.deleteSeenMsgNotification(this.props.item.id);
+        }
+    }
 
     getTime = (time) => {
         let today = new Date();
@@ -18,8 +26,8 @@ class Msg extends Component{
     }
 
    render(){
-        const { user, item, current_user } = this.props;
-
+        const { user, item, seenItem ,current_user } = this.props;
+        console.log(item);
         return <>
 
             {user.id != current_user.id ? 
@@ -37,7 +45,7 @@ class Msg extends Component{
             :
             <div className="d-flex justify-content-end mb-4">
                 <div className="msg_cotainer_send">
-                    {item.text}<br/>
+                    {item.text}{seenItem && <i className="fa fa-check"></i>}<br/>
                     <span className="msg_time_send">{this.getTime(item.dateCreated)}</span>
                 </div>
                 <div className="img_cont_msg">
@@ -50,11 +58,13 @@ class Msg extends Component{
 
 
 const mapStateToProps = (state) => ({
-    current_user: state.user
+    current_user: state.user,
+    notification: state.notification
 });
 
 const mapDispatchToProps = (dispatch) => { 
    return {
+       deleteSeenMsgNotification: (id) => dispatch(deleteSeenMsgNotification(id))
    } 
 };
 

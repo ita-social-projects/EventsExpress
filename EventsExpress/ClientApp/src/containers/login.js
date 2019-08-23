@@ -29,7 +29,7 @@ class LoginWrapper extends Component {
   }
 }
 const mapStateToProps = state => {
-    return state.login;
+    return { login: state.login }
 };
 
 const mapDispatchToProps = dispatch => {

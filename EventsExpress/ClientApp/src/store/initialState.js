@@ -158,8 +158,14 @@ const initialState = {
         isError:null,
         data: {
             messages: [],
-            users: []
+            users: [], 
+            id: null
         }
+    },
+    notification:
+    {
+        messages: [],
+        seen_messages: []
     }
 };
 
