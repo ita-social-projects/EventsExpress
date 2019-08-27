@@ -11,7 +11,13 @@ namespace EventsExpress.Validation
     {
         public UserInfoValidator()
         {
+            RuleSet("Birthday", () => {
+                Include(new UserInfoAgeValidator());
+            });
+            
+            //Include(new UserInfoNameValidator());
             //RuleFor(x => x.Id).NotEqual(Guid.Empty).WithMessage("Id can not be null!");
+           
         }
     }
 }

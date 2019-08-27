@@ -172,6 +172,11 @@ const initialState = {
         message:null,
         autoHideDuration: null,
         open:false
+    },
+    dialog:{
+        title:null,
+        message:null,
+        open:false
     }
 };
 

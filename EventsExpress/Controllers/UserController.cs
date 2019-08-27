@@ -5,6 +5,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
+using EventsExpress.Validation;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -181,9 +182,12 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
-            if (!ModelState.IsValid)
+            var validator = new UserInfoAgeValidator();
+            
+            var validationResult = validator.Validate(userInfo);
+            if (!validationResult.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(validationResult.Errors);
             }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)

@@ -5,7 +5,7 @@ import { block_user, unblock_user } from '../actions/user'
 import UserInfo from '../components/user-info'
 import { UserBlock } from '../components/user-info/user-block'
 import UserRoleWrapper from '../containers/user-role'
-import IconButton from "@material-ui/core/IconButton";
+
 
 class UserInfoWpapper extends Component {
     constructor(props) {
@@ -14,9 +14,12 @@ class UserInfoWpapper extends Component {
         this.isCurrentUser = props.user.id === props.currentUser 
     }
 
-    block = () => this.props.block(this.props.user.id)
+    block = () => {
+        this.props.block(this.props.user.id);
+        
+    }
 
-    unblock = () => this.props.unblock(this.props.user.id)
+    unblock = () =>  this.props.unblock(this.props.user.id)
 
 
     render() {
@@ -57,7 +60,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
        block: (id) => dispatch(block_user(id)),
-       unblock: (id) => dispatch(unblock_user(id))
+       unblock: (id) => dispatch(unblock_user(id)),
+       
     };
 }
 

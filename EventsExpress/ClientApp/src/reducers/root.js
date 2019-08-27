@@ -33,6 +33,7 @@ import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
 import * as Hub from './hub';
 import * as Alert from './alert';
+import * as Dialog from './dialog';
 
 const rootReducers = {
     modal: ModalWind.reducer,
@@ -72,7 +73,8 @@ const rootReducers = {
     chats: Chats.reducer,
     chat: Chat.reducer,
     hubConnection: Hub.reducer,
-    alert:Alert.reducer
+    alert:Alert.reducer,
+    dialog:Dialog.reducer
 };
 
 

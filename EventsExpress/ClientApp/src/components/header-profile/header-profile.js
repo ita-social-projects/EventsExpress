@@ -64,7 +64,7 @@ export default class HeaderProfile extends Component {
                             </IconButton>
                             <IconButton
                                 className='menuButton'
-                                aria-label="Edit"
+                                aria-label="Exit"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                                 onClick={onClick}
