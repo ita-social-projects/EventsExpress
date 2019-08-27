@@ -223,23 +223,23 @@ export default class EventsExpressService {
         return res;
     }
 
-    getVisitedEvents = async (id) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id);
+    getVisitedEvents = async (id, page) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getFutureEvents = async (id) => {
-        const res = await this.getResource('event/futureEvents?id=' + id);
+    getFutureEvents = async (id, page) => {
+        const res = await this.getResource('event/futureEvents?id=' + id + '&'+ 'page='+page);
         return res;
     }
 
-    getPastEvents = async (id) => {
-        const res = await this.getResource('event/pastEvents?id=' + id);
+    getPastEvents = async (id, page) => {
+        const res = await this.getResource('event/pastEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getEventsToGo = async (id) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id);
+    getEventsToGo = async (id, page) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 

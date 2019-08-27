@@ -15,7 +15,8 @@ class UserItemViewWrapper extends Component{
     componentWillMount(){    
         const { id } = this.props.match.params;
         this.props.get_user(id);
-    }    
+    }
+   
     componentWillUpdate = (newProps) => { 
         if(newProps.match.params.id !== this.props.match.params.id)
            this.props.get_user(newProps.match.params.id);
@@ -33,24 +34,24 @@ class UserItemViewWrapper extends Component{
         this.props.setAttitude({ userFromId: this.props.current_user, userToId: this.props.profile.data.id, attitude: 2 });
     }
 
-    onFuture = () => {
+    onFuture = (page) => {
         this.setState({flag: false});
-        this.props.get_future_events(this.props.profile.data.id);
+        this.props.get_future_events(this.props.profile.data.id, page);
     }
 
-    onPast = () => {
+    onPast = (page) => {
         this.setState({flag: false});
-        this.props.get_past_events(this.props.profile.data.id);
+        this.props.get_past_events(this.props.profile.data.id, page);
     }
 
-    onVisited = () => {
+    onVisited = (page) => {
         this.setState({flag: false});
-        this.props.get_visited_events(this.props.profile.data.id);
+        this.props.get_visited_events(this.props.profile.data.id, page);
     }
 
-    onToGo = () => {
+    onToGo = (page) => {
         this.setState({flag: false});
-        this.props.get_events_togo(this.props.profile.data.id);
+        this.props.get_events_togo(this.props.profile.data.id, page);
     }
 
     onAddEvent = () => {
@@ -58,7 +59,7 @@ class UserItemViewWrapper extends Component{
     }
 
     render(){   
-    
+     
         const {data, isPending} = this.props.profile;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <Profile
@@ -93,10 +94,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         get_user: (id) => dispatch(get_user(id)),
         setAttitude: (values) => dispatch(setAttitude(values)),
-        get_past_events: (id) => dispatch(get_past_events(id)),
-        get_future_events: (id) => dispatch(get_future_events(id)),
-        get_visited_events: (id) => dispatch(get_visited_events(id)),
-        get_events_togo: (id) => dispatch(get_events_togo(id))
+        get_past_events: (id, page) => dispatch(get_past_events(id, page)),
+        get_future_events: (id, page) => dispatch(get_future_events(id, page)),
+        get_visited_events: (id, page) => dispatch(get_visited_events(id, page)),
+        get_events_togo: (id, page) => dispatch(get_events_togo(id, page))
     } 
 };
 

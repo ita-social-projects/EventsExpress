@@ -5,11 +5,66 @@ import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
 import AddEventWrapper from '../../containers/add-event';
 import './User-profile.css';
-import EventList from '../event/event-list';
+import EventsForProfile from '../event/events-for-profile';
 import Spinner from '../spinner';
 import { Link } from 'react-router-dom'
-export default class UserItemView extends Component {
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PhoneIcon from '@material-ui/icons/Phone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HelpIcon from '@material-ui/icons/Help';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+import ThumbDown from '@material-ui/icons/ThumbDown';
+import ThumbUp from '@material-ui/icons/ThumbUp';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <Typography
+            component="div"
+            role="tabpanel"
+            hidden={value !== index}
+            id={`scrollable-force-tabpanel-${index}`}
+            aria-labelledby={`scrollable-force-tab-${index}`}
+            {...other}
+        >
+            <Box p={3}>{children}</Box>
+        </Typography>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `full-width-tab-${index}`,
+        'aria-controls': `full-width-tabpanel-${index}`,
+    };
+}
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
+    },
+}));
+
+export default class UserItemView extends Component {
+    state = {
+        value: 0
+    };
     getAge = birthday => {
         let today = new Date();
         let birthDate = new Date(birthday);
@@ -20,21 +75,62 @@ export default class UserItemView extends Component {
         }
         return age;
     }
-
     
-
+    componentWillReceiveProps(newProps) {
+        const oldProps = this.props
+        if (oldProps.field !== newProps.field) {
+            if(this.state.value === 0)return this.props.onFuture(); 
+            if (this.state.value === 1) return this.props.onPast();
+            if (this.state.value === 2) return this.props.onVisited();
+            if (this.state.value === 3) return this.props.onToGo();
+        }
+    }
     renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
-        
+
+    
+    handleChange = (event, value) => {
+        this.setState({ value });
+        {
+            value === 0 && (this.props.onFuture())
+
+        }
+        {
+            value === 1 && (this.props.onPast())
+          
+        }
+        {
+            value === 2 && (this.props.onVisited())
+           
+        }
+        {
+            value === 3 && (this.props.onToGo())
+          
+        }
+        {
+            value === 4 && (this.props.onAddEvent())     
+        }
+    };
+
+
     render() {
+        const classes = useStyles;
         const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
         const { isPending, data } = this.props.events;
-
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventList  data_list={data} /> : null;
-       
+        const content = !isPending ? <EventsForProfile
+            data_list={data.items}
+            page={data.pageViewModel.pageNumber}
+            totalPages={data.pageViewModel.totalPages}
+            callback={
+                (this.state.value === 0) ? this.props.onFuture :
+                    (this.state.value === 1) ? this.props.onPast :
+                        (this.state.value === 2) ? this.props.onVisited :
+                            (this.state.value === 3) ? this.props.onToGo : null}
+            /> : null;
+
         const categories_list = this.renderCategories(categories);
-                
+       
         return <>
             <div className="row box info">
                 
@@ -87,37 +183,45 @@ export default class UserItemView extends Component {
                     </div>
                 }
             </div>
-                    <div className="funkyradio d-flex">
-                        <div className="funkyradio-primary mr-2">
-                            <input type="radio" name="radio" id="radio2" onChange={this.props.onFuture}/>
-                            <label htmlFor="radio2" className="pr-2">Future events</label>
-                        </div>
-                        <div className="funkyradio-primary mr-2">
-                            <input type="radio" name="radio" id="radio3" onChange={this.props.onPast}/>
-                            <label htmlFor="radio3" className="pr-2">Archive of events</label>
-                        </div>
-                        <div className="funkyradio-primary mr-2">
-                            <input type="radio" name="radio" id="radio4" onChange={this.props.onVisited}/>
-                            <label htmlFor="radio4" className="pr-2">Visited events</label>
-                        </div>
-                        <div className="funkyradio-primary mr-2">
-                            <input type="radio" name="radio" id="radio5" onChange={this.props.onToGo}/>
-                            <label htmlFor="radio5" className="pr-2">Events to go</label>
-                        </div>
-                        {(id === this.props.current_user) &&
-                        <div className="funkyradio-primary mr-2">
-                            <input type="radio" name="radio" id="radio6" onChange={this.props.onAddEvent}/>
-                            <label htmlFor="radio6" className="pr-2">Add Event</label>
-                        </div>
+            <div className={classes.root}>
+                <AppBar position="static" color="inherit">
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        variant="fullWidth"
+                        scrollButtons="on"
+                        indicatorColor="primary"
+                        textColor="primary"
+                        aria-label="scrollable force tabs example"
+                    >
+                        <Tab label="Future events" icon={<PhoneIcon />} {...a11yProps(0)} />
+                        <Tab label="Archive events" icon={<FavoriteIcon />} {...a11yProps(1)} />
+                        <Tab label="Visited events" icon={<PersonPinIcon />} {...a11yProps(2)} />
+                        <Tab label="Events to go"  icon={<HelpIcon />} {...a11yProps(3)} />
+                        {(id === this.props.current_user)&&
+                            <Tab label="Add event" icon={<ShoppingBasket />} {...a11yProps(4)} /> 
                         }
-                    </div>
+                    </Tabs>
+                </AppBar>
+                <TabPanel value={this.state.value} index={0}> 
+                </TabPanel>
+                <TabPanel value={this.state.value} index={1}>
+                </TabPanel>
+                <TabPanel value={this.state.value} index={2}>
+                </TabPanel>
+                <TabPanel value={this.state.value} index={3}>     
+                </TabPanel>
+                <TabPanel value={this.state.value} index={4}>
+                </TabPanel>
+                
+            </div>
                     {this.props.add_event_flag ? 
                     <div className="row shadow p-5 mb-5 bg-white rounded">
-                        <AddEventWrapper /> 
+                    <AddEventWrapper /> 
                      </div>
                     :
-                    <div className="shadow p-5 mb-5 bg-white rounded">
-                        {(data && data.length > 0) ? <>{spinner}{content}</> : <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
+                <div className="shadow p-5 mb-5 bg-white rounded">
+                    {(data.items && data.items.length > 0) ? <>{spinner}{content}</> : <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
                     </div>
                     }
         </>

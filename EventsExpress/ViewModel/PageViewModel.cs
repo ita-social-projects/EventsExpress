@@ -14,11 +14,12 @@ namespace EventsExpress.ViewModel
         {
             PageNumber = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
+        if(TotalPages != 0) { 
             if (PageNumber > TotalPages)
             {
                 throw new ArgumentOutOfRangeException();
             }
+          }
         }
 
         public bool HasPreviousPage => (PageNumber > 1);

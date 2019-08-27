@@ -19,10 +19,10 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDTO>  Events(EventFilterViewModel model, out int count);
         
-        IEnumerable<EventDTO> FutureEventsByUserId(Guid userId);
-        IEnumerable<EventDTO> PastEventsByUserId(Guid userId);
-        IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId);
-        IEnumerable<EventDTO> EventsToGoByUserId(Guid userId);
+        IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModelq);
 
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);

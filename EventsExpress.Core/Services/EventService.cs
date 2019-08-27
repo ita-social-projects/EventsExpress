@@ -206,44 +206,47 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId)
+        public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId ,PaginationViewModel paginationViewModel)
         {
-            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.OwnerId == userId && e.DateFrom >= DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
-           
-            return _mapper.Map<IEnumerable<EventDTO>>(events);
+
+
+            paginationViewModel.Count = ev.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
-        public IEnumerable<EventDTO> PastEventsByUserId(Guid userId)
+        public IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+           var ev = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.OwnerId == userId && e.DateFrom < DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
-            
-            return _mapper.Map<IEnumerable<EventDTO>>(events);
+
+            paginationViewModel.Count = ev.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
-        public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId)
+        public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom < DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
 
-            return _mapper.Map<IEnumerable<EventDTO>>(events);
+            paginationViewModel.Count = ev.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
-        public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId)
+        public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var evv = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom >= DateTime.Today)
-                .OrderBy(e => e.DateFrom)
-                .AsEnumerable();
+            var ev = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+               .Where(e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId).Where(x => x.DateTo < DateTime.UtcNow).AsEnumerable();
 
-            return _mapper.Map<IEnumerable<EventDTO>>(evv);
+            paginationViewModel.Count = ev.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
     }
 }

@@ -127,7 +127,11 @@ const initialState = {
     events_for_profile: {
         isPending: true,
         isError: false,
-        data: null
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     changePassword: {
         isPending: false,
