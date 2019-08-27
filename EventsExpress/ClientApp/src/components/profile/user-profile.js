@@ -49,11 +49,11 @@ export default class UserItemView extends Component {
                     <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
                 </div>
                 <div className="col-3">
-                    <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6>
+                    {(name) ? <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(this.getAge(birthday)) ? <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(genders[gender]) ? <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(email) ? <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
                 </div>
                 {!(id === this.props.current_user) &&
                     <div className="col-3">

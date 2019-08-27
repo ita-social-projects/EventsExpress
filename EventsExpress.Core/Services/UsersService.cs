@@ -245,7 +245,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = false;
             await Db.SaveAsync();
-
+            await _mediator.Publish(new UnblockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 
@@ -260,7 +260,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = true;
             await Db.SaveAsync();
-
+            await _mediator.Publish(new BlockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 
