@@ -19,13 +19,17 @@ namespace EventsExpress.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public EventController(
             IEventService eventService,
-            IMapper mapper)
+            IAuthService authSrv,
+            IMapper mapper
+            )
         {
             _eventService = eventService;
+            _authService = authSrv;
             _mapper = mapper;
         }
 
@@ -134,7 +138,29 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        [HttpGet("[action]/{eventId}")]
+        public IActionResult GetCurrentRate(Guid eventId)
+        {
+            if (!_eventService.Exists(eventId))
+            {
+                return BadRequest("Invalid id");
+            }
 
+            var userId = _authService.GetCurrentUser(HttpContext.User).Id;
+
+            return Ok(_eventService.GetRateFromUser(userId, eventId));
+        }
+        
+        [HttpGet("[action]/{eventId}")]
+        public IActionResult GetAverageRate(Guid eventId)
+        {
+            if (!_eventService.Exists(eventId))
+            {
+                return BadRequest("Invalid id");
+            }
+
+            return Ok(_eventService.GetRate(eventId));
+        }
         #region Get event-sets for user profile
 
         [HttpGet("[action]")]

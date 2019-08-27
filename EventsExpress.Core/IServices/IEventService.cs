@@ -26,6 +26,9 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
         Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
 
+        byte GetRateFromUser(Guid userId, Guid eventId);
+        double GetRate(Guid eventId);
+
         bool UserIsVisitor(Guid userId, Guid eventId);
         bool Exists(Guid eventId);
     }

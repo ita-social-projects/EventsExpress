@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
 import EditEventWrapper from '../../containers/edit-event'; 
-import Rating from '@material-ui/lab/Rating';
+import RatingWrapper from '../../containers/rating'
+
 
 export default class EventItemView extends Component {
 
@@ -86,8 +87,10 @@ export default class EventItemView extends Component {
                         : <>
                             {!isFutureEvent && iWillVisitIt &&
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    Rate it: 
-                                    <Rating name="size-large"  value={8} max={10} size="large" />
+                                    <RatingWrapper 
+                                        eventId={this.props.data.id} 
+                                        userId={current_user.id}
+                                    />
                                     
                                 </div>
                             }

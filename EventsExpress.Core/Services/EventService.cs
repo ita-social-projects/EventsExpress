@@ -270,6 +270,18 @@ namespace EventsExpress.Core.Services
             }
         }
 
+        public byte GetRateFromUser(Guid userId, Guid eventId)
+        {
+            return Db.RateRepository.Get()
+                       .FirstOrDefault(r => r.UserFromId == userId && r.EventId == eventId)
+                           ?.Score ?? 0;
+        }
+
+        public double GetRate(Guid eventId)
+        {
+            return Db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+        }
+
         public bool UserIsVisitor(Guid userId, Guid eventId) => 
             Db.EventRepository
                 .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;

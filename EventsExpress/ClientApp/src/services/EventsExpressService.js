@@ -92,6 +92,7 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
@@ -200,10 +201,35 @@ export default class EventsExpressService {
         return res;
     }
 
+    setRate = async (data) => {
+        const res = await this.setResource('event/setrate', {
+            Rate: data.rate,
+            UserId: data.userId,
+            EventId: data.eventId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getCurrentRate = async (eventId) => {
+        const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+
     getAllEventsForAdmin = async (filters) => {
         const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;
