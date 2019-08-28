@@ -48,11 +48,6 @@ namespace EventsExpress.Controllers
         public IActionResult Get(Guid id) => 
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
-        [HttpPost("[action]")]
-        public IActionResult GetEvents(List<Guid> eventIds) =>
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds)));
-
-
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel filter)
@@ -216,7 +211,28 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
         }
-            #endregion
 
+        [HttpPost("[action]")]
+        public IActionResult GetEvents([FromBody]List<Guid> eventIds, [FromQuery]int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 1;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }                                     
         }
+        #endregion
+
+    }
 }

@@ -300,9 +300,14 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
-        public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds) =>
-            _mapper.Map<IEnumerable<EventDTO>>(Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .Where(x => eventIds.Contains(x.Id)));       
+        public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
+        {
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
+                .Where(x => eventIds.Contains(x.Id));
+
+            paginationViewModel.Count = events.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
+        }
     }
 }
 

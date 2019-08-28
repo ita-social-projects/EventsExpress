@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import get_events from '../../actions/notification_events';
-import EventList from '../event/event-list';
+import EventList from '../event/events-for-profile';
 import Spinner from '../spinner';
 
 import BadRequest from '../Route guard/400';
@@ -36,7 +36,7 @@ class NotificationEvents extends Component{
                         : null;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage ? <EventList current_user={current_user}  data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !errorMessage ? <EventList current_user={current_user} notification_events={this.props.notification.events} data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.props.get_events} /> : null;
        
         return <>        
             {spinner}
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => { 
     return {
-        get_events: (eventIds) => dispatch(get_events(eventIds))
+        get_events: (eventIds, page) => dispatch(get_events(eventIds, page))
     } 
 };
 

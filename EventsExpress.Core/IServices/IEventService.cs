@@ -28,7 +28,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count);
 
-        IEnumerable<EventDTO> GetEvents(List<Guid> eventIds);
+        IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
         

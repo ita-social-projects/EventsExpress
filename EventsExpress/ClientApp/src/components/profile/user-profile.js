@@ -100,6 +100,7 @@ export default class UserItemView extends Component {
             data_list={data.items}
             page={data.pageViewModel.pageNumber}
             totalPages={data.pageViewModel.totalPages}
+            current_user={this.props.current_user}
             callback={
                 (this.state.value === 0) ? this.props.onFuture :
                     (this.state.value === 1) ? this.props.onPast :

@@ -14,8 +14,8 @@ export default class EventsExpressService {
         return res;
     }
 
-    getEvents = async (eventIds) => {
-        const res = await this.setResource('event/getEvents', eventIds);
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource('event/getEvents?page='+page, eventIds);
         if (!res.ok) {
             return { error: await res.text() };
         }
