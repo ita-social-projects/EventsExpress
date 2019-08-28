@@ -51,7 +51,6 @@ export function block_user(id) {
 
         res.then(response => {
             if (response.error == null) {
-                dispatch(SetDialog({title:"", message:""}));
                 dispatch(setBlockUserSuccess());
                 dispatch(updateBlockedUser(id));
             } else {

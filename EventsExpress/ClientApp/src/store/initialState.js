@@ -177,6 +177,11 @@ const initialState = {
         title:null,
         message:null,
         open:false
+    },
+    contactUs:{
+        isPending: false,
+        isSuccess:false,
+        isError:null
     }
 };
 

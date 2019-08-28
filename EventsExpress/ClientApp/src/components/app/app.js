@@ -49,6 +49,7 @@ export default class App extends Component {
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/chat/:chatId" component={Chat} />
+                        {/* <Route path="/user/contactUs" component={ContactUsWrapper} /> */}
                     <Route component={NotFound} />
                 </Switch>
                 

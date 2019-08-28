@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
+import { set_dialog } from '../actions/dialog'
 import UserInfo from '../components/user-info'
 import { UserBlock } from '../components/user-info/user-block'
 import UserRoleWrapper from '../containers/user-role'
@@ -14,10 +15,9 @@ class UserInfoWpapper extends Component {
         this.isCurrentUser = props.user.id === props.currentUser 
     }
 
-    block = () => {
-        this.props.block(this.props.user.id);
+    block = () => this.props.block(this.props.user.id);
         
-    }
+    
 
     unblock = () =>  this.props.unblock(this.props.user.id)
 
@@ -41,6 +41,7 @@ class UserInfoWpapper extends Component {
                     isCurrentUser={this.isCurrentUser}
                     block={this.block}
                     unblock={this.unblock}
+                    
                 />
 
 
@@ -61,6 +62,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
        block: (id) => dispatch(block_user(id)),
        unblock: (id) => dispatch(unblock_user(id)),
+       
        
     };
 }

@@ -5,7 +5,7 @@ import DialogContainer from '../../containers/dialog';
 import './layout.css';
 
 import './colorlib.css';
-import { Dialog } from 'material-ui';
+
 
 const Layout = ({ children }) => {
     return (
@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
                             <LeftSidebarWrapper />
                         
                     <AlertContainer/>
-                    <DialogContainer/>
+                    
                     </div>
                     <div className="col-9 offset-3">
                         <div className="row">

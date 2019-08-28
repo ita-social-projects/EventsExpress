@@ -62,8 +62,14 @@ const LeftSidebar = (props) => {
                             
                             <NavItem to={'/admin/events?page=1'} icon={'fa fa-calendar'} text={"Events"} />
                         </>
+                       
                         }
-
+                         {props.user.role==="User"&&
+                            <>
+                            <NavItem to={'/user/contactUs'} icon={'fa fa-exclamation-circle'} text={'Contact us'} />
+                            </>
+                         }
+                         
                         
                 </ul>
             </nav>

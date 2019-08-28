@@ -5,17 +5,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { getThemeProps } from '@material-ui/styles';
 
-export default function AlertDialog() {
-  const [open, setOpen] = React.useState(false);
+
+export default function AlertDialog(props) {
+  //const [open, setOpen] = React.useState(false);
+  const{ open, message, title }=props.dialog
 
   function handleClickOpen() {
-    setOpen(true);
+    props.setOpen(true);
   }
 
   function handleClose() {
-    setOpen(false);
+    props.setOpen(false);
   }
 
   function handleOk() {
@@ -23,7 +24,7 @@ export default function AlertDialog() {
   }
 
   function handleCansel() {
-    setOpen(false);
+    props.setOpen(false);
   }
 
   return (
@@ -35,11 +36,10 @@ export default function AlertDialog() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

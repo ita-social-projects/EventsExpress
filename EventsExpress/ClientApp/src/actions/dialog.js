@@ -1,17 +1,17 @@
-import { _alert } from "./alert";
-
 export const _dialog={
     SET:"SET_DIALOG",
     RESET:"RESET_DIALOG",
     SETOPEN:"DIALOG_SET_OPEN"
 }
 
-export function SetDialog(data){
+export function set_dialog(data){
     return dispatch=>{
         dispatch(setDialog(data));
         dispatch(setDialogOpen(true));
     }
 }
+
+
 
 function setDialog(data){
     return{
@@ -22,13 +22,13 @@ function setDialog(data){
 
 function resetDialog(){
     return{
-        type:_alert.RESET
+        type:_dialog.RESET
     }
 }
 
 export function setDialogOpen(data){
     return{
-        type:_alert.SETOPEN,
+        type:_dialog.SETOPEN,
         payload: data
     }
 }

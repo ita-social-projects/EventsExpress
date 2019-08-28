@@ -1,17 +1,18 @@
 import{_dialog} from '../actions/dialog';
 import initialState from '../store/initialState';
-import { _alert } from '../actions/alert';
+
 
 export const reducer=(state=initialState.dialog, action)=>{
     switch(action.type){
         case _dialog.SET:
             return{
-                title:action.payload.title,
-                message:action.payload.message,
-                open:false
+                title: action.payload.title,
+                message: action.payload.message,
+                callback: action.payload.action,
+                open:true
             };
             
-        case _alert.SETOPEN:
+        case _dialog.SETOPEN:
             return {
                 ...state,
                 open:action.payload
