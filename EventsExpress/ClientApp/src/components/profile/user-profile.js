@@ -76,40 +76,18 @@ export default class UserItemView extends Component {
         return age;
     }
     
-    componentWillReceiveProps(newProps) {
-        const oldProps = this.props
-        if (oldProps.field !== newProps.field) {
-            if(this.state.value === 0)return this.props.onFuture(); 
-            if (this.state.value === 1) return this.props.onPast();
-            if (this.state.value === 2) return this.props.onVisited();
-            if (this.state.value === 3) return this.props.onToGo();
-        }
-    }
+    
     renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
     
     handleChange = (event, value) => {
         this.setState({ value });
-        {
-            value === 0 && (this.props.onFuture())
-
-        }
-        {
-            value === 1 && (this.props.onPast())
-          
-        }
-        {
-            value === 2 && (this.props.onVisited())
-           
-        }
-        {
-            value === 3 && (this.props.onToGo())
-          
-        }
-        {
-            value === 4 && (this.props.onAddEvent())     
-        }
+        value === 0 && (this.props.onFuture())
+        value === 1 && (this.props.onPast())
+        value === 2 && (this.props.onVisited())
+        value === 3 && (this.props.onToGo())
+        value === 4 && (this.props.onAddEvent())     
     };
 
 
