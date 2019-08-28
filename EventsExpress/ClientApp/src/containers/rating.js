@@ -21,14 +21,14 @@ class RatingWrapper extends Component{
 
     render() {        
         return <div className='d-flex flex-row align-items-center justify-content-between'>
-                    {this.props.iCanRate 
-                        && <RatingSetter myRate={this.props.myRate} callback={this.onRateChange}/> 
-                        //: <div></div>
+                    {this.props.iWillVisitIt  
+                        ? <RatingSetter myRate={this.props.myRate} callback={this.onRateChange} /> 
+                        : <div></div>
                     }
-                    {!this.props.isFutureEvent
-                        && <RatingAverage value={this.props.averageRate} />
-                        //: <div></div>
-                    }                                    
+                    
+                    <RatingAverage value={this.props.averageRate} />
+                    
+                                                       
             </div>
     }
 }

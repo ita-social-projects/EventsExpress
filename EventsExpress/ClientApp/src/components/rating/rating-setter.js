@@ -4,7 +4,7 @@ import Rating from '@material-ui/lab/Rating';
 
 export default function RatingSetter(props) {    
     
-    return <div className=''>
+    return <div>
         Your rate: 
         <Rating 
             value={Number(props.myRate)}

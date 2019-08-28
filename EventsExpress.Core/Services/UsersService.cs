@@ -329,5 +329,13 @@ namespace EventsExpress.Core.Services
             
             return user;
         }
+
+        public double GetRating(Guid userId)
+        {
+            var ownEventsIds = Db.EventRepository.Get().Where(e => e.OwnerId == userId).Select(e => e.Id).ToList();
+
+            return Db.RateRepository.Get().Where(r => ownEventsIds.Contains(r.EventId)).Average(r => r.Score);
+        }
+
     }
 }

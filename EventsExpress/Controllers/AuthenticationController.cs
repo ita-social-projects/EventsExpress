@@ -59,6 +59,8 @@ namespace EventsExpress.Controllers
             var userInfo = _mapper.Map<UserInfo>(user);
             userInfo.Token = result.Message;
 
+            userInfo.Rating = _userService.GetRating(userInfo.Id);
+
             return Ok(userInfo);
         }
 
@@ -81,7 +83,7 @@ namespace EventsExpress.Controllers
             }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = auth.Message;
-
+            userInfo.Rating = _userService.GetRating(userInfo.Id);
             return Ok(userInfo);
         }
 
@@ -107,6 +109,7 @@ namespace EventsExpress.Controllers
             }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = result.Message;
+            userInfo.Rating = _userService.GetRating(userInfo.Id);
 
             return Ok(userInfo);
         }
@@ -117,8 +120,10 @@ namespace EventsExpress.Controllers
         public IActionResult Login()
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
+            var userInfo = _mapper.Map<UserInfo>(user);
+            userInfo.Rating = _userService.GetRating(userInfo.Id);
 
-            return Ok(_mapper.Map<UserDTO, UserInfo>(user));
+            return Ok(userInfo);
         }
 
 

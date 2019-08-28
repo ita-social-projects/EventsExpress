@@ -14,7 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import ModalWind from '../modal-wind';
 import { Link } from 'react-router-dom';
-
+import RatingAverage from '../rating/rating-average'
 import './header-profile.css';
 
 export default class HeaderProfile extends Component {
@@ -22,7 +22,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl, email } = this.props.user;
+        const { id, name, photoUrl, email, rating } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -46,6 +46,7 @@ export default class HeaderProfile extends Component {
                         
                         
                         <h4>{name}</h4>
+                        <RatingAverage value={rating} direction='row' />
                         
                         <div>
                             <Link to={'/profile' }><IconButton
