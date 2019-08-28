@@ -10,10 +10,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import CustomAvatar from '../avatar/custom-avatar';
 import ModalWind from '../modal-wind';
 import { Link } from 'react-router-dom';
+
 
 import './header-profile.css';
 
@@ -22,7 +22,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl, email } = this.props.user;
+        const { id, name } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -33,17 +33,8 @@ export default class HeaderProfile extends Component {
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">
-                        {photoUrl
-                            ? <Avatar
-                                src={photoUrl}
-                                className='bigAvatar'
-                            />
-                            : <Avatar className='bigAvatar'>
-                                <h1 className="display-1 text-light">
-                                    {email.charAt(0).toUpperCase()}
-                                </h1>
-                            </Avatar>}
-                        
+
+                        <CustomAvatar size="big" photoUrl={this.props.user.photoUrl} name={this.props.user.name} />
                         
                         <h4>{name}</h4>
                         

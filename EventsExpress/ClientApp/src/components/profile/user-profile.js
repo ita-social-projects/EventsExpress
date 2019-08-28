@@ -9,6 +9,8 @@ import AddEventWrapper from '../../containers/add-event';
 import './User-profile.css';
 import EventList from '../event/event-list';
 import Spinner from '../spinner';
+
+import CustomAvatar from '../avatar/custom-avatar';
 import { AddComponent } from '../home/home';
 
 export default class UserItemView extends Component {
@@ -30,7 +32,7 @@ export default class UserItemView extends Component {
     renderEvents = arr => arr.map(item => <div className="col-4"><Event current_user={this.props.current_user} key={item.id} item={item} /></div>)
         
     render() {
-        const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
+        const { name, email, birthday, gender, categories, id, attitude } = this.props.data;
         const { isPending, data } = this.props.events;
 
         const spinner = isPending ? <Spinner /> : null;
@@ -57,14 +59,7 @@ export default class UserItemView extends Component {
                 </div>
                 {!(id === this.props.current_user) &&
                     <div className="col-3">
-                        <div className="d-flex align-items-center attitude">
-                            <Avatar
-                                alt="Тут аватар"
-                                src={userPhoto}
-
-                                className='bigAvatar'
-                            />
-                        </div>
+                    <CustomAvatar size="big" name={name} photoUrl={this.props.data.photoUrl}/>
                         <center>
                         {attitude == '2' && <div className="row attitude">
                             <button onClick={this.props.onLike} className="btn btn-info">Like</button>

@@ -12,6 +12,12 @@ export default class CategoryItem extends Component {
                 <i className="fas fa-hashtag mr-1"></i>
                 {item.name}
             </td>
+            <td className="d-flex align-items-center justify-content-center">
+                {item.countOfUser}
+            </td>
+            <td className="justify-content-center">
+                {item.countOfEvents}
+            </td>
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton  className="text-info"  size="small" onClick={callback}>

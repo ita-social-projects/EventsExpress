@@ -23,6 +23,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
 import EventManagmentWrapper from '../../containers/event-managment';
 
+import CustomAvatar from '../avatar/custom-avatar';
+
 
 const useStyles = makeStyles(theme => ({
     
@@ -76,11 +78,7 @@ export default class Event extends Component {
                     avatar={
                             <Tooltip title={user.username}>
                                 <Link to={'/user/' + user.id} className="btn-custom">
-                                    <Avatar aria-label="recipe"
-                        src={user.photoUrl}
-                         className={classes.avatar} >
-                             {user.username[0].toUpperCase()}
-                                    </Avatar>
+                                    <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
                                     </Link>
                         </Tooltip>
                         }

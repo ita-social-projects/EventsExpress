@@ -5,12 +5,11 @@ import ReactRoterDOM from 'react-router-dom';
 import Event from './event-item';
 import '../layout/colorlib.css';
 import './event-item-view.css';
-
-import Fab from '@material-ui/core/Fab';
 import { Link } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
 import EditEventWrapper from '../../containers/edit-event'; 
+
+import CustomAvatar from '../avatar/custom-avatar';
 export default class EventItemView extends Component {
 
     state = { edit: false }
@@ -24,12 +23,7 @@ export default class EventItemView extends Component {
     renderUsers = (arr) => {
         return arr.map(
             (x) => (<div className="d-flex align-items-center">
-                <Avatar
-                    alt="Тут аватар"
-                    src={x.photoUrl}
-
-                    className='littleAvatar'
-                /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
+                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
             </div>)
         );
     }

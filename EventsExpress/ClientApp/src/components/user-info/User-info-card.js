@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import genders from '../../constants/GenderConstants';
+import CustomAvatar from '../avatar/custom-avatar';
 import { Link } from 'react-router-dom';
 import './user-info.css'
 const useStyles = makeStyles(theme => ({
@@ -64,9 +65,7 @@ export default class UserInfoCard extends Component {
                         <Grid container spacing={1}>
                             <Grid item>
                                         <ButtonBase className={classes.Avatar}>
-                                    {user.photoUrl
-                                                ? <Avatar className='MiddleAvatar' src={user.photoUrl} />
-                                                : <Avatar className='MiddleAvatar' >{user.email.charAt(0).toUpperCase()}</Avatar>}
+                                            <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
                                         </ButtonBase>
                             </Grid>
                             <Grid item xs={1} sm container>
