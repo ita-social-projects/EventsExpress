@@ -85,15 +85,15 @@ export default class EventItemView extends Component {
                             <EditEventWrapper />
                         </div>
                         : <>
-                            {!isFutureEvent && iWillVisitIt &&
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <RatingWrapper 
-                                        eventId={this.props.data.id} 
-                                        userId={current_user.id}
-                                    />
-                                    
-                                </div>
-                            }
+                            <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <RatingWrapper 
+                                    iCanRate={!isFutureEvent && iWillVisitIt}
+                                    isFutureEvent={isFutureEvent}
+                                    eventId={this.props.data.id} 
+                                    userId={current_user.id}
+                                />                                
+                            </div>
+                            
                             <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                 {description}
                             </div>

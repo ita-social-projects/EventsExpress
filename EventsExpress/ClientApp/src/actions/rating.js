@@ -30,6 +30,7 @@ export function set_rating(data) {
             if (response.error == null) {
                 dispatch(setRatingSuccess(response));
                 dispatch(getRatingSuccess(data.rate));
+                
             } else {
                 dispatch(setRatingError(response.error));
             }

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import Rating from '@material-ui/lab/Rating';
-import { set_rating, get_currrent_rating } from'../actions/rating'
-
+import { set_rating, get_currrent_rating, get_average_rating } from'../actions/rating'
+import RatingAverage from '../components/rating/rating-average'
+import RatingSetter from '../components/rating/rating-setter'
 
 class RatingWrapper extends Component{
     componentDidMount = () => {
@@ -15,21 +15,21 @@ class RatingWrapper extends Component{
     onRateChange = event => {
         let rate = event.currentTarget.value;
         
-        this.props.setRate(rate);        
-
+        this.props.setRate(rate); 
+        setTimeout(this.props.getAverageRate, 125);
     }
 
     render() {        
-        return <>
-                    Rate it: 
-                    <Rating 
-                        value={Number(this.props.myRate)}
-                        max={10}
-                        size="large"
-                        onChange={this.onRateChange}
-                    />
-                    Average rating: {this.props.averageRate}
-               </>
+        return <div className='d-flex flex-row align-items-center justify-content-between'>
+                    {this.props.iCanRate 
+                        && <RatingSetter myRate={this.props.myRate} callback={this.onRateChange}/> 
+                        //: <div></div>
+                    }
+                    {!this.props.isFutureEvent
+                        && <RatingAverage value={this.props.averageRate} />
+                        //: <div></div>
+                    }                                    
+            </div>
     }
 }
 
@@ -48,7 +48,7 @@ const mapDispatchToProps = (dispatch, props) => {
                 rate: value
         })),       
         getMyRate: () => dispatch(get_currrent_rating(props.eventId)),
-        getAverageRate: () => {}
+        getAverageRate: () => dispatch(get_average_rating(props.eventId)),
     } 
 };
 

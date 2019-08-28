@@ -161,6 +161,8 @@ namespace EventsExpress.Controllers
 
             return Ok(_eventService.GetRate(eventId));
         }
+        
+
         #region Get event-sets for user profile
 
         [HttpGet("[action]")]
