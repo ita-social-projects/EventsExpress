@@ -1,6 +1,4 @@
 import EventsExpressService from '../services/EventsExpressService';
-import get_events from './event-list';
-import { func } from 'prop-types';
 import get_event from './event-item-view';
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import Moment from 'react-moment';
 import 'moment-timezone';
-import ReactRoterDOM from 'react-router-dom';
-import Event from './event-item';
 import '../layout/colorlib.css';
 import './event-item-view.css';
-
-import Fab from '@material-ui/core/Fab';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';

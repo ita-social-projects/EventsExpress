@@ -1,5 +1,4 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { func } from 'prop-types';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
 
@@ -36,8 +35,26 @@ export default function login(email, password) {
       });
   }
 }
+export function loginFacebook(email, name) {
 
+    return dispatch => {
+        dispatch(setLoginPending(true));
 
+        const res = api_serv.setFacebookLogin({ Email: email, Name: name });
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setUser(response));
+                dispatch(setLoginSuccess(true));
+                localStorage.setItem('token', response.token);
+                dispatch(initialConnection());
+
+                dispatch(getUnreadMessages(response.id));
+            } else {
+                dispatch(setLoginError(response.error));
+            }
+        });
+    }
+}
 
 
   export function setUser(data) {

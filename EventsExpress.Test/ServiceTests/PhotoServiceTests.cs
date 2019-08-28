@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using EventsExpress.Core.Infrastructure;
 using Microsoft.Extensions.Options;
 
@@ -17,19 +15,25 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     class PhotoServiceTests : TestInitializer
     {
-        private PhotoService photoService;
+        private PhotoService _photoService;
 
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
-            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
 
-            photoService = new PhotoService(mockUnitOfWork.Object, mockOpt.Object);
+            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
+            mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
+            mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
 
             mockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
+
+            _photoService = new PhotoService(mockUnitOfWork.Object, mockOpt.Object);
         }
+
+
+        
 
 
         [Test]
@@ -43,7 +47,7 @@ namespace EventsExpress.Test.ServiceTests
                     ContentType = GetContentType(Path.GetFileName(@"./Images/valid-image.jpg"))
                 };
 
-                Assert.DoesNotThrowAsync(async () => await photoService.AddPhoto(file));
+                Assert.DoesNotThrowAsync(async () => await _photoService.AddPhoto(file));
             }
         }
 
@@ -63,8 +67,7 @@ namespace EventsExpress.Test.ServiceTests
                     Headers = new HeaderDictionary(),
                     ContentType = GetContentType(fileName)
                 };
-
-                Assert.ThrowsAsync<ArgumentException>(async () => await photoService.AddPhoto(file));
+                Assert.ThrowsAsync<ArgumentException>(async () => await _photoService.AddPhoto(file));
             }
         }
 
@@ -74,8 +77,7 @@ namespace EventsExpress.Test.ServiceTests
         private string GetContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
-            string contentType;
-            if (!provider.TryGetContentType(fileName, out contentType))
+            if (!provider.TryGetContentType(fileName, out var contentType))
             {
                 contentType = "application/octet-stream";
             }

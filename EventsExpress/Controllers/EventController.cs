@@ -132,38 +132,91 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Unblock(Guid eventId)
-        {
-            var result = await _eventService.UnblockEvent(eventId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
-            return Ok();
-        }
-
+        #region Get event-sets for user profile
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid id) =>
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id)));
-
+        public IActionResult FutureEvents(Guid id, int page=1) {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult PastEvents(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id)));
-
+        public IActionResult PastEvents(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult EventsToGo(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id)));
-
+        public IActionResult EventsToGo(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult VisitedEvents(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
-        
+        public IActionResult VisitedEvents(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+            #endregion
 
-
-    }
+        }
 }

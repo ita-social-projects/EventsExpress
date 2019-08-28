@@ -1,9 +1,10 @@
 ﻿import { connect } from 'react-redux';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Login  from '../components/login';
 import login from '../actions/login';
-
+import GoogleLogin from './GoogleLogin';
 import { useAlert } from "react-alert";
+import FacebookLogin from './FacebookLogin';
 
 class LoginWrapper extends Component {
   submit = values => {
@@ -12,15 +13,17 @@ class LoginWrapper extends Component {
    
   render() {
       alert = useAlert;
-      let { isLoginPending, isLoginSuccess, loginError, isFirstLogin } = this.props.login;
+      let {  loginError } = this.props;
     
     return <div>
               <Login onSubmit={this.submit} />
               {loginError && 
               <p className="text-danger text-center">{loginError}</p>
-              }
-       
-        
+        }
+        <div className="row">
+            <GoogleLogin />
+                <FacebookLogin />
+             </div>
            </div>
     ;
   }

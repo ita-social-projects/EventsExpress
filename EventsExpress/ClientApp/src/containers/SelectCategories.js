@@ -1,6 +1,5 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import save from '../actions/SelectCategories';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
 import get_categories from '../actions/category-list'
 
@@ -14,7 +13,6 @@ class SelectCategoriesWrapper extends Component {
     };
 
     render() {
-        let { IsSelectCategoriesSeccess, IsSelectCategoriesError } = this.props;
         return <SelectCategories items={this.props.allCategories.data} onSubmit={this.submit} />;
     }
 }

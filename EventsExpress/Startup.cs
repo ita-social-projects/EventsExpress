@@ -28,6 +28,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using System.Text;
 
 namespace EventsExpress
 {
@@ -55,6 +56,8 @@ namespace EventsExpress
                 .AddMemoryCache()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -115,10 +118,12 @@ namespace EventsExpress
             services.AddSingleton<CacheHelper>();
 
             #endregion
-
-            services.AddMvc()
-                .AddFluentValidation()
+            services.AddCors();
+            services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+           
+            
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
@@ -162,9 +167,14 @@ namespace EventsExpress
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }                             
-
+            }
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
             app.UseAuthentication();
+          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

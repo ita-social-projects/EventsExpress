@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace EventsExpress.Controllers
 {
@@ -28,6 +29,7 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
             _authService = authSrv;
         }
+
 
         /// <summary>
         /// This method allows to log in to the API and generate an authentication token.
@@ -54,7 +56,56 @@ namespace EventsExpress.Controllers
 
             var user = _userService.GetByEmail(authRequest.Email);
 
-            var userInfo = _mapper.Map<UserDTO, UserInfo>(user);
+            var userInfo = _mapper.Map<UserInfo>(user);
+            userInfo.Token = result.Message;
+
+            return Ok(userInfo);
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("FacebookLogin")]
+        public async Task<IActionResult> FacebookLogin(UserView userView)
+        {
+            var userExisting = _userService.GetByEmail(userView.Email);
+            if (userExisting == null)
+            {
+                var user = _mapper.Map<UserDTO>(userView);
+                user.EmailConfirmed = true;
+                await _userService.Create(user);
+            }
+            var auth = _authService.AuthenticateGoogleFacebookUser(userView.Email);
+            if (!auth.Successed)
+            {
+                return BadRequest(auth.Message);
+            }
+            var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
+            userInfo.Token = auth.Message;
+
+            return Ok(userInfo);
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("google")]
+        public async Task<IActionResult> Google([FromBody]UserView userView)
+        {
+            var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+            var userExisting = _userService.GetByEmail(payload.Email);
+            if (userExisting == null)
+            {
+                var user = _mapper.Map<UserView, UserDTO>(userView);
+                user.Email = payload.Email;
+                user.EmailConfirmed = true;
+                user.Name = payload.Name;
+                await _userService.Create(user);
+            }
+            var result = _authService.AuthenticateGoogleFacebookUser(payload.Email);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = result.Message;
 
             return Ok(userInfo);
@@ -79,7 +130,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user = _mapper.Map<LoginDto, UserDTO> (authRequest);
+            var user = _mapper.Map<LoginDto, UserDTO>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
 
             var result = await _userService.Create(user);
@@ -90,7 +141,7 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        
+
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> PasswordRecovery(string email)
@@ -159,6 +210,6 @@ namespace EventsExpress.Controllers
             }
             return Ok();
         }
-       
+
     }
 }

@@ -1,10 +1,11 @@
-using System;
 using EventsExpress.Db.DbInitialize;
 using EventsExpress.Db.EF;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 
 namespace EventsExpress
 {
@@ -19,7 +20,7 @@ namespace EventsExpress
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var dbContext = services.GetRequiredService<AppDbContext>();      
+                    var dbContext = services.GetRequiredService<AppDbContext>();
                     DbInitializer.Seed(dbContext);
                 }
                 catch (Exception ex)
@@ -29,11 +30,14 @@ namespace EventsExpress
                 }
             }
 
-           host.Run();
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }

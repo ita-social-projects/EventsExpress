@@ -2,9 +2,8 @@
 import { renderTextField, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
-import { renderSelectField, renderCheckbox } from '../helpers/helpers'
-import { sizing } from '@material-ui/system';
+import Radio from '@material-ui/core/Radio'
+import { renderSelectField } from '../helpers/helpers'
 
 class UsersFilters extends Component {
     render() {
