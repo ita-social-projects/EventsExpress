@@ -4,6 +4,7 @@ import get_chats from '../../actions/chats';
  import { Link } from 'react-router-dom';
  import ButtonBase from '@material-ui/core/ButtonBase';
  import Avatar from '@material-ui/core/Avatar';
+ import './user_chats.css';
 class UserChats extends Component{
 
     componentWillMount = () => {
@@ -26,7 +27,7 @@ class UserChats extends Component{
                         : <Avatar className='SmallAvatar' >{user.username.charAt(0).toUpperCase()}</Avatar>}
                 </ButtonBase>
                 <p>{user.username} </p>    
-                {new_msg.length > 0 && <p>You have {new_msg.length} unread messages</p>}
+                {new_msg.length > 0 && <p><center>You have {new_msg.length} unread messages</center></p>}
             </div>
         </Link>
         <hr/>
@@ -37,8 +38,8 @@ class UserChats extends Component{
 
     render(){
         return <>
-        
         <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+    
             {this.renderChats(this.props.chats.data)}
         </div>
         

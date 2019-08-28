@@ -42,14 +42,14 @@ export  function get_eventsForAdmin(filters = "?page=1") {
         });
     }
 }
-function setEventPending(data){
+export function setEventPending(data){
     return {
         type: SET_EVENTS_PENDING,
         payload: data
     } 
 }  
 
-function getEvents(data){
+export function getEvents(data){
       return {
           type: GET_EVENTS_SUCCESS,
           payload: data

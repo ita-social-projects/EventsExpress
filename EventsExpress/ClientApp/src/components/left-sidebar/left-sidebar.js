@@ -4,6 +4,7 @@ import HeaderProfileWrapper from '../../containers/header-profile';
 import { Link } from 'react-router-dom';
 
 import Badge from '@material-ui/core/Badge';
+
 const NavItem = ({to, icon, text, my_icon}) => {
     return (<li className="sidebar-header">
         <Link to={ to } className="active">
@@ -20,7 +21,6 @@ const NavItem = ({to, icon, text, my_icon}) => {
 
 
 const LeftSidebar = (props) =>{
-    console.log(props.msg_for_read().length);
     return (
     <div id="colorlib-page">
             <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  

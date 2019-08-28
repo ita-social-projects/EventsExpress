@@ -37,7 +37,7 @@ namespace EventsExpress.Controllers
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
             if (result.Successed)
             {
-                return Ok();
+                return Ok(result.Property);
             }
             return BadRequest(result.Message);
         }
@@ -48,7 +48,11 @@ namespace EventsExpress.Controllers
         public IActionResult Get(Guid id) => 
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
-               
+        [HttpPost("[action]")]
+        public IActionResult GetEvents(List<Guid> eventIds) =>
+            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds)));
+
+
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel filter)

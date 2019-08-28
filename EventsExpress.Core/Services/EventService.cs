@@ -165,7 +165,7 @@ namespace EventsExpress.Core.Services
 
                 eventDTO.Id = result.Id;
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
-                return new OperationResult(true);
+                return new OperationResult(true, "Create new Event", result.Id.ToString());
             }
             catch (Exception ex)
             {
@@ -201,16 +201,14 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
 
             await Db.SaveAsync();
-            return new OperationResult(true);
+            return new OperationResult(true, "Edit event", ev.Id.ToString());
         }
 
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(Db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .FirstOrDefault(x => x.Id == eventId));
-
-        
-
+          
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
         {
             var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x=>x.IsBlocked==false);
@@ -259,7 +257,6 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
         }
 
-
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId)
         {
             var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
@@ -299,6 +296,10 @@ namespace EventsExpress.Core.Services
 
             return _mapper.Map<IEnumerable<EventDTO>>(evv);
         }
+
+        public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds) =>
+            _mapper.Map<IEnumerable<EventDTO>>(Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
+                .Where(x => eventIds.Contains(x.Id)));       
     }
 }
 

@@ -11,7 +11,7 @@ namespace EventsExpress.Validation
     {
         public UserInfoValidator()
         {
-            RuleFor(x => x.Id).NotEqual(Guid.Empty).WithMessage("Id can not be null!");
+            //RuleFor(x => x.Id).NotEqual(Guid.Empty).WithMessage("Id can not be null!");
         }
     }
 }

@@ -177,7 +177,8 @@ const initialState = {
     notification:
     {
         messages: [],
-        seen_messages: []
+        seen_messages: [],
+        events: []
     }
 };
 

@@ -7,17 +7,7 @@ import {getFormValues, reset} from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 import { SetAlert } from '../actions/alert';
-import {  green } from '@material-ui/core/colors';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import Snackbar from '@material-ui/core/Snackbar';
 import get_categories from '../actions/category-list';
-
-
-
-
 
 class AddEventWrapper extends Component{
     
@@ -43,7 +33,8 @@ class AddEventWrapper extends Component{
     }
 
     onSubmit = (values) => {
-        this.props.add_event({ ...values, user_id: this.props.user_id });
+     const res = this.props.add_event({ ...values, user_id: this.props.user_id });
+     console.log(res);
     }
 
     onChangeCountry = (e) => {

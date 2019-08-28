@@ -124,7 +124,7 @@ namespace EventsExpress
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
             services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
-            services.AddTransient<IValidator<EventDto>, EventDtoValidator>();
+            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>();
             services.AddTransient<IValidator<UserInfo>, UserInfoValidator>();
             services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
       

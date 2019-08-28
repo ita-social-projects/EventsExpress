@@ -16,6 +16,14 @@ export default class EventsExpressService {
         return res;
     }
 
+    getEvents = async (eventIds) => {
+        const res = await this.setResource('event/getEvents', eventIds);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
     getUnreadMessages = async (userId) => {
         const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
         console.log(res);
