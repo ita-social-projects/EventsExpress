@@ -32,9 +32,7 @@ namespace EventsExpress.Core.Services
             _photoService = photoSrv;
             _mediator = mediator;
         }
-       
 
-        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -302,12 +300,10 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
-            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom >= DateTime.Today)
-                .OrderBy(e => e.DateFrom)
-                .AsEnumerable();
-
-            return _mapper.Map<IEnumerable<EventDTO>>(events);
+            var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
+                .Where(x => eventIds.Contains(x.Id));
+            paginationViewModel.Count = events.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
         public async Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate)

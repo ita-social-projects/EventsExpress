@@ -133,6 +133,17 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
+        public async Task<IActionResult> Unblock(Guid eventId)
+        {
+            var result = await _eventService.UnblockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
         public async Task<IActionResult> SetRate(RateDto model)
         {
             if (!ModelState.IsValid)
