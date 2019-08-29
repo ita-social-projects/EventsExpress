@@ -301,6 +301,51 @@
             <response code="200">Unblock is succesful</response>
             <response code="400">Unblock process failed</response>
         </member>
+        <member name="M:EventsExpress.Controllers.UsersController.EditUsername(EventsExpress.DTO.UserInfo)">
+            <summary>
+            This method is to edit username
+            </summary>
+            <param name="userInfo">Required</param>
+            <returns></returns>
+            <response code="200">Edit is succesful</response>
+            <response code="400">Edit process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.UsersController.EditBirthday(EventsExpress.DTO.UserInfo)">
+            <summary>
+            This method is to edit date of birthday
+            </summary>
+            <param name="userInfo">Required</param>
+            <returns></returns>
+            <response code="200">Edit is succesful</response>
+            <response code="400">Edit process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.UsersController.EditGender(EventsExpress.DTO.UserInfo)">
+            <summary>
+            This method is to edit gender
+            </summary>
+            <param name="userInfo">Required</param>
+            <returns></returns>
+            <response code="200">Edit is succesful</response>
+            <response code="400">Edit process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.UsersController.EditUserCategory(EventsExpress.DTO.UserInfo)">
+            <summary>
+            This method is to edit user categories
+            </summary>
+            <param name="userInfo">Required</param>
+            <returns></returns>
+            <response code="200">Edit is succesful</response>
+            <response code="400">Edit process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.UsersController.ChangeAvatar(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            This metod is to change user avatar
+            </summary>
+            <param name="newAva">Required</param>
+            <returns></returns>
+            <response code="200">Changing is succesful</response>
+            <response code="400">Changing process failed</response>
+        </member>
         <member name="M:EventsExpress.Controllers.UsersController.GetUserProfileById(System.Guid)">
             <summary>
             This method is for get user

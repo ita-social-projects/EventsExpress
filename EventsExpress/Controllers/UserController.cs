@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
+using MediatR;
 
 namespace EventsExpress.Controllers
 {
@@ -25,15 +27,22 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+        private readonly IEmailService _emailService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
-            IMapper mapper)
+            IMapper mapper,
+            IMediator mediator,      
+            IEmailService emailService                
+                            )
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
+            _emailService = emailService;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -156,6 +165,13 @@ namespace EventsExpress.Controllers
 
         #region My profile managment
 
+        /// <summary>
+        /// This method is to edit username
+        /// </summary>
+        /// <param name="userInfo">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit is succesful</response>
+        /// <response code="400">Edit process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
@@ -179,6 +195,13 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method is to edit date of birthday
+        /// </summary>
+        /// <param name="userInfo">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit is succesful</response>
+        /// <response code="400">Edit process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
@@ -204,6 +227,13 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method is to edit gender
+        /// </summary>
+        /// <param name="userInfo">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit is succesful</response>
+        /// <response code="400">Edit process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(UserInfo userInfo)
         {
@@ -226,6 +256,13 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method is to edit user categories
+        /// </summary>
+        /// <param name="userInfo">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit is succesful</response>
+        /// <response code="400">Edit process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
         {
@@ -249,6 +286,13 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// This metod is to change user avatar
+        /// </summary>
+        /// <param name="newAva">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Changing is succesful</response>
+        /// <response code="400">Changing process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangeAvatar([FromForm]IFormFile newAva)
         {
@@ -267,6 +311,36 @@ namespace EventsExpress.Controllers
             }
             var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
             return Ok(updatedPhoto);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ContactAdmins(string message, string type)
+        {
+            var user = _authService.GetCurrentUser(HttpContext.User);
+
+            var admins = _userService.GetUsersByRole("Admin");
+
+            try
+            {
+                foreach (var admin in admins)
+                {
+                    await _emailService.SendEmailAsync(new EmailDTO
+                    {
+                        Subject = type,
+                        RecepientEmail =admin.Email,
+                        MessageText = message
+                    });
+                    return Ok();
+                }
+                
+            }
+
+            catch (Exception)
+            {
+
+            }
+
+            return BadRequest();
         }
 
         #endregion

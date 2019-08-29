@@ -4,37 +4,54 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { reduxForm, Field } from 'redux-form';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import {  renderTextArea } from '../helpers/helpers';
+import InputLabel from '@material-ui/core/InputLabel';
+
+
+const useStyles = makeStyles(theme => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }));
+  
 
 class ContactUs extends Component{
     constructor(props){
         super(props)
     }
+    
+
+    
 
     render(){
+        const classes = useStyles;
+        const { handleSubmit, pristine, reset, submitting } = this.props;
         return(
-            <form>
-                <div className="text text-2 pl-md-4" >
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="age-simple">Age</InputLabel>
-                        <Select
-                        value={values.age}
-                        onChange={handleChange}
-                        inputProps={{
-                            name: 'age',
-                            id: 'age-simple',
-                        }}
-                        >
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Field name='description' component={renderTextArea} type="input" label="Description" />
+            <form className="col-7 ">
+                <div className="box text text-2 pl-md-4 " >
+                    <Field className="form-control" component="select">
+                        <option value="newCategory">new category</option>;
+                        <option value="newCategory">newCategory</option>;
+                    </Field>
+                    <Field name='description' component={renderTextArea}
+                     type="input" label="Description" />
                     
-                </div>
-                <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
-                        Send
+                
+                <Button type="submit" color="primary" disabled={pristine || submitting}>Submit</Button>
+                <Button type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
+                    Clear
                 </Button>
+                </div>
             </form>
         )
     }
@@ -42,5 +59,5 @@ class ContactUs extends Component{
 
 export default reduxForm({
     form: "ContactUs", // a unique identifier for this form
-    validate
+    
 })(ContactUs);

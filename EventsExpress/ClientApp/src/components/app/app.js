@@ -20,6 +20,7 @@ import EventsForAdmin from '../../components/event/EventsForAdmin'
 import Authentication from '../Authentication/authentication';
 import Chat from '../chat';
 import UserChats from '../chat/user_chats';
+import ContactUsWrapper from '../../containers/contactUs';
 
 export default class App extends Component {
 
@@ -49,7 +50,7 @@ export default class App extends Component {
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/chat/:chatId" component={Chat} />
-                        {/* <Route path="/user/contactUs" component={ContactUsWrapper} /> */}
+                        <Route path="/contactUs" component={ContactUsWrapper} /> 
                     <Route component={NotFound} />
                 </Switch>
                 

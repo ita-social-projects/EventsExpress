@@ -66,7 +66,7 @@ const LeftSidebar = (props) => {
                         }
                          {props.user.role==="User"&&
                             <>
-                            <NavItem to={'/user/contactUs'} icon={'fa fa-exclamation-circle'} text={'Contact us'} />
+                            <NavItem to={'/contactUs'} icon={'fa fa-exclamation-circle'} text={'Contact us'} />
                             </>
                          }
                          

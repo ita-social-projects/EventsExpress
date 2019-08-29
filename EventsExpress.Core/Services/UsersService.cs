@@ -174,6 +174,15 @@ namespace EventsExpress.Core.Services
         }
 
 
+        public IEnumerable<UserDTO> GetUsersByRole(string role)
+        {
+            var users = Db.UserRepository.Get("Role")
+                .Where(user => user.Role.Name == role)                
+                .AsEnumerable();
+
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
         public IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories)
         {
             var categoryIds = categories.Select(x => x.Id).ToList();

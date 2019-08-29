@@ -20,6 +20,7 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> PasswordRecover(UserDTO userDto);
         Task<OperationResult> EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
         Task<OperationResult> SetAttitude(AttitudeDTO attitude);
+        
 
         Task<OperationResult> Block(Guid uId);
         Task<OperationResult> Unblock(Guid uId);
@@ -31,5 +32,6 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count);
         IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories);
+        IEnumerable<UserDTO> GetUsersByRole(string role);
     }
 }
