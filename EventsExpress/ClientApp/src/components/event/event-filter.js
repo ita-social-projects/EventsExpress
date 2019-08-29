@@ -13,10 +13,10 @@ class EventFilter extends Component {
         let values = form_values || {};
         return <>
             <form onSubmit={this.props.handleSubmit} className="box">
-                <Field name='search' component={renderTextField} type="input" label="Search" />
-                    <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>              
-                    {values.dateFrom != null &&
-                <span>To<br/><Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span>
+                <Field name='search' component={renderTextField} type="input" label="Search" /><br/>
+                    <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>  <br/>            
+                    {values.dateFrom != null &&<>
+                <span>To<br/><Field name='dateTo' defaultValue={values.dateFrom} minValue={values.dateFrom} component={renderDatePicker} /></span><br/></>
               }
                 <Field
                     name="categories"
@@ -26,7 +26,7 @@ class EventFilter extends Component {
                     textField={"name"}
                     className="form-control mt-2"
                     placeholder='#hashtags'
-                />
+                /><br/>
                 {
                     (current_user.role=="Admin")?
                         <Field name="status" component={radioButton}>
@@ -35,7 +35,7 @@ class EventFilter extends Component {
                             <Radio value="true" label="Blocked" />
                         </Field>
                         :null
-                }
+                }<br/>
                 <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>
