@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip'; 
 import Badge from '@material-ui/core/Badge';
+import SocialShare from '././share/ShareMenu'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -105,7 +106,8 @@ export default class Event extends Component {
                         <IconButton className={classes.button} aria-label="view">
                             <i className="fa fa-eye"></i>
                         </IconButton>
-                    </Link>
+                        </Link>
+                        <SocialShare href='https://www.instagram.com/dima.kundiy/' />
                 </CardActions>
             </Card>
             </div>
