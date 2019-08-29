@@ -68,8 +68,9 @@ export default class Event extends Component {
 
 
         return (
-            <div className="col-4 mt-3">
-            <Card className={classes.card}>
+            <div className={"col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 mt-3" }>
+
+            <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
                     avatar={
                             <Tooltip title={user.username}>

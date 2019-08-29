@@ -167,7 +167,8 @@ namespace EventsExpress.Mapping
 
             #region MESSAGE MAPPING         
                                     
-            CreateMap<ChatRoom, UserChatDto>()                     
+            CreateMap<ChatRoom, UserChatDto>()
+                .ForMember(dest => dest.LastMessage, opts => opts.MapFrom(src => src.Messages.LastOrDefault().Text))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
                 .Select(x => new UserPreviewDto {
                     Id = x.UserId,
