@@ -16,7 +16,7 @@ export default function RatingAverage(props) {
 
     return <div className={direction + ' d-flex align-items-center'} >
             <IconButton className={textColor} size="small" disabled>
-                <i class="far fa-star"></i> 
+                <i className="far fa-star"></i> 
             </IconButton>
             <div className={textColor}>
                 {props.value ? props.value : "-"}

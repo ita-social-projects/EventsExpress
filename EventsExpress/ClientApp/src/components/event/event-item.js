@@ -55,14 +55,21 @@ export default class Event extends Component {
         );
     }
       
-    render() {
-        
+    render() {        
         const classes = useStyles;
-        // const [expanded, setExpanded] = React.useState();
       
+        
         const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor } = this.props.item;
         const { city, country } = this.props.item;
     
+        const rateTextColor = (user.rating < 5) 
+        ? 'text-danger' 
+        : (user.rating < 8) 
+            ? 'text-warning'
+            : 'text-success';
+
+
+
         return (
             <div className="col-4 mt-3">
             <Card className={classes.card}>
@@ -70,17 +77,18 @@ export default class Event extends Component {
                     avatar={
                             <Tooltip title={user.username}>
                                 <Link to={'/user/' + user.id} className="btn-custom">
-                                    <Avatar aria-label="recipe"
-                        src={user.photoUrl}
-                         className={classes.avatar} >
-                             {user.username[0].toUpperCase()}
+                                    <Avatar 
+                                        aria-label="recipe"
+                                        src={user.photoUrl}
+                                        className={classes.avatar} 
+                                    >
+                                        {user.username[0].toUpperCase()}
                                     </Avatar>
-                                    </Link>
-                        </Tooltip>
-                        }
+                                </Link>
+                            </Tooltip>
+                    }
                         
-                        action={
-                            
+                    action={
                         <Tooltip title="Visitors">
                             <IconButton>
                                 <Badge badgeContent={countVisitor} color="primary">
@@ -88,7 +96,7 @@ export default class Event extends Component {
                                 </Badge>
                             </IconButton>
                         </Tooltip>
-                        }
+                    }
                     title={title}
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                 />
