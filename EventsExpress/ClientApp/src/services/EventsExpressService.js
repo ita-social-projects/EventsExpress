@@ -1,6 +1,4 @@
 import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-
 
 export default class EventsExpressService {
 
@@ -13,6 +11,20 @@ export default class EventsExpressService {
     
     getChat = async (chatId) => {
         const res = await this.getResource(`chat/GetChat?chatId=${chatId}`);
+        return res;
+    }
+
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource('event/getEvents?page='+page, eventIds);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
+    getUnreadMessages = async (userId) => {
+        const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
+        console.log(res);
         return res;
     }
 
@@ -42,6 +54,22 @@ export default class EventsExpressService {
             i++;
         })
         const res = await this.setResourceWithData('event/edit', file);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventBlock = async (id) => {
+        const res = await this.setResource('Event/Block/?eventId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventUnblock = async (id) => {
+        const res = await this.setResource('Event/Unblock/?eventId=' + id);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -245,23 +273,23 @@ export default class EventsExpressService {
         return res;
     }
 
-    getVisitedEvents = async (id) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id);
+    getVisitedEvents = async (id, page) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getFutureEvents = async (id) => {
-        const res = await this.getResource('event/futureEvents?id=' + id);
+    getFutureEvents = async (id, page) => {
+        const res = await this.getResource('event/futureEvents?id=' + id + '&'+ 'page='+page);
         return res;
     }
 
-    getPastEvents = async (id) => {
-        const res = await this.getResource('event/pastEvents?id=' + id);
+    getPastEvents = async (id, page) => {
+        const res = await this.getResource('event/pastEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getEventsToGo = async (id) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id);
+    getEventsToGo = async (id, page) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 

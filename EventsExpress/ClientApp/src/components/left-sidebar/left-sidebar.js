@@ -3,11 +3,14 @@ import './left-sidebar.css';
 import HeaderProfileWrapper from '../../containers/header-profile';
 import { Link } from 'react-router-dom';
 
-const NavItem = ({to, icon, text}) => {
+import Badge from '@material-ui/core/Badge';
+
+const NavItem = ({to, icon, text, my_icon}) => {
     return (<li className="sidebar-header">
         <Link to={ to } className="active">
             <span className="link">
                 <i className= { icon } ></i>
+                {my_icon}
                 <span className="hiden"> &nbsp; { text } </span>
                 <strong></strong>
             </span>
@@ -33,7 +36,10 @@ const LeftSidebar = (props) =>{
                             <NavItem to={'/user/' + props.user.id} icon={'fa fa-user'} text={"Profile"} />
                             <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Search Users"} />
                             
-                            <NavItem to={'/user_chats'} icon={'fa fa-envelope'} text={"Comuna"} />
+                            <NavItem to={'/user_chats'} my_icon={
+                                <Badge badgeContent={props.msg_for_read().length} color="primary">
+                                    <i className="fa fa-envelope"></i>
+                                </Badge>} text={"Comuna"} />
                             </>
                             }
                         {props.user.role === "Admin" &&

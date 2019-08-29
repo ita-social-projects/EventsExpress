@@ -29,5 +29,12 @@ namespace EventsExpress.Core
         
         public SortBy SortBy { get; set; }
 
+        public bool Blocked { get; set; }
+
+        public bool Unblocked { get; set; }
+
+
+
+
     }
 }

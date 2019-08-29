@@ -1,6 +1,7 @@
 
 
 import { reset_hub } from './chat';
+import { resetNotification } from './chats';
 export const SET_LOGOUT = "SET_LOGOUT";
 
   export default function logout(){
@@ -8,6 +9,7 @@ export const SET_LOGOUT = "SET_LOGOUT";
     return dispatch => { 
       dispatch(reset_hub());
       dispatch(setLogout());
+      dispatch(resetNotification());
     }
   }
 

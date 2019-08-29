@@ -1,8 +1,10 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, INITIAL_CONNECTION, RECEIVE_MESSAGE, RESET_HUB
+   INITIAL_CONNECTION, RECEIVE_MESSAGE, RESET_HUB
 }from '../actions/chat';
+
+import { EVENT_WAS_CREATED } from '../actions/add-event';
 
 export const reducer = (
     state = initialState.hubConnection,
@@ -11,6 +13,11 @@ export const reducer = (
     switch (action.type) {
       case INITIAL_CONNECTION:
         return action.payload
+      case EVENT_WAS_CREATED:
+        state
+        .invoke('EventWasCreated', action.payload)
+        .catch(err => console.error(err));
+        return state;
       case RESET_HUB:
           return null
        default: 

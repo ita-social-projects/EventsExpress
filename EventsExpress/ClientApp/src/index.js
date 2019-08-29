@@ -9,6 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { setUser } from './actions/login';
 import { initialConnection } from './actions/chat';
 
+import { getUnreadMessages } from './actions/chats';
+
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const history = createBrowserHistory({ basename: baseUrl });
@@ -28,8 +30,10 @@ async function AuthUser(token){
     }),
     });
     if(res.ok){
-      store.dispatch(setUser(await res.json()));
+      const user = await res.json();
+      store.dispatch(setUser(user));
       store.dispatch(initialConnection());
+      store.dispatch(getUnreadMessages(user.id));
     }else{
       localStorage.clear();
     }

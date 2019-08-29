@@ -42,7 +42,7 @@ namespace EventsExpress.Controllers
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
             if (result.Successed)
             {
-                return Ok();
+                return Ok(result.Property);
             }
             return BadRequest(result.Message);
         }
@@ -53,7 +53,6 @@ namespace EventsExpress.Controllers
         public IActionResult Get(Guid id) => 
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
-               
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel filter)
@@ -85,7 +84,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
@@ -122,6 +121,16 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Block(Guid eventId)
+        {
+            var result = await _eventService.BlockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> SetRate(RateDto model)
@@ -164,26 +173,110 @@ namespace EventsExpress.Controllers
         
 
         #region Get event-sets for user profile
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult FutureEvents(Guid id, int page=1) {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid id) =>
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id)));
-
+        public IActionResult PastEvents(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult PastEvents(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id)));
-
+        public IActionResult EventsToGo(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet("[action]")]
-        public IActionResult EventsToGo(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id)));
+        public IActionResult VisitedEvents(Guid id, int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 3;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
 
-
-        [HttpGet("[action]")]
-        public IActionResult VisitedEvents(Guid id) => 
-            Ok(_mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id)));
-        
+        [HttpPost("[action]")]
+        public IActionResult GetEvents([FromBody]List<Guid> eventIds, [FromQuery]int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 1;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }                                     
+        }
         #endregion
 
     }

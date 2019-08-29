@@ -1,5 +1,4 @@
 ﻿import React, { Component } from "react";
-import { reduxForm } from "redux-form";
 import Avatar from '@material-ui/core/Avatar';
 import { Link } from 'react-router-dom';
 import './Comment.css';
@@ -31,7 +30,7 @@ export default class commentItem extends Component {
             <div>
                 <div>
                     <div className="row">
-                        {!(user === userId) && <div className="photo-container">
+                        {(user !== userId) && <div className="photo-container">
                             <Avatar
                                 alt="Тут аватар"
                                 src={userPhoto}

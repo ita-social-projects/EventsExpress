@@ -11,7 +11,7 @@ class EditGenderContainer extends React.Component {
 
 
     render() {
-        let { isEditGenderPending, isEditGenderSuccess, EditGenderError } = this.props;
+   
 
         return <EditGender onSubmit={this.submit} />;
     }

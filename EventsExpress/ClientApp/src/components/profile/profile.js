@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import SelectCategoriesWrapper from '../../containers/SelectCategories';
 import AddUserCategory from '../../containers/editProfileContainers/addUserCategoryContainer';
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
@@ -110,8 +109,8 @@ const useStyles = makeStyles(theme => ({
                     aria-controls="panel3bh-content"
                     id="panel3bh-header"
                 >
-                    <Typography className={classes.heading}>Age</Typography>
-                    <Typography className={classes.secondaryHeading}><Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment></Typography>
+                    <Typography className={classes.heading}>Date of birth</Typography>
+                    <Typography className={classes.secondaryHeading}>{props.birthday}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
