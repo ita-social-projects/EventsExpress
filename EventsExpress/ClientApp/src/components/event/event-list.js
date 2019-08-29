@@ -28,7 +28,12 @@ export default class EventList extends Component {
         return arr.map((item) => {
 
             return (
-                <Event key={item.id} item={item} />
+                <Event 
+                    key={item.id+item.isBlocked} 
+                    item={item} 
+                    current_user={this.props.current_user}
+                   
+                />
             );
         });
     }

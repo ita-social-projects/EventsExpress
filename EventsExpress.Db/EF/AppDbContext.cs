@@ -59,7 +59,7 @@ namespace EventsExpress.Db.EF
                 .HasForeignKey(ue => ue.EventId);
 
             // user-event configs
-            // user as ovner
+            // user as owner
             builder.Entity<Event>()
                 .HasOne(e => e.Owner)
                 .WithMany(u => u.Events)
@@ -77,13 +77,10 @@ namespace EventsExpress.Db.EF
                 .WithMany(u => u.Rates)
                 .HasForeignKey(r => r.UserFromId).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Rate>()
-                .HasOne(r => r.UserTo)
-                .WithMany(u => u.MyRates)
-                .HasForeignKey(r => r.UserToId).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<Rate>()
                 .HasOne(r => r.Event)
                 .WithMany(e => e.Rates)
                 .HasForeignKey(r => r.EventId).OnDelete(DeleteBehavior.Restrict);
+
 
             builder.Entity<Relationship>()
                 .HasOne(r => r.UserFrom)

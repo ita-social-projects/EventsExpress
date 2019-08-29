@@ -29,8 +29,6 @@ namespace EventsExpress.Db.Entities
         
         public IEnumerable<Rate> Rates { get; set; }
 
-        public IEnumerable<Rate> MyRates { get; set; }
-
         public IEnumerable<Relationship> Relationships { get; set; }
 
         public IEnumerable<UserChat> Chats { get; set; }

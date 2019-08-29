@@ -1,7 +1,7 @@
 import EventsExpressService from '../services/EventsExpressService';
 import * as SignalR from '@aspnet/signalr';
 import { connect } from 'react-redux';
-
+import { SetAlert } from './alert';
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
@@ -15,6 +15,7 @@ export const RECEIVE_SEEN_MESSAGE = "RECEIVE_SEEN_MESSAGE";
 export const CONCAT_NEW_MSG = "CONCAT_NEW_MSG";
 export const DELETE_OLD_NOTIFICATION = "DELETE_OLD_NOTIFICATION";
 export const DELETE_SEEN_MSG_NOTIFICATION = "DELETE_SEEN_MSG_NOTIFICATION";
+export const RECEIVED_NEW_EVENT = "RECEIVED_NEW_EVENT";
 
 const api_serv = new EventsExpressService();
 
@@ -33,7 +34,7 @@ export default function get_chat(chatId) {
         });
     }
 }
-export function initialConnection(props) {
+export function initialConnection() {
     return dispatch => {
         const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/chatroom`,
             { accessTokenFactory: () => (localStorage.getItem('token')) }).build();
@@ -42,9 +43,17 @@ export function initialConnection(props) {
             .start()
             .then(() =>{ hubConnection.on('ReceiveMessage', (data) => {
                     dispatch(ReceiveMsg(data));
+                    if(data.senderId != localStorage.getItem('id')){
+                    dispatch(SetAlert({variant: 'info', message: "You have received new message", autoHideDuration: 5000}));
+                    }
             });
             hubConnection.on('wasSeen', (data) => {
-                dispatch(ReceiveSeenMsg(data));
+                    dispatch(ReceiveSeenMsg(data));
+            });
+        
+        hubConnection.on('ReceivedNewEvent', (data) => {
+                dispatch(receivedNewEvent(data));
+                dispatch(SetAlert({variant: 'info', message: `The event was created which could interested you.`, autoHideDuration: 5000})); 
         });
         }
             )
@@ -56,6 +65,14 @@ export function initialConnection(props) {
         });
     }
 }
+
+function receivedNewEvent(data){
+    return {
+        type: RECEIVED_NEW_EVENT,
+        payload: data
+    }
+}
+
 export function deleteSeenMsgNotification(id){
     return dispatch => dispatch({
         type: DELETE_SEEN_MSG_NOTIFICATION,

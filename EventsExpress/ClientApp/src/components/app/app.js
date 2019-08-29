@@ -16,7 +16,7 @@ import EventsForAdmin from '../../components/event/EventsForAdmin'
 import Authentication from '../Authentication/authentication';
 import Chat from '../chat';
 import UserChats from '../chat/user_chats';
-
+import NotificationEvents from '../notification_events';
 export default class App extends Component {
 
     render() {
@@ -43,6 +43,7 @@ export default class App extends Component {
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/admin/users" component={UsersWrapper} />
                         <Route path="/user_chats" component={UserChats} />
+                        <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/chat/:chatId" component={Chat} />
                     <Route component={NotFound} />

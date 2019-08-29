@@ -153,12 +153,22 @@ namespace EventsExpress.Core.Services
         }
 
 
-        public UserDTO GetById(Guid id) =>
-            _mapper.Map<UserDTO>(Db.UserRepository.Get("Photo,Categories.Category,Events,Role").FirstOrDefault(x => x.Id == id));
+        public UserDTO GetById(Guid id)
+        {
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get("Photo,Categories.Category,Events,Role").FirstOrDefault(x => x.Id == id));
+            user.Rating = GetRating(user.Id);
+            return user;
+        }
+          
 
 
-        public UserDTO GetByEmail(string email) =>
-            _mapper.Map<UserDTO>(Db.UserRepository.Get("Role,Categories.Category,Photo").AsNoTracking().FirstOrDefault(o => o.Email == email));
+        public UserDTO GetByEmail(string email)
+        {
+            var user = _mapper.Map<UserDTO>(Db.UserRepository.Get("Role,Categories.Category,Photo").AsNoTracking().FirstOrDefault(o => o.Email == email));
+            user.Rating = GetRating(user.Id);
+            return user;
+        }
+            
             
 
         public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count)
@@ -172,7 +182,18 @@ namespace EventsExpress.Core.Services
           
             count = users.Count();
 
-            return _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            users = users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize);
+
+            var result = _mapper
+                .Map<IEnumerable<UserDTO>>(users)
+                .ToList();
+
+            foreach (var u in result)
+            {
+                u.Rating = GetRating(u.Id);
+            }
+
+            return result;
         }
 
 
@@ -186,7 +207,7 @@ namespace EventsExpress.Core.Services
                 .Distinct()
                 .AsEnumerable();
 
-            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users);
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
 
@@ -322,12 +343,27 @@ namespace EventsExpress.Core.Services
             var user = _mapper.Map<UserDTO, ProfileDTO>(GetById(id));
 
             var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == fromId && x.UserToId == id));
-
             user.Attitude = (rel != null)
                 ? (byte) rel.Attitude
                 : (byte) 2;
-            
+
+            user.Rating = GetRating(user.Id);
+
             return user;
         }
+
+        public double GetRating(Guid userId)
+        {
+            var ownEventsIds = Db.EventRepository.Get().Where(e => e.OwnerId == userId).Select(e => e.Id).ToList();
+            try
+            {
+                return Db.RateRepository.Get().Where(r => ownEventsIds.Contains(r.EventId)).Average(r => r.Score);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
     }
 }

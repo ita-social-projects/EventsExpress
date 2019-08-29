@@ -21,8 +21,14 @@ export default class EventsForProfile extends Component {
             currentPage: page
         });
         console.log(page);
+       
+        if(this.props.notification_events != null){
+            console.log(this.props.notification_events);
+        this.props.callback(this.props.notification_events,page);
+       }else{
         this.props.callback(page);
-
+        console.log(this.props.notification_events);
+       }
     };
 
 
@@ -30,7 +36,7 @@ export default class EventsForProfile extends Component {
         return arr.map((item) => {
 
             return (
-                <Event key={item.id} item={item} />
+                <Event key={item.id} item={item} current_user={this.props.current_user} />
             );
         });
     }

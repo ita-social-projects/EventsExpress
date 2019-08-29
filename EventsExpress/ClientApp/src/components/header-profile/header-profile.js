@@ -6,6 +6,8 @@ import DirectionsRun from "@material-ui/icons/DirectionsRun";
 import Avatar from '@material-ui/core/Avatar';
 import ModalWind from '../modal-wind';
 import { Link } from 'react-router-dom';
+import RatingAverage from '../rating/rating-average'
+import Badge from '@material-ui/core/Badge';
 
 import './header-profile.css';
 
@@ -14,7 +16,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl, email } = this.props.user;
+        const { id, name, photoUrl, email, rating } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -38,6 +40,7 @@ export default class HeaderProfile extends Component {
                         
                         
                         <h4>{name}</h4>
+                        <RatingAverage value={rating} direction='row' />
                         
                         <div>
                             <Link to={'/profile' }><IconButton
@@ -47,6 +50,8 @@ export default class HeaderProfile extends Component {
                             >
                                 <Create />
                             </IconButton></Link>
+                            <Link to={'/notification_events' }>
+                                <Badge badgeContent={this.props.notification} color="primary">
                             <IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"
@@ -54,6 +59,7 @@ export default class HeaderProfile extends Component {
                             >
                                 <Notifications />
                             </IconButton>
+                            </Badge></Link>
                             <IconButton
                                 className='menuButton'
                                 aria-label="Edit"

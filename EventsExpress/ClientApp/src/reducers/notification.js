@@ -1,7 +1,7 @@
 
 import initialState from '../store/initialState';
 import {
-     RECEIVE_MESSAGE, DELETE_OLD_NOTIFICATION, RECEIVE_SEEN_MESSAGE, DELETE_SEEN_MSG_NOTIFICATION
+     RECEIVE_MESSAGE, DELETE_OLD_NOTIFICATION, RECEIVE_SEEN_MESSAGE, DELETE_SEEN_MSG_NOTIFICATION, RECEIVED_NEW_EVENT
 }from '../actions/chat';
 
 import {
@@ -14,6 +14,13 @@ export const reducer = (
     action
   ) => {
     switch (action.type) {
+        case RECEIVED_NEW_EVENT: 
+            var new_events = state.events;
+            new_events = new_events.concat(action.payload);
+            return {
+                ...state,
+                events: new_events
+            }
         case RECEIVE_MESSAGE:
             var new_msg = state.messages;
             new_msg = new_msg.concat(action.payload);

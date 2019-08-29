@@ -15,7 +15,7 @@ namespace EventsExpress.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -219,19 +219,15 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<Guid>("EventId");
 
-                    b.Property<int>("Score");
+                    b.Property<byte>("Score");
 
                     b.Property<Guid>("UserFromId");
-
-                    b.Property<Guid>("UserToId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
                     b.HasIndex("UserFromId");
-
-                    b.HasIndex("UserToId");
 
                     b.ToTable("Rates");
                 });
@@ -454,11 +450,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
                         .WithMany("Rates")
                         .HasForeignKey("UserFromId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
-                        .WithMany("MyRates")
-                        .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

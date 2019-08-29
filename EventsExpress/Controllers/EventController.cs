@@ -6,6 +6,7 @@ using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
+using EventsExpress.Validation;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +19,17 @@ namespace EventsExpress.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public EventController(
             IEventService eventService,
-            IMapper mapper)
+            IAuthService authSrv,
+            IMapper mapper
+            )
         {
             _eventService = eventService;
+            _authService = authSrv;
             _mapper = mapper;
         }
 
@@ -37,7 +42,7 @@ namespace EventsExpress.Controllers
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
             if (result.Successed)
             {
-                return Ok();
+                return Ok(result.Property);
             }
             return BadRequest(result.Message);
         }
@@ -48,7 +53,6 @@ namespace EventsExpress.Controllers
         public IActionResult Get(Guid id) => 
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
-               
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult All([FromQuery]EventFilterViewModel filter)
@@ -80,7 +84,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                     
                 };
@@ -117,6 +121,67 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Block(Guid eventId)
+        {
+            var result = await _eventService.BlockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Unblock(Guid eventId)
+        {
+            var result = await _eventService.UnblockEvent(eventId);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SetRate(RateDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _eventService.SetRate(model.UserId, model.EventId, model.Rate);
+            if (result.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("[action]/{eventId}")]
+        public IActionResult GetCurrentRate(Guid eventId)
+        {
+            if (!_eventService.Exists(eventId))
+            {
+                return BadRequest("Invalid id");
+            }
+
+            var userId = _authService.GetCurrentUser(HttpContext.User).Id;
+
+            return Ok(_eventService.GetRateFromUser(userId, eventId));
+        }
+        
+        [HttpGet("[action]/{eventId}")]
+        public IActionResult GetAverageRate(Guid eventId)
+        {
+            if (!_eventService.Exists(eventId))
+            {
+                return BadRequest("Invalid id");
+            }
+
+            return Ok(_eventService.GetRate(eventId));
+        }
+        
 
         #region Get event-sets for user profile
         [AllowAnonymous]
@@ -202,7 +267,28 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
         }
-            #endregion
 
+        [HttpPost("[action]")]
+        public IActionResult GetEvents([FromBody]List<Guid> eventIds, [FromQuery]int page = 1)
+        {
+            var model = new PaginationViewModel();
+            model.PageSize = 1;
+            model.Page = page;
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewDto>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds, model)),
+                    PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize)
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }                                     
         }
+        #endregion
+
+    }
 }

@@ -7,9 +7,7 @@ import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
 import Msg from './msg';
-import {
-    RECEIVE_MESSAGE
-} from '../../actions/chat';
+import Spinner from '../spinner';
 
 class Chat extends Component {
 
@@ -18,13 +16,15 @@ class Chat extends Component {
     }
 
     componentDidUpdate = () => {
+        if(!this.props.chat.isPending){
         document.getElementsByClassName('card-body')[0].scrollTop = document.getElementsByClassName('card-body')[0].scrollHeight;
+        }
         var newMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && !this.props.chat.data.messages.map(y => y.id).includes(x.id));
         if(newMsg.length > 0)
         {
             this.props.concatNewMsg(newMsg);
             this.props.deleteOldNotififcation(newMsg.map(x => x.id));
-        }      
+        }
         var msgIds = this.props.chat.data.messages.filter(x => (!x.seen && x.senderId != this.props.current_user.id)).map(x => x.id);
         console.log(msgIds);
         if(msgIds.length > 0){
@@ -68,7 +68,8 @@ class Chat extends Component {
 
     render() {
         var sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
-        return <>
+        const {isPending} = this.props.chat;
+            return isPending ? <Spinner /> : <>
             <div className="row justify-content-center h-100 mt-2">
                 <div className="col-md-8 col-xl-8 chat">
                     <div className="card">

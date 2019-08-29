@@ -16,5 +16,6 @@ namespace EventsExpress.DTO
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
         public virtual RoleDto Role { get; set; }
+        public double Rating { get; set; }
     }
 }

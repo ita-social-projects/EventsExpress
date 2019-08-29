@@ -14,6 +14,14 @@ export default class EventsExpressService {
         return res;
     }
 
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource('event/getEvents?page='+page, eventIds);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
     getUnreadMessages = async (userId) => {
         const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
         console.log(res);
@@ -46,6 +54,22 @@ export default class EventsExpressService {
             i++;
         })
         const res = await this.setResourceWithData('event/edit', file);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventBlock = async (id) => {
+        const res = await this.setResource('Event/Block/?eventId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventUnblock = async (id) => {
+        const res = await this.setResource('Event/Unblock/?eventId=' + id);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -96,6 +120,7 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
@@ -204,10 +229,35 @@ export default class EventsExpressService {
         return res;
     }
 
+    setRate = async (data) => {
+        const res = await this.setResource('event/setrate', {
+            Rate: data.rate,
+            UserId: data.userId,
+            EventId: data.eventId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getCurrentRate = async (eventId) => {
+        const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+
     getAllEventsForAdmin = async (filters) => {
         const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;

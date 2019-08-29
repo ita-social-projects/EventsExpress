@@ -2,6 +2,7 @@ import EventsExpressService from '../services/EventsExpressService';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
 
+
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
 export const SET_LOGIN_ERROR = "SET_LOGIN_ERROR";
@@ -24,6 +25,7 @@ export default function login(email, password) {
          
           localStorage.setItem('token', response.token);
           
+          localStorage.setItem('id', response.id);
           dispatch(initialConnection());
 
           dispatch(getUnreadMessages(response.id));

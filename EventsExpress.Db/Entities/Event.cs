@@ -24,8 +24,8 @@ namespace EventsExpress.Db.Entities
         public virtual User Owner { get; set; }    
 
         public virtual ICollection<UserEvent> Visitors { get; set; }
-        public virtual IEnumerable<EventCategory> Categories { get; set; }
+        public virtual ICollection<EventCategory> Categories { get; set; }
 
-        public virtual IEnumerable<Rate> Rates { get; set; }
+        public virtual ICollection<Rate> Rates { get; set; }
     }
 }
