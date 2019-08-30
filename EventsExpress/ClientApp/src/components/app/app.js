@@ -45,6 +45,7 @@ export default class App extends Component {
                         <Route path="/admin/users" component={UserPWrapper} />
                         <Route path="/admin/events" component={EventsForAdmin} />
                         <Route path="/search/users" component={SearchUserWrapper} />
+                        
                         <Route path="/admin/users" component={UsersWrapper} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/authentication/:id/:token" component={Authentication} />

@@ -13,14 +13,14 @@ const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
         backgroundImage: "linear-gradient(90deg, #94d4ff, transparent)",
- 
+
     },
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
         maxWidth: 500,
-        
-        
+
+
     },
     Avatar: {
         width: 128,
@@ -33,21 +33,21 @@ const useStyles = makeStyles(theme => ({
         maxHeight: '100%',
     },
 }));
- const getAge = (birthday) => {
+const getAge = (birthday) => {
     let today = new Date();
     let birthDate = new Date(birthday);
     var age = today.getFullYear() - birthDate.getFullYear();
     var m = today.getMonth() - birthDate.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age = age - 1;
-     }
-     if (age >= 100) {
-         age = "---";
-     }
+    }
+    if (age >= 100) {
+        age = "---";
+    }
     return age;
 }
 export default class UserInfoCard extends Component {
-   
+
 
     render() {
         const { user } = this.props;
@@ -55,38 +55,38 @@ export default class UserInfoCard extends Component {
         return (
             <>
                 <br />
-             
+
                 <div className="row">
                     <div className="col-3"></div>
                     <div className="col-6">
-                    <div className={classes.root}>
-           
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={1}>
-                            <Grid item>
+                        <div className={classes.root}>
+
+                            <Paper className={classes.paper} style={{ backgroundColor: (user.attitude === 0) ? "lightgreen" : ((user.attitude === 1) ? "thistle" : "") }}>
+                                <Grid container spacing={1}>
+                                    <Grid item>
                                         <ButtonBase className={classes.Avatar}>
                                             <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
                                         </ButtonBase>
-                            </Grid>
-                            <Grid item xs={1} sm container>
-                                <Grid item xs container direction="column" spacing={2}>
-                                    <Grid item xs>
+                                    </Grid>
+                                    <Grid item xs={1} sm container>
+                                        <Grid item xs container direction="column" spacing={2}>
+                                            <Grid item xs>
                                                 <Typography gutterBottom variant="subtitle1">
-                                                    {(user.username) ? <p><Link to={'/user/' + user.id} className="btn-custom">{user.username}</Link></p>:<p><Link to={'/user/' + user.id} className="btn-custom">{user.email.substring(0, user.email.search("@"))}</Link></p>}
-                </Typography>
+                                                    {(user.username) ? <p><Link to={'/user/' + user.id} className="btn-custom">{user.username}</Link></p> : <p><Link to={'/user/' + user.id} className="btn-custom">{user.email.substring(0, user.email.search("@"))}</Link></p>}
+                                                </Typography>
                                                 <Typography variant="body2" gutterBottom>
                                                     {genders[user.gender]}
-                </Typography>
+                                                </Typography>
                                                 <Typography variant="body2" color="textSecondary">
                                                     Age:{getAge(user.birthday)}
-                </Typography>
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        </Grid>
                             </Paper>
                         </div>
-                </div> 
+                    </div>
                     <div className="col-3">
                     </div>
                 </div>

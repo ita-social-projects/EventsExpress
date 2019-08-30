@@ -159,7 +159,7 @@ namespace EventsExpress.Core.Services
             _mapper.Map<UserDTO>(Db.UserRepository.Get("Role,Categories.Category,Photo").AsNoTracking().FirstOrDefault(o => o.Email == email));
             
 
-        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count)
+        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
             var users = Db.UserRepository.Get("Photo,Role");
 
@@ -170,7 +170,16 @@ namespace EventsExpress.Core.Services
           
             count = users.Count();
 
-            return _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            IEnumerable<UserDTO>  allUsers =  _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            foreach (var us in allUsers)
+            {
+                var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == id && x.UserToId == us.Id));
+
+                us.Attitude = (rel != null)
+                    ? (byte)rel.Attitude
+                    : (byte)2;
+            }
+            return allUsers;
         }
 
 

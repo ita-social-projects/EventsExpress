@@ -29,7 +29,7 @@ namespace EventsExpress.Core.IServices
 
         ProfileDTO GetProfileById(Guid id, Guid fromId);
 
-        IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count);
+        IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id);
         IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories);
     }
 }
