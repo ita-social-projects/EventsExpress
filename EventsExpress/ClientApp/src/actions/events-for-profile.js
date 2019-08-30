@@ -9,12 +9,12 @@ export const SET_EVENTS_PROFILE_ERROR = "SET_EVENTS_PROFILE_ERROR";
 
 const api_serv = new EventsExpressService();
 
-export default function get_future_events(id) {
+export default function get_future_events(id, page=1) {
 
     return dispatch => {
         dispatch(setEventPending(true));
-
-        const res = api_serv.getFutureEvents(id);
+        
+        const res = api_serv.getFutureEvents(id, page);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));
@@ -26,12 +26,12 @@ export default function get_future_events(id) {
     }
 }
 
-export function get_past_events(id) {
+export function get_past_events(id, page=1) {
 
     return dispatch => {
         dispatch(setEventPending(true));
 
-        const res = api_serv.getPastEvents(id);
+        const res = api_serv.getPastEvents(id, page);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));
@@ -43,12 +43,12 @@ export function get_past_events(id) {
     }
 }
 
-export function get_visited_events(id) {
+export function get_visited_events(id, page=1) {
 
     return dispatch => {
         dispatch(setEventPending(true));
 
-        const res = api_serv.getVisitedEvents(id);
+        const res = api_serv.getVisitedEvents(id, page);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));
@@ -60,12 +60,12 @@ export function get_visited_events(id) {
     }
 }
 
-export function get_events_togo(id) {
+export function get_events_togo(id, page=1) {
 
     return dispatch => {
         dispatch(setEventPending(true));
 
-        const res = api_serv.getEventsToGo(id);
+        const res = api_serv.getEventsToGo(id, page);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));

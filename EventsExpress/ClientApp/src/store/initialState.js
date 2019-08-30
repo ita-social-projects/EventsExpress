@@ -61,11 +61,6 @@ const initialState = {
          IsSelectCategoriesSeccess: false,
          IsSelectCategoriesError: null
      },
-    add_event:{
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
-    },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,
@@ -133,7 +128,11 @@ const initialState = {
     events_for_profile: {
         isPending: true,
         isError: false,
-        data: null
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     changePassword: {
         isPending: false,
@@ -164,7 +163,8 @@ const initialState = {
         isError:null,
         data: {
             messages: [],
-            users: []
+            users: [], 
+            id: null
         }
     },
     alert:{
@@ -182,6 +182,12 @@ const initialState = {
         isPending: false,
         isSuccess:false,
         isError:null
+    },
+    notification:
+    {
+        messages: [],
+        seen_messages: [],
+        events: []
     }
 };
 

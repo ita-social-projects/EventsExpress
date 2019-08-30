@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
@@ -10,8 +12,11 @@ namespace EventsExpress.Mapping
 {
     public class AutoMapperProfile : Profile
     {
+
+
         public AutoMapperProfile()
         {
+
             #region USER MAPPING
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
@@ -66,6 +71,7 @@ namespace EventsExpress.Mapping
             CreateMap<ProfileDTO, ProfileDto>().ReverseMap();
 
             CreateMap<LoginDto, UserDTO>();
+            CreateMap<UserView, UserDTO>();
 
             #endregion
 
@@ -95,7 +101,7 @@ namespace EventsExpress.Mapping
                     Id = src.OwnerId,
                     Birthday = src.Owner.Birthday,
                     PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@"))
+                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal))
                 }));
 
             CreateMap<EventDTO, EventDto>()
@@ -105,7 +111,7 @@ namespace EventsExpress.Mapping
                     new UserPreviewDto
                     {
                         Id = x.User.Id,
-                        Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@")),
+                        Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@", StringComparison.Ordinal)),
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null
                     })))
@@ -118,7 +124,7 @@ namespace EventsExpress.Mapping
                     Id = src.OwnerId,
                     Birthday = src.Owner.Birthday,
                     PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@"))
+                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal))
                 }));
 
             CreateMap<EventDto, EventDTO>()
@@ -161,7 +167,8 @@ namespace EventsExpress.Mapping
 
             #region MESSAGE MAPPING         
                                     
-            CreateMap<ChatRoom, UserChatDto>()                     
+            CreateMap<ChatRoom, UserChatDto>()
+                .ForMember(dest => dest.LastMessage, opts => opts.MapFrom(src => src.Messages.LastOrDefault().Text))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
                 .Select(x => new UserPreviewDto {
                     Id = x.UserId,
@@ -174,8 +181,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Messages, opts => opts.MapFrom(src => src.Messages.Select(x => new MessageDto
                 {
                     Id = x.Id,
+                    ChatRoomId = x.ChatRoomId,
                     DateCreated = x.DateCreated,
                     SenderId = x.SenderId,
+                    Seen = x.Seen,
+                    Edited = x.Edited,
                     Text = x.Text  
                 })))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
@@ -187,7 +197,8 @@ namespace EventsExpress.Mapping
                     Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@"))
                 })));
 
-
+            CreateMap<Message, MessageDto>().ReverseMap();
+                
             #endregion
         }
     }

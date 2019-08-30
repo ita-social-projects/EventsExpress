@@ -50,9 +50,18 @@ namespace EventsExpress.Controllers
         /// <returns></returns>
         /// <response code="200">UserChatDto model</response>
         [HttpGet("[action]")]
-        public IActionResult GetChat([FromQuery]Guid chatId)
-        {                                                                                                 
-            var res = _mapper.Map<ChatDto>(_messageService.GetChat(chatId));
+        public async Task<IActionResult> GetChat([FromQuery]Guid chatId)
+        {
+            var sender = _authService.GetCurrentUser(HttpContext.User);
+            var chat = await _messageService.GetChat(chatId, sender.Id);
+            var res = _mapper.Map<ChatDto>(chat);
+            return Ok(res);
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetUnreadMessages([FromQuery]Guid userId)
+        {
+            var res = _mapper.Map<IEnumerable<MessageDto>>(_messageService.GetUnreadMessages(userId));
             return Ok(res);
         }
     }

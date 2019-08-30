@@ -1,10 +1,14 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
+using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +33,24 @@ namespace EventsExpress.Core.Services
             _configuration = config;
         }
 
+        public OperationResult AuthenticateGoogleFacebookUser(string email)
+        {
+            var user = _userService.GetByEmail(email);
+            if (user == null)
+            {
+                return new OperationResult(false, $"User with email: {email} not found", "email");
+            }
+
+            if (user.IsBlocked)
+            {
+                return new OperationResult(false, $"{email}, your account was blocked.", "email");
+            }
+
+
+            var token = GenerateJwt(user);
+
+            return new OperationResult(true, token, "");
+        }
 
         public OperationResult Authenticate(string email, string password)
         {
@@ -106,6 +128,7 @@ namespace EventsExpress.Core.Services
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),     
             };
 
             var token = new JwtSecurityToken(
@@ -118,5 +141,7 @@ namespace EventsExpress.Core.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }

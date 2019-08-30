@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import SelectCategoriesWrapper from '../../containers/SelectCategories';
 import AddUserCategory from '../../containers/editProfileContainers/addUserCategoryContainer';
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
@@ -156,16 +155,7 @@ const useStyles = makeStyles(theme => ({
 
 const mapStateToProps = state => {
     return state.user;
-
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        
-    };
-};
 
-export default connect(
-    mapStateToProps,
-
-)(Profile);
+export default connect(mapStateToProps)(Profile);

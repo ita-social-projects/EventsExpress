@@ -17,18 +17,16 @@ namespace EventsExpress.Core.DTOs
         public DateTime Birthday { get; set; }
         public Gender Gender { get; set; }
         public bool IsBlocked { get; set; }
-        
         public virtual Guid RoleId { get; set; }
         public virtual Role Role { get; set; }
         public virtual Guid? PhotoId { get; set; }
         public virtual Photo Photo { get; set; }
 
+        public double Rating { get; set; }
+
         public IEnumerable<EventDTO> Events { get; set; }
-
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
-
         public IEnumerable<UserCategory> Categories { get; set; }
-
         public IEnumerable<Rate> MyRates { get; set; }
 
     }

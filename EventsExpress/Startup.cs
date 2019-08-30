@@ -27,6 +27,8 @@ using EventsExpress.Validation;
 using Swashbuckle.AspNetCore.Swagger;
 using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using System.Text;
 
 namespace EventsExpress
 {
@@ -54,6 +56,8 @@ namespace EventsExpress
                 .AddMemoryCache()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -114,18 +118,21 @@ namespace EventsExpress
             services.AddSingleton<CacheHelper>();
 
             #endregion
-
-            services.AddMvc()
-                .AddFluentValidation()
+            services.AddCors();
+            services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+           
+            
 
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
             services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
-            services.AddTransient<IValidator<EventDto>, EventDtoValidator>();
+            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>();
             services.AddTransient<IValidator<UserInfo>, UserInfoValidator>();
             services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
+            services.AddTransient<IValidator<RateDto>, RateDtoValidator>();
       
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -146,8 +153,8 @@ namespace EventsExpress
 
                 c.IncludeXmlComments(xmlPath);
             });
-
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -161,9 +168,14 @@ namespace EventsExpress
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }                             
-
+            }
+            app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials());
             app.UseAuthentication();
+          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

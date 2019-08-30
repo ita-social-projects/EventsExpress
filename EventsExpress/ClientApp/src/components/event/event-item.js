@@ -3,24 +3,18 @@ import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import IconDecorator from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip'; 
 import Badge from '@material-ui/core/Badge';
+import SocialShare from '././share/ShareMenu'
 import EventManagmentWrapper from '../../containers/event-managment';
 
 
@@ -60,33 +54,40 @@ export default class Event extends Component {
         );
     }
       
-    render() {
-        
+    render() {        
         const classes = useStyles;
-        // const [expanded, setExpanded] = React.useState();
       
         const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor, isBlocked  } = this.props.item;
         const { city, country } = this.props.item;
-        let divClassName = (isBlocked)?"bg-warning":"";
+    
+        const rateTextColor = (user.rating < 5) 
+        ? 'text-danger' 
+        : (user.rating < 8) 
+            ? 'text-warning'
+            : 'text-success';
+
+
+
         return (
-            <div className={"col-4 mt-3" }>
+            <div className={"col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 mt-3" }>
 
             <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
                     avatar={
                             <Tooltip title={user.username}>
                                 <Link to={'/user/' + user.id} className="btn-custom">
-                                    <Avatar aria-label="recipe"
-                        src={user.photoUrl}
-                         className={classes.avatar} >
-                             {user.username[0].toUpperCase()}
+                                    <Avatar 
+                                        aria-label="recipe"
+                                        src={user.photoUrl}
+                                        className={classes.avatar} 
+                                    >
+                                        {user.username[0].toUpperCase()}
                                     </Avatar>
-                                    </Link>
-                        </Tooltip>
-                        }
+                                </Link>
+                            </Tooltip>
+                    }
                         
-                        action={
-                            
+                    action={
                         <Tooltip title="Visitors">
                             <IconButton>
                                 <Badge badgeContent={countVisitor} color="primary">
@@ -94,7 +95,7 @@ export default class Event extends Component {
                                 </Badge>
                             </IconButton>
                         </Tooltip>
-                        }
+                    }
                     title={title}
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                 />
@@ -124,6 +125,8 @@ export default class Event extends Component {
                         : null
                     }
                         
+                    
+                        <SocialShare href='https://www.instagram.com/dima.kundiy/' />
                 </CardActions>
             </Card>
             </div>

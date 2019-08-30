@@ -53,21 +53,6 @@ namespace EventsExpress.Test.ServiceTests
 
         }
 
-        [Test]
-        public void Create_WithEmptyCategoryName_IsFalse()
-        {
-            var res = service.Create("");
-
-            Assert.IsFalse(res.Result.Successed);
-        }
-
-        [Test]
-        public void Create_WithNJullCategoryName_IsFalse()
-        {
-            var res = service.Create(null);
-
-            Assert.IsFalse(res.Result.Successed);
-        }
 
         [Test]
         public void Create_newCategory_Success()

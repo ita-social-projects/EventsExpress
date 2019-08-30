@@ -1,7 +1,4 @@
 import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-import { async } from 'q';
-
 
 export default class EventsExpressService {
 
@@ -14,6 +11,20 @@ export default class EventsExpressService {
     
     getChat = async (chatId) => {
         const res = await this.getResource(`chat/GetChat?chatId=${chatId}`);
+        return res;
+    }
+
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource('event/getEvents?page='+page, eventIds);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
+    getUnreadMessages = async (userId) => {
+        const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
+        console.log(res);
         return res;
     }
 
@@ -120,6 +131,15 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    
+    setFacebookLogin = async (data) => {
+        const res = await this.setResource('Authentication/FacebookLogin', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res.json();
+    }
+
 
     setRecoverPassword = async (data) => {
         console.log("SERVICE:")
@@ -220,10 +240,35 @@ export default class EventsExpressService {
         return res;
     }
 
+    setRate = async (data) => {
+        const res = await this.setResource('event/setrate', {
+            Rate: data.rate,
+            UserId: data.userId,
+            EventId: data.eventId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    getCurrentRate = async (eventId) => {
+        const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+
     getAllEventsForAdmin = async (filters) => {
         const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;
@@ -239,23 +284,23 @@ export default class EventsExpressService {
         return res;
     }
 
-    getVisitedEvents = async (id) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id);
+    getVisitedEvents = async (id, page) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getFutureEvents = async (id) => {
-        const res = await this.getResource('event/futureEvents?id=' + id);
+    getFutureEvents = async (id, page) => {
+        const res = await this.getResource('event/futureEvents?id=' + id + '&'+ 'page='+page);
         return res;
     }
 
-    getPastEvents = async (id) => {
-        const res = await this.getResource('event/pastEvents?id=' + id);
+    getPastEvents = async (id, page) => {
+        const res = await this.getResource('event/pastEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getEventsToGo = async (id) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id);
+    getEventsToGo = async (id, page) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
