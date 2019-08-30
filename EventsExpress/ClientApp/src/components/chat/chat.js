@@ -84,7 +84,7 @@ class Chat extends Component {
                                 }
                                 <div className="user_info">
                                     <span>Chat with {sender != null && sender.username}</span>
-                                    <p>1767 Messages</p>
+                                    <p>{this.props.chat.data.messages.length} Messages</p>
                                 </div>
                             </div>
                         </div>

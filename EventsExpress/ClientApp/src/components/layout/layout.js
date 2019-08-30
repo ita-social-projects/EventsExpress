@@ -13,14 +13,14 @@ const Layout = ({ children }) => {
                 <div className="row">
                     <div className="col-3 position-fixed">
 
-                    <LeftSidebarWrapper />
-                    <AlertContainer/>
+                        <LeftSidebarWrapper />
+                        <AlertContainer />
                     </div>
                     <div className="col-9 offset-3">
                         <div className="row">
-                            <div className="col-12">
-                                {children}
-                            </div>
+                            <div className="col-12">  
+                            {children}
+                            </div> 
                         </div>
                     </div>
                 </div>

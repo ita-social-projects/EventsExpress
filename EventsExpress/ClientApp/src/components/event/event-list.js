@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Event from './event-item';
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import $ from 'jquery';
 const limit = 2;
 const pageCount = 3;
 
@@ -44,9 +44,10 @@ export default class EventList extends Component {
         const { page, totalPages } = this.props;
         console.log(data_list);
         return <>
-            <div className="row">
-                {items}
+                <div className="row">
+                        {items}
             </div>
+
             <br />
             <ul className="pagination justify-content-center">
                 <Pagination
@@ -157,6 +158,8 @@ export default class EventList extends Component {
                 </Pagination>
             </ul>
 
+
+            
         </>
     }
 }
