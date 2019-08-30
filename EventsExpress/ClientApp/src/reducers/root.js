@@ -71,7 +71,7 @@ const rootReducers = {
     hubConnection: Hub.reducer,
     alert:Alert.reducer,
     dialog:Dialog.reducer,
-    contactUs:ContactUs.reducer
+    contactUs:ContactUs.reducer,
     notification: Notification.reducer
 };
 
