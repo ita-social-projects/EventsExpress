@@ -82,8 +82,11 @@ namespace EventsExpress.Controllers
         {
             int pageSize = 5;
             int count;
-            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(_commentService.GetCommentByEventId(id, page, pageSize, out count));
-
+            var res = _mapper.Map<IEnumerable<CommentDTO>, IEnumerable<CommentDto>>(
+                _commentService.GetCommentByEventId(id, page, pageSize, out count));
+            foreach (var com in res) {
+                com.Children = _mapper.Map<IEnumerable<CommentDto>>(com.Children);
+            }
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             IndexViewModel<CommentDto> viewModel = new IndexViewModel<CommentDto>
             {

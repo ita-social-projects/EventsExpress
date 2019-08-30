@@ -17,6 +17,8 @@ import Badge from '@material-ui/core/Badge';
 import SocialShare from '././share/ShareMenu'
 import EventManagmentWrapper from '../../containers/event-managment';
 
+import CustomAvatar from '../avatar/custom-avatar';
+
 
 const useStyles = makeStyles(theme => ({
     
@@ -76,16 +78,10 @@ export default class Event extends Component {
                     avatar={
                             <Tooltip title={user.username}>
                                 <Link to={'/user/' + user.id} className="btn-custom">
-                                    <Avatar 
-                                        aria-label="recipe"
-                                        src={user.photoUrl}
-                                        className={classes.avatar} 
-                                    >
-                                        {user.username[0].toUpperCase()}
-                                    </Avatar>
-                                </Link>
-                            </Tooltip>
-                    }
+                                    <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
+                                    </Link>
+                        </Tooltip>
+                        }
                         
                     action={
                         <Tooltip title="Visitors">

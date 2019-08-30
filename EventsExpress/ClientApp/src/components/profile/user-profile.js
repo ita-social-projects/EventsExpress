@@ -22,6 +22,8 @@ import ThumbDown from '@material-ui/icons/ThumbDown';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import CustomAvatar from '../avatar/custom-avatar';
+import { AddComponent } from '../home/home'; 
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -60,6 +62,8 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
     },
 }));
+
+
 
 export default class UserItemView extends Component {
     state = {
@@ -121,22 +125,15 @@ export default class UserItemView extends Component {
                     <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
                 </div>
                 <div className="col-3">
-                    <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6>
+                    {(name) ? <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(this.getAge(birthday)) ? <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(genders[gender]) ? <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(email) ? <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
                 </div>
                 {(id !== this.props.current_user) &&
                     <div className="col-3">
-                        <div className="d-flex align-items-center attitude">
-                            <Avatar
-                                alt="Тут аватар"
-                                src={userPhoto}
-
-                                className='bigAvatar'
-                            />
-                        </div>
+                    <CustomAvatar size="big" name={name} photoUrl={this.props.data.photoUrl}/>
                         <center>
                         {attitude == '2' && <div className="row attitude">
                             <button onClick={this.props.onLike} className="btn btn-info">Like</button>

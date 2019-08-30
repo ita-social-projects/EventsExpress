@@ -232,7 +232,8 @@ export default class EventsExpressService {
             Id: data.id,
             Text: data.comment,
             UserId: data.userId,
-            EventId: data.eventId
+            EventId: data.eventId,
+            CommentsId: data.commentsId
         });
         if (!res.ok) {
             return { error: await res.text() };

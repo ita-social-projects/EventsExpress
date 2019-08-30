@@ -4,10 +4,11 @@ import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
 import { Link } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
 import Comment from '../comment/comment';
 import EditEventWrapper from '../../containers/edit-event'; 
-import RatingWrapper from '../../containers/rating'
+
+import CustomAvatar from '../avatar/custom-avatar';
+import RatingWrapper from '../../containers/rating';
 
 
 export default class EventItemView extends Component {
@@ -20,12 +21,9 @@ export default class EventItemView extends Component {
 
     renderUsers = arr => {
         return arr.map(
-            x => <div key={x.id} className="d-flex align-items-center">
-                <Avatar className='littleAvatar' src={x.photoUrl} />
-                <Link to={'/user/' + x.id} className="btn-custom">
-                    <h4>{x.username} {this.getAge(x.birthday)}</h4>
-                </Link>                               
-            </div>
+            (x) => (<div className="d-flex align-items-center">
+                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
+            </div>)
         );
     }
 

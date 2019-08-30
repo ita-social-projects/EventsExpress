@@ -21,5 +21,9 @@ namespace EventsExpress.DTO
         public string UserPhoto { get; set; }
 
         public string UserName { get; set; }
+
+        public Guid? CommentsId { get; set; }
+
+        public IEnumerable<CommentDto> Children { get; set; }
     }
 }

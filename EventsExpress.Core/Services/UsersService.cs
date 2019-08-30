@@ -171,7 +171,7 @@ namespace EventsExpress.Core.Services
             
             
 
-        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count)
+        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
             var users = Db.UserRepository.Get("Photo,Role");
 
@@ -182,6 +182,16 @@ namespace EventsExpress.Core.Services
           
             count = users.Count();
 
+            IEnumerable<UserDTO>  allUsers =  _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
+            foreach (var us in allUsers)
+            {
+                var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == id && x.UserToId == us.Id));
+
+                us.Attitude = (rel != null)
+                    ? (byte)rel.Attitude
+                    : (byte)2;
+            }
+            return allUsers;
             users = users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize);
 
             var result = _mapper
@@ -277,7 +287,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = false;
             await Db.SaveAsync();
-
+            await _mediator.Publish(new UnblockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 
@@ -292,7 +302,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = true;
             await Db.SaveAsync();
-
+            await _mediator.Publish(new BlockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 

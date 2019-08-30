@@ -24,6 +24,9 @@ namespace EventsExpress.Core.DTOs
 
         public double Rating { get; set; }
 
+
+        public byte Attitude { get; set; }
+
         public IEnumerable<EventDTO> Events { get; set; }
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
         public IEnumerable<UserCategory> Categories { get; set; }

@@ -33,9 +33,7 @@ class CategoryAddWrapper extends React.Component {
     render() {
         return (this.props.item.id !== this.props.editedCategory) 
             ? <tr>
-                <td width="75%"></td>
-
-                <td className="align-middle align-items-stretch" width="15%">
+                <td className="align-middle align-items-stretch" width="20%">
                     <div className="d-flex align-items-center justify-content-center">
                         <IconButton 
                             className="text-info" 
@@ -45,7 +43,7 @@ class CategoryAddWrapper extends React.Component {
                         </IconButton> 
                     </div>
                 </td>
-                <td ></td>
+                <td width="55%"></td>
 
             </tr>
             : <tr>

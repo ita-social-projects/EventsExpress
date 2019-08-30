@@ -110,6 +110,7 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = true;
 
             await Db.SaveAsync();
+            await _mediator.Publish(new BlockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -125,6 +126,7 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = false;
 
             await Db.SaveAsync();
+            await _mediator.Publish(new UnblockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
         }

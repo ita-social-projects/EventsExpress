@@ -58,9 +58,10 @@ namespace EventsExpress.Controllers
             filter.PageSize = 4;
             try
             {
+                var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
@@ -90,9 +91,10 @@ namespace EventsExpress.Controllers
             }
             try
             {
+                var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
                 };
                 return Ok(viewModel);
