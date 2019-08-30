@@ -11,10 +11,12 @@ const api_serv=new EventExpressService();
 
 export default function contact_Us(data){
     return dispatch=>{
+        
         dispatch(setContactUsPending(true));
         const res=api_serv.setContactUs(data);
+
         res.then(response=>{
-            if(response.error==null){
+            if(response.error == null){
                 dispatch(setContactUsSuccess(true));
             }else{
                 dispatch(setContactUsError(response.error));

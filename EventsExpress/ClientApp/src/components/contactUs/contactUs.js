@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import { reduxForm, Field } from 'redux-form';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import {  renderTextArea } from '../helpers/helpers';
-import InputLabel from '@material-ui/core/InputLabel';
+import Module from '../helpers';
 
 
 const useStyles = makeStyles(theme => ({
@@ -24,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
   
+  const { validate, renderTextField, asyncValidate } = Module;
 
 class ContactUs extends Component{
     constructor(props){
@@ -35,13 +32,16 @@ class ContactUs extends Component{
 
     render(){
         const classes = useStyles;
-        const { handleSubmit, pristine, reset, submitting } = this.props;
+        const {  pristine, reset, submitting } = this.props;
         return(
-            <form className="col-7 ">
+            <form className="col-7 " onSubmit={this.props.handleSubmit}>
                 <div className="box text text-2 pl-md-4 " >
-                    <Field className="form-control" component="select">
-                        <option value="newCategory">new category</option>;
-                        <option value="newCategory">newCategory</option>;
+                    <Field name='type' className="form-control" component="select">
+                        <option value="" >--</option>;
+                        <option value="newCategory">New Category</option>;
+                        <option value="bugReport">Bug Report</option>;
+                        <option value="badEvent">Bad Event</option>;
+                        <option value="bugUser">Bad User</option>;
                     </Field>
                     <Field name='description' component={renderTextArea}
                      type="input" label="Description" />
@@ -59,5 +59,5 @@ class ContactUs extends Component{
 
 export default reduxForm({
     form: "ContactUs", // a unique identifier for this form
-    
+    validate
 })(ContactUs);

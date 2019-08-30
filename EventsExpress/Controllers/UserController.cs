@@ -313,12 +313,21 @@ namespace EventsExpress.Controllers
             return Ok(updatedPhoto);
         }
 
+        public class ContactUsDto {
+            public string Description { get; set; }
+            public string Type { get; set; }
+            
+        }
+
+        
         [HttpPost("[action]")]
-        public async Task<IActionResult> ContactAdmins(string message, string type)
+        public async Task<IActionResult> ContactAdmins(ContactUsDto model)
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
 
             var admins = _userService.GetUsersByRole("Admin");
+
+            var emailBody = $"New request from <a href='mailto:{user.Email}?subject=re:{model.Type}'>{user.Email}</a> : <br />{model.Description}. ";
 
             try
             {
@@ -326,21 +335,18 @@ namespace EventsExpress.Controllers
                 {
                     await _emailService.SendEmailAsync(new EmailDTO
                     {
-                        Subject = type,
+                        Subject = model.Type,
                         RecepientEmail =admin.Email,
-                        MessageText = message
-                    });
-                    return Ok();
+                        MessageText = emailBody
+                    });                    
                 }
-                
-            }
 
-            catch (Exception)
+                return Ok();
+            }
+            catch (Exception e)
             {
-
-            }
-
-            return BadRequest();
+                return BadRequest(e.Message);
+            }           
         }
 
         #endregion

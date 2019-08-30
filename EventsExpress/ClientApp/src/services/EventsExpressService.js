@@ -1,5 +1,6 @@
 import React from 'react';
 import { dark } from '@material-ui/core/styles/createPalette';
+import { async } from 'q';
 
 
 export default class EventsExpressService {
@@ -55,6 +56,17 @@ export default class EventsExpressService {
         }
         return res;
     }
+
+    setContactUs=async(data)=>{
+        console.log('srv: ', data);
+
+        const res =await this.setResource('users/ContactAdmins', data);
+        if(!res.ok){
+            return{error: await res.text()};
+        }
+        return res;
+    }
+
 
     setEventUnblock = async (id) => {
         const res = await this.setResource('Event/Unblock/?eventId=' + id);
