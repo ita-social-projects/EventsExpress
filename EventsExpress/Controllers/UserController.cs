@@ -376,6 +376,7 @@ namespace EventsExpress.Controllers
         /// <returns></returns>
         /// <response code="200">Attitude set success</response>    
         /// <response code="400">Attitude set failed</response>
+        [HttpPost("[action]")]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
             if (!ModelState.IsValid)

@@ -27,7 +27,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 base.Initialize();
                 mockUserService = new Mock<IUserService>();
-                service = new CommentService(mockUnitOfWork.Object, mockMapper.Object, mockUserService.Object);
+                service = new CommentService(mockUnitOfWork.Object, mockMapper.Object);
                 comment = new Comments() { Id = new Guid("93f0c600-9c1b-48b4-9606-08d7141a36bb"), Text="Text", EventId = new Guid("d3994f53-1e0d-4eda-d0e8-08d70c4f9464"), UserId = new Guid("19824dd6-67bf-4a52-24a7-08d705fcf8d4"), Date = new DateTime(2019, 08, 08) };
                 user = new User() { Email = "aaa@gmail.com", Id = new Guid("19824dd6-67bf-4a52-24a7-08d705fcf8d4") };
                 even = new Event() { Id = new Guid("d3994f53-1e0d-4eda-d0e8-08d70c4f9464") };

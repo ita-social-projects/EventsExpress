@@ -182,18 +182,7 @@ namespace EventsExpress.Core.Services
           
             count = users.Count();
 
-            IEnumerable<UserDTO>  allUsers =  _mapper.Map<IEnumerable<UserDTO>>(users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
-            foreach (var us in allUsers)
-            {
-                var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == id && x.UserToId == us.Id));
-
-                us.Attitude = (rel != null)
-                    ? (byte)rel.Attitude
-                    : (byte)2;
-            }
-            return allUsers;
             users = users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize);
-
             var result = _mapper
                 .Map<IEnumerable<UserDTO>>(users)
                 .ToList();
@@ -201,6 +190,11 @@ namespace EventsExpress.Core.Services
             foreach (var u in result)
             {
                 u.Rating = GetRating(u.Id);
+
+                var rel = Db.RelationshipRepository.Get().FirstOrDefault(x => (x.UserFromId == id && x.UserToId == u.Id));
+                u.Attitude = (rel != null)
+                    ? (byte)rel.Attitude
+                    : (byte)2;
             }
 
             return result;
