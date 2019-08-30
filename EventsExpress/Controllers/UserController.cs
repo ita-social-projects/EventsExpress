@@ -315,13 +315,14 @@ namespace EventsExpress.Controllers
             return Ok(updatedPhoto);
         }
 
-        public class ContactUsDto {
-            public string Description { get; set; }
-            public string Type { get; set; }
-            
-        }
-
-        
+    
+        /// <summary>
+        /// This method help to contact users with admins
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <response code="200">Sending is succesfull</response>
+        /// <response code="400">Sending process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ContactAdmins(ContactUsDto model)
         {
@@ -359,7 +360,7 @@ namespace EventsExpress.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         /// <response code="200">Return profileDto</response>
-        
+        /// <response code="400">Attitude set failed</response>
         [HttpGet("[action]")]
         public IActionResult GetUserProfileById(Guid id)
         {
@@ -393,6 +394,12 @@ namespace EventsExpress.Controllers
 
 
         // HELPERS: 
+        /// <summary>
+        /// This method help to get current user from JWT 
+        /// </summary>
+        /// <param name="userClaims"></param>
+        /// <returns></returns>
+        /// <response code="200">Get current uses</response>
         private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
 
 

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
   
-  const { validate, renderTextField, asyncValidate } = Module;
+  const { validate } = Module;
 
 class ContactUs extends Component{
     constructor(props){

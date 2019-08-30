@@ -1,5 +1,6 @@
 import EventExpressService from "../services/EventsExpressService";
-import {setAlert} from './alert';
+import {SetAlert} from './alert';
+import { reset} from 'redux-form';
 
 export const contactUs={
     PENDING : "SET_CONTACTUS_PENDING",
@@ -18,8 +19,11 @@ export default function contact_Us(data){
         res.then(response=>{
             if(response.error == null){
                 dispatch(setContactUsSuccess(true));
+                dispatch(SetAlert({variant:'success', message:'Message was succesfully sended'}));
+                dispatch(reset('ContactUs'));
             }else{
                 dispatch(setContactUsError(response.error));
+                dispatch(SetAlert({variant:'error', message:'Failed'}));
             }
         }
 

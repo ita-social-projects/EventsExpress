@@ -13,6 +13,24 @@
             <response code="200">Return UserInfo model</response>
             <response code="400">If login process failed</response>
         </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.FacebookLogin(EventsExpress.DTO.UserView)">
+            <summary>
+            This method is to login with facebook account
+            </summary>
+            <param name="userView"></param>
+            <returns></returns>
+            /// <response code="200">Return UserInfo model</response>
+            <response code="400">If login process failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.Google(EventsExpress.DTO.UserView)">
+            <summary>
+            This method is to login with google account
+            </summary>
+            <param name="userView"></param>
+            <returns></returns>
+            /// <response code="200">Return UserInfo model</response>
+            <response code="400">If login process failed</response>
+        </member>
         <member name="M:EventsExpress.Controllers.AuthenticationController.Login">
             <summary>
             This method to refresh user status using only jwt access token
@@ -89,6 +107,7 @@
             </summary>
             <returns>UserChatDto model</returns>
             <response code="200">UserChatDto model</response>
+            <response code="200">If proccess is failed</response>
         </member>
         <member name="M:EventsExpress.Controllers.ChatController.GetChat(System.Guid)">
             <summary>
@@ -97,6 +116,17 @@
             <param name="chatId">Required</param>
             <returns></returns>
             <response code="200">UserChatDto model</response>
+            <response code="200">If proccess is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.ChatController.GetUnreadMessages(System.Guid)">
+            <summary>
+            This method is to get mesagees which are unread
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+            /// <returns></returns>
+            <response code="200">MessageDto model</response>
+            <response code="200">If proccess is failed</response>
         </member>
         <member name="M:EventsExpress.Controllers.CommentController.Edit(EventsExpress.DTO.CommentDto)">
             <summary>
@@ -187,6 +217,7 @@
             <param name="eventId">Required</param>
             <returns></returns>
             <response code="200">Block is succesful</response>
+            <response code="302">If user isn't admin</response>
             <response code="400">Block process failed</response>
         </member>
         <member name="M:EventsExpress.Controllers.EventController.Unblock(System.Guid)">
@@ -196,7 +227,84 @@
             <param name="eventId">Required</param>
             <returns></returns>
             <response code="200">Unblock is succesful</response>
-            <response code="400">Unblock process failed</response>
+            <response code="400">Unblock process is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.SetRate(EventsExpress.DTO.RateDto)">
+            <summary>
+            This method id used to set rating to user
+            </summary>
+            <param name="model">Required (type: RateDto)</param>
+            <returns></returns>
+            <response code="200">Rating is setted successfully</response>
+            <response code="400">Setting rating is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.GetCurrentRate(System.Guid)">
+            <summary>
+            This method gets current rate for event
+            </summary>
+            <param name="eventId">Required (type: Guid)</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.GetAverageRate(System.Guid)">
+            <summary>
+            This method gets average rate for event 
+            </summary>
+            <param name="eventId">Reguired (type: Guid)</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.FutureEvents(System.Guid,System.Int32)">
+            <summary>
+            This method gets future events for user profile
+            </summary>
+            <param name="id">Reguired</param>
+            <param name="page">Reguired</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.PastEvents(System.Guid,System.Int32)">
+            <summary>
+            This method gets finished events
+            </summary>
+            <param name="id">Reguired</param>
+            <param name="page">Reguired</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response> 
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.EventsToGo(System.Guid,System.Int32)">
+            <summary>
+            This method gets  events which have to visit
+            </summary>
+            <param name="id">Reguired</param>
+            <param name="page">Reguired</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response> 
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.VisitedEvents(System.Guid,System.Int32)">
+            <summary>
+            This method gets  events which have visited
+            </summary>
+            <param name="id">Reguired</param>
+            <param name="page">Reguired</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.EventController.GetEvents(System.Collections.Generic.List{System.Guid},System.Int32)">
+            <summary>
+            This method gets  events 
+            </summary>
+            <param name="eventIds">Reguired</param>
+            <param name="page">Reguired</param>
+            <returns></returns>
+            <response code="200">Getting is successful</response>
+            <response code="400">Getting is failed</response>
         </member>
         <member name="M:EventsExpress.Controllers.LocationsController.Countries">
             <summary>
@@ -346,6 +454,15 @@
             <response code="200">Changing is succesful</response>
             <response code="400">Changing process failed</response>
         </member>
+        <member name="M:EventsExpress.Controllers.UsersController.ContactAdmins(EventsExpress.DTO.ContactUsDto)">
+            <summary>
+            This method help to contact users with admins
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+            <response code="200">Sending is succesfull</response>
+            <response code="400">Sending process failed</response>
+        </member>
         <member name="M:EventsExpress.Controllers.UsersController.GetUserProfileById(System.Guid)">
             <summary>
             This method is for get user
@@ -353,6 +470,7 @@
             <param name="id"></param>
             <returns></returns>
             <response code="200">Return profileDto</response>
+            <response code="400">Attitude set failed</response>
         </member>
         <member name="M:EventsExpress.Controllers.UsersController.SetAttitude(EventsExpress.DTO.AttitudeDto)">
             <summary>
@@ -362,6 +480,14 @@
             <returns></returns>
             <response code="200">Attitude set success</response>    
             <response code="400">Attitude set failed</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.UsersController.GetCurrentUser(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            This method help to get current user from JWT 
+            </summary>
+            <param name="userClaims"></param>
+            <returns></returns>
+            <response code="200">Get current uses</response>
         </member>
     </members>
 </doc>

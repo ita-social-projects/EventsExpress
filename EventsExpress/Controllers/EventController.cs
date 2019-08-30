@@ -128,6 +128,7 @@ namespace EventsExpress.Controllers
         /// <returns></returns>
         /// <response code="200">Adding user from event proces success</response>
         /// <response code="400">If adding user from event process failed</response>        
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var res = await _eventService.AddUserToEvent(userId, eventId);
@@ -164,8 +165,10 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required</param>
         /// <returns></returns>
         /// <response code="200">Block is succesful</response>
+        /// <response code="302">If user isn't admin</response>
         /// <response code="400">Block process failed</response>
         [HttpPost("[action]")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Block(Guid eventId)
         {
             var result = await _eventService.BlockEvent(eventId);
@@ -182,7 +185,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required</param>
         /// <returns></returns>
         /// <response code="200">Unblock is succesful</response>
-        /// <response code="400">Unblock process failed</response>
+        /// <response code="400">Unblock process is failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
@@ -194,6 +197,13 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method id used to set rating to user
+        /// </summary>
+        /// <param name="model">Required (type: RateDto)</param>
+        /// <returns></returns>
+        /// <response code="200">Rating is setted successfully</response>
+        /// <response code="400">Setting rating is failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> SetRate(RateDto model)
         {
@@ -209,6 +219,13 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// This method gets current rate for event
+        /// </summary>
+        /// <param name="eventId">Required (type: Guid)</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response>
         [HttpGet("[action]/{eventId}")]
         public IActionResult GetCurrentRate(Guid eventId)
         {
@@ -221,7 +238,14 @@ namespace EventsExpress.Controllers
 
             return Ok(_eventService.GetRateFromUser(userId, eventId));
         }
-        
+
+        /// <summary>
+        /// This method gets average rate for event 
+        /// </summary>
+        /// <param name="eventId">Reguired (type: Guid)</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response>
         [HttpGet("[action]/{eventId}")]
         public IActionResult GetAverageRate(Guid eventId)
         {
@@ -232,10 +256,17 @@ namespace EventsExpress.Controllers
 
             return Ok(_eventService.GetRate(eventId));
         }
-        
+
 
         #region Get event-sets for user profile
-        [AllowAnonymous]
+        /// <summary>
+        /// This method gets future events for user profile
+        /// </summary>
+        /// <param name="id">Reguired</param>
+        /// <param name="page">Reguired</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response>
         [HttpGet("[action]")]
         public IActionResult FutureEvents(Guid id, int page=1) {
             var model = new PaginationViewModel();
@@ -256,6 +287,14 @@ namespace EventsExpress.Controllers
             }
         }
 
+        /// <summary>
+        /// This method gets finished events
+        /// </summary>
+        /// <param name="id">Reguired</param>
+        /// <param name="page">Reguired</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response> 
         [HttpGet("[action]")]
         public IActionResult PastEvents(Guid id, int page = 1)
         {
@@ -277,6 +316,14 @@ namespace EventsExpress.Controllers
             }
         }
 
+        /// <summary>
+        /// This method gets  events which have to visit
+        /// </summary>
+        /// <param name="id">Reguired</param>
+        /// <param name="page">Reguired</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response> 
         [HttpGet("[action]")]
         public IActionResult EventsToGo(Guid id, int page = 1)
         {
@@ -298,6 +345,14 @@ namespace EventsExpress.Controllers
             }
         }
 
+        /// <summary>
+        /// This method gets  events which have visited
+        /// </summary>
+        /// <param name="id">Reguired</param>
+        /// <param name="page">Reguired</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response>
         [HttpGet("[action]")]
         public IActionResult VisitedEvents(Guid id, int page = 1)
         {
@@ -319,6 +374,14 @@ namespace EventsExpress.Controllers
             }
         }
 
+        /// <summary>
+        /// This method gets  events 
+        /// </summary>
+        /// <param name="eventIds">Reguired</param>
+        /// <param name="page">Reguired</param>
+        /// <returns></returns>
+        /// <response code="200">Getting is successful</response>
+        /// <response code="400">Getting is failed</response>
         [HttpPost("[action]")]
         public IActionResult GetEvents([FromBody]List<Guid> eventIds, [FromQuery]int page = 1)
         {

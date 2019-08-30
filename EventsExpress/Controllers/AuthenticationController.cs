@@ -64,7 +64,13 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-
+        /// <summary>
+        /// This method is to login with facebook account
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
+        /// /// <response code="200">Return UserInfo model</response>
+        /// <response code="400">If login process failed</response>
         [AllowAnonymous]
         [HttpPost("FacebookLogin")]
         public async Task<IActionResult> FacebookLogin(UserView userView)
@@ -86,7 +92,13 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-
+        /// <summary>
+        /// This method is to login with google account
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
+        /// /// <response code="200">Return UserInfo model</response>
+        /// <response code="400">If login process failed</response>
         [AllowAnonymous]
         [HttpPost("google")]
         public async Task<IActionResult> Google([FromBody]UserView userView)

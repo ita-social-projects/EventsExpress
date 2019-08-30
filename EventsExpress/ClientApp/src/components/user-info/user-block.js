@@ -1,6 +1,6 @@
 import React from 'react';
 import IconButton from "@material-ui/core/IconButton";
-import DialogContainer from "../../containers/dialog";
+
 
 
 
@@ -15,7 +15,7 @@ export function UserBlock(props) {
                     ? <IconButton  className="text-success" size="small" onClick={unblock}>
                         <i className="fas fa-lock" ></i>
                     </IconButton> 
-                    : <IconButton className="text-danger" size="small" onClick={onBlock} >
+                    : <IconButton className="text-danger" size="small" onClick={block} >
                         <i className="fas fa-unlock-alt" ></i>
                     </IconButton>
                 }
