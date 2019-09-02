@@ -109,14 +109,16 @@ export default class Event extends Component {
                 </CardContent>
                 <CardActions disableSpacing>
                     <div className="flex flex-column">                        
-                        <Link to={'/event/'+id+'/'+1}>
+
+                        {this.renderCategories(categories.slice(0,2))}
+                    </div>                        
+                    
+                    <Link to={'/event/'+id+'/'+1}>
                             <IconButton className={classes.button} aria-label="view">
                                 <i className="fa fa-eye"></i>
                             </IconButton>
                         </Link>
-                        {this.renderCategories(categories.slice(0,2))}
-                    </div>
-                    {(this.props.current_user.role=="Admin")
+                    {(this.props.current_user != null && this.props.current_user.role=="Admin")
                         ? <EventManagmentWrapper eventItem={this.props.item} />
                         : null
                     }

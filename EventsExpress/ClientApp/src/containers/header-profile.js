@@ -4,7 +4,7 @@ import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
 import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login';
-
+import history from '../history';
 
 class HeaderProfileWrapper extends Component {
 

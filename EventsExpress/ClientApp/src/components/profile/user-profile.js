@@ -133,8 +133,8 @@ export default class UserItemView extends Component {
                 </div>
                 {(id !== this.props.current_user) &&
                     <div className="col-3">
-                    <CustomAvatar size="big" name={name} photoUrl={userPhoto}/>
                         <center>
+                    <CustomAvatar size="big" name={name} photoUrl={userPhoto}/>
                         {attitude == '2' && <div className="row attitude">
                             <button onClick={this.props.onLike} className="btn btn-info">Like</button>
                             <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>

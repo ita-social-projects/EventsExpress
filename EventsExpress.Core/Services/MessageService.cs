@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace EventsExpress.Core.Services
 {
     public class MessageService : IMessageService
-    {
+    {                                                                           
 
         private readonly IUnitOfWork Db;
         private readonly IMapper _mapper;
