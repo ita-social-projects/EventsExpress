@@ -44,8 +44,11 @@ namespace EventsExpress.Controllers
         {
             var sender = _authService.GetCurrentUser(HttpContext.User);
             var chat = await _messageService.GetChat(chatId, sender.Id);
-            var res = _mapper.Map<ChatDto>(chat);
-            return Ok(res);
+            if(chat == null)
+            {
+                return BadRequest();
+            }                                    
+            return Ok(_mapper.Map<ChatDto>(chat));
         }
 
         [HttpGet("[action]")]

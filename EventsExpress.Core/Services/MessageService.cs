@@ -34,7 +34,10 @@ namespace EventsExpress.Core.Services
         public async Task<ChatRoom> GetChat(Guid chatId, Guid sender)
         {
 
-            var chat = Db.ChatRepository.Get("").FirstOrDefault(x => x.Id == chatId) ?? Db.ChatRepository.Get("").FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
+            var chat = Db.ChatRepository.Get("")
+                .FirstOrDefault(x => x.Id == chatId) ?? 
+                Db.ChatRepository.Get("")
+                .FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
             if (chat == null)           
             { 
                 chat = new ChatRoom();
@@ -56,7 +59,8 @@ namespace EventsExpress.Core.Services
             var chat = Db.ChatRepository.Get(chatId);
             if (chat == null)
             {
-                chat = Db.ChatRepository.Get("").FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
+                chat = Db.ChatRepository.Get("")
+                    .FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
             }
 
             var msg = Db.MessageRepository.Insert(new Message { ChatRoomId = chat.Id, SenderId = sender, Text = text });

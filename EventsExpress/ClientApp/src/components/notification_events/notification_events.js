@@ -41,6 +41,7 @@ class NotificationEvents extends Component{
         return <>        
             {spinner}
             {content}
+            {items.length == 0 && <p className="text-center h3">You don't have notifications</p> }
         </>
     }
 }
