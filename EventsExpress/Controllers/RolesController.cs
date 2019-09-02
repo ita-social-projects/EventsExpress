@@ -22,7 +22,11 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method have to return all roles
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Return IEnumerable RoleDto model</response> 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult All()

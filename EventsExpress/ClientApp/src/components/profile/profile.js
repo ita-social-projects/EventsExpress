@@ -155,16 +155,7 @@ const useStyles = makeStyles(theme => ({
 
 const mapStateToProps = state => {
     return state.user;
-
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        
-    };
-};
 
-export default connect(
-    mapStateToProps,
-
-)(Profile);
+export default connect(mapStateToProps)(Profile);

@@ -12,6 +12,7 @@ class EventFilter extends Component {
         const { all_categories, form_values,current_user } = this.props;
         let values = form_values || {};
         return <>
+            <div className="sidebar   " >
             <form onSubmit={this.props.handleSubmit} className="box">
                 <Field name='search' component={renderTextField} type="input" label="Search" /><br/>
                     <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>  <br/>            
@@ -39,7 +40,8 @@ class EventFilter extends Component {
                 <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>
-            </form>
+                </form>
+            </div>
         </>
     }
 }

@@ -30,7 +30,12 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method have to return all chats
+        /// </summary>
+        /// <returns>UserChatDto model</returns>
+        /// <response code="200">UserChatDto model</response>
+        /// <response code="200">If proccess is failed</response>
         [HttpGet("[action]")]
         public IActionResult GetAllChats()
         {
@@ -39,6 +44,13 @@ namespace EventsExpress.Controllers
             return Ok(res);
         }
 
+        /// <summary>
+        /// This method have to return chat
+        /// </summary>
+        /// <param name="chatId">Required</param>
+        /// <returns></returns>
+        /// <response code="200">UserChatDto model</response>
+        /// <response code="200">If proccess is failed</response>
         [HttpGet("[action]")]
         public async Task<IActionResult> GetChat([FromQuery]Guid chatId)
         {
@@ -51,6 +63,14 @@ namespace EventsExpress.Controllers
             return Ok(_mapper.Map<ChatDto>(chat));
         }
 
+        /// <summary>
+        /// This method is to get mesagees which are unread
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// /// <returns></returns>
+        /// <response code="200">MessageDto model</response>
+        /// <response code="200">If proccess is failed</response>
         [HttpGet("[action]")]
         public IActionResult GetUnreadMessages([FromQuery]Guid userId)
         {

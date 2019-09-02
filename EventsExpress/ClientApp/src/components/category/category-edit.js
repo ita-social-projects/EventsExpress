@@ -45,6 +45,8 @@ class CategoryEdit extends Component {
                 
 
             </td>
+            <td></td>
+            <td></td>
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton  className="text-success"  size="small" type="submit" form="save-form">

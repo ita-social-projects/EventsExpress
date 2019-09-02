@@ -23,27 +23,34 @@ const variantIcon = {
 
 const useStyles1 = makeStyles(theme => ({
   success: {
-    backgroundColor: green[600],
+      backgroundColor: green[600],
+      zIndex:100000,
   },
   error: {
-    backgroundColor: theme.palette.error.dark,
+      backgroundColor: theme.palette.error.dark,
+      zIndex: 100000,
   },
   info: {
-    backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.main,
+      zIndex: 100000,
   },
   warning: {
-    backgroundColor: amber[700],
+      backgroundColor: amber[700],
+      zIndex: 100000,
   },
   icon: {
-    fontSize: 20,
+      fontSize: 20,
+      zIndex: 100000,
   },
   iconVariant: {
     opacity: 0.9,
-    marginRight: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      zIndex: 100000,
   },
   message: {
     display: 'flex',
-    alignItems: 'center',
+      alignItems: 'center',
+      zIndex: 100000,
   },
 }));
 
@@ -60,7 +67,7 @@ export default   function MySnackbar(props) {
       horizontal: "left"
     }}
     open={open}
-    autoHideDuration={autoHideDuration == null ? 1000 : autoHideDuration}
+    autoHideDuration={autoHideDuration == null ? 5000 : autoHideDuration}
     onClose={onClose}
     >
     <SnackbarContent

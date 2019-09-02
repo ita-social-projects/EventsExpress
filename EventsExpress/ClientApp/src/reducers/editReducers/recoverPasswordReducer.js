@@ -29,8 +29,3 @@ export const reducer = (state = initialState.recoverPassword, action) => {
     }
 }
 
-/*
-         isPending: false,
-        isError: false,
-        isSucces:false,
- */

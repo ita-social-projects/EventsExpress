@@ -68,4 +68,4 @@ const mapDispatchToProps = (dispatch) => {
     } 
 };
 
-    export default connect(mapStateToProps, mapDispatchToProps)(EventListWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EventListWrapper);

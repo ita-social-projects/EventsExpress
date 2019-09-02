@@ -1,4 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
+import { SetAlert} from '../alert';
 export const addUserCategory = {
     PENDING: "SET_ADDUSERCATEGORY_PENDING",
     SUCCESS: "SET_ADDUSERCATEGORY_SUCCESS",
@@ -17,8 +18,10 @@ export default function add_UserCategory(data) {
 
                 dispatch(setAddUserCategorySuccess(true));
                 dispatch(updateCategories(data));
+                dispatch(SetAlert({variant:'success', message:'Favarote categoris is updated'}));
             } else {
                 dispatch(setAddUserCategoryError(response.error));
+                dispatch(SetAlert({variant:'error', message:'Failed'}));
             }
         });
 

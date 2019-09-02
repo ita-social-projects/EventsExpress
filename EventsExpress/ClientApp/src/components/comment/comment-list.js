@@ -30,7 +30,6 @@ export default class CommentList extends Component {
     }
     render() {
         const { data_list } = this.props;
-
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
         return <>

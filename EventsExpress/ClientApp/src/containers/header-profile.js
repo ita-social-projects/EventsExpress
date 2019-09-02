@@ -4,6 +4,8 @@ import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
 import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login';
+
+
 class HeaderProfileWrapper extends Component {
 
   logout_reset = () =>{
@@ -23,6 +25,7 @@ const mapStateToProps = state => {
   
   const mapDispatchToProps = dispatch => {
     return {
+        
         logout: () => { dispatch(logout()) } ,
         reset: () => {
             dispatch(setRegisterPending(true));

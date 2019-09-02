@@ -27,20 +27,18 @@ export default function add_event(data) {
 
   
 export function edit_event(data) {
-
   return dispatch => {
     dispatch(setEventPending(true));
 
     const res = api_serv.setEvent(data);
     res.then(response => {
       if(response.error == null){
-          
-          dispatch(setEventSuccess(true));
-          dispatch(get_event(data.id));
-        }else{
-          dispatch(setEventError(response.error));
-        }
-      });
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+      }else{
+        dispatch(setEventError(response.error));
+      }
+    });
   }
 }
 
@@ -58,17 +56,17 @@ function eventWasCreated(eventId){
     };
   }
 
-  export function setEventPending(data) {
-    return {
-      type: SET_EVENT_PENDING,
-      payload: data
-    };
-  }
+export function setEventPending(data) {
+  return {
+    type: SET_EVENT_PENDING,
+    payload: data
+  };
+}
 
-  export function setEventError(data) {
-    return {
-      type: SET_EVENT_ERROR,
-      payload: data
-    };
-  }
-  
+export function setEventError(data) {
+  return {
+    type: SET_EVENT_ERROR,
+    payload: data
+  };
+}
+

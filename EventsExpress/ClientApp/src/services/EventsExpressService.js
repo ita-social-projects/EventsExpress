@@ -68,6 +68,17 @@ export default class EventsExpressService {
         return res;
     }
 
+    setContactUs=async(data)=>{
+        console.log('srv: ', data);
+
+        const res =await this.setResource('users/ContactAdmins', data);
+        if(!res.ok){
+            return{error: await res.text()};
+        }
+        return res;
+    }
+
+
     setEventUnblock = async (id) => {
         const res = await this.setResource('Event/Unblock/?eventId=' + id);
         if (!res.ok) {
@@ -120,6 +131,7 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
@@ -220,6 +232,19 @@ export default class EventsExpressService {
             Id: data.id,
             Text: data.comment,
             UserId: data.userId,
+            EventId: data.eventId,
+            CommentsId: data.commentsId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setRate = async (data) => {
+        const res = await this.setResource('event/setrate', {
+            Rate: data.rate,
+            UserId: data.userId,
             EventId: data.eventId
         });
         if (!res.ok) {
@@ -228,10 +253,23 @@ export default class EventsExpressService {
         return res;
     }
 
+    getCurrentRate = async (eventId) => {
+        const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+
     getAllEventsForAdmin = async (filters) => {
         const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;

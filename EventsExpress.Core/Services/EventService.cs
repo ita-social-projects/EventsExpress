@@ -32,9 +32,7 @@ namespace EventsExpress.Core.Services
             _photoService = photoSrv;
             _mediator = mediator;
         }
-       
 
-        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -112,6 +110,7 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = true;
 
             await Db.SaveAsync();
+            await _mediator.Publish(new BlockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -127,6 +126,7 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = false;
 
             await Db.SaveAsync();
+            await _mediator.Publish(new UnblockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -304,10 +304,55 @@ namespace EventsExpress.Core.Services
         {
             var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
                 .Where(x => eventIds.Contains(x.Id));
-
             paginationViewModel.Count = events.Count();
             return _mapper.Map<IEnumerable<EventDTO>>(events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
+
+        public async Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate)
+        {
+            try
+            {
+                var ev = Db.EventRepository.Get("Rates").FirstOrDefault(e => e.Id == eventId);
+                ev.Rates = ev.Rates ?? new List<Rate>();
+                
+                var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
+                
+                if (currentRate == null)
+                {
+                    ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
+                }
+                else
+                {
+                    currentRate.Score = rate;
+                }
+                await Db.SaveAsync();
+                return new OperationResult(true);
+            }
+            catch (Exception e)
+            {
+                return new OperationResult(false, e.Message, "");
+            }
+        }
+
+        public byte GetRateFromUser(Guid userId, Guid eventId)
+        {
+            return Db.RateRepository.Get()
+                       .FirstOrDefault(r => r.UserFromId == userId && r.EventId == eventId)
+                           ?.Score ?? 0;
+        }
+
+        public double GetRate(Guid eventId)
+        {
+            return Db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+        }
+
+        public bool UserIsVisitor(Guid userId, Guid eventId) => 
+            Db.EventRepository
+                .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;
+
+        public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
     }
+
+    
 }
 

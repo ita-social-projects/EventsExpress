@@ -19,9 +19,7 @@
 .comment-container {
     width: 100%;
     height: 90px;
-    padding: 5px;
     margin-bottom: 5px;
-    padding-left: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -38,5 +36,7 @@
 .mybutton {
    padding-right: 15px;
 }
-.add-form {
+
+.children {
+   padding-left: 50px;
 }

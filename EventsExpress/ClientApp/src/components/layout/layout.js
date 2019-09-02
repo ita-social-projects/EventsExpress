@@ -1,10 +1,11 @@
 import React from 'react';
 import LeftSidebarWrapper from '../../containers/left-sidebar';
 import AlertContainer from '../../containers/alert';
-import RightSidebar from '../right-sidebar';
+import DialogContainer from '../../containers/dialog';
 import './layout.css';
 
 import './colorlib.css';
+
 
 const Layout = ({ children }) => {
     return (

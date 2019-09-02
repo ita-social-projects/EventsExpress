@@ -38,7 +38,7 @@ const EditUsername = props => {
                 <Button type="submit" color="primary" disabled={pristine || submitting}>Submit</Button>
                 <Button type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
                     Clear
-        </Button>
+                </Button>
             </div>
         </form>
     );

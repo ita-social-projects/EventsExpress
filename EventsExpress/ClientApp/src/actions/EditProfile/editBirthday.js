@@ -1,4 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
+import { SetAlert} from '../alert';
 
 export const editBirthday = {
     PENDING : "SET_EDITBIRTHDAY_PENDING",
@@ -19,8 +20,10 @@ export default function edit_Birthday(data) {
                 dispatch(setEditBirthdaySuccess(true));
                 console.log(data);
                 dispatch(updateBirthday(data.Birthday));
+                dispatch(SetAlert({variant:'success', message:'Set date of birth successed'}));
             } else {
                 dispatch(setEditBirthdayError(response.error));
+                dispatch(SetAlert({variant:'error', message:'Failed'}));
             }
         });
 

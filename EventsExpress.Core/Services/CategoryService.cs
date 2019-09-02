@@ -27,8 +27,16 @@ namespace EventsExpress.Core.Services
         public Category Get(Guid id) => Db.CategoryRepository.Get(id);
 
 
-        public IEnumerable<CategoryDTO> GetAllCategories() =>
-            _mapper.Map<IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
+        public IEnumerable<CategoryDTO> GetAllCategories()
+        {
+            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
+            foreach (var cat in categories)
+            {
+                cat.CountOfUser = Db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfEvents = Db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+            }
+            return categories;
+        }
         
 
         public async  Task<OperationResult> Create(string title)

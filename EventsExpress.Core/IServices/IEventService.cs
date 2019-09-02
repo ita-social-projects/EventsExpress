@@ -9,8 +9,6 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        bool Exists(Guid id);
-
         Task<OperationResult> Create(EventDTO eventDTO);
         Task<OperationResult> Edit(EventDTO e);
         Task<OperationResult> Delete(Guid eventId);
@@ -31,6 +29,12 @@ namespace EventsExpress.Core.IServices
         IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
         Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
-        
+        Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
+
+        byte GetRateFromUser(Guid userId, Guid eventId);
+        double GetRate(Guid eventId);
+
+        bool UserIsVisitor(Guid userId, Guid eventId);
+        bool Exists(Guid eventId);
     }
 }

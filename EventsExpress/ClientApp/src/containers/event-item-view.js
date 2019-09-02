@@ -27,29 +27,31 @@ class EventItemViewWrapper extends Component{
     }
 
     render(){   
-   
-
-        const {data, isPending} = this.props.event;
-      
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending ? <EventItemView match={this.props.match} onLeave={this.onLeave} onJoin={this.onJoin} data={data} current_user={this.props.current_user} /> : null;
-    
-        return <>
-                {spinner}
-                {content}
-                </>
+        const {data, isPending } = this.props.event;
+  
+        return isPending
+            ? <Spinner />
+            : <EventItemView 
+                data={data}
+                match={this.props.match} 
+                onLeave={this.onLeave} 
+                onJoin={this.onJoin} 
+                current_user={this.props.current_user} 
+            />
     }
 }
 
-const mapStateToProps = (state) => ({event: state.event, current_user: state.user});
+const mapStateToProps = (state) => ({
+    event: state.event, 
+    current_user: state.user
+});
 
-const mapDispatchToProps = (dispatch) => { 
-    return {
-        get_event: (id) => dispatch(get_event(id)),
-        join: (userId, eventId) => dispatch(join(userId, eventId)),
-        leave: (userId, eventId) => dispatch(leave(userId, eventId)),
-        reset: () => dispatch(resetEvent())
-    } 
-};
+const mapDispatchToProps = (dispatch) => ({
+    get_event: (id) => dispatch(get_event(id)),
+    join: (userId, eventId) => dispatch(join(userId, eventId)),
+    leave: (userId, eventId) => dispatch(leave(userId, eventId)),
+    reset: () => dispatch(resetEvent())
+})
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventItemViewWrapper);
