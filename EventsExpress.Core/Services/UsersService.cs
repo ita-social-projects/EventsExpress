@@ -165,7 +165,10 @@ namespace EventsExpress.Core.Services
         public UserDTO GetByEmail(string email)
         {
             var user = _mapper.Map<UserDTO>(Db.UserRepository.Get("Role,Categories.Category,Photo").AsNoTracking().FirstOrDefault(o => o.Email == email));
-            user.Rating = GetRating(user.Id);
+            if (user != null)
+            {
+                user.Rating = GetRating(user.Id);
+            }
             return user;
         }
             

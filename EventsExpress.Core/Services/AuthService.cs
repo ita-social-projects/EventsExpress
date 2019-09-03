@@ -57,7 +57,7 @@ namespace EventsExpress.Core.Services
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                return new OperationResult(false, $"User with email: {email} not found", "email");
+                return new OperationResult(false, "User not found", "email");
             }
 
             if (user.IsBlocked)

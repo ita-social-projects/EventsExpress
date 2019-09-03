@@ -4,16 +4,21 @@ import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
 import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login';
+import { Link } from 'react-router-dom';
+import history from '../history';
 class HeaderProfileWrapper extends Component {
 
   logout_reset = () =>{
     console.log(
       this.props.hub);
-    this.props.hub.stop(); 
-    this.props.logout();
-  }
+      this.props.hub.stop(); 
+      this.props.logout();
+      
+     
+    }
 
     render() {
+        
         return <HeaderProfile user={this.props.user} onClick={this.logout_reset} reset={this.props.reset} notification={this.props.notification.events.length} />;
     }
   }

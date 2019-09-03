@@ -59,7 +59,8 @@ export default class HeaderProfile extends Component {
                             >
                                 <Notifications />
                             </IconButton>
-                            </Badge></Link>
+                                </Badge></Link>
+                            <Link to="/home/events?page=1">
                             <IconButton
                                 className='menuButton'
                                 aria-label="Edit"
@@ -68,7 +69,8 @@ export default class HeaderProfile extends Component {
                                 onClick={onClick}
                             >
                                 <DirectionsRun />
-                            </IconButton>
+                                </IconButton>
+                            </Link>
                         </div>
                         
                             
