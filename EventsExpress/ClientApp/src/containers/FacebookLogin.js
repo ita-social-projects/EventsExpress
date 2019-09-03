@@ -14,7 +14,6 @@ class LoginFacebook extends Component {
             this.props.loginFacebook(response.email, response.name)
             console.log(response);
         }
-        let { loginError } = this.props.login;
         return (
 
 

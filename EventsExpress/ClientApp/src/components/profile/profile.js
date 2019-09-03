@@ -110,7 +110,7 @@ const useStyles = makeStyles(theme => ({
                     id="panel3bh-header"
                 >
                     <Typography className={classes.heading}>Date of birth</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.birthday}</Typography>
+                    <Typography className={classes.secondaryHeading}><Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment></Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
