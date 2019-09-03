@@ -36,6 +36,7 @@ namespace EventsExpress.Test.ServiceTests
             [Test]
             public void Delete_Existing_returnTrue()
             {
+                
                 mockUnitOfWork.Setup(u => u.CommentsRepository.Get(new Guid("93f0c600-9c1b-48b4-9606-08d7141a36bb"))).Returns(new Comments() { Id = new Guid("93f0c600-9c1b-48b4-9606-08d7141a36bb"), Text = "Text", EventId = new Guid("d3994f53-1e0d-4eda-d0e8-08d70c4f9464"), UserId = new Guid("19824dd6-67bf-4a52-24a7-08d705fcf8d4"), Date = new DateTime(2019, 08, 08) });
                 var rez = service.Delete(new Guid("93f0c600-9c1b-48b4-9606-08d7141a36bb"));
 

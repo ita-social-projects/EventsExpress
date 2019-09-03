@@ -17,10 +17,10 @@ using Microsoft.EntityFrameworkCore;
 namespace EventsExpress.Test.ServiceTests
 {
     [TestFixture]
-    class UsersServiceTests: TestInitializer
+    class UsersServiceTests : TestInitializer
     {
         private UserService service;
-        
+
 
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IMediator> mockMediator;
@@ -40,35 +40,29 @@ namespace EventsExpress.Test.ServiceTests
             mockEmailService = new Mock<IEmailService>();
             mockCacheHelper = new Mock<CacheHelper>();
             mockEventService = new Mock<IEventService>();
-            
+
             service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
 
             const string existingEmail = "existingEmail@gmail.com";
             var id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
             var name = "existingName";
 
-            existingUser = new User { Id = id, Name = name, Email = existingEmail};
+            existingUser = new User { Id = id, Name = name, Email = existingEmail };
             existingUserDTO = new UserDTO { Id = id, Name = name, Email = existingEmail };
 
-            mockUnitOfWork.Setup(u => u.UserRepository.Get("Role,Categories.Category,Photo"))
-                .Returns(new List<User> { existingUser }
-                    .AsQueryable());
-
-            mockMapper.Setup(m => m.Map<User>(existingUserDTO))
-                .Returns(existingUser);
-            mockMapper.Setup(m => m.Map<UserDTO>(existingUser))
-                .Returns(existingUserDTO);
+           
+            
         }
 
-        [Test]
-        public void Create_RepeatEmail_ReturnFalse()
+       /* [Test]
+        public void Create_EmeilExist_ReturnFalse()
         {
-            var newUser = new UserDTO { Email = "existingEmail@gmail.com" };
-
-            var result = service.Create(newUser);
-
-            Assert.IsFalse(result.Result.Successed);
-        }
+            mockUnitOfWork.Setup(u=>u.UserRepository.Get(existingUser.Id))
+                .Returns(existingUser);
+            UserDTO userDTO = new UserDTO() {Email=existingUser.Email };
+            var result = service.Create(userDTO);
+            Assert.IsTrue(result.Result.Successed);
+        }*/
 
         [Test]
         public void Verificate_CacheDtoNull_ReturnFalse()
