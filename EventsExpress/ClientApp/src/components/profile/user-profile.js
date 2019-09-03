@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import 'moment-timezone';
-import Avatar from '@material-ui/core/Avatar';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
 import AddEventWrapper from '../../containers/add-event';
@@ -18,12 +17,10 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import HelpIcon from '@material-ui/icons/Help';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CustomAvatar from '../avatar/custom-avatar';
-import { AddComponent } from '../home/home'; 
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -134,22 +131,22 @@ export default class UserItemView extends Component {
                 {(id !== this.props.current_user) &&
                     <div className="col-3">
                         <center>
-                    <CustomAvatar size="big" name={name} photoUrl={userPhoto}/>
-                        {attitude == '2' && <div className="row attitude">
-                            <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                            <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                        </div>}
-                        {attitude == '1' && <div className="row attitude">
-                            <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                            <button className="btn btn-light">Dislike</button>
-                            <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                        </div>}
-                        {attitude == '0' && <div className="row attitude">
-                            <button className="btn btn-light">Like</button>
-                            <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                            <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                        </div>}
-                        <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
+                            <CustomAvatar size="big" name={name} photoUrl={userPhoto}/>
+                            {attitude == '2' && <div className="row attitude">
+                                <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                                <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                            </div>}
+                            {attitude == '1' && <div className="row attitude">
+                                <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                                <button className="btn btn-light">Dislike</button>
+                                <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                            </div>}
+                            {attitude == '0' && <div className="row attitude">
+                                <button className="btn btn-light">Like</button>
+                                <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                                <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                            </div>}
+                            <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
                         </center>
                     </div>
                 }

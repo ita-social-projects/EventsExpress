@@ -14,12 +14,14 @@ export default function RatingAverage(props) {
         ? 'flex-row'
         : 'flex-column';
 
-    return <div className={direction + ' d-flex align-items-center'} >
+    return (props.value) 
+        ? <div className={direction + ' d-flex align-items-center'} >
             <IconButton className={textColor} size="small" disabled>
                 <i className="far fa-star"></i> 
             </IconButton>
-            <div className={textColor}>
-                {props.value ? props.value : "-"}
-            </div>
+            <div className={textColor}>{props.value}</div>
         </div>
+        : null
+    
+    
 }
