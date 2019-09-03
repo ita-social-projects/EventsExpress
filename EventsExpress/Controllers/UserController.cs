@@ -177,9 +177,13 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
-            if (string.IsNullOrEmpty(userInfo.Name))
+            var validator = new UserInfoNameValidator();
+
+
+             var validationResult = validator.Validate(userInfo);
+            if (!validationResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validationResult.Errors);
             }
 
             var user = GetCurrentUser(HttpContext.User);
@@ -239,9 +243,13 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(UserInfo userInfo)
         {
-            if (!ModelState.IsValid)
+            var validator = new UserInfoGenderValidation();
+
+            var validationResult = validator.Validate(userInfo);
+
+            if (!validationResult.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(validationResult.Errors);
             }
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)

@@ -54,7 +54,7 @@ namespace EventsExpress.Test.ServiceTests
             
         }
 
-        [Test]
+       /* [Test]
         public void Create_EmeilExist_ReturnFalse()
         {
             mockUnitOfWork.Setup(u=>u.UserRepository.Get(existingUser.Id))
@@ -62,7 +62,7 @@ namespace EventsExpress.Test.ServiceTests
             UserDTO userDTO = new UserDTO() {Email=existingUser.Email };
             var result = service.Create(userDTO);
             Assert.IsTrue(result.Result.Successed);
-        }
+        }*/
 
         [Test]
         public void Verificate_CacheDtoNull_ReturnFalse()

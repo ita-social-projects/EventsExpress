@@ -26,17 +26,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             service = new CategoryService(mockUnitOfWork.Object, mockMapper.Object);
-            category = new Category() { Id= new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName"  };
+            category = new Category { Id= new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName"  };
 
             categoryDto = new CategoryDto() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019A"), Name = "RandomName2" };
             categoryDTO = new CategoryDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019C"), Name = "RandomName3" };
 
-            mockUnitOfWork.Setup(u => u.CategoryRepository
-            .Get("")).Returns(new List<Category>()
-                {
-                    new Category { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "NameIsExist" }
-                }
-                .AsQueryable());
+            
         }
 
         [Test]
@@ -50,6 +45,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNotEmpty(res.Name);
         }
        
+        
 
         [Test]
         public  void  Delete_ExistingId_Success()
@@ -128,19 +124,23 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsTrue(result.Result.Successed);
         }
 
-      /*  [Test]
+        [Test]
         public void Edit_NameExist_ReturnFalse()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id)).
-                Returns(category);
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+                Returns(new List<Category>()
+                    {
+                    new Category {Name="RandomName"}
+                    } .AsQueryable );
 
             mockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
-                .Returns(new Category() {Id=(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")),Name="RandomName" });
+                .Returns(new Category() {Id=(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019B")),Name="RandomName2" });
 
-            CategoryDTO newCategoryDto= new CategoryDTO() { Name = "RandomName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D") };
+            CategoryDTO newCategoryDto= new CategoryDTO() { Name = "RandomName", Id = category.Id };
             var result = service.Edit(newCategoryDto);
-            Assert.IsTrue(result.Result.Successed);
-        }*/
+            Assert.IsFalse(result.Result.Successed);
+        }
 
+        
     }
 }
