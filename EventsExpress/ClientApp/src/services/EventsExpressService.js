@@ -34,6 +34,7 @@ export default class EventsExpressService {
 
             file.append('Id', data.id);
         }
+        
         if(data.image != null){
         file.append('Photo', data.image.file);
         }
@@ -44,9 +45,14 @@ export default class EventsExpressService {
         if (data.dateFrom != null) {
             file.append('DateFrom', new Date(data.dateFrom).toDateString());
         }
-        
+        else{
+            file.append('DateFrom', new Date(Date.now()).toDateString());
+        }
         if (data.dateFrom != null) {
             file.append('DateTo', new Date(data.dateTo).toDateString());
+        }        
+        else{
+            file.append('DateTo', new Date(Date.now()).toDateString());
         }
         let i = 0;
         data.categories.map(x => {

@@ -6,7 +6,6 @@ using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
-using EventsExpress.Validation;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +42,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
-            var result = model.Id == Guid.Empty 
+            var result = model.Id == Guid.Empty
                 ? await _eventService.Create(_mapper.Map<EventDTO>(model))
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
             if (result.Successed)
@@ -61,7 +60,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return UserInfo model</response>
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult Get(Guid id) => 
+        public IActionResult Get(Guid id) =>
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace EventsExpress.Controllers
                 {
                     Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
-                    
+
                 };
                 return Ok(viewModel);
             }
@@ -110,7 +109,7 @@ namespace EventsExpress.Controllers
                 {
                     Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
-                    
+
                 };
                 return Ok(viewModel);
             }
@@ -168,7 +167,7 @@ namespace EventsExpress.Controllers
         /// <response code="302">If user isn't admin</response>
         /// <response code="400">Block process failed</response>
         [HttpPost("[action]")]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid eventId)
         {
             var result = await _eventService.BlockEvent(eventId);
@@ -268,7 +267,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Getting is successful</response>
         /// <response code="400">Getting is failed</response>
         [HttpGet("[action]")]
-        public IActionResult FutureEvents(Guid id, int page=1) {
+        public IActionResult FutureEvents(Guid id, int page = 1)
+        {
             var model = new PaginationViewModel();
             model.PageSize = 3;
             model.Page = page;
@@ -400,7 +400,7 @@ namespace EventsExpress.Controllers
             catch (ArgumentOutOfRangeException)
             {
                 return BadRequest();
-            }                                     
+            }
         }
         #endregion
 

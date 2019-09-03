@@ -49,15 +49,15 @@ export default class HeaderProfile extends Component {
                                 <Create />
                             </IconButton></Link>
                             <Link to={'/notification_events' }>
-                                <Badge badgeContent={this.props.notification} color="primary">
                             <IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                             >
-                                <Notifications />
+                            <Badge badgeContent={this.props.notification} color="primary">
+                                <Notifications /></Badge>
                             </IconButton>
-                            </Badge></Link>
+                            </Link>
                             <IconButton
                                 className='menuButton'
                                 aria-label="Exit"
