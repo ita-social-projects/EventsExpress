@@ -13,23 +13,25 @@ class LoginWrapper extends Component {
    
   render() {
       alert = useAlert;
-      let {  loginError } = this.props;
-    
-    return <div>
-              <Login onSubmit={this.submit} />
-              {loginError && 
-              <p className="text-danger text-center">{loginError}</p>
-        }
-        <div className="row">
-            <GoogleLogin />
-                <FacebookLogin />
-             </div>
-           </div>
-    ;
+      let { loginError } = this.props.loginStatus;
+      console.log(this.props.loginError);
+      return <>
+          <div>
+              <Login onSubmit={this.submit} loginError={loginError} />
+            
+          <div className="row">
+              <FacebookLogin />   
+              <GoogleLogin />
+          </div>
+             
+          </div>
+   </>
   }
 }
 const mapStateToProps = state => {
-    return { login: state.login }
+    return {
+        loginStatus: state.login
+    }
 };
 
 const mapDispatchToProps = dispatch => {

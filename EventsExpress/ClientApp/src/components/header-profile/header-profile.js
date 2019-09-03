@@ -57,7 +57,8 @@ export default class HeaderProfile extends Component {
                             <Badge badgeContent={this.props.notification} color="primary">
                                 <Notifications /></Badge>
                             </IconButton>
-                            </Link>
+                                </Link>
+                            <Link to="/home/events?page=1">
                             <IconButton
                                 className='menuButton'
                                 aria-label="Exit"
@@ -66,7 +67,8 @@ export default class HeaderProfile extends Component {
                                 onClick={onClick}
                             >
                                 <DirectionsRun />
-                            </IconButton>
+                                </IconButton>
+                            </Link>
                         </div>
                         
                             

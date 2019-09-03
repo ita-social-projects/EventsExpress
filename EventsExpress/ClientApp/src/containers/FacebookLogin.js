@@ -19,9 +19,6 @@ class LoginFacebook extends Component {
 
 
             <div>
-                {loginError &&
-                    <p className="text-danger text-center">{loginError}</p>
-                }
                 <FacebookLogin
                     appId="418450132121252"
                     fields="name,email,picture"
