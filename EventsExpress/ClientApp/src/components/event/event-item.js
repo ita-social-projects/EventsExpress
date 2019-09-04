@@ -123,8 +123,8 @@ export default class Event extends Component {
                         : null
                     }
                         
-                    
-                        <SocialShare href='https://www.instagram.com/dima.kundiy/' />
+
+                        <SocialShare href={'https://eventsexpress.azurewebsites.net/event/' + id + '/' + 1} />
                 </CardActions>
             </Card>
             </div>
