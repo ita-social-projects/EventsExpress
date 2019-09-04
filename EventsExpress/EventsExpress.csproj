@@ -7,10 +7,11 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <UserSecretsId>f1bdaccc-3ba9-4a23-bcd6-693fbbc22425</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Dell\source\repos\sand0\EventsExpress\EventsExpress\EventsExpress.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\osavchuktc\source\repos\EventsExpress\EventsExpress\EventsExpress.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,11 +43,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\build\dima\" />
+    <Folder Include="ClientApp\build\static\css\" />
+    <Folder Include="ClientApp\build\static\js\" />
+    <Folder Include="ClientApp\build\static\media\" />
     <Folder Include="ClientApp\src\components\avatar\" />
     <Folder Include="ClientApp\src\components\chat\" />
     <Folder Include="ClientApp\src\components\contactUs\" />
     <Folder Include="ClientApp\src\components\event\share\" />
     <Folder Include="ClientApp\src\components\rating\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

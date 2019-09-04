@@ -46,7 +46,6 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email}, your account was blocked.", "email");
             }
 
-
             var token = GenerateJwt(user);
 
             return new OperationResult(true, token, "");
