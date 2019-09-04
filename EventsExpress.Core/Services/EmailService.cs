@@ -29,7 +29,7 @@ namespace EventsExpress.Core.Services
                 Port = _senderOptions.Value.Port,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = _senderOptions.Value.UseDefaultCredentials,
-                Credentials = (_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
+                Credentials = (!_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
                 EnableSsl = _senderOptions.Value.EnableSsl
             };
 
