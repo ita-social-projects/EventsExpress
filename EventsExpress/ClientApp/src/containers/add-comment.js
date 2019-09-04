@@ -11,7 +11,7 @@ class CommentWrapper extends React.Component {
 
     }
     componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorComment && this.props.add_event_status.isCommentSuccess) {
+        if (this.props.add_event_status && !this.props.add_event_status.errorComment && this.props.add_event_status.isCommentSuccess) {
             this.props.reset();
             this.props.resetEventStatus();
         }
