@@ -76,7 +76,7 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> FacebookLogin(UserView userView)
         {
             var userExisting = _userService.GetByEmail(userView.Email);
-            if (userExisting == null)
+            if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
             {
                 var user = _mapper.Map<UserDTO>(userView);
                 user.EmailConfirmed = true;
@@ -105,7 +105,7 @@ namespace EventsExpress.Controllers
         {
             var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
             var userExisting = _userService.GetByEmail(payload.Email);
-            if (userExisting == null)
+            if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
                 var user = _mapper.Map<UserView, UserDTO>(userView);
                 user.Email = payload.Email;
