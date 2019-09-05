@@ -6,6 +6,7 @@ import get_future_events  from './events-for-profile';
 export const GET_PROFILE_PENDING = "GET_PROFILE_PENDING";
 export const GET_PROFILE_SUCCESS = "GET_PROFILE_SUCCESS";
 export const GET_PROFILE_ERROR = "GET_PROFILE_ERROR";
+export const RESET_USER = "RESET_USER";
 
 
 const api_serv = new EventsExpressService();
@@ -64,5 +65,11 @@ function getProfileError(data) {
     return {
         type: GET_PROFILE_ERROR,
         payload: data
+    }
+}
+
+export function reset_user() {
+    return {
+        type: RESET_USER
     }
 }

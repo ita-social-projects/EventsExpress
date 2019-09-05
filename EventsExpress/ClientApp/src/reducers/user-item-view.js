@@ -1,7 +1,7 @@
 ﻿
 import initialState from '../store/initialState';
 import {
-    GET_PROFILE_ERROR, GET_PROFILE_PENDING, GET_PROFILE_SUCCESS
+    GET_PROFILE_ERROR, GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, RESET_USER
 } from '../actions/user-item-view';
 
 export const reducer = (
@@ -24,8 +24,11 @@ export const reducer = (
             return {
                 ...state,
                 isPending: false,
+                isError: false,
                 data: action.payload
             }
+        case RESET_USER:
+            return initialState.profile;
         default:
             return state;
     }
