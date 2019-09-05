@@ -27,7 +27,7 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private IPhotoService _photoService;
         private readonly IMediator _mediator;
-        private CacheHelper _cacheHelper;
+        private ICacheHelper _cacheHelper;
         private IEmailService _emailService;            
         private IEventService _eventService;
 
@@ -35,7 +35,7 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IPhotoService photoSrv,
             IMediator mediator,
-            CacheHelper cacheHelper,
+            ICacheHelper cacheHelper,
             IEmailService emailService,
             IEventService eventService
             )                                                                                                     
@@ -53,7 +53,7 @@ namespace EventsExpress.Core.Services
         {
            
 
-            if (Db.UserRepository.Get().FirstOrDefault(u => u.Email == userDto.Email) != null)
+            if (Db.UserRepository.Get().Any(u => u.Email == userDto.Email))
             {
                 return new OperationResult(false, "Emali is exist in database", "Email");
             }
@@ -62,7 +62,7 @@ namespace EventsExpress.Core.Services
             user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
             var result = Db.UserRepository.Insert(user);
 
-            if (result.Email == user.Email && result.Id != null)
+            if (result.Email == user.Email && result.Id != Guid.Empty)
             {
                 await Db.SaveAsync();
                 userDto.Id = result.Id;

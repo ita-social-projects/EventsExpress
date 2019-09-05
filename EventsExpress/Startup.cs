@@ -83,7 +83,7 @@ namespace EventsExpress
             services.AddTransient<IPhotoService, PhotoService> ();
             services.AddTransient<ICommentService, CommentService>();
 
-            services.AddSingleton<CacheHelper>();
+            services.AddSingleton<ICacheHelper>();
 
             #endregion
 
