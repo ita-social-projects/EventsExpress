@@ -13,6 +13,7 @@ export default class CommentList extends Component {
             currentPage: 1
         };
     }
+
     handlePageChange = (page,  e) => {
         this.props.callback(this.props.evId, page);
         this.setState({
@@ -20,20 +21,13 @@ export default class CommentList extends Component {
         });
     };
 
-    renderItems = (arr) => {
-        return arr.map((item) => {
-
-            return (
-                <CommentItemWrapper key={item.id} item={item} />
-            );
-        });
-    }
+    renderItems = arr => arr.map(item => <CommentItemWrapper key={item.id} item={item} />)
+    
     render() {
         const { data_list } = this.props;
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
-        return <>
-           
+        return <>           
             <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
@@ -51,9 +45,7 @@ export default class CommentList extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
-
                             <div>
-
                                 {hasPreviousPage && (
                                 <Link className="btn btn-primary"
                                     to={window.location.pathname.replace(/[/].$/g, '/' + page)}
@@ -63,7 +55,7 @@ export default class CommentList extends Component {
                                     })}
                                 >
                                     first
-                              </Link>)}
+                                </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"

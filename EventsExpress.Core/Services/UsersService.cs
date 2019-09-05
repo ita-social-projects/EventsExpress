@@ -182,7 +182,9 @@ namespace EventsExpress.Core.Services
             users = !string.IsNullOrEmpty(model.Role) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
             users = (model.Blocked) ? users.Where(x => x.IsBlocked == model.Blocked) : users;
             users = (model.UnBlocked) ? users.Where(x => x.IsBlocked == !(model.UnBlocked)) : users;
-          
+
+            users = (model.IsConfirmed != null) ? users.Where(x => x.EmailConfirmed == (model.IsConfirmed)) : users;
+
             count = users.Count();
 
             users = users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize);

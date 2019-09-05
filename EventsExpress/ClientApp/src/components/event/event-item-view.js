@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import Comment from '../comment/comment';
 import EditEventWrapper from '../../containers/edit-event'; 
 
+
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
-
+import IconButton from "@material-ui/core/IconButton";
 
 export default class EventItemView extends Component {
 
@@ -26,6 +27,23 @@ export default class EventItemView extends Component {
             </div>)
         );
     }
+
+    renderOwner = user => (
+        <Link to={'/user/' + user.id} className="btn-custom">
+            <div className="d-flex align-items-center border-bottom">
+                <div className='d-flex flex-column'>
+                    <IconButton  className="text-warning"  size="small" disabled > 
+                        <i class="fas fa-crown"></i>
+                    </IconButton>
+                    <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
+                </div>
+                <div>
+                    <h5>{user.username}</h5>
+                    {'Age: ' + this.getAge(user.birthday)}
+                </div>
+            </div>
+        </Link>
+    )
 
     getAge = birthday => {
         let today = new Date();
@@ -104,6 +122,7 @@ export default class EventItemView extends Component {
                     }
                 </div>
                 <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
+                    {this.renderOwner(user)}
                     {this.renderUsers(visitors)}
                 </div>
             </div>

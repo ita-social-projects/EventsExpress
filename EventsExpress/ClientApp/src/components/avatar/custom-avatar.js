@@ -1,12 +1,13 @@
 ﻿import React, { Component } from "react";
 import Avatar from '@material-ui/core/Avatar';
 
+import { Badge } from '@material-ui/core';
 export default class CustomAvatar extends Component {
 
 
     render() {
 
-        const  { photoUrl, name }  = this.props;
+        const  { photoUrl, name, badge_icon }  = this.props;
         
         let size = `${this.props.size}Avatar`;
         
