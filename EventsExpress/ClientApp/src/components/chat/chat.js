@@ -95,8 +95,8 @@ class Chat extends Component {
                             {this.renderMessages(this.props.chat.data)}
                         </div>
                         <div className="card-footer">
-                            <form className="w-100 d-flex" onSubmit={this.Send}>
-                                <Field name='msg' component={renderTextField} type="input" label="Send message..." />
+                            <form className="w-100 d-flex" autocomplete="off" onSubmit={this.Send}>
+                                <Field name='msg' component={renderTextField} type="input" autocomplete="off" label="Send message..." />
                                 <Button fullWidth={true} type="submit" color="primary" className="w-25">
                                     Send
                         </Button>

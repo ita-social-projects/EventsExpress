@@ -34,8 +34,15 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\build\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\build\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="ClientApp\build\**" />
+    <None Remove="ClientApp\build\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,10 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\build\dima\" />
-    <Folder Include="ClientApp\build\static\css\" />
-    <Folder Include="ClientApp\build\static\js\" />
-    <Folder Include="ClientApp\build\static\media\" />
     <Folder Include="ClientApp\src\components\avatar\" />
     <Folder Include="ClientApp\src\components\chat\" />
     <Folder Include="ClientApp\src\components\contactUs\" />
