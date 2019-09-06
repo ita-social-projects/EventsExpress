@@ -48,7 +48,7 @@ export default class EventsExpressService {
         else{
             file.append('DateFrom', new Date(Date.now()).toDateString());
         }
-        if (data.dateFrom != null) {
+        if (data.dateTo != null) {
             file.append('DateTo', new Date(data.dateTo).toDateString());
         }        
         else{

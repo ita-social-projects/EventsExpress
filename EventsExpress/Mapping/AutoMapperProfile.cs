@@ -145,7 +145,11 @@ namespace EventsExpress.Mapping
             CreateMap<CommentDTO, CommentDto>()
                 .ForMember(dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
+                .ForMember(dest => dest.UserName, 
+                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
+
+            
+
             CreateMap<CommentDto, CommentDTO>();
             #endregion
 

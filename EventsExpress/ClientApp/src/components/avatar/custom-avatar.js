@@ -1,6 +1,5 @@
 ﻿import React, { Component } from "react";
 import Avatar from '@material-ui/core/Avatar';
-
 export default class CustomAvatar extends Component {
 
 
