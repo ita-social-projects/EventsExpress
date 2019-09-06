@@ -45,23 +45,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNotEmpty(res.Name);
         }
 
-
-        [Test]
-        public void Delete_ExistingId_Success()
-        {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id)).
-                Returns(category);
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
-                .Returns(category);
-
-            var res = service.Delete(category.Id);
-            Assert.IsTrue(res.Result.Successed);
-
-            Assert.IsNotEmpty(res.Name);
-        }
-
-       
-
         [Test]
         public void Create_WithEmptyCategoryName_IsFalse()
         {

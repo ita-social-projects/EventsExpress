@@ -124,12 +124,12 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Verificate_NotCorrectUserId_ReturnFalse()
+        public void ConfirmEmail_NotCorrectUserId_ReturnFalse()
         {
             
             CacheDTO cache = new CacheDTO() { };
             mockUnitOfWork.Setup(u => u.UserRepository.Get(cache.UserId));
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -137,7 +137,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         [TestCase(null)]
         [TestCase("")]
-        public void Verificate_TokenIsNullOrEmpty_ReturnFalse(string token)
+        public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
         {
             CacheDTO cache = new CacheDTO() { UserId=existingUser.Id, Token = token };
 
@@ -146,13 +146,13 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns(existingUser);
 
             
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
         }
 
         [Test]
-        public void Verificate_ValidCacheDto_ReturnTrue()
+        public void ConfirmEmail_ValidCacheDto_ReturnTrue()
         {
             CacheDTO cache = new CacheDTO() { UserId = existingUser.Id, Token = "validToken" };
 
@@ -163,13 +163,13 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = cache.Token });
 
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsTrue(result.Result.Successed);
         }
 
         [Test]
-        public void Verificate_CachingFailed_ReturnFalse()
+        public void ConfirmEmail_CachingFailed_ReturnFalse()
         {
             CacheDTO cache = new CacheDTO() { UserId = existingUser.Id, Token = "validToken" };
 
@@ -180,7 +180,7 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = "invalidToken" });
 
-            var result = service.Verificate(cache);
+            var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
         }

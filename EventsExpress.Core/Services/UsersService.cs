@@ -27,15 +27,14 @@ namespace EventsExpress.Core.Services
         private readonly IMediator _mediator;
         private ICacheHelper _cacheHelper;
         private IEmailService _emailService;            
-        private IEventService _eventService;
+        
 
         public UserService(IUnitOfWork uow,
             IMapper mapper,
             IPhotoService photoSrv,
             IMediator mediator,
             ICacheHelper cacheHelper,
-            IEmailService emailService,
-            IEventService eventService
+            IEmailService emailService      
             )                                                                                                     
         {
             Db = uow;
