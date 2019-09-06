@@ -80,12 +80,15 @@ namespace EventsExpress.Test.ServiceTests
             User newUser = new User() { Email = "correctemail@example.com" };
 
             mockMapper.Setup(m => m
-                .Map<UserDTO, User>(newUserDTO))
+                .Map< User>(newUserDTO))
                     .Returns(newUser);
 
+
             mockUnitOfWork.Setup(u => u.RoleRepository
-                .Get(""))
-                    .Returns(new List<Role> { new Role { Name = "User" } }.AsQueryable);
+            .Get(""))
+                .Returns(new List<Role> { new Role() { Name="SameRole"} }.AsQueryable);
+            
+
             mockUnitOfWork.Setup(u => u.UserRepository
                 .Insert(newUser))
                     .Returns(new User { Id = Guid.NewGuid(), Email = newUser.Email });
@@ -106,7 +109,7 @@ namespace EventsExpress.Test.ServiceTests
             User newUser = new User() { Email = "correctemail@example.com" };
 
             mockMapper.Setup(m => m
-                .Map<UserDTO, User>(newUserDTO))
+                .Map<User>(newUserDTO))
                     .Returns(newUser);
 
             mockUnitOfWork.Setup(u => u.RoleRepository
@@ -186,10 +189,13 @@ namespace EventsExpress.Test.ServiceTests
         }
 
          [Test]
-         public void PasswordRecovery_UserdDTONull_ReturnFalse()
+         public void PasswordRecovery_UserNoFoundInDb_ReturnFalse()
          {
-             UserDTO newUser = null;
-             var result = service.PasswordRecover(newUser);
+             
+
+            mockUnitOfWork.Setup(u => u.UserRepository.Get(existingUserDTO.Id));
+              
+             var result = service.PasswordRecover(existingUserDTO);
 
              Assert.IsFalse(result.Result.Successed);
          }

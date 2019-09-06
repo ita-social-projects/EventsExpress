@@ -89,7 +89,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false,"Token is null or empty", "verification token");
             }
 
-            if (cacheDto.Token == _cacheHelper.GetValue(cacheDto.UserId).Token)
+            if (cacheDto.Token != _cacheHelper.GetValue(cacheDto.UserId).Token)
             {
                 return new OperationResult(false, "Validation failed", "");
             }

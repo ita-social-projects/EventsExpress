@@ -45,19 +45,16 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNotEmpty(res.Name);
         }
 
-        [Test]
-        public void Create_WithEmptyCategoryName_IsFalse()
-        {
-            var res = service.Create("");
-
-            Assert.IsFalse(res.Result.Successed);
-        }
+        
 
         [Test]
         public  void  Delete_ExistingId_Success()
         {
             mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id)).
-                Returns(category); 
+                Returns(category);
+
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
+                .Returns(category);
 
             var res = service.Delete(category.Id);
             Assert.IsTrue (res.Result.Successed);
@@ -68,6 +65,12 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_newCategory_Success()
         {
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+                Returns(new List<Category>()
+                    {
+                    new Category {Name="RandomName"}
+                    }.AsQueryable);
+
             var res = service.Create("CorrectName");
 
             Assert.IsTrue(res.Result.Successed);
@@ -75,16 +78,21 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_NotExistingId_ReturnFalse()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")));
+            Category wrongCategory = new Category() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019B"), };
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id))
+            .Returns(category);
 
-            var res = service.Delete(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"));
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
+                .Returns(wrongCategory);
+
+            var res = service.Delete(category.Id);
 
             Assert.IsFalse(res.Result.Successed);
         }
         [Test]
         public void Delete_NullId_ReturnFalse()
         {
-            
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
 
             var res = service.Delete(new Guid());
 
@@ -94,7 +102,8 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_EmprtyCategory_ReturnFalse()
         {
-            
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
+
             var res = service.Edit(new CategoryDTO());
 
             Assert.IsFalse(res.Result.Successed);
@@ -105,7 +114,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             
             
-            Category newCategory = new Category() { Name = "NameIsExist" };
+            Category newCategory = new Category() { Name = "RandomName" };
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+                Returns(new List<Category>()
+                    {
+                    new Category {Name="RandomName"}
+                    }.AsQueryable);
 
             var result = service.Create(newCategory.Name);
 
@@ -115,7 +129,10 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_NotExistingId_ReturnFalse()
         {
-            CategoryDTO newCategory = new CategoryDTO() { Name = "newName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019F") };
+           
+             CategoryDTO newCategory = new CategoryDTO() { Name = "newName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019F") };
+
+            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
             var result = service.Edit(newCategory);
             Assert.IsFalse(result.Result.Successed);
         }
