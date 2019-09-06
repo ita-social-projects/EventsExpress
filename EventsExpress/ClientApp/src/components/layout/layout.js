@@ -10,21 +10,14 @@ import './colorlib.css';
 const Layout = ({ children }) => {
     return (
         <>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-3">
-                        <LeftSidebarWrapper />
-                        <AlertContainer />
-                    </div>
-                    <div className="col-9">
-                        <div className="row">
-                            <div className="col-12">  
-                            {children}
-                            </div> 
-                        </div>
-                    </div>
-                </div>
+            <LeftSidebarWrapper />
+            <AlertContainer />
+
+            <div id="main" className="container-fluid pl-5">
+                   {children}
             </div>
+
+            
         </>
     );
 }
