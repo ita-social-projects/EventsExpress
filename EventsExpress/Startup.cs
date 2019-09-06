@@ -109,13 +109,14 @@ namespace EventsExpress
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();
 
+            services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddTransient<IPhotoService, PhotoService> ();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
             
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
 
-            services.AddSingleton<CacheHelper>();
+            
 
             #endregion
             services.AddCors();

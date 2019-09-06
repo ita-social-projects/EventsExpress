@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Comment from '../comment/comment';
+import EditEventWrapper from '../../containers/edit-event'; 
+import CustomAvatar from '../avatar/custom-avatar';
+import RatingWrapper from '../../containers/rating';
+import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
-import { Link } from 'react-router-dom';
-import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event'; 
-
-import CustomAvatar from '../avatar/custom-avatar';
-import RatingWrapper from '../../containers/rating';
-
 
 export default class EventItemView extends Component {
 
@@ -20,12 +19,35 @@ export default class EventItemView extends Component {
     }
 
     renderUsers = arr => {
-        return arr.map(
-            (x) => (<div className="d-flex align-items-center">
-                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
-            </div>)
+        return arr.map(x => (
+            <Link to={'/user/' + x.id} className="btn-custom">
+                <div className="d-flex align-items-center border-bottom">
+                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />                    
+                    <div>
+                        <h5>{x.username}</h5>
+                        {'Age: ' + this.getAge(x.birthday)}
+                    </div>
+                </div>
+            </Link>)
         );
     }
+
+    renderOwner = user => (
+        <Link to={'/user/' + user.id} className="btn-custom">
+            <div className="d-flex align-items-center border-bottom">
+                <div className='d-flex flex-column'>
+                    <IconButton  className="text-warning"  size="small" disabled > 
+                        <i class="fas fa-crown"></i>
+                    </IconButton>
+                    <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
+                </div>
+                <div>
+                    <h5>{user.username}</h5>
+                    {'Age: ' + this.getAge(user.birthday)}
+                </div>
+            </div>
+        </Link>
+    )
 
     getAge = birthday => {
         let today = new Date();
@@ -104,6 +126,7 @@ export default class EventItemView extends Component {
                     }
                 </div>
                 <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
+                    {this.renderOwner(user)}
                     {this.renderUsers(visitors)}
                 </div>
             </div>

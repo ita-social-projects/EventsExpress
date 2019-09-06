@@ -82,7 +82,8 @@ namespace EventsExpress.Core.Services
             }
 
             var result = Db.CategoryRepository.Delete(category);
-            
+            if(result.Id != id)
+                return new OperationResult(false, "", "");
             await Db.SaveAsync();
             return new OperationResult(true);
         }

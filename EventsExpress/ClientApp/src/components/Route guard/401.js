@@ -28,7 +28,14 @@ import { setRolesError } from '../../actions/roles'
          this.props.setStatus(true);
     }
     render() {
-        return null;
+        return <div id="notfound">
+            <div className="notfound">
+                <div className="notfound-404">
+                    <h1>Oops!</h1>
+                </div>
+                <h2>You have to be authorized!</h2>
+            </div>
+        </div>;
     }
 }
 const mapStateToProps = (state) => ({

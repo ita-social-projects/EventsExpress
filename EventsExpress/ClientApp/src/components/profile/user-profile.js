@@ -20,7 +20,7 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CustomAvatar from '../avatar/custom-avatar';
-
+import { Redirect } from 'react-router-dom'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -107,92 +107,92 @@ export default class UserItemView extends Component {
                     (this.state.value === 1) ? this.props.onPast :
                         (this.state.value === 2) ? this.props.onVisited :
                             (this.state.value === 3) ? this.props.onToGo : null}
-            /> : null;
+        /> : null;
 
         const categories_list = this.renderCategories(categories);
-       
-        return <>
-            <div className="row box info">
-                
-                <div className="col-3">
-                    <h6><strong><p className="font-weight-bolder" >User Name:</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >Age:</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >Gender:</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >Email:</p></strong></h6>
-                    <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
-                </div>
-                <div className="col-3">
-                    {(name) ? <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                    {(this.getAge(birthday)) ? <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                    {(genders[gender]) ? <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                    {(email) ? <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                    {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                </div>
-                {(id !== this.props.current_user) &&
-                    <div className="col-3">
-                        <center>
-                            <CustomAvatar size="big" name={name} photoUrl={userPhoto}/>
-                            {attitude == '2' && <div className="row attitude">
-                                <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                            </div>}
-                            {attitude == '1' && <div className="row attitude">
-                                <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                <button className="btn btn-light">Dislike</button>
-                                <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                            </div>}
-                            {attitude == '0' && <div className="row attitude">
-                                <button className="btn btn-light">Like</button>
-                                <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                                <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                            </div>}
-                            <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
-                        </center>
-                    </div>
-                }
 
-                {(id === this.props.current_user) &&
-                    <div className="col-2">
+        return <>
+                <div className="row box info">
+
+                    <div className="col-3">
+                        <h6><strong><p className="font-weight-bolder" key={name} >User Name:</p></strong></h6>
+                        <h6><strong><p className="font-weight-bolder" >Age:</p></strong></h6>
+                        <h6><strong><p className="font-weight-bolder" >Gender:</p></strong></h6>
+                        <h6><strong><p className="font-weight-bolder" >Email:</p></strong></h6>
+                        <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
                     </div>
-                }
-            </div>
-            <div className={classes.root}>
-                <AppBar position="static" color="inherit">
-                    <Tabs
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                        variant="fullWidth"
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary"
-                        aria-label="scrollable force tabs example"
-                    >
-                        <Tab label="Future events" icon={<PhoneIcon />} {...a11yProps(0)} />
-                        <Tab label="Archive events" icon={<FavoriteIcon />} {...a11yProps(1)} />
-                        <Tab label="Visited events" icon={<PersonPinIcon />} {...a11yProps(2)} />
-                        <Tab label="Events to go"  icon={<HelpIcon />} {...a11yProps(3)} />
-                        {(id === this.props.current_user)&&
-                            <Tab label="Add event" icon={<ShoppingBasket />} {...a11yProps(4)} /> 
-                        }
-                    </Tabs>
-                </AppBar>
-                <TabPanel value={this.state.value} index={0}> 
-                </TabPanel>
-                <TabPanel value={this.state.value} index={1}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={2}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={3}>     
-                </TabPanel>
-                <TabPanel value={this.state.value} index={4}>
-                </TabPanel>
-                
-            </div>
-                    {this.props.add_event_flag ? 
+                    <div className="col-3">
+                        {(name) ? <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                        {(this.getAge(birthday)) ? <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                        {(genders[gender]) ? <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                        {(email) ? <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                        {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
+                    </div>
+                    {(id !== this.props.current_user) &&
+                        <div className="col-3">
+                            <center>
+                                <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                {attitude == '2' && <div className="row attitude">
+                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                                </div>}
+                                {attitude == '1' && <div className="row attitude">
+                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
+                                    <button className="btn btn-light">Dislike</button>
+                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                                </div>}
+                                {attitude == '0' && <div className="row attitude">
+                                    <button className="btn btn-light">Like</button>
+                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
+                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
+                                </div>}
+                                <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
+                            </center>
+                        </div>
+                    }
+
+                    {(id === this.props.current_user) &&
+                        <div className="col-2">
+                        </div>
+                    }
+                </div>
+                <div className={classes.root}>
+                    <AppBar position="static" color="inherit">
+                        <Tabs
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            variant="fullWidth"
+                            scrollButtons="on"
+                            indicatorColor="primary"
+                            textColor="primary"
+                            aria-label="scrollable force tabs example"
+                        >
+                            <Tab label="Future events" icon={<PhoneIcon />} {...a11yProps(0)} />
+                            <Tab label="Archive events" icon={<FavoriteIcon />} {...a11yProps(1)} />
+                            <Tab label="Visited events" icon={<PersonPinIcon />} {...a11yProps(2)} />
+                            <Tab label="Events to go" icon={<HelpIcon />} {...a11yProps(3)} />
+                            {(id === this.props.current_user) &&
+                                <Tab label="Add event" icon={<ShoppingBasket />} {...a11yProps(4)} />
+                            }
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={this.state.value} index={0}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={1}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={2}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={3}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={4}>
+                    </TabPanel>
+
+                </div>
+                    {this.props.add_event_flag ?
                     <div className="row shadow p-5 mb-5 bg-white rounded">
-                    <AddEventWrapper /> 
-                     </div>
-                    :
+                <AddEventWrapper />
+            </div>
+            :
                 <div className="shadow p-5 mb-5 bg-white rounded">
                 {spinner}{content}
                     {!isPending && !(data.items && data.items.length > 0) && <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}

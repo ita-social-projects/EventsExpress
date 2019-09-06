@@ -25,15 +25,16 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
-        private readonly CacheHelper _cacheHelper;
-        private readonly IEmailService _emailService;
+        private ICacheHelper _cacheHelper;
+        private IEmailService _emailService;            
+        
 
         public UserService(IUnitOfWork uow,
             IMapper mapper,
             IPhotoService photoSrv,
             IMediator mediator,
-            CacheHelper cacheHelper,
-            IEmailService emailService
+            ICacheHelper cacheHelper,
+            IEmailService emailService      
             )                                                                                                     
         {
             Db = uow;
@@ -47,7 +48,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(UserDTO userDto)
         {
-            if (GetByEmail(userDto.Email) != null)
+           
+
+            if (Db.UserRepository.Get().Any(u => u.Email == userDto.Email))
             {
                 return new OperationResult(false, "Email is exist in database", "Email");
             }
@@ -55,6 +58,7 @@ namespace EventsExpress.Core.Services
 
             user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
 
+            
             var result = Db.UserRepository.Insert(user);
             if (result.Email != user.Email || result.Id == Guid.Empty)
             {
@@ -85,7 +89,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false,"Token is null or empty", "verification token");
             }
 
-            if (cacheDto.Token == _cacheHelper.GetValue(cacheDto.UserId).Token)
+            if (cacheDto.Token != _cacheHelper.GetValue(cacheDto.UserId).Token)
             {
                 return new OperationResult(false, "Validation failed", "");
             }
@@ -182,7 +186,9 @@ namespace EventsExpress.Core.Services
             users = !string.IsNullOrEmpty(model.Role) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
             users = (model.Blocked) ? users.Where(x => x.IsBlocked == model.Blocked) : users;
             users = (model.UnBlocked) ? users.Where(x => x.IsBlocked == !(model.UnBlocked)) : users;
-          
+
+            users = (model.IsConfirmed != null) ? users.Where(x => x.EmailConfirmed == (model.IsConfirmed)) : users;
+
             count = users.Count();
 
             users = users.Skip((model.Page - 1) * model.PageSize).Take(model.PageSize);
