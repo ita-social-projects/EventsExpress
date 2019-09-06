@@ -24,7 +24,7 @@ class LeftSidebar extends Component  {
         super(props);
 
         this.state = {
-            _class: "left-sidebar-opened"
+            _class: "left-sidebar-closed"
         };
     }
     
@@ -48,10 +48,11 @@ class LeftSidebar extends Component  {
                     </button>
                     
                 </div>
-                <div  id="mySidebar" className={this.state._class + ' left-sidebar' }>
+                <div className={this.state._class + ' left-sidebar' }>
                     
                     <HeaderProfileWrapper/>
-                    <nav id="colorlib-main-menu" role="navigation">
+
+                    <nav>
                         <hr/>
                         <ul className="list-unstyled">
                             
