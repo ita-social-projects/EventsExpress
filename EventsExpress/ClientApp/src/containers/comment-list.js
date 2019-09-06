@@ -13,16 +13,23 @@ class CommentListWrapper extends Component {
    
     }
     getComments = (value, page) => this.props.get_comments(value,page);
+    
     render() {
 
         const { data, isPending, isError } = this.props.comments;
-        const spinner = isPending ? <Spinner /> : null;
-      
-      // const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <InternalServerError /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
 
-        const content = !isPending ? <CommentList evId={this.props.eventId} data_list={data.items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getComments} /> : null;
-        return <>
-          
+        const spinner = isPending ? <Spinner /> : null;
+        const content = !isPending 
+            ? <CommentList 
+                evId={this.props.eventId} 
+                data_list={data.items} 
+                page={data.pageViewModel.pageNumber} 
+                totalPages={data.pageViewModel.totalPages} 
+                callback={this.getComments} 
+            /> 
+            : null;
+
+    return <>
             {spinner}
             {content}
         </>
@@ -34,10 +41,8 @@ const mapStateToProps = state => ({
     eventId: state.event.data.id
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        get_comments: (data, page) => dispatch(get_comments(data, page))
-    }
-};
+const mapDispatchToProps = dispatch => ({
+    get_comments: (data, page) => dispatch(get_comments(data, page))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommentListWrapper);

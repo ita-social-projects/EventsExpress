@@ -55,7 +55,8 @@ export default class HeaderProfile extends Component {
                                 aria-haspopup="true"
                             >
                             <Badge badgeContent={this.props.notification} color="primary">
-                                <Notifications /></Badge>
+                                <Notifications />
+                            </Badge>
                             </IconButton>
                                 </Link>
                             <Link to="/home/events?page=1">

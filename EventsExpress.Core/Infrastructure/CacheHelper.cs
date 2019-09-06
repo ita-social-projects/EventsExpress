@@ -6,9 +6,9 @@ using EventsExpress.Core.DTOs;
 
 namespace EventsExpress.Core.Infrastructure
 {
-    public class CacheHelper
+    public class CacheHelper:ICacheHelper
     {
-        public CacheDTO GetValue(Guid UserId)
+         public CacheDTO GetValue(Guid UserId)
         {
             MemoryCache memoryCache = MemoryCache.Default;
             return memoryCache.Get(UserId.ToString()) as CacheDTO;

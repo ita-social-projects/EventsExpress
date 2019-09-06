@@ -56,6 +56,7 @@ namespace EventsExpress.Controllers
         public IActionResult SearchUsers([FromQuery]UsersFilterViewModel filter)
         {
             filter.PageSize = 4;
+            filter.IsConfirmed = true;
             try
             {
                 var user = GetCurrentUser(HttpContext.User);

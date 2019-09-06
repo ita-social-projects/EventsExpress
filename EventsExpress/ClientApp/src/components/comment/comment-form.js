@@ -5,41 +5,26 @@ import Button from "@material-ui/core/Button";
 import { renderTextField } from '../helpers/helpers';
 import './Comment.css';
 
-class Comment extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+let Comment = (props) => (
+    <form name="addComment" onSubmit={props.handleSubmit}>
+        <Field
+            name="comment"
+            component={renderTextField}
+            label="Comment:"
+        />
+    
+        {props.commentError && 
+            <div className="alert alert-danger">{props.commentError}</div>
+        }
 
-    render() {
-        return (
-            <div className="add-form">
-                <form name="addComment" onSubmit={this.props.handleSubmit}>
-                    <div>
-                        <Field
-                            name="comment"
-                            component={renderTextField}
-                            label="Comment:"
-                            type="comment"
-                        />
-                    </div>
-                    <div>
-                        {this.props.commentError && <div className="alert alert-danger">{this.props.commentError}</div>}
+        <DialogActions>
+            <Button type="submit" value="Add" color="primary"> Add </Button>
+        </DialogActions>                    
+    </form>      
+);
 
-                        <DialogActions>
-                            <Button type="submit" value="Add" color="primary">
-                                Add
-                            </Button>
-                        </DialogActions>
-
-                    </div>
-                </form>
-            </div>
-        );
-    }
-}
 
 Comment = reduxForm({
-    // a unique name for the form
     form: "add-comment"
 })(Comment);
 

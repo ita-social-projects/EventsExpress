@@ -109,6 +109,7 @@ namespace EventsExpress
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();
 
+            services.AddSingleton<ICacheHelper>();
             services.AddTransient<IPhotoService, PhotoService> ();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
             

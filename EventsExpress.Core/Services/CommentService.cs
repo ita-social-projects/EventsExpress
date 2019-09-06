@@ -15,6 +15,7 @@ namespace EventsExpress.Core.Services
     {
         public IUnitOfWork Db { get; set; }
         private readonly IMapper _mapper;
+        
 
         public CommentService(IUnitOfWork uow, IMapper mapper)
         {
@@ -24,18 +25,24 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
+            count = Db.CommentsRepository.Get().Count(x => x.EventId == id && x.CommentsId == null);
+
             var comments = Db.CommentsRepository
                 .Get("User.Photo,Children")
-                .Where(x => x.CommentsId == null)
-                .Where(x => x.EventId == id)
-                .Skip((page - 1) * pageSize).Take(pageSize).AsEnumerable();
-            count = Db.CommentsRepository.Get()
-                .Where(x => x.CommentsId == null)
-                .Where(x => x.EventId == id).Count();
+                .Where(x => x.EventId == id && x.CommentsId == null)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .AsEnumerable();
+
             var com = _mapper.Map<IEnumerable<CommentDTO>>(comments);
             foreach (var c in com)
             {
                 c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
+                foreach (var child in c.Children)
+                {
+                    child.User = Db.UserRepository.Get("Photo").FirstOrDefault(u => u.Id == child.UserId);
+                }
+
             }
             return com;
         }
