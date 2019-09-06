@@ -11,7 +11,7 @@ const NavItem = ({to, icon, text, my_icon}) => {
             <span className="link">
                 <i className= { icon } ></i>
                 {my_icon}
-                <span className="hiden"> &nbsp; { text } </span>
+                <span className="nav-item-text"> &nbsp; { text } </span>
                 <strong></strong>
             </span>
         </Link>
@@ -22,22 +22,15 @@ const NavItem = ({to, icon, text, my_icon}) => {
 
 const LeftSidebar = (props) => {
     
-    function onClick() {
-        console.log('click', document.getElementsByTagName('body')[0].classList, document.getElementsByTagName('body')[0].classList.contains('offcanvas'));
+    function onClick() {        
         if (document.getElementsByTagName('body')[0].classList.contains('offcanvas')) {
-            console.log(document.getElementById('sidebarCollapse'));
             document.getElementById('sidebarCollapse').classList.remove('active');
-            console.log('remove');
             document.getElementsByTagName('body')[0].classList.remove('offcanvas');
-
-            console.log('remove');
         } else {
             document.getElementById('sidebarCollapse').classList.add('active');
             document.getElementsByTagName('body')[0].className += " offcanvas";
         }
     }
-    
-    
 
     return (
         <div id="colorlib-page">
@@ -50,38 +43,32 @@ const LeftSidebar = (props) => {
                         
                         <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} />
                         {props.user.id &&
-                            <>
+                        <>
                             <NavItem to={'/user/' + props.user.id} icon={'fa fa-user'} text={"Profile"} />
                             <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Search Users"} />
-                            
                             <NavItem to={'/user_chats'} my_icon={
                                 <Badge badgeContent={props.msg_for_read().length} color="primary">
                                     <i className="fa fa-envelope"></i>
                                 </Badge>} text={"Comuna"} />
-                            </>
-                            }
+                        </>
+                        }
                         {props.user.role === "Admin" &&
                         <>
                             <NavItem to={'/admin/categories/'} icon={'fa fa-hashtag'} text={"Categories"} />
-                            
                             <NavItem to={'/admin/users?page=1'} icon={'fa fa-users'} text={"Users"} />
-                            
                             <NavItem to={'/admin/events?page=1'} icon={'fa fa-calendar'} text={"Events"} />
-                        </>
-                       
+                        </>                       
                         }
-                         {props.user.role==="User"&&
-                            <>
+                        {props.user.role==="User"&&
+                        <>
                             <NavItem to={'/contactUs'} icon={'fa fa-exclamation-circle'} text={'Contact us'} />
-                            </>
-                         }
-                         
-                        
-                </ul>
-            </nav>
-            
-        </div> </div>
-            );
+                        </>
+                        }
+                    </ul>
+                </nav>            
+            </div> 
+        </div>
+    );
 }
 
 export default LeftSidebar;

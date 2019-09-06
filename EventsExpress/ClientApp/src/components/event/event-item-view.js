@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Comment from '../comment/comment';
+import EditEventWrapper from '../../containers/edit-event'; 
+import CustomAvatar from '../avatar/custom-avatar';
+import RatingWrapper from '../../containers/rating';
+import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
-import { Link } from 'react-router-dom';
-import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event'; 
-
-
-import CustomAvatar from '../avatar/custom-avatar';
-import RatingWrapper from '../../containers/rating';
-import IconButton from "@material-ui/core/IconButton";
 
 export default class EventItemView extends Component {
 
@@ -21,10 +19,16 @@ export default class EventItemView extends Component {
     }
 
     renderUsers = arr => {
-        return arr.map(
-            (x) => (<div className="d-flex align-items-center">
-                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} /><p><Link to={'/user/' + x.id} className="btn-custom"><h4>{x.username} {this.getAge(x.birthday)}</h4></Link></p>
-            </div>)
+        return arr.map(x => (
+            <Link to={'/user/' + x.id} className="btn-custom">
+                <div className="d-flex align-items-center border-bottom">
+                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />                    
+                    <div>
+                        <h5>{x.username}</h5>
+                        {'Age: ' + this.getAge(x.birthday)}
+                    </div>
+                </div>
+            </Link>)
         );
     }
 

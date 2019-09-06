@@ -51,6 +51,17 @@ span {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 
+@media (max-width: 780px) { 
+    .nav-item-text {
+        display: none;
+    }
+    .button-open{
+        transform: translateX(70px) !important;
+        border: 0;
+        background: transparent;
+    }
+}
+
 .wrapper {
     display: flex;
     align-items: stretch;
