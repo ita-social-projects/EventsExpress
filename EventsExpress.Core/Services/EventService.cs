@@ -213,7 +213,10 @@ namespace EventsExpress.Core.Services
         {
             var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x=>x.IsBlocked==false);
 
-            events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord)) : events;
+            events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) 
+                                                                        || x.Description.Contains(model.KeyWord) 
+                                                                        || x.City.Name.Contains(model.KeyWord)
+                                                                        || x.City.Country.Name.Contains(model.KeyWord)) : events;
             events = (model.DateFrom != DateTime.MinValue) ? events.Where(x => x.DateFrom >= model.DateFrom) : events.Where(x => x.DateFrom >= DateTime.Today);
             events = (model.DateTo != DateTime.MinValue) ? events.Where(x => x.DateTo <= model.DateTo) : events;
 
@@ -236,7 +239,10 @@ namespace EventsExpress.Core.Services
         {
             var events = Db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
-            events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord)) : events;
+            events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord) 
+                                                                        || x.Description.Contains(model.KeyWord)
+                                                                        || x.City.Name.Contains(model.KeyWord)
+                                                                        || x.City.Country.Name.Contains(model.KeyWord)) : events;
             events = (model.DateFrom != DateTime.MinValue) ? events.Where(x => x.DateFrom >= model.DateFrom) : events;
             events = (model.DateTo != DateTime.MinValue) ? events.Where(x => x.DateTo <= model.DateTo) : events;
             events = (model.Blocked) ? events.Where(x => x.IsBlocked == model.Blocked) : events;

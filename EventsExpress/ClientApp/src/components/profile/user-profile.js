@@ -194,7 +194,8 @@ export default class UserItemView extends Component {
                      </div>
                     :
                 <div className="shadow p-5 mb-5 bg-white rounded">
-                    {(data.items && data.items.length > 0) ? <>{spinner}{content}</> : <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
+                {spinner}{content}
+                    {!isPending && !(data.items && data.items.length > 0) && <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
                     </div>
                     }
         </>

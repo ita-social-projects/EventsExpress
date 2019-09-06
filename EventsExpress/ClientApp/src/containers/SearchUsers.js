@@ -28,12 +28,13 @@ class SearchUsers extends Component {
             : null;
         return <>
             <div className="row">
-                {spinner}
                 <div className='col-12'>
                     <div className='col-9'>  
                         < UserSearchFilterWrapper />
 
+                        {spinner}
                         {errorMessage}
+
                         {content}
                     </div>
                 </div>

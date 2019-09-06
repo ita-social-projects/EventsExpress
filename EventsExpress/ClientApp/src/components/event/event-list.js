@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import Event from './event-item';
 import Pagination from "react-paginating";
 import { Link } from 'react-router-dom';
-import $ from 'jquery';
+import { connect } from 'react-redux';
+import {reset_events} from '../../actions/event-list';
 const limit = 2;
 const pageCount = 3;
 
-
-
-export default class EventList extends Component {
+class EventList extends Component {
     constructor() {
         super();
         this.state = {
             currentPage: 1
         };
+    }
+
+    componentWillUnmount = () => {
+        this.props.reset_events();
     }
 
     handlePageChange = (page, e) => {
@@ -163,3 +166,11 @@ export default class EventList extends Component {
         </>
     }
 }
+
+const mapDispatchToProps = (dispatch) => { 
+    return {
+        reset_events: () => dispatch(reset_events())
+    } 
+};
+
+export default connect(null, mapDispatchToProps)(EventList);

@@ -20,8 +20,7 @@ export const reducer = (state = initialState.users, action) => {
         case GET_USERS_ERROR:
             return {
                 ...state,
-                isError: action.payload,
-                isPending: false
+                isError: action.payload
             }
 
         case blockUser.UPDATE: {

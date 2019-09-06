@@ -12,7 +12,7 @@ class EventFilter extends Component {
         const { all_categories, form_values,current_user } = this.props;
         let values = form_values || {};
         return <>
-            <div className="sidebar   " >
+            <div className="sidebar" >
             <form onSubmit={this.props.handleSubmit} className="box">
                 <Field name='search' component={renderTextField} type="input" label="Search" /><br/>
                     <span>From<br/><Field name='dateFrom' component={renderDatePicker} /></span>  <br/>            
@@ -28,6 +28,7 @@ class EventFilter extends Component {
                     className="form-control mt-2"
                     placeholder='#hashtags'
                 /><br/>
+
                 {
                     (current_user.role=="Admin")?
                         <Field name="status" component={radioButton}>
