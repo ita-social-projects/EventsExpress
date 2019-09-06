@@ -79,7 +79,7 @@ class UserItemViewWrapper extends Component {
             : isError.ErrorCode == '500'
                 ? <Redirect from="*" to="/home/events?page=1" />
                 : isError.ErrorCode == '401'
-                    ? <Unauthorized />
+                    ? <Redirect from="*" to="/home/events?page=1" />
                     : isError.ErrorCode == '400'
                         ? <BadRequest />
                         : null;
