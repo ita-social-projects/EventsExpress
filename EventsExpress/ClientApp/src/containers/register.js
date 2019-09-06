@@ -2,7 +2,6 @@ import React from "react";
 import Register from "../components/register";
 import { connect } from "react-redux";
 import register from "../actions/register";
-import { setRegisterSuccess, setRegisterError } from '../actions/register';
 import { useAlert } from "react-alert";
 
 
@@ -19,7 +18,7 @@ class RegisterWrapper extends React.Component {
   };
   render() {
       alert = useAlert;
-      const { isRegisterPending, registerError } = this.props;
+      const {  registerError } = this.props;
     
     return <>
         <Register onSubmit={this.submit} />

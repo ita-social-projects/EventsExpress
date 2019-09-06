@@ -10,8 +10,18 @@ class CommentWrapper extends React.Component {
     componentDidUpdate = () => {
 
     }
+    componentDidUpdate = () => {
+        if (this.props.add_event_status && !this.props.add_event_status.errorComment && this.props.add_event_status.isCommentSuccess) {
+            this.props.reset();
+            this.props.resetEventStatus();
+        }
+    }
+    componentWillUnmount = () => {
+        this.props.reset();
+        this.props.resetCommentStatus();
+    }
     submit = values => {
-        this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId });
+        this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId, commentsId: this.props.parentId });
     };
     render() {
     
@@ -35,9 +45,11 @@ const mapDispatchToProps = dispatch => {
         add: (data) => dispatch(add(data)),
         reset: () => {
             dispatch(reset('add-comment'));
+        },
+        resetCommentStatus: () => {
             dispatch(setCommentPending(true));
             dispatch(setCommentSuccess(false));
-            dispatch(set2CommentError(false));
+            dispatch(set2CommentError(null));
         }
     };
 };

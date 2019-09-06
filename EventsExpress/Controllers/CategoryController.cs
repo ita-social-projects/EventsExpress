@@ -18,8 +18,8 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private ICategoryService _categoryService;
-        private IMapper _mapper;
+        private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
 
         public CategoryController(
             ICategoryService categoryService,
@@ -30,32 +30,54 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// This method have to return all categories
+        /// </summary>
+        /// <returns>CategoryDto model</returns>
+        /// <response code="200">Return IEnumerable CategoryDto model</response>
         [HttpGet("[action]")]
         [AllowAnonymous]
-        public IActionResult All()
-        {
-            var res = _mapper.Map<IEnumerable<CategoryDTO>, IEnumerable<CategoryDto>>(_categoryService.GetAllCategories());
-            return Ok(res);
-        }
+        public IActionResult All() =>
+            Ok(_mapper.Map<IEnumerable<CategoryDto>>(_categoryService.GetAllCategories()));
 
-        [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var res = await _categoryService.Delete(id);
-
-            return Ok(res);
-        }
-
+        /// <summary>
+        /// This method is for edit and create categories
+        /// </summary>
+        /// <param name="model">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Edit/Create category proces success</response>
+        /// <response code="400">If Edit/Create process failed</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CategoryDto model)
         {
-            if (string.IsNullOrEmpty(model.Name))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Category cannot be empty!");
+                return BadRequest(ModelState);
             }
             var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
                                        : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
+            if (res.Successed)
+            {
+                return Ok();
+            }
+            return BadRequest(res.Message);
+        }
+
+        /// <summary>
+        /// This method is for delete category
+        /// </summary>
+        /// <param name="id">Required</param>
+        /// <returns></returns>
+        /// <response code="200">Delete category proces success</response>
+        /// <response code="400">If delete process failed</response> 
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+            var res = await _categoryService.Delete(id);
             if (res.Successed)
             {
                 return Ok();

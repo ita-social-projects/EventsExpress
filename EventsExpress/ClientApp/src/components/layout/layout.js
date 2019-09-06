@@ -1,10 +1,11 @@
 import React from 'react';
 import LeftSidebarWrapper from '../../containers/left-sidebar';
-
-import RightSidebar from '../right-sidebar';
+import AlertContainer from '../../containers/alert';
+import DialogContainer from '../../containers/dialog';
 import './layout.css';
 
 import './colorlib.css';
+
 
 const Layout = ({ children }) => {
     return (
@@ -13,13 +14,14 @@ const Layout = ({ children }) => {
                 <div className="row">
                     <div className="col-3 position-fixed">
 
-                    <LeftSidebarWrapper />
+                        <LeftSidebarWrapper />
+                        <AlertContainer />
                     </div>
                     <div className="col-9 offset-3">
                         <div className="row">
-                            <div className="col-12">
-                                {children}
-                            </div>
+                            <div className="col-12">  
+                            {children}
+                            </div> 
                         </div>
                     </div>
                 </div>

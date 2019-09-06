@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EventsExpress.Core.Infrastructure
+namespace EventsExpress.Core.Extensions
 {
     public static class ByteArrayExtensions
     {

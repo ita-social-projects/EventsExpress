@@ -14,7 +14,7 @@ namespace EventsExpress.Core.Services
 {
     public class CategoryService : ICategoryService
     {
-        public IUnitOfWork Db { get; set; }
+        private readonly IUnitOfWork Db;
         private readonly IMapper _mapper;
 
         public CategoryService(IUnitOfWork uow, IMapper mapper)
@@ -23,40 +23,39 @@ namespace EventsExpress.Core.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<CategoryDTO> GetAllCategories()
-        {
-           return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
-        } 
 
         public Category Get(Guid id) => Db.CategoryRepository.Get(id);
 
+
+        public IEnumerable<CategoryDTO> GetAllCategories()
+        {
+            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
+            foreach (var cat in categories)
+            {
+                cat.CountOfUser = Db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfEvents = Db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+            }
+            return categories;
+        }
+        
+
         public async  Task<OperationResult> Create(string title)
         {
-            if (string.IsNullOrEmpty(title))
-            {
-                return new OperationResult(false, "Incorrect category name!", "");
-            }
-
             if (Db.CategoryRepository.Get().Any(c => c.Name == title))
             {
                 return new OperationResult(false, "The same category is already exist in database", "");
             }
 
-            Db.CategoryRepository.Insert(new Category() {Name=title });
-
+            Db.CategoryRepository.Insert(new Category{ Name=title });
             await Db.SaveAsync();
 
-            return new OperationResult(true, "", "");
+            return new OperationResult(true);
         }
+
 
         public async Task<OperationResult> Edit(CategoryDTO category)
         {
-            if (category.Id == null)
-            {
-                return new OperationResult(false, "Id field is '0'", "");
-            }
-
-            Category oldCategory = Db.CategoryRepository.Get(category.Id);
+            var oldCategory = Db.CategoryRepository.Get(category.Id);
             if (oldCategory == null)
             {
                 return new OperationResult(false, "Not found", "");
@@ -68,27 +67,25 @@ namespace EventsExpress.Core.Services
             }
 
             oldCategory.Name = category.Name;
-
             await Db.SaveAsync();
 
-            return new OperationResult(true, "", "");
+            return new OperationResult(true);
         }
+
 
         public async Task<OperationResult> Delete(Guid id)
         {
-            if (id == null)
-            {
-                return new OperationResult(false, "Id field is null", "");
-            }
-            Category category = Db.CategoryRepository.Get(id);
+            var category = Db.CategoryRepository.Get(id);
             if (category == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
 
             var result = Db.CategoryRepository.Delete(category);
+            if(result.Id != id)
+                return new OperationResult(false, "", "");
             await Db.SaveAsync();
-            return new OperationResult(true, "", "");
+            return new OperationResult(true);
         }
 
     }

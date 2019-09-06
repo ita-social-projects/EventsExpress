@@ -61,11 +61,6 @@ const initialState = {
          IsSelectCategoriesSeccess: false,
          IsSelectCategoriesError: null
      },
-    add_event:{
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
-    },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,
@@ -119,6 +114,7 @@ const initialState = {
         isPending: true,
         isError: false,
         data: {
+            
             dateFrom: null,
             dateTo: null,
             photoUrl: null
@@ -132,7 +128,11 @@ const initialState = {
     events_for_profile: {
         isPending: true,
         isError: false,
-        data: null
+        data: {
+            items: [],
+            pageViewModel: {}
+
+        }
     },
     changePassword: {
         isPending: false,
@@ -149,9 +149,46 @@ const initialState = {
         isSucces:false,
         isError:null,
         data:[]
+    },
+    chats:{
+        isPending: false,
+        isSuccess:false,
+        isError:null,
+        data: []
+    },
+    hubConnection: null,
+    chat:{
+        isPending: false,
+        isSuccess:false,
+        isError:null,
+        data: {
+            messages: [],
+            users: [], 
+            id: null
+        }
+    },
+    alert:{
+        variant:null,
+        message:null,
+        autoHideDuration: null,
+        open:false
+    },
+    dialog:{
+        title:null,
+        message:null,
+        open:false
+    },
+    contactUs:{
+        isPending: false,
+        isSuccess:false,
+        isError:null
+    },
+    notification:
+    {
+        messages: [],
+        seen_messages: [],
+        events: []
     }
-
-
 };
 
 export default initialState;

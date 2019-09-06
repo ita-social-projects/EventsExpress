@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-
+import CustomAvatar from '../avatar/custom-avatar';
+import RatingAverage from '../rating/rating-average';
 
 export default class UserInfo extends Component {
 
@@ -10,10 +10,11 @@ export default class UserInfo extends Component {
         return (
             <>
                 <td className="align-middle">
-                    {user.photoUrl
-                        ? <Avatar src={user.photoUrl} />
-                        : <Avatar>{user.email.charAt(0).toUpperCase()}</Avatar>}
+                    <CustomAvatar photoUrl={user.photoUrl} name={user.username} />                                        
+                </td>
 
+                <td className="align-middle">
+                    <RatingAverage value={user.rating} direction='col' />
                 </td>
 
                 <td className="align-middle">{user.email}</td>

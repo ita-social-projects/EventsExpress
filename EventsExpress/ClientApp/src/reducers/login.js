@@ -30,9 +30,6 @@ export const reducer = (
       return Object.assign({}, state, {
         isLoginSuccess: !action.isLoginSuccess
           });
-
-
-
     default:
       return state;
   }

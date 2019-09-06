@@ -55,14 +55,14 @@ class Home extends Component {
     render() {
 
         return (
-            <div className="row">
-                <div className='col-9'>
-                    <EventListWrapper params={this.props.location.search} />
+                <div className="row">
+                    <div className='col-9'>
+                        <EventListWrapper params={this.props.location.search} />
+                    </div>
+                    <div className="col-3">
+                        <EventFilterWrapper/>
+                    </div> 
                 </div>
-                <div className="col-3">
-                    <EventFilterWrapper/>
-                </div> 
-            </div>
 
         );
     }

@@ -28,8 +28,9 @@ namespace EventsExpress.Db.Entities
         public IEnumerable<UserCategory> Categories { get; set; }
         
         public IEnumerable<Rate> Rates { get; set; }
-        public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<Relationship> Relationships { get; set; }
+
+        public IEnumerable<UserChat> Chats { get; set; }
     }
 }

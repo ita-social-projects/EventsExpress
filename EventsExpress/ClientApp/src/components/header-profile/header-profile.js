@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Create from "@material-ui/icons/Create";
 import Notifications from "@material-ui/icons/Notifications";
@@ -10,10 +9,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import CustomAvatar from '../avatar/custom-avatar';
 import ModalWind from '../modal-wind';
 import { Link } from 'react-router-dom';
+import RatingAverage from '../rating/rating-average'
+import Badge from '@material-ui/core/Badge';
+
 
 import './header-profile.css';
 
@@ -22,7 +23,7 @@ export default class HeaderProfile extends Component {
 
     render(){
  
-        const { id, name, photoUrl, email } = this.props.user;
+        const { id, name, photoUrl, email, rating } = this.props.user;
         const { onClick } = this.props;
     
     return (
@@ -33,19 +34,11 @@ export default class HeaderProfile extends Component {
                 )}
                 {id && (
                     <div className="d-flex flex-column align-items-center">
-                        {photoUrl
-                            ? <Avatar
-                                src={photoUrl}
-                                className='bigAvatar'
-                            />
-                            : <Avatar className='bigAvatar'>
-                                <h1 className="display-1 text-light">
-                                    {email.charAt(0).toUpperCase()}
-                                </h1>
-                            </Avatar>}
-                        
+
+                        <CustomAvatar size="big" photoUrl={this.props.user.photoUrl} name={this.props.user.name} />
                         
                         <h4>{name}</h4>
+                        <RatingAverage value={rating} direction='row' />
                         
                         <div>
                             <Link to={'/profile' }><IconButton
@@ -55,22 +48,27 @@ export default class HeaderProfile extends Component {
                             >
                                 <Create />
                             </IconButton></Link>
+                            <Link to={'/notification_events' }>
                             <IconButton
                                 aria-label="Account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                             >
-                                <Notifications />
+                            <Badge badgeContent={this.props.notification} color="primary">
+                                <Notifications /></Badge>
                             </IconButton>
+                                </Link>
+                            <Link to="/home/events?page=1">
                             <IconButton
                                 className='menuButton'
-                                aria-label="Edit"
+                                aria-label="Exit"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
                                 onClick={onClick}
                             >
                                 <DirectionsRun />
-                            </IconButton>
+                                </IconButton>
+                            </Link>
                         </div>
                         
                             

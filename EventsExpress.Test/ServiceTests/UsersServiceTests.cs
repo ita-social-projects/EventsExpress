@@ -12,13 +12,15 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 using System.Linq;
 using EventsExpress.Core.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Test.ServiceTests
-{    [TestFixture]
-    class UsersServiceTests: TestInitializer
+{
+    [TestFixture]
+    class UsersServiceTests : TestInitializer
     {
         private UserService service;
-        private User user;
+
 
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IMediator> mockMediator;
@@ -40,7 +42,7 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper = new Mock<ICacheHelper>();
             mockEventService = new Mock<IEventService>();
 
-            service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object,mockEventService.Object);
+            service = new UserService(mockUnitOfWork.Object, mockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
 
             const string existingEmail = "existingEmail@gmail.com";
             var id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");

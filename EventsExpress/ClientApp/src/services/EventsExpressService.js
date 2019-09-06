@@ -1,10 +1,32 @@
 import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-
 
 export default class EventsExpressService {
 
     _baseUrl = 'api/';
+
+    getChats = async () => {
+        const res = await this.getResource('chat/GetAllChats');
+        return res;
+    }
+    
+    getChat = async (chatId) => {
+        const res = await this.getResource(`chat/GetChat?chatId=${chatId}`);
+        return res;
+    }
+
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource('event/getEvents?page='+page, eventIds);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res.json();
+    }
+
+    getUnreadMessages = async (userId) => {
+        const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
+        console.log(res);
+        return res;
+    }
 
     setEvent = async (data) => {
         let file = new FormData();
@@ -12,6 +34,7 @@ export default class EventsExpressService {
 
             file.append('Id', data.id);
         }
+        
         if(data.image != null){
         file.append('Photo', data.image.file);
         }
@@ -22,9 +45,14 @@ export default class EventsExpressService {
         if (data.dateFrom != null) {
             file.append('DateFrom', new Date(data.dateFrom).toDateString());
         }
-        
+        else{
+            file.append('DateFrom', new Date(Date.now()).toDateString());
+        }
         if (data.dateFrom != null) {
             file.append('DateTo', new Date(data.dateTo).toDateString());
+        }        
+        else{
+            file.append('DateTo', new Date(Date.now()).toDateString());
         }
         let i = 0;
         data.categories.map(x => {
@@ -32,6 +60,33 @@ export default class EventsExpressService {
             i++;
         })
         const res = await this.setResourceWithData('event/edit', file);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setEventBlock = async (id) => {
+        const res = await this.setResource('Event/Block/?eventId=' + id);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setContactUs=async(data)=>{
+        console.log('srv: ', data);
+
+        const res =await this.setResource('users/ContactAdmins', data);
+        if(!res.ok){
+            return{error: await res.text()};
+        }
+        return res;
+    }
+
+
+    setEventUnblock = async (id) => {
+        const res = await this.setResource('Event/Unblock/?eventId=' + id);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -82,6 +137,15 @@ export default class EventsExpressService {
         }
         return await res.json();
     }
+    
+    setFacebookLogin = async (data) => {
+        const res = await this.setResource('Authentication/FacebookLogin', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res.json();
+    }
+
 
     setRecoverPassword = async (data) => {
         console.log("SERVICE:")
@@ -111,7 +175,7 @@ export default class EventsExpressService {
         return res;
     }
     getUserById = async (id) => {
-        const res = await this.getResource('users/GetUserById?id=' + id);
+        const res = await this.getResource('users/GetUserProfileById?id=' + id);
         return res;
     }
     getSearchUsers = async (filter) => {
@@ -174,6 +238,19 @@ export default class EventsExpressService {
             Id: data.id,
             Text: data.comment,
             UserId: data.userId,
+            EventId: data.eventId,
+            CommentsId: data.commentsId
+        });
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return res;
+    }
+
+    setRate = async (data) => {
+        const res = await this.setResource('event/setrate', {
+            Rate: data.rate,
+            UserId: data.userId,
             EventId: data.eventId
         });
         if (!res.ok) {
@@ -182,10 +259,23 @@ export default class EventsExpressService {
         return res;
     }
 
+    getCurrentRate = async (eventId) => {
+        const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
         return res;
     }
+
     getAllEventsForAdmin = async (filters) => {
         const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;
@@ -201,23 +291,23 @@ export default class EventsExpressService {
         return res;
     }
 
-    getVisitedEvents = async (id) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id);
+    getVisitedEvents = async (id, page) => {
+        const res = await this.getResource('event/visitedEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getFutureEvents = async (id) => {
-        const res = await this.getResource('event/futureEvents?id=' + id);
+    getFutureEvents = async (id, page) => {
+        const res = await this.getResource('event/futureEvents?id=' + id + '&'+ 'page='+page);
         return res;
     }
 
-    getPastEvents = async (id) => {
-        const res = await this.getResource('event/pastEvents?id=' + id);
+    getPastEvents = async (id, page) => {
+        const res = await this.getResource('event/pastEvents?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 
-    getEventsToGo = async (id) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id);
+    getEventsToGo = async (id, page) => {
+        const res = await this.getResource('event/EventsToGo?id=' + id+ '&'+ 'page='+page);
         return res;
     }
 

@@ -20,7 +20,7 @@ class Login extends Component {
     
   render() {
      
-    const { pristine, reset, submitting } = this.props;
+      const { pristine, reset, submitting, loginError } = this.props;
 
     return (
       <div className="auth">
@@ -52,7 +52,10 @@ class Login extends Component {
             </DialogActions>
           </div>    
         </form>
-        <div className="text-center">
+            <div className="text-center">
+                {loginError &&
+                    <p className="text-danger text-center">{loginError}</p>
+                }
           <Modalwind2 />
         </div>
       </div>

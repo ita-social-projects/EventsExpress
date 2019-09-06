@@ -1,4 +1,5 @@
 import EventsExpressService from '../../services/EventsExpressService';
+import { SetAlert} from '../alert';
 export const changeAvatar = {
     PENDING: "SET_CHANGE_AVATAR_PENDING",
     SUCCESS: "SET_CHANGE_AVATAR_SUCCESS",
@@ -20,8 +21,10 @@ export default  function change_avatar(data) {
                 console.log(response);
                 
                 dispatch(updateAvatar(response));
+                dispatch(SetAlert({variant:'success', message:'Avatar is update'}));
             } else {
                 dispatch(setAvatarError(response.error));
+                dispatch(SetAlert({variant:'error', message:'Failed'}));
             }
         });
 

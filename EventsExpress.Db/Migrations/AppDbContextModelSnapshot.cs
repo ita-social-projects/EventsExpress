@@ -15,7 +15,7 @@ namespace EventsExpress.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -30,6 +30,18 @@ namespace EventsExpress.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.ChatRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatRoom");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.City", b =>
@@ -54,8 +66,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("CommentsId");
-
                     b.Property<DateTime>("Date");
 
                     b.Property<Guid>("EventId");
@@ -68,9 +78,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentsId");
-
                     b.HasIndex("EventId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
@@ -140,6 +150,36 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("EventCategory");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("ChatRoomId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<bool>("Edited");
+
+                    b.Property<Guid?>("ParentId");
+
+                    b.Property<bool>("Seen");
+
+                    b.Property<Guid>("SenderId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatRoomId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -177,19 +217,15 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<Guid>("EventId");
 
-                    b.Property<int>("Score");
+                    b.Property<byte>("Score");
 
                     b.Property<Guid>("UserFromId");
-
-                    b.Property<Guid>("UserToId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
                     b.HasIndex("UserFromId");
-
-                    b.HasIndex("UserToId");
 
                     b.ToTable("Rates");
                 });
@@ -290,6 +326,24 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("UserCategory");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("ChatId");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserChat");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
                 {
                     b.Property<Guid>("UserId");
@@ -315,14 +369,14 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.Comments")
-                        .WithMany("Children")
-                        .HasForeignKey("CommentsId");
-
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.Comments")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithMany()
@@ -360,6 +414,23 @@ namespace EventsExpress.Db.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.ChatRoom")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.Message", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Photo", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Report")
@@ -377,11 +448,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
                         .WithMany("Rates")
                         .HasForeignKey("UserFromId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
-                        .WithMany("MyRates")
-                        .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -427,6 +493,19 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithMany("Categories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.ChatRoom", "Chat")
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithMany("Chats")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

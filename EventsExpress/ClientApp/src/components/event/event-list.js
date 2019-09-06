@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Event from './event-item';
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import $ from 'jquery';
 const limit = 2;
 const pageCount = 3;
 
@@ -28,20 +28,26 @@ export default class EventList extends Component {
         return arr.map((item) => {
 
             return (
-                <Event key={item.id} item={item} />
+                <Event 
+                    key={item.id+item.isBlocked} 
+                    item={item} 
+                    current_user={this.props.current_user}
+                   
+                />
             );
         });
     }
-
+ 
     render() {
         const { data_list } = this.props;
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
-
+        console.log(data_list);
         return <>
-            <div className="row">
-                {items}
+                <div className="row">
+                        {items}
             </div>
+
             <br />
             <ul className="pagination justify-content-center">
                 <Pagination
@@ -152,6 +158,8 @@ export default class EventList extends Component {
                 </Pagination>
             </ul>
 
+
+            
         </>
     }
 }

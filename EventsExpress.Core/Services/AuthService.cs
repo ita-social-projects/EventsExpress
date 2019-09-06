@@ -1,36 +1,62 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
+using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 
 namespace EventsExpress.Core.Services
 {
-    public class AuthServicre : IAuthServicre
+    public class AuthService : IAuthService
     {
         private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
+        private readonly IConfiguration _configuration;
 
-        public AuthServicre(
+        public AuthService(
             IUserService userSrv, 
-            IJwtSigningEncodingKey signingEncodingKey)
+            IJwtSigningEncodingKey signingEncodingKey,
+            IConfiguration config
+            )
         {
             _userService = userSrv;
             _signingEncodingKey = signingEncodingKey;
+            _configuration = config;
         }
 
+        public OperationResult AuthenticateGoogleFacebookUser(string email)
+        {
+            var user = _userService.GetByEmail(email);
+            if (user == null)
+            {
+                return new OperationResult(false, $"User with email: {email} not found", "email");
+            }
+
+            if (user.IsBlocked)
+            {
+                return new OperationResult(false, $"{email}, your account was blocked.", "email");
+            }
+
+            var token = GenerateJwt(user);
+
+            return new OperationResult(true, token, "");
+        }
 
         public OperationResult Authenticate(string email, string password)
         {
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                return new OperationResult(false, $"User with email: {email} not found", "email");
+                return new OperationResult(false, "User not found", "email");
             }
 
             if (user.IsBlocked)
@@ -65,6 +91,7 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, token, "");
         }
 
+
         public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
@@ -75,6 +102,7 @@ namespace EventsExpress.Core.Services
             }
             return new OperationResult(false, "Invalid password", "");
         }
+
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
@@ -87,21 +115,24 @@ namespace EventsExpress.Core.Services
         }
 
 
-        private bool VerifyPassword(UserDTO user, string actualPassword) => 
+        private static bool VerifyPassword(UserDTO user, string actualPassword) => 
             (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
 
 
         private string GenerateJwt(UserDTO user)
         {
+            var lifeTime = _configuration.GetValue<int>("JWTOptions:LifeTime");
+
             var claims = new []
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),     
             };
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(3000),
+                expires: DateTime.Now.AddMinutes(lifeTime),
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
                         _signingEncodingKey.SigningAlgorithm)
@@ -109,5 +140,7 @@ namespace EventsExpress.Core.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        
     }
 }
