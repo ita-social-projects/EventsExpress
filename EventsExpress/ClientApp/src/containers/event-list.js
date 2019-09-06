@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event-list';
-import BadRequest from '../components/Route guard/400'
-import Unauthorized from '../components/Route guard/401'
-import Forbidden from '../components/Route guard/403'
-import { Redirect } from 'react-router'
-import history from '../history';
+import BadRequest from '../components/Route guard/400';
+import Unauthorized from '../components/Route guard/401';
+import Forbidden from '../components/Route guard/403';
+import { Redirect } from 'react-router';
 
 
 class EventListWrapper extends Component{
@@ -25,12 +24,11 @@ class EventListWrapper extends Component{
             this.getEvents(newProps.params);
     }
     
-
     getEvents = (filter) => this.props.get_events(filter);
     
 
     render() {
-        console.log(this.props.events);
+        console.log('events', this.props.events);
         let current_user = this.props.current_user.id != null ? this.props.current_user :{} ;
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;
@@ -49,8 +47,7 @@ class EventListWrapper extends Component{
        
         return <>
             {errorMessage}
-                {spinner}
-                {content}
+                {spinner || content}
                </>
     }
 }

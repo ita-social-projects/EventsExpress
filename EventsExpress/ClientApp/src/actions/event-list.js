@@ -6,6 +6,7 @@ export const SET_EVENTS_PENDING = "SET_EVENTS_PENDING";
 export const GET_EVENTS_SUCCESS = "GET_EVENTS_SUCCESS";
 export const SET_EVENTS_ERROR = "SET_EVENTS_ERROR";
 
+export const RESET_EVENTS = "RESET_EVENTS";
 
 const api_serv = new EventsExpressService();
 
@@ -60,5 +61,11 @@ export function setEventError(data ){
     return{
         type: SET_EVENTS_ERROR,
         payload: data
+    }
+}
+
+export function reset_events(){
+    return {
+        type: RESET_EVENTS
     }
 }

@@ -1,7 +1,7 @@
 import{blockEvent,unBlockEvent}from '../actions/event-item-view'
 import initialState from '../store/initialState';
 import {
-    SET_EVENTS_ERROR,SET_EVENTS_PENDING,GET_EVENTS_SUCCESS
+    SET_EVENTS_ERROR,SET_EVENTS_PENDING,GET_EVENTS_SUCCESS, RESET_EVENTS
 }from '../actions/event-list';
 
 export const reducer = (
@@ -12,7 +12,6 @@ export const reducer = (
       case SET_EVENTS_ERROR:
           return {
                 ...state,
-                isPending: false,
               isError: action.payload
             } 
     case SET_EVENTS_PENDING:
@@ -50,6 +49,8 @@ export const reducer = (
         });
         return newState;
       }
+      case RESET_EVENTS:
+        return initialState.events;
        default: 
           return state;
     }

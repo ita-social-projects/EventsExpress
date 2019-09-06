@@ -4,6 +4,7 @@ import get_chats from '../../actions/chats';
  import { Link } from 'react-router-dom';
  import ButtonBase from '@material-ui/core/ButtonBase';
  import Avatar from '@material-ui/core/Avatar';
+ import Spinner from '../spinner';
  import './user_chats.css';
 class UserChats extends Component{
 
@@ -37,11 +38,17 @@ class UserChats extends Component{
     }
 
     render(){
+
+        const { isPending , data } = this.props.chats;
+
+        const spinner = isPending ? <Spinner/> : null;
+        const content = !isPending ?
+                                    <div className="row shadow mt-5 p-5 mb-5 bg-white rounded"> 
+                                    {this.renderChats(data)}
+                                    </div> : null;
         return <>
-        <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-    
-            {this.renderChats(this.props.chats.data)}
-        </div>
+            {spinner}
+            {content}
         
         </>
     }

@@ -28,9 +28,8 @@ class UsersWrapper extends Component{
         const filter = (isError.ErrorCode != '403') ? < UsersFilterWrapper /> : null;
         return <>
             <div className="row">
-                {spinner}
-                
                 <div className='col-9'>
+                {spinner}
                     {errorMessage}
                     {content}
                 </div>

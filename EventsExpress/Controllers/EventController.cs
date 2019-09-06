@@ -42,6 +42,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm]EventDto model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = model.Id == Guid.Empty
                 ? await _eventService.Create(_mapper.Map<EventDTO>(model))
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
