@@ -57,7 +57,8 @@ class AddEventWrapper extends Component{
        if(this.props.add_event_status.isEventSuccess){  
         this.setState({open: true});
     }
-       return <>
+       return <div className="w-50 m-auto">
+
                 <EventForm data={{}} 
                 all_categories={this.props.all_categories} 
                 cities={this.props.cities.data} 
@@ -67,7 +68,7 @@ class AddEventWrapper extends Component{
                 form_values={this.props.form_values}
                 Event={this.props.add_event_status}
                 isCreated={false} />
-               </>
+               </div>
     }
 }
 

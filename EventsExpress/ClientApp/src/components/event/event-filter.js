@@ -38,9 +38,16 @@ class EventFilter extends Component {
                         </Field>
                         :null
                 }<br/>
-                <Button fullWidth={true} type="submit" value="Login" color="primary" disabled={this.props.submitting}>
+
+                <div className="d-flex">
+                <Button fullWidth={true} color="primary" onClick={this.props.onReset} disabled={this.props.pristine || this.props.submitting}>
+                    Reset
+                </Button>
+
+                <Button fullWidth={true} type="submit" color="primary" disabled={this.props.pristine || this.props.submitting}>
                     Search
                 </Button>
+                </div>
                 </form>
             </div>
         </>

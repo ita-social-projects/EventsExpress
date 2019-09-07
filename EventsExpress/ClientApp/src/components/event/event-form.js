@@ -141,8 +141,6 @@ class EventForm extends Component {
             </div>
           }
         </div>
-
-
         <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
           Save
                 </Button>

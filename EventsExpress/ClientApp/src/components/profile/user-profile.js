@@ -112,7 +112,7 @@ export default class UserItemView extends Component {
         const categories_list = this.renderCategories(categories);
 
         return <>
-                <div className="row box info">
+                <div className="row info">
 
                     <div className="col-3">
                         <h6><strong><p className="font-weight-bolder" key={name} >User Name:</p></strong></h6>
@@ -129,9 +129,14 @@ export default class UserItemView extends Component {
                         {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
                     </div>
                     {(id !== this.props.current_user) &&
-                        <div className="col-3">
+                        <div className="col-4 user">
                             <center>
+                                <div className="user-profile-avatar">
                                 <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                    <div className="msg-btn">
+                                        <Link to={`/chat/${id}`}><button className="btn btn-success mt-1">Write</button></Link>
+                                    </div>
+                                </div>
                                 {attitude == '2' && <div className="row attitude">
                                     <button onClick={this.props.onLike} className="btn btn-info">Like</button>
                                     <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
@@ -146,8 +151,7 @@ export default class UserItemView extends Component {
                                     <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
                                     <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
                                 </div>}
-                                <Link to={`/chat/${id}`}><button className="btn btn-info mt-1">Message</button></Link>
-                            </center>
+                             </center>
                         </div>
                     }
 
@@ -156,7 +160,7 @@ export default class UserItemView extends Component {
                         </div>
                     }
                 </div>
-                <div className={classes.root}>
+                <div className={' mt-2'}>
                     <AppBar position="static" color="inherit">
                         <Tabs
                             value={this.state.value}
@@ -186,18 +190,18 @@ export default class UserItemView extends Component {
                     </TabPanel>
                     <TabPanel value={this.state.value} index={4}>
                     </TabPanel>
-
-                </div>
                     {this.props.add_event_flag ?
-                    <div className="row shadow p-5 mb-5 bg-white rounded">
+                    <div className="shadow mb-5 bg-white rounded">
                 <AddEventWrapper />
             </div>
             :
-                <div className="shadow p-5 mb-5 bg-white rounded">
+                <div className="shadow pl-2 pr-2 mb-5 bg-white rounded">
                 {spinner}{content}
                     {!isPending && !(data.items && data.items.length > 0) && <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
                     </div>
                     }
+                </div>
+                  
         </>
     }
 }

@@ -39,9 +39,8 @@ class NotificationEvents extends Component{
         const content = !errorMessage ? <EventList current_user={current_user} notification_events={this.props.notification.events} data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.props.get_events} /> : null;
        
         return <>        
-            {spinner}
-            {content}
-            {items.length == 0 && <p className="text-center h3">You don't have notifications</p> }
+            {spinner || content}
+            {!spinner && items.length == 0 && <p className="text-center h3">You don't have notifications</p> }
         </>
     }
 }

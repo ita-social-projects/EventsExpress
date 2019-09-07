@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 export default class Event extends Component {
 
     renderCategories = (arr) => {
-        return arr.map((x) => (<span key={x.id}>#{x.name}</span>)
+        return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
         );
     }
       
@@ -71,7 +71,7 @@ export default class Event extends Component {
 
 
         return (
-            <div className={"col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3" }>
+            <div className={"col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 mt-3" }>
 
             <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
@@ -108,7 +108,7 @@ export default class Event extends Component {
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <div className="flex flex-column">                        
+                    <div className="flex flex-row">                        
 
                         {this.renderCategories(categories.slice(0,2))}
                     </div>                        

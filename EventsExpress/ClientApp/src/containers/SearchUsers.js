@@ -1,6 +1,6 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { get_SearchUsers } from '../actions/users';
+import { get_SearchUsers, reset_users } from '../actions/users';
 import Spinner from '../components/spinner';
 import UserItemList from '../components/users/user-item';
 import UserSearchFilterWrapper from '../containers/UserSearchFilterWrapper';
@@ -18,6 +18,11 @@ class SearchUsers extends Component {
     componentWillMount() {
         this.getUsers(this.props.params);
     }
+
+    componentWillUnmount = () => {
+        this.props.reset_users();
+    }
+
     getUsers = (page) => this.props.get_SearchUsers(page);
 
     render() {
@@ -29,14 +34,10 @@ class SearchUsers extends Component {
         return <>
             <div className="row">
                 <div className='col-12'>
-                    <div className='col-9'>  
                         < UserSearchFilterWrapper />
 
-                        {spinner}
+                        {spinner || content}
                         {errorMessage}
-
-                        {content}
-                    </div>
                 </div>
             </div>
         </>
@@ -49,7 +50,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_SearchUsers: (page) => dispatch(get_SearchUsers(page))
+        get_SearchUsers: (page) => dispatch(get_SearchUsers(page)),
+        reset_users: () => dispatch(reset_users())
     };
 }
 

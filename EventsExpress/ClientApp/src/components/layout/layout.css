@@ -18,3 +18,9 @@
 input{
     margin-bottom: 10px;
 }
+
+.preview-container{
+    border: 1px solid rgba(114, 113, 113, 0.329);
+    border-radius: 15px;
+    padding: 10px;
+}

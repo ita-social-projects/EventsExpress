@@ -14,7 +14,7 @@ class UserSearchFilter extends Component {
                     <Button fullWidth={true} type="button" color="primary" disabled={this.props.pristine || this.props.submitting} onClick={this.props.reset}>
                         CLEAR
                    </Button >
-                    <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
+                    <Button fullWidth={true} type="submit" color="primary" disabled={this.props.pristine || this.props.submitting}>
                         Search
                 </Button>
                 </DialogActions>

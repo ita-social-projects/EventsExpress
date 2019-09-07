@@ -34,10 +34,14 @@ class ContactUs extends Component{
         const classes = useStyles;
         const {  pristine, reset, submitting } = this.props;
         return(
-            <form className="col-7 " onSubmit={this.props.handleSubmit}>
+            <div id='notfound'>
+                
+            <div className='notfound'>
+                
+            <form className="notfound-404" onSubmit={this.props.handleSubmit}>
                 <div className="box text text-2 pl-md-4 " >
                     <Field name='type' className="form-control" component="select">
-                        <option value="" >--</option>;
+                        <option value="" >Problem type</option>;
                         <option value="newCategory">New Category</option>;
                         <option value="bugReport">Bug Report</option>;
                         <option value="badEvent">Bad Event</option>;
@@ -53,6 +57,8 @@ class ContactUs extends Component{
                 </Button>
                 </div>
             </form>
+            </div>
+            </div>
         )
     }
 }

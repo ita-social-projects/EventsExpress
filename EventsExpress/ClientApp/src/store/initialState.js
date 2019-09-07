@@ -83,7 +83,7 @@ const initialState = {
         data: []
     },
     users: {
-        isPending: false,
+        isPending: true,
         isError: false,
         editedUser: null,
         data: {

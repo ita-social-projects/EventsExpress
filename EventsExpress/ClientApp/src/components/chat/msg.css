@@ -18,7 +18,7 @@
 		.card-header{
 			border-radius: 15px 15px 0 0 !important;
             border-bottom: 0 !important;
-            background: #555854ea;
+            background: #5aa6c9ea;
 		}
 	 .card-footer{
 		border-radius: 0 0 15px 15px !important;
@@ -142,9 +142,9 @@
 	.msg_cotainer_send{
 		margin-top: auto;
 		margin-bottom: auto;
-		margin-right: 10px;
+		/* margin-right: 10px; */
 		border-radius: 25px;
-		background-color: #78e08f;
+		background-color: #00ff4c;
 		padding: 10px;
 		position: relative;
 	}
@@ -161,7 +161,7 @@
 		bottom: -15px;
 		color: rgb(0,0,0);
 		font-size: 10px;
-		min-width: 100px;
+		min-width: 75px;
 		float: right;
 	}
 	.msg_head{
