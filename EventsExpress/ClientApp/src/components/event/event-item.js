@@ -8,7 +8,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
@@ -29,7 +28,7 @@ const useStyles = makeStyles(theme => ({
       
     },
     media: {
-      height: 0,
+      height: 0, 
       paddingTop: '56.25%', // 16:9
     },
     expand: {
@@ -68,10 +67,10 @@ export default class Event extends Component {
             <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
                     avatar={
-                            <Tooltip title={user.username}>
-                                <Link to={'/user/' + user.id} className="btn-custom">
-                                    <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
-                                    </Link>
+                        <Tooltip title={user.username}>
+                            <Link to={'/user/' + user.id} className="btn-custom">
+                                <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
+                            </Link>
                         </Tooltip>
                         }
                         
@@ -87,11 +86,14 @@ export default class Event extends Component {
                     title={title}
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                 />
+                
                 <CardMedia
-                    className={classes.media}
+                    className={classes.media + ' card-image'}
                     title={title}
                 >
-                    <img src={photoUrl} className="w-100"/>
+                    <Link to={'/event/'+id+'/'+1}>
+                        <img src={photoUrl} className="w-100"/>
+                    </Link>
                 </CardMedia>
 
                 <CardContent>
@@ -99,9 +101,13 @@ export default class Event extends Component {
                         {description.substr(0, 128) + '...'}
                     </Typography>
                 </CardContent>
+                
                 <CardActions disableSpacing>
-                    <div className='w-100'>                   
-                        <div className="d-flex flex-row">                        
+                    <div className='w-100'> 
+                        <div className='mb-2'>
+                            {country + ' ' + city }
+                        </div>                  
+                        <div className="float-left">                        
                             {this.renderCategories(categories.slice(0,2))}
                         </div>                        
                         <div className='d-flex flex-row align-items-center justify-content-center float-right'>

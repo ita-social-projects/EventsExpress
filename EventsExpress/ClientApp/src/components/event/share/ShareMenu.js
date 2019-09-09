@@ -1,10 +1,11 @@
 ﻿import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ShareIcon from '@material-ui/icons/Share';
 import ShareButtons from './ShareButtons'
+
+
 const StyledMenu = withStyles({
     paper: {
         border: '1px solid #d3d4d5',
@@ -49,14 +50,14 @@ export default function CustomizedMenus(props) {
 
     return (
         <div>
-            <Button className="btn"
+            <IconButton className="btn"
                 aria-controls="customized-menu"
                 aria-haspopup="true"
             
                 onClick={handleClick}
             >
-             < ShareIcon/>
-      </Button>
+             <i class="fas fa-share-alt"></i>
+            </IconButton>
             <StyledMenu
                 id="customized-menu"
                 anchorEl={anchorEl}
