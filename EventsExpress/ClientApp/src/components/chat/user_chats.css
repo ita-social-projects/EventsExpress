@@ -7,6 +7,12 @@
     max-height: 720px;
     background: #E6EAEA;
   }
+  .new-msgs{
+    background-color: #ffc10762;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
   @media screen and (max-width: 360px) {
     #frame {
       width: 100%;

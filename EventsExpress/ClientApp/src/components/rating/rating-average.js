@@ -19,7 +19,7 @@ export default function RatingAverage(props) {
             <IconButton className={textColor} size="small" disabled>
                 <i className="far fa-star"></i> 
             </IconButton>
-            <div className={textColor}>{props.value}</div>
+            <div className={textColor}>{props.value.toFixed(1)}</div>
         </div>
         : null
     

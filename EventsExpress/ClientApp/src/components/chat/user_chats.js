@@ -18,10 +18,11 @@ class UserChats extends Component{
         
             const user = x.users.find(y => y.id != this.props.current_user.id);
             const new_msg = this.props.notification.messages.filter(y => y.chatRoomId == x.id);
+            const chatBg = new_msg.length > 0 ? 'new-msgs' : ''
         return <>
         <div key={x.id} className="w-100">
         <Link to={`/chat/${x.id}`}>   
-            <div className="col-12 d-flex">                                        
+            <div className={chatBg+ " col-12 d-flex"}>                                        
             <ButtonBase>
             {user.photoUrl
                         ? <Avatar className='SmallAvatar' src={user.photoUrl} />

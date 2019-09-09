@@ -88,7 +88,7 @@ export default class Event extends Component {
                 />
                 
                 <CardMedia
-                    className={classes.media + ' card-image'}
+                    className={classes.media}
                     title={title}
                 >
                     <Link to={'/event/'+id+'/'+1}>
