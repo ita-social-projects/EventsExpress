@@ -37,9 +37,9 @@ namespace EventsExpress.Core.NotificationHandlers
                 var EventLink = "http://localhost:51712/event/" + notification.Id + "/1";
                 await _sender.SendEmailAsync(new EmailDTO
                 {
-                    Subject = "Your event was UNblocked",
+                    Subject = "Your event was Unblocked",
                     RecepientEmail = Email,
-                    MessageText = $"Dear {Email}, congratulations, your event was UNblocked! " +
+                    MessageText = $"Dear {Email}, congratulations, your event was Unblocked! " +
                     $"\"<a href='{EventLink}'>{Even.Title}</>\""
                 });
             }

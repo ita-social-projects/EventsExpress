@@ -52,7 +52,7 @@ namespace EventsExpress.Core.Services
 
             if (Db.UserRepository.Get().Any(u => u.Email == userDto.Email))
             {
-                return new OperationResult(false, "Email is exist in database", "Email");
+                return new OperationResult(false, "Email already exists in database", "Email");
             }
             var user = _mapper.Map<User>(userDto);
 
@@ -117,7 +117,7 @@ namespace EventsExpress.Core.Services
                 await Db.SaveAsync();
                 await _emailService.SendEmailAsync(new EmailDTO
                 {
-                    Subject = "EventExpress password recovery",
+                    Subject = "EventsExpress password recovery",
                     RecepientEmail = user.Email,
                     MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}"
 

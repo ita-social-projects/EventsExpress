@@ -33,7 +33,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = "Your account was blocked",
                         RecepientEmail = notification.Email,
-                        MessageText = $"Dear {notification.Email}, your account was blocked for some reason"
+                        MessageText = $"Dear {notification.Email}, your account was blocked for some reason!"
                     });
             }
             catch (Exception ex)
