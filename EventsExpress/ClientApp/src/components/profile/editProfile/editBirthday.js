@@ -4,20 +4,7 @@ import TextField from "material-ui/TextField";
 import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 
-const renderTextField = ({
-    input,
-    label,
-    meta: { touched, error },
-    ...custom
-}) => (
-        <TextField
-            hintText={label}
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            {...custom}
-        />
-    );
+
 
 const { validate, renderMyDatePicker } = Module;
 const EditBirthday = props => {
