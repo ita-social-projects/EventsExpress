@@ -105,7 +105,7 @@ const ChangePassword = (props) => {
                             </div>
 
                             
-                            <div >
+                            <div className='mt-2'>
                                 <Button type="submit" color="primary" disabled={pristine || submitting }>
                                     Submit
                                 </Button>
