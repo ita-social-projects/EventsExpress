@@ -195,9 +195,9 @@ export default class UserItemView extends Component {
                 <AddEventWrapper />
             </div>
             :
-                <div className="shadow pl-2 pr-2 mb-5 bg-white rounded">
+                <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">
                 {spinner}{content}
-                    {!isPending && !(data.items && data.items.length > 0) && <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
+                    {!isPending && !(data.items && data.items.length > 0) && <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
                     </div>
                     }
                 </div>

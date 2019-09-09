@@ -48,7 +48,7 @@ class EventList extends Component {
         console.log(data_list);
         return <>
                 <div className="row">
-                        {items}
+                        {data_list.length > 0 ? items : <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
             </div>
 
             <br />
