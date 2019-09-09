@@ -1,7 +1,6 @@
 .header-profile-root {
     flex-grow: 1;
-    width: 100%;
-    padding: 2em 0 1em 0;
+    width: 100%;    
     display: flex;
     justify-content: center;
 }

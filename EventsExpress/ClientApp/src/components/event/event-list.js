@@ -26,29 +26,23 @@ class EventList extends Component {
         });
     };
 
-
-    renderItems = (arr) => {
-        return arr.map((item) => {
-
-            return (
-                <Event 
-                    key={item.id+item.isBlocked} 
-                    item={item} 
-                    current_user={this.props.current_user}
-                   
-                />
-            );
-        });
-    }
+    renderItems = arr => 
+        arr.map(item => (
+            <Event 
+                key={item.id+item.isBlocked} 
+                item={item} 
+                current_user={this.props.current_user}                   
+            />
+    ));
+        
  
     render() {
-        const { data_list } = this.props;
-        const items = this.renderItems(data_list);
+        const items = this.renderItems(this.props.data_list);
         const { page, totalPages } = this.props;
-        console.log(data_list);
+
         return <>
-                <div className="row">
-                        {items}
+            <div className="row">
+                {items}
             </div>
 
             <br />
@@ -69,7 +63,6 @@ class EventList extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
-
                             <div>
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -80,7 +73,7 @@ class EventList extends Component {
                                         })}
                                     >
                                         first
-                              </Link>)}
+                                    </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -160,8 +153,6 @@ class EventList extends Component {
                         )}
                 </Pagination>
             </ul>
-
-
             
         </>
     }

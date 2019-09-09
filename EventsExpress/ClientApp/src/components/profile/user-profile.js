@@ -76,11 +76,12 @@ export default class UserItemView extends Component {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age = age - 1;
         }
+        if (age > 150) return '---'
         return age;
     }
     
     
-    renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
+    renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
     
@@ -159,21 +160,7 @@ export default class UserItemView extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </div>
-                                {attitude == '2' && <div className="row attitude">
-                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                                </div>}
-                                {attitude == '1' && <div className="row attitude">
-                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                    <button className="btn btn-light">Dislike</button>
-                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                                </div>}
-                                {attitude == '0' && <div className="row attitude">
-                                    <button className="btn btn-light">Like</button>
-                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                                </div>}
-                             </center>
+                            </center>
                         </div>
                     }
 
