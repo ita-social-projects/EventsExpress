@@ -50,7 +50,7 @@ const useStyles = makeStyles({
     props.reset();
   }
   return (
-    <div>
+    <div className='d-inline-block'>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Sign In/Up
       </Button>

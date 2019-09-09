@@ -20,7 +20,9 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CustomAvatar from '../avatar/custom-avatar';
-import { Redirect } from 'react-router-dom'
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -132,10 +134,30 @@ export default class UserItemView extends Component {
                         <div className="col-4 user">
                             <center>
                                 <div className="user-profile-avatar">
-                                <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                    <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
                                     <div className="msg-btn">
-                                        <Link to={`/chat/${id}`}><button className="btn btn-success mt-1">Write</button></Link>
+                                        <Link to={`/chat/${id}`}>
+                                            <button className="btn btn-success mt-1">Write</button>
+                                        </Link>
                                     </div>
+                                </div>
+                                <div className="row justify-content-center">
+                                    <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <IconButton 
+                                            className={attitude == '0' ? 'text-success' : ''}
+                                            onClick={attitude != '0' ? this.props.onLike : this.props.onReset}
+                                        >
+                                            <i class="fas fa-thumbs-up"></i>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Dislike this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <IconButton
+                                            className={attitude == '1' ? 'text-danger' : ''}
+                                            onClick={attitude != '1' ? this.props.onDislike : this.props.onReset}
+                                        >
+                                            <i class="fas fa-thumbs-down"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 </div>
                                 {attitude == '2' && <div className="row attitude">
                                     <button onClick={this.props.onLike} className="btn btn-info">Like</button>
@@ -160,7 +182,7 @@ export default class UserItemView extends Component {
                         </div>
                     }
                 </div>
-                <div className={' mt-2'}>
+                <div className='mt-2'>
                     <AppBar position="static" color="inherit">
                         <Tabs
                             value={this.state.value}
@@ -180,25 +202,23 @@ export default class UserItemView extends Component {
                             }
                         </Tabs>
                     </AppBar>
-                    <TabPanel value={this.state.value} index={0}>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={1}>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={2}>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={3}>
-                    </TabPanel>
-                    <TabPanel value={this.state.value} index={4}>
-                    </TabPanel>
-                    {this.props.add_event_flag ?
-                    <div className="shadow mb-5 bg-white rounded">
-                <AddEventWrapper />
-            </div>
-            :
-                <div className="shadow pl-2 pr-2 mb-5 bg-white rounded">
-                {spinner}{content}
-                    {!isPending && !(data.items && data.items.length > 0) && <h4><strong><p className="font-weight-bold p-9" align="center">No events yet!</p></strong></h4>}
-                    </div>
+
+                    <TabPanel value={this.state.value} index={0}> </TabPanel>
+                    <TabPanel value={this.state.value} index={1}> </TabPanel>
+                    <TabPanel value={this.state.value} index={2}> </TabPanel>
+                    <TabPanel value={this.state.value} index={3}> </TabPanel>
+                    <TabPanel value={this.state.value} index={4}> </TabPanel>
+                    {this.props.add_event_flag 
+                        ? <div className="shadow mb-5 bg-white rounded">
+                            <AddEventWrapper />
+                        </div>
+                        : <div className="shadow pl-2 pr-2 mb-5 bg-white rounded">
+                            {spinner}
+                            {content}
+                            {!isPending && !(data.items && data.items.length > 0) && 
+                                <p className="font-weight-bold p-9" align="center" >No events yet!</p>
+                            }
+                        </div>
                     }
                 </div>
                   
