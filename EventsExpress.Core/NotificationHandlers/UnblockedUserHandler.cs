@@ -31,9 +31,9 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 await _sender.SendEmailAsync(new EmailDTO
                 {
-                    Subject = "Your account was UNblocked",
+                    Subject = "Your account was Unblocked",
                     RecepientEmail = notification.Email,
-                    MessageText = $"Dear {notification.Email}, congratulations, your account was UNblocked, so you can come back and enjoy spending you time in EventExpress"
+                    MessageText = $"Dear {notification.Email}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress"
                 });
             }
             catch (Exception ex)

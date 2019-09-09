@@ -189,23 +189,25 @@ export default class UserItemView extends Component {
                             }
                         </Tabs>
                     </AppBar>
-
-                    <TabPanel value={this.state.value} index={0}> </TabPanel>
-                    <TabPanel value={this.state.value} index={1}> </TabPanel>
-                    <TabPanel value={this.state.value} index={2}> </TabPanel>
-                    <TabPanel value={this.state.value} index={3}> </TabPanel>
-                    <TabPanel value={this.state.value} index={4}> </TabPanel>
-                    {this.props.add_event_flag 
-                        ? <div className="shadow mb-5 bg-white rounded">
-                            <AddEventWrapper />
-                        </div>
-                        : <div className="shadow pl-2 pr-2 mb-5 bg-white rounded">
-                            {spinner}
-                            {content}
-                            {!isPending && !(data.items && data.items.length > 0) && 
-                                <p className="font-weight-bold p-9" align="center" >No events yet!</p>
-                            }
-                        </div>
+                    <TabPanel value={this.state.value} index={0}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={1}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={2}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={3}>
+                    </TabPanel>
+                    <TabPanel value={this.state.value} index={4}>
+                    </TabPanel>
+                    {this.props.add_event_flag ?
+                    <div className="shadow mb-5 bg-white rounded">
+                <AddEventWrapper />
+            </div>
+            :
+                <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">
+                {spinner}{content}
+                    {!isPending && !(data.items && data.items.length > 0) && <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
+                    </div>
                     }
                 </div>
                   

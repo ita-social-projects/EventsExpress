@@ -57,9 +57,7 @@ namespace EventsExpress.Controllers
             var user = _userService.GetByEmail(authRequest.Email);
 
             var userInfo = _mapper.Map<UserInfo>(user);
-            userInfo.Token = result.Message;
-
-            //userInfo.Rating = _userService.GetRating(userInfo.Id);
+            userInfo.Token = result.Message;      
 
             return Ok(userInfo);
         }

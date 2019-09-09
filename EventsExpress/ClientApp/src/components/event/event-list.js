@@ -41,8 +41,8 @@ class EventList extends Component {
         const { page, totalPages } = this.props;
 
         return <>
-            <div className="row">
-                {items}
+                <div className="row">
+                        {data_list.length > 0 ? items : <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
             </div>
 
             <br />
