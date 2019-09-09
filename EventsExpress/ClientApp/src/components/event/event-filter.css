@@ -1,0 +1,30 @@
+.sidebar-filter {
+    position: fixed;
+    right: 0;
+    top:0;
+    margin: 0;
+    padding: 0;
+    width: 15em;   
+    height: 100%;
+    overflow: auto;
+  }
+  
+.events-container{
+    width: 100%;
+    padding-right: 15em;
+}
+   
+
+
+  @media (max-width: 780px) {
+    .sidebar-filter {
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+    }
+    
+    .events-container{
+        padding-right: 0 !important;
+    }
+  }
+  

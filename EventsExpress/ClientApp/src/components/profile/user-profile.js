@@ -20,7 +20,9 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CustomAvatar from '../avatar/custom-avatar';
-import { Redirect } from 'react-router-dom'
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -74,11 +76,12 @@ export default class UserItemView extends Component {
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age = age - 1;
         }
+        if (age > 150) return '---'
         return age;
     }
     
     
-    renderCategories = arr => arr.map(item => <span key={item.id}>#{item.name}</span>)
+    renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
     
@@ -132,26 +135,32 @@ export default class UserItemView extends Component {
                         <div className="col-4 user">
                             <center>
                                 <div className="user-profile-avatar">
-                                <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                    <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
                                     <div className="msg-btn">
-                                        <Link to={`/chat/${id}`}><button className="btn btn-success mt-1">Write</button></Link>
+                                        <Link to={`/chat/${id}`}>
+                                            <button className="btn btn-success mt-1">Write</button>
+                                        </Link>
                                     </div>
                                 </div>
-                                {attitude == '2' && <div className="row attitude">
-                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                                </div>}
-                                {attitude == '1' && <div className="row attitude">
-                                    <button onClick={this.props.onLike} className="btn btn-info">Like</button>
-                                    <button className="btn btn-light">Dislike</button>
-                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                                </div>}
-                                {attitude == '0' && <div className="row attitude">
-                                    <button className="btn btn-light">Like</button>
-                                    <button onClick={this.props.onDislike} className="btn btn-info">Dislike</button>
-                                    <button onClick={this.props.onReset} className="btn btn-info">Reset</button>
-                                </div>}
-                             </center>
+                                <div className="row justify-content-center">
+                                    <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <IconButton 
+                                            className={attitude == '0' ? 'text-success' : ''}
+                                            onClick={attitude != '0' ? this.props.onLike : this.props.onReset}
+                                        >
+                                            <i class="fas fa-thumbs-up"></i>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Dislike this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <IconButton
+                                            className={attitude == '1' ? 'text-danger' : ''}
+                                            onClick={attitude != '1' ? this.props.onDislike : this.props.onReset}
+                                        >
+                                            <i class="fas fa-thumbs-down"></i>
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            </center>
                         </div>
                     }
 
@@ -160,7 +169,7 @@ export default class UserItemView extends Component {
                         </div>
                     }
                 </div>
-                <div className={' mt-2'}>
+                <div className='mt-2'>
                     <AppBar position="static" color="inherit">
                         <Tabs
                             value={this.state.value}

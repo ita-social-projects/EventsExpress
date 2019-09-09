@@ -61,29 +61,40 @@ export const validate = values => {
   }
   if (values.password !== values.RepeatPassword) {
     errors.RepeatPassword = 'Passwords do not match';
-    }
-    if (values.newPassword !== values.repeatPassword) {
-        errors.repeatPassword = 'Passwords do not match';
-    }
-    if (new Date(values.Birthday).getTime <= Date.now()) {
-        errors.Birthday = 'Date is incorrect';
-    }
+  }
+  if (values.newPassword !== values.repeatPassword) {
+    errors.repeatPassword = 'Passwords do not match';
+  }
+  if (new Date(values.Birthday).getTime() >= Date.now()) {
+    
+    errors.Birthday = 'Date is incorrect';
+  }
    
     
   return errors
 }
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, }) =>
-    <DatePicker
-        onChange={onChange}
-        selected={value || defaultValue || new Date()}
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue,maxValue}) =>{
+    value=value || defaultValue||new Date(2000,1,1,12,0,0);
     
+
+    minValue= new Date().getFullYear()-115;
+    maxValue= new Date().getFullYear()-15;
+    console.log(minValue);
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1,1,0,0,0)}
+        maxDate={new Date(maxValue, 12,31,23,59,59)}
+
     peekNextMonth
     showMonthDropdown
     showYearDropdown
     dropdownMode="select"
-/>
+/>}
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
+  
+  
   value = value || defaultValue || new Date();
   minValue = minValue || new Date();
   return <DatePicker

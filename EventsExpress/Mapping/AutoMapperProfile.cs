@@ -37,6 +37,7 @@ namespace EventsExpress.Mapping
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<UserDTO, UserInfo>()
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -48,7 +49,7 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserManageDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@"))))
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Role,
                     opts => opts.MapFrom(src => new RoleDto {Id = src.RoleId, Name = src.Role.Name}))
@@ -57,14 +58,14 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDTO, UserPreviewDto>()
                 .ForMember(dest => dest.Username,
-                    opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@"))))
+                    opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
             CreateMap<UserDTO, ProfileDTO>()
                 .ForMember(dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@"))))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryDto {Id = x.Category.Id, Name = x.Category.Name})));

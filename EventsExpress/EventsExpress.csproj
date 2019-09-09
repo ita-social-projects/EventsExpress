@@ -50,9 +50,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\public\dima\" />
     <Folder Include="ClientApp\src\components\avatar\" />
     <Folder Include="ClientApp\src\components\chat\" />
     <Folder Include="ClientApp\src\components\contactUs\" />
+    <Folder Include="ClientApp\src\components\container-list-item\" />
+    <Folder Include="ClientApp\src\components\container-list\" />
     <Folder Include="ClientApp\src\components\event\share\" />
     <Folder Include="ClientApp\src\components\rating\" />
     <Folder Include="Properties\PublishProfiles\" />
