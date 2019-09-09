@@ -23,6 +23,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import RatingAverage from '../rating/rating-average';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -97,7 +98,7 @@ export default class UserItemView extends Component {
 
     render() {
         const classes = useStyles;
-        const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
+        const { userPhoto, name, email, birthday, gender, categories, id, attitude, rating } = this.props.data;
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventsForProfile
@@ -133,7 +134,7 @@ export default class UserItemView extends Component {
                     </div>
                     {(id !== this.props.current_user) &&
                         <div className="col-4 user">
-                            <center>
+                            <div className='d-flex flex-column justify-content-center align-items-center'>
                                 <div className="user-profile-avatar">
                                     <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
                                     <div className="msg-btn">
@@ -142,6 +143,7 @@ export default class UserItemView extends Component {
                                         </Link>
                                     </div>
                                 </div>
+                                <RatingAverage value={rating} direction='row' />
                                 <div className="row justify-content-center">
                                     <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton 
@@ -160,7 +162,7 @@ export default class UserItemView extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </div>
-                            </center>
+                            </div>
                         </div>
                     }
 
