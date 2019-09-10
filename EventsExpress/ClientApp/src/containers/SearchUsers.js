@@ -8,7 +8,8 @@ import BadRequest from '../components/Route guard/400'
 import Unauthorized from '../components/Route guard/401'
 import Forbidden from '../components/Route guard/403'
 import { Redirect } from 'react-router'
-
+import history from '../history';
+import { reset } from 'redux-form';
 class SearchUsers extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {
@@ -22,7 +23,12 @@ class SearchUsers extends Component {
     componentWillUnmount = () => {
         this.props.reset_users();
     }
-
+    onReset = () => {
+        this.props.reset_filters();
+        var search_string = '?page=1';
+        this.props.get_SearchUsers(search_string);
+        history.push(window.location.pathname + search_string);   
+    }
     getUsers = (page) => this.props.get_SearchUsers(page);
 
     render() {
@@ -34,8 +40,8 @@ class SearchUsers extends Component {
         return <>
             <div className="row">
                 <div className='col-12'>
-                        < UserSearchFilterWrapper />
-
+                        < UserSearchFilterWrapper onReset={this.onReset}/>
+                    
                         {spinner || content}
                         {errorMessage}
                 </div>
@@ -51,7 +57,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         get_SearchUsers: (page) => dispatch(get_SearchUsers(page)),
-        reset_users: () => dispatch(reset_users())
+        reset_users: () => dispatch(reset_users()),
+        reset_filters: () => dispatch(reset('user-search-filter-form'))
     };
 }
 
