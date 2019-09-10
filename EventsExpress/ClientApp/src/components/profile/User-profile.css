@@ -79,6 +79,17 @@
 }
 .info {
     padding-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row-reverse;
+    
+}
+
+@media (max-width: 768px){
+    .info {        
+        flex-direction: column
+    } 
 }
 
 .attitude {
@@ -118,4 +129,4 @@
 }
 .user-profile-avatar:hover .msg-btn {
     opacity: 1;
-  }
+}
