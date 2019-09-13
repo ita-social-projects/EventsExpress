@@ -7,16 +7,10 @@ import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
-import ReactRoterDOM from 'react-router-dom';
-import Event from './event-item';
 import '../layout/colorlib.css';
 import './event-item-view.css';
 
-import Fab from '@material-ui/core/Fab';
-import { Link } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
-import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event'; 
+
 export default class EventItemView extends Component {
 
     state = { edit: false }

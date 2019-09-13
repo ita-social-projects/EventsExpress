@@ -1,15 +1,24 @@
 ﻿import React, { Component } from 'react';
-import Moment from 'react-moment';
 import 'moment-timezone';
-import { Link } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
 import AddEventWrapper from '../../containers/add-event';
 import './User-profile.css';
 import EventsForProfile from '../event/events-for-profile';
 import Spinner from '../spinner';
-import { AddComponent } from '../home/home';
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import CustomAvatar from '../avatar/custom-avatar';
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
+import RatingAverage from '../rating/rating-average';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
