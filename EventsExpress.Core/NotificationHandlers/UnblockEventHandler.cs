@@ -32,15 +32,16 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                var Email = _userService.GetById(notification.UserId).Email;
-                var Even = _eventService.EventById(notification.Id);
-                var EventLink = "http://localhost:51712/event/" + notification.Id + "/1";
+                var email = _userService.GetById(notification.UserId).Email;
+                var even = _eventService.EventById(notification.Id);
+                var eventLink = "https://eventsexpress.azurewebsites.net/event/" + notification.Id + "/1";
+
                 await _sender.SendEmailAsync(new EmailDTO
                 {
                     Subject = "Your event was Unblocked",
-                    RecepientEmail = Email,
-                    MessageText = $"Dear {Email}, congratulations, your event was Unblocked! " +
-                    $"\"<a href='{EventLink}'>{Even.Title}</>\""
+                    RecepientEmail = email,
+                    MessageText = $"Dear {email}, congratulations, your event was Unblocked! " +
+                    $"\"<a href='{eventLink}'>{even.Title}</>\""
                 });
             }
             catch (Exception ex)

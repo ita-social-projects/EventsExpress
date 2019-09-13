@@ -36,7 +36,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = "New event for you!",
                         RecepientEmail = u.Email,
-                        MessageText = $"The <a href='http://localhost:61985/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
+                        MessageText = $"The <a href='https://eventsexpress.azurewebsites.net/event/{notification.Event.Id}/1'>event</a> was created which could interested you."
                     });
                 }
             }
