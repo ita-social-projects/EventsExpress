@@ -19,6 +19,7 @@ class ChangeAvatar extends React.Component {
         const files = [ ...event.target.files ];
     }
     handleOnDrop = (newImageFile, onChange) => {
+      if(newImageFile.length > 0){
         const imagefile = {
           file: newImageFile[0],
           name: newImageFile[0].name,
@@ -26,11 +27,13 @@ class ChangeAvatar extends React.Component {
           size: 1
         };
         this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
+      }
       };
     
       resetForm = () => this.setState({ imagefile: [] }, () => this.props.reset());
 
       componentWillMount = () => {
+        if(this.props.current_photo != null){
           const imagefile = {
             file: '',
             name: '',
@@ -38,7 +41,7 @@ class ChangeAvatar extends React.Component {
             size: 1
           };
           this.setState({ imagefile: [imagefile] });
-        }
+        }}
 
     componentWillUnmount = () => {
       this.resetForm();

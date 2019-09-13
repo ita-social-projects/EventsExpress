@@ -78,7 +78,18 @@
     background-color: #5bc0de;
 }
 .info {
-    padding-top: 5%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row-reverse;
+    
+}
+
+@media (max-width: 768px){
+    .info {        
+        flex-direction: column
+    } 
 }
 
 .attitude {
@@ -92,4 +103,30 @@
 
 .check {
    padding-top: 35px;
+}
+
+.user {
+     margin-top: -10px;
+}
+
+.user-profile-avatar{
+    position: relative;
+}
+
+.user-profile-avatar:hover{
+    opacity: 0.5;
+}
+
+.msg-btn{    
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.user-profile-avatar:hover .msg-btn {
+    opacity: 1;
 }

@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import Event from './event-item';
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {reset_events} from '../../actions/event-list';
 const limit = 2;
 const pageCount = 3;
 
-
-
-export default class EventList extends Component {
+class EventList extends Component {
     constructor() {
         super();
         this.state = {
             currentPage: 1
         };
+    }
+
+    componentWillUnmount = () => {
+        this.props.reset_events();
     }
 
     handlePageChange = (page, e) => {
@@ -23,25 +26,26 @@ export default class EventList extends Component {
         });
     };
 
-
-    renderItems = (arr) => {
-        return arr.map((item) => {
-
-            return (
-                <Event key={item.id} item={item} />
-            );
-        });
-    }
-
+    renderItems = arr => 
+        arr.map(item => (
+            <Event 
+                key={item.id+item.isBlocked} 
+                item={item} 
+                current_user={this.props.current_user}                   
+            />
+    ));
+        
+ 
     render() {
         const { data_list } = this.props;
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
-
+        
         return <>
-            <div className="row">
-                {items}
+                <div className="row">
+                        {data_list.length > 0 ? items : <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
             </div>
+
             <br />
             <ul className="pagination justify-content-center">
                 <Pagination
@@ -60,7 +64,6 @@ export default class EventList extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
-
                             <div>
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -71,7 +74,7 @@ export default class EventList extends Component {
                                         })}
                                     >
                                         first
-                              </Link>)}
+                                    </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -151,7 +154,15 @@ export default class EventList extends Component {
                         )}
                 </Pagination>
             </ul>
-
+            
         </>
     }
 }
+
+const mapDispatchToProps = (dispatch) => { 
+    return {
+        reset_events: () => dispatch(reset_events())
+    } 
+};
+
+export default connect(null, mapDispatchToProps)(EventList);

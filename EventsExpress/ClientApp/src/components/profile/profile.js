@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 import Moment from 'react-moment';
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -110,7 +111,7 @@ const useStyles = makeStyles(theme => ({
                     aria-controls="panel3bh-content"
                     id="panel3bh-header"
                 >
-                    <Typography className={classes.heading}>Age</Typography>
+                    <Typography className={classes.heading}>Date of birth</Typography>
                     <Typography className={classes.secondaryHeading}><Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment></Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -156,16 +157,7 @@ const useStyles = makeStyles(theme => ({
 
 const mapStateToProps = state => {
     return state.user;
-
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        
-    };
-};
 
-export default connect(
-    mapStateToProps,
-
-)(Profile);
+export default connect(mapStateToProps)(Profile);

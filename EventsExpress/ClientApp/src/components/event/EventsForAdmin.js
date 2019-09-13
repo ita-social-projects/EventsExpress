@@ -10,17 +10,13 @@ class EventsForAdmin extends Component {
     render() {
       
 
-        return (
-            <div className="row">
-                <div className='col-9'> 
-                    <AdminEventListWrapper params={this.props.location.search} />
-                </div>
-                <div className="col-3">
-                    <EventFilterWrapper />
-                </div>
+        return (<>
+            <EventFilterWrapper/>
+            <div className="events-container">
+                <AdminEventListWrapper params={this.props.location.search} />       
             </div>
-
-        );
+            
+        </>);
     }
 }
 

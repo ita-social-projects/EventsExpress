@@ -15,7 +15,7 @@ namespace EventsExpress.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -66,8 +66,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("CommentsId");
-
                     b.Property<DateTime>("Date");
 
                     b.Property<Guid>("EventId");
@@ -80,9 +78,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentsId");
-
                     b.HasIndex("EventId");
+
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
@@ -219,19 +217,15 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<Guid>("EventId");
 
-                    b.Property<int>("Score");
+                    b.Property<byte>("Score");
 
                     b.Property<Guid>("UserFromId");
-
-                    b.Property<Guid>("UserToId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
                     b.HasIndex("UserFromId");
-
-                    b.HasIndex("UserToId");
 
                     b.ToTable("Rates");
                 });
@@ -375,14 +369,14 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.Comments")
-                        .WithMany("Children")
-                        .HasForeignKey("CommentsId");
-
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.Comments")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithMany()
@@ -454,11 +448,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
                         .WithMany("Rates")
                         .HasForeignKey("UserFromId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
-                        .WithMany("MyRates")
-                        .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

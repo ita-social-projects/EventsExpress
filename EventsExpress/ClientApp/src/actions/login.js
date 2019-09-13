@@ -1,6 +1,8 @@
 import EventsExpressService from '../services/EventsExpressService';
 import { func } from 'prop-types';
 import { initialConnection } from './chat';
+import { getUnreadMessages } from './chats';
+
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
@@ -21,8 +23,13 @@ export default function login(email, password) {
       if(response.error == null){
           dispatch(setUser(response));
           dispatch(setLoginSuccess(true));
-          dispatch(initialConnection());
+         
           localStorage.setItem('token', response.token);
+          
+          localStorage.setItem('id', response.id);
+          dispatch(initialConnection());
+
+          dispatch(getUnreadMessages(response.id));
         }else{
           dispatch(setLoginError(response.error));
         }
@@ -39,10 +46,11 @@ export function loginFacebook(email, name) {
             if (response.error == null) {
                 dispatch(setUser(response));
                 dispatch(setLoginSuccess(true));
-
-
-
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('id', response.id);
+                dispatch(initialConnection());
+
+                dispatch(getUnreadMessages(response.id));
             } else {
                 dispatch(setLoginError(response.error));
             }

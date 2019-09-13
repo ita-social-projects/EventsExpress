@@ -17,6 +17,7 @@ import register from "../../registerServiceWorker";
 import reset from '../../containers/header-profile'
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -25,84 +26,76 @@ function TabContainer(props) {
   );
 }
 
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
-};
-
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     maxWidth: 500
   }
 });
- function ModalWind(props) {
 
+function ModalWind(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
     
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
-  function handleClickOpen() {
-     
-   props.setStatus(true);
+  const handleChange = (event, newValue) => { 
+    setValue(newValue); 
   }
 
-  function handleClose() {
-     
-      props.setStatus(false);
+  const handleClickOpen = () => { 
+    props.setStatus(true); 
+  }
+  
+  const handleClose = () => { 
+    props.setStatus(false); 
     props.reset();
   }
+
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+    <div className='d-inline-block'>
+      <Button className='mt-5' variant="outlined" color="primary" onClick={handleClickOpen}>
         Sign In/Up
       </Button>
-          <Dialog
-              open={props.status.isOpen}
-              onClose={handleClose}
-              aria-labelledby="form-dialog-title"
+      <Dialog
+        open={props.status.isOpen}
+        onClose={handleClose}
+      >
+        <Paper square className={classes.root}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="fullWidth"
+            indicatorColor="primary"
+            textColor="primary"
           >
-      
-          <Paper square className={classes.root}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              variant="fullWidth"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab icon={<LockOpen />} label="Login" />
-              <Tab icon={<PersonPinIcon />} label="Register" />
-            </Tabs>
-            {value === 0 && (
-              <TabContainer>
-                <LoginWrapper  />
-              </TabContainer>
-            )}
-            {value === 1 && (
-              <TabContainer>
-                          <RegisterWrapper handleClose={handleClose} />
-              </TabContainer>
-            )}
-            <Button  fullWidth onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-          </Paper>
+            <Tab icon={<LockOpen />} label="Login" />
+            <Tab icon={<PersonPinIcon />} label="Register" />
+          </Tabs>
+          
+          {value === 0 && (
+            <TabContainer>
+              <LoginWrapper  />
+            </TabContainer>
+          )}
+          {value === 1 && (
+            <TabContainer>
+              <RegisterWrapper handleClose={handleClose} />
+            </TabContainer>
+          )}
+
+          <Button fullWidth onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+        </Paper>
       </Dialog>
     </div>
-    );
-
-}
+)}
 
 const mapStateToProps = (state) => ({
-    status: state.modal
+  status: state.modal
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setStatus: (data) => dispatch(TogleOpenWind(data))
-          }
-};
+const mapDispatchToProps = (dispatch) => ({
+  setStatus: (data) => dispatch(TogleOpenWind(data))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalWind)

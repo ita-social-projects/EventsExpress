@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './left-sidebar.css';
 import HeaderProfileWrapper from '../../containers/header-profile';
 import { Link } from 'react-router-dom';
 
-const NavItem = ({to, icon, text}) => {
+import Badge from '@material-ui/core/Badge';
+
+const NavItem = ({to, icon, text, my_icon}) => {
     return (<li className="sidebar-header">
         <Link to={ to } className="active">
             <span className="link">
-                <i className= { icon } ></i>
-                <span className="hiden"> &nbsp; { text } </span>
+                <i className= { icon + ' nav-item-icon' } ></i>
+                {my_icon}
+                <span className="nav-item-text">                     
+                    &nbsp;
+                    {text}
+                </span>
                 <strong></strong>
             </span>
         </Link>
@@ -16,42 +22,72 @@ const NavItem = ({to, icon, text}) => {
     );
 }
 
+class LeftSidebar extends Component  {
+    constructor(props) {
+        super(props);
 
-const LeftSidebar = (props) =>{
-    return (
-    <div id="colorlib-page">
-            <button id="sidebarCollapse" className="js-colorlib-nav-toggle colorlib-nav-toggle" > <i></i> </button>  
-            <div id="colorlib-aside" role="complementary" className="js-fullheight">
-                <HeaderProfileWrapper/>
-                <nav id="colorlib-main-menu" role="navigation">
+        this.state = {
+            _class: "left-sidebar-closed"
+        };
+    }
+    
 
-                    <ul className="list-unstyled">
-                        
-                        <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} />
-                        {props.user.id &&
-                            <>
-                            <NavItem to={'/user/' + props.user.id} icon={'fa fa-user'} text={"Profile"} />
-                            <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Search Users"} />
+    render() {
+        return (
+            <>  
+                <div id='open-close-zone' 
+                    className={this.state._class + ' d-flex justify-content-start'}
+                    onClick={() => {
+                        this.state._class === "left-sidebar-opened"
+                            ? this.setState({_class: "left-sidebar-closed"})
+                            : this.setState({_class: "left-sidebar-opened"})
+                        }
+                    }
+                >
+                    <button 
+                        class="open-close-btn" 
+                    >
+                        {this.state._class === "left-sidebar-opened" ? '×' : '☰'}
+                    </button>
+                    
+                </div>
+                <div className={this.state._class + ' left-sidebar' }>
+                    
+                    <HeaderProfileWrapper/>
+
+                    <nav>
+                        <hr/>
+                        <ul className="list-unstyled">
                             
-                            <NavItem to={'/user_chats'} icon={'fa fa-envelope'} text={"Comuna"} />
+                            <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} />
+                            {this.props.user.id &&
+                            <>
+                                <NavItem to={'/user/' + this.props.user.id} icon={'fa fa-user'} text={"Profile"} />
+                                <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Search Users"} />
+                                <NavItem to={'/user_chats'} my_icon={
+                                    <Badge badgeContent={this.props.msg_for_read().length} color="primary">
+                                        <i className="fa fa-envelope"></i>
+                                    </Badge>} text={"Comuna"} />
                             </>
                             }
-                        {props.user.role === "Admin" &&
-                        <>
-                            <NavItem to={'/admin/categories/'} icon={'fa fa-hashtag'} text={"Categories"} />
-                            
-                            <NavItem to={'/admin/users?page=1'} icon={'fa fa-users'} text={"Users"} />
-                            
-                            <NavItem to={'/admin/events?page=1'} icon={'fa fa-calendar'} text={"Events"} />
-                        </>
-                        }
-
-                        
-                </ul>
-            </nav>
-            
-        </div> </div>
-            );
+                            {this.props.user.role === "Admin" &&
+                            <>
+                                <NavItem to={'/admin/categories/'} icon={'fa fa-hashtag'} text={"Categories"} />
+                                <NavItem to={'/admin/users?page=1'} icon={'fa fa-users'} text={"Users"} />
+                                <NavItem to={'/admin/events?page=1'} icon={'fa fa-calendar'} text={"Events"} />
+                            </>                       
+                            }
+                            {this.props.user.role==="User"&&
+                            <>
+                                <NavItem to={'/contactUs'} icon={'fa fa-exclamation-circle'} text={'Contact us'} />
+                            </>
+                            }
+                        </ul>
+                    </nav>            
+                </div> 
+            </>
+        );
+    }
 }
 
 export default LeftSidebar;

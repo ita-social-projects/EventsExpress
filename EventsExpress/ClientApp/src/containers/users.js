@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {get_users } from '../actions/users';
+import {get_users, reset_users } from '../actions/users';
 import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';
@@ -19,6 +19,11 @@ class UsersWrapper extends Component{
     componentDidMount() {
         this.getUsers(this.props.params);
     }
+
+    componentWillUnmount = () => {
+        this.props.reset_users();
+    }
+
     getUsers = (page) => this.props.get_users(page);
 
     render() {
@@ -30,11 +35,9 @@ class UsersWrapper extends Component{
         const filter = (isError.ErrorCode != '403') ? < UsersFilterWrapper /> : null;
         return <>
             <div className="row">
-                {spinner}
-                
                 <div className='col-9'>
+                {spinner || content}
                     {errorMessage}
-                    {content}
                 </div>
                 <div className="col-3">
                     {filter}
@@ -50,7 +53,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => { 
     return{
-        get_users: (page) => dispatch(get_users(page))
+        get_users: (page) => dispatch(get_users(page)),
+        reset_users: () => dispatch(reset_users())
  };
 }
 

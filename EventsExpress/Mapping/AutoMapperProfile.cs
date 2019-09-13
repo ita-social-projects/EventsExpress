@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
@@ -10,8 +12,11 @@ namespace EventsExpress.Mapping
 {
     public class AutoMapperProfile : Profile
     {
+
+
         public AutoMapperProfile()
         {
+
             #region USER MAPPING
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
@@ -32,6 +37,7 @@ namespace EventsExpress.Mapping
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<UserDTO, UserInfo>()
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -43,7 +49,7 @@ namespace EventsExpress.Mapping
             CreateMap<UserDTO, UserManageDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Role,
                     opts => opts.MapFrom(src => new RoleDto {Id = src.RoleId, Name = src.Role.Name}))
@@ -52,13 +58,14 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDTO, UserPreviewDto>()
                 .ForMember(dest => dest.Username,
-                    opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@"))))
+                    opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
             CreateMap<UserDTO, ProfileDTO>()
                 .ForMember(dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryDto {Id = x.Category.Id, Name = x.Category.Name})));
@@ -96,7 +103,7 @@ namespace EventsExpress.Mapping
                     Id = src.OwnerId,
                     Birthday = src.Owner.Birthday,
                     PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@"))
+                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal))
                 }));
 
             CreateMap<EventDTO, EventDto>()
@@ -106,7 +113,7 @@ namespace EventsExpress.Mapping
                     new UserPreviewDto
                     {
                         Id = x.User.Id,
-                        Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@")),
+                        Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@", StringComparison.Ordinal)),
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null
                     })))
@@ -119,7 +126,7 @@ namespace EventsExpress.Mapping
                     Id = src.OwnerId,
                     Birthday = src.Owner.Birthday,
                     PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@"))
+                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal))
                 }));
 
             CreateMap<EventDto, EventDTO>()
@@ -139,7 +146,11 @@ namespace EventsExpress.Mapping
             CreateMap<CommentDTO, CommentDto>()
                 .ForMember(dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.Name));
+                .ForMember(dest => dest.UserName, 
+                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
+
+            
+
             CreateMap<CommentDto, CommentDTO>();
             #endregion
 
@@ -162,7 +173,8 @@ namespace EventsExpress.Mapping
 
             #region MESSAGE MAPPING         
                                     
-            CreateMap<ChatRoom, UserChatDto>()                     
+            CreateMap<ChatRoom, UserChatDto>()
+                .ForMember(dest => dest.LastMessage, opts => opts.MapFrom(src => src.Messages.LastOrDefault().Text))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
                 .Select(x => new UserPreviewDto {
                     Id = x.UserId,
@@ -175,8 +187,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Messages, opts => opts.MapFrom(src => src.Messages.Select(x => new MessageDto
                 {
                     Id = x.Id,
+                    ChatRoomId = x.ChatRoomId,
                     DateCreated = x.DateCreated,
                     SenderId = x.SenderId,
+                    Seen = x.Seen,
+                    Edited = x.Edited,
                     Text = x.Text  
                 })))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
@@ -188,7 +203,8 @@ namespace EventsExpress.Mapping
                     Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@"))
                 })));
 
-
+            CreateMap<Message, MessageDto>().ReverseMap();
+                
             #endregion
         }
     }

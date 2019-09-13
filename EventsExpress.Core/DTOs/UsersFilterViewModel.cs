@@ -27,6 +27,8 @@ namespace EventsExpress.Core.DTOs
 
         public bool UnBlocked { get; set; }
 
+        public bool? IsConfirmed { get; set; } = null;
+
         public SortBy SortBy { get; set; }
     }
 }

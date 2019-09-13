@@ -19,7 +19,7 @@ class UserSearchFilterWrapper extends Component {
 
     render() {
         return <>
-            <UserSearchFilter onSubmit={this.onSubmit} />
+            <UserSearchFilter onSubmit={this.onSubmit} onReset={this.props.onReset}/>
         </>
     }
 }

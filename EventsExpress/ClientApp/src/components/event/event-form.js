@@ -33,6 +33,7 @@ class EventForm extends Component {
     const files = [...event.target.files];
   }
   handleOnDrop = (newImageFile, onChange) => {
+    if(newImageFile.length > 0){
     const imagefile = {
       file: newImageFile[0],
       name: newImageFile[0].name,
@@ -40,6 +41,7 @@ class EventForm extends Component {
       size: 1
     };
     this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
+  }
   };
 
   componentDidMount = () => {
@@ -139,8 +141,6 @@ class EventForm extends Component {
             </div>
           }
         </div>
-
-
         <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
           Save
                 </Button>

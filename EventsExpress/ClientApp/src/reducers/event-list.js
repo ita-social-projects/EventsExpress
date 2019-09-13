@@ -1,7 +1,7 @@
-
+import{blockEvent,unBlockEvent}from '../actions/event-item-view'
 import initialState from '../store/initialState';
 import {
-    SET_EVENTS_ERROR,SET_EVENTS_PENDING,GET_EVENTS_SUCCESS
+    SET_EVENTS_ERROR,SET_EVENTS_PENDING,GET_EVENTS_SUCCESS, RESET_EVENTS
 }from '../actions/event-list';
 
 export const reducer = (
@@ -12,7 +12,6 @@ export const reducer = (
       case SET_EVENTS_ERROR:
           return {
                 ...state,
-                isPending: false,
               isError: action.payload
             } 
     case SET_EVENTS_PENDING:
@@ -26,6 +25,32 @@ export const reducer = (
               isPending: false,
               data: action.payload
           }
+      case blockEvent.UPDATE:{
+        let newState={...state};
+        newState.data.items=state.data.items.map((item)=>{
+          if(item.id===action.payload){
+            let updatedItem=item;
+            updatedItem.isBlocked=true;
+            return updatedItem;
+          }
+          return item;
+        });
+        return newState;
+      }
+      case unBlockEvent.UPDATE:{
+        let newState={...state};
+        newState.data.items=state.data.items.map((item)=>{
+          if(item.id===action.payload){
+            let updatedItem=item;
+            updatedItem.isBlocked=false;
+            return updatedItem;
+          }
+          return item;
+        });
+        return newState;
+      }
+      case RESET_EVENTS:
+        return initialState.events;
        default: 
           return state;
     }

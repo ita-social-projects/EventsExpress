@@ -1,6 +1,6 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { get_SearchUsers } from '../actions/users';
+import { get_SearchUsers, reset_users } from '../actions/users';
 import Spinner from '../components/spinner';
 import UserItemList from '../components/users/user-item';
 import UserSearchFilterWrapper from '../containers/UserSearchFilterWrapper';
@@ -10,7 +10,8 @@ import Unauthorized from '../components/Route guard/401'
 import Forbidden from '../components/Route guard/403'
 import NotFound from '../components/Route guard/404';
 import { Redirect } from 'react-router'
-
+import history from '../history';
+import { reset } from 'redux-form';
 class SearchUsers extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {
@@ -19,6 +20,16 @@ class SearchUsers extends Component {
     }
     componentWillMount() {
         this.getUsers(this.props.params);
+    }
+
+    componentWillUnmount = () => {
+        this.props.reset_users();
+    }
+    onReset = () => {
+        this.props.reset_filters();
+        var search_string = '?page=1';
+        this.props.get_SearchUsers(search_string);
+        history.push(window.location.pathname + search_string);   
     }
     getUsers = (page) => this.props.get_SearchUsers(page);
 
@@ -30,14 +41,11 @@ class SearchUsers extends Component {
             : null;
         return <>
             <div className="row">
-                {spinner}
                 <div className='col-12'>
-                    <div className='col-9'>  
-                        < UserSearchFilterWrapper />
-
+                        < UserSearchFilterWrapper onReset={this.onReset}/>
+                    
+                        {spinner || content}
                         {errorMessage}
-                        {content}
-                    </div>
                 </div>
             </div>
         </>
@@ -50,7 +58,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_SearchUsers: (page) => dispatch(get_SearchUsers(page))
+        get_SearchUsers: (page) => dispatch(get_SearchUsers(page)),
+        reset_users: () => dispatch(reset_users()),
+        reset_filters: () => dispatch(reset('user-search-filter-form'))
     };
 }
 

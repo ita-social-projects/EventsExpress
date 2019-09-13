@@ -23,7 +23,6 @@ export default class Users extends Component {
         });
     };
 
-
     renderUsers = (arr) => {
         return arr.map(user => 
             <UserInfoWpapper key={user.id + user.isBlocked + user.role.id} user={user} />);
@@ -33,21 +32,11 @@ export default class Users extends Component {
         const { page, totalPages } = this.props;
         return <>
             <table className="table">
-                <thead className="bg-light">
-                    <tr>
-                        <td scope="col"></td>
-                        <td scope="col">email</td>
-                        <td scope="col">name</td>
-                        <td scope="col">role</td>
-                        <td scope="col"></td>
-                        <td scope="col">status</td>
-                    </tr>
-                </thead>
                 <tbody>
                     {this.renderUsers(this.props.users)}
-                </tbody>
-                
+                </tbody>                
             </table>
+
             <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}

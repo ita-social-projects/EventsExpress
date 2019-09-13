@@ -14,14 +14,10 @@ class LoginFacebook extends Component {
             this.props.loginFacebook(response.email, response.name)
             console.log(response);
         }
-        let { loginError } = this.props.login;
         return (
 
 
             <div>
-                {loginError &&
-                    <p className="text-danger text-center">{loginError}</p>
-                }
                 <FacebookLogin
                     appId="418450132121252"
                     fields="name,email,picture"

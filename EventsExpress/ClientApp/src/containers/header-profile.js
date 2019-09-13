@@ -9,20 +9,24 @@ class HeaderProfileWrapper extends Component {
   logout_reset = () =>{
     console.log(
       this.props.hub);
-    this.props.hub.stop(); 
-    this.props.logout();
-  }
+      this.props.hub.stop(); 
+      this.props.logout();
+      
+     
+    }
 
     render() {
-        return <HeaderProfile user={this.props.user} onClick={this.logout_reset} reset={this.props.reset} />;
+        
+        return <HeaderProfile user={this.props.user} onClick={this.logout_reset} reset={this.props.reset} notification={this.props.notification.events.length} />;
     }
   }
 const mapStateToProps = state => {
-    return { ...state, user: state.user, register: state.register, hub: state.hubConnection };
+    return { ...state, user: state.user, register: state.register, hub: state.hubConnection, notification: state.notification };
   };
   
   const mapDispatchToProps = dispatch => {
     return {
+        
         logout: () => { dispatch(logout()) } ,
         reset: () => {
             dispatch(setRegisterPending(true));

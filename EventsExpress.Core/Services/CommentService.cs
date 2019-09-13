@@ -15,9 +15,9 @@ namespace EventsExpress.Core.Services
     {
         public IUnitOfWork Db { get; set; }
         private readonly IMapper _mapper;
+        
 
-
-        public CommentService(IUnitOfWork uow, IMapper mapper, IUserService userService)
+        public CommentService(IUnitOfWork uow, IMapper mapper)
         {
             Db = uow;
             _mapper = mapper;
@@ -25,12 +25,26 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
-            var comments = Db.CommentsRepository.Get("User.Photo")
-                .Where(x => x.EventId == id)
+            count = Db.CommentsRepository.Get().Count(x => x.EventId == id && x.CommentsId == null);
+
+            var comments = Db.CommentsRepository
+                .Get("User.Photo,Children")
+                .Where(x => x.EventId == id && x.CommentsId == null)
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize);
-            count = Db.CommentsRepository.Get().Count(x => x.EventId == id);
-            return _mapper.Map<IEnumerable<CommentDTO>>(comments);
+                .Take(pageSize)
+                .AsEnumerable();
+
+            var com = _mapper.Map<IEnumerable<CommentDTO>>(comments);
+            foreach (var c in com)
+            {
+                c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
+                foreach (var child in c.Children)
+                {
+                    child.User = Db.UserRepository.Get("Photo").FirstOrDefault(u => u.Id == child.UserId);
+                }
+
+            }
+            return com;
         }
 
 
@@ -46,12 +60,13 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Wrong event id!", "");
             }
             
-            Db.CommentsRepository.Insert(new Comments
-            {
-                Text = comment.Text,
-                Date = DateTime.Now,
-                UserId = comment.UserId,
-                EventId = comment.EventId,
+
+
+            Db.CommentsRepository.Insert(new Comments() { Text = comment.Text,
+                                                          Date = DateTime.Now,
+                                                          UserId = comment.UserId,
+                                                          EventId = comment.EventId,
+                                                          CommentsId = comment.CommentsId
             });
 
             await Db.SaveAsync();
@@ -67,13 +82,19 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is null", "");
             }
 
-            var comment = Db.CommentsRepository.Get(id);
+            var comment = Db.CommentsRepository.Get("Children").Where(x => x.Id == id).FirstOrDefault();
             if (comment == null)
             {
                 return new OperationResult(false, "Not found", "");
             }
-
-            Db.CommentsRepository.Delete(comment);
+            if (comment.Children != null)
+            {
+                foreach (var com in comment.Children)
+                {
+                    var res = Db.CommentsRepository.Delete(Db.CommentsRepository.Get(com.Id));
+                }
+            }
+            var result = Db.CommentsRepository.Delete(comment);
             await Db.SaveAsync();
             return new OperationResult(true);
         }

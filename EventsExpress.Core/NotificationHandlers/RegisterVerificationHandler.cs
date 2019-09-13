@@ -48,7 +48,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     Subject = "EventExpress registration",
                     RecepientEmail = notification.User.Email,
-                    MessageText = $"For confirm your email you can follow the <a href='{theEmailLink}'>link</>"
+                    MessageText = $"For confirm your email please follow the <a href='{theEmailLink}'>link</>"
                 });
 
                 var x = _cacheHepler.GetValue(notification.User.Id);

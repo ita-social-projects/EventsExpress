@@ -1,10 +1,11 @@
 ﻿import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { connect } from "react-redux";
-import {setUser } from "../actions/login";
+import {setUser,setLoginSuccess } from "../actions/login";
 import config from '../config.json';
-import { withRouter, Redirect } from "react-router-dom";
-
+import { withRouter } from "react-router-dom";
+import { initialConnection } from '../actions/chat';
+import { getUnreadMessages } from '../actions/chats';
 
 class LoginGoogle extends Component {
 
@@ -28,6 +29,10 @@ class LoginGoogle extends Component {
                     console.log(token);
                     localStorage.setItem('token', token);
                     this.props.setUser(user);
+                    localStorage.setItem('id', user.id);
+                    this.props.getUnreadMessages(user.id);
+                    this.props.initialConnection();
+                    this.props.setLoginSuccess(true);
                 });
             })
     };
@@ -55,7 +60,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setUser: (data) => { dispatch(setUser(data)); }
+        setUser: (data) => { dispatch(setUser(data)); },
+        initialConnection: () => { dispatch(initialConnection()); },
+        getUnreadMessages: (data) => { dispatch(getUnreadMessages(data)); },
+        setLoginSuccess: (data) => { dispatch(setLoginSuccess(data)); }
     }
 };
 

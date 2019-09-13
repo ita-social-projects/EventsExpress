@@ -5,7 +5,7 @@ import EventsExpressService from '../services/EventsExpressService';
 export const GET_USERS_PENDING = "GET_USERS_PENDING";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_ERROR = "GET_USERS_ERROR";
-
+export const RESET_USERS = "RESET_USERS";
 
 const api_serv = new EventsExpressService();
 
@@ -60,5 +60,11 @@ export function getUsersError(data){
     return{
         type: GET_USERS_ERROR,
         payload: data
+    }
+}
+
+export function reset_users(){
+    return {
+        type: RESET_USERS
     }
 }

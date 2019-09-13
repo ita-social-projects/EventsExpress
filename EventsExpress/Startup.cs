@@ -27,6 +27,7 @@ using EventsExpress.Validation;
 using Swashbuckle.AspNetCore.Swagger;
 using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using System.Text;
 
 namespace EventsExpress
@@ -92,7 +93,7 @@ namespace EventsExpress
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration
-                    .GetConnectionString("DefaultConnection")));
+                    .GetConnectionString("AzureConnection")));
 
             #region Configure our services...
 
@@ -108,13 +109,14 @@ namespace EventsExpress
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();
 
+            services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddTransient<IPhotoService, PhotoService> ();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
             
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
 
-            services.AddSingleton<CacheHelper>();
+            
 
             #endregion
             services.AddCors();
@@ -128,9 +130,9 @@ namespace EventsExpress
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
             services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
-            services.AddTransient<IValidator<EventDto>, EventDtoValidator>();
-            services.AddTransient<IValidator<UserInfo>, UserInfoValidator>();
+            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>(); 
             services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
+            services.AddTransient<IValidator<RateDto>, RateDtoValidator>();
       
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -151,8 +153,8 @@ namespace EventsExpress
 
                 c.IncludeXmlComments(xmlPath);
             });
-
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

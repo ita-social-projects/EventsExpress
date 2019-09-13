@@ -34,6 +34,11 @@ import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
 import * as Hub from './hub';
+import * as Alert from './alert';
+import * as Dialog from './dialog';
+import * as ContactUs from './contact-us';
+
+import * as Notification from './notification';
 const rootReducers = {
     auth: authReducer.authReducer,
     modal: ModalWind.reducer,
@@ -72,7 +77,11 @@ const rootReducers = {
     authenticate: Auth.reducer,
     chats: Chats.reducer,
     chat: Chat.reducer,
-    hubConnection: Hub.reducer
+    hubConnection: Hub.reducer,
+    alert:Alert.reducer,
+    dialog:Dialog.reducer,
+    contactUs:ContactUs.reducer,
+    notification: Notification.reducer
 };
 
 

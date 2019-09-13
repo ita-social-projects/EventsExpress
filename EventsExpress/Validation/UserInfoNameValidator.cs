@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace EventsExpress.Validation
 {
-    public class UserInfoValidator : AbstractValidator<UserInfo>
+    public class UserInfoNameValidator:AbstractValidator<UserInfo>
     {
-        public UserInfoValidator()
+        public UserInfoNameValidator()
         {
-            //RuleFor(x => x.Id).NotEqual(Guid.Empty).WithMessage("Id can not be null!");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
         }
     }
 }

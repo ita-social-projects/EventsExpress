@@ -13,11 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Snackbar from '@material-ui/core/Snackbar';
+import { SetAlert } from '../actions/alert';
 import get_categories from '../actions/category-list';
-
-
-
-
 
 class AddEventWrapper extends Component{
     
@@ -33,6 +30,7 @@ class AddEventWrapper extends Component{
         if(!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess){
             this.props.reset();
             this.props.resetEventStatus();
+            this.props.alert({variant: 'success', message: 'Your event was created!', autoHideDuration: 5000});
         }
     }
 
@@ -42,7 +40,8 @@ class AddEventWrapper extends Component{
     }
 
     onSubmit = (values) => {
-        this.props.add_event({ ...values, user_id: this.props.user_id });
+     const res = this.props.add_event({ ...values, user_id: this.props.user_id });
+     console.log(res);
     }
 
     onChangeCountry = (e) => {
@@ -59,7 +58,8 @@ class AddEventWrapper extends Component{
        if(this.props.add_event_status.isEventSuccess){  
         this.setState({open: true});
     }
-       return <>
+       return <div className="w-50 m-auto">
+
                 <EventForm data={{}} 
                 all_categories={this.props.all_categories} 
                 cities={this.props.cities.data} 
@@ -69,46 +69,9 @@ class AddEventWrapper extends Component{
                 form_values={this.props.form_values}
                 Event={this.props.add_event_status}
                 isCreated={false} />
-                   <Snackbar
-                        anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                        }}
-                        open={this.state.open}
-                        autoHideDuration={6000}
-                        onClose={this.handleClose}
-                    >
-                        <MySnackbarContentWrapper
-                        onClose={this.handleClose}
-                        message="Add Event Success!"
-                        />
-                    </Snackbar>
-               </>
+               </div>
     }
 }
-
-function MySnackbarContentWrapper(props) {
-  const { message, onClose, variant, ...other } = props;
-
-  return (
-    <SnackbarContent
-      aria-describedby="client-snackbar"
-      message={
-        <span id="client-snackbar" >
-          <CheckCircleIcon />
-          {message}
-        </span>
-      }
-      action={[
-        <IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>,
-      ]}
-      {...other}
-    />
-  );
-}
-
 
 const mapStateToProps = (state) => ({user_id: state.user.id,
      add_event_status: state.add_event, 
@@ -126,6 +89,7 @@ const mapDispatchToProps = (dispatch) => {
         reset: () => {
             dispatch(reset('event-form'));
         },
+        alert: (data) => dispatch(SetAlert(data)),
         resetEventStatus: () => {
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));

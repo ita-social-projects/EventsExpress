@@ -46,7 +46,6 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email}, your account was blocked.", "email");
             }
 
-
             var token = GenerateJwt(user);
 
             return new OperationResult(true, token, "");
@@ -57,7 +56,7 @@ namespace EventsExpress.Core.Services
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                return new OperationResult(false, $"User with email: {email} not found", "email");
+                return new OperationResult(false, "User not found", "email");
             }
 
             if (user.IsBlocked)
@@ -128,6 +127,7 @@ namespace EventsExpress.Core.Services
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Name, user.Id.ToString()),     
             };
 
             var token = new JwtSecurityToken(
