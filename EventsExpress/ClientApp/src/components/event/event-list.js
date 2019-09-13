@@ -38,7 +38,7 @@ class EventList extends Component {
  
     render() {
         const items = this.renderItems(this.props.data_list);
-        const { page, totalPages } = this.props;
+        const { page, totalPages, data_list } = this.props;
 
         return <>
                 <div className="row">

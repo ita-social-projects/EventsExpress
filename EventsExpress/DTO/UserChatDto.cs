@@ -13,6 +13,8 @@ namespace EventsExpress.DTO
 
         public string LastMessage { get; set; }
 
+        public DateTime LastMessageTime { get; set; }
+
         public IEnumerable<UserPreviewDto> Users { get; set; }
                                                         
     }

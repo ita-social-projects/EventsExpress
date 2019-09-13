@@ -39,8 +39,8 @@ class UserChats extends Component{
 
     render(){
 
-        const { isPending , data } = this.props.chats;
-
+        const { isPending } = this.props.chats;
+        const data = this.props.chats.data.sort(function(a,b){ return new Date(b.lastMessageTime).getTime() -new Date(a.lastMessageTime).getTime();})
         const spinner = isPending ? <Spinner/> : null;
         const content = !isPending ?
                                     <div className="row shadow mt-5 p-5 mb-5 bg-white rounded"> 
