@@ -8,7 +8,6 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
@@ -29,7 +28,7 @@ const useStyles = makeStyles(theme => ({
       
     },
     media: {
-      height: 0,
+      height: 0, 
       paddingTop: '56.25%', // 16:9
     },
     expand: {
@@ -62,24 +61,16 @@ export default class Event extends Component {
         const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor, isBlocked  } = this.props.item;
         const { city, country } = this.props.item;
     
-        const rateTextColor = (user.rating < 5) 
-        ? 'text-danger' 
-        : (user.rating < 8) 
-            ? 'text-warning'
-            : 'text-success';
-
-
-
         return (
-            <div className={"col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 mt-3" }>
+            <div className={"col-12  col-sm-8  col-md-6   col-xl-4 mt-3" }>
 
             <Card className={classes.card } style={{ backgroundColor:(isBlocked)? "gold":"" }}>
                 <CardHeader
                     avatar={
-                            <Tooltip title={user.username}>
-                                <Link to={'/user/' + user.id} className="btn-custom">
-                                    <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
-                                    </Link>
+                        <Tooltip title={user.username}>
+                            <Link to={'/user/' + user.id} className="btn-custom">
+                                <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
+                            </Link>
                         </Tooltip>
                         }
                         
@@ -95,11 +86,14 @@ export default class Event extends Component {
                     title={title}
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                 />
+                
                 <CardMedia
                     className={classes.media}
                     title={title}
                 >
-                    <img src={photoUrl} className="w-100"/>
+                    <Link to={'/event/'+id+'/'+1}>
+                        <img src={photoUrl} className="w-100"/>
+                    </Link>
                 </CardMedia>
 
                 <CardContent>
@@ -107,24 +101,28 @@ export default class Event extends Component {
                         {description.substr(0, 128) + '...'}
                     </Typography>
                 </CardContent>
+                
                 <CardActions disableSpacing>
-                    <div className="flex flex-row">                        
-
-                        {this.renderCategories(categories.slice(0,2))}
-                    </div>                        
-                    
-                    <Link to={'/event/'+id+'/'+1}>
-                            <IconButton className={classes.button} aria-label="view">
-                                <i className="fa fa-eye"></i>
-                            </IconButton>
-                        </Link>
-                    {(this.props.current_user != null && this.props.current_user.role=="Admin")
-                        ? <EventManagmentWrapper eventItem={this.props.item} />
-                        : null
-                    }
-                        
-
-                        <SocialShare href={'https://eventsexpress.azurewebsites.net/event/' + id + '/' + 1} />
+                    <div className='w-100'> 
+                        <div className='mb-2'>
+                            {country + ' ' + city }
+                        </div>                  
+                        <div className="float-left">                        
+                            {this.renderCategories(categories.slice(0,2))}
+                        </div>                        
+                        <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                            <Link to={'/event/'+id+'/'+1}>
+                                <IconButton className={classes.button} aria-label="view">
+                                    <i className="fa fa-eye"></i>
+                                </IconButton>
+                            </Link>
+                            {(this.props.current_user != null && this.props.current_user.role=="Admin")
+                                ? <EventManagmentWrapper eventItem={this.props.item} />
+                                : null
+                            }                        
+                            <SocialShare href={'https://eventsexpress.azurewebsites.net/event/' + id + '/' + 1} />
+                        </div>
+                    </div>
                 </CardActions>
             </Card>
             </div>

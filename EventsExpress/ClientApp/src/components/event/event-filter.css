@@ -16,7 +16,7 @@
    
 
 
-  @media (max-width: 780px) {
+  @media (max-width: 768px) {
     .sidebar-filter {
       width: 100% !important;
       height: auto !important;

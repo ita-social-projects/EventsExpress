@@ -11,7 +11,7 @@ class UserSearchFilter extends Component {
                 <Field name='search' component={renderTextField} type="input" label="Search:" /> 
                 
                 <DialogActions>
-                    <Button fullWidth={true} type="button" color="primary" disabled={this.props.pristine || this.props.submitting} onClick={this.props.reset}>
+                    <Button fullWidth={true} type="button" color="primary" disabled={this.props.pristine || this.props.submitting} onClick={this.props.onReset}>
                         CLEAR
                    </Button >
                     <Button fullWidth={true} type="submit" color="primary" disabled={this.props.pristine || this.props.submitting}>

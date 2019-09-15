@@ -12,17 +12,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CustomAvatar from '../avatar/custom-avatar';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import RatingAverage from '../rating/rating-average';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -97,7 +93,7 @@ export default class UserItemView extends Component {
 
     render() {
         const classes = useStyles;
-        const { userPhoto, name, email, birthday, gender, categories, id, attitude } = this.props.data;
+        const { userPhoto, name, email, birthday, gender, categories, id, attitude, rating } = this.props.data;
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending ? <EventsForProfile
@@ -114,26 +110,22 @@ export default class UserItemView extends Component {
 
         const categories_list = this.renderCategories(categories);
 
-        return <>
-                <div className="row info">
 
-                    <div className="col-3">
-                        <h6><strong><p className="font-weight-bolder" key={name} >User Name:</p></strong></h6>
-                        <h6><strong><p className="font-weight-bolder" >Age:</p></strong></h6>
-                        <h6><strong><p className="font-weight-bolder" >Gender:</p></strong></h6>
-                        <h6><strong><p className="font-weight-bolder" >Email:</p></strong></h6>
-                        <h6><strong><p className="font-weight-bolder" >Interests:</p></strong></h6>
-                    </div>
-                    <div className="col-3">
-                        {(name) ? <h6><strong><p className="font-weight-bolder" >{name}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                        {(this.getAge(birthday)) ? <h6><strong><p className="font-weight-bolder" >{this.getAge(birthday)}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                        {(genders[gender]) ? <h6><strong><p className="font-weight-bolder" >{genders[gender]}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                        {(email) ? <h6><strong><p className="font-weight-bolder" >{email}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                        {(categories_list) ? <h6><strong><p className="font-weight-bolder" >{categories_list}</p></strong></h6> : <h6><strong><p className="font-weight-bolder" >---</p></strong></h6>}
-                    </div>
-                    {(id !== this.props.current_user) &&
+        const render_prop = (propName, value) => (
+            <div className='row mb-3 font-weight-bold'>
+                <div className='col-4'>{propName + ':'}</div>
+                <div className='col-8'>
+                    {value ? value : '' }
+                </div>
+            </div>
+        )
+
+        return <>
+                <div className="info">
+                    {(id !== this.props.current_user) 
+                        ?
                         <div className="col-4 user">
-                            <center>
+                            <div className='d-flex flex-column justify-content-center align-items-center'>
                                 <div className="user-profile-avatar">
                                     <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
                                     <div className="msg-btn">
@@ -142,6 +134,7 @@ export default class UserItemView extends Component {
                                         </Link>
                                     </div>
                                 </div>
+                                <RatingAverage value={rating} direction='row' />
                                 <div className="row justify-content-center">
                                     <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton 
@@ -160,32 +153,37 @@ export default class UserItemView extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </div>
-                            </center>
+                            </div>
                         </div>
-                    }
+                        :<div className="col-4"></div>
+                    }   
 
-                    {(id === this.props.current_user) &&
-                        <div className="col-2">
-                        </div>
-                    }
+                    <div className='col-sm-12  col-md-6'>
+                        {render_prop('User Name', name )}
+                        {render_prop('Age', this.getAge(birthday) )}
+                        {render_prop('Gender', genders[gender] )}
+                        {render_prop('Email', email )}
+                        {render_prop('Interests', categories_list )}
+                    </div>
                 </div>
+
                 <div className='mt-2'>
                     <AppBar position="static" color="inherit">
                         <Tabs
+                            className='w-100'
                             value={this.state.value}
                             onChange={this.handleChange}
                             variant="fullWidth"
                             scrollButtons="on"
                             indicatorColor="primary"
                             textColor="primary"
-                            aria-label="scrollable force tabs example"
                         >
-                            <Tab label="Future events" icon={<PhoneIcon />} {...a11yProps(0)} />
-                            <Tab label="Archive events" icon={<FavoriteIcon />} {...a11yProps(1)} />
-                            <Tab label="Visited events" icon={<PersonPinIcon />} {...a11yProps(2)} />
-                            <Tab label="Events to go" icon={<HelpIcon />} {...a11yProps(3)} />
+                            <Tab label="Future events" icon={<IconButton color={ this.state.value===0 ? '' : 'primary'}><i class="far fa-calendar-alt"></i></IconButton>} {...a11yProps(0)} />
+                            <Tab label="Archive events" icon={<IconButton color={ this.state.value===1 ? '' : 'primary'}><i class="fas fa-archive"></i></IconButton>} {...a11yProps(1)} />
+                            <Tab label="Visited events" icon={<IconButton color={ this.state.value===2 ? '' : 'primary'}><i class="fas fa-history"></i></IconButton>} {...a11yProps(2)} />
+                            <Tab label="Events to go" icon={<IconButton color={ this.state.value===3 ? '' : 'primary'}><i class="fas fa-map-marker-alt"></i></IconButton>} {...a11yProps(3)} />
                             {(id === this.props.current_user) &&
-                                <Tab label="Add event" icon={<ShoppingBasket />} {...a11yProps(4)} />
+                                <Tab label="Add event" icon={<IconButton color={ this.state.value===4 ? '' : 'primary'}><i class="fas fa-plus"></i></IconButton>} {...a11yProps(4)} />
                             }
                         </Tabs>
                     </AppBar>

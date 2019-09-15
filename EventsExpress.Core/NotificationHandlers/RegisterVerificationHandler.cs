@@ -34,7 +34,7 @@ namespace EventsExpress.Core.NotificationHandlers
             
             Debug.WriteLine("messagehandled");
             var token = Guid.NewGuid().ToString();
-            string theEmailLink= "http://localhost:61985/authentication/" + notification.User.Id.ToString() + "/" + token;
+            string theEmailLink= "https://eventsexpress.azurewebsites.net/authentication/" + notification.User.Id.ToString() + "/" + token;
 
             _cacheHepler.Add(new CacheDTO
             {

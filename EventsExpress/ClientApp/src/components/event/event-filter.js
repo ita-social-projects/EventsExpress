@@ -29,7 +29,7 @@ class EventFilter extends Component {
                             name='search' 
                             component={renderTextField} 
                             type="input" 
-                            label="Search" 
+                            label="Keyword" 
                         />
                     </div>          
 

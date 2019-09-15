@@ -34,7 +34,7 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var Email = _userService.GetById(notification.UserId).Email;
                 var Even = _eventService.EventById(notification.Id);
-                var EventLink = "http://localhost:51712/event/" + notification.Id + "/1";
+                var EventLink = "https://eventsexpress.azurewebsites.net/event/" + notification.Id + "/1";
                 await _sender.SendEmailAsync(new EmailDTO
                 {
                     Subject = "Your event was blocked",

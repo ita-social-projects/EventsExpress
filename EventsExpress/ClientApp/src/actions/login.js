@@ -46,6 +46,7 @@ export function loginFacebook(email, name) {
                 dispatch(setUser(response));
                 dispatch(setLoginSuccess(true));
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('id', response.id);
                 dispatch(initialConnection());
 
                 dispatch(getUnreadMessages(response.id));
