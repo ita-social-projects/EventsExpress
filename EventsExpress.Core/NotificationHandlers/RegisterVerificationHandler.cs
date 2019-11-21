@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using EventsExpress.Core.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -17,16 +18,19 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly ICacheHelper _cacheHepler;
+        private readonly IOptions<HostSettings> _urlOptions;
 
         public RegisterVerificationHandler(
             IEmailService sender,
             IUserService userSrv,
-            ICacheHelper cacheHepler
+            ICacheHelper cacheHepler,
+            IOptions<HostSettings> opt
             )
         {
             _sender = sender;
             _userService = userSrv;
             _cacheHepler = cacheHepler;
+            _urlOptions = opt;
         }
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
@@ -34,7 +38,10 @@ namespace EventsExpress.Core.NotificationHandlers
             
             Debug.WriteLine("messagehandled");
             var token = Guid.NewGuid().ToString();
-            string theEmailLink= "https://eventsexpress.azurewebsites.net/authentication/" + notification.User.Id.ToString() + "/" + token;
+            var host = _urlOptions.Value.Host;
+            var port = _urlOptions.Value.Port;
+
+            string theEmailLink= $"{host}:{port}/authentication/{notification.User.Id}/{token}";
 
             _cacheHepler.Add(new CacheDTO
             {
