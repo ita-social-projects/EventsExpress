@@ -3,15 +3,15 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using ImageProcessor;
-using ImageProcessor.Imaging;
-using ImageProcessor.Imaging.Formats;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
 
 
 namespace EventsExpress.Core.Services
@@ -43,18 +43,32 @@ namespace EventsExpress.Core.Services
                 imgData = reader.ReadBytes((int)uploadedFile.Length);
             }
 
+            var img = GetImageFromFile(uploadedFile);
+
             var photo = new Photo
             {
-                Thumb = Resize(imgData, _widthOptions.Value.Thumbnail),
-                Img = Resize(imgData, _widthOptions.Value.Image),
+                Thumb = ImageToByteArray(Resize(img, _widthOptions.Value.Thumbnail)),
+                Img = ImageToByteArray(Resize(img, _widthOptions.Value.Image)),
             };
 
             Db.PhotoRepository.Insert(photo);
             await Db.SaveAsync();
-
+                
             return photo;
         }
 
+        public Image GetImageFromFile(IFormFile file)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+
+                using (var img = Image.FromStream(memoryStream))
+                {
+                    return img;
+                }
+            }
+        }
 
         public async Task Delete(Guid id)
         {
@@ -70,28 +84,30 @@ namespace EventsExpress.Core.Services
         private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
 
-        private static byte[] Resize(byte[] originalImage, int width)
+        private Image Resize(Image image, int width)
         {
-            using (var originalImageStream = new MemoryStream(originalImage))
+            int height = (int)(image.Height * image.Width / width);
+            var res = new Bitmap(width, height);
+            using (var graphic = Graphics.FromImage(res))
             {
-                using (var resultImage = new MemoryStream())
-                {
-                    using (var imageFactory = new ImageFactory())
-                    {
-                        var createdImage = imageFactory.Load(originalImageStream);
-
-                        if (createdImage.Image.Width > width)
-                        {
-                            createdImage = createdImage.Resize(new ResizeLayer(new Size(width, 0), ResizeMode.Max));
-                        }
-                        createdImage.Format(new JpegFormat())
-                            .Save(resultImage);
-                    }
-
-                    return resultImage.GetBuffer();
-                }
+                graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphic.SmoothingMode = SmoothingMode.HighQuality;
+                graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphic.CompositingQuality = CompositingQuality.HighQuality;
+                graphic.DrawImage(image, 0, 0, width, height);
             }
+            return res;
         }
 
+
+        private byte[] ImageToByteArray(Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
+        
     }
 }
