@@ -9,7 +9,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
 
@@ -43,32 +42,18 @@ namespace EventsExpress.Core.Services
                 imgData = reader.ReadBytes((int)uploadedFile.Length);
             }
 
-            var img = GetImageFromFile(uploadedFile);
-
             var photo = new Photo
             {
-                Thumb = ImageToByteArray(Resize(img, _widthOptions.Value.Thumbnail)),
-                Img = ImageToByteArray(Resize(img, _widthOptions.Value.Image)),
+                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
+                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
             };
 
             Db.PhotoRepository.Insert(photo);
             await Db.SaveAsync();
-                
+
             return photo;
         }
 
-        public Image GetImageFromFile(IFormFile file)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-
-                using (var img = Image.FromStream(memoryStream))
-                {
-                    return img;
-                }
-            }
-        }
 
         public async Task Delete(Guid id)
         {
@@ -83,20 +68,21 @@ namespace EventsExpress.Core.Services
 
         private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
-
-        private Image Resize(Image image, int width)
+        public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
-            int height = (int)(image.Height * image.Width / width);
-            var res = new Bitmap(width, height);
-            using (var graphic = Graphics.FromImage(res))
+            using (var memoryStream = file.OpenReadStream())
             {
-                graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphic.SmoothingMode = SmoothingMode.HighQuality;
-                graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphic.CompositingQuality = CompositingQuality.HighQuality;
-                graphic.DrawImage(image, 0, 0, width, height);
+                var oldBitMap = new Bitmap(memoryStream);
+                var newSize = new Size
+                {
+                    Width = newWidth,
+                    Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width)
+                };
+
+                var newBitmap = new Bitmap(oldBitMap, newSize);
+
+                return ImageToByteArray(newBitmap);
             }
-            return res;
         }
 
 
@@ -108,6 +94,6 @@ namespace EventsExpress.Core.Services
                 return ms.ToArray();
             }
         }
-        
+
     }
 }

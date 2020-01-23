@@ -175,6 +175,7 @@ namespace EventsExpress.Mapping
                                     
             CreateMap<ChatRoom, UserChatDto>()
                 .ForMember(dest => dest.LastMessage, opts => opts.MapFrom(src => src.Messages.LastOrDefault().Text))
+                .ForMember(dest => dest.LastMessageTime, opts => opts.MapFrom(src => src.Messages.LastOrDefault().DateCreated))
                 .ForMember(dest => dest.Users, opts => opts.MapFrom(src => src.Users
                 .Select(x => new UserPreviewDto {
                     Id = x.UserId,
