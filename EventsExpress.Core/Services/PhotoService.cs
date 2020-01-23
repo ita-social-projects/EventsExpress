@@ -3,15 +3,14 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using ImageProcessor;
-using ImageProcessor.Imaging;
-using ImageProcessor.Imaging.Formats;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
+
 
 
 namespace EventsExpress.Core.Services
@@ -45,8 +44,8 @@ namespace EventsExpress.Core.Services
 
             var photo = new Photo
             {
-                Thumb = Resize(imgData, _widthOptions.Value.Thumbnail),
-                Img = Resize(imgData, _widthOptions.Value.Image),
+                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
+                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
             };
 
             Db.PhotoRepository.Insert(photo);
@@ -69,27 +68,30 @@ namespace EventsExpress.Core.Services
 
         private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
 
-
-        private static byte[] Resize(byte[] originalImage, int width)
+        public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
-            using (var originalImageStream = new MemoryStream(originalImage))
+            using (var memoryStream = file.OpenReadStream())
             {
-                using (var resultImage = new MemoryStream())
+                var oldBitMap = new Bitmap(memoryStream);
+                var newSize = new Size
                 {
-                    using (var imageFactory = new ImageFactory())
-                    {
-                        var createdImage = imageFactory.Load(originalImageStream);
+                    Width = newWidth,
+                    Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width)
+                };
 
-                        if (createdImage.Image.Width > width)
-                        {
-                            createdImage = createdImage.Resize(new ResizeLayer(new Size(width, 0), ResizeMode.Max));
-                        }
-                        createdImage.Format(new JpegFormat())
-                            .Save(resultImage);
-                    }
+                var newBitmap = new Bitmap(oldBitMap, newSize);
 
-                    return resultImage.GetBuffer();
-                }
+                return ImageToByteArray(newBitmap);
+            }
+        }
+
+
+        private byte[] ImageToByteArray(Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
             }
         }
 
