@@ -1,5 +1,6 @@
 import React from 'react';
-import { routerReducer } from 'react-router-redux';
+import { combineReducers } from 'redux';
+import { routerReducer, routerMiddleware } from 'react-router-redux';
 import {reducer as LoginReducer} from './login';
 import { reducer as formReducer } from 'redux-form';
 import * as Username from './editReducers/editUsernameReducer';
@@ -17,6 +18,7 @@ import * as Cities from './cities';
 import * as Users from './users';
 import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
+import { changePassword } from '../actions/EditProfile/changePassword';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
 import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
@@ -27,6 +29,7 @@ import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
+
 import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
@@ -46,8 +49,11 @@ const rootReducers = {
     editUsername: Username.reducer,
     editGender: Gender.reducer,
     editBirthday: Birthday.reducer,
+    form: formReducer,
+    login: LoginReducer,
     register: Register.reducer,
     selectCategories: SelectCategories.reducer,
+    register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
     countries: Countries.reducer,
@@ -58,9 +64,12 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer,
     event: EventView.reducer,
+    change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,
+    change_avatar: ChangeAvatar.reducer, 
+    delete_comment: DeleteComment.reducer,
     profile: Profile.reducer,
     events_for_profile: EventsForProfile.reducer,
     delete_comment: DeleteComment.reducer,

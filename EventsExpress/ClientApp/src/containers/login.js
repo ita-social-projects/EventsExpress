@@ -1,5 +1,5 @@
 ﻿import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Login  from '../components/login';
 import login from '../actions/login';
 import GoogleLogin from './GoogleLogin';

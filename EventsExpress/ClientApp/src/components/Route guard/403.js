@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
 import './css/error.css';
+import { Link } from 'react-router-dom'
+
 
 export default class Forbidden extends Component {
     render() {

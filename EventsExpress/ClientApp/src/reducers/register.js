@@ -1,5 +1,6 @@
 import { SET_REGISTER_PENDING, SET_REGISTER_SUCCESS, SET_REGISTER_ERROR} from '../actions/register';
 import initialState from '../store/initialState';
+import ModalWind from '.././components/modal-wind'
 export const reducer = (
     state = initialState.register,
     action

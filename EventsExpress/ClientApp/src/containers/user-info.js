@@ -1,10 +1,12 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Fab from '@material-ui/core/Fab';
 import { block_user, unblock_user } from '../actions/user'
 import { set_dialog } from '../actions/dialog'
 import UserInfo from '../components/user-info'
 import { UserBlock } from '../components/user-info/user-block'
 import UserRoleWrapper from '../containers/user-role'
+import IconButton from "@material-ui/core/IconButton";
 
 
 class UserInfoWpapper extends Component {
@@ -22,7 +24,7 @@ class UserInfoWpapper extends Component {
 
 
     render() {
-        const { user,  editedUser } = this.props;
+        const { user, currentUser, editedUser } = this.props;
         
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>

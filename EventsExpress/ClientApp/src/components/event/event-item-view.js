@@ -10,6 +10,7 @@ import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
 
+
 export default class EventItemView extends Component {
 
     state = { edit: false }

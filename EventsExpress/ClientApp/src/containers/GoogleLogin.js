@@ -9,6 +9,10 @@ import { getUnreadMessages } from '../actions/chats';
 
 class LoginGoogle extends Component {
 
+    onFailure = (error) => {
+        alert(error);
+    };
+
     googleResponse = (response) => {
         console.log(response);
         const tokenBlob = new Blob([JSON.stringify({ tokenId: response.tokenId }, null, 2)], { type: 'application/json' });
@@ -46,7 +50,7 @@ class LoginGoogle extends Component {
             </div>
         );
     }
-}
+};
 
 const mapStateToProps = (state) => {
     return {

@@ -1,8 +1,10 @@
 import React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles} from "@material-ui/core/styles";
+import { makeStyles, fade } from "@material-ui/core/styles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
@@ -11,6 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
+import register from "../../registerServiceWorker";
+import reset from '../../containers/header-profile'
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
 

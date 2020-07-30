@@ -1,4 +1,6 @@
 ﻿import React, { Component } from "react";
+import { reduxForm } from "redux-form";
+import Avatar from '@material-ui/core/Avatar';
 import { Link } from 'react-router-dom';
 import './Comment.css';
 import CustomAvatar from '../avatar/custom-avatar';
@@ -34,20 +36,34 @@ export default class commentItem extends Component {
 
     render() {
         const { text, userPhoto, date, userName, userId } = this.props.item;
-        
-        return (      
-            <div className="row">
-                <div className="photo-container">
-                    <CustomAvatar photoUrl={userPhoto} name={userName} />
-                    <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
-                </div>
-                <div className="mybutton">
-                    <Link to={'/user/' + userId} className="btn-custom float-left">
-                        <strong className="text-primary">
-                            {userName}
-                        </strong>
-                    </Link>
-                    <p>{text}</p>
+        const { user } = this.props;
+        return (
+            <div>
+                <div>
+                    <div className="row">
+                        {!(user === userId) && <div className="photo-container">
+                            <Avatar
+                                alt="Тут аватар"
+                                src={userPhoto}
+                            />
+                            <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
+                        </div>}
+                        <div className="mybutton">
+                            <p>
+                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong className="text-primary">{userName}</strong></a></Link>
+                            </p>
+                            <div className="clearfix"></div>
+                            
+                            <p>{text}</p>
+                        </div>
+                        {(user === userId) && <div className="photo-container">
+                            <Avatar
+                                alt="Тут аватар"
+                                src={userPhoto}
+                            />
+                            <h1 className="text-secondary comment-text"> {this.getTime(date)}</h1>
+                        </div>}
+                    </div>
                 </div>
             </div>
         );
