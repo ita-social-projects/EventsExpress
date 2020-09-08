@@ -41,7 +41,7 @@ namespace EventsExpress.Core.NotificationHandlers
             var host = _urlOptions.Value.Host;
             var port = _urlOptions.Value.Port;
 
-            string theEmailLink= $"{host}:{port}/authentication/{notification.User.Id}/{token}";
+            //string theEmailLink= $"{host}:{port}/authentication/{notification.User.Id}/{token}";
 
             _cacheHepler.Add(new CacheDTO
             {
@@ -51,11 +51,12 @@ namespace EventsExpress.Core.NotificationHandlers
 
             try
             {
+                string theEmailLink = $"<a style=\"color:#0f0ff6; text-decoration:none\" target=\"_blank\" href=\"https://localhost:44376/authentication/{notification.User.Id}/{token}\">link</a>";
                 await _sender.SendEmailAsync(new EmailDTO
                 {
                     Subject = "EventExpress registration",
                     RecepientEmail = notification.User.Email,
-                    MessageText = $"For confirm your email please follow the <a href='{theEmailLink}'>link</>"
+                    MessageText = $"For confirm your email please follow the {theEmailLink}"
                 });
 
                 var x = _cacheHepler.GetValue(notification.User.Id);
