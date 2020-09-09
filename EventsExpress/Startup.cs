@@ -169,11 +169,11 @@ namespace EventsExpress
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            
             app.UseCors(x => x
                .AllowAnyOrigin()
                .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials());
+               .AllowAnyHeader());
             app.UseAuthentication();
           
 
@@ -202,11 +202,7 @@ namespace EventsExpress
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                spa.UseReactDevelopmentServer(npmScript: "start");
             });
         }
     }
