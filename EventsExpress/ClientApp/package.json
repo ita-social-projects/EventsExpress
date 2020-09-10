@@ -58,9 +58,9 @@
     "ui": "^0.2.4",
     "rimraf": "^2.6.2"
   },
-  "devDependencies": {  },
+  "devDependencies": {},
   "scripts": {
-    "start": "rimraf ./build && react-scripts start",
+    "start": "npm install && rimraf ./build && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
