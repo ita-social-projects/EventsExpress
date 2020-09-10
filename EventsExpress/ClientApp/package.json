@@ -13,7 +13,7 @@
     "globalize": "^1.4.2",
     "jquery": "^3.4.1",
     "jsonwebtoken": "^8.5.1",
-    "material": "^0.3.13",
+    "material": "0.3.13",
     "material-ui": "^0.20.2",
     "material-ui-flat-pagination": "^3.2.0",
     "material-ui-pagination": "1.1.6",
