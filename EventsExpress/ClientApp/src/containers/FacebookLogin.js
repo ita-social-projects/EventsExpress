@@ -19,7 +19,7 @@ class LoginFacebook extends Component {
 
             <div>
                 <FacebookLogin
-                    appId="418450132121252"
+                    appId="2741444662848625"
                     fields="name,email,picture"
                     callback={responseFacebook}
                     cssClass="btnFacebook"
