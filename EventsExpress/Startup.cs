@@ -93,7 +93,7 @@ namespace EventsExpress
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration
-                    .GetConnectionString("DefaultConnection")));
+                    .GetConnectionString("AzureConnection")));
 
             #region Configure our services...
 
@@ -115,6 +115,8 @@ namespace EventsExpress
             
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
+            services.Configure<HostSettings>(Configuration.GetSection("HostSettings"));
+
 
             
 
