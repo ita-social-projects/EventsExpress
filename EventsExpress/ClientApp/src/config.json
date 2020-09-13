@@ -1,6 +1,7 @@
 ﻿{
-  "GOOGLE_CLIENT_ID": "186919339940-1bo0injuj5mf3r1c3mejhrb49fceacar.apps.googleusercontent.com",
+  "GOOGLE_CLIENT_ID": "3429495463-t3uma25030ea0q819p2f600bi9j1869l.apps.googleusercontent.com",
 
-  "GOOGLE_AUTH_CALLBACK_URL": "https://eventsexpress.azurewebsites.net/api/Authentication/Google",
+  "GOOGLE_AUTH_CALLBACK_URL": "https://localhost:44311/api/Authentication/Google",
   "FACEBOOK_AUTH_CALLBACK_URL": "https://eventsexpress-test.azurewebsites.net/api/Authentication/FacebookLogin"
-}
+
+ }

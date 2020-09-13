@@ -20,7 +20,9 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ICacheHelper _cacheHepler;
         private readonly IOptions<HostSettings> _urlOptions;
 
-        public RegisterVerificationHandler(
+
+        public RegisterVerificationHandler
+            (
             IEmailService sender,
             IUserService userSrv,
             ICacheHelper cacheHepler,
@@ -32,17 +34,18 @@ namespace EventsExpress.Core.NotificationHandlers
             _cacheHepler = cacheHepler;
             _urlOptions = opt;
         }
-
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
-            
             Debug.WriteLine("messagehandled");
             var token = Guid.NewGuid().ToString();
             var host = _urlOptions.Value.Host;
             var port = _urlOptions.Value.Port;
-
-            string theEmailLink= $"{host}:{port}/authentication/{notification.User.Id}/{token}";
-
+               
+            string theEmailLink =
+                   port == 0 
+                ? $"<a \" target=\"_blank\" href=\"{host}/authentication/{notification.User.Id}/{token}\">link</a>"
+                : $"<a \" target=\"_blank\" href=\"{host}:{port}/authentication/{notification.User.Id}/{token}\">link</a>";
+            
             _cacheHepler.Add(new CacheDTO
             {
                 UserId = notification.User.Id,
@@ -55,7 +58,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     Subject = "EventExpress registration",
                     RecepientEmail = notification.User.Email,
-                    MessageText = $"For confirm your email please follow the <a href='{theEmailLink}'>link</>"
+                    MessageText = $"For confirm your email please follow the {theEmailLink}   "
                 });
 
                 var x = _cacheHepler.GetValue(notification.User.Id);
