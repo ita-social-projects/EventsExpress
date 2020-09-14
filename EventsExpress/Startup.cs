@@ -29,6 +29,8 @@ using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using EventsExpress.Core.Extensions;
 
 namespace EventsExpress
 {
@@ -122,12 +124,14 @@ namespace EventsExpress
 
             #endregion
             services.AddCors();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-           
-            
 
+
+
+           
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
@@ -189,7 +193,7 @@ namespace EventsExpress
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
+            app.UseHttpContext();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
