@@ -18,10 +18,9 @@ export default class EventsExpressService {
 
     getEvents = async (eventIds, page) => {
         const res = await this.setResource('event/getEvents?page='+page, eventIds);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res.json();
+        return !res.ok
+            ? { error: await res.text() }
+            : res.json();
     }
 
     getUnreadMessages = async (userId) => {
@@ -32,120 +31,110 @@ export default class EventsExpressService {
 
     setEvent = async (data) => {
         let file = new FormData();
-        if (data.id != null) {
-
+        if (data.id != null)
+        {
             file.append('Id', data.id);
         }
         
-        if(data.image != null){
+        if (data.image != null)
+        {
         file.append('Photo', data.image.file);
         }
+
         file.append('Title', data.title);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
-        if (data.dateFrom != null) {
-            file.append('DateFrom', new Date(data.dateFrom).toDateString());
-        }
-        else{
-            file.append('DateFrom', new Date(Date.now()).toDateString());
-        }
-        if (data.dateTo != null) {
-            file.append('DateTo', new Date(data.dateTo).toDateString());
-        }        
-        else{
-            file.append('DateTo', new Date(Date.now()).toDateString());
-        }
+
+        data.dateFrom != null
+            ? file.append('DateFrom', new Date(data.dateFrom).toDateString())
+            : file.append('DateFrom', new Date(Date.now()).toDateString());
+
+        data.dateTo != null
+            ? file.append('DateTo', new Date(data.dateTo).toDateString())
+            : file.append('DateTo', data.dateFrom);
+
         let i = 0;
+
         data.categories.map(x => {
             file.append('Categories[' + i + '].Id', x.id);
             i++;
         })
         const res = await this.setResourceWithData('event/edit', file);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setEventBlock = async (id) => {
         const res = await this.setResource('Event/Block/?eventId=' + id);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setContactUs=async(data)=>{
         console.log('srv: ', data);
 
         const res =await this.setResource('users/ContactAdmins', data);
-        if(!res.ok){
-            return{error: await res.text()};
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
 
     setEventUnblock = async (id) => {
         const res = await this.setResource('Event/Unblock/?eventId=' + id);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     auth = async (data) => {
         console.log('auth', data);
         const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
         console.log(res);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res.json();
+        return !res.ok
+            ? { error: await res.text() }
+            : res.json();
     }
 
 
     setUserFromEvent = async (data) => {
         const res = await this.setResource('event/DeleteUserFromEvent?userId=' + data.userId + '&eventId=' + data.eventId);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setUserToEvent = async (data) => {
         const res = await this.setResource('event/AddUserToEvent?userId=' + data.userId + '&eventId=' + data.eventId);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setAvatar = async (data) => {
         let file = new FormData();
         file.append('newAva', data.image.file);
         const res = await this.setResourceWithData('users/changeAvatar', file);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return await res.text();
+        return !res.ok
+            ? { error: await res.text() }
+            : await res.text();
     }
 
     setLogin = async (data) => {
         const res = await this.setResource('Authentication/login', data);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return await res.json();
+        return !res.ok
+            ? { error: await res.text() }
+            : await res.json();
     }
     
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return await res.json();
+        return !res.ok
+            ? { error: await res.text() }
+            : await res.json();
     }
 
 
@@ -153,18 +142,16 @@ export default class EventsExpressService {
         console.log("SERVICE:")
         console.log(data)
         const res = await this.setResource('Authentication/PasswordRecovery/?email=' + data.email);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return await res;
+        return !res.ok
+            ? { error: await res.text() }
+            : await res;
     }
 
     setRegister = async (data) => {
         const res = await this.setResource('Authentication/register', data);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     getEvent = async (id) => {
@@ -202,26 +189,23 @@ export default class EventsExpressService {
 
     setChangeUserRole = async (userId, newRoleId) => {
         const res = await this.setResource(`users/ChangeRole/?userId=` + userId + '&roleId=' + newRoleId);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setCategoryDelete = async (data) => {
         const res = await this.setResource(`category/delete/${data}`);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setCommentDelete = async (data) => {
         const res = await this.setResource(`comment/delete/${data.id}`);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setCategory = async (data) => {
@@ -229,10 +213,9 @@ export default class EventsExpressService {
             Id: data.Id,
             Name: data.Name
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setComment = async (data) => {
@@ -243,10 +226,9 @@ export default class EventsExpressService {
             EventId: data.eventId,
             CommentsId: data.commentsId
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setRate = async (data) => {
@@ -255,10 +237,9 @@ export default class EventsExpressService {
             UserId: data.userId,
             EventId: data.eventId
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     getCurrentRate = async (eventId) => {
@@ -321,26 +302,26 @@ export default class EventsExpressService {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }),
         });
-        if (!res.ok) {
-            return {
-                error:
+
+        return !res.ok
+            ?
+              { error:
                 {
                     ErrorCode: res.status,
                     massage: await res.statusText
                 }
-            }
-        }
-        return await res.json();
+              }
+            : await res.json();
+       
     }
 
     setUsername = async (data) => {
         const res = await this.setResource('Users/EditUsername', {
             Name: data.UserName
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setBirthday = async (data) => {
@@ -348,46 +329,41 @@ export default class EventsExpressService {
             Birthday: new Date(data.Birthday).toDateString()
 
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setGender = async (data) => {
         const res = await this.setResource('Users/EditGender', {
             Gender: data.Gender
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setUserCategory = async (data) => {
         const res = await this.setResource('Users/EditUserCategory', {
             Categories: data.Categories
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setUserBlock = async (id) => {
         const res = await this.setResource('Users/Block/?userId=' + id);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setUserUnblock = async (id) => {
         const res = await this.setResource('Users/Unblock/?userId=' + id);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
     
     setAttitude = async (data) => {
@@ -396,20 +372,17 @@ export default class EventsExpressService {
             UserToId: data.userToId,
             Attitude: data.attitude
         });
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setChangePassword = async (data) => {
         
         const res = await this.setResource('Authentication/ChangePassword', data);
-        if (!res.ok) {
-            return { error: await res.text() };
-        }
-        
-        return res;
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
 
     setResource = (url, data) => fetch(

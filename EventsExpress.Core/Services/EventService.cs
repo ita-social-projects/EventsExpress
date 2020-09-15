@@ -133,16 +133,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(EventDTO eventDTO)
         {
-            if (eventDTO.DateFrom == DateTime.MinValue)
-            {
-                eventDTO.DateFrom = DateTime.Today;
-            }
-
-            if (eventDTO.DateTo == DateTime.MinValue)
-            {
-                eventDTO.DateTo = DateTime.Today;
-            }
-
+            eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today    : eventDTO.DateFrom;
+            eventDTO.DateTo   = (eventDTO.DateTo < eventDTO.DateFrom)    ? eventDTO.DateFrom : eventDTO.DateTo;
+            
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
             try
             {
