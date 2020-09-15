@@ -1,4 +1,5 @@
 ﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -18,19 +19,19 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly IEventService _eventService;
-        private readonly IOptions<HostSettings> _urlOptions;
+        
 
         public UnblockedEventHandler(
             IEmailService sender,
             IUserService userSrv,
-            IEventService eventService,
-            IOptions<HostSettings> opt
+            IEventService eventService
+           
             )
         {
             _sender = sender;
             _userService = userSrv;
             _eventService = eventService;
-            _urlOptions = opt;
+           
         }
 
         public async Task Handle(UnblockedEventMessage notification, CancellationToken cancellationToken)
@@ -39,10 +40,9 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var Email = _userService.GetById(notification.UserId).Email;
                 var Even = _eventService.EventById(notification.Id);
-                var host = _urlOptions.Value.Host;
-                var port = _urlOptions.Value.Port;
+                var MyUrl = MyHttpContext.AppBaseUrl;
 
-                string link = $"{host}:{port}/event/{notification.Id}/1";
+                string link = $"{MyUrl}/event/{notification.Id}/1";
 
                 
                 
