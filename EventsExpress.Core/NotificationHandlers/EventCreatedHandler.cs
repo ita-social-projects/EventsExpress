@@ -1,4 +1,5 @@
 ﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -17,17 +18,17 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly IOptions<HostSettings> _urlOptions;
+        
 
         public EventCreatedHandler(
             IEmailService sender,
-            IUserService userSrv,
-            IOptions<HostSettings> opt
+            IUserService userSrv
+            
             )
         {
             _sender = sender;
             _userService = userSrv;
-            _urlOptions = opt;
+            
         }
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
@@ -37,10 +38,9 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 foreach (var u in users)
                 {
-                    var host = _urlOptions.Value.Host;
-                    var port = _urlOptions.Value.Port;
+                    var MyUrl = MyHttpContext.AppBaseUrl;
 
-                    string link = $"{host}:{port}/event/{notification.Event.Id}/1";
+                    string link = $"{MyUrl}/event/{notification.Event.Id}/1";
 
                     await _sender.SendEmailAsync(new EmailDTO
                     {

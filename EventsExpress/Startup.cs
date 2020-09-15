@@ -117,14 +117,14 @@ namespace EventsExpress
             
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
-            services.Configure<HostSettings>(Configuration.GetSection("HostSettings"));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
-            
+
 
             #endregion
             services.AddCors();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
             services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
