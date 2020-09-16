@@ -52,9 +52,9 @@ export default class EventsExpressService {
 
         data.dateTo != null
             ? file.append('DateTo', new Date(data.dateTo).toDateString())
-            : file.append('DateTo', data.dateFrom);
+            : file.append('DateTo', new Date(data.dateFrom).toDateString());
 
-        let i = 0;
+        let i = 0; 
 
         data.categories.map(x => {
             file.append('Categories[' + i + '].Id', x.id);
