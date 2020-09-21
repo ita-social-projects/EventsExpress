@@ -64,7 +64,7 @@ class EventForm extends Component {
   }
 
   isSaveButtonDisabled = false;
-  DisableSaveButton = () => {
+  disableSaveButton = () => {
       if (this.props.valid) {
           this.isSaveButtonDisabled = true;
       }
@@ -150,7 +150,7 @@ class EventForm extends Component {
             </div>
           }
             </div>
-            <Button fullWidth={true} type="submit" color="primary" onClick={this.DisableSaveButton} disabled={this.isSaveButtonDisabled}>
+            <Button fullWidth={true} type="submit" color="primary" onClick={this.disableSaveButton} disabled={this.isSaveButtonDisabled}>
           Save
                 </Button>
       </form>
