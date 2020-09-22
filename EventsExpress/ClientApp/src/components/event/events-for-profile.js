@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom'
 const limit = 2;
 const pageCount = 3;
 
-
-
 export default class EventsForProfile extends Component {
     constructor() {
         super();
@@ -20,17 +18,13 @@ export default class EventsForProfile extends Component {
         this.setState({
             currentPage: page
         });
-        console.log(page);
-       
-        if(this.props.notification_events != null){
-            console.log(this.props.notification_events);
-        this.props.callback(this.props.notification_events,page);
-       }else{
-        this.props.callback(page);
-        console.log(this.props.notification_events);
-       }
-    };
 
+        if (this.props.notification_events != null) {
+            this.props.callback(this.props.notification_events, page);
+        } else {
+            this.props.callback(page);
+        }
+    };
 
     renderItems = (arr) => {
         return arr.map((item) => {
@@ -45,7 +39,7 @@ export default class EventsForProfile extends Component {
         const { data_list } = this.props;
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
-        
+
         return <>
             <div className="row">
                 {items}
@@ -78,11 +72,11 @@ export default class EventsForProfile extends Component {
                                         })}
                                     >
                                         first
-                              </button>)}
+                                    </button>)}
 
                                 {hasPreviousPage && (
                                     <button className="btn btn-primary"
-                                       
+
                                         {...getPageItemProps({
                                             pageValue: previousPage,
                                             onPageChange: this.handlePageChange
@@ -100,7 +94,7 @@ export default class EventsForProfile extends Component {
                                     if (totalPages != 1) {
                                         return (
                                             <button className="btn btn-primary"
-                                               
+
                                                 {...getPageItemProps({
                                                     pageValue: page,
                                                     key: page,
@@ -114,14 +108,14 @@ export default class EventsForProfile extends Component {
                                     } else {
 
                                         return (
-                                    <></>
+                                            <></>
                                         );
                                     }
                                 })}
 
                                 {hasNextPage && (
                                     <button className="btn btn-primary"
-                                        
+
                                         {...getPageItemProps({
                                             pageValue: nextPage,
                                             onPageChange: this.handlePageChange
@@ -132,19 +126,18 @@ export default class EventsForProfile extends Component {
                                 )}
                                 {hasNextPage && (
                                     <button className="btn btn-primary"
-                                        
+
                                         {...getPageItemProps({
                                             pageValue: this.props.totalPages,
                                             onPageChange: this.handlePageChange
                                         })}
                                     >
                                         last
-                                </button>)}
+                                    </button>)}
                             </div>
                         )}
                 </Pagination>
             </ul>
-
         </>
     }
 }

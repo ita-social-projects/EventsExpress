@@ -12,7 +12,6 @@ class LoginFacebook extends Component {
                 this.props.login.loginError = " Please add email to your facebook account!"
             }
             this.props.loginFacebook(response.email, response.name);
-            console.log(response);
         }
 
         return (

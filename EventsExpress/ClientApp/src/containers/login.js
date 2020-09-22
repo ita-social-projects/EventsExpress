@@ -15,8 +15,6 @@ class LoginWrapper extends Component {
     alert = useAlert;
     let { loginError } = this.props.loginStatus;
 
-    console.log(this.props.loginError);
-
     return <>
       <div>
         <Login onSubmit={this.submit} loginError={loginError} />

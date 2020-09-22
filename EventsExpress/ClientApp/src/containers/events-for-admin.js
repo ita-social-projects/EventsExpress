@@ -10,7 +10,6 @@ import Forbidden from '../components/Route guard/403'
 import { Redirect } from 'react-router'
 import history from '../history';
 
-
 class AdminEventListWrapper extends Component {
     componentWillUpdate(prevProps, prevState) {
         if (this.props.events.isError.ErrorCode == '500') {
@@ -22,17 +21,23 @@ class AdminEventListWrapper extends Component {
     }
     getEvents = (page) => this.props.get_eventsForAdmin(page);
 
-
     render() {
-            console.log(this.props.events);
-        let current_user = this.props.current_user.id != null ? this.props.current_user :{} ;
+        let current_user = this.props.current_user.id != null ? this.props.current_user : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = data;
 
         const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/admin/events?page=1" /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
 
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage ? <EventList current_user={current_user} data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !errorMessage
+            ? <EventList
+                current_user={current_user}
+                data_list={items}
+                page={data.pageViewModel.pageNumber}
+                totalPages={data.pageViewModel.totalPages}
+                callback={this.getEvents}
+            />
+            : null;
 
         return <>
             {errorMessage}

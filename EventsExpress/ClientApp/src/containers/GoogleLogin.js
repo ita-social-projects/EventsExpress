@@ -17,7 +17,6 @@ class LoginGoogle extends Component {
                 response.profileObj.name,
                 response.profileObj.imageUrl
             );
-            console.log(response);
         }
 
         return (

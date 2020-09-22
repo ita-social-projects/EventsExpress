@@ -8,9 +8,6 @@ import Dialog from "@material-ui/core/Dialog";
 import { makeStyles, fade } from "@material-ui/core/styles";
 import RecoverPasswordContainer from "../../containers/editProfileContainers/recoverPasswordContainer";
 
-
-
-
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
@@ -22,12 +19,9 @@ const useStyles = makeStyles({
 const { validate, renderTextField, asyncValidate } = Module;
 
 function Modalwind2(props) {
-    console.log(props)
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-
-
 
     function handleClickOpen() {
         setOpen(true);
@@ -35,13 +29,11 @@ function Modalwind2(props) {
 
     function handleClose() {
         setOpen(false);
-       // props.reset();
     }
-
 
     return (
         <div>
-            <Button  color="primary" onClick={handleClickOpen}>
+            <Button color="primary" onClick={handleClickOpen}>
                 Forgot password
             </Button>
             <Dialog
@@ -58,4 +50,5 @@ function Modalwind2(props) {
         </div>
     )
 }
-export default Modalwind2
+
+export default Modalwind2;

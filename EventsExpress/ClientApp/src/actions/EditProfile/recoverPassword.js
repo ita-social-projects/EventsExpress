@@ -4,7 +4,7 @@ export const recoverPassword = {
     PENDING: "SET_RECOVERPASSWORD_PENDING",
     SUCCESS: "SET_RECOVERPASSWORD_SUCCESS",
     ERROR: "SET_RECOVERPASSWORD_ERROR",
-    
+
 }
 
 const api_serv = new EventsExpressService();
@@ -15,20 +15,13 @@ export default function recover_Password(data) {
         const res = api_serv.setRecoverPassword(data);
         res.then(response => {
             if (response.error == null) {
-
                 dispatch(setRecoverPasswordSuccess(true));
-                console.log(data);
-                
             } else {
                 dispatch(setRecoverPasswordError(response.error));
             }
         });
-
     }
 }
-
-
-
 
 function setRecoverPasswordPending(data) {
     return {
@@ -50,4 +43,3 @@ function setRecoverPasswordError(data) {
         payload: data
     };
 }
-

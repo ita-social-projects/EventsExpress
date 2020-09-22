@@ -98,10 +98,11 @@ namespace EventsExpress.Controllers
         /// /// <response code="200">Return UserInfo model</response>
         /// <response code="400">If login process failed</response>
         [AllowAnonymous]
-        [HttpPost("Google")]
-        public async Task<IActionResult> Google([FromBody]UserView userView)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GoogleLogin([FromBody]UserView userView)
         {
-            var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+            var payload = await GoogleJsonWebSignature.ValidateAsync(
+                userView.tokenId, new GoogleJsonWebSignature.ValidationSettings());
             var userExisting = _userService.GetByEmail(payload.Email);
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
