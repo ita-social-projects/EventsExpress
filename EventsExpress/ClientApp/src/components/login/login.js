@@ -1,4 +1,4 @@
-import React, { Component} from "react";
+import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
@@ -6,25 +6,21 @@ import Module from '../helpers';
 import { Link } from 'react-router-dom';
 import Modalwind2 from '../recoverPassword/modalwind2';
 
-
-
 const { validate, renderTextField, asyncValidate } = Module;
 
 class Login extends Component {
   constructor(props) {
-      super(props);
+    super(props);
+  }
 
-    }
+  openModal = () => (<Modalwind2 />)
 
-    openModal = () => (<Modalwind2/>)
-    
   render() {
-     
-      const { pristine, reset, submitting, loginError } = this.props;
+    const { pristine, reset, submitting, loginError } = this.props;
 
     return (
       <div className="auth">
-        <form onSubmit={this.props.handleSubmit}>
+        <form onSubmit={this.props.handleSubmit} autoComplete="off">
           <div>
             <Field
               name="email"
@@ -39,10 +35,10 @@ class Login extends Component {
               label="Password:"
               type="password"
             />
-           </div>
-                
+          </div>
+
           <div>
-            <DialogActions>          
+            <DialogActions>
               <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
                 CLEAR
               </Button >
@@ -50,12 +46,12 @@ class Login extends Component {
                 Sign In
               </Button>
             </DialogActions>
-          </div>    
+          </div>
         </form>
-            <div className="text-center">
-                {loginError &&
-                    <p className="text-danger text-center">{loginError}</p>
-                }
+        <div className="text-center">
+          {loginError &&
+            <p className="text-danger text-center">{loginError}</p>
+          }
           <Modalwind2 />
         </div>
       </div>
