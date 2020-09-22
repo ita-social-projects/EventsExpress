@@ -63,7 +63,17 @@ class EventForm extends Component {
     this.resetForm();
   }
 
-  resetForm = () => this.setState({ imagefile: [] });
+  isSaveButtonDisabled = false;
+  disableSaveButton = () => {
+      if (this.props.valid) {
+          this.isSaveButtonDisabled = true;
+      }
+  }
+
+  resetForm = () => {
+    this.isSaveButtonDisabled = false;
+    this.setState({ imagefile: [] });
+  }
 
   renderLocations = (arr) => {
     return arr.map((item) => {
@@ -71,8 +81,7 @@ class EventForm extends Component {
     });
   }
 
-  render() {
-
+  render() {    
     const { countries, form_values, all_categories, data } = this.props;
     let values = form_values || this.props.initialValues;
     let countries_list = this.renderLocations(countries);
@@ -140,8 +149,8 @@ class EventForm extends Component {
               <Field name='cityId' data={this.props.cities} text='City' component={renderSelectLocationField} />
             </div>
           }
-        </div>
-        <Button fullWidth={true} type="submit" color="primary" disabled={this.props.submitting}>
+            </div>
+            <Button fullWidth={true} type="submit" color="primary" onClick={this.disableSaveButton} disabled={this.isSaveButtonDisabled}>
           Save
                 </Button>
       </form>
