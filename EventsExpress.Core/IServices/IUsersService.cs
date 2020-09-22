@@ -1,7 +1,9 @@
 ﻿using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
+
 using Microsoft.AspNetCore.Http;
+
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -20,7 +22,6 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> PasswordRecover(UserDTO userDto);
         Task<OperationResult> EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
         Task<OperationResult> SetAttitude(AttitudeDTO attitude);
-        
 
         Task<OperationResult> Block(Guid uId);
         Task<OperationResult> Unblock(Guid uId);

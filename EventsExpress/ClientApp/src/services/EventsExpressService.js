@@ -10,14 +10,14 @@ export default class EventsExpressService {
         const res = await this.getResource('chat/GetAllChats');
         return res;
     }
-    
+
     getChat = async (chatId) => {
         const res = await this.getResource(`chat/GetChat?chatId=${chatId}`);
         return res;
     }
 
     getEvents = async (eventIds, page) => {
-        const res = await this.setResource('event/getEvents?page='+page, eventIds);
+        const res = await this.setResource('event/getEvents?page=' + page, eventIds);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -36,9 +36,9 @@ export default class EventsExpressService {
 
             file.append('Id', data.id);
         }
-        
-        if(data.image != null){
-        file.append('Photo', data.image.file);
+
+        if (data.image != null) {
+            file.append('Photo', data.image.file);
         }
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -47,13 +47,13 @@ export default class EventsExpressService {
         if (data.dateFrom != null) {
             file.append('DateFrom', new Date(data.dateFrom).toDateString());
         }
-        else{
+        else {
             file.append('DateFrom', new Date(Date.now()).toDateString());
         }
         if (data.dateTo != null) {
             file.append('DateTo', new Date(data.dateTo).toDateString());
-        }        
-        else{
+        }
+        else {
             file.append('DateTo', new Date(Date.now()).toDateString());
         }
         let i = 0;
@@ -76,12 +76,12 @@ export default class EventsExpressService {
         return res;
     }
 
-    setContactUs=async(data)=>{
+    setContactUs = async (data) => {
         console.log('srv: ', data);
 
-        const res =await this.setResource('users/ContactAdmins', data);
-        if(!res.ok){
-            return{error: await res.text()};
+        const res = await this.setResource('users/ContactAdmins', data);
+        if (!res.ok) {
+            return { error: await res.text() };
         }
         return res;
     }
@@ -133,13 +133,20 @@ export default class EventsExpressService {
     }
 
     setLogin = async (data) => {
-        const res = await this.setResource('Authentication/login', data);
+        const res = await this.setResource('Authentication/Login', data);
         if (!res.ok) {
             return { error: await res.text() };
         }
         return await res.json();
     }
-    
+
+    setGooglekLogin = async (data) => {
+        const res = await this.setResource('Authentication/Google', data);
+        if (!res.ok) {
+            return { error: await res.text() };
+        }
+        return await res.json();
+    }
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
@@ -294,22 +301,22 @@ export default class EventsExpressService {
     }
 
     getVisitedEvents = async (id, page) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id+ '&'+ 'page='+page);
+        const res = await this.getResource('event/visitedEvents?id=' + id + '&' + 'page=' + page);
         return res;
     }
 
     getFutureEvents = async (id, page) => {
-        const res = await this.getResource('event/futureEvents?id=' + id + '&'+ 'page='+page);
+        const res = await this.getResource('event/futureEvents?id=' + id + '&' + 'page=' + page);
         return res;
     }
 
     getPastEvents = async (id, page) => {
-        const res = await this.getResource('event/pastEvents?id=' + id+ '&'+ 'page='+page);
+        const res = await this.getResource('event/pastEvents?id=' + id + '&' + 'page=' + page);
         return res;
     }
 
     getEventsToGo = async (id, page) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id+ '&'+ 'page='+page);
+        const res = await this.getResource('event/EventsToGo?id=' + id + '&' + 'page=' + page);
         return res;
     }
 
@@ -389,7 +396,7 @@ export default class EventsExpressService {
         }
         return res;
     }
-    
+
     setAttitude = async (data) => {
         const res = await this.setResource('users/SetAttitude', {
             UserFromId: data.userFromId,
@@ -403,12 +410,12 @@ export default class EventsExpressService {
     }
 
     setChangePassword = async (data) => {
-        
+
         const res = await this.setResource('Authentication/ChangePassword', data);
         if (!res.ok) {
             return { error: await res.text() };
         }
-        
+
         return res;
     }
 

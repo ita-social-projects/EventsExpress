@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 const ChangePassword = (props) => {
     const { handleSubmit, pristine, reset, submitting } = props;
     const classes = useStyles();
-    
+
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
@@ -53,8 +53,6 @@ const ChangePassword = (props) => {
     };
 
     return (
-
-
         <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
             <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -62,7 +60,7 @@ const ChangePassword = (props) => {
                 id="panel1bh-header"
             >
                 <Typography className={classes.heading}>ChangePassword</Typography>
-                
+
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
 
@@ -71,7 +69,7 @@ const ChangePassword = (props) => {
 
                         <form onSubmit={handleSubmit}>
                             <div className="d-flex flex-column " >
-                                
+
                                 <Field
                                     name="oldPassword"
                                     label="Input current password"
@@ -104,9 +102,8 @@ const ChangePassword = (props) => {
 
                             </div>
 
-                            
                             <div className='mt-2'>
-                                <Button type="submit" color="primary" disabled={pristine || submitting }>
+                                <Button type="submit" color="primary" disabled={pristine || submitting}>
                                     Submit
                                 </Button>
                                 <Button type="button" disabled={pristine || submitting} onClick={reset}>
@@ -121,14 +118,11 @@ const ChangePassword = (props) => {
             </ExpansionPanelDetails>
 
         </ExpansionPanel>
-
-
-        
     );
 };
 
 export default reduxForm({
     form: "ChangePassword", // a unique identifier for this form
     validate
-    
+
 })(ChangePassword);
