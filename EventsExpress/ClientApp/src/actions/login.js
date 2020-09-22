@@ -13,21 +13,8 @@ const api_serv = new EventsExpressService();
 export default function login(email, password) {
   return dispatch => {
     dispatch(setLoginPending(true));
-
     const res = api_serv.setLogin({ Email: email, Password: password });
-
-    res.then(response => {
-      if (response.error == null) {
-        dispatch(setUser(response));
-        dispatch(setLoginSuccess(true));
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('id', response.id);
-        dispatch(initialConnection());
-        dispatch(getUnreadMessages(response.id));
-      } else {
-        dispatch(setLoginError(response.error));
-      }
-    });
+    loginResponseHandler(res, dispatch);
   }
 }
 
@@ -35,46 +22,22 @@ export function loginGoogle(tokenId, email, name, imageUrl) {
   return dispatch => {
     dispatch(setLoginPending(true));
 
-    const res = api_serv.setGooglekLogin({
+    const res = api_serv.setGoogleLogin({
       TokenId: tokenId,
       Email: email,
       Name: name,
       PhotoUrl: imageUrl
     });
 
-    res.then(response => {
-      if (response.error == null) {
-        dispatch(setUser(response));
-        dispatch(setLoginSuccess(true));
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('id', response.id);
-        dispatch(initialConnection());
-        dispatch(getUnreadMessages(response.id));
-      } else {
-        dispatch(setLoginError(response.error));
-      }
-    });
+    loginResponseHandler(res, dispatch);
   }
 }
 
 export function loginFacebook(email, name) {
   return dispatch => {
     dispatch(setLoginPending(true));
-
     const res = api_serv.setFacebookLogin({ Email: email, Name: name });
-
-    res.then(response => {
-      if (response.error == null) {
-        dispatch(setUser(response));
-        dispatch(setLoginSuccess(true));
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('id', response.id);
-        dispatch(initialConnection());
-        dispatch(getUnreadMessages(response.id));
-      } else {
-        dispatch(setLoginError(response.error));
-      }
-    });
+    loginResponseHandler(res, dispatch);
   }
 }
 
@@ -104,4 +67,19 @@ export function setLoginError(loginError) {
     type: SET_LOGIN_ERROR,
     loginError
   };
+}
+
+const loginResponseHandler = (res, dispatch) => {
+  res.then(response => {
+    if (response.error == null) {
+      dispatch(setUser(response));
+      dispatch(setLoginSuccess(true));
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('id', response.id);
+      dispatch(initialConnection());
+      dispatch(getUnreadMessages(response.id));
+    } else {
+      dispatch(setLoginError(response.error));
+    }
+  });
 }

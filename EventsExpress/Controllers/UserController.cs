@@ -54,7 +54,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
-            filter.PageSize = 6;
+            filter.PageSize = 12;
             filter.IsConfirmed = true;
             try
             {

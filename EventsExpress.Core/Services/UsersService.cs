@@ -178,7 +178,7 @@ namespace EventsExpress.Core.Services
 
             if (user != null)
             {
-                user.CanChangePassword = string.IsNullOrEmpty(user?.PasswordHash) ? false : true;
+                user.CanChangePassword = string.IsNullOrEmpty(user.PasswordHash) ? false : true;
                 user.Rating = GetRating(user.Id);
             }
             return user;
@@ -190,20 +190,32 @@ namespace EventsExpress.Core.Services
         {
             var users = Db.UserRepository.Get("Photo,Role");
 
-            users = !string.IsNullOrEmpty(model.KeyWord) ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord)) : users;
-            users = !string.IsNullOrEmpty(model.Role) ? users.Where(x => x.Role.Name.Contains(model.Role)) : users;
-            users = (model.Blocked) ? users.Where(x => x.IsBlocked == model.Blocked) : users;
-            users = (model.UnBlocked) ? users.Where(x => x.IsBlocked == !(model.UnBlocked)) : users;
+            users = !string.IsNullOrEmpty(model.KeyWord)
+                ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord))
+                : users;
 
-            users = (model.IsConfirmed != null) ? users.Where(x => x.EmailConfirmed == (model.IsConfirmed)) : users;
+            users = !string.IsNullOrEmpty(model.Role)
+                ? users.Where(x => x.Role.Name.Contains(model.Role))
+                : users;
+
+            users = (model.Blocked)
+                ? users.Where(x => x.IsBlocked == model.Blocked)
+                : users;
+
+            users = (model.UnBlocked)
+                ? users.Where(x => x.IsBlocked == !(model.UnBlocked))
+                : users;
+
+            users = (model.IsConfirmed != null)
+                ? users.Where(x => x.EmailConfirmed == (model.IsConfirmed))
+                : users;
 
             count = users.Count();
 
             users = users.Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize);
-            var result = _mapper
-                .Map<IEnumerable<UserDTO>>(users)
-                .ToList();
+
+            var result = _mapper.Map<IEnumerable<UserDTO>>(users).ToList();
 
             foreach (var u in result)
             {
@@ -211,9 +223,8 @@ namespace EventsExpress.Core.Services
 
                 var rel = Db.RelationshipRepository.Get()
                     .FirstOrDefault(x => (x.UserFromId == id && x.UserToId == u.Id));
-                u.Attitude = (rel != null)
-                    ? (byte)rel.Attitude
-                    : (byte)2;
+
+                u.Attitude = (rel != null) ? (byte)rel.Attitude : (byte)2;
             }
 
             return result;

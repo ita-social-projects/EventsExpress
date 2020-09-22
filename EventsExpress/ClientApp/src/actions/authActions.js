@@ -8,7 +8,6 @@
 }
 
 export function logout() {
-    console.log("Logging out");
     return dispath => {
         dispath({
             type: "LOGOUT",

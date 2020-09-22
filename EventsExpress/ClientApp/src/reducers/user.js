@@ -28,7 +28,6 @@ export const reducer = (state = initialState.user, action) => {
                 categories: action.payload.Categories
             }
         case editBirthday.UPDATE:
-            console.log(action.payload)
             return {
                 ...state,
                 birthday: new Date(action.payload).toDateString()

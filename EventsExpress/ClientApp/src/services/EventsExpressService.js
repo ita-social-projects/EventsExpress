@@ -1,9 +1,7 @@
 import React from 'react';
 import { dark } from '@material-ui/core/styles/createPalette';
 
-
 export default class EventsExpressService {
-
     _baseUrl = 'api/';
 
     getChats = async () => {
@@ -17,7 +15,7 @@ export default class EventsExpressService {
     }
 
     getEvents = async (eventIds, page) => {
-        const res = await this.setResource('event/getEvents?page=' + page, eventIds);
+        const res = await this.setResource(`event/getEvents?page=${page}`, eventIds);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -26,7 +24,6 @@ export default class EventsExpressService {
 
     getUnreadMessages = async (userId) => {
         const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
-        console.log(res);
         return res;
     }
 
@@ -58,8 +55,7 @@ export default class EventsExpressService {
         }
         let i = 0;
         data.categories.map(x => {
-            file.append('Categories[' + i + '].Id', x.id);
-            i++;
+            file.append(`Categories[${i++}].Id`, x.id);
         })
         const res = await this.setResourceWithData('event/edit', file);
         if (!res.ok) {
@@ -69,7 +65,7 @@ export default class EventsExpressService {
     }
 
     setEventBlock = async (id) => {
-        const res = await this.setResource('Event/Block/?eventId=' + id);
+        const res = await this.setResource(`Event/Block/?eventId=${id}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -77,8 +73,6 @@ export default class EventsExpressService {
     }
 
     setContactUs = async (data) => {
-        console.log('srv: ', data);
-
         const res = await this.setResource('users/ContactAdmins', data);
         if (!res.ok) {
             return { error: await res.text() };
@@ -86,9 +80,8 @@ export default class EventsExpressService {
         return res;
     }
 
-
     setEventUnblock = async (id) => {
-        const res = await this.setResource('Event/Unblock/?eventId=' + id);
+        const res = await this.setResource(`Event/Unblock/?eventId=${id}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -96,18 +89,15 @@ export default class EventsExpressService {
     }
 
     auth = async (data) => {
-        console.log('auth', data);
-        const res = await this.setResource('authentication/verify/' + data.userId + '/' + data.token);
-        console.log(res);
+        const res = await this.setResource(`Authentication/verify/${data.userId}/${data.token}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
         return res.json();
     }
 
-
     setUserFromEvent = async (data) => {
-        const res = await this.setResource('event/DeleteUserFromEvent?userId=' + data.userId + '&eventId=' + data.eventId);
+        const res = await this.setResource(`event/DeleteUserFromEvent?userId=${data.userId}&eventId=${data.eventId}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -115,7 +105,7 @@ export default class EventsExpressService {
     }
 
     setUserToEvent = async (data) => {
-        const res = await this.setResource('event/AddUserToEvent?userId=' + data.userId + '&eventId=' + data.eventId);
+        const res = await this.setResource(`event/AddUserToEvent?userId=${data.userId}&eventId=${data.eventId}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -140,13 +130,14 @@ export default class EventsExpressService {
         return await res.json();
     }
 
-    setGooglekLogin = async (data) => {
-        const res = await this.setResource('Authentication/Google', data);
+    setGoogleLogin = async (data) => {
+        const res = await this.setResource('Authentication/GoogleLogin', data);
         if (!res.ok) {
             return { error: await res.text() };
         }
         return await res.json();
     }
+
     setFacebookLogin = async (data) => {
         const res = await this.setResource('Authentication/FacebookLogin', data);
         if (!res.ok) {
@@ -155,11 +146,8 @@ export default class EventsExpressService {
         return await res.json();
     }
 
-
     setRecoverPassword = async (data) => {
-        console.log("SERVICE:")
-        console.log(data)
-        const res = await this.setResource('Authentication/PasswordRecovery/?email=' + data.email);
+        const res = await this.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -175,7 +163,7 @@ export default class EventsExpressService {
     }
 
     getEvent = async (id) => {
-        const res = await this.getResource('event/get?id=' + id);
+        const res = await this.getResource(`event/get?id=${id}`);
         return res;
     }
 
@@ -183,22 +171,24 @@ export default class EventsExpressService {
         const res = await this.getResource(`users/get${filter}`);
         return res;
     }
+
     getUserById = async (id) => {
-        const res = await this.getResource('users/GetUserProfileById?id=' + id);
+        const res = await this.getResource(`users/GetUserProfileById?id=${id}`);
         return res;
     }
+
     getSearchUsers = async (filter) => {
         const res = await this.getResource(`users/searchUsers${filter}`);
-        console.log(res);
         return res;
     }
+
     getCountries = async () => {
         const res = await this.getResource('locations/countries');
         return res;
     }
 
     getCities = async (country) => {
-        const res = await this.getResource('locations/country:' + country + '/cities');
+        const res = await this.getResource(`locations/country:${country}/cities`);
         return res;
     }
 
@@ -208,7 +198,7 @@ export default class EventsExpressService {
     }
 
     setChangeUserRole = async (userId, newRoleId) => {
-        const res = await this.setResource(`users/ChangeRole/?userId=` + userId + '&roleId=' + newRoleId);
+        const res = await this.setResource(`users/ChangeRole/?userId=${userId}&roleId=${newRoleId}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -273,12 +263,10 @@ export default class EventsExpressService {
         return res;
     }
 
-
     getAverageRate = async (eventId) => {
         const res = await this.getResource(`event/GetAverageRate/${eventId}`);
         return res;
     }
-
 
     getAllEvents = async (filters) => {
         const res = await this.getResource(`event/all${filters}`);
@@ -301,22 +289,22 @@ export default class EventsExpressService {
     }
 
     getVisitedEvents = async (id, page) => {
-        const res = await this.getResource('event/visitedEvents?id=' + id + '&' + 'page=' + page);
+        const res = await this.getResource(`event/visitedEvents?id=${id}&page=${page}`);
         return res;
     }
 
     getFutureEvents = async (id, page) => {
-        const res = await this.getResource('event/futureEvents?id=' + id + '&' + 'page=' + page);
+        const res = await this.getResource(`event/futureEvents?id=${id}&page=${page}`);
         return res;
     }
 
     getPastEvents = async (id, page) => {
-        const res = await this.getResource('event/pastEvents?id=' + id + '&' + 'page=' + page);
+        const res = await this.getResource(`event/pastEvents?id=${id}&page=${page}`);
         return res;
     }
 
     getEventsToGo = async (id, page) => {
-        const res = await this.getResource('event/EventsToGo?id=' + id + '&' + 'page=' + page);
+        const res = await this.getResource(`event/EventsToGo?id=${id}&page=${page}`);
         return res;
     }
 
@@ -325,7 +313,7 @@ export default class EventsExpressService {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }),
         });
         if (!res.ok) {
@@ -353,7 +341,6 @@ export default class EventsExpressService {
     setBirthday = async (data) => {
         const res = await this.setResource('Users/EditBirthday', {
             Birthday: new Date(data.Birthday).toDateString()
-
         });
         if (!res.ok) {
             return { error: await res.text() };
@@ -382,7 +369,7 @@ export default class EventsExpressService {
     }
 
     setUserBlock = async (id) => {
-        const res = await this.setResource('Users/Block/?userId=' + id);
+        const res = await this.setResource(`Users/Block/?userId=${id}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -390,7 +377,7 @@ export default class EventsExpressService {
     }
 
     setUserUnblock = async (id) => {
-        const res = await this.setResource('Users/Unblock/?userId=' + id);
+        const res = await this.setResource(`Users/Unblock/?userId=${id}`);
         if (!res.ok) {
             return { error: await res.text() };
         }
@@ -410,7 +397,6 @@ export default class EventsExpressService {
     }
 
     setChangePassword = async (data) => {
-
         const res = await this.setResource('Authentication/ChangePassword', data);
         if (!res.ok) {
             return { error: await res.text() };
@@ -425,7 +411,7 @@ export default class EventsExpressService {
             method: "post",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }),
             body: JSON.stringify(data)
         }
@@ -436,10 +422,9 @@ export default class EventsExpressService {
         {
             method: "post",
             headers: new Headers({
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }),
             body: data
         }
     );
-
 }

@@ -1,5 +1,6 @@
 import EventsExpressService from '../../services/EventsExpressService';
-import { SetAlert} from '../alert';
+import { SetAlert } from '../alert';
+
 export const changeAvatar = {
     PENDING: "SET_CHANGE_AVATAR_PENDING",
     SUCCESS: "SET_CHANGE_AVATAR_SUCCESS",
@@ -9,25 +10,20 @@ export const changeAvatar = {
 
 const api_serv = new EventsExpressService();
 
-export default  function change_avatar(data) {
+export default function change_avatar(data) {
     return dispatch => {
         dispatch(setAvatarPending(true));
         const res = api_serv.setAvatar(data);
-        console.log(res);
         res.then(response => {
             if (response.error == null) {
                 dispatch(setAvatarSuccess(true));
-                //console.log( response.text());
-                console.log(response);
-                
                 dispatch(updateAvatar(response));
-                dispatch(SetAlert({variant:'success', message:'Avatar is update'}));
+                dispatch(SetAlert({ variant: 'success', message: 'Avatar is update' }));
             } else {
                 dispatch(setAvatarError(response.error));
-                dispatch(SetAlert({variant:'error', message:'Failed'}));
+                dispatch(SetAlert({ variant: 'error', message: 'Failed' }));
             }
         });
-
     }
 }
 
@@ -58,4 +54,3 @@ export function setAvatarError(data) {
         payload: data
     };
 }
-

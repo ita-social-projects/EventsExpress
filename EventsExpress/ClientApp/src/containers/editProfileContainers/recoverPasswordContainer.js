@@ -11,14 +11,13 @@ class RecoverPasswordContainer extends React.Component {
     }
 
     submit = value => {
-        console.log(value);
         this.props.recoverPassword(value);
     }
 
     render() {
         let { isRecoverPasswordPending, isRecoverPasswordSuccess, RecoverPasswordError, status } = this.props;
-        
-        
+
+
 
         return <>
             <RecoverPassword onSubmit={this.submit} />
