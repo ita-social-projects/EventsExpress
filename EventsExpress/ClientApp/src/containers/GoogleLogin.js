@@ -1,9 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { loginGoogle } from '../actions/login';
-import config from '../config.json';
-import { withRouter } from "react-router-dom";
+import config from '../config';
+import { withRouter } from 'react-router-dom';
 
 class LoginGoogle extends Component {
     render() {

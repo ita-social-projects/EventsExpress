@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
-import { connect } from "react-redux";
-import config from "../config.json";
+import { connect } from 'react-redux';
+import config from '../config';
 import { loginFacebook } from '../actions/login';
 import './css/Auth.css'
 
