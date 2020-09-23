@@ -1,9 +1,11 @@
 using EventsExpress.Db.DbInitialize;
 using EventsExpress.Db.EF;
+
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
 using System;
 using System.IO;
 
