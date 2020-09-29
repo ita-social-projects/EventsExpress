@@ -13,15 +13,15 @@ export const reducer = (
                 ...initialState.chat
             }
         case CONCAT_NEW_MSG:
-                var new_msg = state.data.messages;
-                new_msg = new_msg.concat(action.payload);
-                return {
-                    ...state,
-                    data:{
-                        ...state.data,
-                        messages: new_msg
-                    }
+            var new_msg = state.data.messages;
+            new_msg = new_msg.concat(action.payload);
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    messages: new_msg
                 }
+            }
         case RECEIVE_SEEN_MESSAGE:
             var new_msg = state.data.messages;
             var new_msg = new_msg.map(x => {
@@ -58,4 +58,4 @@ export const reducer = (
         default:
             return state;
     }
-}  
+}

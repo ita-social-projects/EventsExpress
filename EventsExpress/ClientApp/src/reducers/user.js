@@ -1,6 +1,6 @@
 import initialState from '../store/initialState';
-import {SET_USER} from '../actions/login';
-import {SET_LOGOUT} from '../actions/logout';
+import { SET_USER } from '../actions/login';
+import { SET_LOGOUT } from '../actions/logout';
 
 import { addUserCategory } from '../actions/EditProfile/addUserCategory';
 import { editBirthday } from '../actions/EditProfile/editBirthday';
@@ -11,7 +11,6 @@ import { changeAvatar } from '../actions/EditProfile/change-avatar';
 import { authenticate } from '../actions/authentication';
 
 export const reducer = (state = initialState.user, action) => {
-    //state = state || initialState.user;
     switch (action.type) {
         case SET_USER:
             return action.payload;
@@ -29,7 +28,6 @@ export const reducer = (state = initialState.user, action) => {
                 categories: action.payload.Categories
             }
         case editBirthday.UPDATE:
-            console.log(action.payload)
             return {
                 ...state,
                 birthday: new Date(action.payload).toDateString()
@@ -52,6 +50,6 @@ export const reducer = (state = initialState.user, action) => {
 
             }
         default:
-            return state;    
+            return state;
     }
 }

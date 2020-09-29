@@ -1,13 +1,13 @@
-﻿import React, {Component} from 'react';
+﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
 import add_event from '../actions/add-event';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
-import {getFormValues, reset} from 'redux-form';
+import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 
-import {  green } from '@material-ui/core/colors';
+import { green } from '@material-ui/core/colors';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -16,71 +16,69 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { SetAlert } from '../actions/alert';
 import get_categories from '../actions/category-list';
 
-class AddEventWrapper extends Component{
-    
+class AddEventWrapper extends Component {
+
     state = {
         open: false
     }
 
-    componentDidMount = () =>{
+    componentDidMount = () => {
         this.props.get_countries();
         this.props.get_categories();
     }
     componentDidUpdate = () => {
-        if(!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess){
+        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
             this.props.resetEventStatus();
-            this.props.alert({variant: 'success', message: 'Your event was created!', autoHideDuration: 5000});
+            this.props.alert({ variant: 'success', message: 'Your event was created!', autoHideDuration: 5000 });
         }
     }
 
-    componentWillUnmount = () =>{
+    componentWillUnmount = () => {
         this.props.reset();
         this.props.resetEventStatus();
     }
 
     onSubmit = (values) => {
-     const res = this.props.add_event({ ...values, user_id: this.props.user_id });
-     console.log(res);
+        const res = this.props.add_event({ ...values, user_id: this.props.user_id });
     }
 
     onChangeCountry = (e) => {
         this.props.get_cities(e.target.value);
     }
 
-    handleClose = () =>{
-        this.setState({open: false});
+    handleClose = () => {
+        this.setState({ open: false });
     }
 
-
-    render(){   
-        
-       if(this.props.add_event_status.isEventSuccess){  
-        this.setState({open: true});
-    }
-       return <div className="w-50 m-auto">
-
-                <EventForm data={{}} 
-                all_categories={this.props.all_categories} 
-                cities={this.props.cities.data} 
-                onChangeCountry={this.onChangeCountry} 
-                onSubmit={this.onSubmit} 
-                countries={this.props.countries.data} 
+    render() {
+        if (this.props.add_event_status.isEventSuccess) {
+            this.setState({ open: true });
+        }
+        return <div className="w-50 m-auto">
+            <EventForm data={{}}
+                all_categories={this.props.all_categories}
+                cities={this.props.cities.data}
+                onChangeCountry={this.onChangeCountry}
+                onSubmit={this.onSubmit}
+                countries={this.props.countries.data}
                 form_values={this.props.form_values}
                 Event={this.props.add_event_status}
                 isCreated={false} />
-               </div>
+        </div>
     }
 }
 
-const mapStateToProps = (state) => ({user_id: state.user.id,
-     add_event_status: state.add_event, 
-     countries: state.countries,
-     cities: state.cities,
-     all_categories: state.categories,
-     form_values: getFormValues('event-form')(state)});
+const mapStateToProps = (state) => ({
+    user_id: state.user.id,
+    add_event_status: state.add_event,
+    countries: state.countries,
+    cities: state.cities,
+    all_categories: state.categories,
+    form_values: getFormValues('event-form')(state)
+});
 
-const mapDispatchToProps = (dispatch) => { 
+const mapDispatchToProps = (dispatch) => {
     return {
         add_event: (data) => dispatch(add_event(data)),
         get_countries: () => dispatch(get_countries()),
@@ -95,8 +93,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(setEventSuccess(false));
             dispatch(setEventError(null));
         }
-        
-    } 
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddEventWrapper);

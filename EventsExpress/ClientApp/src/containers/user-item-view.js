@@ -69,11 +69,7 @@ class UserItemViewWrapper extends Component {
     }
 
     render() {
-
-        console.log('this.props', this.props);
         const { data, isPending, isError } = this.props.profile;
-        console.log('isPending', isPending);
-        console.log('isError', isError);
         const errorMessage = isError.ErrorCode == '403'
             ? <Forbidden />
             : isError.ErrorCode == '500'
@@ -83,7 +79,7 @@ class UserItemViewWrapper extends Component {
                     : isError.ErrorCode == '400'
                         ? <BadRequest />
                         : null;
-        console.log(errorMessage);
+
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending && errorMessage == null ? <Profile
             onAddEvent={this.onAddEvent}
@@ -99,7 +95,7 @@ class UserItemViewWrapper extends Component {
             data={data}
             current_user={this.props.current_user}
         /> : null;
-        console.log(content);
+
         return <>
             {spinner || errorMessage}
             {content}

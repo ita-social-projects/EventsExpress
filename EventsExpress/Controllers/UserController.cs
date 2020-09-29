@@ -34,9 +34,8 @@ namespace EventsExpress.Controllers
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IMediator mediator,      
-            IEmailService emailService                
-                            )
+            IMediator mediator,
+            IEmailService emailService)
         {
             _userService = userSrv;
             _authService = authSrv;
@@ -53,9 +52,9 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable UserManageDto models</response>
         /// <response code="400">Return failed</response>
         [HttpGet("[action]")]
-        public IActionResult SearchUsers([FromQuery]UsersFilterViewModel filter)
+        public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
-            filter.PageSize = 6;     
+            filter.PageSize = 12;
             filter.IsConfirmed = true;
             try
             {
@@ -84,7 +83,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">Return failed</response>
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get([FromQuery]UsersFilterViewModel filter)
+        public IActionResult Get([FromQuery] UsersFilterViewModel filter)
         {
             if (filter.PageSize == 0)
             {
@@ -181,7 +180,7 @@ namespace EventsExpress.Controllers
             var validator = new UserInfoNameValidator();
 
 
-             var validationResult = validator.Validate(userInfo);
+            var validationResult = validator.Validate(userInfo);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
@@ -213,7 +212,7 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
             var validator = new UserInfoAgeValidator();
-            
+
             var validationResult = validator.Validate(userInfo);
             if (!validationResult.IsValid)
             {
@@ -305,7 +304,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Changing is succesful</response>
         /// <response code="400">Changing process failed</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeAvatar([FromForm]IFormFile newAva)
+        public async Task<IActionResult> ChangeAvatar([FromForm] IFormFile newAva)
         {
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
@@ -324,7 +323,7 @@ namespace EventsExpress.Controllers
             return Ok(updatedPhoto);
         }
 
-    
+
         /// <summary>
         /// This method help to contact users with admins
         /// </summary>
@@ -348,9 +347,9 @@ namespace EventsExpress.Controllers
                     await _emailService.SendEmailAsync(new EmailDTO
                     {
                         Subject = model.Type,
-                        RecepientEmail =admin.Email,
+                        RecepientEmail = admin.Email,
                         MessageText = emailBody
-                    });                    
+                    });
                 }
 
                 return Ok();
@@ -358,7 +357,7 @@ namespace EventsExpress.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
-            }           
+            }
         }
 
         #endregion

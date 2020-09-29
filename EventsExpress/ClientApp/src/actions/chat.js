@@ -43,22 +43,26 @@ export function initialConnection() {
 
         hubConnection
             .start()
-            .then(() =>{ hubConnection.on('ReceiveMessage', (data) => {
+            .then(() => {
+                hubConnection.on('ReceiveMessage', (data) => {
                     dispatch(ReceiveMsg(data));
-                    if(data.senderId != localStorage.getItem('id')){
-                    dispatch(SetAlert({variant: 'info', message: "You have received new message", autoHideDuration: 5000}));
+                    if (data.senderId != localStorage.getItem('id')) {
+                        dispatch(SetAlert({ variant: 'info', message: "You have received new message", autoHideDuration: 5000 }));
                     }
-            });
-            hubConnection.on('wasSeen', (data) => {
+                });
+                hubConnection.on('wasSeen', (data) => {
                     dispatch(ReceiveSeenMsg(data));
-            });
-        
-        hubConnection.on('ReceivedNewEvent', (data) => {
-                dispatch(receivedNewEvent(data));
-                dispatch(SetAlert({variant: 'info', message: `The event was created which could interested you.`, autoHideDuration: 5000})); 
-        });
-        }
-            )
+                });
+
+                hubConnection.on('ReceivedNewEvent', (data) => {
+                    dispatch(receivedNewEvent(data));
+                    dispatch(SetAlert({
+                        variant: 'info',
+                        message: `The event was created which could interested you.`,
+                        autoHideDuration: 5000
+                    }));
+                });
+            })
             .catch(err => console.log('Error while establishing connection :('));
 
         dispatch({
@@ -68,26 +72,26 @@ export function initialConnection() {
     }
 }
 
-function receivedNewEvent(data){
+function receivedNewEvent(data) {
     return {
         type: RECEIVED_NEW_EVENT,
         payload: data
     }
 }
 
-export function deleteSeenMsgNotification(id){
+export function deleteSeenMsgNotification(id) {
     return dispatch => dispatch({
         type: DELETE_SEEN_MSG_NOTIFICATION,
         payload: id
     });
 }
-export function deleteOldNotififcation(data){
+export function deleteOldNotififcation(data) {
     return dispatch => dispatch({
         type: DELETE_OLD_NOTIFICATION,
         payload: data
     });
 }
-export function concatNewMsg(data){
+export function concatNewMsg(data) {
     return dispatch => dispatch({
         type: CONCAT_NEW_MSG,
         payload: data

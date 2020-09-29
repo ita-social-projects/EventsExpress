@@ -16,39 +16,39 @@ class Chat extends Component {
     }
 
     componentDidUpdate = () => {
-        if(!this.props.chat.isPending){
-        document.getElementsByClassName('card-body')[0].scrollTop = document.getElementsByClassName('card-body')[0].scrollHeight;
+        if (!this.props.chat.isPending) {
+            document.getElementsByClassName('card-body')[0].scrollTop = document.getElementsByClassName('card-body')[0].scrollHeight;
         }
+
         var newMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && !this.props.chat.data.messages.map(y => y.id).includes(x.id));
-        if(newMsg.length > 0)
-        {
+
+        if (newMsg.length > 0) {
             this.props.concatNewMsg(newMsg);
             this.props.deleteOldNotififcation(newMsg.map(x => x.id));
         }
+
         var msgIds = this.props.chat.data.messages.filter(x => (!x.seen && x.senderId != this.props.current_user.id)).map(x => x.id);
-        console.log(msgIds);
-        if(msgIds.length > 0){
-            console.log('seen');
+
+        if (msgIds.length > 0) {
             this.props.hubConnection
-            .invoke('seen', msgIds)
-            .catch(err => { console.log('error'); console.error(err)});
-        }
-        var deleteMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && this.props.chat.data.messages.map(y => y.id).includes(x.id));
-        if(deleteMsg.length > 0)
-        {
-            this.props.deleteOldNotififcation(deleteMsg.map(x => x.id));
+                .invoke('seen', msgIds)
+                .catch(err => { console.log('error'); console.error(err) });
         }
 
+        var deleteMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && this.props.chat.data.messages.map(y => y.id).includes(x.id));
+
+        if (deleteMsg.length > 0) {
+            this.props.deleteOldNotififcation(deleteMsg.map(x => x.id));
+        }
     }
 
     componentWillUnmount = () => {
-        console.log('Unmount', this.props);
         this.props.resetChat();
     }
 
     Send = (e) => {
         e.preventDefault();
-        if(e.target.msg.value != ""){
+        if (e.target.msg.value != "") {
             this.props.hubConnection
                 .invoke('send', this.props.chat.data.id, e.target.msg.value)
                 .catch(err => console.error(err));
@@ -62,7 +62,7 @@ class Chat extends Component {
                 var sender = arr.users.find(y => y.id == x.senderId);
                 if (arr.id == x.chatRoomId) {
                     return <>
-                        <Msg key={x.id+x.seen} user={sender} seenItem={x.seen} item={x} />
+                        <Msg key={x.id + x.seen} user={sender} seenItem={x.seen} item={x} />
                     </>
                 }
             })
@@ -70,8 +70,8 @@ class Chat extends Component {
 
     render() {
         var sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
-        const {isPending} = this.props.chat;
-            return isPending ? <Spinner /> : <>
+        const { isPending } = this.props.chat;
+        return isPending ? <Spinner /> : <>
             <div className="row justify-content-center h-100 mt-2">
                 <div className="col-md-8 col-xl-8 chat">
                     <div className="card">
@@ -105,13 +105,9 @@ class Chat extends Component {
                     </div>
                 </div>
             </div>
-
-
-
         </>
     }
 }
-
 
 const mapStateToProps = (state) => ({
     current_user: state.user,
@@ -136,4 +132,3 @@ Chat = reduxForm({
 })(Chat);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);
-

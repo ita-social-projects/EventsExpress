@@ -39,12 +39,12 @@ export const validate = values => {
     'categories',
     'countryId',
     'cityId',
-     'RepeatPassword',
-     'oldPassword',
-     'newPassword',
-     'repeatPassword',
-      'Birthday',
-      'UserName'
+    'RepeatPassword',
+    'oldPassword',
+    'newPassword',
+    'repeatPassword',
+    'Birthday',
+    'UserName'
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
@@ -70,35 +70,34 @@ export const validate = values => {
     errors.repeatPassword = 'Passwords do not match';
   }
   if (new Date(values.Birthday).getTime() >= Date.now()) {
-    
+
     errors.Birthday = 'Date is incorrect';
   }
-   
-    
+
+
   return errors
 }
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue,maxValue}) =>{
-    value=value || defaultValue||new Date(2000,1,1,12,0,0);
-    
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+  value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
 
-    minValue= new Date().getFullYear()-115;
-    maxValue= new Date().getFullYear()-15;
-    console.log(minValue);
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1,1,0,0,0)}
-        maxDate={new Date(maxValue, 12,31,23,59,59)}
+  minValue = new Date().getFullYear() - 115;
+  maxValue = new Date().getFullYear() - 15;
+  return <DatePicker
+    onChange={onChange}
+    selected={new Date(value) || new Date()}
+    minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+    maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
 
     peekNextMonth
     showMonthDropdown
     showYearDropdown
     dropdownMode="select"
-/>}
+  />
+}
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
-  
-  
+
+
   value = value || defaultValue || new Date();
   minValue = minValue || new Date();
   return <DatePicker
@@ -130,60 +129,60 @@ export const renderSelectLocationField = ({
   children,
   ...custom
 }) =>
-    <FormControl error={touched && error}>
-      <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-      <Select
-        native
-        {...input}
-        onBlur={() => input.onBlur()}
-        {...custom}
-        inputProps={{
-          name: text.toLowerCase() + 'Id',
-          id: 'age-native-simple'
-        }}
-      >
-        <option value=""></option>
-        {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
-      </Select>
-      {renderFromHelper({ touched, error })}
-    </FormControl>
+  <FormControl error={touched && error}>
+    <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+    <Select
+      native
+      {...input}
+      onBlur={() => input.onBlur()}
+      {...custom}
+      inputProps={{
+        name: text.toLowerCase() + 'Id',
+        id: 'age-native-simple'
+      }}
+    >
+      <option value=""></option>
+      {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+    </Select>
+    {renderFromHelper({ touched, error })}
+  </FormControl>
 
 
 
-export const renderMultiselect = ({ input, data, valueField, textField, placeholder, 
+export const renderMultiselect = ({ input, data, valueField, textField, placeholder,
   meta: { touched, invalid, error } }) =>
   <>
-  <Multiselect {...input}
-    onBlur={() => input.onBlur()}
-    value={input.value || []}
-    data={data}
-    valueField={valueField}
-    textField={textField}
-    placeholder={placeholder}
-  />
-  {renderFromHelper({ touched, error })}
+    <Multiselect {...input}
+      onBlur={() => input.onBlur()}
+      value={input.value || []}
+      data={data}
+      valueField={valueField}
+      textField={textField}
+      placeholder={placeholder}
+    />
+    {renderFromHelper({ touched, error })}
   </>
 
 export const renderTextArea = ({
-    label,
-    defaultValue,
-    input,
-    rows,
-    meta: { touched, invalid, error },
-    ...custom
-  }) => (
-  <TextField
-  label={label}
-  defaultValue={defaultValue}
-  multiline
-  rows="4"
-  fullWidth
-  {...input}
-  error={touched && invalid}
-  
-  helperText={touched && error}
-  variant="outlined"
-/>)
+  label,
+  defaultValue,
+  input,
+  rows,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+    <TextField
+      label={label}
+      defaultValue={defaultValue}
+      multiline
+      rows="4"
+      fullWidth
+      {...input}
+      error={touched && invalid}
+
+      helperText={touched && error}
+      variant="outlined"
+    />)
 
 export const renderTextField = ({
   label,
@@ -219,7 +218,7 @@ export const renderSelectField = ({
       <Select
         fullWidth
         native
-        
+
         error={touched && invalid}
 
         helperText={touched && error}

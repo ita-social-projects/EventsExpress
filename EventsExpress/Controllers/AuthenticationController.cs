@@ -98,10 +98,11 @@ namespace EventsExpress.Controllers
         /// /// <response code="200">Return UserInfo model</response>
         /// <response code="400">If login process failed</response>
         [AllowAnonymous]
-        [HttpPost("google")]
-        public async Task<IActionResult> Google([FromBody]UserView userView)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GoogleLogin([FromBody]UserView userView)
         {
-            var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
+            var payload = await GoogleJsonWebSignature.ValidateAsync(
+                userView.tokenId, new GoogleJsonWebSignature.ValidationSettings());
             var userExisting = _userService.GetByEmail(payload.Email);
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
@@ -118,6 +119,7 @@ namespace EventsExpress.Controllers
             }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = result.Message;
+            userInfo.PhotoUrl = userView.PhotoUrl;
 
             return Ok(userInfo);
         }
@@ -153,14 +155,17 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var user = _mapper.Map<LoginDto, UserDTO>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
 
             var result = await _userService.Create(user);
+
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 

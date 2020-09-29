@@ -33,11 +33,9 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
-
- const Profile = (props) => {
+const Profile = (props) => {
     const classes = useStyles();
-    
+
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = panel => (event, isExpanded) => {
@@ -46,16 +44,16 @@ const useStyles = makeStyles(theme => ({
 
     return (
         <div className={classes.root}>
-             <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography className={classes.heading}>Change Avatar</Typography>
-                    </ExpansionPanelSummary>
+            <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                >
+                    <Typography className={classes.heading}>Change Avatar</Typography>
+                </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    
+
                     <Typography>
                         <MuiThemeProvider>
                             <ChangeAvatarWrapper />
@@ -65,17 +63,17 @@ const useStyles = makeStyles(theme => ({
                 </ExpansionPanelDetails>
 
             </ExpansionPanel>
-                <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography className={classes.heading}>Username</Typography>
+            <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                >
+                    <Typography className={classes.heading}>Username</Typography>
                     <Typography className={classes.secondaryHeading}>{props.name}</Typography>
-                    </ExpansionPanelSummary>
+                </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    
+
                     <Typography>
                         <MuiThemeProvider>
                             <EditUsernameContainer />
@@ -141,23 +139,20 @@ const useStyles = makeStyles(theme => ({
 
                     <Typography>
                         <MuiThemeProvider>
-                            <AddUserCategory  />
+                            <AddUserCategory />
                         </MuiThemeProvider>
                     </Typography>
 
                 </ExpansionPanelDetails>
 
             </ExpansionPanel>
-            <ChangePasswordContainer/>
+            { props.canChangePassword ? <ChangePasswordContainer /> : null }
         </div>
     );
 }
 
-
-
 const mapStateToProps = state => {
     return state.user;
 };
-
 
 export default connect(mapStateToProps)(Profile);
