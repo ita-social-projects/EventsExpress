@@ -14,7 +14,7 @@ namespace EventsExpress.Db.Entities
         public Guid? ParentId { get; set; }
         public Message Parent { get; set; }
 
-        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public bool Edited { get; set; } = false;
 
         public bool Seen { get; set; } = false;
