@@ -28,29 +28,40 @@ using Swashbuckle.AspNetCore.Swagger;
 using EventsExpress.Core.ChatHub;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using System.Text;
 using Microsoft.AspNetCore.Http;
 using EventsExpress.Core.Extensions;
 
 namespace EventsExpress
 {
+    /// <summary>
+    /// The Startup class configures services and the app's request pipeline.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// ctor of class Startup
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        /// <summary>
+        /// Represents a set of key/value application configuration properties.
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        /// <summary>
+        ///  This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+            public void ConfigureServices(IServiceCollection services)
         {
             #region Authorization and Autontification configuring...
 
             var signingKey = new SigningSymmetricKey(Configuration.GetValue<string>("JWTOptions:SecretKey"));
 
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
+            services.AddTransient<ITokenService, TokenService>();
 
             var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
 
@@ -162,8 +173,11 @@ namespace EventsExpress
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

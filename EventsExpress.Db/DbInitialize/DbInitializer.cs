@@ -62,6 +62,10 @@ namespace EventsExpress.Db.DbInitialize
                 new Category{ Name="Team-Building"},
                 new Category{ Name="Swimming"},
                 new Category{ Name="Gaming"},
+                new Category {Name = "Fishing"},
+                new Category {Name = "Trips"},
+                new Category {Name = "Meeting"},
+                new Category {Name = "Sport"}
             };
             
             dbContext.Categories.AddRange(categories);

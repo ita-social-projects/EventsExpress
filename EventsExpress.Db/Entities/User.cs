@@ -32,5 +32,6 @@ namespace EventsExpress.Db.Entities
         public IEnumerable<Relationship> Relationships { get; set; }
 
         public IEnumerable<UserChat> Chats { get; set; }
+        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
     }
 }

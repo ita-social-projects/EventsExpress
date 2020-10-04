@@ -363,6 +363,31 @@
             <returns></returns>
             <response code="200">Return IEnumerable RoleDto model</response> 
         </member>
+        <member name="T:EventsExpress.Controllers.TokenController">
+            <summary>
+            Controller using for generate and refreshing tokens
+            </summary>
+        </member>
+        <member name="M:EventsExpress.Controllers.TokenController.#ctor(EventsExpress.Core.IServices.IUserService,EventsExpress.Core.IServices.IAuthService,EventsExpress.Core.IServices.ITokenService)">
+            <summary>
+            ctor of TokenController
+            </summary>
+            <param name="userSrv"></param>
+            <param name="authSrv"></param>
+            <param name="tokenService"></param>
+        </member>
+        <member name="M:EventsExpress.Controllers.TokenController.Refresh">
+            <summary>
+            action using for refresh token
+            </summary>
+            <returns>return new jwt and refresh token</returns>
+        </member>
+        <member name="M:EventsExpress.Controllers.TokenController.Revoke">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:EventsExpress.Controllers.UsersController.SearchUsers(EventsExpress.Core.DTOs.UsersFilterViewModel)">
             <summary>
             This method
@@ -488,6 +513,34 @@
             <param name="userClaims"></param>
             <returns></returns>
             <response code="200">Get current uses</response>
+        </member>
+        <member name="T:EventsExpress.Startup">
+            <summary>
+            The Startup class configures services and the app's request pipeline.
+            </summary>
+        </member>
+        <member name="M:EventsExpress.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            ctor of class Startup
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:EventsExpress.Startup.Configuration">
+            <summary>
+            Represents a set of key/value application configuration properties.
+            </summary>
+        </member>
+        <member name="M:EventsExpress.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+             This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+        </member>
+        <member name="M:EventsExpress.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
         </member>
     </members>
 </doc>

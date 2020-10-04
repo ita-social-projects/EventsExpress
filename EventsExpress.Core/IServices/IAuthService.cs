@@ -9,11 +9,14 @@ namespace EventsExpress.Core.IServices
 {
     public interface IAuthService
     {
-        
-        OperationResult Authenticate(string email, string password);
-        OperationResult FirstAuthenticate(UserDTO userDto);
+
+        Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> Authenticate(string email, string password);
+        Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> FirstAuthenticate(UserDTO userDto);
         Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword);
         UserDTO GetCurrentUser(ClaimsPrincipal userClaims);
-        OperationResult AuthenticateGoogleFacebookUser(string email);
+        OperationResult AuthenticateGoogleFacebookUser(string email, out AuthenticateResponseModel responseModel);
+
+
+
     }
 }

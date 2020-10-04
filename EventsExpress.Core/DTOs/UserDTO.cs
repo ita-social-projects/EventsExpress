@@ -32,5 +32,6 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
         public IEnumerable<UserCategory> Categories { get; set; }
         public IEnumerable<Rate> MyRates { get; set; }
+        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
     }
 }

@@ -25,8 +25,8 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
-        private ICacheHelper _cacheHelper;
-        private IEmailService _emailService;
+        private readonly ICacheHelper _cacheHelper;
+        private readonly IEmailService _emailService;
 
 
         public UserService(IUnitOfWork uow,
@@ -132,7 +132,7 @@ namespace EventsExpress.Core.Services
 
 
         public async Task<OperationResult> Update(UserDTO userDTO)
-        {
+          {
             if (string.IsNullOrEmpty(userDTO.Email))
             {
                 return new OperationResult(false, "EMAIL cannot be empty", "Email");
@@ -234,8 +234,10 @@ namespace EventsExpress.Core.Services
         public IEnumerable<UserDTO> GetUsersByRole(string role)
         {
             var users = Db.UserRepository.Get("Role")
-                .Where(user => user.Role.Name == role)
-                .AsEnumerable();
+               .Where(user => user.Role.Name == role)
+               .Include(user => user.RefreshTokens)
+               .AsNoTracking()
+               .AsEnumerable();
 
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
@@ -249,6 +251,18 @@ namespace EventsExpress.Core.Services
                     .Any(category => categoryIds.Contains(category.Category.Id)))
                 .Distinct()
                 .AsEnumerable();
+            
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
+        public IEnumerable<UserDTO> GetAllUsers(string role1, string role2)   
+        {
+
+            var users = Db.UserRepository.Get("Role")
+               .Where(user => user.Role.Name == role1 || user.Role.Name == role2)
+               .Include(user => user.RefreshTokens)
+               .AsNoTracking()
+               .AsEnumerable();
 
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }

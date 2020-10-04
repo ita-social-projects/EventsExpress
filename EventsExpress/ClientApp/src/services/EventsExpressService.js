@@ -1,5 +1,6 @@
 import React from 'react';
 import { dark } from '@material-ui/core/styles/createPalette';
+import jwt from 'jsonwebtoken';
 
 export default class EventsExpressService {
     _baseUrl = 'api/';
@@ -289,18 +290,54 @@ export default class EventsExpressService {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }),
         });
 
-        return !res.ok
-            ? {
-                error: {
-                    ErrorCode: res.status,
-                    massage: await res.statusText
+        if (res.ok) {
+            return await res.json();
+        }
+
+        else {
+            if (res.status === 401) {
+                let resUpdateToken = null;
+                localStorage.removeItem("token");
+
+                resUpdateToken = await fetch('api/token/refresh-token', {
+                    method: "POST"
+                });
+
+                if (!resUpdateToken.ok) {
+                    return this.getResourceResponseHandler(resUpdateToken);
+                }
+                let result = await this.getResourceResponseHandler(resUpdateToken);
+                localStorage.setItem('token', result.jwtToken);
+
+                return this.getResource(url);
+
+            }
+            else {
+                return {
+                    error: {
+                        ErrorCode: res.status,
+                        massage: await res.statusText
+                    }
                 }
             }
-            : await res.json();
+        }
+    }
+
+    getResourceResponseHandler = async (response) => {
+        if (response.ok) {
+            return await response.json();
+        } else {
+            return {
+                error: {
+                    ErrorCode: response.status,
+                    massage: await response.statusText
+                }
+            }
+        }
     }
 
     setUsername = async (data) => {
@@ -371,26 +408,91 @@ export default class EventsExpressService {
             : res;
     }
 
-    setResource = (url, data) => fetch(
-        this._baseUrl + url,
-        {
-            method: "post",
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }),
-            body: JSON.stringify(data)
+    setResource = async (url, data) => {
+        const res = await fetch(
+            this._baseUrl + url,
+            {
+                method: "post",
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }),
+                body: JSON.stringify(data)
+            }
+        );
+        if (res.ok) {
+            return res;
         }
-    );
+        else {
+            if (res.status === 401) {
+                let setResUpdateToken = null;
+                localStorage.removeItem("token");
 
-    setResourceWithData = (url, data) => fetch(
-        this._baseUrl + url,
-        {
-            method: "post",
-            headers: new Headers({
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }),
-            body: data
+                setResUpdateToken = await fetch('api/token/refresh-token', {
+                    method: "POST"
+                });
+
+                if (!setResUpdateToken.ok) {
+                    return this.getResourceResponseHandler(setResUpdateToken);
+                }
+                let result = await this.getResourceResponseHandler(setResUpdateToken);
+                localStorage.setItem('token', result.jwtToken);
+
+                return this.setResource(url, data);
+
+            }
+            else {
+                return {
+                    error: {
+                        ErrorCode: res.status,
+                        massage: await res.statusText
+                    }
+                }
+            }
         }
-    );
+
+    }
+
+    setResourceWithData = async (url, data) => {
+        const res = await fetch(
+            this._baseUrl + url,
+            {
+                method: "post",
+                headers: new Headers({
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }),
+                body: data
+            }
+        );
+        if (res.ok) {
+            return res;
+        }
+        else {
+            if (res.status === 401) {
+                let setResWithDataUpdateToken = null;
+                localStorage.removeItem("token");
+
+                setResWithDataUpdateToken = await fetch('api/token/refresh-token', {
+                    method: "POST"
+                });
+
+                if (!setResWithDataUpdateToken.ok) {
+                    return this.getResourceResponseHandler(setResWithDataUpdateToken);
+                }
+                let result = await this.getResourceResponseHandler(setResWithDataUpdateToken);
+                localStorage.setItem('token', result.jwtToken);
+
+                return this.setResourceWithData(url, data);
+
+            }
+            else {
+                return {
+                    error: {
+                        ErrorCode: res.status,
+                        massage: await res.statusText
+                    }
+                }
+            }
+        }
+    }
 }
