@@ -59,7 +59,7 @@ class LoginTwitter extends Component {
                     buttonTheme="light_short"
                     consumerKey={config.TWITTER_CONSUMER_KEY}
                     consumerSecret={config.TWITTER_CONSUMER_SECRET}
-                    callbackUrl={config.TWITTER_CALLBACK_URL}
+                    callbackUrl={`${window.location.origin}${config.TWITTER_CALLBACK_URL}`}
                 />
             </div>
         );
