@@ -131,7 +131,7 @@ export default class EventsExpressService {
             : await res.json();
     }
 
-    setTwitterLoging = async (data) => {
+    setTwitterLogin = async (data) => {
         const res = await this.setResource('Authentication/TwitterLogin', data);
         return !res.ok
             ? { error: await res.text() }

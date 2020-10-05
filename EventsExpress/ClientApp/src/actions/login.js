@@ -44,7 +44,7 @@ export function loginFacebook(email, name) {
 export function loginTwitter(data) {
   return dispatch => {
     dispatch(setLoginPending(true));
-    const res = api_serv.setTwitterLoging({
+    const res = api_serv.setTwitterLogin({
       TokenId: data.oauth_token,
       TokenSecret: data.oauth_token_secret,
       UserId: data.user_id,
