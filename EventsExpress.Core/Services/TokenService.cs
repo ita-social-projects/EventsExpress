@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using EventsExpress.Core.Extensions;
 
 namespace EventsExpress.Core.Services
 {
@@ -21,14 +20,15 @@ namespace EventsExpress.Core.Services
         private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public TokenService(IConfiguration configuration, IJwtSigningEncodingKey jwtSigningEncodingKey, IUserService userService)
+        public TokenService(IConfiguration configuration, IJwtSigningEncodingKey jwtSigningEncodingKey, IUserService userService, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
             _signingEncodingKey = jwtSigningEncodingKey;
             _userService = userService;
-
+            _httpContextAccessor = httpContextAccessor;
         }
         public string GenerateAccessToken(UserDTO user)
         {
@@ -115,9 +115,8 @@ namespace EventsExpress.Core.Services
                 HttpOnly = true,
                 Expires = DateTime.Now.AddDays(7)
             };
-            MyHttpContext.Current.Response.Cookies.Delete("refreshToken");
-            MyHttpContext.Current.Response.Cookies.Append("refreshToken", token, cookieOptions);
-           
+           _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
     }
 }
