@@ -33,9 +33,10 @@ namespace EventsExpress.Core.Services
             _configuration = config;
         }
 
-        public OperationResult AuthenticateGoogleFacebookUser(string email)
+        public OperationResult AuthenticateUserFromExternalProvider(string email)
         {
-            var user = _userService.GetByEmail(email);
+            UserDTO user = _userService.GetByEmail(email);
+
             if (user == null)
             {
                 return new OperationResult(false, $"User with email: {email} not found", "email");
@@ -46,8 +47,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, $"{email}, your account was blocked.", "email");
             }
 
-            var token = GenerateJwt(user);
-
+            string token = GenerateJwt(user);
             return new OperationResult(true, token, "");
         }
 
@@ -140,7 +140,5 @@ namespace EventsExpress.Core.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-        
     }
 }

@@ -14,6 +14,6 @@ namespace EventsExpress.Core.IServices
         OperationResult FirstAuthenticate(UserDTO userDto);
         Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword);
         UserDTO GetCurrentUser(ClaimsPrincipal userClaims);
-        OperationResult AuthenticateGoogleFacebookUser(string email);
+        OperationResult AuthenticateUserFromExternalProvider(string email);
     }
 }
