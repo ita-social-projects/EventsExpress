@@ -4,6 +4,20 @@
         <name>EventsExpress</name>
     </assembly>
     <members>
+        <member name="T:EventsExpress.Controllers.AuthenticationController">
+            <summary>
+            AuthenticationController using for Authenticate users.
+            </summary>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.#ctor(EventsExpress.Core.IServices.IUserService,AutoMapper.IMapper,EventsExpress.Core.IServices.IAuthService,EventsExpress.Core.IServices.ITokenService)">
+            <summary>
+            ctor of AuthenticationController
+            </summary>
+            <param name="userSrv"></param>
+            <param name="mapper"></param>
+            <param name="authSrv"></param>
+            <param name="tokenService"></param>
+        </member>
         <member name="M:EventsExpress.Controllers.AuthenticationController.Login(EventsExpress.DTO.LoginDto)">
             <summary>
             This method allows to log in to the API and generate an authentication token.

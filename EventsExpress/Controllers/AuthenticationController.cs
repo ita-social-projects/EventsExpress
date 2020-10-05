@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Controllers
-{
+{    /// <summary>
+     /// AuthenticationController using for Authenticate users.
+     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -21,6 +23,13 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
+        /// <summary>
+        /// ctor of AuthenticationController
+        /// </summary>
+        /// <param name="userSrv"></param>
+        /// <param name="mapper"></param>
+        /// <param name="authSrv"></param>
+        /// <param name="tokenService"></param>
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
@@ -81,14 +90,15 @@ namespace EventsExpress.Controllers
                 user.EmailConfirmed = true;
                 await _userService.Create(user);
              }
-            var auth = _authService.AuthenticateGoogleFacebookUser(userView.Email, out AuthenticateResponseModel responseModel);
-            if (!auth.Successed)
-                {
-                return BadRequest(auth.Message);
-                }
+            var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(userView.Email);
+            if (!opResult.Successed)
+            {
+                return BadRequest(opResult.Message);
+            }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = responseModel.JwtToken;
-            _tokenService.SetTokenCookie(responseModel.RefreshToken);
+            userInfo.Token = authResponseModel.JwtToken;
+            Response.Cookies.Delete("refreshToken", new CookieOptions { HttpOnly = true });
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
         /// <summary>
@@ -113,15 +123,16 @@ namespace EventsExpress.Controllers
                 user.Name = payload.Name;
                 await _userService.Create(user);
                 }
-            var result = _authService.AuthenticateGoogleFacebookUser(payload.Email, out AuthenticateResponseModel responseModel);
-            if (!result.Successed)
-                {
-                return BadRequest(result.Message);
-                }
+            var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(payload.Email);
+            if (!opResult.Successed)
+            {
+                return BadRequest(opResult.Message);
+            }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
-            userInfo.Token = responseModel.JwtToken;
+            userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
-            _tokenService.SetTokenCookie(responseModel.RefreshToken);
+            Response.Cookies.Delete("refreshToken", new CookieOptions { HttpOnly = true });
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
                 /// <summary>
