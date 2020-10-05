@@ -79,13 +79,6 @@ export default class EventsExpressService {
             : res;
     }
 
-    auth = async (data) => {
-        const res = await this.setResource(`Authentication/verify/${data.userId}/${data.token}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res.json();
-    }
-
     setUserFromEvent = async (data) => {
         const res = await this.setResource(`event/DeleteUserFromEvent?userId=${data.userId}&eventId=${data.eventId}`);
         return !res.ok
@@ -109,6 +102,14 @@ export default class EventsExpressService {
             : await res.text();
     }
 
+    //#region Authentication
+    auth = async (data) => {
+        const res = await this.setResource(`Authentication/verify/${data.userId}/${data.token}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res.json();
+    }
+
     setLogin = async (data) => {
         const res = await this.setResource('Authentication/Login', data);
         return !res.ok
@@ -130,6 +131,13 @@ export default class EventsExpressService {
             : await res.json();
     }
 
+    setTwitterLoging = async (data) => {
+        const res = await this.setResource('Authentication/TwitterLogin', data);
+        return !res.ok
+            ? { error: await res.text() }
+            : await res.json();
+    }
+
     setRecoverPassword = async (data) => {
         const res = await this.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
         return !res.ok
@@ -143,6 +151,14 @@ export default class EventsExpressService {
             ? { error: await res.text() }
             : res;
     }
+
+    setChangePassword = async (data) => {
+        const res = await this.setResource('Authentication/ChangePassword', data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+    //#endregion Authentication
 
     getEvent = async (id) => {
         const res = await this.getResource(`event/get?id=${id}`);
@@ -359,13 +375,6 @@ export default class EventsExpressService {
             UserToId: data.userToId,
             Attitude: data.attitude
         });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
-    setChangePassword = async (data) => {
-        const res = await this.setResource('Authentication/ChangePassword', data);
         return !res.ok
             ? { error: await res.text() }
             : res;

@@ -4,7 +4,7 @@ import Login from '../components/login';
 import login from '../actions/login';
 import GoogleLogin from './GoogleLogin';
 import { useAlert } from "react-alert";
-import FacebookLogin from './FacebookLogin';
+import TwitterLogin from './TwitterLogin';
 
 class LoginWrapper extends Component {
   submit = values => {
@@ -19,8 +19,8 @@ class LoginWrapper extends Component {
       <div>
         <Login onSubmit={this.submit} loginError={loginError} />
 
-        <div className="row">
-          <FacebookLogin />
+        <div className="d-flex justify-content-around">
+          <TwitterLogin />
           <GoogleLogin />
         </div>
 

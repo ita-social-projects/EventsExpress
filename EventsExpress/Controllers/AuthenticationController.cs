@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
+
 using Google.Apis.Auth;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using System;
 using System.Threading.Tasks;
 
@@ -49,44 +54,15 @@ namespace EventsExpress.Controllers
             }
 
             var result = _authService.Authenticate(authRequest.Email, authRequest.Password);
+
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
 
             var user = _userService.GetByEmail(authRequest.Email);
-
             var userInfo = _mapper.Map<UserInfo>(user);
-            userInfo.Token = result.Message;      
-
-            return Ok(userInfo);
-        }
-
-        /// <summary>
-        /// This method is to login with facebook account
-        /// </summary>
-        /// <param name="userView"></param>
-        /// <returns></returns>
-        /// /// <response code="200">Return UserInfo model</response>
-        /// <response code="400">If login process failed</response>
-        [AllowAnonymous]
-        [HttpPost("FacebookLogin")]
-        public async Task<IActionResult> FacebookLogin(UserView userView)
-        {
-            var userExisting = _userService.GetByEmail(userView.Email);
-            if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
-            {
-                var user = _mapper.Map<UserDTO>(userView);
-                user.EmailConfirmed = true;
-                await _userService.Create(user);
-            }
-            var auth = _authService.AuthenticateGoogleFacebookUser(userView.Email);
-            if (!auth.Successed)
-            {
-                return BadRequest(auth.Message);
-            }
-            var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = auth.Message;
+            userInfo.Token = result.Message;
             return Ok(userInfo);
         }
 
@@ -99,11 +75,12 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> GoogleLogin([FromBody]UserView userView)
+        public async Task<IActionResult> GoogleLogin([FromBody] UserView userView)
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.tokenId, new GoogleJsonWebSignature.ValidationSettings());
             var userExisting = _userService.GetByEmail(payload.Email);
+
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
                 var user = _mapper.Map<UserView, UserDTO>(userView);
@@ -112,15 +89,43 @@ namespace EventsExpress.Controllers
                 user.Name = payload.Name;
                 await _userService.Create(user);
             }
-            var result = _authService.AuthenticateGoogleFacebookUser(payload.Email);
+
+            var result = _authService.AuthenticateUserFromExternalProvider(payload.Email);
+
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = result.Message;
             userInfo.PhotoUrl = userView.PhotoUrl;
+            return Ok(userInfo);
+        }
 
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> TwitterLogin([FromBody] UserView userView)
+        {
+            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+
+            if (!(userExisting is null) && !string.IsNullOrEmpty(userView.Email))
+            {
+                UserDTO user = _mapper.Map<UserDTO>(userView);
+                user.EmailConfirmed = true;
+                await _userService.Create(user);
+            }
+
+            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
+
+            if (!auth.Successed)
+            {
+                return BadRequest(auth.Message);
+            }
+
+            UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
+            userInfo.Token = auth.Message;
+            userInfo.PhotoUrl = userView.PhotoUrl;
             return Ok(userInfo);
         }
 
@@ -158,7 +163,6 @@ namespace EventsExpress.Controllers
 
             var user = _mapper.Map<LoginDto, UserDTO>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
-
             var result = await _userService.Create(user);
 
             if (!result.Successed)
@@ -184,17 +188,21 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest();
             }
+
             var user = _userService.GetByEmail(email);
+
             if (user == null)
             {
                 return BadRequest("User with this email is not found");
             }
 
             var result = await _userService.PasswordRecover(user);
+
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 
@@ -229,7 +237,6 @@ namespace EventsExpress.Controllers
             var userInfo = _mapper.Map<UserDTO, UserInfo>(user);
             userInfo.Token = _authService.FirstAuthenticate(user).Message;
             userInfo.AfterEmailConfirmation = true;
-
             return Ok(userInfo);
         }
 
@@ -247,14 +254,15 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var user = _authService.GetCurrentUser(HttpContext.User);
 
+            var user = _authService.GetCurrentUser(HttpContext.User);
             var result = await _authService.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
 
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 

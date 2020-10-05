@@ -23,7 +23,7 @@ class LoginGoogle extends Component {
             <div>
                 <GoogleLogin
                     clientId={config.GOOGLE_CLIENT_ID}
-                    buttonText="Google"
+                    buttonText="Log in"
                     onSuccess={responseGoogle}
                     version="3.2"
                 />
