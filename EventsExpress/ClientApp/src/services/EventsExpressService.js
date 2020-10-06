@@ -297,45 +297,35 @@ export default class EventsExpressService {
         if (res.ok) {
             return await res.json();
         }
-
+        else if (res.status === 401) {
+            return this.RefreshHandler(this.getResource, res, url);
+        }
         else {
-            if (res.status === 401) {
-                let resUpdateToken = null;
-                localStorage.removeItem("token");
-
-                resUpdateToken = await fetch('api/token/refresh-token', {
-                    method: "POST"
-                });
-
-                if (!resUpdateToken.ok) {
-                    return this.getResourceResponseHandler(resUpdateToken);
-                }
-                let result = await this.getResourceResponseHandler(resUpdateToken);
-                localStorage.setItem('token', result.jwtToken);
-
-                return this.getResource(url);
-
-            }
-            else {
-                return {
-                    error: {
-                        ErrorCode: res.status,
-                        massage: await res.statusText
-                    }
-                }
-            }
+            return this.errorHandler(res);
         }
     }
 
-    getResourceResponseHandler = async (response) => {
-        if (response.ok) {
-            return await response.json();
-        } else {
-            return {
-                error: {
-                    ErrorCode: response.status,
-                    massage: await response.statusText
-                }
+    RefreshHandler = async (callback, res, url, data) => {
+
+        localStorage.removeItem("token");
+        var response = await fetch('api/token/refresh-token', {
+            method: "POST"
+        });
+        if (!response.ok) {
+            return this.errorHandler(res);
+        }
+        let rest = await response.json();
+        localStorage.setItem('token', rest.jwtToken);
+        return data === undefined
+            ? callback(url)
+            : callback(url, data);
+    }
+
+    errorHandler = async (response) => {
+        return {
+            error: {
+                ErrorCode: response.status,
+                massage: await response.statusText
             }
         }
     }
@@ -423,34 +413,12 @@ export default class EventsExpressService {
         if (res.ok) {
             return res;
         }
-        else {
-            if (res.status === 401) {
-                let setResUpdateToken = null;
-                localStorage.removeItem("token");
-
-                setResUpdateToken = await fetch('api/token/refresh-token', {
-                    method: "POST"
-                });
-
-                if (!setResUpdateToken.ok) {
-                    return this.getResourceResponseHandler(setResUpdateToken);
-                }
-                let result = await this.getResourceResponseHandler(setResUpdateToken);
-                localStorage.setItem('token', result.jwtToken);
-
-                return this.setResource(url, data);
-
-            }
-            else {
-                return {
-                    error: {
-                        ErrorCode: res.status,
-                        massage: await res.statusText
-                    }
-                }
-            }
+        else if (res.status === 401) {
+            return this.RefreshHandler(this.setResource, res, url, data);
         }
-
+        else {
+            return this.errorHandler(res);
+        }
     }
 
     setResourceWithData = async (url, data) => {
@@ -467,32 +435,11 @@ export default class EventsExpressService {
         if (res.ok) {
             return res;
         }
+        else if (res.status === 401) {
+            return this.RefreshHandler(this.setResourceWithData, res, url, data);
+        }
         else {
-            if (res.status === 401) {
-                let setResWithDataUpdateToken = null;
-                localStorage.removeItem("token");
-
-                setResWithDataUpdateToken = await fetch('api/token/refresh-token', {
-                    method: "POST"
-                });
-
-                if (!setResWithDataUpdateToken.ok) {
-                    return this.getResourceResponseHandler(setResWithDataUpdateToken);
-                }
-                let result = await this.getResourceResponseHandler(setResWithDataUpdateToken);
-                localStorage.setItem('token', result.jwtToken);
-
-                return this.setResourceWithData(url, data);
-
-            }
-            else {
-                return {
-                    error: {
-                        ErrorCode: res.status,
-                        massage: await res.statusText
-                    }
-                }
-            }
+            return this.errorHandler(res);
         }
     }
 }

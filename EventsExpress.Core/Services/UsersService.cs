@@ -257,7 +257,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetUserByRefreshToken(string token)   
         {
-            var user = Db.UserRepository.Get("Role,RefreshTokens")
+            var user = Db.UserRepository.Get("Role,RefreshTokens").AsNoTracking()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
                  
                

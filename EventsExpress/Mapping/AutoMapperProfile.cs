@@ -213,8 +213,15 @@ namespace EventsExpress.Mapping
                 })));
 
             CreateMap<Message, MessageDto>().ReverseMap();
-                
+
             #endregion
+
+            #region
+            CreateMap<RefreshToken, RefreshTokenDTO>();
+            CreateMap<RefreshTokenDTO, RefreshToken>();
+            #endregion
+
+
         }
     }
 }

@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,7 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
         /// <summary>
         /// ctor of TokenController
         /// </summary>
@@ -29,12 +32,14 @@ namespace EventsExpress.Controllers
         public TokenController(
             IUserService userSrv,
             IAuthService authSrv,
-            ITokenService tokenService
+            ITokenService tokenService,
+            IMapper mapper
             )
         {
             _userService = userSrv;
             _authService = authSrv;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
         /// <summary>
         /// action using for refresh token
@@ -67,7 +72,7 @@ namespace EventsExpress.Controllers
             var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == Request.Cookies["refreshToken"]);
 
             // return false if token is not active
-            if (!refreshToken.IsActive || refreshToken == null) return BadRequest();
+            if (!_mapper.Map<RefreshTokenDTO>( refreshToken).IsActive || refreshToken == null) return BadRequest();
 
             // revoke token and save
             refreshToken.Revoked = DateTime.Now;

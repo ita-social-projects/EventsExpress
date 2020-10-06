@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
 
 namespace EventsExpress.Core.Services
 {
@@ -21,14 +22,16 @@ namespace EventsExpress.Core.Services
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
 
-        public TokenService(IConfiguration configuration, IJwtSigningEncodingKey jwtSigningEncodingKey, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public TokenService(IConfiguration configuration, IJwtSigningEncodingKey jwtSigningEncodingKey, IUserService userService, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
             _configuration = configuration;
             _signingEncodingKey = jwtSigningEncodingKey;
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
         public string GenerateAccessToken(UserDTO user)
         {
@@ -90,13 +93,14 @@ namespace EventsExpress.Core.Services
             var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
             
             // return null if token is no longer active
-            if (!refreshToken.IsActive) return null;
+            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive) return null;
 
             // replace old refresh token with a new one and save
             var newRefreshToken = GenerateRefreshToken();
             refreshToken.Revoked = DateTime.Now;
             refreshToken.ReplacedByToken = newRefreshToken.Token;
-            user.RefreshTokens = new List<RefreshToken> { newRefreshToken, refreshToken };
+            user.RefreshTokens = new List<RefreshToken> { newRefreshToken,refreshToken };
+
             await _userService.Update(user);
 
             // generate new jwt

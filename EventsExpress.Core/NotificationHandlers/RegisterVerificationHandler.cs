@@ -15,19 +15,16 @@ namespace EventsExpress.Core.NotificationHandlers
     public class RegisterVerificationHandler :INotificationHandler<RegisterVerificationMessage>
     {
         private readonly IEmailService _sender;
-        private readonly IUserService _userService;
         private readonly ICacheHelper _cacheHepler;
       
         public RegisterVerificationHandler
             (
             IEmailService sender,
-            IUserService userSrv,
             ICacheHelper cacheHepler
            
             )
         {
             _sender = sender;
-            _userService = userSrv;
             _cacheHepler = cacheHepler;
             
 

@@ -382,7 +382,7 @@
             Controller using for generate and refreshing tokens
             </summary>
         </member>
-        <member name="M:EventsExpress.Controllers.TokenController.#ctor(EventsExpress.Core.IServices.IUserService,EventsExpress.Core.IServices.IAuthService,EventsExpress.Core.IServices.ITokenService)">
+        <member name="M:EventsExpress.Controllers.TokenController.#ctor(EventsExpress.Core.IServices.IUserService,EventsExpress.Core.IServices.IAuthService,EventsExpress.Core.IServices.ITokenService,AutoMapper.IMapper)">
             <summary>
             ctor of TokenController
             </summary>
