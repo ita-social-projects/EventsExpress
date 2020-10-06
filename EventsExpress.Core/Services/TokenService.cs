@@ -85,13 +85,7 @@ namespace EventsExpress.Core.Services
         public async Task<AuthenticateResponseModel> RefreshToken(string token)
         {
             var user = _userService.GetUserByRefreshToken(token);
-           //var user = _userService.GetUsersByRole("User")           
-           //     .SingleOrDefault(u =>
-           //     {
-           //         if (u.RefreshTokens is null) return false;
-           //         return u.RefreshTokens.Any(t => t.Token.Equals(token));
-           //     });
-           // return null if no user found with token
+            // return null if no user found with token
             if (user == null) return null;
             var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
             
