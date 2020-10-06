@@ -15,21 +15,29 @@
         </member>
         <member name="M:EventsExpress.Controllers.AuthenticationController.FacebookLogin(EventsExpress.DTO.UserView)">
             <summary>
-            This method is to login with facebook account
+            This method is to login with facebook account.
             </summary>
-            <param name="userView"></param>
-            <returns></returns>
-            /// <response code="200">Return UserInfo model</response>
-            <response code="400">If login process failed</response>
+            <param name="userView">Requireed.</param>
+            <returns>UserInfo model.</returns>
+            <response code="200">Return UserInfo model.</response>
+            <response code="400">If login process failed.</response>
         </member>
         <member name="M:EventsExpress.Controllers.AuthenticationController.GoogleLogin(EventsExpress.DTO.UserView)">
             <summary>
             This method is to login with google account
             </summary>
-            <param name="userView"></param>
-            <returns></returns>
-            /// <response code="200">Return UserInfo model</response>
-            <response code="400">If login process failed</response>
+            <param name="userView">Requireed.</param>
+            <returns>UserInfo model.</returns>
+            /// <response code="200">Return UserInfo model.</response>
+            <response code="400">If login process failed.</response>
+        </member>
+        <member name="M:EventsExpress.Controllers.AuthenticationController.TwitterLogin(EventsExpress.DTO.UserView)">
+            <summary>
+            This method is to login with twitter account.
+            </summary>
+            <param name="userView">Required.</param>
+            <response code="200">Return UserInfo model.</response>
+            <response code="400">If login process failed.</response>
         </member>
         <member name="M:EventsExpress.Controllers.AuthenticationController.Login">
             <summary>

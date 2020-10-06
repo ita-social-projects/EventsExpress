@@ -67,12 +67,12 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to login with facebook account
+        /// This method is to login with facebook account.
         /// </summary>
-        /// <param name="userView"></param>
-        /// <returns></returns>
-        /// /// <response code="200">Return UserInfo model</response>
-        /// <response code="400">If login process failed</response>
+        /// <param name="userView">Requireed.</param>
+        /// <returns>UserInfo model.</returns>
+        /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> FacebookLogin(UserView userView)
@@ -101,10 +101,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with google account
         /// </summary>
-        /// <param name="userView"></param>
-        /// <returns></returns>
-        /// /// <response code="200">Return UserInfo model</response>
-        /// <response code="400">If login process failed</response>
+        /// <param name="userView">Requireed.</param>
+        /// <returns>UserInfo model.</returns>
+        /// /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> GoogleLogin([FromBody] UserView userView)
@@ -135,6 +135,12 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
+        /// <summary>
+        /// This method is to login with twitter account.
+        /// </summary>
+        /// <param name="userView">Required.</param>
+        /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> TwitterLogin([FromBody] UserView userView)
