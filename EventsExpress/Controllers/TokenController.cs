@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +8,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using EventsExpress.Core.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -23,6 +25,9 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        
+
         /// <summary>
         /// ctor of TokenController
         /// </summary>
@@ -33,13 +38,15 @@ namespace EventsExpress.Controllers
             IUserService userSrv,
             IAuthService authSrv,
             ITokenService tokenService,
-            IMapper mapper
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor
             )
         {
             _userService = userSrv;
             _authService = authSrv;
             _tokenService = tokenService;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
         /// action using for refresh token
@@ -62,11 +69,12 @@ namespace EventsExpress.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpPost("revoke"), Authorize]
+        [HttpPost("revoke")]
         public async Task<IActionResult> Revoke()
-        {    
-            var principal = HttpContext.User;
-            var user = _authService.GetCurrentUser(principal);
+        {
+            var token = Request.Cookies["refreshToken"];
+
+            var user = _userService.GetUserByRefreshToken(token);
             if (user == null) return BadRequest();
 
             var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == Request.Cookies["refreshToken"]);
@@ -76,6 +84,7 @@ namespace EventsExpress.Controllers
 
             // revoke token and save
             refreshToken.Revoked = DateTime.Now;
+            user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
            Response.Cookies.Delete("refreshToken");
             return Ok();
