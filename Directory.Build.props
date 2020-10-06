@@ -1,0 +1,12 @@
+<Project>
+ <PropertyGroup>
+   <CodeAnalysisRuleset>$(MSBuildThisFileDirectory)Custom.ruleset</CodeAnalysisRuleset>
+ </PropertyGroup>
+ 
+ <ItemGroup>
+   <!-- Add reference to analyzers to all projects -->
+   <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+   <!-- Common StyleCop configuration -->
+   <AdditionalFiles Include="$(SolutionDir)stylecop.json" Link="stylecop.json" />
+ </ItemGroup>
+</Project>
