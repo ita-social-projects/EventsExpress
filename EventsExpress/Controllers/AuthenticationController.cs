@@ -62,13 +62,12 @@ namespace EventsExpress.Controllers
             }
             var (opResult, authResponseModel) = await _authService.Authenticate(authRequest.Email, authRequest.Password);
             if (!opResult.Successed)
-                {
+            {
                 return BadRequest(opResult.Message);
-                }
+            }
             var user = _userService.GetByEmail(authRequest.Email);
             var userInfo = _mapper.Map<UserInfo>(user);
             userInfo.Token = authResponseModel.JwtToken;
-            Response.Cookies.Delete("refreshToken", new CookieOptions { HttpOnly = true });
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
@@ -85,11 +84,11 @@ namespace EventsExpress.Controllers
         {
             var userExisting = _userService.GetByEmail(userView.Email);
             if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
-             {
+            {
                 var user = _mapper.Map<UserDTO>(userView);
                 user.EmailConfirmed = true;
                 await _userService.Create(user);
-             }
+            }
             var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(userView.Email);
             if (!opResult.Successed)
             {
@@ -97,7 +96,6 @@ namespace EventsExpress.Controllers
             }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
-            Response.Cookies.Delete("refreshToken", new CookieOptions { HttpOnly = true });
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
@@ -110,19 +108,19 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> GoogleLogin([FromBody]UserView userView)
+        public async Task<IActionResult> GoogleLogin([FromBody] UserView userView)
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.tokenId, new GoogleJsonWebSignature.ValidationSettings());
             var userExisting = _userService.GetByEmail(payload.Email);
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
-                {
+            {
                 var user = _mapper.Map<UserView, UserDTO>(userView);
                 user.Email = payload.Email;
                 user.EmailConfirmed = true;
                 user.Name = payload.Name;
                 await _userService.Create(user);
-                }
+            }
             var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(payload.Email);
             if (!opResult.Successed)
             {
@@ -131,11 +129,10 @@ namespace EventsExpress.Controllers
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
-            Response.Cookies.Delete("refreshToken", new CookieOptions { HttpOnly = true });
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
-                /// <summary>
+        /// <summary>
         /// This method to refresh user status using only jwt access token
         /// </summary>
         /// <returns>UserInfo model</returns>
@@ -186,14 +183,14 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> PasswordRecovery(string email)
         {
             if (string.IsNullOrEmpty(email))
-                {
+            {
                 return BadRequest();
-                }
+            }
             var user = _userService.GetByEmail(email);
             if (user == null)
-                {
+            {
                 return BadRequest("User with this email is not found");
-                }
+            }
             var result = await _userService.PasswordRecover(user);
             return
                  !result.Successed
@@ -214,14 +211,14 @@ namespace EventsExpress.Controllers
         {
             var cache = new CacheDTO { Token = token };
             if (!Guid.TryParse(userid, out cache.UserId))
-                {
+            {
                 return BadRequest();
-                }
+            }
             var result = await _userService.ConfirmEmail(cache);
             if (!result.Successed)
-                {
+            {
                 return BadRequest(result.Message);
-                }
+            }
             var user = _userService.GetById(cache.UserId);
             var userInfo = _mapper.Map<UserDTO, UserInfo>(user);
             var (_, authResponseModel) = await _authService.FirstAuthenticate(user);
@@ -241,9 +238,9 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             if (!ModelState.IsValid)
-                {
+            {
                 return BadRequest(ModelState);
-                }
+            }
             var user = _authService.GetCurrentUser(HttpContext.User);
             var result = await _authService.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
             return

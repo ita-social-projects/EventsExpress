@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace EventsExpress.Core.Services
 {
@@ -48,11 +49,10 @@ namespace EventsExpress.Core.Services
 
             var jwtToken = _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
-
-            // save refresh token
+             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
-            return (new OperationResult(true, jwtToken, ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
         public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> Authenticate(string email, string password)
@@ -86,7 +86,7 @@ namespace EventsExpress.Core.Services
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
 
-            return (new OperationResult(true, jwtToken, ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
         public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> FirstAuthenticate(UserDTO userDto)
@@ -103,7 +103,7 @@ namespace EventsExpress.Core.Services
 
             await _userService.Update(userDto);
 
-            return (new OperationResult(true, jwtToken, ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
 

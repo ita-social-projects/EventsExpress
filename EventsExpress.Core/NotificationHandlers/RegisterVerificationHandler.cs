@@ -7,7 +7,6 @@ using EventsExpress.Core.Notifications;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Extensions;
 
@@ -35,10 +34,8 @@ namespace EventsExpress.Core.NotificationHandlers
         }
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
-            Debug.WriteLine("messagehandled");
             var token = Guid.NewGuid().ToString();
-            var myUrl = MyHttpContext.AppBaseUrl;
-            string theEmailLink = $"<a \" target=\"_blank\" href=\"{myUrl}/authentication/{notification.User.Id}/{token}\">link</a>";
+            string theEmailLink = $"<a \" target=\"_blank\" href=\"{AppHttpContext.AppBaseUrl}/authentication/{notification.User.Id}/{token}\">link</a>";
                
             
             _cacheHepler.Add(new CacheDTO
@@ -58,11 +55,10 @@ namespace EventsExpress.Core.NotificationHandlers
 
                 var x = _cacheHepler.GetValue(notification.User.Id);
 
-                Debug.WriteLine(x.Token);
             }
-            catch(Exception ex)
+            catch
             {
-                Debug.WriteLine(ex.Message);
+               
             }
         }
     }

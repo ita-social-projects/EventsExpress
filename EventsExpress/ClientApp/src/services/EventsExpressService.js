@@ -290,7 +290,7 @@ export default class EventsExpressService {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }),
         });
 

@@ -178,7 +178,7 @@ namespace EventsExpress.Core.Services
 
             if (user != null)
             {
-                user.CanChangePassword = string.IsNullOrEmpty(user.PasswordHash) ? false : true;
+                user.CanChangePassword = !string.IsNullOrEmpty(user.PasswordHash);
                 user.Rating = GetRating(user.Id);
             }
             return user;
@@ -255,16 +255,14 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public IEnumerable<UserDTO> GetAllUsers(string role1, string role2)   
+        public UserDTO GetUserByRefreshToken(string token)   
         {
+            var user = Db.UserRepository.Get("Role,RefreshTokens")
+                .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
+                 
+               
 
-            var users = Db.UserRepository.Get("Role")
-               .Where(user => user.Role.Name == role1 || user.Role.Name == role2)
-               .Include(user => user.RefreshTokens)
-               .AsNoTracking()
-               .AsEnumerable();
-
-            return _mapper.Map<IEnumerable<UserDTO>>(users);
+            return _mapper.Map<UserDTO>(user);
         }
 
 
@@ -281,7 +279,6 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-
             user.Role = newRole;
             await Db.SaveAsync();
 
