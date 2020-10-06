@@ -2,9 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import Login from '../components/login';
 import login from '../actions/login';
-import GoogleLogin from './GoogleLogin';
 import { useAlert } from "react-alert";
-import TwitterLogin from './TwitterLogin';
 
 class LoginWrapper extends Component {
   submit = values => {
@@ -18,12 +16,6 @@ class LoginWrapper extends Component {
     return <>
       <div>
         <Login onSubmit={this.submit} loginError={loginError} />
-
-        <div className="d-flex justify-content-around">
-          <TwitterLogin />
-          <GoogleLogin />
-        </div>
-
       </div>
     </>
   }

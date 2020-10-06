@@ -67,6 +67,38 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method is to login with facebook account
+        /// </summary>
+        /// <param name="userView"></param>
+        /// <returns></returns>
+        /// /// <response code="200">Return UserInfo model</response>
+        /// <response code="400">If login process failed</response>
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> FacebookLogin(UserView userView)
+        {
+            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+
+            if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
+            {
+                var user = _mapper.Map<UserDTO>(userView);
+                user.EmailConfirmed = true;
+                await _userService.Create(user);
+            }
+
+            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
+
+            if (!auth.Successed)
+            {
+                return BadRequest(auth.Message);
+            }
+
+            UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
+            userInfo.Token = auth.Message;
+            return Ok(userInfo);
+        }
+
+        /// <summary>
         /// This method is to login with google account
         /// </summary>
         /// <param name="userView"></param>

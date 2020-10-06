@@ -36,7 +36,7 @@ class LoginTwitter extends Component {
                 );
 
                 if (typeof accountCred === 'undefined'
-                    || typeof accountCred?.email === 'undefined') {
+                    || typeof accountCred.email === 'undefined') {
                     this.props.login.loginError = " Please add email to your twitter account!";
                 } else {
                     ({
