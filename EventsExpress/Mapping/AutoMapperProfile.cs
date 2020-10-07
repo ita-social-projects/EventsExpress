@@ -216,7 +216,7 @@ namespace EventsExpress.Mapping
 
             #endregion
 
-            #region
+            #region REFRESHTOKEN MAPPING
             CreateMap<RefreshToken, RefreshTokenDTO>();
             CreateMap<RefreshTokenDTO, RefreshToken>();
             #endregion
