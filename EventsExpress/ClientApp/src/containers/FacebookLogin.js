@@ -3,7 +3,7 @@ import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import config from '../config';
 import { loginFacebook } from '../actions/login';
-import './css/Auth.css'
+import './css/Auth.css';
 
 class LoginFacebook extends Component {
     render() {
@@ -17,13 +17,15 @@ class LoginFacebook extends Component {
         return (
             <div>
                 <FacebookLogin
-                    clientId={config.FACEBOOK_CLIENT_ID}
+                    appId={config.FACEBOOK_CLIENT_ID}
+                    autoLoad={false}
                     fields="name,email,picture"
                     callback={responseFacebook}
                     cssClass="btnFacebook"
-                    icon={<img src="https://img.icons8.com/ios/24/000000/facebook-f.png" />}
+                    icon={<i class="fab fa-facebook fa-lg"></i>}
+                    textButton="&nbsp;&nbsp;Log in"
                     version="3.1"
-                    textButton="&nbsp;&nbsp;Facebook" />
+                />
             </div>
         );
     }
