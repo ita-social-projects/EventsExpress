@@ -51,7 +51,7 @@ namespace EventsExpress.Core.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
-        public RefreshToken GenerateRefreshToken()
+        public RefreshToken GenerateRefreshToken(string ipAddress)
         {
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
@@ -61,7 +61,8 @@ namespace EventsExpress.Core.Services
                 {
                     Token = Convert.ToBase64String(randomNumber),
                     Expires = DateTime.Now.AddDays(7),
-                    Created = DateTime.Now
+                    Created = DateTime.Now,
+                    CreatedByIp = ipAddress
                 };
             }
         }
@@ -96,8 +97,10 @@ namespace EventsExpress.Core.Services
             if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive) return null;
 
             // replace old refresh token with a new one and save
-            var newRefreshToken = GenerateRefreshToken();
+            string ipAddress = IpAddress();
+            var newRefreshToken = GenerateRefreshToken(ipAddress);
             refreshToken.Revoked = DateTime.Now;
+            refreshToken.RevokedByIp = ipAddress;
             refreshToken.ReplacedByToken = newRefreshToken.Token;
             user.RefreshTokens = new List<RefreshToken> { newRefreshToken,refreshToken };
 
@@ -106,6 +109,26 @@ namespace EventsExpress.Core.Services
             // generate new jwt
             var jwtToken = GenerateAccessToken(user);
             return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
+        }
+
+        public async Task<bool>  RevokeToken(string token)
+        {
+            string ipAddress = IpAddress();
+            var user = _userService.GetUserByRefreshToken(token);
+            if (user == null) return false;
+
+            var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == token);
+
+            // return false if token is not active
+            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive || refreshToken == null) return false;;
+
+            // revoke token and save
+            refreshToken.Revoked = DateTime.Now;
+            refreshToken.RevokedByIp = ipAddress;
+            user.RefreshTokens = new List<RefreshToken> { refreshToken };
+            await _userService.Update(user);
+           _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+            return true;
         }
         public void SetTokenCookie(string token)
         {
@@ -117,6 +140,14 @@ namespace EventsExpress.Core.Services
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
             _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);
            
+        }
+
+        public string IpAddress()
+        {
+            if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+                return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
+            else
+                return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
     }
 }

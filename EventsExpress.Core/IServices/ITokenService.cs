@@ -9,10 +9,12 @@ namespace EventsExpress.Core.IServices
     public interface ITokenService
     {
         string GenerateAccessToken(UserDTO user);
-        RefreshToken GenerateRefreshToken();
+        RefreshToken GenerateRefreshToken(string ipAddress);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
         Task<AuthenticateResponseModel> RefreshToken(string token);
+        Task<bool> RevokeToken(string token);
         void SetTokenCookie(string token);
+        string IpAddress();
 
     }
 }

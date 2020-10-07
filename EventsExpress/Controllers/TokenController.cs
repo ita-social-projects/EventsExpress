@@ -69,25 +69,16 @@ namespace EventsExpress.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpPost("revoke")]
+        [HttpPost("revoke-token")]
         public async Task<IActionResult> Revoke()
         {
             var token = Request.Cookies["refreshToken"];
+            var response = await _tokenService.RevokeToken(token);
+            if (!response)
+                return NotFound(new { message = "Token not found" });
 
-            var user = _userService.GetUserByRefreshToken(token);
-            if (user == null) return BadRequest();
-
-            var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == Request.Cookies["refreshToken"]);
-
-            // return false if token is not active
-            if (!_mapper.Map<RefreshTokenDTO>( refreshToken).IsActive || refreshToken == null) return BadRequest();
-
-            // revoke token and save
-            refreshToken.Revoked = DateTime.Now;
-            user.RefreshTokens = new List<RefreshToken> { refreshToken };
-            await _userService.Update(user);
-           Response.Cookies.Delete("refreshToken");
-            return Ok();
+            return Ok(new { message = "Token revoked" });
+                        
         }
     }
 }

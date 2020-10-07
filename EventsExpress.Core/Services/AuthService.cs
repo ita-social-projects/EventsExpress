@@ -48,7 +48,8 @@ namespace EventsExpress.Core.Services
             }
 
             var jwtToken = _tokenService.GenerateAccessToken(user);
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            string ipAddress = _tokenService.IpAddress();
+            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
              // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
@@ -80,7 +81,8 @@ namespace EventsExpress.Core.Services
             }
             // authentication successful so generate jwt and refresh tokens
             var jwtToken = _tokenService.GenerateAccessToken(user);
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            string ipAddress = _tokenService.IpAddress();
+            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
 
             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
@@ -96,7 +98,8 @@ namespace EventsExpress.Core.Services
                 return (new OperationResult(false, $"User with email: {userDto.Email} not found", "email"), null);
             }
             var jwtToken = _tokenService.GenerateAccessToken(userDto);
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            string ipAddress = _tokenService.IpAddress();
+            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
 
             // save refresh token
             userDto.RefreshTokens = new List<RefreshToken> { refreshToken };

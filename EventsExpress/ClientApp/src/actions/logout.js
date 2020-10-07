@@ -22,7 +22,7 @@ export default  function logout() {
 }
 
 async function RevokeToken() {
-    await fetch('api/token/revoke', {
+    await fetch('api/token/revoke-token', {
         method: "POST"
     });
 }
