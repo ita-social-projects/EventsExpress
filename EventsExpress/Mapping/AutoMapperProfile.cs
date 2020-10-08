@@ -19,9 +19,6 @@ namespace EventsExpress.Mapping
 
             #region USER MAPPING
             CreateMap<User, UserDTO>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
@@ -47,12 +44,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryDto {Id = x.Category.Id, Name = x.Category.Name})))
+                        src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
                 .ForMember(dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
-
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
+              
 
             CreateMap<UserDTO, UserManageDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

@@ -5,7 +5,7 @@ import { resetNotification } from './chats';
 export const SET_LOGOUT = "SET_LOGOUT";
 
 export default  function logout() {
-       RevokeToken();
+       revokeToken();
        localStorage.clear();
        return  dispatch => { 
       dispatch(reset_hub());
@@ -21,8 +21,8 @@ export default  function logout() {
     };
 }
 
-async function RevokeToken() {
-    await fetch('api/token/revoke-token', {
+ function revokeToken() {
+     fetch('api/token/revoke-token', {
         method: "POST"
     });
 }

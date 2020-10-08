@@ -132,7 +132,7 @@ namespace EventsExpress.Core.Services
 
 
         public async Task<OperationResult> Update(UserDTO userDTO)
-          {
+        {
             if (string.IsNullOrEmpty(userDTO.Email))
             {
                 return new OperationResult(false, "EMAIL cannot be empty", "Email");
@@ -248,19 +248,19 @@ namespace EventsExpress.Core.Services
 
             var users = Db.UserRepository.Get("Photo,Role,Categories.Category")
                 .Where(user => user.Categories
-                    .Any(category => categoryIds.Contains(category.Category.Id)))
+                .Any(category => categoryIds.Contains(category.Category.Id)))
                 .Distinct()
                 .AsEnumerable();
-            
+
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public UserDTO GetUserByRefreshToken(string token)   
+        public UserDTO GetUserByRefreshToken(string token)
         {
             var user = Db.UserRepository.Get("Role,RefreshTokens").AsNoTracking()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
-                 
-               
+
+
 
             return _mapper.Map<UserDTO>(user);
         }

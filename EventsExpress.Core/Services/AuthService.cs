@@ -3,18 +3,9 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
-using Google.Apis.Auth;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Http;
-using System.Net;
 
 namespace EventsExpress.Core.Services
 {
@@ -44,13 +35,12 @@ namespace EventsExpress.Core.Services
 
             if (user.IsBlocked)
             {
-                return (new OperationResult(false, $"{email}, your account was blocked.", "email"),null);
+                return (new OperationResult(false, $"{email}, your account was blocked.", "email"), null);
             }
 
             var jwtToken = _tokenService.GenerateAccessToken(user);
-            string ipAddress = _tokenService.IpAddress();
-            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
-             // save refresh token
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
             return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
@@ -81,8 +71,7 @@ namespace EventsExpress.Core.Services
             }
             // authentication successful so generate jwt and refresh tokens
             var jwtToken = _tokenService.GenerateAccessToken(user);
-            string ipAddress = _tokenService.IpAddress();
-            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
@@ -98,8 +87,7 @@ namespace EventsExpress.Core.Services
                 return (new OperationResult(false, $"User with email: {userDto.Email} not found", "email"), null);
             }
             var jwtToken = _tokenService.GenerateAccessToken(userDto);
-            string ipAddress = _tokenService.IpAddress();
-            var refreshToken = _tokenService.GenerateRefreshToken(ipAddress);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             // save refresh token
             userDto.RefreshTokens = new List<RefreshToken> { refreshToken };
@@ -125,9 +113,9 @@ namespace EventsExpress.Core.Services
         {
             Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
             if (emailClaim is null) return null;
-            return 
+            return
                 string.IsNullOrEmpty(emailClaim.Value)
-                ? null 
+                ? null
                 : _userService.GetByEmail(emailClaim.Value);
         }
 

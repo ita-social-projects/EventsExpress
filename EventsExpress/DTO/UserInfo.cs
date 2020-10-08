@@ -19,7 +19,6 @@ namespace EventsExpress.DTO
         public string Token { get; set; }
         public bool AfterEmailConfirmation { get; set; } = false;
         public IEnumerable<CategoryDto> Categories { get; set; }
-        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
         public double Rating { get; set; }
         public bool CanChangePassword { get; set; }
     }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Controllers;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
