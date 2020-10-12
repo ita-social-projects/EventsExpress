@@ -17,8 +17,7 @@ namespace EventsExpress.Db.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     Token = table.Column<string>(nullable: true),
                     Expires = table.Column<DateTime>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),

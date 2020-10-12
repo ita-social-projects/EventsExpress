@@ -234,10 +234,8 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("Expires");
