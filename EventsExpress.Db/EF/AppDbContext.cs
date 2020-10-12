@@ -8,17 +8,20 @@ namespace EventsExpress.Db.EF
 {
     public class AppDbContext : DbContext
     {
-
         public DbSet<Role> Roles { get; set; }
+
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<User> Users { get; set; }
 
         public DbSet<Rate> Rates { get; set; }
+
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
         public DbSet<Report> Reports { get; set; }
+
         public DbSet<Comments> Comments { get; set; }
 
         public DbSet<Category> Categories { get; set; }
@@ -26,24 +29,22 @@ namespace EventsExpress.Db.EF
         public DbSet<Photo> Photos { get; set; }
 
         public DbSet<City> Cities { get; set; }
+
         public DbSet<Country> Countries { get; set; }
 
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) 
+            : base(options)
         {
             Database.Migrate();
         }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-
             // user config
             builder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
-
 
             // user-event many-to-many configs
             // user as visitor
@@ -65,7 +66,6 @@ namespace EventsExpress.Db.EF
                 .WithMany(u => u.Events)
                 .HasForeignKey(e => e.OwnerId).OnDelete(DeleteBehavior.Restrict);
 
-
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");
             builder.Entity<Event>()
@@ -80,7 +80,6 @@ namespace EventsExpress.Db.EF
                 .HasOne(r => r.Event)
                 .WithMany(e => e.Rates)
                 .HasForeignKey(r => r.EventId).OnDelete(DeleteBehavior.Restrict);
-
 
             builder.Entity<Relationship>()
                 .HasOne(r => r.UserFrom)
@@ -99,7 +98,6 @@ namespace EventsExpress.Db.EF
                 .WithMany(c => c.Users)
                 .HasForeignKey(uc => uc.CategoryId);
 
-
             // event-category many-to-many
             builder.Entity<EventCategory>()
                 .HasKey(t => new { t.EventId, t.CategoryId });
@@ -112,11 +110,17 @@ namespace EventsExpress.Db.EF
                 .WithMany(c => c.Events)
                 .HasForeignKey(uc => uc.CategoryId);
 
+            // EventStatusHistory config
+            builder.Entity<EventStatusHistory>()
+                .HasOne(esh => esh.User)
+                .WithMany(u => u.ChangedStatusEvents);
+            builder.Entity<EventStatusHistory>()
+                .HasOne(esh => esh.Event)
+                .WithMany(e => e.StatusHistory);
 
             // category config
             builder.Entity<Category>()
                 .Property(c => c.Name).IsRequired();
-
 
             // country config
             builder.Entity<Country>()
@@ -124,12 +128,9 @@ namespace EventsExpress.Db.EF
             builder.Entity<Country>()
                 .HasIndex(c => c.Name).IsUnique();
 
-
             // city config
             builder.Entity<City>()
                 .Property(c => c.Name).IsRequired();
-
         }
     }
 }
-

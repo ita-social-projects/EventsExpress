@@ -13,10 +13,10 @@ namespace EventsExpress.Db.Entities
 
         public virtual Event Event { get; set; }
 
-        public EventStatus EventStatus { get; set; }
+        public EventStatus EventStatus { get; set; } = EventStatus.Active;
 
         public string Reason { get; set; }
 
-        public DateTime ChangedStatusOn { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     }
 }

@@ -131,6 +131,15 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
+        public async Task<OperationResult> CancelEvent(Guid eventId, string reason)
+        {
+            var uEvent = Db.EventRepository.Get(eventId);
+            if (uEvent == null)
+            {
+                return new OperationResult(false, "Invalid event id", "eventId");
+            }
+        }
+
         public async Task<OperationResult> Create(EventDTO eventDTO)
         {
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today    : eventDTO.DateFrom;
@@ -275,8 +284,8 @@ namespace EventsExpress.Core.Services
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
 
-            paginationViewModel.Count = ev.Count();
-            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
+           paginationViewModel.Count = ev.Count();
+           return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
         public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -313,9 +322,9 @@ namespace EventsExpress.Core.Services
             {
                 var ev = Db.EventRepository.Get("Rates").FirstOrDefault(e => e.Id == eventId);
                 ev.Rates = ev.Rates ?? new List<Rate>();
-                
+
                 var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
-                
+
                 if (currentRate == null)
                 {
                     ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
@@ -324,6 +333,7 @@ namespace EventsExpress.Core.Services
                 {
                     currentRate.Score = rate;
                 }
+
                 await Db.SaveAsync();
                 return new OperationResult(true);
             }
@@ -351,7 +361,4 @@ namespace EventsExpress.Core.Services
 
         public bool Exists(Guid id) => (Db.EventRepository.Get(id) != null);
     }
-
-    
 }
-
