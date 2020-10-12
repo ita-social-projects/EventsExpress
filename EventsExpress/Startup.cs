@@ -128,7 +128,6 @@ namespace EventsExpress
             
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
-            services.Configure<ConfigDbOptionsModel>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

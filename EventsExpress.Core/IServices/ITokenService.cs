@@ -14,7 +14,6 @@ namespace EventsExpress.Core.IServices
         Task<AuthenticateResponseModel> RefreshToken(string token);
         Task<bool> RevokeToken(string token);
         void SetTokenCookie(string token);
-        //string IpAddress();
-
+        
     }
 }

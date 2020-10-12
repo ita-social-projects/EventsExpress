@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -16,16 +17,21 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly ICacheHelper _cacheHepler;
-      
+        private readonly ILogger<RegisterVerificationHandler> _logger;
+
+
+
         public RegisterVerificationHandler
             (
             IEmailService sender,
-            ICacheHelper cacheHepler
+            ICacheHelper cacheHepler,
+            ILogger<RegisterVerificationHandler> logger
            
             )
         {
             _sender = sender;
             _cacheHepler = cacheHepler;
+            _logger = logger;
             
 
         }
@@ -53,9 +59,9 @@ namespace EventsExpress.Core.NotificationHandlers
                 var x = _cacheHepler.GetValue(notification.User.Id);
 
             }
-            catch
+            catch(Exception ex)
             {
-               
+                _logger.LogError(ex.Message);
             }
         }
     }
