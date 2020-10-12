@@ -41,6 +41,23 @@ export function loginFacebook(email, name) {
   }
 }
 
+export function loginTwitter(data) {
+  return dispatch => {
+    dispatch(setLoginPending(true));
+
+    const res = api_serv.setTwitterLogin({
+      TokenId: data.oauth_token,
+      TokenSecret: data.oauth_token_secret,
+      UserId: data.user_id,
+      Email: data.email,
+      Name: typeof data.name !== 'undefined' ? data.name : data.screen_name,
+      PhotoUrl: data.image_url,
+    });
+
+    loginResponseHandler(res, dispatch);
+  }
+}
+
 export function setUser(data) {
   return {
     type: SET_USER,
@@ -82,4 +99,4 @@ const loginResponseHandler = (res, dispatch) => {
       dispatch(setLoginError(response.error));
     }
   });
-}
+};

@@ -2,8 +2,8 @@
 import { connect } from 'react-redux'
 import _authenticate from '../../actions/authentication';
 import history from '../../history';
- class Authentication extends Component {
 
+class Authentication extends Component {
     componentWillMount = () => {
         const { id, token } = this.props.match.params;
         this.props.auth({ userId: id, token: token })
@@ -13,10 +13,10 @@ import history from '../../history';
         return (
             <div className="mt-5 b-inline-block">
                 <div className='h3 text-center alert alert-success'>
-                    Our congratulation, Your registration was successful! 
+                    Our congratulation, Your registration was successful!
                 </div>
             </div>
-            )
+        )
     }
 }
 
@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => {
         auth: (data) => dispatch(_authenticate(data))
     };
 };
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps

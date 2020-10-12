@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { loginGoogle } from '../actions/login';
 import config from '../config';
 import { withRouter } from 'react-router-dom';
+import './css/Auth.css';
 
 class LoginGoogle extends Component {
     render() {
@@ -23,7 +24,8 @@ class LoginGoogle extends Component {
             <div>
                 <GoogleLogin
                     clientId={config.GOOGLE_CLIENT_ID}
-                    buttonText="Google"
+                    className="btnGoogle"
+                    buttonText="Log in"
                     onSuccess={responseGoogle}
                     version="3.2"
                 />

@@ -1,7 +1,6 @@
-
-
 import { reset_hub } from './chat';
 import { resetNotification } from './chats';
+
 export const SET_LOGOUT = "SET_LOGOUT";
 
 export default  function logout() {
@@ -14,6 +13,7 @@ export default  function logout() {
        
     }
   }
+}
 
   function setLogout() {
     return {
@@ -25,4 +25,5 @@ export default  function logout() {
      fetch('api/token/revoke-token', {
         method: "POST"
     });
+}
 }

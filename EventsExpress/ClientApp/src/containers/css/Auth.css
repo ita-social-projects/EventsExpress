@@ -1,24 +1,27 @@
 ﻿.btnFacebook {
-    width: 150px;
-    height: 40px;
-    border-radius: 4px;
+    max-width: 118px;
+    height: 48px;
+    border: 0px transparent;
+    border-radius: 50px;
     background: #3b5998;
     color: white;
-    border: 0px transparent;
     text-align: center;
-    margin: 5px;
+    margin: 0px 5px;
+    padding: 0px 18px;
     display: inline-block;
 }
 
 .btnGoogle {
-    margin: 5px;
-    width: 165px;
-    height: 40px;
-    border-radius: 4px;
+    max-width: 118px;
+    height: 48px;
+    border: 0px transparent;
+    border-radius: 50px;
     background: #db3236;
     color: white;
-    border: 0px transparent;
     text-align: center;
+    margin: 0px 5px;
+    padding: 0px 18px;
+    display: inline-block;
 }
 
 .btnFacebook:hover {
@@ -31,8 +34,9 @@
     opacity: 0.6;
 }
 
-@media only screen and (max-width : 399px) {
-    .btnFacebook, .btnGoogle {
-        width: 100%
+@media only screen and (max-width: 399px) {
+    .btnFacebook,
+    .btnGoogle {
+        width: 100%;
     }
 }

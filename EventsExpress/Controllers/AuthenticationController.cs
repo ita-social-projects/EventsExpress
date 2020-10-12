@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
+
 using Google.Apis.Auth;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -71,17 +76,18 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
         /// <summary>
-        /// This method is to login with facebook account
+        /// This method is to login with facebook account.
         /// </summary>
-        /// <param name="userView"></param>
-        /// <returns></returns>
-        /// /// <response code="200">Return UserInfo model</response>
-        /// <response code="400">If login process failed</response>
+        /// <param name="userView">Requireed.</param>
+        /// <returns>UserInfo model.</returns>
+        /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
-        [HttpPost("FacebookLogin")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> FacebookLogin(UserView userView)
         {
-            var userExisting = _userService.GetByEmail(userView.Email);
+            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+
             if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
             {
                 var user = _mapper.Map<UserDTO>(userView);
@@ -101,10 +107,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with google account
         /// </summary>
-        /// <param name="userView"></param>
-        /// <returns></returns>
-        /// /// <response code="200">Return UserInfo model</response>
-        /// <response code="400">If login process failed</response>
+        /// <param name="userView">Requireed.</param>
+        /// <returns>UserInfo model.</returns>
+        /// /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> GoogleLogin([FromBody] UserView userView)
@@ -112,6 +118,7 @@ namespace EventsExpress.Controllers
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.tokenId, new GoogleJsonWebSignature.ValidationSettings());
             var userExisting = _userService.GetByEmail(payload.Email);
+
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
                 var user = _mapper.Map<UserView, UserDTO>(userView);
@@ -125,10 +132,43 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(opResult.Message);
             }
+
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            return Ok(userInfo);
+        }
+
+        /// <summary>
+        /// This method is to login with twitter account.
+        /// </summary>
+        /// <param name="userView">Required.</param>
+        /// <response code="200">Return UserInfo model.</response>
+        /// <response code="400">If login process failed.</response>
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> TwitterLogin([FromBody] UserView userView)
+        {
+            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+
+            if (!(userExisting is null) && !string.IsNullOrEmpty(userView.Email))
+            {
+                UserDTO user = _mapper.Map<UserDTO>(userView);
+                user.EmailConfirmed = true;
+                await _userService.Create(user);
+            }
+
+            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
+
+            if (!auth.Successed)
+            {
+                return BadRequest(auth.Message);
+            }
+
+            UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
+            userInfo.Token = auth.Message;
+            userInfo.PhotoUrl = userView.PhotoUrl;
             return Ok(userInfo);
         }
         /// <summary>
@@ -185,16 +225,21 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest();
             }
+
             var user = _userService.GetByEmail(email);
+
             if (user == null)
             {
                 return BadRequest("User with this email is not found");
             }
             var result = await _userService.PasswordRecover(user);
-            return
-                 !result.Successed
-                 ? (IActionResult)BadRequest(result.Message)
-                 : Ok();
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok();
         }
         /// <summary>
         /// This method is for email confirmation
@@ -240,12 +285,16 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var user = _authService.GetCurrentUser(HttpContext.User);
             var result = await _authService.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
-            return
-                 !result.Successed
-                 ? (IActionResult)BadRequest(result.Message)
-                 : Ok();
+
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok();
         }
     }
 }

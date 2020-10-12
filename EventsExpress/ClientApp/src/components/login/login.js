@@ -5,14 +5,13 @@ import Button from "@material-ui/core/Button";
 import Module from '../helpers';
 import { Link } from 'react-router-dom';
 import Modalwind2 from '../recoverPassword/modalwind2';
+import GoogleLogin from '../../containers/GoogleLogin';
+import LoginFacebook from '../../containers/FacebookLogin';
+import TwitterLogin from '../../containers/TwitterLogin';
 
 const { validate, renderTextField, asyncValidate } = Module;
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   openModal = () => (<Modalwind2 />)
 
   render() {
@@ -36,7 +35,6 @@ class Login extends Component {
               type="password"
             />
           </div>
-
           <div>
             <DialogActions>
               <Button fullWidth={true} type="button" color="primary" disabled={pristine || submitting} onClick={reset}>
@@ -48,6 +46,11 @@ class Login extends Component {
             </DialogActions>
           </div>
         </form>
+        <div className="d-flex justify-content-around mb-3">
+          <TwitterLogin />
+          <LoginFacebook />
+          <GoogleLogin />
+        </div>
         <div className="text-center">
           {loginError &&
             <p className="text-danger text-center">{loginError}</p>

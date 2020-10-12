@@ -25,9 +25,10 @@ namespace EventsExpress.Core.Services
             _tokenService = tokenService;
         }
 
-        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> AuthenticateGoogleFacebookUser(string email)
+        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> AuthenticateUserFromExternalProvider(string email)
         {
-            var user = _userService.GetByEmail(email);
+            UserDTO user = _userService.GetByEmail(email);
+
             if (user == null)
             {
                 return (new OperationResult(false, $"User with email: {email} not found", "email"), null);
@@ -43,7 +44,7 @@ namespace EventsExpress.Core.Services
             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
-            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
         public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> Authenticate(string email, string password)
