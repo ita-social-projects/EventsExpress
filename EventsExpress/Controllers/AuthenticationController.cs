@@ -94,13 +94,14 @@ namespace EventsExpress.Controllers
                 user.EmailConfirmed = true;
                 await _userService.Create(user);
             }
-            var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(userView.Email);
+            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
             if (!opResult.Successed)
             {
                 return BadRequest(opResult.Message);
             }
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
+            userInfo.PhotoUrl = userView.PhotoUrl;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
@@ -127,7 +128,7 @@ namespace EventsExpress.Controllers
                 user.Name = payload.Name;
                 await _userService.Create(user);
             }
-            var (opResult, authResponseModel) = await _authService.AuthenticateGoogleFacebookUser(payload.Email);
+            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
             if (!opResult.Successed)
             {
                 return BadRequest(opResult.Message);
@@ -159,16 +160,17 @@ namespace EventsExpress.Controllers
                 await _userService.Create(user);
             }
 
-            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
+            var(opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
 
-            if (!auth.Successed)
+            if (!opResult.Successed)
             {
-                return BadRequest(auth.Message);
+                return BadRequest(opResult.Message);
             }
 
             UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = auth.Message;
+            userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
         /// <summary>

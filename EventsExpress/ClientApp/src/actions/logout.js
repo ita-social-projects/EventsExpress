@@ -3,27 +3,26 @@ import { resetNotification } from './chats';
 
 export const SET_LOGOUT = "SET_LOGOUT";
 
-export default  function logout() {
-       revokeToken();
-       localStorage.clear();
-       return  dispatch => { 
-      dispatch(reset_hub());
-      dispatch(setLogout());
+export default function logout() {
+    revokeToken();
+    localStorage.clear();
+    return dispatch => {
+        dispatch(reset_hub());
+        dispatch(setLogout());
         dispatch(resetNotification());
-       
     }
-  }
 }
 
-  function setLogout() {
+
+function setLogout() {
     return {
-      type: SET_LOGOUT
+        type: SET_LOGOUT
     };
 }
 
- function revokeToken() {
-     fetch('api/token/revoke-token', {
+function revokeToken() {
+    fetch('api/token/revoke-token', {
         method: "POST"
     });
 }
-}
+

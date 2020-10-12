@@ -33,10 +33,14 @@ export function loginGoogle(tokenId, email, name, imageUrl) {
   }
 }
 
-export function loginFacebook(email, name) {
+export function loginFacebook(email, name, picture) {
   return dispatch => {
-    dispatch(setLoginPending(true));
-    const res = api_serv.setFacebookLogin({ Email: email, Name: name });
+      dispatch(setLoginPending(true));
+      const res = api_serv.setFacebookLogin({
+          Email: email,
+          Name: name,
+          PhotoUrl: picture
+      });
     loginResponseHandler(res, dispatch);
   }
 }

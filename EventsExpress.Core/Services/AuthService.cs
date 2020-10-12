@@ -78,7 +78,7 @@ namespace EventsExpress.Core.Services
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
 
-            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
         public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> FirstAuthenticate(UserDTO userDto)
@@ -95,7 +95,7 @@ namespace EventsExpress.Core.Services
 
             await _userService.Update(userDto);
 
-            return (new OperationResult(true, "", ""), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
 
