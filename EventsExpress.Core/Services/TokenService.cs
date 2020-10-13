@@ -4,15 +4,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
-using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using AutoMapper;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EventsExpress.Core.Services
 {
@@ -24,8 +24,8 @@ namespace EventsExpress.Core.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-
-        public TokenService(IOptions<JwtOptionsModel> opt,
+        public TokenService(
+            IOptions<JwtOptionsModel> opt,
             IJwtSigningEncodingKey jwtSigningEncodingKey,
             IUserService userService,
             IHttpContextAccessor httpContextAccessor,
@@ -37,6 +37,22 @@ namespace EventsExpress.Core.Services
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
+
+        private string IpAddress
+        {
+            get
+            {
+                if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+                {
+                    return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
+                }
+                else
+                {
+                    return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                }
+            }
+        }
+
         public string GenerateAccessToken(UserDTO user)
         {
             var lifeTime = _jwtOptions.Value.LifeTime;
@@ -55,6 +71,7 @@ namespace EventsExpress.Core.Services
             );
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
+
         public RefreshToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
@@ -66,10 +83,11 @@ namespace EventsExpress.Core.Services
                     Token = Convert.ToBase64String(randomNumber),
                     Expires = DateTime.Now.AddDays(7),
                     Created = DateTime.Now,
-                    CreatedByIp = IpAddress
+                    CreatedByIp = IpAddress,
                 };
             }
         }
+
         public ClaimsPrincipal GetPrincipalFromJwt(string token)
         {
             var signingKey = new SigningSymmetricKey(_jwtOptions.Value.SecretKey);
@@ -82,23 +100,35 @@ namespace EventsExpress.Core.Services
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingDecodingKey.GetKey(),
-                ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+                ValidateLifetime = false,
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
                 throw new SecurityTokenException("Invalid token");
+            }
+
             return principal;
         }
+
         public async Task<AuthenticateResponseModel> RefreshToken(string token)
         {
             var user = _userService.GetUserByRefreshToken(token);
+
             // return null if no user found with token
-            if (user == null) return null;
+            if (user == null)
+            {
+                return null;
+            }
+
             var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
 
             // return null if token is no longer active
-            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive) return null;
+            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive)
+            {
+                return null;
+            }
 
             // replace old refresh token with a new one and save
             var newRefreshToken = GenerateRefreshToken();
@@ -117,12 +147,18 @@ namespace EventsExpress.Core.Services
         public async Task<bool> RevokeToken(string token)
         {
             var user = _userService.GetUserByRefreshToken(token);
-            if (user == null) return false;
+            if (user == null)
+            {
+                return false;
+            }
 
             var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == token);
 
             // return false if token is not active
-            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive || refreshToken == null) return false; ;
+            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive || refreshToken == null)
+            {
+                return false;
+            }
 
             // revoke token and save
             refreshToken.Revoked = DateTime.Now;
@@ -132,27 +168,16 @@ namespace EventsExpress.Core.Services
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
             return true;
         }
+
         public void SetTokenCookie(string token)
         {
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.Now.AddDays(7)
+                Expires = DateTime.Now.AddDays(7),
             };
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
             _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);
-
-        }
-
-        private string IpAddress
-        {
-            get
-            {
-                if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
-                    return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
-                else
-                    return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-            }
         }
     }
 }

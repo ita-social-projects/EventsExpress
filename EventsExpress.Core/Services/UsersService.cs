@@ -181,6 +181,7 @@ namespace EventsExpress.Core.Services
                 user.CanChangePassword = !string.IsNullOrEmpty(user.PasswordHash);
                 user.Rating = GetRating(user.Id);
             }
+
             return user;
         }
 
@@ -386,16 +387,15 @@ namespace EventsExpress.Core.Services
                     return new OperationResult(false, "Set failing", "");
                 }
             }
+
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
             await Db.SaveAsync();
             return new OperationResult(true);
         }
 
-
         public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
             _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get()
                 .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
-
 
         public ProfileDTO GetProfileById(Guid id, Guid fromId)
         {
