@@ -13,9 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Controllers
-{
+{    /// <summary>
+     /// AuthenticationController using for Authenticate users.
+     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -23,16 +26,25 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-
+        private readonly ITokenService _tokenService;
+        /// <summary>
+        /// ctor of AuthenticationController
+        /// </summary>
+        /// <param name="userSrv"></param>
+        /// <param name="mapper"></param>
+        /// <param name="authSrv"></param>
+        /// <param name="tokenService"></param>
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
-            IAuthService authSrv
+            IAuthService authSrv,
+            ITokenService tokenService
             )
         {
             _userService = userSrv;
             _mapper = mapper;
             _authService = authSrv;
+            _tokenService = tokenService;
         }
 
 
@@ -46,26 +58,23 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpPost("[action]")]
         [Produces("application/json")]
-        public IActionResult Login(LoginDto authRequest)
+        public async Task<IActionResult> Login(LoginDto authRequest)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var result = _authService.Authenticate(authRequest.Email, authRequest.Password);
-
-            if (!result.Successed)
+            var (opResult, authResponseModel) = await _authService.Authenticate(authRequest.Email, authRequest.Password);
+            if (!opResult.Successed)
             {
-                return BadRequest(result.Message);
+                return BadRequest(opResult.Message);
             }
-
             var user = _userService.GetByEmail(authRequest.Email);
             var userInfo = _mapper.Map<UserInfo>(user);
-            userInfo.Token = result.Message;
+            userInfo.Token = authResponseModel.JwtToken;
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
-
         /// <summary>
         /// This method is to login with facebook account.
         /// </summary>
@@ -85,19 +94,17 @@ namespace EventsExpress.Controllers
                 user.EmailConfirmed = true;
                 await _userService.Create(user);
             }
-
-            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
-
-            if (!auth.Successed)
+            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
+            if (!opResult.Successed)
             {
-                return BadRequest(auth.Message);
+                return BadRequest(opResult.Message);
             }
-
-            UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = auth.Message;
+            var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
+            userInfo.Token = authResponseModel.JwtToken;
+            userInfo.PhotoUrl = userView.PhotoUrl;
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
-
         /// <summary>
         /// This method is to login with google account
         /// </summary>
@@ -121,17 +128,16 @@ namespace EventsExpress.Controllers
                 user.Name = payload.Name;
                 await _userService.Create(user);
             }
-
-            var result = _authService.AuthenticateUserFromExternalProvider(payload.Email);
-
-            if (!result.Successed)
+            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
+            if (!opResult.Successed)
             {
-                return BadRequest(result.Message);
+                return BadRequest(opResult.Message);
             }
 
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
-            userInfo.Token = result.Message;
+            userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
 
@@ -154,19 +160,19 @@ namespace EventsExpress.Controllers
                 await _userService.Create(user);
             }
 
-            OperationResult auth = _authService.AuthenticateUserFromExternalProvider(userView.Email);
+            var(opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
 
-            if (!auth.Successed)
+            if (!opResult.Successed)
             {
-                return BadRequest(auth.Message);
+                return BadRequest(opResult.Message);
             }
 
             UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = auth.Message;
+            userInfo.Token = authResponseModel.JwtToken;
             userInfo.PhotoUrl = userView.PhotoUrl;
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
-
         /// <summary>
         /// This method to refresh user status using only jwt access token
         /// </summary>
@@ -178,11 +184,11 @@ namespace EventsExpress.Controllers
         public IActionResult Login()
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
-            var userInfo = _mapper.Map<UserInfo>(user);
-
-            return Ok(userInfo);
+            return
+            user == null
+               ? (IActionResult)Unauthorized()
+               : Ok(_mapper.Map<UserInfo>(user));
         }
-
         /// <summary>
         /// This method allows register user
         /// </summary>
@@ -198,19 +204,14 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             var user = _mapper.Map<LoginDto, UserDTO>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
             var result = await _userService.Create(user);
-
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok();
+            return
+                !result.Successed
+                ? (IActionResult)BadRequest(result.Message)
+                : Ok();
         }
-
         /// <summary>
         /// This method is for password recovery
         /// </summary>
@@ -233,7 +234,6 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest("User with this email is not found");
             }
-
             var result = await _userService.PasswordRecover(user);
 
             if (!result.Successed)
@@ -243,7 +243,6 @@ namespace EventsExpress.Controllers
 
             return Ok();
         }
-
         /// <summary>
         /// This method is for email confirmation
         /// </summary>
@@ -257,27 +256,23 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> EmailConfirm(string userid, string token)
         {
             var cache = new CacheDTO { Token = token };
-
             if (!Guid.TryParse(userid, out cache.UserId))
             {
                 return BadRequest();
             }
-
             var result = await _userService.ConfirmEmail(cache);
-
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
-
             var user = _userService.GetById(cache.UserId);
-
             var userInfo = _mapper.Map<UserDTO, UserInfo>(user);
-            userInfo.Token = _authService.FirstAuthenticate(user).Message;
+            var (_, authResponseModel) = await _authService.FirstAuthenticate(user);
+            userInfo.Token = authResponseModel.JwtToken;
+            await _userService.Update(user);
             userInfo.AfterEmailConfirmation = true;
             return Ok(userInfo);
         }
-
         /// <summary>
         /// This method is for change password
         /// </summary>
@@ -303,6 +298,5 @@ namespace EventsExpress.Controllers
 
             return Ok();
         }
-
     }
 }

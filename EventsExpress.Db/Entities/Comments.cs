@@ -15,10 +15,10 @@ namespace EventsExpress.Db.Entities
         public virtual Event Event { get; set; }
 
         public Guid? CommentsId { get; set; }
-        public Guid? ParentId { get; set; }
-
+       
         public virtual IEnumerable<Comments> Children { get; set; }
 
         public DateTime Date { get; set; }
+        public Comments Parent { get; set; }
     }
 }

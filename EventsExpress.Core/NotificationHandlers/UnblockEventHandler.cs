@@ -40,12 +40,8 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var Email = _userService.GetById(notification.UserId).Email;
                 var Even = _eventService.EventById(notification.Id);
-                var MyUrl = MyHttpContext.AppBaseUrl;
-
-                string link = $"{MyUrl}/event/{notification.Id}/1";
-
-                
-                
+                string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
+                              
                 await _sender.SendEmailAsync(new EmailDTO
                 {
                     Subject = "Your event was Unblocked",

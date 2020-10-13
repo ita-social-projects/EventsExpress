@@ -3,92 +3,99 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
-using Google.Apis.Auth;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-
 
 namespace EventsExpress.Core.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IUserService _userService;
-        private readonly IJwtSigningEncodingKey _signingEncodingKey;
-        private readonly IConfiguration _configuration;
+        private readonly ITokenService _tokenService;
+
 
         public AuthService(
-            IUserService userSrv, 
-            IJwtSigningEncodingKey signingEncodingKey,
-            IConfiguration config
+            IUserService userSrv,
+            ITokenService tokenService
+
             )
         {
             _userService = userSrv;
-            _signingEncodingKey = signingEncodingKey;
-            _configuration = config;
+            _tokenService = tokenService;
         }
 
-        public OperationResult AuthenticateUserFromExternalProvider(string email)
+        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> AuthenticateUserFromExternalProvider(string email)
         {
             UserDTO user = _userService.GetByEmail(email);
 
             if (user == null)
             {
-                return new OperationResult(false, $"User with email: {email} not found", "email");
+                return (new OperationResult(false, $"User with email: {email} not found", "email"), null);
             }
 
             if (user.IsBlocked)
             {
-                return new OperationResult(false, $"{email}, your account was blocked.", "email");
+                return (new OperationResult(false, $"{email}, your account was blocked.", "email"), null);
             }
 
-            string token = GenerateJwt(user);
-            return new OperationResult(true, token, "");
+            var jwtToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            // save refresh token
+            user.RefreshTokens = new List<RefreshToken> { refreshToken };
+            await _userService.Update(user);
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
-        public OperationResult Authenticate(string email, string password)
+        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> Authenticate(string email, string password)
         {
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                return new OperationResult(false, "User not found", "email");
+
+                return (new OperationResult(false, "User not found", "email"), null);
             }
 
             if (user.IsBlocked)
             {
-                return new OperationResult(false, $"{email}, your account was blocked.", "email");
+                return (new OperationResult(false, $"{email}, your account was blocked.", "email"), null);
             }
 
             if (!user.EmailConfirmed)
             {
-                return new OperationResult(false, $"{email} is not confirmed, please confirm", "");
+                return (new OperationResult(false, $"{email} is not confirmed, please confirm", ""), null);
             }
 
             if (!VerifyPassword(user, password))
             {
-                return new OperationResult(false, "Invalid password", "Password");
+                return (new OperationResult(false, "Invalid password", "Password"), null);
             }
+            // authentication successful so generate jwt and refresh tokens
+            var jwtToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            var token = GenerateJwt(user);
+            // save refresh token
+            user.RefreshTokens = new List<RefreshToken> { refreshToken };
+            await _userService.Update(user);
 
-            return new OperationResult(true, token, "");
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
-
-        public OperationResult FirstAuthenticate(UserDTO userDto)
+        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> FirstAuthenticate(UserDTO userDto)
         {
             if (userDto == null)
             {
-                return new OperationResult(false, $"User with email: {userDto.Email} not found", "email");
+                return (new OperationResult(false, $"User with email: {userDto.Email} not found", "email"), null);
             }
-            var token = GenerateJwt(userDto);
+            var jwtToken = _tokenService.GenerateAccessToken(userDto);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            return new OperationResult(true, token, "");
+            // save refresh token
+            userDto.RefreshTokens = new List<RefreshToken> { refreshToken };
+
+            await _userService.Update(userDto);
+
+            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
 
@@ -103,42 +110,20 @@ namespace EventsExpress.Core.Services
             return new OperationResult(false, "Invalid password", "");
         }
 
-
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
-            string email = userClaims.FindFirst(ClaimTypes.Email).Value;
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-            return _userService.GetByEmail(email);
+            Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
+            if (emailClaim is null) return null;
+            return
+                string.IsNullOrEmpty(emailClaim.Value)
+                ? null
+                : _userService.GetByEmail(emailClaim.Value);
         }
 
-
-        private static bool VerifyPassword(UserDTO user, string actualPassword) => 
+        private static bool VerifyPassword(UserDTO user, string actualPassword) =>
             (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
 
-
-        private string GenerateJwt(UserDTO user)
-        {
-            var lifeTime = _configuration.GetValue<int>("JWTOptions:LifeTime");
-
-            var claims = new []
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.Name),
-                new Claim(ClaimTypes.Name, user.Id.ToString()),     
-            };
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(lifeTime),
-                signingCredentials: new SigningCredentials(
-                        _signingEncodingKey.GetKey(),
-                        _signingEncodingKey.SigningAlgorithm)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
     }
+
+
 }

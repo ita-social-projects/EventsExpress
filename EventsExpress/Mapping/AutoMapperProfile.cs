@@ -20,7 +20,8 @@ namespace EventsExpress.Mapping
             #region USER MAPPING
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
-                .ForMember(dest => dest.Events, opts => opts.Ignore());
+                .ForMember(dest => dest.Events, opts => opts.Ignore())
+                .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
 
             CreateMap<UserDTO, User>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -34,6 +35,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
+                .ForMember(dest => dest.Phone, opts => opts.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens))
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<UserDTO, UserInfo>()
@@ -41,10 +44,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryDto {Id = x.Category.Id, Name = x.Category.Name})))
+                        src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
                 .ForMember(dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
+              
 
             CreateMap<UserDTO, UserManageDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -205,8 +209,15 @@ namespace EventsExpress.Mapping
                 })));
 
             CreateMap<Message, MessageDto>().ReverseMap();
-                
+
             #endregion
+
+            #region REFRESHTOKEN MAPPING
+            CreateMap<RefreshToken, RefreshTokenDTO>();
+            CreateMap<RefreshTokenDTO, RefreshToken>();
+            #endregion
+
+
         }
     }
 }
