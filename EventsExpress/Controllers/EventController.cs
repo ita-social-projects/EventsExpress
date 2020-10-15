@@ -201,6 +201,26 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method is for event cancelation.
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        /// <response code="200">Cancelation succesful.</response>
+        /// <response code="400">Cancelation failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Cancel(Guid eventId, string reason)
+        {
+            var result = await _eventService.CancelEvent(eventId, reason);
+            if (!result.Successed)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
         /// This method id used to set rating to user
         /// </summary>
         /// <param name="model">Required (type: RateDto)</param>

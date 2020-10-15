@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.Services
 {
@@ -138,6 +139,13 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Invalid event id", "eventId");
             }
+
+            var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
+            Db.EventStatusHistoryRepository.Insert(record);
+
+            await Db.SaveAsync();
+
+            return new OperationResult(true);
         }
 
         public async Task<OperationResult> Create(EventDTO eventDTO)
@@ -353,6 +361,17 @@ namespace EventsExpress.Core.Services
         public double GetRate(Guid eventId)
         {
             return Db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+        }
+
+        private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
+        {
+            var record = new EventStatusHistory();
+            record.EventId = e.Id;
+            record.UserId = e.OwnerId;
+            record.EventStatus = status;
+            record.Reason = reason;
+
+            return record;
         }
 
         public bool UserIsVisitor(Guid userId, Guid eventId) => 
