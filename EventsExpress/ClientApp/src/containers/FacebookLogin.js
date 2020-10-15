@@ -11,7 +11,7 @@ class LoginFacebook extends Component {
             if (typeof response.email === 'undefined') {
                 this.props.login.loginError = " Please add email to your facebook account!"
             }
-            this.props.loginFacebook(response.email, response.name);
+            this.props.loginFacebook(response.email, response.name, response.picture.data.url);
         }
 
         return (
@@ -39,7 +39,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginFacebook: (email, name) => dispatch(loginFacebook(email, name))
+        loginFacebook: (email, name, picture) => dispatch(loginFacebook(email, name, picture))
     }
 };
 

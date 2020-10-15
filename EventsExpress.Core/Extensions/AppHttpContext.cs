@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EventsExpress.Core.Extensions
 {
-    class MyHttpContext
+    class AppHttpContext
     {
         private static IHttpContextAccessor m_httpContextAccessor;
         public static HttpContext Current => m_httpContextAccessor.HttpContext;
@@ -22,7 +22,7 @@ namespace EventsExpress.Core.Extensions
     {
          public static IApplicationBuilder UseHttpContext (this IApplicationBuilder app)
         {
-            MyHttpContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
+            AppHttpContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
             return app;
         }
     }

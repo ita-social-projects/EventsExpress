@@ -28,6 +28,7 @@ namespace EventsExpress.Core.IServices
 
         UserDTO GetById(Guid id);
         UserDTO GetByEmail(string email);
+        UserDTO GetUserByRefreshToken(string token);
 
         ProfileDTO GetProfileById(Guid id, Guid fromId);
 

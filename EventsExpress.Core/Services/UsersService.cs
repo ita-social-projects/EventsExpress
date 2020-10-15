@@ -25,8 +25,8 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
-        private ICacheHelper _cacheHelper;
-        private IEmailService _emailService;
+        private readonly ICacheHelper _cacheHelper;
+        private readonly IEmailService _emailService;
 
 
         public UserService(IUnitOfWork uow,
@@ -178,9 +178,10 @@ namespace EventsExpress.Core.Services
 
             if (user != null)
             {
-                user.CanChangePassword = string.IsNullOrEmpty(user.PasswordHash) ? false : true;
+                user.CanChangePassword = !string.IsNullOrEmpty(user.PasswordHash);
                 user.Rating = GetRating(user.Id);
             }
+
             return user;
         }
 
@@ -234,8 +235,10 @@ namespace EventsExpress.Core.Services
         public IEnumerable<UserDTO> GetUsersByRole(string role)
         {
             var users = Db.UserRepository.Get("Role")
-                .Where(user => user.Role.Name == role)
-                .AsEnumerable();
+               .Where(user => user.Role.Name == role)
+               .Include(user => user.RefreshTokens)
+               .AsNoTracking()
+               .AsEnumerable();
 
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
@@ -246,11 +249,21 @@ namespace EventsExpress.Core.Services
 
             var users = Db.UserRepository.Get("Photo,Role,Categories.Category")
                 .Where(user => user.Categories
-                    .Any(category => categoryIds.Contains(category.Category.Id)))
+                .Any(category => categoryIds.Contains(category.Category.Id)))
                 .Distinct()
                 .AsEnumerable();
 
             return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
+        public UserDTO GetUserByRefreshToken(string token)
+        {
+            var user = Db.UserRepository.Get("Role,RefreshTokens").AsNoTracking()
+                .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
+
+
+
+            return _mapper.Map<UserDTO>(user);
         }
 
 
@@ -267,7 +280,6 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
-
             user.Role = newRole;
             await Db.SaveAsync();
 
@@ -375,16 +387,15 @@ namespace EventsExpress.Core.Services
                     return new OperationResult(false, "Set failing", "");
                 }
             }
+
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
             await Db.SaveAsync();
             return new OperationResult(true);
         }
 
-
         public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
             _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get()
                 .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
-
 
         public ProfileDTO GetProfileById(Guid id, Guid fromId)
         {

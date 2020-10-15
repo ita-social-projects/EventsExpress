@@ -44,5 +44,6 @@ namespace EventsExpress.Db.Entities
         public virtual IEnumerable<UserChat> Chats { get; set; }
 
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
+        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
     }
 }
