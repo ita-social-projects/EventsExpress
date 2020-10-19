@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
 using FluentValidation;
@@ -26,7 +23,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.UserId)
                 .NotEqual(Guid.Empty)
                 .WithMessage("Invalid userId");
-            
+
             RuleFor(x => x)
                 .Must(x => _eventService.UserIsVisitor(x.UserId, x.EventId))
                 .WithMessage("User isn't visitor");

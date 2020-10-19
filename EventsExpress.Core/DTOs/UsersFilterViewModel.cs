@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventsExpress.Core.DTOs
+﻿namespace EventsExpress.Core.DTOs
 {
     public enum SortBy
     {
@@ -10,7 +6,6 @@ namespace EventsExpress.Core.DTOs
         DescDate,
         AscRate,
         DescRate,
-
     }
 
     public class UsersFilterViewModel

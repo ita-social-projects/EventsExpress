@@ -12,7 +12,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -24,7 +24,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -36,7 +36,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -48,7 +48,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    CountryId = table.Column<Guid>(nullable: false)
+                    CountryId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -79,7 +79,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     EventId = table.Column<Guid>(nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: false)
+                    CategoryId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -97,7 +97,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: false)
+                    CategoryId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -122,7 +122,7 @@ namespace EventsExpress.Db.Migrations
                     DateTo = table.Column<DateTime>(type: "date", nullable: false),
                     CityId = table.Column<Guid>(nullable: false),
                     PhotoId = table.Column<Guid>(nullable: true),
-                    OwnerId = table.Column<Guid>(nullable: false)
+                    OwnerId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -141,7 +141,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    EventId = table.Column<Guid>(nullable: false)
+                    EventId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -160,7 +160,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Path = table.Column<string>(nullable: true),
-                    ReportId = table.Column<Guid>(nullable: true)
+                    ReportId = table.Column<Guid>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -187,7 +187,7 @@ namespace EventsExpress.Db.Migrations
                     Gender = table.Column<int>(nullable: false),
                     IsBlocked = table.Column<bool>(nullable: false),
                     RoleId = table.Column<Guid>(nullable: true),
-                    PhotoId = table.Column<Guid>(nullable: true)
+                    PhotoId = table.Column<Guid>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -214,7 +214,7 @@ namespace EventsExpress.Db.Migrations
                     Text = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false)
+                    Date = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -241,7 +241,7 @@ namespace EventsExpress.Db.Migrations
                     UserFromId = table.Column<Guid>(nullable: false),
                     UserToId = table.Column<Guid>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false),
-                    Score = table.Column<int>(nullable: false)
+                    Score = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -273,7 +273,7 @@ namespace EventsExpress.Db.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     UserFromId = table.Column<Guid>(nullable: false),
                     UserToId = table.Column<Guid>(nullable: false),
-                    Attitude = table.Column<int>(nullable: false)
+                    Attitude = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -298,7 +298,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {

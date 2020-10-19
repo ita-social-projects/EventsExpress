@@ -11,7 +11,7 @@ namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190819123144_someChanges")]
-    partial class someChanges
+    partial class SomeChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

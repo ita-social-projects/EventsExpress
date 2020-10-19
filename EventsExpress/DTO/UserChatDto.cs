@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventsExpress.DTO
 {
@@ -16,6 +14,5 @@ namespace EventsExpress.DTO
         public DateTime LastMessageTime { get; set; }
 
         public IEnumerable<UserPreviewDto> Users { get; set; }
-                                                        
     }
 }

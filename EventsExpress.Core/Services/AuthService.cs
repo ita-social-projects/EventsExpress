@@ -1,11 +1,11 @@
-﻿using EventsExpress.Core.DTOs;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
@@ -14,12 +14,9 @@ namespace EventsExpress.Core.Services
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-
         public AuthService(
             IUserService userSrv,
-            ITokenService tokenService
-
-            )
+            ITokenService tokenService)
         {
             _userService = userSrv;
             _tokenService = tokenService;
@@ -41,6 +38,7 @@ namespace EventsExpress.Core.Services
 
             var jwtToken = _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
+
             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
@@ -52,7 +50,6 @@ namespace EventsExpress.Core.Services
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-
                 return (new OperationResult(false, "User not found", "email"), null);
             }
 
@@ -63,13 +60,14 @@ namespace EventsExpress.Core.Services
 
             if (!user.EmailConfirmed)
             {
-                return (new OperationResult(false, $"{email} is not confirmed, please confirm", ""), null);
+                return (new OperationResult(false, $"{email} is not confirmed, please confirm", string.Empty), null);
             }
 
             if (!VerifyPassword(user, password))
             {
                 return (new OperationResult(false, "Invalid password", "Password"), null);
             }
+
             // authentication successful so generate jwt and refresh tokens
             var jwtToken = _tokenService.GenerateAccessToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
@@ -87,6 +85,7 @@ namespace EventsExpress.Core.Services
             {
                 return (new OperationResult(false, $"User with email: {userDto.Email} not found", "email"), null);
             }
+
             var jwtToken = _tokenService.GenerateAccessToken(userDto);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
@@ -98,7 +97,6 @@ namespace EventsExpress.Core.Services
             return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
         }
 
-
         public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
@@ -107,13 +105,18 @@ namespace EventsExpress.Core.Services
 
                 return await _userService.Update(userDto);
             }
-            return new OperationResult(false, "Invalid password", "");
+
+            return new OperationResult(false, "Invalid password", string.Empty);
         }
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
             Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
-            if (emailClaim is null) return null;
+            if (emailClaim is null)
+            {
+                return null;
+            }
+
             return
                 string.IsNullOrEmpty(emailClaim.Value)
                 ? null
@@ -121,9 +124,6 @@ namespace EventsExpress.Core.Services
         }
 
         private static bool VerifyPassword(UserDTO user, string actualPassword) =>
-            (user.PasswordHash == PasswordHasher.GenerateHash(actualPassword));
-
+            user.PasswordHash == PasswordHasher.GenerateHash(actualPassword);
     }
-
-
 }

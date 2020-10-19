@@ -1,22 +1,21 @@
-﻿using EventsExpress.Core.Services;
+﻿using System;
+using System.IO;
+using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.IO;
-using EventsExpress.Core.Infrastructure;
-using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Test.ServiceTests
 {
     [TestFixture]
-    class PhotoServiceTests : TestInitializer
+    internal class PhotoServiceTests : TestInitializer
     {
-        private PhotoService _photoService;
-
+        public PhotoService PhotoService { get; set; }
 
         [SetUp]
         protected override void Initialize()
@@ -27,14 +26,10 @@ namespace EventsExpress.Test.ServiceTests
             mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
             mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
 
-            mockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
+            MockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
 
-            _photoService = new PhotoService(mockUnitOfWork.Object, mockOpt.Object);
+            PhotoService = new PhotoService(MockUnitOfWork.Object, mockOpt.Object);
         }
-
-
-        
-
 
         [Test]
         public void AddPhoto_ValidFormFile_DoesNotThrows()
@@ -44,13 +39,12 @@ namespace EventsExpress.Test.ServiceTests
                 var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(@"./Images/valid-image.jpg"))
                 {
                     Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(Path.GetFileName(@"./Images/valid-image.jpg"))
+                    ContentType = GetContentType(Path.GetFileName(@"./Images/valid-image.jpg")),
                 };
 
-                Assert.DoesNotThrowAsync(async () => await _photoService.AddPhoto(file));
+                Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhoto(file));
             }
         }
-
 
         [Test]
         [TestCase(@"./Images/invalidFile.txt")]
@@ -65,14 +59,11 @@ namespace EventsExpress.Test.ServiceTests
                 var file = new FormFile(stream, 0, stream.Length, null, fileName)
                 {
                     Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(fileName)
+                    ContentType = GetContentType(fileName),
                 };
-                Assert.ThrowsAsync<ArgumentException>(async () => await _photoService.AddPhoto(file));
+                Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhoto(file));
             }
         }
-
-
-
 
         private string GetContentType(string fileName)
         {
@@ -81,6 +72,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 contentType = "application/octet-stream";
             }
+
             return contentType;
         }
     }

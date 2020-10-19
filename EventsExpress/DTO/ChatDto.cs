@@ -1,13 +1,9 @@
-﻿using EventsExpress.Db.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace EventsExpress.DTO
 {
     public class ChatDto : UserChatDto
-    {                          
-        public IEnumerable<MessageDto> Messages { get; set; }       
+    {
+        public IEnumerable<MessageDto> Messages { get; set; }
     }
 }

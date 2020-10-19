@@ -1,31 +1,28 @@
-﻿using EventsExpress.Core.Extensions;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Imaging;
-
-
 
 namespace EventsExpress.Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        private readonly IUnitOfWork Db;
+        private readonly IUnitOfWork db;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
 
         public PhotoService(
             IUnitOfWork uow,
-            IOptions<ImageOptionsModel> opt
-            )
+            IOptions<ImageOptionsModel> opt)
         {
-            Db = uow;
+            db = uow;
             _widthOptions = opt;
         }
 
@@ -48,25 +45,23 @@ namespace EventsExpress.Core.Services
                 Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
             };
 
-            Db.PhotoRepository.Insert(photo);
-            await Db.SaveAsync();
+            db.PhotoRepository.Insert(photo);
+            await db.SaveAsync();
 
             return photo;
         }
 
-
         public async Task Delete(Guid id)
         {
-            var photo = Db.PhotoRepository.Get(id);
+            var photo = db.PhotoRepository.Get(id);
             if (photo != null)
             {
-                Db.PhotoRepository.Delete(photo);
-                await Db.SaveAsync();
+                db.PhotoRepository.Delete(photo);
+                await db.SaveAsync();
             }
         }
 
-
-        private static bool IsValidImage(IFormFile file) => (file != null && file.IsImage());
+        private static bool IsValidImage(IFormFile file) => file != null && file.IsImage();
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
@@ -76,7 +71,7 @@ namespace EventsExpress.Core.Services
                 var newSize = new Size
                 {
                     Width = newWidth,
-                    Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width)
+                    Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
                 };
 
                 var newBitmap = new Bitmap(oldBitMap, newSize);
@@ -84,7 +79,6 @@ namespace EventsExpress.Core.Services
                 return ImageToByteArray(newBitmap);
             }
         }
-
 
         private byte[] ImageToByteArray(Image imageIn)
         {
@@ -94,6 +88,5 @@ namespace EventsExpress.Core.Services
                 return ms.ToArray();
             }
         }
-
     }
 }

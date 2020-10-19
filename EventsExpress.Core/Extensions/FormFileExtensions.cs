@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Extensions
 {
@@ -46,9 +46,10 @@ namespace EventsExpress.Core.Extensions
                 {
                     return false;
                 }
+
                 //------------------------------------------
-                //check whether the image size exceeding the limit or not
-                //------------------------------------------ 
+                // check whether the image size exceeding the limit or not
+                //------------------------------------------
                 if (postedFile.Length < ImageMinimumBytes)
                 {
                     return false;
@@ -72,7 +73,6 @@ namespace EventsExpress.Core.Extensions
             //  Try to instantiate new Bitmap, if .NET will throw exception
             //  we can assume that it's not a valid image
             //-------------------------------------------
-
             try
             {
                 using (var bitmap = new Bitmap(postedFile.OpenReadStream()))

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.IServices;
@@ -22,8 +21,7 @@ namespace EventsExpress.Controllers
         public ChatController(
             IMessageService messageService,
             IAuthService authService,
-            IMapper mapper
-            )
+            IMapper mapper)
         {
             _authService = authService;
             _messageService = messageService;
@@ -31,11 +29,11 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to return all chats
+        /// This method have to return all chats.
         /// </summary>
-        /// <returns>UserChatDto model</returns>
-        /// <response code="200">UserChatDto model</response>
-        /// <response code="200">If proccess is failed</response>
+        /// <returns>UserChatDto.</returns>
+        /// <response code="200">UserChatDto model.</response>
+        /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
         public IActionResult GetAllChats()
         {
@@ -45,34 +43,33 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to return chat
+        /// This method have to return chat.
         /// </summary>
-        /// <param name="chatId">Required</param>
-        /// <returns></returns>
-        /// <response code="200">UserChatDto model</response>
-        /// <response code="200">If proccess is failed</response>
+        /// <param name="chatId">Required.</param>
+        /// <returns>Chat.</returns>
+        /// <response code="200">UserChatDto model.</response>
+        /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetChat([FromQuery]Guid chatId)
+        public async Task<IActionResult> GetChat([FromQuery] Guid chatId)
         {
             var sender = _authService.GetCurrentUser(HttpContext.User);
             var chat = await _messageService.GetChat(chatId, sender.Id);
-            if(chat == null)
+            if (chat == null)
             {
                 return BadRequest();
-            }                                    
+            }
+
             return Ok(_mapper.Map<ChatDto>(chat));
         }
 
         /// <summary>
-        /// This method is to get mesagees which are unread
+        /// This method is to get mesagees which are unread.
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        /// /// <returns></returns>
-        /// <response code="200">MessageDto model</response>
-        /// <response code="200">If proccess is failed</response>
+        /// <returns>UnreadMessages.</returns>
+        /// <response code="200">MessageDto model.</response>
+        /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
-        public IActionResult GetUnreadMessages([FromQuery]Guid userId)
+        public IActionResult GetUnreadMessages([FromQuery] Guid userId)
         {
             var res = _mapper.Map<IEnumerable<MessageDto>>(_messageService.GetUnreadMessages(userId));
             return Ok(res);
