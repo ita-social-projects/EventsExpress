@@ -15,7 +15,6 @@ namespace EventsExpress.Test.ServiceTests
     {
         private CategoryService service;
         private Category category;
-        private CategoryDto categoryDto;
         private CategoryDTO categoryDTO;
 
         [SetUp]
@@ -24,7 +23,6 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             service = new CategoryService(MockUnitOfWork.Object, MockMapper.Object);
             category = new Category { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName" };
-            categoryDto = new CategoryDto() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019A"), Name = "RandomName2" };
             categoryDTO = new CategoryDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019C"), Name = "RandomName3" };
         }
 

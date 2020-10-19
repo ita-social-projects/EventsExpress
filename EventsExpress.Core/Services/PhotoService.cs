@@ -15,14 +15,14 @@ namespace EventsExpress.Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        private readonly IUnitOfWork db;
+        private readonly IUnitOfWork _db;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
 
         public PhotoService(
             IUnitOfWork uow,
             IOptions<ImageOptionsModel> opt)
         {
-            db = uow;
+            _db = uow;
             _widthOptions = opt;
         }
 
@@ -45,19 +45,19 @@ namespace EventsExpress.Core.Services
                 Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
             };
 
-            db.PhotoRepository.Insert(photo);
-            await db.SaveAsync();
+            _db.PhotoRepository.Insert(photo);
+            await _db.SaveAsync();
 
             return photo;
         }
 
         public async Task Delete(Guid id)
         {
-            var photo = db.PhotoRepository.Get(id);
+            var photo = _db.PhotoRepository.Get(id);
             if (photo != null)
             {
-                db.PhotoRepository.Delete(photo);
-                await db.SaveAsync();
+                _db.PhotoRepository.Delete(photo);
+                await _db.SaveAsync();
             }
         }
 

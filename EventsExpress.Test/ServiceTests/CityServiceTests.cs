@@ -13,16 +13,12 @@ namespace EventsExpress.Test.ServiceTests
     {
         private const string GuidId = "62FA647C-AD54-4BCC-A860-E5A2664B019D";
         private CityService cityService;
-        private City city;
-        private Country country;
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
             cityService = new CityService(MockUnitOfWork.Object);
-            city = new City() { Id = new Guid(GuidId), Name = "RandomName" };
-            country = new Country() { Id = new Guid(GuidId), Name = "RandomName" };
         }
 
         [Test]

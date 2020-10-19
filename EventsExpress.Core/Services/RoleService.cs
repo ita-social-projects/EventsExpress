@@ -8,13 +8,13 @@ namespace EventsExpress.Core.Services
 {
     public class RoleService : IRoleService
     {
+        private readonly IUnitOfWork _db;
+
         public RoleService(IUnitOfWork uow)
         {
-            Db = uow;
+            _db = uow;
         }
 
-        public IUnitOfWork Db { get; set; }
-
-        public IEnumerable<Role> All() => Db.RoleRepository.Get().AsEnumerable();
+        public IEnumerable<Role> All() => _db.RoleRepository.Get().AsEnumerable();
     }
 }

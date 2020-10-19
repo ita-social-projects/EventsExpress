@@ -15,7 +15,7 @@ namespace EventsExpress.Core.Services
 {
     public class EventService : IEventService
     {
-        private readonly IUnitOfWork db;
+        private readonly IUnitOfWork _db;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
@@ -26,7 +26,7 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             IPhotoService photoSrv)
         {
-            db = unitOfWork;
+            _db = unitOfWork;
             _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
@@ -34,13 +34,13 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
-            var ev = db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
+            var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
-            var us = db.UserRepository.Get(userId);
+            var us = _db.UserRepository.Get(userId);
             if (us == null)
             {
                 return new OperationResult(false, "User not found!", "userID");
@@ -52,14 +52,14 @@ namespace EventsExpress.Core.Services
             }
 
             ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
-            await db.SaveAsync();
+            await _db.SaveAsync();
 
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
-            var ev = db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
+            var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", "eventId");
@@ -69,7 +69,7 @@ namespace EventsExpress.Core.Services
             if (v != null)
             {
                 ev.Visitors.Remove(v);
-                await db.SaveAsync();
+                await _db.SaveAsync();
 
                 return new OperationResult(true);
             }
@@ -84,14 +84,14 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is '0'", string.Empty);
             }
 
-            var ev = db.EventRepository.Get(id);
+            var ev = _db.EventRepository.Get(id);
             if (ev == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
 
-            var result = db.EventRepository.Delete(ev);
-            await db.SaveAsync();
+            var result = _db.EventRepository.Delete(ev);
+            await _db.SaveAsync();
 
             if (result != null)
             {
@@ -103,7 +103,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> BlockEvent(Guid eID)
         {
-            var uEvent = db.EventRepository.Get(eID);
+            var uEvent = _db.EventRepository.Get(eID);
             if (uEvent == null)
             {
                 return new OperationResult(false, "Invalid event id", "eventId");
@@ -111,7 +111,7 @@ namespace EventsExpress.Core.Services
 
             uEvent.IsBlocked = true;
 
-            await db.SaveAsync();
+            await _db.SaveAsync();
             await _mediator.Publish(new BlockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
@@ -119,7 +119,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> UnblockEvent(Guid eId)
         {
-            var uEvent = db.EventRepository.Get(eId);
+            var uEvent = _db.EventRepository.Get(eId);
             if (uEvent == null)
             {
                 return new OperationResult(false, "Invalid event Id", "eventId");
@@ -127,7 +127,7 @@ namespace EventsExpress.Core.Services
 
             uEvent.IsBlocked = false;
 
-            await db.SaveAsync();
+            await _db.SaveAsync();
             await _mediator.Publish(new UnblockedEventMessage(uEvent.OwnerId, uEvent.Id));
 
             return new OperationResult(true);
@@ -155,8 +155,8 @@ namespace EventsExpress.Core.Services
 
             try
             {
-                var result = db.EventRepository.Insert(ev);
-                await db.SaveAsync();
+                var result = _db.EventRepository.Insert(ev);
+                await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
@@ -170,7 +170,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventDTO e)
         {
-            var ev = db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
+            var ev = _db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
             ev.Title = e.Title;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
@@ -195,18 +195,18 @@ namespace EventsExpress.Core.Services
 
             ev.Categories = eventCategories;
 
-            await db.SaveAsync();
+            await _db.SaveAsync();
             return new OperationResult(true, "Edit event", ev.Id.ToString());
         }
 
         public EventDTO EventById(Guid eventId) =>
-            _mapper.Map<EventDTO>(db.EventRepository
+            _mapper.Map<EventDTO>(_db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
         {
-            var events = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false);
+            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false);
 
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord)
                                                                         || x.Description.Contains(model.KeyWord)
@@ -232,7 +232,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count)
         {
-            var events = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
+            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord)
                                                                         || x.Description.Contains(model.KeyWord)
@@ -260,7 +260,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var ev = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.OwnerId == userId && e.DateFrom >= DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
@@ -271,7 +271,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var ev = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                  .Where(e => e.OwnerId == userId && e.DateFrom < DateTime.Today)
                  .OrderBy(e => e.DateFrom)
                  .AsEnumerable();
@@ -282,7 +282,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var ev = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .Where(e => e.Visitors.Any(x => x.UserId == userId) && e.DateFrom < DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
@@ -293,7 +293,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var ev = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                .Where(e => e.Visitors.Where(x => x.UserId == userId).FirstOrDefault().UserId == userId).Where(x => x.DateTo > DateTime.UtcNow).AsEnumerable();
 
             paginationViewModel.Count = ev.Count();
@@ -302,7 +302,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
-            var events = db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
+            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
                 .Where(x => eventIds.Contains(x.Id));
             paginationViewModel.Count = events.Count();
             return _mapper.Map<IEnumerable<EventDTO>>(events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
@@ -312,7 +312,7 @@ namespace EventsExpress.Core.Services
         {
             try
             {
-                var ev = db.EventRepository.Get("Rates").FirstOrDefault(e => e.Id == eventId);
+                var ev = _db.EventRepository.Get("Rates").FirstOrDefault(e => e.Id == eventId);
                 ev.Rates = ev.Rates ?? new List<Rate>();
 
                 var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
@@ -326,7 +326,7 @@ namespace EventsExpress.Core.Services
                     currentRate.Score = rate;
                 }
 
-                await db.SaveAsync();
+                await _db.SaveAsync();
                 return new OperationResult(true);
             }
             catch (Exception e)
@@ -337,20 +337,20 @@ namespace EventsExpress.Core.Services
 
         public byte GetRateFromUser(Guid userId, Guid eventId)
         {
-            return db.RateRepository.Get()
+            return _db.RateRepository.Get()
                        .FirstOrDefault(r => r.UserFromId == userId && r.EventId == eventId)
                            ?.Score ?? 0;
         }
 
         public double GetRate(Guid eventId)
         {
-            return db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+            return _db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
         }
 
         public bool UserIsVisitor(Guid userId, Guid eventId) =>
-            db.EventRepository
+            _db.EventRepository
                 .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;
 
-        public bool Exists(Guid id) => db.EventRepository.Get(id) != null;
+        public bool Exists(Guid id) => _db.EventRepository.Get(id) != null;
     }
 }

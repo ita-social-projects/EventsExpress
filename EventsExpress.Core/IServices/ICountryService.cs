@@ -10,7 +10,6 @@ namespace EventsExpress.Core.IServices
     {
         IEnumerable<Country> GetCountries();
 
-        // Country GetByName(string name);
         Country GetById(Guid id);
 
         Task<OperationResult> CreateCountryAsync(Country country);

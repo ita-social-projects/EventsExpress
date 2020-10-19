@@ -58,8 +58,7 @@ namespace EventsExpress.Core.Extensions
                 byte[] buffer = new byte[ImageMinimumBytes];
                 postedFile.OpenReadStream().Read(buffer, 0, ImageMinimumBytes);
                 string content = Encoding.UTF8.GetString(buffer);
-                if (Regex.IsMatch(content, @"<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext|<cross\-domain\-policy",
-                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
+                if (Regex.IsMatch(content, @"<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext|<cross\-domain\-policy", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
                 {
                     return false;
                 }
