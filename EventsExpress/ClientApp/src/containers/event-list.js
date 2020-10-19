@@ -7,6 +7,7 @@ import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';
 import { Redirect } from 'react-router';
+import { generateQuerySearch } from '../components/helpers/helpers';
 
 class EventListWrapper extends Component {
     componentDidUpdate(prevProps, prevState) {
@@ -14,6 +15,7 @@ class EventListWrapper extends Component {
             this.getEvents(this.props.params);
         }
     }
+
     componentDidMount() {
         this.getEvents(this.props.params);
     }
@@ -32,15 +34,25 @@ class EventListWrapper extends Component {
         const errorMessage = isError.ErrorCode == '403'
             ? <Forbidden />
             : isError.ErrorCode == '500'
-                ? <Redirect from="*" to="/home/events?page=1" />
+                ? <Redirect from="*" to={{
+                    pathname: "/home/events",
+                    search: generateQuerySearch(this.props.events.searchParams),
+                }} />
                 : isError.ErrorCode == '401'
                     ? <Unauthorized />
                     : isError.ErrorCode == '400'
                         ? <BadRequest />
                         : null;
-
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage ? <EventList current_user={current_user} data_list={items} page={data.pageViewModel.pageNumber} totalPages={data.pageViewModel.totalPages} callback={this.getEvents} /> : null;
+        const content = !errorMessage
+            ? <EventList
+                current_user={current_user}
+                data_list={items}
+                page={data.pageViewModel.pageNumber}
+                totalPages={data.pageViewModel.totalPages}
+                callback={this.getEvents}
+            />
+            : null;
 
         return <>
             {errorMessage}

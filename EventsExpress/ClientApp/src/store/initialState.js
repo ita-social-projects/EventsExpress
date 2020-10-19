@@ -1,12 +1,13 @@
+'use strict';
 
 const initialState = {
-    modalWind:{
-        isOpen: false 
+    modalWind: {
+        isOpen: false
     },
     resetError: {
         isError: false,
     },
-    user:{
+    user: {
         id: null,
         name: null,
         email: null,
@@ -23,17 +24,17 @@ const initialState = {
         isError: false,
         data: []
     },
-    login:{
+    login: {
         isLoginPending: false,
         isLoginSuccess: false,
         loginError: null
     },
-    register:{
+    register: {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
     },
-    add_event:{
+    add_event: {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
@@ -43,25 +44,32 @@ const initialState = {
         isError: false,
         data: {
             items: [],
-            pageViewModel: {}
-
-        }
+            pageViewModel: {},
+        },
+        searchParams: {
+            page: '1',
+            keyWord: undefined,
+            dateFrom: undefined,
+            dateTo: undefined,
+            categories: undefined,
+            status: undefined,
+        },
     },
     change_avatar: {
         isPending: false,
         isSuccess: false,
         Error: {}
-     },
+    },
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
         EditUsernameError: {}
-     },
+    },
     SelectCategories: {
-         IsSelectCategoriesSeccess: false,
-         IsSelectCategoriesError: null
-     },
-    add_event:{
+        IsSelectCategoriesSeccess: false,
+        IsSelectCategoriesError: null
+    },
+    add_event: {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
@@ -106,8 +114,7 @@ const initialState = {
         isError: false,
         data: {
             items: [],
-            pageViewModel: {}
-
+            pageViewModel: {},
         }
     },
     delete_comment: {
@@ -119,10 +126,9 @@ const initialState = {
         isPending: true,
         isError: false,
         data: {
-            
             dateFrom: null,
             dateTo: null,
-            photoUrl: null
+            photoUrl: null,
         }
     },
     profile: {
@@ -135,8 +141,7 @@ const initialState = {
         isError: false,
         data: {
             items: [],
-            pageViewModel: {}
-
+            pageViewModel: {},
         }
     },
     changePassword: {
@@ -147,46 +152,46 @@ const initialState = {
     recoverPassword: {
         isPending: false,
         isError: false,
-        isSucces:null,
+        isSucces: null,
     },
-    authenticate:{
-        isPending:false,
-        isSucces:false,
-        isError:null,
-        data:[]
-    },
-    chats:{
+    authenticate: {
         isPending: false,
-        isSuccess:false,
-        isError:null,
+        isSucces: false,
+        isError: null,
+        data: []
+    },
+    chats: {
+        isPending: false,
+        isSuccess: false,
+        isError: null,
         data: []
     },
     hubConnection: null,
-    chat:{
+    chat: {
         isPending: false,
-        isSuccess:false,
-        isError:null,
+        isSuccess: false,
+        isError: null,
         data: {
             messages: [],
-            users: [], 
+            users: [],
             id: null
         }
     },
-    alert:{
-        variant:null,
-        message:null,
+    alert: {
+        variant: null,
+        message: null,
         autoHideDuration: null,
-        open:false
+        open: false
     },
-    dialog:{
-        title:null,
-        message:null,
-        open:false
+    dialog: {
+        title: null,
+        message: null,
+        open: false
     },
-    contactUs:{
+    contactUs: {
         isPending: false,
-        isSuccess:false,
-        isError:null
+        isSuccess: false,
+        isError: null
     },
     notification:
     {

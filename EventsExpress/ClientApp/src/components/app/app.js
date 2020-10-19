@@ -23,8 +23,10 @@ import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
 import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
+import { connect } from 'react-redux';
+import { generateQuerySearch } from '../../components/helpers/helpers';
 
-export default class App extends Component {
+class App extends Component {
     render() {
         return (
             <Layout>
@@ -34,7 +36,13 @@ export default class App extends Component {
                         exact
                         path="/"
                         render={() => (
-                            <Redirect to="/home/events?page=1" />
+                            // <Redirect to="/home/events?page=1" />
+                            <Redirect
+                                to={{
+                                    pathname: "/home/events",
+                                    search: `?${generateQuerySearch(this.props.events.searchParams)}`,
+                                }}
+                            />
                         )}
                     />
                     <Route path="/profile/" component={Profile} />
@@ -57,3 +65,10 @@ export default class App extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    events: state.events,
+    current_user: state.user
+})
+
+export default connect(mapStateToProps)(App);

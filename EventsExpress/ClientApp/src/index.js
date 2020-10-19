@@ -8,7 +8,6 @@ import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
 import { setUser } from './actions/login';
 import { initialConnection } from './actions/chat';
-
 import { getUnreadMessages } from './actions/chats';
 
 // Create browser history to use in the Redux store
@@ -19,24 +18,24 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
-async function AuthUser(token){
-  if(!token)
+async function AuthUser(token) {
+  if (!token)
     return;
-    const res = await fetch('api/Authentication/login_token', {
-    method: 'post',  
+  const res = await fetch('api/Authentication/login_token', {
+    method: 'post',
     headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
     }),
-    });
-    if(res.ok){
-      const user = await res.json();
-      store.dispatch(setUser(user));
-      store.dispatch(initialConnection());
-      store.dispatch(getUnreadMessages(user.id));
-    }else{
-      localStorage.clear();
-    }
+  });
+  if (res.ok) {
+    const user = await res.json();
+    store.dispatch(setUser(user));
+    store.dispatch(initialConnection());
+    store.dispatch(getUnreadMessages(user.id));
+  } else {
+    localStorage.clear();
+  }
 }
 
 const token = localStorage.getItem('token');

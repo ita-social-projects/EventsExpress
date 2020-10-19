@@ -1,80 +1,87 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {  getFormValues, reset } from 'redux-form';
+import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
-import { get_events,get_eventsForAdmin } from '../actions/event-list';
+import { get_events, get_eventsForAdmin } from '../actions/event-list';
 import history from '../history';
-
 import get_categories from '../actions/category-list';
+import { generateQuerySearch } from '../components/helpers/helpers';
 
 class EventFilterWrapper extends Component {
-
-    componentWillMount(){
+    componentWillMount() {
         this.props.get_categories();
     }
 
     onReset = () => {
         this.props.reset_filters();
-        var search_string = '?page=1';
-        if(window.location.search != search_string){
-        if(this.props.current_user.role=="Admin"){
-            this.props.AdminSearch(search_string); 
-        }
-        else{
-            this.props.search(search_string); 
-        }
-        history.push(window.location.pathname + search_string);   
-    }
-    }
-    
-    onSubmit = (filters) => {  
+        let search_string = '?page=1';
 
-        var search_string = '?page=1';
-        if (filters != null) {
-            if (filters.search != null) {
-                search_string += '&keyWord=' + filters.search;
+        if (window.location.search != search_string) {
+            if (this.props.current_user.role == "Admin") {
+                this.props.AdminSearch(search_string);
+            } else {
+                this.props.search(search_string);
             }
-            if (filters.dateFrom != null) {
-                search_string += '&dateFrom=' + new Date(filters.dateFrom).toDateString();
-            }
-            if (filters.dateTo != null) {
-                search_string += '&dateTo=' + new Date(filters.dateTo).toDateString();
-            }
-            if (filters.categories != null) {
-                var categories = '';
-                for (var i = 0; i < filters.categories.length; i++) {
-                    categories += filters.categories[i].id + ',';
-                }
-                search_string += '&categories=' + categories;
-            }
-            if(filters.status=="all"){
-                search_string+='&All='+true;
-            }
-            if (filters.status == 'blocked') {
-                search_string += '&Blocked=' + true;
-            }
-            if (filters.status == 'unblocked') {
-                search_string += '&Unblocked=' + true;
-            }
+
+            history.push(window.location.pathname + search_string);
         }
-        if(this.props.current_user.role=="Admin"){
-            this.props.AdminSearch(search_string); 
+    }
+
+    onSubmit = (filters,) => {
+        // let search_string = generateQuerySearch(this.props.events.searchParams);
+        // var search_string = '?page=1';
+        // if (filters != null) {
+        //     if (filters.search != null) {
+        //         search_string += '&keyWord=' + filters.search;
+        //     }
+        //     if (filters.dateFrom != null) {
+        //         search_string += '&dateFrom=' + new Date(filters.dateFrom).toDateString();
+        //     }
+        //     if (filters.dateTo != null) {
+        //         search_string += '&dateTo=' + new Date(filters.dateTo).toDateString();
+        //     }
+        //     if (filters.categories != null) {
+        //         var categories = '';
+        //         for (var i = 0; i < filters.categories.length; i++) {
+        //             categories += filters.categories[i].id + ',';
+        //         }
+        //         search_string += '&categories=' + categories;
+        //     }
+        //     if (filters.status == "all") {
+        //         search_string += '&All=' + true;
+        //     }
+        //     if (filters.status == 'blocked') {
+        //         search_string += '&Blocked=' + true;
+        //     }
+        //     if (filters.status == 'unblocked') {
+        //         search_string += '&Unblocked=' + true;
+        //     }
+        // }
+
+        Object.keys(filters).forEach(function (key) {
+            this.props.events.searchParams[key] = filters[key];
+        }.bind(this));
+        // ({ keyWord: this.props.events.searchParams.keyWord } = filters);
+
+        let search_string = generateQuerySearch(this.props.events.searchParams);
+
+        if (this.props.current_user.role == "Admin") {
+            this.props.AdminSearch(search_string);
+        } else {
+            this.props.search(search_string);
         }
-        else{
-            this.props.search(search_string); 
-        }
+
         history.push(window.location.pathname + search_string);
     }
 
     render() {
         return <>
-            <EventFilter 
-            all_categories={this.props.all_categories}
-            onSubmit={this.onSubmit}
-            onReset={this.onReset}
-            form_values={this.props.form_values} 
-            current_user={this.props.current_user}
-
+            <EventFilter
+                all_categories={this.props.all_categories}
+                onSubmit={this.onSubmit}
+                onReset={this.onReset}
+                form_values={this.props.form_values}
+                current_user={this.props.current_user}
             />
         </>
     }
@@ -82,6 +89,7 @@ class EventFilterWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     all_categories: state.categories,
+    events: state.events,
     form_values: getFormValues('event-filter-form')(state),
     current_user: state.user
 });

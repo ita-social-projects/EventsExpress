@@ -11,47 +11,46 @@ const { validate } = Module;
 class EventFilter extends Component {
     constructor(props) {
         super(props);
-
         this.state = { viewMore: false }
     }
 
     //toggleMode = val => !val;
 
     render() {
-        const { all_categories, form_values,current_user } = this.props;
+        const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
-        
+
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
                     <div className="form-group">
-                        <Field 
-                            name='search' 
-                            component={renderTextField} 
-                            type="input" 
-                            label="Keyword" 
+                        <Field
+                            name='keyWord'
+                            component={renderTextField}
+                            type="input"
+                            label="Keyword"
                         />
-                    </div>          
+                    </div>
 
-                    {this.state.viewMore && <> 
-                        
+                    {this.state.viewMore && <>
+
                         <div className="form-group">
                             <div>From</div>
-                            <Field 
-                                name='dateFrom' 
-                                component={renderDatePicker} 
+                            <Field
+                                name='dateFrom'
+                                component={renderDatePicker}
                             />
                         </div>
                         <div className="form-group">
                             <div>To</div>
-                            <Field 
-                                name='dateTo' 
-                                defaultValue={values.dateFrom} 
-                                minValue={values.dateFrom} 
-                                component={renderDatePicker} 
+                            <Field
+                                name='dateTo'
+                                defaultValue={values.dateFrom}
+                                minValue={values.dateFrom}
+                                component={renderDatePicker}
                             />
                         </div>
-                        
+
                         <div className="form-group">
                             <Field
                                 name="categories"
@@ -64,7 +63,7 @@ class EventFilter extends Component {
                             />
                         </div>
 
-                        {current_user.role=="Admin" && (
+                        {current_user.role == "Admin" && (
                             <div className="form-group">
                                 <Field name="status" component={radioButton}>
                                     <Radio value="true" label="All" />
@@ -74,14 +73,14 @@ class EventFilter extends Component {
                             </div>
                         )}
 
-                    </>}          
-                    
+                    </>}
+
                     <div>
                         <Button
-                            key={this.state.viewMore} 
-                            fullWidth={true} 
-                            color="info" 
-                            onClick={() => {this.setState({viewMore: !this.state.viewMore})}}
+                            key={this.state.viewMore}
+                            fullWidth={true}
+                            color="info"
+                            onClick={() => { this.setState({ viewMore: !this.state.viewMore }) }}
                         >
                             {this.state.viewMore ? 'less...' : 'more filters...'}
                         </Button>
