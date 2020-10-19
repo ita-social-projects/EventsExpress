@@ -11,6 +11,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DbSet<User> Users { get; set; }
 
@@ -128,6 +129,10 @@ namespace EventsExpress.Db.EF
             // city config
             builder.Entity<City>()
                 .Property(c => c.Name).IsRequired();
+           
+            //comment config
+            builder.Entity<Comments>()
+                .HasOne(c => c.Parent).WithMany(prop => prop.Children).HasForeignKey(c => c.CommentsId);
 
         }
     }
