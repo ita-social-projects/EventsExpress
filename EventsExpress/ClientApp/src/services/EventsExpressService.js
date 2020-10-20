@@ -1,5 +1,6 @@
 import React from 'react';
 import { dark } from '@material-ui/core/styles/createPalette';
+import jwt from 'jsonwebtoken';
 
 export default class EventsExpressService {
     _baseUrl = 'api/';
@@ -101,13 +102,67 @@ export default class EventsExpressService {
         return res;
     }
 
+    getEvents = async (eventIds, page) => {
+        const res = await this.setResource(`event/getEvents?page=${page}`, eventIds);
+        return !res.ok
+            ? { error: await res.text() }
+            : res.json();
+    }
+
     getUnreadMessages = async (userId) => {
         const res = await this.getResource(`chat/GetUnreadMessages?userId=${userId}`);
         return res;
     }
 
+    setEvent = async (data) => {
+        let file = new FormData();
+        if (data.id != null) {
+            file.append('Id', data.id);
+        }
+
+        if (data.image != null) {
+            file.append('Photo', data.image.file);
+        }
+
+        file.append('Title', data.title);
+        file.append('Description', data.description);
+        file.append('CityId', data.cityId);
+        file.append('User.Id', data.user_id);
+
+        data.dateFrom != null
+            ? file.append('DateFrom', new Date(data.dateFrom).toDateString())
+            : file.append('DateFrom', new Date(Date.now()).toDateString());
+
+        data.dateTo != null
+            ? file.append('DateTo', new Date(data.dateTo).toDateString())
+            : file.append('DateTo', new Date(data.dateFrom).toDateString());
+
+        let i = 0;
+        data.categories.map(x => {
+            file.append(`Categories[${i++}].Id`, x.id);
+        });
+        const res = await this.setResourceWithData('event/edit', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setEventBlock = async (id) => {
+        const res = await this.setResource(`Event/Block/?eventId=${id}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
     setContactUs = async (data) => {
         const res = await this.setResource('users/ContactAdmins', data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setEventUnblock = async (id) => {
+        const res = await this.setResource(`Event/Unblock/?eventId=${id}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -194,81 +249,10 @@ export default class EventsExpressService {
     }
     //#endregion Authentication
 
-    //#region Events
     getEvent = async (id) => {
         const res = await this.getResource(`event/get?id=${id}`);
         return res;
     }
-
-    getEvents = async (eventIds, page) => {
-        const res = await this.setResource(`event/getEvents?page=${page}`, eventIds);
-        return !res.ok
-            ? { error: await res.text() }
-            : res.json();
-    }
-
-    getAllEvents = async (filters) => {
-        const res = await this.getResource(`event/all${filters}`);
-        return res;
-    }
-
-    getAllEventsForAdmin = async (filters) => {
-        const res = await this.getResource(`event/AllForAdmin${filters}`);
-        return res;
-    }
-
-    getAverageRate = async (eventId) => {
-        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
-        return res;
-    }
-
-    setEventUnblock = async (id) => {
-        const res = await this.setResource(`Event/Unblock/?eventId=${id}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
-    setEvent = async (data) => {
-        let file = new FormData();
-        if (data.id != null) {
-            file.append('Id', data.id);
-        }
-
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
-        }
-
-        file.append('Title', data.title);
-        file.append('Description', data.description);
-        file.append('CityId', data.cityId);
-        file.append('User.Id', data.user_id);
-
-        data.dateFrom != null
-            ? file.append('DateFrom', new Date(data.dateFrom).toDateString())
-            : file.append('DateFrom', new Date(Date.now()).toDateString());
-
-        data.dateTo != null
-            ? file.append('DateTo', new Date(data.dateTo).toDateString())
-            : file.append('DateTo', new Date(data.dateFrom).toDateString());
-
-        let i = 0;
-        data.categories.map(x => {
-            file.append(`Categories[${i++}].Id`, x.id);
-        })
-        const res = await this.setResourceWithData('event/edit', file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
-    setEventBlock = async (id) => {
-        const res = await this.setResource(`Event/Block/?eventId=${id}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-    //#endregion Events
 
     getUsers = async (filter) => {
         const res = await this.getResource(`users/get${filter}`);
@@ -357,6 +341,21 @@ export default class EventsExpressService {
 
     getCurrentRate = async (eventId) => {
         const res = await this.getResource(`event/GetCurrentRate/${eventId}`);
+        return res;
+    }
+
+    getAverageRate = async (eventId) => {
+        const res = await this.getResource(`event/GetAverageRate/${eventId}`);
+        return res;
+    }
+
+    getAllEvents = async (filters) => {
+        const res = await this.getResource(`event/all${filters}`);
+        return res;
+    }
+
+    getAllEventsForAdmin = async (filters) => {
+        const res = await this.getResource(`event/AllForAdmin${filters}`);
         return res;
     }
 

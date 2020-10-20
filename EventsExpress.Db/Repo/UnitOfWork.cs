@@ -1,17 +1,13 @@
-﻿
-using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using EventsExpress.Db.EF;
+using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Db.Repo
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private AppDbContext Database;
+        private readonly AppDbContext database;
 
         private IEventRepository _eventRepository;
         private ICategoryRepository _categoryRepository;
@@ -27,83 +23,77 @@ namespace EventsExpress.Db.Repo
         private IUserRepository _userRepository;
         private IChatRepository _chatRepository;
         private IMessageRepository _messageRepository;
+        private bool disposed = false;
 
         public UnitOfWork(
-            AppDbContext context
-            )
+            AppDbContext context)
         {
-            Database = context;                   
+            database = context;
         }
 
         public IChatRepository ChatRepository =>
-           _chatRepository ?? (_chatRepository = new ChatRepository(Database));   
+           _chatRepository ?? (_chatRepository = new ChatRepository(database));
 
         public IMessageRepository MessageRepository =>
-           _messageRepository ?? (_messageRepository = new MessageRepository(Database));
+           _messageRepository ?? (_messageRepository = new MessageRepository(database));
 
         public IEventRepository EventRepository =>
-           _eventRepository ?? (_eventRepository = new EventRepository(Database));
+           _eventRepository ?? (_eventRepository = new EventRepository(database));
 
         public ICategoryRepository CategoryRepository =>
-           _categoryRepository ?? (_categoryRepository = new CategoryRepository(Database));
+           _categoryRepository ?? (_categoryRepository = new CategoryRepository(database));
 
         public ICityRepository CityRepository =>
-            _cityRepository ?? (_cityRepository = new CityRepository(Database));
+            _cityRepository ?? (_cityRepository = new CityRepository(database));
 
         public ICountryRepository CountryRepository =>
-            _countryRepository ?? (_countryRepository = new CountryRepository(Database));
+            _countryRepository ?? (_countryRepository = new CountryRepository(database));
 
         public ICommentsRepository CommentsRepository =>
-            _commentsRepository ?? (_commentsRepository = new CommentsRepository(Database));
+            _commentsRepository ?? (_commentsRepository = new CommentsRepository(database));
 
         public IPermissionRepository PermissionRepository =>
-            _permissionRepository ?? (_permissionRepository = new PermissionRepository(Database));
+            _permissionRepository ?? (_permissionRepository = new PermissionRepository(database));
 
         public IPhotoRepository PhotoRepository =>
-            _photoRepository ?? (_photoRepository = new PhotoRepository(Database));
+            _photoRepository ?? (_photoRepository = new PhotoRepository(database));
 
         public IRateRepository RateRepository =>
-            _rateRepository ?? (_rateRepository = new RateRepository(Database));
+            _rateRepository ?? (_rateRepository = new RateRepository(database));
 
         public IRelationshipRepository RelationshipRepository =>
-            _relationshipRepository ?? (_relationshipRepository = new RelationshipRepository(Database));
+            _relationshipRepository ?? (_relationshipRepository = new RelationshipRepository(database));
 
         public IReportRepository ReportRepository =>
-            _reportRepository ?? (_reportRepository = new ReportRepository(Database));
+            _reportRepository ?? (_reportRepository = new ReportRepository(database));
 
         public IRoleRepository RoleRepository =>
-            _roleRepository ?? (_roleRepository = new RoleRepository(Database));
+            _roleRepository ?? (_roleRepository = new RoleRepository(database));
 
         public IUserRepository UserRepository =>
-            _userRepository ?? (_userRepository = new UserRepository(Database));
-
-
-
-
-
-
+            _userRepository ?? (_userRepository = new UserRepository(database));
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
             {
                 if (disposing)
-                {                               
+                {
                 }
+
                 this.disposed = true;
             }
         }
 
         public async Task SaveAsync()
-        {                               
-            await Database.SaveChangesAsync();
+        {
+            await database.SaveChangesAsync();
         }
     }
 }

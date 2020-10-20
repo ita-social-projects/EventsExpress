@@ -11,7 +11,7 @@ namespace EventsExpress.Db.Migrations
                 name: "ChatRoom",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace EventsExpress.Db.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Edited = table.Column<bool>(nullable: false),
                     Text = table.Column<string>(nullable: true),
-                    ChatRoomId = table.Column<Guid>(nullable: true)
+                    ChatRoomId = table.Column<Guid>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -60,7 +60,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    ChatId = table.Column<Guid>(nullable: false)
+                    ChatId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {

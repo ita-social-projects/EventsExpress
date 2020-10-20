@@ -1,35 +1,35 @@
+using System;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using AutoMapper;
+using EventsExpress.Core.ChatHub;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EventsExpress.Db.IRepo;
 using EventsExpress.Db.Repo;
+using EventsExpress.DTO;
+using EventsExpress.Mapping;
+using EventsExpress.Validation;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IO;
-using AutoMapper;
-using EventsExpress.Mapping;
-using System.Reflection;
-using MediatR;
-using EventsExpress.Core.NotificationHandlers;
-using FluentValidation.AspNetCore;
-using FluentValidation;
-using EventsExpress.DTO;
-using EventsExpress.Validation;
 using Swashbuckle.AspNetCore.Swagger;
-using EventsExpress.Core.ChatHub;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Http;
-using EventsExpress.Core.Extensions;
 
 namespace EventsExpress
 {
@@ -39,22 +39,22 @@ namespace EventsExpress
     public class Startup
     {
         /// <summary>
-        /// ctor of class Startup
+        /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
-        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
         /// <summary>
-        /// Represents a set of key/value application configuration properties.
+        /// Gets represents a set of key/value application configuration properties.
         /// </summary>
         public IConfiguration Configuration { get; }
 
         /// <summary>
         ///  This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
-            public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             #region Authorization and Autontification configuring...
 
@@ -68,7 +68,8 @@ namespace EventsExpress
             services
                 .AddMemoryCache()
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
+                .AddJwtBearer(options =>
+                {
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -81,7 +82,7 @@ namespace EventsExpress
 
                         ValidateLifetime = true,
 
-                        ClockSkew = TimeSpan.FromSeconds(5)
+                        ClockSkew = TimeSpan.FromSeconds(5),
                     };
                     options.Events = new JwtBearerEvents
                     {
@@ -92,13 +93,14 @@ namespace EventsExpress
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
                             if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments("/chatRoom")))
+                                path.StartsWithSegments("/chatRoom"))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
                             }
+
                             return Task.CompletedTask;
-                        }
+                        },
                     };
                 });
 
@@ -123,35 +125,28 @@ namespace EventsExpress
             services.AddTransient<ICommentService, CommentService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddTransient<IPhotoService, PhotoService> ();
+            services.AddTransient<IPhotoService, PhotoService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
-            
+
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
-
-
             #endregion
             services.AddCors();
-            
+
             services.AddMvc().AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-
-
-
-           
             services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
             services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
             services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
             services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
-            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>(); 
+            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>();
             services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
             services.AddTransient<IValidator<RateDto>, RateDtoValidator>();
-      
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -159,7 +154,7 @@ namespace EventsExpress
             });
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
-           
+
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
 
             services.AddSwaggerGen(c =>
@@ -174,11 +169,10 @@ namespace EventsExpress
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
+
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -190,18 +184,17 @@ namespace EventsExpress
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
             app.UseCors(x => x
                .AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials());
             app.UseAuthentication();
-          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -216,7 +209,7 @@ namespace EventsExpress
                     template: "{controller}/{action=Index}/{id?}");
             });
             app.UseSignalR(routes =>
-            {          
+            {
                 routes.MapHub<ChatRoom>("/chatRoom");
             });
 

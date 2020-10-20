@@ -1,12 +1,13 @@
-﻿using EventsExpress.DTO;
+﻿using System;
+using EventsExpress.DTO;
 using FluentValidation;
-using System;
 
 namespace EventsExpress.Validation
 {
     public class EventDtoValidator : AbstractValidator<EventDto>
     {
-        public EventDtoValidator() {
+        public EventDtoValidator()
+        {
             RuleFor(x => x.Title).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateFrom).NotEmpty().WithMessage("Field is required!");

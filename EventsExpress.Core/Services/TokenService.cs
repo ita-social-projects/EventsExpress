@@ -67,8 +67,7 @@ namespace EventsExpress.Core.Services
                 expires: DateTime.Now.AddSeconds(lifeTime),
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
-                        _signingEncodingKey.SigningAlgorithm)
-            );
+                        _signingEncodingKey.SigningAlgorithm));
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
 {
@@ -9,6 +7,7 @@ namespace EventsExpress.Db.Entities
         public string Name { get; set; }
 
         public virtual IEnumerable<UserCategory> Users { get; set; }
+
         public virtual IEnumerable<EventCategory> Events { get; set; }
     }
 }

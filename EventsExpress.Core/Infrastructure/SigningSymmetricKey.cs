@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IdentityModel.Tokens;
+﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventsExpress.Core.Infrastructure
@@ -10,12 +7,12 @@ namespace EventsExpress.Core.Infrastructure
     {
         private readonly SymmetricSecurityKey _secretKey;
 
-        public string SigningAlgorithm { get; } = SecurityAlgorithms.HmacSha256;
-
         public SigningSymmetricKey(string key)
         {
             this._secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         }
+
+        public string SigningAlgorithm { get; } = SecurityAlgorithms.HmacSha256;
 
         public SecurityKey GetKey() => this._secretKey;
     }

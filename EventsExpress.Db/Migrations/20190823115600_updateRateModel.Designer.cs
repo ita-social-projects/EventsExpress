@@ -11,7 +11,7 @@ namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190823115600_updateRateModel")]
-    partial class updateRateModel
+    partial class UpdateRateModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
