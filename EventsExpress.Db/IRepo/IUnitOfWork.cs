@@ -32,6 +32,7 @@ namespace EventsExpress.Db.IRepo
         IChatRepository ChatRepository { get; }
 
         IMessageRepository MessageRepository { get; }
+
         IEventStatusHistoryRepository EventStatusHistoryRepository { get; }
 
         Task SaveAsync();

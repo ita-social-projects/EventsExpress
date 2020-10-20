@@ -18,7 +18,6 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> BlockEvent(Guid eID);
 
         Task<OperationResult> UnblockEvent(Guid eId);
-        Task<OperationResult> CancelEvent(Guid eventId, string reason);
 
         EventDTO EventById(Guid eventId);
 

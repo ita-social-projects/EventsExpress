@@ -23,8 +23,8 @@ namespace EventsExpress.Db.Repo
         private IUserRepository _userRepository;
         private IChatRepository _chatRepository;
         private IMessageRepository _messageRepository;
-        private bool disposed = false;
         private IEventStatusHistoryRepository _eventStatusHistoryRepository;
+        private bool disposed = false;
 
         public UnitOfWork(
             AppDbContext context)
@@ -75,13 +75,7 @@ namespace EventsExpress.Db.Repo
             _userRepository ?? (_userRepository = new UserRepository(database));
 
         public IEventStatusHistoryRepository EventStatusHistoryRepository =>
-            _eventStatusHistoryRepository ?? (_eventStatusHistoryRepository = new EventStatusHistoryRepository(Database));
-
-
-
-
-
-
+            _eventStatusHistoryRepository ?? (_eventStatusHistoryRepository = new EventStatusHistoryRepository(database));
 
         public void Dispose()
         {

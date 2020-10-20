@@ -11,7 +11,6 @@ namespace EventsExpress.Db.EF
             Database.Migrate();
         }
 
-
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -19,6 +18,8 @@ namespace EventsExpress.Db.EF
         public DbSet<User> Users { get; set; }
 
         public DbSet<Rate> Rates { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
 
         public DbSet<Relationship> Relationships { get; set; }
 

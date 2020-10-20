@@ -10,7 +10,6 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using MediatR;
-using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.Services
 {
@@ -130,22 +129,6 @@ namespace EventsExpress.Core.Services
 
             await _db.SaveAsync();
             await _mediator.Publish(new UnblockedEventMessage(uEvent.OwnerId, uEvent.Id));
-
-            return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> CancelEvent(Guid eventId, string reason)
-        {
-            var uEvent = Db.EventRepository.Get(eventId);
-            if (uEvent == null)
-            {
-                return new OperationResult(false, "Invalid event id", "eventId");
-            }
-
-            var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
-            Db.EventStatusHistoryRepository.Insert(record);
-
-            await Db.SaveAsync();
 
             return new OperationResult(true);
         }
@@ -293,8 +276,8 @@ namespace EventsExpress.Core.Services
                  .OrderBy(e => e.DateFrom)
                  .AsEnumerable();
 
-           paginationViewModel.Count = ev.Count();
-           return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
+            paginationViewModel.Count = ev.Count();
+            return _mapper.Map<IEnumerable<EventDTO>>(ev.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
 
         public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -342,7 +325,6 @@ namespace EventsExpress.Core.Services
                 {
                     currentRate.Score = rate;
                 }
-                await Db.SaveAsync();
 
                 await _db.SaveAsync();
                 return new OperationResult(true);
@@ -367,19 +349,6 @@ namespace EventsExpress.Core.Services
 
         public bool UserIsVisitor(Guid userId, Guid eventId) =>
             _db.EventRepository
-        private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
-        {
-            var record = new EventStatusHistory();
-            record.EventId = e.Id;
-            record.UserId = e.OwnerId;
-            record.EventStatus = status;
-            record.Reason = reason;
-
-            return record;
-        }
-
-        public bool UserIsVisitor(Guid userId, Guid eventId) => 
-            Db.EventRepository
                 .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;
 
         public bool Exists(Guid id) => _db.EventRepository.Get(id) != null;
