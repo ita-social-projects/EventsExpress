@@ -33,7 +33,6 @@ namespace EventsExpress.Core.IServices
         UserDTO GetById(Guid id);
 
         UserDTO GetByEmail(string email);
-        UserDTO GetUserByRefreshToken(string token);
 
         UserDTO GetUserByRefreshToken(string token);
 
