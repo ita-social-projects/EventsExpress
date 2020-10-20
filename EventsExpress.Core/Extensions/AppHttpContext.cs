@@ -1,29 +1,19 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Extensions
 {
-    class AppHttpContext
+    public class AppHttpContext
     {
-        private static IHttpContextAccessor m_httpContextAccessor;
-        public static HttpContext Current => m_httpContextAccessor.HttpContext;
-        public static string AppBaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
-        internal static void Configure (IHttpContextAccessor contextAccessor)
-        {
-            m_httpContextAccessor = contextAccessor;
-        }
-    }
+        private static IHttpContextAccessor _httpContextAccessor;
 
-    public static class HttpContextExtensions
-    {
-         public static IApplicationBuilder UseHttpContext (this IApplicationBuilder app)
+        public static HttpContext Current => _httpContextAccessor.HttpContext;
+
+        public static string AppBaseUrl =>
+            $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
+
+        internal static void Configure(IHttpContextAccessor contextAccessor)
         {
-            AppHttpContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
-            return app;
+            _httpContextAccessor = contextAccessor;
         }
     }
 }
