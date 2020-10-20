@@ -8,7 +8,7 @@ import Zoom from '@material-ui/core/Zoom';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
-
+import { generateQuerySearch } from '../../components/helpers/helpers';
 import './header-profile.css';
 
 export default class HeaderProfile extends Component {
@@ -55,7 +55,7 @@ export default class HeaderProfile extends Component {
                                 <Link
                                     to={{
                                         pathname: "/home/events",
-                                        search: `?${generateQuerySearch(this.props.events.searchParams)}`,
+                                        search: generateQuerySearch(this.props.events.searchParams),
                                     }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>

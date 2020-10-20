@@ -40,7 +40,7 @@ class App extends Component {
                             <Redirect
                                 to={{
                                     pathname: "/home/events",
-                                    search: `?${generateQuerySearch(this.props.events.searchParams)}`,
+                                    search: generateQuerySearch(this.props.events.searchParams),
                                 }}
                             />
                         )}
