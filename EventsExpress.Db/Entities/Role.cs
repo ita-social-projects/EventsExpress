@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
 {
@@ -8,8 +6,6 @@ namespace EventsExpress.Db.Entities
     {
         public string Name { get; set; }
 
-        public IEnumerable<User> Users { get; set; }  
-
-        //navigation properties:
+        public IEnumerable<User> Users { get; set; }
     }
 }

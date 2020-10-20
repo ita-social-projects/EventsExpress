@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace EventsExpress.Db.Helpers
 {
     public static class PasswordHasher
-    {    
+    {
         public static string GenerateHash(string password, string salt = "a192862aa3bf46dffb57b12bdcc4c199")
         {
             var byteSalt = Encoding.UTF8.GetBytes(salt);
@@ -16,6 +14,5 @@ namespace EventsExpress.Db.Helpers
 
             return Encoding.UTF8.GetString(saltedHash, 0, saltedHash.Length);
         }
-
     }
 }

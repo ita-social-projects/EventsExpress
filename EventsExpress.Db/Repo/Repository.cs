@@ -9,15 +9,15 @@ namespace EventsExpress.Db.Repo
     public class Repository<T> : IRepository<T>
         where T : class
     {
-
-        protected readonly AppDbContext Database;
-        protected readonly DbSet<T> entities;
-
         public Repository(AppDbContext context)
         {
             Database = context;
-            entities = context.Set<T>();
+            Entities = context.Set<T>();
         }
+
+        protected DbSet<T> Entities { get; }
+
+        protected AppDbContext Database { get; }
 
         public T Insert(T entity)
         {
@@ -26,7 +26,7 @@ namespace EventsExpress.Db.Repo
                 throw new NotImplementedException();
             }
 
-            this.entities.Add(entity);
+            Entities.Add(entity);
             return entity;
         }
 
@@ -37,13 +37,13 @@ namespace EventsExpress.Db.Repo
                 throw new NotImplementedException();
             }
 
-            this.entities.Update(entity);
+            Entities.Update(entity);
             return entity;
         }
 
         public IQueryable<T> Get(string includeProperties = "")
         {
-            IQueryable<T> query = this.entities;
+            IQueryable<T> query = Entities;
             foreach (var includeProperty in
                 includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -55,7 +55,7 @@ namespace EventsExpress.Db.Repo
 
         public T Get(Guid id)
         {
-            return this.entities.Find(id);
+            return Entities.Find(id);
         }
 
         public T Delete(T entity)
@@ -65,7 +65,7 @@ namespace EventsExpress.Db.Repo
                 throw new NotImplementedException();
             }
 
-            this.entities.Remove(entity);
+            Entities.Remove(entity);
             return entity;
         }
     }

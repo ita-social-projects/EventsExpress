@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventsExpress.Core.Extensions
 {
-    public static class ByteArrayExtensions
+    public static class ByteArrayExtentions
     {
         public static string ToRenderablePictureString(this byte[] array)
         {
@@ -12,6 +10,7 @@ namespace EventsExpress.Core.Extensions
             {
                 return string.Empty;
             }
+
             return "data:image; base64," + Convert.ToBase64String(array);
         }
     }

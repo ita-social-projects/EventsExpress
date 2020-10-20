@@ -30,8 +30,8 @@ namespace EventsExpress.Db.Entities
 
         public virtual Photo Photo { get; set; }
 
-        // navigation properties:
-        public virtual IEnumerable<Event> Events { get; set; }
+        /// <summary>Gets or sets navigation properties. </summary>
+        public IEnumerable<Event> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
 
@@ -44,6 +44,7 @@ namespace EventsExpress.Db.Entities
         public virtual IEnumerable<UserChat> Chats { get; set; }
 
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
+
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
     }
 }

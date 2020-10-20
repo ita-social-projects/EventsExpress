@@ -1,7 +1,4 @@
-﻿using EventsExpress.Db.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace EventsExpress.Core.DTOs
 {

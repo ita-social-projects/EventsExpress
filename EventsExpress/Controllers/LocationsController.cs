@@ -1,9 +1,9 @@
-﻿using EventsExpress.Core.IServices;
+﻿using System;
+using System.Threading.Tasks;
+using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Controllers
 {
@@ -17,19 +17,19 @@ namespace EventsExpress.Controllers
 
         public LocationsController(
             ICountryService countrySrv,
-            ICityService citySrv
-            )
+            ICityService citySrv)
         {
             _countryService = countrySrv;
             _cityService = citySrv;
         }
 
-        //Methods for countries CRUD:
+        // Methods for countries CRUD:
+
         /// <summary>
-        /// This method have return all countries
+        /// This method have return all countries.
         /// </summary>
-        /// <returns>IEnumerable Countries</returns>
-        /// <response code="200">Return IEnumerable country model</response>
+        /// <returns>IEnumerable Countries.</returns>
+        /// <response code="200">Return IEnumerable country model.</response>
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Countries()
@@ -38,12 +38,11 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method for edit/create country
+        /// This method for edit/create country.
         /// </summary>
-        /// <param name="country">Requiered</param>
-        /// <returns></returns>
-        /// <response code="200">Edit/Create country proces success</response>
-        /// <response code="400">If Edit/Create country failed</response>
+        /// <param name="country">Requiered.</param>
+        /// <response code="200">Edit/Create country proces success.</response>
+        /// <response code="400">If Edit/Create country failed.</response>
         [HttpPost("countries/edit")]
         public async Task<IActionResult> EditCountry(Country country)
         {
@@ -58,16 +57,16 @@ namespace EventsExpress.Controllers
                     return Ok();
                 }
             }
+
             return BadRequest();
         }
 
         /// <summary>
-        /// This method is for delete country
+        /// This method is for delete country.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Delete country proces success</response>
-        /// <response code="400">If delete process failed</response>  
+        /// <param name="id">CountryId.</param>
+        /// <response code="200">Delete country proces success.</response>
+        /// <response code="400">If delete process failed.</response>
         [HttpPost("countries/delete")]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
@@ -79,17 +78,17 @@ namespace EventsExpress.Controllers
                     return Ok();
                 }
             }
+
             return BadRequest();
         }
 
-
-        //Methods for cities CRUD:
+        // Methods for cities CRUD:
 
         /// <summary>
-        /// This method have return all cities
+        /// This method have return all cities.
         /// </summary>
-        /// <returns>IEnumerable cities</returns>
-        /// <response code="200">Return IEnumerable city model</response>
+        /// <returns>IEnumerable cities.</returns>
+        /// <response code="200">Return IEnumerable city model.</response>
         [AllowAnonymous]
         [HttpGet("country:{countryId}/[action]")]
         public IActionResult Cities(Guid countryId)
@@ -98,12 +97,11 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method for edit/create country
+        /// This method for edit/create country.
         /// </summary>
-        /// <param name="city">Requiered</param>
-        /// <returns></returns>
-        /// <response code="200">Edit/Create city proces success</response>
-        /// <response code="400">If Edit/Create city failed</response>
+        /// <param name="city">Requiered.</param>
+        /// <response code="200">Edit/Create city proces success.</response>
+        /// <response code="400">If Edit/Create city failed.</response>
         [HttpPost("cities/edit")]
         public async Task<IActionResult> EditCity(City city)
         {
@@ -118,16 +116,16 @@ namespace EventsExpress.Controllers
                     return Ok();
                 }
             }
+
             return BadRequest();
         }
 
         /// <summary>
-        /// This method is for delete country
+        /// This method is for delete country.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Delete city proces success</response>
-        /// <response code="400">If delete process failed</response>  
+        /// <param name="id">CityId.</param>
+        /// <response code="200">Delete city proces success.</response>
+        /// <response code="400">If delete process failed.</response>
         [HttpPost("cities/delete")]
         public async Task<IActionResult> DeleteCity(Guid id)
         {
@@ -139,6 +137,7 @@ namespace EventsExpress.Controllers
                     return Ok();
                 }
             }
+
             return BadRequest();
         }
     }

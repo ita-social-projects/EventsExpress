@@ -1,28 +1,22 @@
 ﻿using AutoMapper;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Moq;
 using EventsExpress.Db.IRepo;
-
+using Moq;
+using NUnit.Framework;
 
 namespace EventsExpress.Test
 {
     [TestFixture]
     public abstract class TestInitializer
     {
-        protected static Mock<IUnitOfWork> mockUnitOfWork;
-        protected static Mock<IMapper> mockMapper;
-       
+        protected static Mock<IUnitOfWork> MockUnitOfWork { get; set; }
 
+        protected static Mock<IMapper> MockMapper { get; set; }
 
         [SetUp]
         protected virtual void Initialize()
         {
-            mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockMapper = new Mock<IMapper>();
-            
+            MockUnitOfWork = new Mock<IUnitOfWork>();
+            MockMapper = new Mock<IMapper>();
             TestContext.WriteLine("Initialize test data");
         }
 
@@ -31,6 +25,5 @@ namespace EventsExpress.Test
         {
             TestContext.WriteLine("Cleanup test data");
         }
-
     }
 }

@@ -1,4 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
@@ -7,15 +11,10 @@ using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using EventsExpress.Validation;
 using EventsExpress.ViewModel;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Linq;
-using MediatR;
 
 namespace EventsExpress.Controllers
 {
@@ -27,30 +26,27 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IMediator mediator,
             IEmailService emailService)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
-            _mediator = mediator;
         }
 
         /// <summary>
-        /// This method
+        /// This method seach Users with filter.
         /// </summary>
-        /// <param name="filter">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Return IEnumerable UserManageDto models</response>
-        /// <response code="400">Return failed</response>
+        /// <param name="filter">Required.</param>
+        /// <returns>Users.</returns>
+        /// <response code="200">Return IEnumerable UserManageDto models.</response>
+        /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
@@ -62,7 +58,7 @@ namespace EventsExpress.Controllers
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
                     Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
-                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
             }
@@ -72,15 +68,13 @@ namespace EventsExpress.Controllers
             }
         }
 
-        #region Users managment by Admin
-
         /// <summary>
-        /// This metod have to return UserMangeDto
+        /// This metod have to return UserDto for Admin.
         /// </summary>
-        /// <param name="filter">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Return  UserManageDto model</response>
-        /// <response code="400">Return failed</response>
+        /// <param name="filter">Required.</param>
+        /// <returns>Users.</returns>
+        /// <response code="200">Return  UserManageDto model.</response>
+        /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
         public IActionResult Get([FromQuery] UsersFilterViewModel filter)
@@ -89,13 +83,14 @@ namespace EventsExpress.Controllers
             {
                 filter.PageSize = 10;
             }
+
             try
             {
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageDto>
                 {
                     Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
-                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize)
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
             }
@@ -106,13 +101,12 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to change role of user
+        /// This method have to change role of user.
         /// </summary>
-        /// <param name="userId">Required</param>
-        /// <param name="roleId">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Change role success</response>
-        /// <response code="400">Change role failed</response>
+        /// <param name="userId">Required.</param>
+        /// <param name="roleId">UserRoleId.</param>
+        /// <response code="200">Change role success.</response>
+        /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
@@ -122,16 +116,16 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 
         /// <summary>
-        /// This method is to block user
+        /// This method is to block user.
         /// </summary>
-        /// <param name="userId">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Block is succesful</response>
-        /// <response code="400">Block process failed</response>
+        /// <param name="userId">Required.</param>
+        /// <response code="200">Block is succesful.</response>
+        /// <response code="400">Block process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid userId)
@@ -141,16 +135,16 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 
         /// <summary>
-        /// This method is to unblock event
+        /// This method is to unblock event.
         /// </summary>
-        /// <param name="userId">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Unblock is succesful</response>
-        /// <response code="400">Unblock process failed</response>
+        /// <param name="userId">Required.</param>
+        /// <response code="200">Unblock is succesful.</response>
+        /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid userId)
@@ -160,25 +154,20 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 
-        #endregion
-
-        #region My profile managment
-
         /// <summary>
-        /// This method is to edit username
+        /// This method is to edit username.
         /// </summary>
-        /// <param name="userInfo">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Edit is succesful</response>
-        /// <response code="400">Edit process failed</response>
+        /// <param name="userInfo">Required.</param>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(UserInfo userInfo)
         {
             var validator = new UserInfoNameValidator();
-
 
             var validationResult = validator.Validate(userInfo);
             if (!validationResult.IsValid)
@@ -198,16 +187,16 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
+
             return BadRequest(result.Message);
         }
 
         /// <summary>
-        /// This method is to edit date of birthday
+        /// This method is to edit date of birthday.
         /// </summary>
-        /// <param name="userInfo">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Edit is succesful</response>
-        /// <response code="400">Edit process failed</response>
+        /// <param name="userInfo">Required.</param>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(UserInfo userInfo)
         {
@@ -218,6 +207,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
+
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -230,16 +220,16 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
+
             return BadRequest(result.Message);
         }
 
         /// <summary>
-        /// This method is to edit gender
+        /// This method is to edit gender.
         /// </summary>
-        /// <param name="userInfo">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Edit is succesful</response>
-        /// <response code="400">Edit process failed</response>
+        /// <param name="userInfo">Required.</param>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(UserInfo userInfo)
         {
@@ -251,6 +241,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
+
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -263,16 +254,16 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
+
             return BadRequest(result.Message);
         }
 
         /// <summary>
-        /// This method is to edit user categories
+        /// This method is to edit user categories.
         /// </summary>
-        /// <param name="userInfo">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Edit is succesful</response>
-        /// <response code="400">Edit process failed</response>
+        /// <param name="userInfo">Required.</param>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
         {
@@ -280,6 +271,7 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
@@ -293,18 +285,17 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
+
             return BadRequest();
         }
 
         /// <summary>
-        /// This metod is to change user avatar
+        /// This metod is to change user avatar.
         /// </summary>
-        /// <param name="newAva">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Changing is succesful</response>
-        /// <response code="400">Changing process failed</response>
+        /// <response code="200">Changing is succesful.</response>
+        /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeAvatar([FromForm] IFormFile newAva)
+        public async Task<IActionResult> ChangeAvatar()
         {
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
@@ -312,25 +303,24 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            newAva = HttpContext.Request.Form.Files[0];
+            var newAva = HttpContext.Request.Form.Files[0];
 
             var result = await _userService.ChangeAvatar(user.Id, newAva);
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
             return Ok(updatedPhoto);
         }
 
-
         /// <summary>
-        /// This method help to contact users with admins
+        /// This method help to contact users with admins.
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        /// <response code="200">Sending is succesfull</response>
-        /// <response code="400">Sending process failed</response>
+        /// <param name="model">ContactModel.</param>
+        /// <response code="200">Sending is succesfull.</response>
+        /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ContactAdmins(ContactUsDto model)
         {
@@ -348,7 +338,7 @@ namespace EventsExpress.Controllers
                     {
                         Subject = model.Type,
                         RecepientEmail = admin.Email,
-                        MessageText = emailBody
+                        MessageText = emailBody,
                     });
                 }
 
@@ -360,15 +350,13 @@ namespace EventsExpress.Controllers
             }
         }
 
-        #endregion
-
         /// <summary>
-        /// This method is for get user
+        /// This method is for get user.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        /// <response code="200">Return profileDto</response>
-        /// <response code="400">Attitude set failed</response>
+        /// <param name="id">UserId.</param>
+        /// <returns>User.</returns>
+        /// <response code="200">Return profileDto.</response>
+        /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
         public IActionResult GetUserProfileById(Guid id)
         {
@@ -379,12 +367,10 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to set attitide t user
+        /// This method is to set attitide t user.
         /// </summary>
-        /// <param name="attitude"></param>
-        /// <returns></returns>
-        /// <response code="200">Attitude set success</response>    
-        /// <response code="400">Attitude set failed</response>
+        /// <response code="200">Attitude set success.</response>
+        /// <response code="400">Attitude set failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
@@ -392,24 +378,21 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var result = await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
             if (!result.Successed)
             {
                 return BadRequest(result.Message);
             }
+
             return Ok();
         }
 
+        // HELPERS:
 
-        // HELPERS: 
         /// <summary>
-        /// This method help to get current user from JWT 
+        /// This method help to get current user from JWT.
         /// </summary>
-        /// <param name="userClaims"></param>
-        /// <returns></returns>
-        /// <response code="200">Get current uses</response>
         private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
-
-
     }
 }

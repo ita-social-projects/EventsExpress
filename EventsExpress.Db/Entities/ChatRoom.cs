@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
 {
@@ -10,7 +8,6 @@ namespace EventsExpress.Db.Entities
 
         public ICollection<UserChat> Users { get; set; }
 
-        public IEnumerable<Message> Messages { get; set; }   
+        public IEnumerable<Message> Messages { get; set; }
     }
-
 }

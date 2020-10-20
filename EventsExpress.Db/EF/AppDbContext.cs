@@ -1,16 +1,19 @@
 ﻿using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventsExpress.Db.EF
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Role> Roles { get; set; }
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+            Database.Migrate();
+        }
+
 
         public DbSet<Permission> Permissions { get; set; }
+
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public DbSet<User> Users { get; set; }
@@ -32,12 +35,6 @@ namespace EventsExpress.Db.EF
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
-            : base(options)
-        {
-            Database.Migrate();
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -132,11 +129,10 @@ namespace EventsExpress.Db.EF
             // city config
             builder.Entity<City>()
                 .Property(c => c.Name).IsRequired();
-           
-            //comment config
+
+            // comment config
             builder.Entity<Comments>()
                 .HasOne(c => c.Parent).WithMany(prop => prop.Children).HasForeignKey(c => c.CommentsId);
-
         }
     }
 }

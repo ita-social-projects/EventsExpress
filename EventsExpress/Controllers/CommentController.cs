@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.EF;
 using EventsExpress.DTO;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -17,45 +15,48 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
-        private ICommentService _commentService;
-        private IMapper _mapper;
-      
-        public CommentController(ICommentService commentService,
-                    IMapper mapper)
-        { 
+        private readonly ICommentService _commentService;
+        private readonly IMapper _mapper;
+
+        public CommentController(
+            ICommentService commentService,
+            IMapper mapper)
+        {
             _commentService = commentService;
             _mapper = mapper;
         }
+
         /// <summary>
-        /// This method is for edit and create comments
+        /// This method is for edit and create comments.
         /// </summary>
-        /// <param name="model">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Edit/Create comment proces success</response>
-        /// <response code="400">If Edit/Create process failed</response>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit/Create comment proces success.</response>
+        /// <response code="400">If Edit/Create process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CommentDto model)
         {
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return BadRequest();
             }
+
             var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
-                                       
+
             if (res.Successed)
             {
                 return Ok();
             }
+
             return BadRequest(res.Message);
         }
 
         /// <summary>
-        /// This method is for delete comment
+        /// This method is for delete comment.
         /// </summary>
-        /// <param name="id">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Delete comment proces success</response>
-        /// <response code="400">If delete process failed</response> 
+        /// <param name="id">Required.</param>
+        /// <response code="200">Delete comment proces success.</response>
+        /// <response code="400">If delete process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -66,25 +67,25 @@ namespace EventsExpress.Controllers
             {
                 return Ok();
             }
+
             return BadRequest(res.Message);
         }
 
         /// <summary>
-        /// This method have to return all comments
+        /// This method have to return all comments.
         /// </summary>
-        /// <param name="id">Required</param>
-        /// <param name="page">Required</param>
-        /// <returns></returns>
-        /// <response code="200">Return CommentDto model</response>
+        /// <param name="id">Required.</param>
+        /// <param name="page">CountPages.</param>
+        /// <returns>AllComments.</returns>
+        /// <response code="200">Return CommentDto model.</response>
         [AllowAnonymous]
         [HttpGet("[action]/{id}/")]
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            int count;
             var res = _mapper.Map<IEnumerable<CommentDto>>(
                 _commentService
-                    .GetCommentByEventId(id, page, pageSize, out count));
+                    .GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {
@@ -94,10 +95,9 @@ namespace EventsExpress.Controllers
             var viewModel = new IndexViewModel<CommentDto>
             {
                 PageViewModel = new PageViewModel(count, page, pageSize),
-                Items = res
+                Items = res,
             };
             return Ok(viewModel);
         }
     }
-    
 }

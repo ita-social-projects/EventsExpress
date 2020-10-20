@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventsExpress.Core.Infrastructure
+﻿namespace EventsExpress.Core.Infrastructure
 {
     public class OperationResult
     {
-        public bool Successed { get; set; }
-        public string Message { get; set; }
-        public string Property { get; set; }
-
         public OperationResult(bool successed, string message, string prop)
         {
             Successed = successed;
@@ -17,8 +9,15 @@ namespace EventsExpress.Core.Infrastructure
             Property = prop;
         }
 
-        public OperationResult(bool successed) : this(successed, "", "")
+        public OperationResult(bool successed)
+            : this(successed, string.Empty, string.Empty)
         {
         }
+
+        public bool Successed { get; set; }
+
+        public string Message { get; set; }
+
+        public string Property { get; set; }
     }
 }
