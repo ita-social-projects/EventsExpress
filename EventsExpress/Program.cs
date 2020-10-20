@@ -1,17 +1,15 @@
+using System;
+using System.IO;
 using EventsExpress.Db.DbInitialize;
 using EventsExpress.Db.EF;
-
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using System;
-using System.IO;
-
 namespace EventsExpress
 {
-    public class Program
+       public class Program
     {
         public static void Main(string[] args)
         {

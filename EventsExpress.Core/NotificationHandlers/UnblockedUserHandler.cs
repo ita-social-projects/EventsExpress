@@ -1,28 +1,22 @@
-﻿using EventsExpress.Core.DTOs;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
     public class UnblockedUserHandler : INotificationHandler<UnblockedUserMessage>
     {
         private readonly IEmailService _sender;
-        private readonly IUserService _userService;
 
         public UnblockedUserHandler(
-            IEmailService sender,
-            IUserService userSrv
-            )
+            IEmailService sender)
         {
             _sender = sender;
-            _userService = userSrv;
         }
 
         public async Task Handle(UnblockedUserMessage notification, CancellationToken cancellationToken)
@@ -33,7 +27,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     Subject = "Your account was Unblocked",
                     RecepientEmail = notification.Email,
-                    MessageText = $"Dear {notification.Email}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress"
+                    MessageText = $"Dear {notification.Email}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress",
                 });
             }
             catch (Exception ex)

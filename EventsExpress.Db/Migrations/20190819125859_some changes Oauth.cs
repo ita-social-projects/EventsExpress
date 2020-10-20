@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class somechangesOauth : Migration
+    public partial class SomechangesOauth : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

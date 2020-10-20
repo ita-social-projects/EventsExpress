@@ -11,7 +11,7 @@ namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20190819125859_some changes Oauth")]
-    partial class somechangesOauth
+    partial class SomechangesOauth
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

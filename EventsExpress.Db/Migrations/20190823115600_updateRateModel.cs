@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class updateRateModel : Migration
+    public partial class UpdateRateModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

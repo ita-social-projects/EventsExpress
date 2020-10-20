@@ -1,5 +1,5 @@
-﻿using EventsExpress.Core.DTOs;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 
 namespace EventsExpress.Core.IServices
 {

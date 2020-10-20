@@ -1,16 +1,12 @@
-﻿using EventsExpress.Core.DTOs;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using MediatR;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -18,17 +14,13 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        
 
         public EventCreatedHandler(
             IEmailService sender,
-            IUserService userSrv
-            
-            )
+            IUserService userSrv)
         {
             _sender = sender;
             _userService = userSrv;
-            
         }
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
@@ -43,7 +35,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = "New event for you!",
                         RecepientEmail = u.Email,
-                        MessageText = $"The <a href='{link}'>event</a> was created which could interested you."
+                        MessageText = $"The <a href='{link}'>event</a> was created which could interested you.",
                     });
                 }
             }

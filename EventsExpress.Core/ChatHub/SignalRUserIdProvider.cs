@@ -1,8 +1,4 @@
-﻿using EventsExpress.Core.IServices;
-using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.Core.ChatHub
 {

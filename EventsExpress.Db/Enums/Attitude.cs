@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventsExpress.Db.Enums
+﻿namespace EventsExpress.Db.Enums
 {
     public enum Attitude
     {
-        Like, 
+        Like,
         Dislike,
-        Reset
+        Reset,
     }
 }

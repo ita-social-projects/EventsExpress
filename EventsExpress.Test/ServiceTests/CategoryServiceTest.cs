@@ -1,43 +1,35 @@
-﻿using EventsExpress.Core.Services;
-using EventsExpress.Db.Entities;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Moq;
-using NUnit.Framework.Internal;
-using System.Threading.Tasks;
-using EventsExpress.DTO;
-using EventsExpress.Core.DTOs;
 using System.Linq;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Services;
+using EventsExpress.Db.Entities;
+using EventsExpress.DTO;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace EventsExpress.Test.ServiceTests
-{   [TestFixture]
-    class CategoryServiceTest: TestInitializer
+{
+    [TestFixture]
+    internal class CategoryServiceTest : TestInitializer
     {
         private CategoryService service;
         private Category category;
-        private CategoryDto categoryDto;
         private CategoryDTO categoryDTO;
-
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
-            service = new CategoryService(mockUnitOfWork.Object, mockMapper.Object);
-            category = new Category { Id= new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName"  };
-
-            categoryDto = new CategoryDto() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019A"), Name = "RandomName2" };
+            service = new CategoryService(MockUnitOfWork.Object, MockMapper.Object);
+            category = new Category { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName" };
             categoryDTO = new CategoryDTO() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019C"), Name = "RandomName3" };
-
-            
         }
 
         [Test]
         public void Get_ExistingId_ReturnEntity()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
                 .Returns(new Category() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "random" });
 
             var res = service.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"));
@@ -45,56 +37,54 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNotEmpty(res.Name);
         }
 
-        
-
         [Test]
-        public  void  Delete_ExistingId_Success()
+        public void Delete_ExistingId_Success()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id)).
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id)).
                 Returns(category);
 
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
                 .Returns(category);
 
             var res = service.Delete(category.Id);
-            Assert.IsTrue (res.Result.Successed);
-
+            Assert.IsTrue(res.Result.Successed);
         }
-
 
         [Test]
         public void Create_newCategory_Success()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty)).
                 Returns(new List<Category>()
                     {
-                    new Category {Name="RandomName"}
+                    new Category { Name = "RandomName" },
                     }.AsQueryable);
 
             var res = service.Create("CorrectName");
 
             Assert.IsTrue(res.Result.Successed);
         }
+
         [Test]
         public void Delete_NotExistingId_ReturnFalse()
         {
             Category wrongCategory = new Category() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019B"), };
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id))
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(category.Id))
             .Returns(category);
 
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Delete(category))
                 .Returns(wrongCategory);
 
             var res = service.Delete(category.Id);
 
             Assert.IsFalse(res.Result.Successed);
         }
+
         [Test]
         public void Delete_NullId_ReturnFalse()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty));
 
-            var res = service.Delete(new Guid());
+            var res = service.Delete(default);
 
             Assert.IsFalse(res.Result.Successed);
         }
@@ -102,7 +92,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_EmprtyCategory_ReturnFalse()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty));
 
             var res = service.Edit(new CategoryDTO());
 
@@ -112,13 +102,11 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_RepeatTitle_ReturnFalse()
         {
-            
-            
             Category newCategory = new Category() { Name = "RandomName" };
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty)).
                 Returns(new List<Category>()
                     {
-                    new Category {Name="RandomName"}
+                    new Category { Name = "RandomName" },
                     }.AsQueryable);
 
             var result = service.Create(newCategory.Name);
@@ -129,10 +117,9 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_NotExistingId_ReturnFalse()
         {
-           
-             CategoryDTO newCategory = new CategoryDTO() { Name = "newName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019F") };
+            CategoryDTO newCategory = new CategoryDTO() { Name = "newName", Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019F") };
 
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(""));
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty));
             var result = service.Edit(newCategory);
             Assert.IsFalse(result.Result.Successed);
         }
@@ -140,7 +127,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_ValidDto_Success()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(categoryDTO.Id)).
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(categoryDTO.Id)).
                 Returns(category);
             var result = service.Edit(categoryDTO);
             Assert.IsTrue(result.Result.Successed);
@@ -149,19 +136,18 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_NameExist_ReturnFalse()
         {
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get("")).
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(string.Empty)).
                 Returns(new List<Category>()
                     {
-                    new Category {Name="RandomName"}
+                    new Category { Name = "RandomName" },
                     }.AsQueryable);
 
-            mockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
-                .Returns(new Category() { Id = (new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019B")), Name = "RandomName2" });
+            MockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
+                .Returns(new Category() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019B"), Name = "RandomName2" });
 
             CategoryDTO newCategoryDto = new CategoryDTO() { Name = "RandomName", Id = category.Id };
             var result = service.Edit(newCategoryDto);
             Assert.IsFalse(result.Result.Successed);
         }
-
     }
 }

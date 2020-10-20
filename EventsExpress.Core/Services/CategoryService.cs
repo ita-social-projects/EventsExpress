@@ -1,92 +1,89 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IUnitOfWork Db;
+        private readonly IUnitOfWork _db;
         private readonly IMapper _mapper;
 
         public CategoryService(IUnitOfWork uow, IMapper mapper)
         {
-            Db = uow;
+            _db = uow;
             _mapper = mapper;
         }
 
-
-        public Category Get(Guid id) => Db.CategoryRepository.Get(id);
-
+        public Category Get(Guid id) => _db.CategoryRepository.Get(id);
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
-            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(Db.CategoryRepository.Get().AsEnumerable());
+            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(_db.CategoryRepository.Get().AsEnumerable());
             foreach (var cat in categories)
             {
-                cat.CountOfUser = Db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
-                cat.CountOfEvents = Db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfUser = _db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfEvents = _db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
             }
+
             return categories;
         }
-        
 
-        public async  Task<OperationResult> Create(string title)
+        public async Task<OperationResult> Create(string title)
         {
-            if (Db.CategoryRepository.Get().Any(c => c.Name == title))
+            if (_db.CategoryRepository.Get().Any(c => c.Name == title))
             {
-                return new OperationResult(false, "The same category is already exist in database", "");
+                return new OperationResult(false, "The same category is already exist in database", string.Empty);
             }
 
-            Db.CategoryRepository.Insert(new Category{ Name=title });
-            await Db.SaveAsync();
+            _db.CategoryRepository.Insert(new Category { Name = title });
+            await _db.SaveAsync();
 
             return new OperationResult(true);
         }
-
 
         public async Task<OperationResult> Edit(CategoryDTO category)
         {
-            var oldCategory = Db.CategoryRepository.Get(category.Id);
+            var oldCategory = _db.CategoryRepository.Get(category.Id);
             if (oldCategory == null)
             {
-                return new OperationResult(false, "Not found", "");
+                return new OperationResult(false, "Not found", string.Empty);
             }
 
-            if (Db.CategoryRepository.Get().Any(c => c.Name == category.Name))
+            if (_db.CategoryRepository.Get().Any(c => c.Name == category.Name))
             {
-                return new OperationResult(false, "The same category is already exist in database", "");
+                return new OperationResult(false, "The same category is already exist in database", string.Empty);
             }
 
             oldCategory.Name = category.Name;
-            await Db.SaveAsync();
+            await _db.SaveAsync();
 
             return new OperationResult(true);
         }
-
 
         public async Task<OperationResult> Delete(Guid id)
         {
-            var category = Db.CategoryRepository.Get(id);
+            var category = _db.CategoryRepository.Get(id);
             if (category == null)
             {
-                return new OperationResult(false, "Not found", "");
+                return new OperationResult(false, "Not found", string.Empty);
             }
 
-            var result = Db.CategoryRepository.Delete(category);
-            if(result.Id != id)
-                return new OperationResult(false, "", "");
-            await Db.SaveAsync();
+            var result = _db.CategoryRepository.Delete(category);
+            if (result.Id != id)
+            {
+                return new OperationResult(false, string.Empty, string.Empty);
+            }
+
+            await _db.SaveAsync();
             return new OperationResult(true);
         }
-
     }
 }

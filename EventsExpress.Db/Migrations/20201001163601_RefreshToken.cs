@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
@@ -10,8 +9,7 @@ namespace EventsExpress.Db.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ParentId",
-                table: "Comments"
-                );
+                table: "Comments");
 
             migrationBuilder.CreateTable(
                 name: "RefreshTokens",
@@ -23,7 +21,7 @@ namespace EventsExpress.Db.Migrations
                     Created = table.Column<DateTime>(nullable: false),
                     Revoked = table.Column<DateTime>(nullable: true),
                     ReplacedByToken = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -40,12 +38,10 @@ namespace EventsExpress.Db.Migrations
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            
         }
     }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.Caching;
 using EventsExpress.Core.DTOs;
 
 namespace EventsExpress.Core.Infrastructure
 {
-    public class CacheHelper:ICacheHelper
+    public class CacheHelper : ICacheHelper
     {
-         public CacheDTO GetValue(Guid UserId)
+        public CacheDTO GetValue(Guid userId)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Get(UserId.ToString()) as CacheDTO;
+            return memoryCache.Get(userId.ToString()) as CacheDTO;
         }
 
         public bool Add(CacheDTO value)
@@ -26,12 +24,12 @@ namespace EventsExpress.Core.Infrastructure
             memoryCache.Set(value.UserId.ToString(), value, DateTime.Now.AddDays(10));
         }
 
-        public void Delete(Guid UserId)
+        public void Delete(Guid userId)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            if (memoryCache.Contains(UserId.ToString()))
+            if (memoryCache.Contains(userId.ToString()))
             {
-                memoryCache.Remove(UserId.ToString());
+                memoryCache.Remove(userId.ToString());
             }
         }
     }

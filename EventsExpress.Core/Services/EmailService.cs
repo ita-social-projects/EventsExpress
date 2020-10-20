@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using EventsExpress.Core.DTOs;
-using EventsExpress.Core.IServices;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.IServices;
 using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.Services
@@ -17,7 +17,6 @@ namespace EventsExpress.Core.Services
             _senderOptions = opt;
         }
 
-
         public Task SendEmailAsync(EmailDTO emailDto)
         {
             var from = _senderOptions.Value.Account;
@@ -30,7 +29,7 @@ namespace EventsExpress.Core.Services
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = _senderOptions.Value.UseDefaultCredentials,
                 Credentials = (!_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
-                EnableSsl = _senderOptions.Value.EnableSsl
+                EnableSsl = _senderOptions.Value.EnableSsl,
             };
 
             var mail = new MailMessage(@from, emailDto.RecepientEmail)
