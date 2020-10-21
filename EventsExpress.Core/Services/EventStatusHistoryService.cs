@@ -1,23 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Db.IRepo;
+using MediatR;
 
 namespace EventsExpress.Core.Services
 {
     public class EventStatusHistoryService : IEventStatusHistoryService
     {
         private readonly IUnitOfWork _db;
+        private readonly IMediator _mediator;
 
         public EventStatusHistoryService(
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IMediator mediator)
         {
             _db = unitOfWork;
+            _mediator = mediator;
         }
 
         public async Task<OperationResult> CancelEvent(Guid eventId, string reason)
@@ -32,6 +36,7 @@ namespace EventsExpress.Core.Services
             _db.EventStatusHistoryRepository.Insert(record);
 
             await _db.SaveAsync();
+            await _mediator.Publish(new CancelEventMessage(eventId));
 
             return new OperationResult(true);
         }
@@ -45,6 +50,11 @@ namespace EventsExpress.Core.Services
             record.Reason = reason;
 
             return record;
+        }
+
+        public EventStatusHistory GetLastRecord(Guid eventId, EventStatus status)
+        {
+            return _db.EventStatusHistoryRepository.GetLastRecord(eventId, status);
         }
     }
 }

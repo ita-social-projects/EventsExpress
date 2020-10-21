@@ -37,6 +37,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<EventStatusHistory> EventStatusHistory { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
