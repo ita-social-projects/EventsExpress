@@ -1,15 +1,7 @@
 ﻿using System;
 
-namespace EventsExpress.Core
+namespace EventsExpress.Core.DTOs
 {
-    public enum SortBy
-    {
-        AscDate,
-        DescDate,
-        AscRate,
-        DescRate,
-    }
-
     public class EventFilterViewModel
     {
         public int Page { get; set; }
