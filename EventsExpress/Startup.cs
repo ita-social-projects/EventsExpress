@@ -184,7 +184,8 @@ namespace EventsExpress
             Scheme = "oauth2",
             Name = "Bearer",
             In = ParameterLocation.Header,
-        }, new List<string>()
+        },
+        new List<string>()
     },
 });
 
@@ -234,13 +235,10 @@ namespace EventsExpress
                     template: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventsExpress API");
             });
             app.UseSignalR(routes =>
             {
