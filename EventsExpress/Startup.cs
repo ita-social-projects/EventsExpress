@@ -137,16 +137,12 @@ namespace EventsExpress
 
             #endregion
             services.AddCors();
+            services.AddControllers();
 
-            services.AddMvc().AddFluentValidation()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddTransient<IValidator<LoginDto>, LoginDtoValidator>();
-            services.AddTransient<IValidator<ChangePasswordDto>, ChangePasswordDtoValidator>();
-            services.AddTransient<IValidator<CategoryDto>, CategoryDtoValidator>();
-            services.AddTransient<IValidator<CommentDto>, CommentDtoValidator>();
-            services.AddTransient<IValidator<DTO.EventDto>, EventDtoValidator>();
-            services.AddTransient<IValidator<AttitudeDto>, AttitudeDtoValidator>();
-            services.AddTransient<IValidator<RateDto>, RateDtoValidator>();
+            services.AddMvc().AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -172,22 +168,22 @@ namespace EventsExpress
 
                 c.AddSecurityRequirement(
                     new OpenApiSecurityRequirement
-{
-    {
-        new OpenApiSecurityScheme
-        {
-            Reference = new OpenApiReference
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer",
-            },
-            Scheme = "oauth2",
-            Name = "Bearer",
-            In = ParameterLocation.Header,
-        },
-        new List<string>()
-    },
-});
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer",
+                                },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header,
+                            },
+                            new List<string>()
+                        },
+                    });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -217,32 +213,29 @@ namespace EventsExpress
             }
 
             app.UseCors(x => x
-               .AllowAnyOrigin()
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials());
-            app.UseAuthentication();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseHttpContext();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatRoom>("/chatRoom");
             });
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventsExpress API");
-            });
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatRoom>("/chatRoom");
             });
 
             app.UseSpa(spa =>
