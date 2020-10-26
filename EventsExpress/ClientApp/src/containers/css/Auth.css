@@ -15,13 +15,28 @@
     max-width: 118px;
     height: 48px;
     border: 0px transparent;
-    border-radius: 50px;
+    border-radius: 46px;
     background: #db3236;
-    color: white;
     text-align: center;
+    font-weight: 600;
     margin: 0px 5px;
-    padding: 0px 18px;
+    padding: 0px 15px;
     display: inline-block;
+    border-radius: 25px !important;
+    min-width: 118px;
+}
+
+.btnGoogle div {
+   padding: 0px 15px !important;
+   margin-right: 3px !important;
+   margin-top: 5px;
+   border-radius: 30px !important;
+}
+
+.btnGoogle span {
+   padding-right: 5px;
+   font-weight: 600 !important;
+   font-size: 1.1em;
 }
 
 .btnFacebook:hover {
