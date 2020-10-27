@@ -2,7 +2,6 @@
 import SelectCategoriesWrapper from '../SelectCategories';
 import add_UserCategory from '../../actions/EditProfile/addUserCategory';
 import { connect } from "react-redux";
-import add from "../../actions/add-category";
 
 class AddUserCategory extends React.Component {
     submit = values => {

@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 import CommentList from '../components/comment/comment-list';
 import Spinner from '../components/spinner';
 import get_comments from '../actions/comment-list';
-import BadRequest from '../components/Route guard/400'
-import InternalServerError from '../components/Route guard/500'
-import Unauthorized from '../components/Route guard/401'
-import Forbidden from '../components/Route guard/403'
 
 
 
@@ -21,7 +17,7 @@ class CommentListWrapper extends Component {
     
     render() {
 
-        const { data, isPending, isError } = this.props.comments;
+        const { data, isPending } = this.props.comments;
 
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending 

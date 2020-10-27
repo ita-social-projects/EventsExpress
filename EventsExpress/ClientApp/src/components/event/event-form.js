@@ -4,7 +4,7 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
-import moment, { now } from 'moment';
+import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
@@ -12,12 +12,6 @@ import { renderMultiselect, renderSelectLocationField, renderTextArea } from '..
 import { connect } from 'react-redux';
 
 momentLocaliser(moment)
-const enhanceWithPreview = files =>
-  files.map(file =>
-    Object.assign({}, file, {
-      preview: URL.createObjectURL(file),
-    })
-  )
 
 const imageIsRequired = value => (!value ? "Required" : undefined);
 
@@ -30,7 +24,6 @@ class EventForm extends Component {
   handleFile(fieldName, event) {
     event.preventDefault();
     // convert files to an array
-    const files = [...event.target.files];
   }
   handleOnDrop = (newImageFile, onChange) => {
     if(newImageFile.length > 0){
@@ -84,7 +77,6 @@ class EventForm extends Component {
   render() {    
     const { countries, form_values, all_categories, data } = this.props;
     let values = form_values || this.props.initialValues;
-    let countries_list = this.renderLocations(countries);
     if(this.props.Event.isEventSuccess){
     this.resetForm();
     }

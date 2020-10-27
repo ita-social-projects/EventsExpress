@@ -45,7 +45,7 @@ export default class commentItem extends Component {
                         </div>}
                         <div className="mybutton">
                             <p>
-                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left"><strong className="text-primary">{userName}</strong></a></Link>
+                                <Link to={'/user/' + userId} className="btn-custom"><a className="float-left" href={'/user/' + userId}><strong className="text-primary">{userName}</strong></a></Link>
                             </p>
                             <div className="clearfix"></div>
                             
