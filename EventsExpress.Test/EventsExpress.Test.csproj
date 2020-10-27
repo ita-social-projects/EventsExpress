@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Images\**" />
-    <EmbeddedResource Remove="Images\**" />
-    <None Remove="Images\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
     <PackageReference Include="Moq" Version="4.12.0" />
