@@ -10,7 +10,7 @@ import * as moment from 'moment';
 class Msg extends Component {
     componentDidUpdate = () => {
         if (this.props.notification.seen_messages.map(x => x.id).includes(this.props.item.id)) {
-            this.props.item = this.props.notification.seen_messages.find(x => x.id == this.props.item.id);
+            this.props.item = this.props.notification.seen_messages.find(x => x.id === this.props.item.id);
             this.props.deleteSeenMsgNotification(this.props.item.id);
         }
     }
@@ -22,7 +22,7 @@ class Msg extends Component {
     render() {
         const { user, item, seenItem, current_user } = this.props;
         return <>
-            {user.id != current_user.id ?
+            {user.id !== current_user.id ?
                 <div className="d-flex justify-content-start mb-4">
                     <Link to={'/user/' + user.id}>
                         <ButtonBase>

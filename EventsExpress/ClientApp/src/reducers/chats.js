@@ -1,4 +1,3 @@
-
 import initialState from '../store/initialState';
 import {
     GET_CHATS_ERROR, GET_CHATS_PENDING, GET_CHATS_SUCCESS
@@ -11,8 +10,8 @@ export const reducer = (
 ) => {
     switch (action.type) {
         case RECEIVE_MESSAGE:
-            var chat = state.data.find(x => x.id == action.payload.chatRoomId);
-            var newChats = state.data.filter(x => x.id != action.payload.chatRoomId);
+            var chat = state.data.find(x => x.id === action.payload.chatRoomId);
+            var newChats = state.data.filter(x => x.id !== action.payload.chatRoomId);
             if (chat != null) {
                 chat.lastMessage = action.payload.text;
                 chat.lastMessageTime = action.payload.dateCreated;

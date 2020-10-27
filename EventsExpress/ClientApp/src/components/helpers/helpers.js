@@ -13,10 +13,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 
-import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-
 export const radioButton = ({ input, ...rest }) => (
   <FormControl>
     <RadioGroup {...input} {...rest}>
@@ -51,12 +47,7 @@ export const validate = values => {
       errors[field] = 'Required'
     }
   })
-  // if(new Date(values.date_from).getTime() <= new Date().getTime()){
-  //   errors.date_from  = 'Date is incorrect';
-  // }
-  // if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
-  //   errors.date_to = 'Date is too low of start';
-  // }
+
   if (
     values.email &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
@@ -262,7 +253,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 const asyncValidate = (values) => {
   return sleep(1000).then(() => {
     if (['foo@foo.com', 'bar@bar.com'].includes(values.email)) {
-      throw { email: 'Email already Exists' }
+        throw Object.create({ email: 'Email already Exists' });
     }
   })
 }

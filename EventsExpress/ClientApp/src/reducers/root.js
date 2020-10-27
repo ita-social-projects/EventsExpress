@@ -1,6 +1,4 @@
-import React from 'react';
-import { combineReducers } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { routerReducer } from 'react-router-redux';
 import {reducer as LoginReducer} from './login';
 import { reducer as formReducer } from 'redux-form';
 import * as Username from './editReducers/editUsernameReducer';
@@ -18,7 +16,6 @@ import * as Cities from './cities';
 import * as Users from './users';
 import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
-import { changePassword } from '../actions/EditProfile/changePassword';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
 import * as EventView from './event-item-view';
 import * as AddComment from './add-comment';
@@ -49,11 +46,8 @@ const rootReducers = {
     editUsername: Username.reducer,
     editGender: Gender.reducer,
     editBirthday: Birthday.reducer,
-    form: formReducer,
-    login: LoginReducer,
     register: Register.reducer,
     selectCategories: SelectCategories.reducer,
-    register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
     countries: Countries.reducer,
@@ -64,7 +58,6 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer,
     event: EventView.reducer,
-    change_avatar: ChangeAvatar.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,
@@ -72,7 +65,6 @@ const rootReducers = {
     delete_comment: DeleteComment.reducer,
     profile: Profile.reducer,
     events_for_profile: EventsForProfile.reducer,
-    delete_comment: DeleteComment.reducer,
     recoverPassword: RecoverPassword.reducer,
     authenticate: Auth.reducer,
     chats: Chats.reducer,

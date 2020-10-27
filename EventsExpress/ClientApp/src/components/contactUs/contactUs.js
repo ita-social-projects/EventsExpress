@@ -23,15 +23,8 @@ const useStyles = makeStyles(theme => ({
   const { validate } = Module;
 
 class ContactUs extends Component{
-    constructor(props){
-        super(props)
-    }
-    
-
-    
 
     render(){
-        const classes = useStyles;
         const {  pristine, reset, submitting } = this.props;
         return(
             <div id='notfound'>

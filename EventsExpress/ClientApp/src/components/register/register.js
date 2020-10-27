@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { useAlert } from "react-alert";
 import DialogActions from "@material-ui/core/DialogActions";
 import Module  from '../helpers';
@@ -9,12 +9,8 @@ const { validate, renderTextField, asyncValidate } = Module;
 
 
  class Register extends Component {
-  constructor(props) {
-    super(props);
 
-  }
      render() {
-         alert = useAlert;
     const {pristine, reset , submitting} = this.props;
     return (
       <div className="register">

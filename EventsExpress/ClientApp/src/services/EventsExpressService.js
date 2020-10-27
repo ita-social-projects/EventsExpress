@@ -1,7 +1,3 @@
-import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-import jwt from 'jsonwebtoken';
-
 export default class EventsExpressService {
     _baseUrl = 'api/';
 

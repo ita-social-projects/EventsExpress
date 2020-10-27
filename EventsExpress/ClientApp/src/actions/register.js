@@ -1,4 +1,3 @@
-import React from 'react';
 import EventsExpressService from '../services/EventsExpressService';
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
