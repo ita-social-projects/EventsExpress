@@ -2,7 +2,7 @@ import React from 'react';
 import IconButton from "@material-ui/core/IconButton";
 
 export default function EventBlock(props){
-    const {eventItem,block,unblock}=props;
+    const {block,unblock}=props;
     
     return props.eventItem.isBlocked ?
         <IconButton className="text-success" size="middle" onClick={unblock}>

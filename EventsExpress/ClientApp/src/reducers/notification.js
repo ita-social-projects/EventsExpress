@@ -34,14 +34,14 @@ export const reducer = (
                 messages: action.payload
             }
         case RECEIVE_SEEN_MESSAGE:
-                var new_msg = state.seen_messages;
+                new_msg = state.seen_messages;
                 new_msg = new_msg.concat(action.payload);
             return {
                 ...state,
                 seen_messages: new_msg
             }
         case DELETE_SEEN_MSG_NOTIFICATION:
-                var new_msg = state.seen_messages;
+                new_msg = state.seen_messages;
                 new_msg = new_msg.filter(x => x.id != action.payload);
             return {
                 ...state,
@@ -52,7 +52,7 @@ export const reducer = (
                 ...initialState.notification
             }
         case DELETE_OLD_NOTIFICATION:
-                var new_msg = state.messages;
+                new_msg = state.messages;
                 new_msg = new_msg.filter(x => (!action.payload.includes(x.id)));
                 return {
                     ...state,

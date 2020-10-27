@@ -2,18 +2,14 @@ import React, { Component } from 'react';
 import Home from '../home';
 import Profile from '../profile';
 import Category from '../category/categories';
-import Comment from '../comment/comment'
-import Admin from '../admin';
 import UsersWrapper from '../../containers/users';
 import UserPWrapper from '../../containers/UsersWrapper';
-import EventListWrapper from '../../containers/event-list';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Layout from '../layout';
 import SearchUserWrapper from '../../containers/UserSearchWrapper';
 import NotFound from '../Route guard/404'
-import BadRequest from '../Route guard/400'
 import { Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import EventsForAdmin from '../../components/event/EventsForAdmin'

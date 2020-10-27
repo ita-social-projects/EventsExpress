@@ -83,7 +83,7 @@ export default class EventItemView extends Component {
             <div className="row">
                 <div className="col-9">
                     <div className="col-12">
-                        <img src={photoUrl} className="w-100" />
+                        <img src={photoUrl} className="w-100" alt="EventPicture"/>
                         <div className="text-block"> 
                             <span className="title">{title}</span><br/>
                             <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br/>
