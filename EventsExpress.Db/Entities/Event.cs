@@ -19,6 +19,8 @@ namespace EventsExpress.Db.Entities
 
         public virtual City City { get; set; }
 
+        public int MaxParticipants { get; set; }
+
         public Guid? PhotoId { get; set; }
 
         public virtual Photo Photo { get; set; }

@@ -18,253 +18,257 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 
 export const radioButton = ({ input, ...rest }) => (
-  <FormControl>
-    <RadioGroup {...input} {...rest}>
-      <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
-      <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
-      <FormControlLabel value="all" control={<Radio />} label="All" />
-    </RadioGroup>
-  </FormControl>
+    <FormControl>
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+            <FormControlLabel value="unblocked" control={<Radio />} label="Unblocked" />
+            <FormControlLabel value="all" control={<Radio />} label="All" />
+        </RadioGroup>
+    </FormControl>
 )
 
 
 export const validate = values => {
-  const errors = {}
-  const requiredFields = [
-    'email',
-    'password',
-    'RepeatPassword',
-    'title',
-    'description',
-    'categories',
-    'countryId',
-    'cityId',
-    'RepeatPassword',
-    'oldPassword',
-    'newPassword',
-    'repeatPassword',
-    'Birthday',
-    'UserName'
-  ]
-  requiredFields.forEach(field => {
-    if (!values[field]) {
-      errors[field] = 'Required'
+    const errors = {}
+    const numberFields = ['maxParticipants']
+    const requiredFields = [
+        'email',
+        'password',
+        'RepeatPassword',
+        'title',
+        'description',
+        'categories',
+        'countryId',
+        'cityId',
+        'RepeatPassword',
+        'oldPassword',
+        'newPassword',
+        'repeatPassword',
+        'Birthday',
+        'UserName'
+    ]
+
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    })
+
+    numberFields.forEach(field => {
+        if (values[field] && !/^[1-9]+$/i.test(values[field])) {
+            errors[field] = 'Invalid value'
+        }
+    })
+
+    if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
+        errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
-  })
-  // if(new Date(values.date_from).getTime() <= new Date().getTime()){
-  //   errors.date_from  = 'Date is incorrect';
-  // }
-  // if(new Date(values.date_from).getTime() >= new Date(values.date_to).getTime()){
-  //   errors.date_to = 'Date is too low of start';
-  // }
-  if (
-    values.email &&
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-  ) {
-    errors.email = 'Invalid email address'
-  }
-  if (values.password !== values.RepeatPassword) {
-    errors.RepeatPassword = 'Passwords do not match';
-  }
-  if (values.newPassword !== values.repeatPassword) {
-    errors.repeatPassword = 'Passwords do not match';
-  }
-  if (new Date(values.Birthday).getTime() >= Date.now()) {
 
-    errors.Birthday = 'Date is incorrect';
-  }
+    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address'
+    }
+    if (values.password !== values.RepeatPassword) {
+        errors.RepeatPassword = 'Passwords do not match';
+    }
+    if (values.newPassword !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords do not match';
+    }
+    if (new Date(values.Birthday).getTime() >= Date.now()) {
+
+        errors.Birthday = 'Date is incorrect';
+    }
 
 
-  return errors
+    return errors
 }
 export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
-  value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
+    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
 
-  minValue = new Date().getFullYear() - 115;
-  maxValue = new Date().getFullYear() - 15;
-  return <DatePicker
-    onChange={onChange}
-    selected={new Date(value) || new Date()}
-    minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-    maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+    minValue = new Date().getFullYear() - 115;
+    maxValue = new Date().getFullYear() - 15;
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
 
-    peekNextMonth
-    showMonthDropdown
-    showYearDropdown
-    dropdownMode="select"
-  />
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+    />
 }
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
 
 
-  value = value || defaultValue || new Date();
-  minValue = minValue || new Date();
-  return <DatePicker
-    onChange={onChange}
-    minDate={new Date(minValue)}
-    selected={new Date(value) || new Date()}
-  />
+    value = value || defaultValue || new Date();
+    minValue = minValue || new Date();
+    return <DatePicker
+        onChange={onChange}
+        minDate={new Date(minValue)}
+        selected={new Date(value) || new Date()}
+    />
 }
 
 
 
 export const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
+    value && value.length > max ? `Must be ${max} characters or less` : undefined
 
 export const maxLength15 = maxLength(15)
 
 export const minLength = min => value =>
-  value && value.length < min ? `Must be ${min} characters or more` : undefined
+    value && value.length < min ? `Must be ${min} characters or more` : undefined
 
 export const minLength2 = minLength(6)
 export const minLength3 = minLength(4)
 
 export const renderSelectLocationField = ({
-  input,
-  label,
-  text,
-  data,
-  meta: { touched, invalid, error },
-  children,
-  ...custom
+    input,
+    label,
+    text,
+    data,
+    meta: { touched, invalid, error },
+    children,
+    ...custom
 }) =>
-  <FormControl error={touched && error}>
-    <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-    <Select
-      native
-      {...input}
-      onBlur={() => input.onBlur()}
-      {...custom}
-      inputProps={{
-        name: text.toLowerCase() + 'Id',
-        id: 'age-native-simple'
-      }}
-    >
-      <option value=""></option>
-      {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
-    </Select>
-    {renderFromHelper({ touched, error })}
-  </FormControl>
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+        <Select
+            native
+            {...input}
+            onBlur={() => input.onBlur()}
+            {...custom}
+            inputProps={{
+                name: text.toLowerCase() + 'Id',
+                id: 'age-native-simple'
+            }}
+        >
+            <option value=""></option>
+            {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+        </Select>
+        {renderFromHelper({ touched, error })}
+    </FormControl>
 
 
 
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder,
-  meta: { touched, invalid, error } }) =>
-  <>
-    <Multiselect {...input}
-      onBlur={() => input.onBlur()}
-      value={input.value || []}
-      data={data}
-      valueField={valueField}
-      textField={textField}
-      placeholder={placeholder}
-    />
-    {renderFromHelper({ touched, error })}
-  </>
+    meta: { touched, invalid, error } }) =>
+    <>
+        <Multiselect {...input}
+            onBlur={() => input.onBlur()}
+            value={input.value || []}
+            data={data}
+            valueField={valueField}
+            textField={textField}
+            placeholder={placeholder}
+        />
+        {renderFromHelper({ touched, error })}
+    </>
 
 export const renderTextArea = ({
-  label,
-  defaultValue,
-  input,
-  rows,
-  meta: { touched, invalid, error },
-  ...custom
+    label,
+    defaultValue,
+    input,
+    rows,
+    meta: { touched, invalid, error },
+    ...custom
 }) => (
-    <TextField
-      label={label}
-      defaultValue={defaultValue}
-      multiline
-      rows="4"
-      fullWidth
-      {...input}
-      error={touched && invalid}
+        <TextField
+            label={label}
+            defaultValue={defaultValue}
+            multiline
+            rows="4"
+            fullWidth
+            {...input}
+            error={touched && invalid}
 
-      helperText={touched && error}
-      variant="outlined"
-    />)
+            helperText={touched && error}
+            variant="outlined"
+        />)
 
 export const renderTextField = ({
-  label,
-  defaultValue,
-  input,
-  rows,
-  meta: { touched, invalid, error },
-  ...custom
+    label,
+    defaultValue,
+    input,
+    rows,
+    meta: { touched, invalid, error },
+    ...custom
 }) => (
-    <TextField
-      rows={rows}
-      fullWidth
-      label={label}
-      placeholder={label}
-      error={touched && invalid}
-      defaultValue={defaultValue}
-      value={defaultValue}
-      helperText={touched && error}
-      {...input}
-      {...custom}
-    />
-  )
+        <TextField
+            rows={rows}
+            fullWidth
+            label={label}
+            placeholder={label}
+            error={touched && invalid}
+            defaultValue={defaultValue}
+            value={defaultValue}
+            helperText={touched && error}
+            {...input}
+            {...custom}
+        />
+    )
 
 export const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, invalid, error },
-  children,
-  ...custom
+    input,
+    label,
+    meta: { touched, invalid, error },
+    children,
+    ...custom
 }) => (
-    <FormControl error={touched && error}>
-      <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
-      <Select
-        fullWidth
-        native
+        <FormControl error={touched && error}>
+            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+            <Select
+                fullWidth
+                native
 
-        error={touched && invalid}
+                error={touched && invalid}
 
-        helperText={touched && error}
-        {...input}
-        {...custom}
-        inputProps={{
-          name: { label },
-          id: 'age-native-simple'
-        }}
-      >
-        {children}
-      </Select>
-      {renderFromHelper({ touched, error })}
-    </FormControl>
-  )
+                helperText={touched && error}
+                {...input}
+                {...custom}
+                inputProps={{
+                    name: { label },
+                    id: 'age-native-simple'
+                }}
+            >
+                {children}
+            </Select>
+            {renderFromHelper({ touched, error })}
+        </FormControl>
+    )
 
 const renderFromHelper = ({ touched, error }) => {
-  if (!(touched && error)) {
-    return
-  } else {
-    return <FormHelperText className="text-danger">{touched && error}</FormHelperText>
-  }
+    if (!(touched && error)) {
+        return
+    } else {
+        return <FormHelperText className="text-danger">{touched && error}</FormHelperText>
+    }
 }
 
 export const renderCheckbox = ({ input, label }) => (
-  <div>
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={input.value ? true : false}
-          onChange={input.onChange}
+    <div>
+        <FormControlLabel
+            control={
+                <Checkbox
+                    checked={input.value ? true : false}
+                    onChange={input.onChange}
+                />
+            }
+            label={label}
         />
-      }
-      label={label}
-    />
-  </div>
+    </div>
 )
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const asyncValidate = (values) => {
-  return sleep(1000).then(() => {
-    if (['foo@foo.com', 'bar@bar.com'].includes(values.email)) {
-      throw { email: 'Email already Exists' }
-    }
-  })
+    return sleep(1000).then(() => {
+        if (['foo@foo.com', 'bar@bar.com'].includes(values.email)) {
+            throw { email: 'Email already Exists' }
+        }
+    })
 }
 
 export default asyncValidate;

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201007085358_AddPropIpAddress")]
-    partial class AddPropIpAddress
+    [Migration("20201027164937_AddPropMaxParticipants")]
+    partial class AddPropMaxParticipants
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,6 +121,10 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsBlocked");
+
+                    b.Property<int>("MaxParticipants")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(2147483647);
 
                     b.Property<Guid>("OwnerId");
 
@@ -234,9 +238,8 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
 
