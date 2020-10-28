@@ -101,8 +101,8 @@ class EventForm extends Component {
                         imagefile={this.state.imagefile}
                         handleOnDrop={this.handleOnDrop}
 
-                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-                    />
+                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null} />
+
                     <Button
                         type="button"
                         color="primary"
@@ -110,7 +110,7 @@ class EventForm extends Component {
                         onClick={this.resetForm}
                         style={{ float: "right" }}>
                         Clear
-          </Button>
+                    </Button>
 
                     <div className="mt-2">
                         <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
@@ -118,7 +118,7 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="input" label="Max Count Of Participants" />
                     </div>
-                    <input hidden value={this.props.data.visitors.length} name = 'visitorsCount'/>
+                    <input hidden value={this.props.data.visitors.length} name='visitorsCount' />
                     <div className="meta-wrap m-2">
                         <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
                         {values.dateFrom != null &&
@@ -137,8 +137,8 @@ class EventForm extends Component {
                             valueField={"id"}
                             textField={"name"}
                             className="form-control mt-2"
-                            placeholder='#hashtags'
-                        />
+                            placeholder='#hashtags' />
+
                     </div>
                     <div className="mt-2">
                         <Field onChange={this.props.onChangeCountry}
