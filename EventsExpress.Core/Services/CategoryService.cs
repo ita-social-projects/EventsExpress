@@ -8,6 +8,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -26,11 +27,22 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
-            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(_db.CategoryRepository.Get().AsEnumerable());
+            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(
+                _db.CategoryRepository.Get()
+                .AsNoTracking()
+                .AsEnumerable());
+
             foreach (var cat in categories)
             {
-                cat.CountOfUser = _db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
-                cat.CountOfEvents = _db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfUser = _db.UserRepository.Get("Categories")
+                    .AsNoTracking()
+                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
+                    .Count();
+
+                cat.CountOfEvents = _db.EventRepository.Get("Categories")
+                    .AsNoTracking()
+                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
+                    .Count();
             }
 
             return categories;
