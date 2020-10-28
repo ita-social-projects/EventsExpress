@@ -16,10 +16,6 @@ class EventList extends Component {
         };
     }
 
-    componentWillUnmount = () => {
-        this.props.reset_events();
-    }
-
     handlePageChange = (page, e) => {
         this.props.callback(window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page));
         this.setState({
@@ -38,11 +34,19 @@ class EventList extends Component {
 
     render() {
         const items = this.renderItems(this.props.data_list);
-        const { page, totalPages, current_user, data_list } = this.props;
+        const { page, totalPages, data_list } = this.props;
 
         return <>
             <div className="row">
-                {data_list.length > 0 ? items : <div id="notfound" className="w-100"><div className="notfound"> <div className="notfound-404"><div className="h1">No Results</div></div> </div></div>}
+                {data_list.length > 0
+                    ? items
+                    : <div id="notfound" className="w-100">
+                        <div className="notfound">
+                            <div className="notfound-404">
+                                <div className="h1">No Results</div>
+                            </div>
+                        </div>
+                    </div>}
             </div>
             <br />
             <ul className="pagination justify-content-center">
@@ -91,7 +95,7 @@ class EventList extends Component {
                                         activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
                                     }
 
-                                    if (totalPages != 1) {
+                                    if (totalPages !== 1) {
                                         return (
                                             <Link className="btn btn-primary"
                                                 to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
@@ -120,7 +124,6 @@ class EventList extends Component {
                                         );
                                     }
                                 })}
-
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page + 1))}

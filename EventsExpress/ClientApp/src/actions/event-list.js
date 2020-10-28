@@ -1,6 +1,6 @@
 import { data } from 'jquery';
+import { stringify as stringifyQueryString } from 'query-string';
 import EventsExpressService from '../services/EventsExpressService';
-import { generateQuerySearch } from '../components/helpers/helpers';
 
 export const SET_EVENTS_PENDING = "SET_EVENTS_PENDING";
 export const GET_EVENTS_SUCCESS = "GET_EVENTS_SUCCESS";
@@ -10,14 +10,11 @@ export const UPDATE_EVENTS_FILTERS = "UPDATE_EVENTS_FILTERS";
 
 const api_serv = new EventsExpressService();
 
-// TODO: Remove this func signsture.
-// export function get_events(filters = "?page=1") {
 export function get_events(filters) {
     return dispatch => {
-        dispatch(updateEventsFilters(filters))
         dispatch(setEventPending(true));
         dispatch(setEventError(false));
-        const res = api_serv.getAllEvents(generateQuerySearch(filters));
+        const res = api_serv.getAllEvents(`?${stringifyQueryString(filters)}`);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));
@@ -28,14 +25,11 @@ export function get_events(filters) {
     }
 }
 
-// TODO: Remove this func signsture.
-// export function get_eventsForAdmin(filters = "?page=1") {
 export function get_eventsForAdmin(filters) {
     return dispatch => {
-        dispatch(updateEventsFilters(filters))
         dispatch(setEventPending(true));
         dispatch(setEventError(false));
-        const res = api_serv.getAllEventsForAdmin(generateQuerySearch(filters));
+        const res = api_serv.getAllEventsForAdmin(`?${stringifyQueryString(filters)}`);
         res.then(response => {
             if (response.error == null) {
                 dispatch(getEvents(response));

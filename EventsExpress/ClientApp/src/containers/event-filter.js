@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
-import { get_events, get_eventsForAdmin } from '../actions/event-list';
-import history from '../history';
+import { updateEventsFilters } from '../actions/event-list';
 import get_categories from '../actions/category-list';
-import { generateQuerySearch } from '../components/helpers/helpers';
+import history from '../history';
 
 class EventFilterWrapper extends Component {
     componentWillMount() {
@@ -14,64 +13,49 @@ class EventFilterWrapper extends Component {
 
     onReset = () => {
         this.props.reset_filters();
-        let search_string = '?page=1';
+        this.props.events.searchParams = {
+            page: '1',
+            keyWord: undefined,
+            dateFrom: undefined,
+            dateTo: undefined,
+            categories: undefined,
+            status: undefined,
+        };
 
-        if (window.location.search != search_string) {
-            if (this.props.current_user.role == "Admin") {
-                this.props.AdminSearch(search_string);
-            } else {
-                this.props.search(search_string);
-            }
-
-            history.push(window.location.pathname + search_string);
-        }
+        this.props.updateEventsFilters(this.props.events.searchParams);
     }
 
-    onSubmit = (filters,) => {
-        // let search_string = generateQuerySearch(this.props.events.searchParams);
-        // var search_string = '?page=1';
-        // if (filters != null) {
-        //     if (filters.search != null) {
-        //         search_string += '&keyWord=' + filters.search;
-        //     }
-        //     if (filters.dateFrom != null) {
-        //         search_string += '&dateFrom=' + new Date(filters.dateFrom).toDateString();
-        //     }
-        //     if (filters.dateTo != null) {
-        //         search_string += '&dateTo=' + new Date(filters.dateTo).toDateString();
-        //     }
-        //     if (filters.categories != null) {
-        //         var categories = '';
-        //         for (var i = 0; i < filters.categories.length; i++) {
-        //             categories += filters.categories[i].id + ',';
-        //         }
-        //         search_string += '&categories=' + categories;
-        //     }
-        //     if (filters.status == "all") {
-        //         search_string += '&All=' + true;
-        //     }
-        //     if (filters.status == 'blocked') {
-        //         search_string += '&Blocked=' + true;
-        //     }
-        //     if (filters.status == 'unblocked') {
-        //         search_string += '&Unblocked=' + true;
-        //     }
-        // }
-
+    onSubmit = (filters) => {
         Object.keys(filters).forEach(function (key) {
-            this.props.events.searchParams[key] = filters[key];
+            switch (key) {
+                case 'dateFrom':
+                case 'dateTo':
+                    this.props.events.searchParams[key] = new Date(filters[key]).toDateString();
+                    break;
+                case 'categories':
+                    let categories = '';
+                    filters[key].forEach(function (category) {
+                        categories += `${category.id},`;
+                    });
+                    this.props.events.searchParams[key] = categories;
+                    break;
+                case 'status':
+                    if (filters[key] === "all") {
+                        this.props.events.searchParams[key] = 'All=true';
+                    }
+                    if (filters[key] === 'blocked') {
+                        this.props.events.searchParams[key] = 'Blocked=true';
+                    }
+                    if (filters[key] === 'unblocked') {
+                        this.props.events.searchParams[key] = 'Unblocked=true';
+                    }
+                    break;
+                default:
+                    this.props.events.searchParams[key] = filters[key];
+            }
         }.bind(this));
-        // ({ keyWord: this.props.events.searchParams.keyWord } = filters);
 
-        let search_string = generateQuerySearch(this.props.events.searchParams);
-
-        if (this.props.current_user.role == "Admin") {
-            this.props.AdminSearch(search_string);
-        } else {
-            this.props.search(search_string);
-        }
-
-        history.push(window.location.pathname + search_string);
+        this.props.updateEventsFilters(this.props.events.searchParams);
     }
 
     render() {
@@ -96,10 +80,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        search: (values) => dispatch(get_events(values)),
+        updateEventsFilters: (value) => dispatch(updateEventsFilters(value)),
         get_categories: () => dispatch(get_categories()),
-        AdminSearch: (values) => dispatch(get_eventsForAdmin(values)),
-        reset_filters: () => dispatch(reset('event-filter-form'))
+        reset_filters: () => {
+            dispatch(reset('event-filter-form'));
+        },
     }
 };
 

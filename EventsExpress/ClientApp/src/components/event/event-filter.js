@@ -14,8 +14,6 @@ class EventFilter extends Component {
         this.state = { viewMore: false }
     }
 
-    //toggleMode = val => !val;
-
     render() {
         const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
@@ -31,9 +29,7 @@ class EventFilter extends Component {
                             label="Keyword"
                         />
                     </div>
-
                     {this.state.viewMore && <>
-
                         <div className="form-group">
                             <div>From</div>
                             <Field
@@ -50,7 +46,6 @@ class EventFilter extends Component {
                                 component={renderDatePicker}
                             />
                         </div>
-
                         <div className="form-group">
                             <Field
                                 name="categories"
@@ -62,7 +57,6 @@ class EventFilter extends Component {
                                 placeholder='#hashtags'
                             />
                         </div>
-
                         {current_user.role == "Admin" && (
                             <div className="form-group">
                                 <Field name="status" component={radioButton}>
@@ -72,9 +66,7 @@ class EventFilter extends Component {
                                 </Field>
                             </div>
                         )}
-
                     </>}
-
                     <div>
                         <Button
                             key={this.state.viewMore}
@@ -86,15 +78,23 @@ class EventFilter extends Component {
                         </Button>
                     </div>
                     <div className="d-flex">
-                        <Button fullWidth={true} color="primary" onClick={this.props.onReset} disabled={this.props.pristine || this.props.submitting}>
+                        <Button
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.onReset}
+                            disabled={this.props.pristine || this.props.submitting}
+                        >
                             Reset
                         </Button>
-
-                        <Button fullWidth={true} type="submit" color="primary" disabled={this.props.pristine || this.props.submitting}>
+                        <Button
+                            fullWidth={true}
+                            type="submit"
+                            color="primary"
+                            disabled={this.props.pristine || this.props.submitting}
+                        >
                             Search
                         </Button>
                     </div>
-
                 </form>
             </div>
         </>

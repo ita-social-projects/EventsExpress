@@ -34,27 +34,6 @@ const initialState = {
         isRegisterSuccess: false,
         registerError: null
     },
-    add_event: {
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
-    },
-    events: {
-        isPending: true,
-        isError: false,
-        data: {
-            items: [],
-            pageViewModel: {},
-        },
-        searchParams: {
-            page: '1',
-            keyWord: undefined,
-            dateFrom: undefined,
-            dateTo: undefined,
-            categories: undefined,
-            status: undefined,
-        },
-    },
     change_avatar: {
         isPending: false,
         isSuccess: false,
@@ -68,11 +47,6 @@ const initialState = {
     SelectCategories: {
         IsSelectCategoriesSeccess: false,
         IsSelectCategoriesError: null
-    },
-    add_event: {
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
     },
     add_category: {
         isCategoryPending: false,
@@ -130,6 +104,27 @@ const initialState = {
             dateTo: null,
             photoUrl: null,
         }
+    },
+    add_event: {
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: true,
+        isError: false,
+        data: {
+            items: [],
+            pageViewModel: {},
+        },
+        searchParams: {
+            page: '1',
+            keyWord: undefined,
+            dateFrom: undefined,
+            dateTo: undefined,
+            categories: undefined,
+            status: undefined,
+        },
     },
     profile: {
         isPending: true,
