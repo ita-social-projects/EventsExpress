@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import CommentItemWrapper from '../../containers/delete-comment';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Pagination from "react-paginating";
+
 const limit = 2;
 const pageCount = 3;
-
 
 export default class CommentList extends Component {
     constructor() {
@@ -14,7 +14,7 @@ export default class CommentList extends Component {
         };
     }
 
-    handlePageChange = (page,  e) => {
+    handlePageChange = (page, e) => {
         this.props.callback(this.props.evId, page);
         this.setState({
             currentPage: page
@@ -22,12 +22,13 @@ export default class CommentList extends Component {
     };
 
     renderItems = arr => arr.map(item => <CommentItemWrapper key={item.id} item={item} />)
-    
+
     render() {
         const { data_list } = this.props;
         const items = this.renderItems(data_list);
         const { page, totalPages } = this.props;
-        return <>           
+
+        return <>
             <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
@@ -47,15 +48,15 @@ export default class CommentList extends Component {
                     }) => (
                             <div>
                                 {hasPreviousPage && (
-                                <Link className="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
-                                    {...getPageItemProps({
-                                        pageValue: 1,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    first
-                                </Link>)}
+                                    <Link className="btn btn-primary"
+                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                        {...getPageItemProps({
+                                            pageValue: 1,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        first
+                                    </Link>)}
 
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -92,7 +93,7 @@ export default class CommentList extends Component {
                                         );
                                     } else {
                                         return (
-                                            <Link 
+                                            <Link
                                                 to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
                                                 {...getPageItemProps({
@@ -102,7 +103,7 @@ export default class CommentList extends Component {
                                                     onPageChange: this.handlePageChange
                                                 })}
                                             >
-                                              
+
                                             </Link>
                                         );
                                     }
@@ -121,16 +122,16 @@ export default class CommentList extends Component {
                                     </Link>
                                 )}
                                 {hasNextPage && (
-                                <Link className="btn btn-primary"
-                                    to={window.location.pathname.replace(/[/].$/g, '/' + page)}
+                                    <Link className="btn btn-primary"
+                                        to={window.location.pathname.replace(/[/].$/g, '/' + page)}
 
-                                    {...getPageItemProps({
-                                        pageValue: this.props.totalPages,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    last
-                                </Link>  )}
+                                        {...getPageItemProps({
+                                            pageValue: this.props.totalPages,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        last
+                                    </Link>)}
                             </div>
                         )}
                 </Pagination>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as moment from 'moment';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
 import { deleteSeenMsgNotification } from '../../actions/chat';
 import './msg.css';
-import * as moment from 'moment';
 
 class Msg extends Component {
     componentDidUpdate = () => {
@@ -15,14 +15,15 @@ class Msg extends Component {
         }
     }
 
-    getTime = (value) => {        
+    getTime = (value) => {
         return moment.utc(value).fromNow();
     }
 
     render() {
         const { user, item, seenItem, current_user } = this.props;
         return <>
-            {user.id != current_user.id ?
+            {user.id != current_user.id
+                ?
                 <div className="d-flex justify-content-start mb-4">
                     <Link to={'/user/' + user.id}>
                         <ButtonBase>

@@ -3,21 +3,16 @@ import LeftSidebarWrapper from '../../containers/left-sidebar';
 import AlertContainer from '../../containers/alert';
 import DialogContainer from '../../containers/dialog';
 import './layout.css';
-
 import './colorlib.css';
-
 
 const Layout = ({ children }) => {
     return (
         <>
             <LeftSidebarWrapper />
             <AlertContainer />
-
             <div id="main" className="container-fluid pl-5">
-                   {children}
+                {children}
             </div>
-
-            
         </>
     );
 }

@@ -5,17 +5,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import { stringify as stringifyQueryString } from 'query-string';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
-import { generateQuerySearch } from '../../components/helpers/helpers';
 import './header-profile.css';
 
 export default class HeaderProfile extends Component {
-
-
     render() {
-
         const { id, name, photoUrl, rating } = this.props.user;
         const { onClick } = this.props;
 
@@ -27,11 +24,9 @@ export default class HeaderProfile extends Component {
                     )}
                     {id && (
                         <div className="d-flex flex-column align-items-center">
-
                             <CustomAvatar size="big" photoUrl={photoUrl} name={this.props.user.name} />
                             <h4>{name}</h4>
                             <RatingAverage value={rating} direction='row' />
-
                             <div>
                                 <Link to={'/profile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
@@ -40,7 +35,6 @@ export default class HeaderProfile extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-
                                 <Link to={'/notification_events'}>
                                     <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
@@ -50,12 +44,11 @@ export default class HeaderProfile extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-
-                                {/* <Link to="/home/events?page=1"> */}
                                 <Link
+                                    // to="/home/events?page=1"
                                     to={{
                                         pathname: "/home/events",
-                                        search: generateQuerySearch(this.props.events.searchParams),
+                                        search: `?${stringifyQueryString(this.props.searchParams)}`,
                                     }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>
