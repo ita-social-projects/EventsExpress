@@ -154,6 +154,13 @@ export default class EventsExpressService {
             : res;
     }
 
+    setEventCancel = async (data) => {
+        const res = await this.setResource('EventStatusHistory/Cancel', data);
+        return !res.ok
+            ? { error: await res.text() }
+            : await res.json();
+    }
+
     setContactUs = async (data) => {
         const res = await this.setResource('users/ContactAdmins', data);
         return !res.ok

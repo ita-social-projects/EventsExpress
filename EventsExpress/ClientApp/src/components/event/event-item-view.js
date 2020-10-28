@@ -93,7 +93,8 @@ export default class EventItemView extends Component {
                         <div className="button-block">
                             {(isFutureEvent && current_user.id != null)
                                 ? isMyEvent   
-                                    ? !this.state.edit ? <button onClick={this.onEdit} className="btn btn-join">Edit</button> : null
+                                        ? !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
+                                            <button onClick={this.props.onCancel} className="btn btn-join">Cancel</button></> : null
                                     : iWillVisitIt
                                         ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
                                         : <button onClick={this.props.onJoin} className="btn btn-join">Join</button>

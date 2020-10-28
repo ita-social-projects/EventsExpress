@@ -21,6 +21,13 @@ export const unBlockEvent = {
   UPDATE: 'UPDATE_UNBLOCKED'
 }
 
+export const cancelEvent = {
+    PENDING: 'PENDING_CANCEL',
+    SUCCESS: 'SUCCESS_CANCEL',
+    ERROR: 'ERROR_CANCEL',
+    UPDATE: 'UPDATE_CANCEL'
+}
+
 const api_serv = new EventsExpressService();
 
 export default function get_event(id) {
@@ -117,6 +124,24 @@ export function block_event(id) {
   }
 }
 
+// ACTION CREATOR FOR EVENT CANCELATION:
+export function cancel_event(eventId, reason) {
+    return dispatch => {
+        dispatch(setCancelEventPending(true));
+
+        const res = api_serv.setEventCancel({EventId: eventId, Reason: reason});
+
+        res.then(response => {
+            if (response.error = null) {
+                dispatch(setCancelEventSuccess(eventId));
+                dispatch(updateCancelEvent(eventId));
+            } else {
+                dispatch(setCancelEventError(response.error));
+            }
+        });
+    }
+}
+
 export function resetEvent(){
   return {
     type: RESET_EVENT,
@@ -200,3 +225,32 @@ function updateUnBlockedEvent(id) {
       payload: id
   }
 } 
+
+// cancelEvent User actions
+
+function setCancelEventSuccess() {
+    return {
+        type: cancelEvent.SUCCESS        
+    }
+}
+
+function setCancelEventPending(data) {
+    return {
+        type: cancelEvent.PENDING,
+        payload: data
+    }
+}
+
+function setCancelEventError(data) {
+    return {
+        type: cancelEvent.ERROR,
+        payload: data
+    }
+}
+
+function updateCancelEvent(data) {
+    return {
+        type: cancelEvent.UPDATE,
+        payload: data
+    }
+}

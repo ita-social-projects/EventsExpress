@@ -23,7 +23,6 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for event cancelation.
         /// </summary>
-        /// <param name="eventStatus"></param>       
         /// <response code="200">Cancelation succesful.</response>
         /// <response code="400">Cancelation failed.</response>
         [HttpPost("[action]")]
@@ -35,7 +34,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok();
+            return Ok(eventStatus);
         }
     }
 }
