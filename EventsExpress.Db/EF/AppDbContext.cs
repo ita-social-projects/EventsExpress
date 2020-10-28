@@ -1,5 +1,6 @@
 ﻿using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace EventsExpress.Db.EF
 {
@@ -126,6 +127,10 @@ namespace EventsExpress.Db.EF
             // comment config
             builder.Entity<Comments>()
                 .HasOne(c => c.Parent).WithMany(prop => prop.Children).HasForeignKey(c => c.CommentsId);
+
+            // event config
+            builder.Entity<Event>()
+                .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
         }
     }
 }
