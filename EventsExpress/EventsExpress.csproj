@@ -91,6 +91,4 @@
     </ItemGroup>
   </Target>
 
-  <ProjectExtensions><VisualStudio><UserProperties clientapp_4_1jshintrc__JsonSchema="" /></VisualStudio></ProjectExtensions>
-
 </Project>

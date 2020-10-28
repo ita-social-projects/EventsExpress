@@ -9,7 +9,7 @@ export function UserBlock(props) {
 
     return (isCurrentUser) ? <td> </td> : <> <td className="align-middle">
                 <div className="d-flex justify-content-center align-items-center">
-                {(user.isBlocked === true)
+                {(user.isBlocked)
                     ? <IconButton  className="text-success" size="small" onClick={unblock}>
                         <i className="fas fa-lock" ></i>
                     </IconButton> 
