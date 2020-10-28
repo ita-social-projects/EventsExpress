@@ -3,22 +3,14 @@ import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import IconDecorator from '@material-ui/core/Icon';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
 import SocialShare from '././share/ShareMenu'
@@ -62,6 +54,7 @@ export default class Event extends Component {
         const classes = useStyles;
         const { id, title, dateFrom, comment_count, description, maxParticipants, photoUrl, categories, user, countVisitor, isBlocked } = this.props.item;
         const { city, country } = this.props.item;
+        const INT32_MAX_VALUE = 2147483647;
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -95,11 +88,16 @@ export default class Event extends Component {
                             <img src={photoUrl} className="w-100" />
                         </Link>
                     </CardMedia>
-                    {(maxParticipants < 2147483647)
-                            <Typography variant="body2" color="textSecondary" component="p">{countVisitor}/{maxParticipants} Participants</Typography>
-                        ? <CardContent>
+                    {(maxParticipants < INT32_MAX_VALUE) &&
+                        <CardContent>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="p"
+                            >
+                                {countVisitor}/{maxParticipants} Participants
+                            </Typography>
                         </CardContent>
-                        : null
                     }
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">

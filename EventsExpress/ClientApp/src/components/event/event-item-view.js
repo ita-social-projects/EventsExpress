@@ -71,7 +71,6 @@ export default class EventItemView extends Component {
 
     render() {
         const { current_user } = this.props;
-        const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors, country, city } = this.props.data;
         const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.data;
 
         const categories_list = this.renderCategories(categories);
