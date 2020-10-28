@@ -28,6 +28,7 @@ export const radioButton = ({ input, ...rest }) => (
 
 export const validate = values => {
     const errors = {};
+    const numberFields = ['maxParticipants']
     const requiredFields = [
         'email',
         'password',
@@ -50,6 +51,10 @@ export const validate = values => {
             errors[field] = 'Required'
         }
     });
+
+	if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
+        errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
+    }
 
     if (values.email &&
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {

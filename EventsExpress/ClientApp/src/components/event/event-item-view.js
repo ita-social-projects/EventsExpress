@@ -72,6 +72,7 @@ export default class EventItemView extends Component {
     render() {
         const { current_user } = this.props;
         const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors, country, city } = this.props.data;
+        const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.data;
 
         const categories_list = this.renderCategories(categories);
 
@@ -86,7 +87,10 @@ export default class EventItemView extends Component {
                         <div className="col-12">
                             <img src={photoUrl} className="w-100" />
                             <div className="text-block">
-                                <span className="title">{title}</span><br />
+                                <span className="title">{title}</span>
+								<br />
+								<span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+								<br />
                                 <span>
                                     <Moment format="D MMM YYYY" withTitle>
                                         {dateFrom}

@@ -172,6 +172,7 @@ namespace EventsExpress.Core.Services
         {
             var ev = _db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
             ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;

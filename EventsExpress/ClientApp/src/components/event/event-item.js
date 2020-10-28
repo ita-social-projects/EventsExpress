@@ -60,7 +60,7 @@ export default class Event extends Component {
 
     render() {
         const classes = useStyles;
-        const { id, title, dateFrom, comment_count, description, photoUrl, categories, user, countVisitor, isBlocked } = this.props.item;
+        const { id, title, dateFrom, comment_count, description, maxParticipants, photoUrl, categories, user, countVisitor, isBlocked } = this.props.item;
         const { city, country } = this.props.item;
 
         return (
@@ -95,6 +95,12 @@ export default class Event extends Component {
                             <img src={photoUrl} className="w-100" />
                         </Link>
                     </CardMedia>
+                    {(maxParticipants < 2147483647)
+                            <Typography variant="body2" color="textSecondary" component="p">{countVisitor}/{maxParticipants} Participants</Typography>
+                        ? <CardContent>
+                        </CardContent>
+                        : null
+                    }
                     <CardContent>
                         <Typography variant="body2" color="textSecondary" component="p">
                             {description.substr(0, 128) + '...'}

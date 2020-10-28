@@ -4,7 +4,6 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 using Moq;
