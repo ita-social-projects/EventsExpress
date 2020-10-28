@@ -79,6 +79,7 @@ export default class EventItemView extends Component {
         let iWillVisitIt = visitors.find(x => x.id == current_user.id) != null;
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
+        let isFreePlace = visitors.length < maxParticipants;
 
         return <>
             <div className="container-fluid mt-1">
@@ -88,9 +89,9 @@ export default class EventItemView extends Component {
                             <img src={photoUrl} className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
-								<br />
-								<span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
-								<br />
+                                <br />
+                                <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+                                <br />
                                 <span>
                                     <Moment format="D MMM YYYY" withTitle>
                                         {dateFrom}
@@ -116,7 +117,9 @@ export default class EventItemView extends Component {
                                             : null
                                         : iWillVisitIt
                                             ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
-                                            : <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
+                                            : isFreePlace
+                                                ? <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
+                                                : null
                                     : null
                                 }
                             </div>
