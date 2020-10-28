@@ -54,12 +54,6 @@ export const validate = values => {
         }
     })
 
-    numberFields.forEach(field => {
-        if (values[field] && !/^[1-9]+$/i.test(values[field])) {
-            errors[field] = 'Invalid value'
-        }
-    })
-
     if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
