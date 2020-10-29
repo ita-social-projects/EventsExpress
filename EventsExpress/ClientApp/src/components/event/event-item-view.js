@@ -97,7 +97,7 @@ export default class EventItemView extends Component {
                                     </Moment>
                                     {dateTo != dateFrom &&
                                         <>-
-                                                <Moment format="D MMM YYYY" withTitle>
+                                            <Moment format="D MMM YYYY" withTitle>
                                                 {dateTo}
                                             </Moment>
                                         </>

@@ -22,7 +22,13 @@ class HeaderProfileWrapper extends Component {
   }
 }
 const mapStateToProps = state => {
-  return { ...state, user: state.user, register: state.register, hub: state.hubConnection, notification: state.notification };
+  return {
+    ...state,
+    user: state.user,
+    register: state.register,
+    hub: state.hubConnection,
+    notification: state.notification
+  };
 };
 
 const mapDispatchToProps = dispatch => {

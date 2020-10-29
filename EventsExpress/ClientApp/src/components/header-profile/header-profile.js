@@ -45,6 +45,7 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
                                 </Link>
                                 <Link
+                                    // TODO: Remove commented code.
                                     // to="/home/events?page=1"
                                     to={{
                                         pathname: "/home/events",

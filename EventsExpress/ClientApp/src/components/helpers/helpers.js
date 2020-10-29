@@ -12,9 +12,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
 
 export const radioButton = ({ input, ...rest }) => (
     <FormControl>
@@ -52,7 +49,7 @@ export const validate = values => {
         }
     });
 
-	if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
+    if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 
