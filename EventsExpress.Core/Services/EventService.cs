@@ -42,7 +42,7 @@ namespace EventsExpress.Core.Services
 
             if (ev.MaxParticipants <= ev.Visitors.Count)
             {
-                return new OperationResult(false, "To much participants!", "eventId");
+                return new OperationResult(false, "To much participants!", " ");
             }
 
             var us = _db.UserRepository.Get(userId);
