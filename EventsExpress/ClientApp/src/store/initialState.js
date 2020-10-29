@@ -155,12 +155,6 @@ const initialState = {
         isError: null,
         data: []
     },
-    chats: {
-        isPending: false,
-        isSuccess: false,
-        isError: null,
-        data: []
-    },
     hubConnection: null,
     chat: {
         isPending: false,
@@ -171,6 +165,12 @@ const initialState = {
             users: [],
             id: null
         }
+    },
+    chats: {
+        isPending: false,
+        isSuccess: false,
+        isError: null,
+        data: []
     },
     alert: {
         variant: null,
