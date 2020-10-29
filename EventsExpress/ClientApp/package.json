@@ -11,7 +11,7 @@
         "@material-ui/styles": "4.2.0",
         "bootstrap": "4.3.1",
         "globalize": "1.4.2",
-        "jquery": "3.4.1",
+        "jquery": "3.5.1",
         "jsonwebtoken": "8.5.1",
         "material": "0.3.13",
         "material-ui": "0.20.2",

@@ -40,6 +40,11 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
+            if (ev.MaxParticipants <= ev.Visitors.Count)
+            {
+                return new OperationResult(false, "To much participants!", " ");
+            }
+
             var us = _db.UserRepository.Get(userId);
             if (us == null)
             {
@@ -172,6 +177,7 @@ namespace EventsExpress.Core.Services
         {
             var ev = _db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
             ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
