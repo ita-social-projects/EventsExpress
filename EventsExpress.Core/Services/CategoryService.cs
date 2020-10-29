@@ -30,7 +30,7 @@ namespace EventsExpress.Core.Services
             var categories = _mapper.Map<IEnumerable<CategoryDTO>>(
                 _db.CategoryRepository.Get()
                 .AsNoTracking()
-                .AsEnumerable());
+                .ToList());
 
             foreach (var cat in categories)
             {
