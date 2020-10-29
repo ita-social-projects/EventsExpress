@@ -6,7 +6,6 @@ import get_user, { setAttitude, reset_user } from '../actions/user-item-view';
 import get_future_events, { get_past_events, get_visited_events, get_events_togo } from '../actions/events-for-profile';
 
 import BadRequest from '../components/Route guard/400'
-import Unauthorized from '../components/Route guard/401'
 import Forbidden from '../components/Route guard/403'
 import { Redirect } from 'react-router-dom'
 

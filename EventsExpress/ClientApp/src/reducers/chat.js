@@ -7,13 +7,14 @@ export const reducer = (
     state = initialState.chat,
     action
 ) => {
+    let new_msg = state.data.messages;
+
     switch (action.type) {
         case RESET_CHAT:
             return {
                 ...initialState.chat
             }
         case CONCAT_NEW_MSG:
-            var new_msg = state.data.messages;
             new_msg = new_msg.concat(action.payload);
             return {
                 ...state,
@@ -23,8 +24,8 @@ export const reducer = (
                 }
             }
         case RECEIVE_SEEN_MESSAGE:
-            var new_msg = state.data.messages;
-            var new_msg = new_msg.map(x => {
+            new_msg = state.data.messages;
+            new_msg = new_msg.map(x => {
                 if (action.payload.includes(x.id)) {
                     x.seen = true;
                 }

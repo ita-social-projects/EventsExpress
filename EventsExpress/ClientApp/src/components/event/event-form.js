@@ -4,7 +4,7 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
-import moment, { now } from 'moment';
+import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';

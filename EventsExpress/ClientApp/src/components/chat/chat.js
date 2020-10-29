@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat';
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
-import { renderTextArea, renderTextField } from '../helpers/helpers';
+import { renderTextField } from '../helpers/helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
@@ -57,7 +57,7 @@ class Chat extends Component {
     }
 
     renderMessages = (arr) => {
-        if (this.props.chat.isSuccess)
+        if (this.props.chat.isSuccess) {
             return arr.messages.map(x => {
                 var sender = arr.users.find(y => y.id == x.senderId);
                 if (arr.id == x.chatRoomId) {
@@ -65,7 +65,13 @@ class Chat extends Component {
                         <Msg key={x.id + x.seen} user={sender} seenItem={x.seen} item={x} />
                     </>
                 }
-            })
+                else {
+                    return <>
+                        <Msg />
+                    </>
+                }
+            });
+        }
     }
 
     render() {

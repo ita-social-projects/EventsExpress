@@ -16,8 +16,8 @@ class EventFilterWrapper extends Component {
     onReset = () => {
         this.props.reset_filters();
         var search_string = '?page=1';
-        if(window.location.search != search_string){
-        if(this.props.current_user.role=="Admin"){
+        if(window.location.search !== search_string){
+        if(this.props.current_user.role==="Admin"){
             this.props.AdminSearch(search_string); 
         }
         else{
@@ -47,17 +47,17 @@ class EventFilterWrapper extends Component {
                 }
                 search_string += '&categories=' + categories;
             }
-            if(filters.status=="all"){
+            if(filters.status==="all"){
                 search_string+='&All='+true;
             }
-            if (filters.status == 'blocked') {
+            if (filters.status === 'blocked') {
                 search_string += '&Blocked=' + true;
             }
-            if (filters.status == 'unblocked') {
+            if (filters.status === 'unblocked') {
                 search_string += '&Unblocked=' + true;
             }
         }
-        if(this.props.current_user.role=="Admin"){
+        if(this.props.current_user.role==="Admin"){
             this.props.AdminSearch(search_string); 
         }
         else{
