@@ -118,7 +118,6 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="number" label="Max Count Of Participants" />
                     </div>
-                    <input hidden value={this.props.data.visitors.length} name='visitorsCount' />
                     <div className="meta-wrap m-2">
                         <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
                         {values.dateFrom != null &&
