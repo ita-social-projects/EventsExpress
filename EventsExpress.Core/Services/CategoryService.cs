@@ -27,7 +27,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
-            var categories = _mapper.Map<IEnumerable<CategoryDTO>>(
+            var categories = _mapper.Map<List<CategoryDTO>>(
                 _db.CategoryRepository.Get()
                 .AsNoTracking()
                 .ToList());

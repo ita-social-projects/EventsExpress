@@ -40,6 +40,11 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Event not found!", "eventId");
             }
 
+            if (ev.MaxParticipants <= ev.Visitors.Count)
+            {
+                return new OperationResult(false, "To much participants!", " ");
+            }
+
             var us = _db.UserRepository.Get(userId);
             if (us == null)
             {
