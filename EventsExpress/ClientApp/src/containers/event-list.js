@@ -11,9 +11,9 @@ import Forbidden from '../components/Route guard/403';
 import history from '../history';
 
 class EventListWrapper extends Component {
-    constructor() {
-        super();
-        let queryParams = Object.create(null);
+    constructor(props) {
+        super(props);
+        this.queryParams = Object.create(null);
     }
 
     componentDidUpdate(prevProps) {

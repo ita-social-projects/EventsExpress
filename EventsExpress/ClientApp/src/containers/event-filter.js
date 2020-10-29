@@ -4,9 +4,17 @@ import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import { updateEventsFilters } from '../actions/event-list';
 import get_categories from '../actions/category-list';
-import history from '../history';
 
 class EventFilterWrapper extends Component {
+    constructor(props) {
+        super(props);
+        this.eventStatus = {
+            active: true,
+            blocked: true,
+            cancelled: true,
+        };
+    }
+
     componentWillMount() {
         this.props.get_categories();
     }
