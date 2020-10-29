@@ -71,14 +71,29 @@ export default class EventItemView extends Component {
 
     render() {
         const { current_user } = this.props;
-        const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.data;
-
+        const {
+            photoUrl,
+            categories,
+            title,
+            dateFrom,
+            dateTo,
+            description,
+            maxParticipants,
+            user,
+            visitors,
+            country,
+            city
+        } = this.props.data;
         const categories_list = this.renderCategories(categories);
+        const INT32_MAX_VALUE = 2147483647;
 
-        let iWillVisitIt = visitors.find(x => x.id == current_user.id) != null;
+        let iWillVisitIt = visitors.find(x => x.id == current_user.id) !== null;
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
         let isFreePlace = visitors.length < maxParticipants;
+        let canEdit = isFutureEvent && isMyEvent;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
 
         return <>
             <div className="container-fluid mt-1">
@@ -89,7 +104,10 @@ export default class EventItemView extends Component {
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
-                                <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+                                {(maxParticipants < INT32_MAX_VALUE)
+                                    ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+                                    : <span className="maxParticipants">{visitors.length} Participants</span>
+                                }
                                 <br />
                                 <span>
                                     <Moment format="D MMM YYYY" withTitle>
@@ -109,18 +127,9 @@ export default class EventItemView extends Component {
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {(isFutureEvent && current_user.id != null)
-                                    ? isMyEvent
-                                        ? !this.state.edit
-                                            ? <button onClick={this.onEdit} className="btn btn-join">Edit</button>
-                                            : null
-                                        : iWillVisitIt
-                                            ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
-                                            : isFreePlace
-                                                ? <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
-                                                : null
-                                    : null
-                                }
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
+                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}
+                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
                             </div>
                         </div>
                         {this.state.edit

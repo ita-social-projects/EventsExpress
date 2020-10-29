@@ -29,7 +29,6 @@ class EventForm extends Component {
 
     handleFile(fieldName, event) {
         event.preventDefault();
-        // convert files to an array
         const files = [...event.target.files];
     }
 
@@ -85,7 +84,6 @@ class EventForm extends Component {
     render() {
         const { countries, form_values, all_categories, data } = this.props;
         let values = form_values || this.props.initialValues;
-        let countries_list = this.renderLocations(countries);
 
         if (this.props.Event.isEventSuccess) {
             this.resetForm();
@@ -119,6 +117,15 @@ class EventForm extends Component {
                             defaultValue={data.title}
                             type="input"
                             label="Title"
+                        />
+                    </div>
+                    <div className="mt-2">
+                        <Field
+                            name='maxParticipants'
+                            component={renderTextField}
+                            defaultValue={data.maxParticipants}
+                            type="number"
+                            label="Max Count Of Participants"
                         />
                     </div>
                     <div className="meta-wrap m-2">

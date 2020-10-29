@@ -49,7 +49,13 @@ export const validate = values => {
         }
     });
 
-    if (values.maxParticipants && values.maxParticipants < values.visitors.length) {
+    if (values.maxParticipants && values.maxParticipants < 1) {
+        errors.maxParticipants = `Invalid data`;
+    }
+
+    if (values.visitors
+        && values.maxParticipants
+        && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 
