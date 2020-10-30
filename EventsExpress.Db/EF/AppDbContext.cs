@@ -1,6 +1,6 @@
-﻿using EventsExpress.Db.Entities;
+﻿using System;
+using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace EventsExpress.Db.EF
 {
@@ -37,6 +37,12 @@ namespace EventsExpress.Db.EF
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }
+
+        public DbSet<UserEventInventory> UserEventInventories { get; set; }
+
+        public DbSet<Inventory> Inventories { get; set; }
+
+        public DbSet<UnitOfMeasuring> UnitOfMeasurings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -131,6 +137,24 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
+
+            // inventory config
+            builder.Entity<Inventory>()
+                .HasOne(i => i.Event)
+                .WithMany(e => e.Inventories)
+                .HasForeignKey(i => i.EventId).OnDelete(DeleteBehavior.Restrict);
+
+            // userevent-inventory many-to-many
+            builder.Entity<UserEventInventory>()
+                .HasKey(t => new { t.InventoryId, t.UserId, t.EventId });
+            builder.Entity<UserEventInventory>()
+                .HasOne(uei => uei.UserEvent)
+                .WithMany(ue => ue.Inventories)
+                .HasForeignKey(uei => new { uei.UserId, uei.EventId }).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<UserEventInventory>()
+                .HasOne(uei => uei.Inventory)
+                .WithMany(i => i.UserEventInventories)
+                .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

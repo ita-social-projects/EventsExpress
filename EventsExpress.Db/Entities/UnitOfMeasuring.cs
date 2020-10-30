@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace EventsExpress.Db.Entities
+{
+    public class UnitOfMeasuring : BaseEntity
+    {
+        public string UnitName { get; set; }
+
+        public string ShortName { get; set; }
+    }
+}
