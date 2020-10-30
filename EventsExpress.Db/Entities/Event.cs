@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventsExpress.Db.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
@@ -20,6 +21,8 @@ namespace EventsExpress.Db.Entities
         public virtual City City { get; set; }
 
         public int MaxParticipants { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public Guid? PhotoId { get; set; }
 

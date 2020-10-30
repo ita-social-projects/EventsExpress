@@ -108,6 +108,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
+                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto
                 {
                     Id = src.OwnerId,
@@ -133,6 +134,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
+                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto
                 {
                     Id = src.OwnerId,

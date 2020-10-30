@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.DTO
 {
@@ -16,6 +17,8 @@ namespace EventsExpress.DTO
         public DateTime DateTo { get; set; }
 
         public int MaxParticipants { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public string PhotoUrl { get; set; }
 

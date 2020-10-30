@@ -1,4 +1,5 @@
 ﻿using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -131,6 +132,8 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
+            builder.Entity<Event>()
+                .Property(c => c.Periodicity).HasDefaultValue(Periodicity.NotPeriodic);
         }
     }
 }

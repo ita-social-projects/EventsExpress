@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.DTOs
@@ -20,6 +21,8 @@ namespace EventsExpress.Core.DTOs
         public DateTime DateTo { get; set; }
 
         public int MaxParticipants { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public IFormFile Photo { get; set; }
 
