@@ -8,7 +8,8 @@ import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import { renderMultiselect, renderSelectLocationField, renderTextArea } from '../helpers/helpers';
+import periodicity from '../../constants/PeriodicityConstants';
+import { renderMultiselect, renderSelectLocationField, renderTextArea, renderSelectGenderField } from '../helpers/helpers';
 import { connect } from 'react-redux';
 
 momentLocaliser(moment)
@@ -59,6 +60,12 @@ class EventForm extends Component {
         }
     }
 
+    boxChange = () => {
+        this.setState({
+            isChecked: !this.state.isChecked,
+        });
+    }
+
     componentWillUnmount() {
         this.resetForm();
     }
@@ -82,7 +89,7 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, form_values, all_categories, data } = this.props;
+        const { countries, form_values, all_categories, periodicity, data } = this.props;
         let values = form_values || this.props.initialValues;
         let countries_list = this.renderLocations(countries);
         if (this.props.Event.isEventSuccess) {
@@ -117,7 +124,22 @@ class EventForm extends Component {
                     </div>
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="number" label="Max Count Of Participants" />
+                    </div> 
+                    <div>
+                        <br/>
+                        <input type="checkbox" name="checkRecurrent" onChange={this.boxChange}/>
+                        <label> Recurrent Event</label>
                     </div>
+                    {(!this.props.boxChange)
+                        ?<div className="mt-2">
+                            <Field 
+                                name='periodicity.value'
+                                data={periodicity}
+                                text='periodicity'
+                                component={renderSelectLocationField} />
+                        </div>
+                        : null
+                    }
                     <div className="meta-wrap m-2">
                         <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
                         {values.dateFrom != null &&

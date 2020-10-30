@@ -55,7 +55,7 @@ export const validate = values => {
     }
 
     if (values.visitors && values.maxParticipants && values.maxParticipants < values.visitors.length) {
-            errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
+        errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -145,6 +145,33 @@ export const renderSelectLocationField = ({
         {renderFromHelper({ touched, error })}
     </FormControl>
 
+
+export const renderSelectGenderField = ({
+    input,
+    label,
+    text,
+    data,
+    meta: { touched, invalid, error },
+    children,
+    ...custom
+}) =>
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+        <Select
+            native
+            {...input}
+            onBlur={() => input.onBlur()}
+            {...custom}
+            inputProps={{
+                name: text.toLowerCase() + 'Id',
+                id: 'age-native-simple'
+            }}
+        >
+            <option value=""></option>
+            {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+        </Select>
+        {renderFromHelper({ touched, error })}
+    </FormControl>
 
 
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder,

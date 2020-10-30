@@ -39,6 +39,10 @@ class AddEventWrapper extends Component {
         this.props.get_cities(e.target.value);
     }
 
+    recurrentEventChecked = (e) => {
+        this.props.get_cities(e.target.value);
+    }
+
     handleClose = () => {
         this.setState({ open: false });
     }
@@ -52,7 +56,7 @@ class AddEventWrapper extends Component {
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
-                onSubmit={this.onSubmit}
+                onSubmit={this.onSubmit} 
                 countries={this.props.countries.data}
                 form_values={this.props.form_values}
                 Event={this.props.add_event_status}
