@@ -7,6 +7,7 @@ export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";
 export const GET_EVENT_ERROR = "GET_EVENT_ERROR";
 export const RESET_EVENT = "RESET_EVENT";
 
+
 export const blockEvent = {
   PENDING: 'PENDING_BLOCK',
   SUCCESS: 'SUCCESS_BLOCK',
@@ -25,7 +26,8 @@ export const cancelEvent = {
     PENDING: 'PENDING_CANCEL',
     SUCCESS: 'SUCCESS_CANCEL',
     ERROR: 'ERROR_CANCEL',
-    UPDATE: 'UPDATE_CANCEL'
+    UPDATE: 'UPDATE_CANCEL',
+    SET_EVENT_CANCELATION_MODAL_STATUS: "TOGLE_EVENT_CANCELATION_MODAL_STATUS"
 }
 
 const api_serv = new EventsExpressService();
@@ -135,6 +137,7 @@ export function cancel_event(eventId, reason) {
             if (response.error = null) {
                 dispatch(setCancelEventSuccess(eventId));
                 dispatch(updateCancelEvent(eventId));
+                dispatch(setEventCanelationModalStatus(false));
             } else {
                 dispatch(setCancelEventError(response.error));
             }
@@ -251,6 +254,13 @@ function setCancelEventError(data) {
 function updateCancelEvent(data) {
     return {
         type: cancelEvent.UPDATE,
+        payload: data
+    }
+}
+
+export function setEventCanelationModalStatus(data) {
+    return {
+        type: cancelEvent.SET_EVENT_CANCELATION_MODAL_STATUS,
         payload: data
     }
 }

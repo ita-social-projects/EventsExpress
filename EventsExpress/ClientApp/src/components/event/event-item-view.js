@@ -6,6 +6,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
+import EventCancelModal from './event-cancel-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
@@ -94,7 +95,7 @@ export default class EventItemView extends Component {
                             {(isFutureEvent && current_user.id != null)
                                 ? isMyEvent   
                                         ? !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
-                                            <button onClick={this.props.onCancel} className="btn btn-join">Cancel</button></> : null
+                                            <EventCancelModal submitCallback={this.props.onCancel} /></> : null
                                     : iWillVisitIt
                                         ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
                                         : <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
@@ -111,7 +112,7 @@ export default class EventItemView extends Component {
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                 <RatingWrapper 
                                     iWillVisitIt={iWillVisitIt}
-                                    eventId={this.props.data.id} 
+                                    eventId={this.props.data.id}
                                     userId={current_user.id}
                                 />                                
                             </div>

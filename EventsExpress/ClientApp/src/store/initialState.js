@@ -118,6 +118,7 @@ const initialState = {
     event: {
         isPending: true,
         isError: false,
+        cancelationModalStatus: false,
         data: {
             
             dateFrom: null,

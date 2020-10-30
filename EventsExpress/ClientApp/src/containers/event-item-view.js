@@ -26,8 +26,8 @@ class EventItemViewWrapper extends Component{
         this.props.leave(this.props.current_user.id, this.props.event.data.id);
     }
 
-    onCancel = () => {
-        this.props.cancel(this.props.event.data.id, "By some reason");
+    onCancel = (reason) => {
+        this.props.cancel(this.props.event.data.id, reason);
     }
 
     render(){   
