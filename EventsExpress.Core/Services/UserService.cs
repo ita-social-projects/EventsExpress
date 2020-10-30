@@ -176,32 +176,32 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
-            var users = Db.UserRepository.Get("Photo,Role");
+            var users = Db.UserRepository.Get("Photo,Role").AsNoTracking().ToList();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
-                ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord))
+                ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord)).ToList()
                 : users;
 
             users = !string.IsNullOrEmpty(model.Role)
-                ? users.Where(x => x.Role.Name.Contains(model.Role))
+                ? users.Where(x => x.Role.Name.Contains(model.Role)).ToList()
                 : users;
 
             users = model.Blocked
-                ? users.Where(x => x.IsBlocked == model.Blocked)
+                ? users.Where(x => x.IsBlocked == model.Blocked).ToList()
                 : users;
 
             users = model.UnBlocked
-                ? users.Where(x => x.IsBlocked == !model.UnBlocked)
+                ? users.Where(x => x.IsBlocked == !model.UnBlocked).ToList()
                 : users;
 
             users = (model.IsConfirmed != null)
-                ? users.Where(x => x.EmailConfirmed == model.IsConfirmed)
+                ? users.Where(x => x.EmailConfirmed == model.IsConfirmed).ToList()
                 : users;
 
             count = users.Count();
 
             users = users.Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize);
+                .Take(model.PageSize).ToList();
 
             var result = _mapper.Map<IEnumerable<UserDTO>>(users).ToList();
 
