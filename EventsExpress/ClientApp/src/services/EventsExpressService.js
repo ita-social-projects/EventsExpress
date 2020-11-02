@@ -122,6 +122,7 @@ export default class EventsExpressService {
 
         file.append('Title', data.title);
         file.append('MaxParticipants', data.maxParticipants);
+        file.append('Periodicity', data.periodicity);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);

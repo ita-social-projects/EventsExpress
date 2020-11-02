@@ -26,25 +26,16 @@ const EditPeriodicity = props => {
     const { handleSubmit, pristine, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
-            <div>
                 <Field
                     name="Periodicity"
                     component={renderSelectField}
-                    label="Chose Periodicity"
+                    label="Periodicity"
                 >
-                    <MenuItem value="0" primaryText="NotPeriodic" />
                     <MenuItem value="1" primaryText="Daily" />
                     <MenuItem value="2" primaryText="Weekly" />
                     <MenuItem value="3" primaryText="Monthly" />
                     <MenuItem value="4" primaryText="Yearly" />
                 </Field>
-            </div>
-
-            <div>
-                <Button type="submit" color="primary" disabled={pristine || submitting}>
-                    Submit
-        </Button>
-            </div>
         </form>
     );
 };

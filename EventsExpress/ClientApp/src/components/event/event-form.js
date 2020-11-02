@@ -4,11 +4,14 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import periodicity from '../../constants/PeriodicityConstants';
+import EditPeriodicityContainer from '../../containers/editEventContainers/editPeriodicityContainer'
 import { renderMultiselect, renderSelectLocationField, renderTextArea, renderSelectGenderField } from '../helpers/helpers';
 import { connect } from 'react-redux';
 
@@ -60,9 +63,9 @@ class EventForm extends Component {
         }
     }
 
-    boxChange = () => {
+    handleChange = () => {
         this.setState({
-            isChecked: !this.state.isChecked,
+            checked: !this.state.checked,
         });
     }
 
@@ -89,7 +92,7 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, form_values, all_categories, periodicity, data } = this.props;
+        const { countries, form_values, all_categories, data } = this.props;
         let values = form_values || this.props.initialValues;
         let countries_list = this.renderLocations(countries);
         if (this.props.Event.isEventSuccess) {
@@ -125,20 +128,19 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="number" label="Max Count Of Participants" />
                     </div> 
-                    <div>
+                    <div className="mt-2">
                         <br/>
-                        <input type="checkbox" name="checkRecurrent" onChange={this.boxChange}/>
+                        <input type="checkbox" name="checkRecurrent" onChange={this.handleChange} checked={this.state.checked}/>
                         <label> Recurrent Event</label>
                     </div>
-                    {(!this.props.boxChange)
-                        ?<div className="mt-2">
-                            <Field 
-                                name='periodicity.value'
-                                data={periodicity}
-                                text='periodicity'
-                                component={renderSelectLocationField} />
-                        </div>
-                        : null
+                    { this.state.checked &&
+                        <ExpansionPanelDetails className="pl-0">
+                            <Typography>
+                                <MuiThemeProvider>
+                                    <EditPeriodicityContainer name="periodicity" />
+                                </MuiThemeProvider>
+                            </Typography>
+                        </ExpansionPanelDetails>
                     }
                     <div className="meta-wrap m-2">
                         <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
