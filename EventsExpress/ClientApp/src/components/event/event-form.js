@@ -12,7 +12,7 @@ import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
 import EditPeriodicityContainer from '../../containers/editEventContainers/editPeriodicityContainer'
-import { renderMultiselect, renderSelectLocationField, renderTextArea, renderSelectGenderField } from '../helpers/helpers';
+import { renderMultiselect, renderSelectLocationField, renderTextArea} from '../helpers/helpers';
 import { connect } from 'react-redux';
 
 momentLocaliser(moment)
