@@ -1,17 +1,18 @@
 ﻿import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Profile from '../components/profile/user-profile';
 import Spinner from '../components/spinner';
 import get_user, { setAttitude, reset_user } from '../actions/user-item-view';
-import get_future_events, { get_past_events, get_visited_events, get_events_togo } from '../actions/events-for-profile';
-
-import BadRequest from '../components/Route guard/400'
-import Unauthorized from '../components/Route guard/401'
-import Forbidden from '../components/Route guard/403'
-import { Redirect } from 'react-router-dom'
+import get_future_events, {
+    get_past_events,
+    get_visited_events,
+    get_events_togo
+} from '../actions/events-for-profile';
+import BadRequest from '../components/Route guard/400';
+import Forbidden from '../components/Route guard/403';
 
 class UserItemViewWrapper extends Component {
-
     state = {
         flag: false
     }
@@ -20,7 +21,7 @@ class UserItemViewWrapper extends Component {
         const { id } = this.props.match.params;
         this.props.get_user(id);
     }
-    
+
     componentWillUnmount() {
         this.props.reset_user();
     }
@@ -73,9 +74,9 @@ class UserItemViewWrapper extends Component {
         const errorMessage = isError.ErrorCode == '403'
             ? <Forbidden />
             : isError.ErrorCode == '500'
-                ? <Redirect from="*" to="/home/events?page=1" />
+                ? <Redirect from="*" to="/home/events" />
                 : isError.ErrorCode == '401'
-                    ? <Redirect from="*" to="/home/events?page=1" />
+                    ? <Redirect from="*" to="/home/events" />
                     : isError.ErrorCode == '400'
                         ? <BadRequest />
                         : null;

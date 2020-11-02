@@ -14,13 +14,14 @@ class HeaderProfileWrapper extends Component {
   render() {
     return <HeaderProfile
       user={this.props.user}
-      searchParams={this.props.events.searchParams}
+      filter={this.props.events.filter}
       onClick={this.logout_reset}
       reset={this.props.reset}
       notification={this.props.notification.events.length}
     />;
   }
 }
+
 const mapStateToProps = state => {
   return {
     ...state,
