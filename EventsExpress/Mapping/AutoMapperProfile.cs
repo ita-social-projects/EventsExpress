@@ -231,6 +231,10 @@ namespace EventsExpress.Mapping
             CreateMap<InventoryDTO, InventoryDto>().ReverseMap();
             #endregion
 
+            #region UNITOFMEASURING MAPPING
+            CreateMap<UnitOfMeasuring, UnitOfMeasuringDTO>().ReverseMap();
+            CreateMap<UnitOfMeasuringDTO, UnitOfMeasuringDto>().ReverseMap();
+            #endregion
         }
     }
 }

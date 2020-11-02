@@ -24,6 +24,7 @@ namespace EventsExpress.Db.Repo
         private IChatRepository _chatRepository;
         private IMessageRepository _messageRepository;
         private IInventoryRepository _inventoryRepository;
+        private IUnitOfMeasuringRepository _unitOfMeasuringRepository;
         private bool disposed = false;
 
         public UnitOfWork(
@@ -76,6 +77,9 @@ namespace EventsExpress.Db.Repo
 
         public IInventoryRepository InventoryRepository =>
             _inventoryRepository ?? (_inventoryRepository = new InventoryRepository(database));
+
+        public IUnitOfMeasuringRepository UnitOfMeasuringRepository =>
+            _unitOfMeasuringRepository ?? (_unitOfMeasuringRepository = new UnitOfMeasuringRepository(database));
 
         public void Dispose()
         {

@@ -35,6 +35,8 @@ namespace EventsExpress.Db.IRepo
 
         IInventoryRepository InventoryRepository { get; }
 
+        IUnitOfMeasuringRepository UnitOfMeasuringRepository { get; }
+
         Task SaveAsync();
     }
 }
