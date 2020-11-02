@@ -248,7 +248,6 @@ namespace EventsExpress.Core.Services
             events = (model.DateTo != DateTime.MinValue) ? events.Where(x => x.DateTo <= model.DateTo) : events;
             events = model.Blocked ? events.Where(x => x.IsBlocked == model.Blocked) : events;
             events = model.Unblocked ? events.Where(x => x.IsBlocked == !model.Unblocked) : events;
-            
 
             if (model.Categories != null)
             {
@@ -261,7 +260,6 @@ namespace EventsExpress.Core.Services
             }
 
             count = events.Count();
-            
             return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
         }
 
