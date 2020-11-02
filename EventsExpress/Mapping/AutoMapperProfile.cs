@@ -226,6 +226,11 @@ namespace EventsExpress.Mapping
             CreateMap<RefreshTokenDTO, RefreshToken>();
             #endregion
 
+            #region INVENTORY MAPPING
+            CreateMap<Inventory, InventoryDTO>().ReverseMap();
+            CreateMap<InventoryDTO, InventoryDto>().ReverseMap();
+            #endregion
+
         }
     }
 }

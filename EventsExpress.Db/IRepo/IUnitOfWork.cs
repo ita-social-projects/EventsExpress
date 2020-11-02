@@ -33,6 +33,8 @@ namespace EventsExpress.Db.IRepo
 
         IMessageRepository MessageRepository { get; }
 
+        IInventoryRepository InventoryRepository { get; }
+
         Task SaveAsync();
     }
 }

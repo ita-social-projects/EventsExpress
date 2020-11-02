@@ -125,6 +125,7 @@ namespace EventsExpress
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IInventoryService, InventoryService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddTransient<IPhotoService, PhotoService>();
