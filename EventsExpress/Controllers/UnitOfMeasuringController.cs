@@ -27,7 +27,7 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("action")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)
@@ -44,7 +44,7 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("action")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)
@@ -61,26 +61,13 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("action")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var result = await _unitOfMeasuringService.Delete(id);
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
-
-            return BadRequest(result.Message);
-        }
-
-
-        [HttpGet("action")]
+        [HttpGet("[action]")]
         public IActionResult GetAll()
         {
             return Ok(_mapper.Map<ICollection<UnitOfMeasuringDTO>, ICollection<UnitOfMeasuringDto>>(_unitOfMeasuringService.GetAll()));
         }
 
-        [HttpGet("action")]
+        [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
             return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringDto>(_unitOfMeasuringService.GetById(id)));

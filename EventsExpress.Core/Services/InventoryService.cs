@@ -47,9 +47,48 @@ namespace EventsExpress.Core.Services
             }
         }
 
+        public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
+        {
+            var entity = _db.InventoryRepository.Get(inventoryDTO.Id);
+            if (entity == null)
+            {
+                return new OperationResult(false, "Object not found", inventoryDTO.Id.ToString());
+            }
+
+            try
+            {
+                entity.ItemName = inventoryDTO.ItemName;
+                entity.NeedQuantity = inventoryDTO.NeedQuantity;
+                entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuringId;
+                await _db.SaveAsync();
+                return new OperationResult(true, "Edit inventory", entity.Id.ToString());
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
+            }
+        }
+
         public IEnumerable<InventoryDTO> GetInventar(Guid eventId)
         {
+            var ev = _db.EventRepository.Get(eventId);
+            if (ev == null)
+            {
+                return new List<InventoryDTO>();
+            }
+
             return _mapper.Map<IEnumerable<InventoryDTO>>(_db.InventoryRepository.Get("UnitOfMeasuring").Where(i => i.EventId == eventId));
+        }
+
+        public InventoryDTO GetInventarById(Guid inventoryId)
+        {
+            var entity = _db.InventoryRepository.Get(inventoryId);
+            if (entity == null)
+            {
+                return new InventoryDTO();
+            }
+
+            return _mapper.Map<Inventory, InventoryDTO>(entity);
         }
     }
 }

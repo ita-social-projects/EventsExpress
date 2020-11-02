@@ -9,5 +9,7 @@ namespace EventsExpress.Db.Entities
         public string UnitName { get; set; }
 
         public string ShortName { get; set; }
+
+        public ICollection<Inventory> Inventories { get; set; }
     }
 }

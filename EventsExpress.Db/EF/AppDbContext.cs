@@ -143,6 +143,10 @@ namespace EventsExpress.Db.EF
                 .HasOne(i => i.Event)
                 .WithMany(e => e.Inventories)
                 .HasForeignKey(i => i.EventId).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Inventory>()
+                .HasOne(i => i.UnitOfMeasuring)
+                .WithMany(u => u.Inventories)
+                .HasForeignKey(i => i.UnitOfMeasuringId).OnDelete(DeleteBehavior.Restrict);
 
             // userevent-inventory many-to-many
             builder.Entity<UserEventInventory>()

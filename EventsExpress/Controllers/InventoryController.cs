@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -45,12 +46,28 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditInventar([FromBody] InventoryDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryDto, InventoryDTO>(model));
+            return Ok(result.Property);
+        }
+
         [HttpGet("[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
-            var result = _inventoryService.GetInventar(eventId).ToList();
+            return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
+        }
 
-            return Ok(result.Count);
+        [HttpGet("[action]")]
+        public IActionResult GetInventarById(Guid inventoryId)
+        {
+            return Ok(_mapper.Map<InventoryDTO, InventoryDto>(_inventoryService.GetInventarById(inventoryId)));
         }
     }
 }

@@ -11,5 +11,7 @@ namespace EventsExpress.Core.DTOs
         public double NeedQuantity { get; set; }
 
         public string ItemName { get; set; }
+
+        public Guid UnitOfMeasuringId { get; set; }
     }
 }
