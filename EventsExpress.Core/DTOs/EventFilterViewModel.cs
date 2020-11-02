@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -14,12 +16,10 @@ namespace EventsExpress.Core.DTOs
 
         public DateTime DateTo { get; set; }
 
-        public string Categories { get; set; }
+        public List<string> Categories { get; set; }
 
         public SortBy SortBy { get; set; }
 
-        public bool Blocked { get; set; }
-
-        public bool Unblocked { get; set; }
+        public EventStatus Status { get; set; } = EventStatus.Active;
     }
 }

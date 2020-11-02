@@ -8,8 +8,10 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using EventsExpress.Db.IRepo;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -210,11 +212,11 @@ namespace EventsExpress.Core.Services
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .FirstOrDefault(x => x.Id == eventId));
 
-        public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
+        public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .Where(x => x.IsBlocked == false);
+                .AsNoTracking();
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -225,63 +227,25 @@ namespace EventsExpress.Core.Services
 
             events = (model.DateFrom != DateTime.MinValue)
                 ? events.Where(x => x.DateFrom >= model.DateFrom)
-                : events.Where(x => x.DateFrom >= DateTime.Today);
+                 : events;
 
             events = (model.DateTo != DateTime.MinValue)
                 ? events.Where(x => x.DateTo <= model.DateTo)
                 : events;
 
-            if (model.Categories != null)
+            switch (model.Status)
             {
-                var categoryIds = model.Categories.Split(",")
-                    .Select(x => Guid.TryParse(x, out Guid item) ? item : Guid.Empty)
-                    .Where(x => x != Guid.Empty)
-                    .ToList();
-
-                events = events.Where(x =>
-                    x.Categories.Any(category =>
-                        categoryIds.Contains(category.CategoryId)));
+                case EventStatus.Active:
+                    events = events.Where(x => !x.IsBlocked);
+                    break;
+                case EventStatus.Blocked:
+                    events = events.Where(x => x.IsBlocked);
+                    break;
             }
 
-            count = events.Count();
-
-            return _mapper.Map<IEnumerable<EventDTO>>(
-                events.OrderBy(x => x.DateFrom)
-                .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize));
-        }
-
-        public IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count)
-        {
-            var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
-
-            events = !string.IsNullOrEmpty(model.KeyWord)
-                ? events.Where(x => x.Title.Contains(model.KeyWord)
-                    || x.Description.Contains(model.KeyWord)
-                    || x.City.Name.Contains(model.KeyWord)
-                    || x.City.Country.Name.Contains(model.KeyWord))
-                : events;
-
-            events = (model.DateFrom != DateTime.MinValue)
-                ? events.Where(x => x.DateFrom >= model.DateFrom)
-                : events;
-
-            events = (model.DateTo != DateTime.MinValue)
-                ? events.Where(x => x.DateTo <= model.DateTo)
-                : events;
-
-            events = model.Blocked
-                ? events.Where(x => x.IsBlocked == model.Blocked)
-                : events;
-
-            events = model.Unblocked
-                ? events.Where(x => x.IsBlocked == !model.Unblocked)
-                : events;
-
             if (model.Categories != null)
             {
-                var categoryIds = model.Categories.Split(",")
+                List<Guid> categoryIds = model.Categories
                     .Select(x => Guid.TryParse(x, out Guid item) ? item : Guid.Empty)
                     .Where(x => x != Guid.Empty)
                     .ToList();
