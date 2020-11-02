@@ -52,18 +52,36 @@ export default class Event extends Component {
 
     render() {
         const classes = useStyles;
-        const { id, title, dateFrom, comment_count, description, maxParticipants, photoUrl, categories, user, countVisitor, isBlocked } = this.props.item;
+        const {
+            id,
+            title,
+            dateFrom,
+            description,
+            maxParticipants,
+            photoUrl,
+            categories,
+            user,
+            countVisitor,
+            isBlocked
+        } = this.props.item;
         const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
-                <Card className={classes.card} style={{ backgroundColor: (isBlocked) ? "gold" : "" }}>
+                <Card
+                    className={classes.card}
+                    style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
+                >
                     <CardHeader
                         avatar={
                             <Tooltip title={user.username}>
-                                <Link to={'/user/' + user.id} className="btn-custom">
-                                    <CustomAvatar className={classes.avatar} photoUrl={user.photoUrl} name={user.username} />
+                                <Link to={`/user/${user.id}`} className="btn-custom">
+                                    <CustomAvatar
+                                        className={classes.avatar}
+                                        photoUrl={user.photoUrl}
+                                        name={user.username}
+                                    />
                                 </Link>
                             </Tooltip>
                         }
@@ -107,22 +125,23 @@ export default class Event extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             <div className='mb-2'>
-                                {country + ' ' + city}
+                                {`${city}, ${country}`}
                             </div>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                                <Link to={'/event/' + id + '/' + 1}>
+                                <Link to={`/event/${id}/1`}>
                                     <IconButton className={classes.button} aria-label="view">
                                         <i className="fa fa-eye"></i>
                                     </IconButton>
                                 </Link>
-                                {(this.props.current_user != null && this.props.current_user.role == "Admin")
+                                {(this.props.current_user !== null
+                                    && this.props.current_user.role === "Admin")
                                     ? <EventManagmentWrapper eventItem={this.props.item} />
                                     : null
                                 }
-                                <SocialShare href={'https://eventsexpress.azurewebsites.net/event/' + id + '/' + 1} />
+                                <SocialShare href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
                     </CardActions>

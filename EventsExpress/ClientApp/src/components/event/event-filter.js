@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
-import { renderTextField, renderDatePicker, renderMultiselect, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
-import Module from '../helpers';
 import Button from "@material-ui/core/Button";
 import Radio from '@material-ui/core/Radio';
+import {
+    renderTextField,
+    renderDatePicker,
+    renderMultiselect,
+    radioButton
+} from '../helpers/helpers';
+import Module from '../helpers';
+import { compareObjects } from '../helpers/helpers';
 import './event-filter.css';
 
 const { validate } = Module;
@@ -11,7 +17,28 @@ const { validate } = Module;
 class EventFilter extends Component {
     constructor(props) {
         super(props);
-        this.state = { viewMore: false }
+        this.state = {
+            viewMore: false,
+            needInitializeValues: true,
+        };
+    }
+
+    componentDidUpdate(prevProps) {
+        const initialValues = this.props.initialFormValues;
+
+        if (!compareObjects(initialValues, prevProps.initialFormValues)
+            || this.state.needInitializeValues) {
+            this.props.initialize({
+                keyWord: initialValues.keyWord,
+                dateFrom: initialValues.dateFrom,
+                dateTo: initialValues.dateTo,
+                categories: initialValues.categories,
+                status: initialValues.status,
+            });
+            this.setState({
+                ['needInitializeValues']: false
+            });
+        }
     }
 
     render() {
@@ -29,50 +56,54 @@ class EventFilter extends Component {
                             label="Keyword"
                         />
                     </div>
-                    {this.state.viewMore && <>
-                        <div className="form-group">
-                            <div>From</div>
-                            <Field
-                                name='dateFrom'
-                                component={renderDatePicker}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <div>To</div>
-                            <Field
-                                name='dateTo'
-                                defaultValue={values.dateFrom}
-                                minValue={values.dateFrom}
-                                component={renderDatePicker}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Field
-                                name="categories"
-                                component={renderMultiselect}
-                                data={all_categories.data}
-                                valueField={"id"}
-                                textField={"name"}
-                                className="form-control mt-2"
-                                placeholder='#hashtags'
-                            />
-                        </div>
-                        {current_user.role == "Admin" && (
+                    {this.state.viewMore &&
+                        <>
                             <div className="form-group">
-                                <Field name="status" component={radioButton}>
-                                    <Radio value="true" label="All" />
-                                    <Radio value="true" label="Unblocked" />
-                                    <Radio value="true" label="Blocked" />
-                                </Field>
+                                <div>From</div>
+                                <Field
+                                    name='dateFrom'
+                                    component={renderDatePicker}
+                                />
                             </div>
-                        )}
-                    </>}
+                            <div className="form-group">
+                                <div>To</div>
+                                <Field
+                                    name='dateTo'
+                                    defaultValue={values.dateFrom}
+                                    minValue={values.dateFrom}
+                                    component={renderDatePicker}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <Field
+                                    name="categories"
+                                    component={renderMultiselect}
+                                    data={all_categories.data}
+                                    valueField={"id"}
+                                    textField={"name"}
+                                    className="form-control mt-2"
+                                    placeholder='#hashtags'
+                                />
+                            </div>
+                            {current_user.role === "Admin" && (
+                                <div className="form-group">
+                                    <Field name="status" component={radioButton}>
+                                        <Radio value="true" label="All" />
+                                        <Radio value="true" label="Active" />
+                                        <Radio value="true" label="Blocked" />
+                                    </Field>
+                                </div>
+                            )}
+                        </>
+                    }
                     <div>
                         <Button
                             key={this.state.viewMore}
                             fullWidth={true}
                             color="info"
-                            onClick={() => { this.setState({ viewMore: !this.state.viewMore }) }}
+                            onClick={() => {
+                                this.setState({ viewMore: !this.state.viewMore });
+                            }}
                         >
                             {this.state.viewMore ? 'less...' : 'more filters...'}
                         </Button>
@@ -82,10 +113,20 @@ class EventFilter extends Component {
                             fullWidth={true}
                             color="primary"
                             onClick={this.props.onReset}
-                            disabled={this.props.pristine || this.props.submitting}
+                            disabled={this.props.submitting}
                         >
                             Reset
                         </Button>
+                        {current_user.id &&
+                            <Button
+                                fullWidth={true}
+                                color="primary"
+                                onClick={this.props.onLoadUserDefaults}
+                                disabled={this.props.submitting}
+                            >
+                                Favorite
+                            </Button>
+                        }
                         <Button
                             fullWidth={true}
                             type="submit"
@@ -101,7 +142,8 @@ class EventFilter extends Component {
     }
 }
 
-
-export default EventFilter = reduxForm({
-    form: 'event-filter-form'
+EventFilter = reduxForm({
+    form: 'event-filter-form',
 })(EventFilter);
+
+export default EventFilter;
