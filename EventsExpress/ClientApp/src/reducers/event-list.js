@@ -53,7 +53,7 @@ export const reducer = (state = initialState.events, action) => {
         case UPDATE_EVENTS_FILTERS:
             return {
                 ...state,
-                searchParams: action.payload,
+                filter: action.payload,
             };
         default:
             return state;
