@@ -19,8 +19,6 @@ namespace EventsExpress.DTO
 
         public int MaxParticipants { get; set; }
 
-        public Periodicity Periodicity { get; set; }
-
         public IFormFile Photo { get; set; }
 
         public string PhotoUrl { get; set; }
