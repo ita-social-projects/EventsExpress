@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
+import { stringify as queryStringStringify } from 'query-string';
 import HeaderProfileWrapper from '../../containers/header-profile';
 import './left-sidebar.css';
 
@@ -53,9 +54,14 @@ class LeftSidebar extends Component {
                     <nav>
                         <hr />
                         <ul className="list-unstyled">
-                            {/* TODO: This implementation is outdated. Remove this comment. */}
-                            {/* <NavItem to={'/home/events/?page=1'} icon={'fa fa-home'} text={"Home"} /> */}
-                            <NavItem to={'/home/events'} icon={'fa fa-home'} text={"Home"} />
+                            <NavItem
+                                to={`/home/events?${queryStringStringify(
+                                    this.props.filter,
+                                    { arrayFormat: 'index' }
+                                )}`}
+                                icon={'fa fa-home'}
+                                text={"Home"}
+                            />
                             {this.props.user.id &&
                                 <>
                                     <NavItem to={'/user/' + this.props.user.id} icon={'fa fa-user'} text={"Profile"} />
