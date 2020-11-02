@@ -9,6 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { setUser } from './actions/login';
 import { initialConnection } from './actions/chat';
 import { getUnreadMessages } from './actions/chats';
+import { updateEventsFilters } from './actions/event-list';
+
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -19,38 +21,51 @@ const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
 async function AuthUser(token) {
-  if (!token)
-    return;
-  const res = await fetch('api/Authentication/login_token', {
-    method: 'post',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    }),
-  });
-  if (res.ok) {
-    const user = await res.json();
-    store.dispatch(setUser(user));
-    store.dispatch(initialConnection());
-    store.dispatch(getUnreadMessages(user.id));
-  } else {
-    localStorage.clear();
-  }
+    if (!token)
+        return;
+
+    const res = await fetch('api/Authentication/login_token', {
+        method: 'post',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }),
+    });
+
+    if (res.ok) {
+        const user = await res.json();
+        const eventFilter = {
+            page: '1',
+            keyWord: undefined,
+            dateFrom: undefined,
+            dateTo: undefined,
+            categories: user.categories.map(item => item.id),
+            status: undefined,
+        };
+
+        store.dispatch(setUser(user));
+        store.dispatch(updateEventsFilters(eventFilter));
+        store.dispatch(initialConnection());
+        store.dispatch(getUnreadMessages(user.id));
+    } else {
+        localStorage.clear();
+    }
 }
 
 const token = localStorage.getItem('token');
+
 if (token) {
-  AuthUser(token);
+    AuthUser(token);
 }
 
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
-  </Provider>,
-  rootElement);
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <App />
+        </ConnectedRouter>
+    </Provider>,
+    rootElement);
 
 registerServiceWorker();
