@@ -7,7 +7,7 @@ import Dialog from "@material-ui/core/Dialog";
 import { setEventCanelationModalStatus } from '../../actions/event-item-view';
 import { connect } from 'react-redux';
 import { DialogContent } from '@material-ui/core';
-const { renderTextField } = Module;
+const { renderTextField, validate } = Module;
 
 class EventCancelModal extends Component {
     constructor(props) {
@@ -47,12 +47,16 @@ class EventCancelModal extends Component {
                     <div className="eventCancel">
                         <DialogContent>
                             <div>
-                                <h4>Hello!</h4>
-                                </div>
-                            <div>
-                                <input type='text' onChange={this.handleChange} />
-
+                                <h4>Enter the reason of cancelation</h4>
                             </div>
+                            <div>
+                                <input size="50" type='text' onChange={this.handleChange} />
+                            </div>
+                            {this.props.cancelationStatus.errorMessage &&
+                                <div style={{color: 'red'}}>
+                                {JSON.stringify(JSON.parse(this.props.cancelationStatus.errorMessage)["errors"]["Reason"][1])}
+                                </div>
+                            }
                         </DialogContent>
                         <DialogActions>
                             <Button fullWidth={true} type="button" color="primary" onClick={this.handleClose}>

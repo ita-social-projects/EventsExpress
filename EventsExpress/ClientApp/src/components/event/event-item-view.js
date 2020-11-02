@@ -71,7 +71,7 @@ export default class EventItemView extends Component {
 
     render() {
         const { current_user } = this.props;
-        const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors, country, city} = this.props.data;
+        const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors, country, city} = this.props.event.data;
 
         const categories_list = this.renderCategories(categories);
 
@@ -95,7 +95,9 @@ export default class EventItemView extends Component {
                             {(isFutureEvent && current_user.id != null)
                                 ? isMyEvent   
                                         ? !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
-                                            <EventCancelModal submitCallback={this.props.onCancel} /></> : null
+                                            <EventCancelModal
+                                                submitCallback={this.props.onCancel}
+                                                cancelationStatus={this.props.event.cancelation} /></> : null
                                     : iWillVisitIt
                                         ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
                                         : <button onClick={this.props.onJoin} className="btn btn-join">Join</button>

@@ -50,6 +50,21 @@ export const reducer = (
                 ...state,
                 cancelationModalStatus: action.payload
             }
+        case cancelEvent.ERROR:
+            return {
+                ...state,
+                cancelation: {errorMessage: action.payload, success: false, pending: false}
+            }
+        case cancelEvent.SUCCESS:
+            return {
+                ...state,
+                cancelation: { errorMessage: null, success: true, pending: false }
+            }
+        case cancelEvent.PENDING:
+            return {
+                ...state,
+                cancelation: { errorMessage: null, success: false, pending: true }
+            }
 
         default:
             return state;
