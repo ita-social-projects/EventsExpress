@@ -117,12 +117,12 @@ const initialState = {
             items: [],
             pageViewModel: {},
         },
-        searchParams: {
+        filter: {
             page: '1',
             keyWord: undefined,
             dateFrom: undefined,
             dateTo: undefined,
-            categories: undefined,
+            categories: [],
             status: undefined,
         },
     },
