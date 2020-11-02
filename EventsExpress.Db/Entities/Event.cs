@@ -1,10 +1,10 @@
-﻿using EventsExpress.Db.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
-    public class Event : BaseEntity
+    public class Event : ManageableEvent
     {
         public bool IsBlocked { get; set; }
 
@@ -22,9 +22,9 @@ namespace EventsExpress.Db.Entities
 
         public int MaxParticipants { get; set; }
 
-        public Periodicity Periodicity { get; set; }
-
         public Guid? PhotoId { get; set; }
+
+        public virtual OccurenceEvent OccurenceEvent { get; set; }
 
         public virtual Photo Photo { get; set; }
 

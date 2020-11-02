@@ -1,7 +1,7 @@
-﻿using EventsExpress.Db.Entities;
+﻿using System;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace EventsExpress.Db.EF
 {
@@ -26,6 +26,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<OccurenceEvent> OccurenceEvents { get; set; }
 
         public DbSet<Report> Reports { get; set; }
 
@@ -132,8 +134,6 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
-            builder.Entity<Event>()
-                .Property(c => c.Periodicity).HasDefaultValue(Periodicity.NotPeriodic);
         }
     }
 }
