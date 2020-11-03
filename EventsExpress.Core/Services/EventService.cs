@@ -216,7 +216,8 @@ namespace EventsExpress.Core.Services
         {
             var events = _db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .AsNoTracking();
+                .AsNoTracking()
+				.AsEnumerable();
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -309,7 +310,9 @@ namespace EventsExpress.Core.Services
         {
             var events = _db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .Where(x => eventIds.Contains(x.Id));
+                .Where(x => eventIds.Contains(x.Id))
+				.AsNoTracking()
+				.ToList();
 
             paginationViewModel.Count = events.Count();
 
@@ -354,12 +357,24 @@ namespace EventsExpress.Core.Services
 
         public double GetRate(Guid eventId)
         {
-            return _db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+            try
+            {
+                return  _db.RateRepository.Get()
+					.Where(r => r.EventId == eventId)
+					.AsNoTracking()
+					.ToList()
+					.Average(r => r.Score);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public bool UserIsVisitor(Guid userId, Guid eventId) =>
-            _db.EventRepository
-                .Get("Visitors").FirstOrDefault(e => e.Id == eventId)?.Visitors?.FirstOrDefault(v => v.UserId == userId) != null;
+            _db.EventRepository.Get("Visitors")
+				.FirstOrDefault(e => e.Id == eventId)?.Visitors
+				?.FirstOrDefault(v => v.UserId == userId) != null;
 
         public bool Exists(Guid id) => _db.EventRepository.Get(id) != null;
     }

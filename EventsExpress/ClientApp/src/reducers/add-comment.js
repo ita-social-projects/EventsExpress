@@ -25,6 +25,8 @@ export const reducer = (state = initialState.add_comment, action) => {
                 isCommentPending: false,
                 isCommentSuccess: action.payload
             };
+        default:
+            break;
     }
     return state;
 };

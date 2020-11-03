@@ -24,6 +24,8 @@ export const reducer = (state = initialState.add_category, action) => {
                 isCategorySuccess: action.payload,
                 categoryError: null
             };
+        default:
+            break;
     }
     return state;
 };

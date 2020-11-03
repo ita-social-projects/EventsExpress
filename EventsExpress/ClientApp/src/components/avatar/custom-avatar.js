@@ -9,9 +9,9 @@ export default class CustomAvatar extends Component {
         
         let size = `${this.props.size}Avatar`;
         
-        let firstLetterSize = (this.props.size == 'big') 
+        let firstLetterSize = (this.props.size === 'big') 
             ? 'display-1' 
-            : (this.props.size == 'little') 
+            : (this.props.size === 'little') 
                 ? 'display-4' 
                 : '';
 

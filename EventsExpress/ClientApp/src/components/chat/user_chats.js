@@ -14,8 +14,8 @@ class UserChats extends Component {
 
     renderChats = (arr) => {
         return arr.map(x => {
-            const user = x.users.find(y => y.id != this.props.current_user.id);
-            const new_msg = this.props.notification.messages.filter(y => y.chatRoomId == x.id);
+            const user = x.users.find(y => y.id !== this.props.current_user.id);
+            const new_msg = this.props.notification.messages.filter(y => y.chatRoomId === x.id);
             const chatBg = new_msg.length > 0 ? 'new-msgs' : '';
 
             return <>

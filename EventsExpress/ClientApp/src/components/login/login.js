@@ -3,7 +3,6 @@ import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
-import { Link } from 'react-router-dom';
 import Modalwind2 from '../recoverPassword/modalwind2';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';

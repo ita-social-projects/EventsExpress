@@ -12,8 +12,6 @@ import Module from '../helpers';
 import { compareObjects } from '../helpers/helpers';
 import './event-filter.css';
 
-const { validate } = Module;
-
 class EventFilter extends Component {
     constructor(props) {
         super(props);

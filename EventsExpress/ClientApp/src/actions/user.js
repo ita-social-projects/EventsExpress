@@ -1,5 +1,4 @@
 ﻿import EventsExpressService from '../services/EventsExpressService';
-import {SetDialog}from './dialog';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',

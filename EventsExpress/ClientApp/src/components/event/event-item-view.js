@@ -87,7 +87,7 @@ export default class EventItemView extends Component {
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
 
-        let iWillVisitIt = visitors.find(x => x.id == current_user.id) !== null;
+        let iWillVisitIt = visitors.find(x => x.id === current_user.id) !== null;
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
         let isFreePlace = visitors.length < maxParticipants;
