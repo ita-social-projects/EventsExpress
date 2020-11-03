@@ -1,27 +1,23 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { renderTextField, renderDatePicker } from '../helpers/helpers';
-import './event-form.css';
-import Button from "@material-ui/core/Button";
-import 'react-widgets/dist/css/react-widgets.css'
+import { connect } from 'react-redux';
 import moment from 'moment';
+import Button from "@material-ui/core/Button";
+import { renderTextField, renderDatePicker } from '../helpers/helpers';
+import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import { renderMultiselect, renderSelectLocationField, renderTextArea } from '../helpers/helpers';
-import { connect } from 'react-redux';
+import {
+    renderMultiselect,
+    renderSelectLocationField,
+    renderTextArea
+} from '../helpers/helpers';
+import './event-form.css';
 
 momentLocaliser(moment);
 
-const enhanceWithPreview = files =>
-    files.map(file =>
-        Object.assign({}, file, {
-            preview: URL.createObjectURL(file),
-        })
-    )
-
 const imageIsRequired = value => (!value ? "Required" : undefined);
-
 const { validate } = Module;
 
 class EventForm extends Component {
@@ -202,16 +198,12 @@ const mapStateToProps = (state) => ({
     initialValues: state.event.data
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {};
-};
+EventForm = connect(
+    mapStateToProps
+)(EventForm);
 
-const asd = reduxForm({
+export default reduxForm({
     form: 'event-form',
     validate: validate,
     enableReinitialize: true
 })(EventForm);
-
-const qwe = connect(mapStateToProps, mapDispatchToProps)(asd);
-
-export default qwe;

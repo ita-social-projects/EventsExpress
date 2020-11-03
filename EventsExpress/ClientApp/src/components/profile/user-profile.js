@@ -79,7 +79,17 @@ export default class UserItemView extends Component {
     };
 
     render() {
-        const { userPhoto, name, email, birthday, gender, categories, id, attitude, rating } = this.props.data;
+        const {
+            userPhoto,
+            name,
+            email,
+            birthday,
+            gender,
+            categories,
+            id,
+            attitude,
+            rating
+        } = this.props.data;
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
@@ -161,12 +171,54 @@ export default class UserItemView extends Component {
                         indicatorColor="primary"
                         textColor="primary"
                     >
-                        <Tab label="Future events" icon={<IconButton color={this.state.value === 0 ? '' : 'primary'}><i class="far fa-calendar-alt"></i></IconButton>} {...a11yProps(0)} />
-                        <Tab label="Archive events" icon={<IconButton color={this.state.value === 1 ? '' : 'primary'}><i class="fas fa-archive"></i></IconButton>} {...a11yProps(1)} />
-                        <Tab label="Visited events" icon={<IconButton color={this.state.value === 2 ? '' : 'primary'}><i class="fas fa-history"></i></IconButton>} {...a11yProps(2)} />
-                        <Tab label="Events to go" icon={<IconButton color={this.state.value === 3 ? '' : 'primary'}><i class="fas fa-map-marker-alt"></i></IconButton>} {...a11yProps(3)} />
+                        <Tab
+                            label="Future events"
+                            icon={
+                                <IconButton
+                                    color={this.state.value === 0 ? '' : 'primary'}>
+                                    <i class="far fa-calendar-alt"></i>
+                                </IconButton>}
+                            {...a11yProps(0)}
+                        />
+                        <Tab
+                            label="Archive events"
+                            icon={
+                                <IconButton
+                                    color={this.state.value === 1 ? '' : 'primary'}>
+                                    <i class="fas fa-archive"></i>
+                                </IconButton>}
+                            {...a11yProps(1)}
+                        />
+                        <Tab
+                            label="Visited events"
+                            icon={
+                                <IconButton
+                                    color={this.state.value === 2 ? '' : 'primary'}>
+                                    <i class="fas fa-history"></i>
+                                </IconButton>}
+                            {...a11yProps(2)}
+                        />
+                        <Tab
+                            label="Events to go"
+                            icon={
+                                <IconButton
+                                    color={this.state.value === 3 ? '' : 'primary'}>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </IconButton>}
+                            {...a11yProps(3)}
+                        />
                         {(id === this.props.current_user) &&
-                            <Tab label="Add event" icon={<IconButton color={this.state.value === 4 ? '' : 'primary'}><i class="fas fa-plus"></i></IconButton>} {...a11yProps(4)} />
+                            <Tab
+                                label="Add event"
+                                icon={
+                                    <IconButton
+                                        color={this.state.value === 4 ? '' : 'primary'}
+                                    >
+                                        <i class="fas fa-plus"></i>
+                                    </IconButton>
+                                }
+                                {...a11yProps(4)}
+                            />
                         }
                     </Tabs>
                 </AppBar>

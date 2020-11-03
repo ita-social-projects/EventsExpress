@@ -1,8 +1,8 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
-import 'react-widgets/dist/css/react-widgets.css';
 import DatePicker from 'react-datepicker';
+import 'react-widgets/dist/css/react-widgets.css';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
