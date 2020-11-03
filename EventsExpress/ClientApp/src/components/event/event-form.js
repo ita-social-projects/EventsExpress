@@ -4,7 +4,7 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
-import moment, { now } from 'moment';
+import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
@@ -118,7 +118,6 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="number" label="Max Count Of Participants" />
                     </div>
-                    <input hidden value={this.props.data.visitors.length} name='visitorsCount' />
                     <div className="meta-wrap m-2">
                         <span>From<Field name='dateFrom' component={renderDatePicker} /></span>
                         {values.dateFrom != null &&

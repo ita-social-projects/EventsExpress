@@ -1,5 +1,4 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { func } from 'prop-types';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
 

@@ -78,6 +78,9 @@ export default class EventItemView extends Component {
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
         let isFreePlace = visitors.length < maxParticipants;
+        let canEdit = isFutureEvent && isMyEvent;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
 
         return <>
             <div className="container-fluid mt-1">
@@ -87,21 +90,19 @@ export default class EventItemView extends Component {
                             <img src={photoUrl} className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span><br />
-                                <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span><br />
+                                {(maxParticipants < 2147483647)
+                                    ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+                                    : <span className="maxParticipants">{visitors.length} Participants</span>
+                                }
+                                <br/>
                                 <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br />
                                 <span>{country} {city}</span><br />
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {(isFutureEvent && current_user.id != null)
-                                    ? isMyEvent
-                                        ? !this.state.edit ? <button onClick={this.onEdit} className="btn btn-join">Edit</button> : null
-                                        : iWillVisitIt
-                                            ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
-                                            : isFreePlace
-                                                ? <button onClick={this.props.onJoin} className="btn btn-join">Join</button> : null
-                                    : null
-                                }
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}                             
+                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}                             
+                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}                             
                             </div>
                         </div>
                         {this.state.edit

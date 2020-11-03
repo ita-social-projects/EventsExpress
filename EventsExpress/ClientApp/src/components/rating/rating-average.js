@@ -10,7 +10,7 @@ export default function RatingAverage(props) {
             ? 'text-warning'
             : 'text-success';
 
-    const direction = (props.direction == 'row')
+    const direction = (props.direction === 'row')
         ? 'flex-row'
         : 'flex-column';
 

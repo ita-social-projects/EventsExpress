@@ -176,7 +176,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
-            var users = Db.UserRepository.Get("Photo,Role");
+            var users = Db.UserRepository.Get("Photo,Role").AsNoTracking().AsEnumerable();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
                 ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord))
@@ -201,9 +201,9 @@ namespace EventsExpress.Core.Services
             count = users.Count();
 
             users = users.Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize);
+                .Take(model.PageSize).ToList();
 
-            var result = _mapper.Map<IEnumerable<UserDTO>>(users).ToList();
+            var result = _mapper.Map<IEnumerable<UserDTO>>(users);
 
             foreach (var u in result)
             {

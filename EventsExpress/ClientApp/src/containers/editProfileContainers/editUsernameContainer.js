@@ -11,8 +11,6 @@ class EditUsernameContainer extends React.Component {
 
 
     render() {
-        let { isEditUsernamePending, isEditUsernameSuccess, EditUsernameError } = this.props;
-
         return <EditUsername onSubmit={this.submit} />;
     }
 

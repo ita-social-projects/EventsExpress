@@ -15,8 +15,6 @@ class ChangeAvatar extends React.Component {
     
     handleFile(fieldName, event) {
         event.preventDefault();
-        // convert files to an array
-        const files = [ ...event.target.files ];
     }
     handleOnDrop = (newImageFile, onChange) => {
       if(newImageFile.length > 0){
@@ -49,7 +47,7 @@ class ChangeAvatar extends React.Component {
 
     render(){
 
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { handleSubmit, pristine, submitting } = this.props;
 
     return (
         <form onSubmit={handleSubmit}>

@@ -8,24 +8,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 export default function AlertDialog(props) {
-  //const [open, setOpen] = React.useState(false);
   const{ open, message, title }=props.dialog
-
-  function handleClickOpen() {
-    props.setOpen(true);
-  }
 
   function handleClose() {
     props.setOpen(false);
-  }
-
-  function handleOk() {
-  //    props.callback();
-  }
-
-  function handleCansel() {
-    props.setOpen(false);
-  }
+    }
 
   return (
     <div>

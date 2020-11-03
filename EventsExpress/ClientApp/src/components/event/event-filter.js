@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { renderTextField, renderDatePicker, renderMultiselect, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
-import Module from '../helpers';
 import Button from "@material-ui/core/Button";
 import Radio from '@material-ui/core/Radio';
 import './event-filter.css';
-
-const { validate } = Module;
 
 class EventFilter extends Component {
     constructor(props) {

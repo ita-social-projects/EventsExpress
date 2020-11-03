@@ -4,9 +4,6 @@ import { block_event, unblock_event } from '../actions/event-item-view';
 import EventBlock from '../components/event/event-block';
 
 class EventManagmentWrapper extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     block = () => {
         this.props.block()

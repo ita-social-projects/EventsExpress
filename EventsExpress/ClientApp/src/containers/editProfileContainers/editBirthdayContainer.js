@@ -11,8 +11,6 @@ class EditBirthdayContainer extends React.Component {
 
 
     render() {
-        let { isEditBirthdayPending, isEditBirthdaySuccess, EditBirthdayError } = this.props;
-
         return <EditBirthday onSubmit={this.submit} />;
     }
 

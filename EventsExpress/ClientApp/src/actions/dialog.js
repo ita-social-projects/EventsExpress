@@ -20,12 +20,6 @@ function setDialog(data){
     }
 }
 
-function resetDialog(){
-    return{
-        type:_dialog.RESET
-    }
-}
-
 export function setDialogOpen(data){
     return{
         type:_dialog.SETOPEN,

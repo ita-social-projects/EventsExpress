@@ -1,7 +1,7 @@
 
 import initialState from '../store/initialState';
 import {
-   INITIAL_CONNECTION, RECEIVE_MESSAGE, RESET_HUB
+   INITIAL_CONNECTION, RESET_HUB
 }from '../actions/chat';
 
 import { EVENT_WAS_CREATED } from '../actions/add-event';
