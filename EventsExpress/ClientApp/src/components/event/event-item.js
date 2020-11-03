@@ -102,7 +102,7 @@ export default class Event extends Component {
                         className={classes.media}
                         title={title}
                     >
-                        <Link to={'/event/' + id + '/' + 1}>
+                        <Link to={`/event/${id}/1`}>
                             <img src={photoUrl} className="w-100" />
                         </Link>
                     </CardMedia>

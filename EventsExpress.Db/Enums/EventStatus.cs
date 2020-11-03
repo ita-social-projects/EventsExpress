@@ -6,6 +6,5 @@
         All,
         Blocked,
         Cancelled,
-        Unblocked,
     }
 }

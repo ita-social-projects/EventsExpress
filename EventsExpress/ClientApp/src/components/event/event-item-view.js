@@ -6,6 +6,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
+import EventCancelModal from './event-cancel-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
@@ -83,7 +84,7 @@ export default class EventItemView extends Component {
             visitors,
             country,
             city
-        } = this.props.data;
+        } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
 
@@ -94,6 +95,7 @@ export default class EventItemView extends Component {
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
 
         return <>
             <div className="container-fluid mt-1">
@@ -130,6 +132,7 @@ export default class EventItemView extends Component {
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
                                 {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}
                                 {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
+                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit
