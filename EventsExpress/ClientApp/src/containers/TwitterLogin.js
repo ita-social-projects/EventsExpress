@@ -1,12 +1,9 @@
-'use strict';
-
 import React, { Component } from 'react';
 import TwitterLogin from 'react-twitter-login';
 import { connect } from 'react-redux';
 import config from '../config';
 import { loginTwitter } from '../actions/login';
 import './css/Auth.css';
-import { render } from 'react-dom';
 import oauth from 'oauth-sign';
 import uuid from 'uuid';
 

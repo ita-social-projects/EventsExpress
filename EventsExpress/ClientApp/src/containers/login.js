@@ -1,8 +1,7 @@
 ﻿import { connect } from 'react-redux';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Login from '../components/login';
 import login from '../actions/login';
-import { useAlert } from "react-alert";
 
 class LoginWrapper extends Component {
   submit = values => {
@@ -10,7 +9,6 @@ class LoginWrapper extends Component {
   };
 
   render() {
-    alert = useAlert;
     let { loginError } = this.props.loginStatus;
 
     return <>

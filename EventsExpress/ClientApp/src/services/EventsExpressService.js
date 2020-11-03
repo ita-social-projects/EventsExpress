@@ -1,7 +1,3 @@
-import React from 'react';
-import { dark } from '@material-ui/core/styles/createPalette';
-import jwt from 'jsonwebtoken';
-
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
@@ -125,6 +121,7 @@ export default class EventsExpressService {
         }
 
         file.append('Title', data.title);
+        file.append('MaxParticipants', data.maxParticipants);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
@@ -139,7 +136,7 @@ export default class EventsExpressService {
 
         let i = 0;
         data.categories.map(x => {
-            file.append(`Categories[${i++}].Id`, x.id);
+            return file.append(`Categories[${i++}].Id`, x.id);
         });
         const res = await this.setResourceWithData('event/edit', file);
         return !res.ok

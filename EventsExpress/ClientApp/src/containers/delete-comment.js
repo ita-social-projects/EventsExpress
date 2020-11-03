@@ -11,9 +11,6 @@ import AddComment from './add-comment';
 
 
 class commentItemWrapper extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     state = {
         info: true

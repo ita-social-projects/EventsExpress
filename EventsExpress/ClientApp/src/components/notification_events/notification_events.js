@@ -22,7 +22,7 @@ class NotificationEvents extends Component{
     }
 
     render(){
-        const { current_user, events, notification} = this.props;
+        const { current_user } = this.props;
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;
         const errorMessage = isError.ErrorCode == '403' 
@@ -40,7 +40,7 @@ class NotificationEvents extends Component{
        
         return <>        
             {spinner || content}
-            {!spinner && items.length == 0 && <p className="text-center h3">You don't have notifications</p> }
+            {!spinner && items.length === 0 && <p className="text-center h3">You don't have notifications</p> }
         </>
     }
 }

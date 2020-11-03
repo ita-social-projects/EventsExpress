@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event'; 
+import EditEventWrapper from '../../containers/edit-event';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
@@ -24,7 +24,7 @@ export default class EventItemView extends Component {
         return arr.map(x => (
             <Link to={'/user/' + x.id} className="btn-custom">
                 <div className="d-flex align-items-center border-bottom">
-                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />                    
+                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                     <div>
                         <h5>{x.username}</h5>
                         {'Age: ' + this.getAge(x.birthday)}
@@ -38,7 +38,7 @@ export default class EventItemView extends Component {
         <Link to={'/user/' + user.id} className="btn-custom">
             <div className="d-flex align-items-center border-bottom">
                 <div className='d-flex flex-column'>
-                    <IconButton  className="text-warning"  size="small" disabled > 
+                    <IconButton className="text-warning" size="small" disabled >
                         <i class="fas fa-crown"></i>
                     </IconButton>
                     <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
@@ -66,18 +66,22 @@ export default class EventItemView extends Component {
     }
 
     onEdit = () => {
-        this.setState({edit: true});
+        this.setState({ edit: true });
     }
 
     render() {
         const { current_user } = this.props;
-        const { photoUrl, categories, title, dateFrom, dateTo, description, user, visitors, country, city} = this.props.event.data;
+        const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.event.data;
 
         const categories_list = this.renderCategories(categories);
 
         let iWillVisitIt = visitors.find(x => x.id == current_user.id) != null;
-        let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0,0,0,0);
+        let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
+        let isFreePlace = visitors.length < maxParticipants;
+        let canEdit = isFutureEvent && isMyEvent;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
 
         return <>
         <div className="container-fluid mt-1">
@@ -87,55 +91,60 @@ export default class EventItemView extends Component {
                         <img src={photoUrl} className="w-100" />
                         <div className="text-block"> 
                             <span className="title">{title}</span><br/>
+							{(maxParticipants < 2147483647)
+                                    ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
+                                    : <span className="maxParticipants">{visitors.length} Participants</span>
+                            }
+                            <br/>
                             <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br/>
                             <span>{country} {city}</span><br/>
                             {categories_list}
                         </div>
-                        <div className="button-block">
-                            {(isFutureEvent && current_user.id != null)
-                                ? isMyEvent   
-                                        ? !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
+                        
+                    </div>
+                   
+                            <div className="button-block">
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}                             
+                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}                             
+                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}   
+                                {(isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
                                             <EventCancelModal
                                                 submitCallback={this.props.onCancel}
-                                                cancelationStatus={this.props.event.cancelation} /></> : null
-                                    : iWillVisitIt
-                                        ? <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>
-                                        : <button onClick={this.props.onJoin} className="btn btn-join">Join</button>
-                                : null            
-                            }
+                                                cancelationStatus={this.props.event.cancelation} /></>
+                                }                          
+                            </div>
                         </div>
-                    </div>
-                    {this.state.edit 
-                        ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                            <EditEventWrapper />
-                        </div>
-                        : <>
-                            {!isFutureEvent &&
+                        {this.state.edit
+                            ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+                                <EditEventWrapper />
+                            </div>
+                            : <>
+                                {!isFutureEvent &&
+                                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                        <RatingWrapper
+                                            iWillVisitIt={iWillVisitIt}
+                                            eventId={this.props.data.id}
+                                            userId={current_user.id}
+                                        />
+                                    </div>
+                                }
+
+
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                <RatingWrapper 
-                                    iWillVisitIt={iWillVisitIt}
-                                    eventId={this.props.data.id}
-                                    userId={current_user.id}
-                                />                                
-                            </div>
-                            }
-                            
-                            
-                            <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                {description}
-                            </div>
-                            <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                <Comment match={this.props.match}/>
-                            </div>
-                        </>
-                    }
-                </div>
-                <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                    {this.renderOwner(user)}
-                    {this.renderUsers(visitors)}
+                                    {description}
+                                </div>
+                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <Comment match={this.props.match} />
+                                </div>
+                            </>
+                        }
+                    </div>
+                    <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
+                        {this.renderOwner(user)}
+                        {this.renderUsers(visitors)}
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     }
 }

@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import _authenticate from '../../actions/authentication';
-import history from '../../history';
 
 class Authentication extends Component {
     componentWillMount = () => {

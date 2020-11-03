@@ -8,7 +8,6 @@ import EventsForProfile from '../event/events-for-profile';
 import Spinner from '../spinner';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -50,14 +49,6 @@ function a11yProps(index) {
     };
 }
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
-
 
 
 export default class UserItemView extends Component {
@@ -92,7 +83,6 @@ export default class UserItemView extends Component {
 
 
     render() {
-        const classes = useStyles;
         const { userPhoto, name, email, birthday, gender, categories, id, attitude, rating } = this.props.data;
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;

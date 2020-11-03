@@ -1,5 +1,4 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { SET_EVENT_SUCCESS } from './add-event';
 
 
 export const SET_COUNTRY_PENDING = "SET_COUNTRY_PENDING";

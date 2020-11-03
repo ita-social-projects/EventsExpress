@@ -25,6 +25,8 @@ export const reducer = (state = initialState.add_event, action) => {
                 isEventPending: false,
                 isEventSuccess: action.payload
             };
+        default:
+            break;
     }
     return state;
 };

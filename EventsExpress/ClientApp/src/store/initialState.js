@@ -61,11 +61,6 @@ const initialState = {
          IsSelectCategoriesSeccess: false,
          IsSelectCategoriesError: null
      },
-    add_event:{
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
-    },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,

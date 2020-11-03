@@ -10,6 +10,7 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -38,6 +39,11 @@ namespace EventsExpress.Core.Services
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", "eventId");
+            }
+
+            if (ev.MaxParticipants <= ev.Visitors.Count)
+            {
+                return new OperationResult(false, "To much participants!", " ");
             }
 
             var us = _db.UserRepository.Get(userId);
@@ -172,6 +178,7 @@ namespace EventsExpress.Core.Services
         {
             var ev = _db.EventRepository.Get("Photo,Categories.Category").FirstOrDefault(x => x.Id == e.Id);
             ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
@@ -206,7 +213,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
         {
-            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false);
+            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false).AsNoTracking().AsEnumerable();
 
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord)
                                                                         || x.Description.Contains(model.KeyWord)
@@ -232,8 +239,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count)
         {
-            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
-
+            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").AsNoTracking().AsEnumerable();
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord)
                                                                         || x.Description.Contains(model.KeyWord)
                                                                         || x.City.Name.Contains(model.KeyWord)
@@ -254,7 +260,6 @@ namespace EventsExpress.Core.Services
             }
 
             count = events.Count();
-
             return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
         }
 
@@ -303,7 +308,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .Where(x => eventIds.Contains(x.Id));
+                .Where(x => eventIds.Contains(x.Id)).AsNoTracking().ToList();
             paginationViewModel.Count = events.Count();
             return _mapper.Map<IEnumerable<EventDTO>>(events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize).Take(paginationViewModel.PageSize));
         }
@@ -344,7 +349,14 @@ namespace EventsExpress.Core.Services
 
         public double GetRate(Guid eventId)
         {
-            return _db.RateRepository.Get().Where(r => r.EventId == eventId).Average(r => r.Score);
+            try
+            {
+                return _db.RateRepository.Get().Where(r => r.EventId == eventId).AsNoTracking().ToList().Average(r => r.Score);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public bool UserIsVisitor(Guid userId, Guid eventId) =>
