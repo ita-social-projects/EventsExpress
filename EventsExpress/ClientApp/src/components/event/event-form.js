@@ -10,6 +10,7 @@ import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
 import { renderMultiselect, renderSelectLocationField, renderTextArea } from '../helpers/helpers';
 import { connect } from 'react-redux';
+import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment)
 const enhanceWithPreview = files =>
@@ -152,6 +153,7 @@ class EventForm extends Component {
                         </div>
                     }
                 </div>
+                <Inventory/>
                 <Button fullWidth={true} type="submit" color="primary" onClick={this.disableSaveButton} disabled={this.isSaveButtonDisabled}>
                     Save
                 </Button>
