@@ -82,36 +82,30 @@ export default class EventItemView extends Component {
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
 
         return <>
-        <div className="container-fluid mt-1">
-            <div className="row">
-                <div className="col-9">
-                    <div className="col-12">
-                        <img src={photoUrl} className="w-100" />
-                        <div className="text-block"> 
-                            <span className="title">{title}</span><br/>
-							{(maxParticipants < 2147483647)
+            <div className="container-fluid mt-1">
+                <div className="row">
+                    <div className="col-9">
+                        <div className="col-12">
+                            <img src={photoUrl} className="w-100" />
+                            <div className="text-block">
+                                <span className="title">{title}</span><br />
+                                {(maxParticipants < 2147483647)
                                     ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
                                     : <span className="maxParticipants">{visitors.length} Participants</span>
-                            }
-                            <br/>
-                            <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br/>
-                            <span>{country} {city}</span><br/>
-                            {categories_list}
-                        </div>
-                        
-                    </div>
-                   
+                                }
+                                <br />
+                                <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br />
+                                <span>{country} {city}</span><br />
+                                {categories_list}
+                            </div>
                             <div className="button-block">
-                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}                             
-                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}                             
-                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}   
-                                {(isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit ? <><button onClick={this.onEdit} className="btn btn-join">Edit</button>
-                                            <EventCancelModal
-                                                submitCallback={this.props.onCancel}
-                                                cancelationStatus={this.props.event.cancelation} /></>
-                                }                          
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
+                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}
+                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
+                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit
