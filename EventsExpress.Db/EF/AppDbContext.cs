@@ -1,7 +1,5 @@
-﻿using System;
-using EventsExpress.Db.Entities;
+﻿using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace EventsExpress.Db.EF
 {
