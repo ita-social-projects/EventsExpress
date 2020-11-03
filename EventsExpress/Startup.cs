@@ -138,6 +138,7 @@ namespace EventsExpress
             #endregion
             services.AddCors();
             services.AddControllers();
+            services.AddHttpClient();
 
             services.AddMvc().AddFluentValidation(options =>
             {

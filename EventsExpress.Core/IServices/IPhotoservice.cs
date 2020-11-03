@@ -9,6 +9,8 @@ namespace EventsExpress.Core.IServices
     {
         Task<Photo> AddPhoto(IFormFile uploadedFile);
 
+        Task<Photo> AddPhotoByURL(string url);
+
         Task Delete(Guid id);
     }
 }
