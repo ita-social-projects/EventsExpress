@@ -15,6 +15,8 @@ namespace EventsExpress.Db.IRepo
 
         IEventRepository EventRepository { get; }
 
+        IOccurenceEventRepository OccurenceEventRepository { get; }
+
         IPermissionRepository PermissionRepository { get; }
 
         IPhotoRepository PhotoRepository { get; }
