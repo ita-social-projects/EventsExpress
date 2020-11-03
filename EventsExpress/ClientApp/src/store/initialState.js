@@ -1,5 +1,7 @@
 'use strict';
 
+import eventHelper from '../components/helpers/eventHelper';
+
 const initialState = {
     modalWind: {
         isOpen: false
@@ -117,14 +119,7 @@ const initialState = {
             items: [],
             pageViewModel: {},
         },
-        filter: {
-            page: '1',
-            keyWord: undefined,
-            dateFrom: undefined,
-            dateTo: undefined,
-            categories: [],
-            status: undefined,
-        },
+        filter: eventHelper.getDefaultEventFilter(),
     },
     profile: {
         isPending: true,

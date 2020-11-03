@@ -10,6 +10,7 @@ import { setUser } from './actions/login';
 import { initialConnection } from './actions/chat';
 import { getUnreadMessages } from './actions/chats';
 import { updateEventsFilters } from './actions/event-list';
+import eventHelper from '../src/components/helpers/eventHelper';
 
 
 // Create browser history to use in the Redux store
@@ -35,13 +36,9 @@ async function AuthUser(token) {
     if (res.ok) {
         const user = await res.json();
         const eventFilter = {
-            page: '1',
-            keyWord: undefined,
-            dateFrom: undefined,
-            dateTo: undefined,
+            ...eventHelper.getDefaultEventFilter(),
             categories: user.categories.map(item => item.id),
-            status: undefined,
-        };
+        }
 
         store.dispatch(setUser(user));
         store.dispatch(updateEventsFilters(eventFilter));

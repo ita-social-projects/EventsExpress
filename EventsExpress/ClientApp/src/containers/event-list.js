@@ -11,7 +11,7 @@ import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';
 import history from '../history';
-import { compareObjects } from '../components/helpers/helpers';
+import eventHelper from '../components/helpers/eventHelper';
 
 class EventListWrapper extends Component {
     constructor(props) {
@@ -44,7 +44,7 @@ class EventListWrapper extends Component {
         const objFilterParams = JSON.parse(
             JSON.stringify(this.props.events.filter)
         );
-        return !compareObjects(objFilterParams, this.objQueryParams);
+        return !eventHelper.compareObjects(objFilterParams, this.objQueryParams);
     }
 
     executeSearchEvents = () => {

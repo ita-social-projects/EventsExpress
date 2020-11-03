@@ -8,8 +8,7 @@ import {
     renderMultiselect,
     radioButton
 } from '../helpers/helpers';
-import Module from '../helpers';
-import { compareObjects } from '../helpers/helpers';
+import eventHelper from '../helpers/eventHelper';
 import './event-filter.css';
 
 class EventFilter extends Component {
@@ -24,7 +23,7 @@ class EventFilter extends Component {
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
 
-        if (!compareObjects(initialValues, prevProps.initialFormValues)
+        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
                 keyWord: initialValues.keyWord,

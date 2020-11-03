@@ -268,29 +268,4 @@ const asyncValidate = (values) => {
     })
 }
 
-export const isObject = (object) => {
-    return object !== null && typeof object === 'object';
-}
-
-export const compareObjects = (objFirst, objSecond) => {
-    const keysObjectFirst = Object.keys(objFirst);
-    const keysObjectSecond = Object.keys(objSecond);
-
-    if (keysObjectFirst.length !== keysObjectSecond.length) {
-        return false;
-    }
-
-    for (const key of keysObjectFirst) {
-        const valObjectFirst = objFirst[key];
-        const valObjectSecond = objSecond[key];
-        const areObjects = isObject(valObjectFirst) && isObject(valObjectSecond);
-        if ((areObjects && !compareObjects(valObjectFirst, valObjectSecond))
-            || !areObjects && valObjectFirst !== valObjectSecond) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 export default asyncValidate;

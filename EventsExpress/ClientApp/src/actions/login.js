@@ -1,5 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
-import initialState from '../store/initialState';
+import eventHelper from '../components/helpers/eventHelper';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
 import { updateEventsFilters } from './event-list';
@@ -69,7 +69,7 @@ const loginResponseHandler = (res, dispatch) => {
   res.then(response => {
     if (!response.error) {
       const eventFilter = {
-        ...initialState.events.filter,
+        ...eventHelper.getDefaultEventFilter(),
         categories: response.categories.map(item => item.id),
       };
 

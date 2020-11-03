@@ -4,7 +4,7 @@ import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import { updateEventsFilters } from '../actions/event-list';
 import get_categories from '../actions/category-list';
-import initialState from '../store/initialState';
+import eventHelper from '../components/helpers/eventHelper';
 
 class EventFilterWrapper extends Component {
     componentWillMount() {
@@ -13,17 +13,13 @@ class EventFilterWrapper extends Component {
 
     onReset = () => {
         this.props.reset_filters();
-        let defaultFilter = {
-            ...initialState.events.filter,
-        };
-
-        this.props.updateEventsFilters(defaultFilter);
+        this.props.updateEventsFilters(eventHelper.getDefaultEventFilter());
     }
 
     onLoadUserDefaults = () => {
         this.props.reset_filters();
-        let defaultFilter = {
-            ...initialState.events.filter,
+        const defaultFilter = {
+            ...eventHelper.getDefaultEventFilter(),
             categories: this.props.current_user.categories.map(item => item.id),
         };
 
@@ -49,7 +45,7 @@ class EventFilterWrapper extends Component {
         this.props.updateEventsFilters(this.props.events.filter);
     }
 
-    initialFormValues = (() => {
+    buildInitialFormValues = () => {
         const filter = JSON.parse(JSON.stringify(this.props.events.filter));
         let values = Object.assign({}, filter);
 
@@ -60,9 +56,10 @@ class EventFilterWrapper extends Component {
         }
 
         return values;
-    }).call(this);
+    };
 
     render() {
+        const initialFormValues = this.buildInitialFormValues();
         return <>
             <EventFilter
                 all_categories={this.props.all_categories}
@@ -71,7 +68,7 @@ class EventFilterWrapper extends Component {
                 onReset={this.onReset}
                 form_values={this.props.form_values}
                 current_user={this.props.current_user}
-                initialFormValues={this.initialFormValues}
+                initialFormValues={initialFormValues}
             />
         </>
     }
