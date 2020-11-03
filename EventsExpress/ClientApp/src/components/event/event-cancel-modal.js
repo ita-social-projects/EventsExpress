@@ -1,13 +1,11 @@
 ﻿import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import Module from '../helpers';
 import Dialog from "@material-ui/core/Dialog";
-import { setEventCanelationModalStatus } from '../../actions/event-item-view';
-import { connect } from 'react-redux';
 import { DialogContent } from '@material-ui/core';
-const { renderTextField, validate } = Module;
+import { renderErrorMessage } from '../helpers/helpers';
+import { connect } from 'react-redux';
+import { setEventCanelationModalStatus } from '../../actions/event-item-view';
 
 class EventCancelModal extends Component {
     constructor(props) {
@@ -39,7 +37,6 @@ class EventCancelModal extends Component {
         return (
             <>
                 <button onClick={this.handleClickOpen} className="btn btn-join">Cancel</button>
-
                 <Dialog
                     open={this.props.status}
                     onClose={this.handleClose}
@@ -53,9 +50,14 @@ class EventCancelModal extends Component {
                                 <input size="50" type='text' onChange={this.handleChange} />
                             </div>
                             {this.props.cancelationStatus.errorMessage &&
-                                <div style={{color: 'red'}}>
-                                {JSON.stringify(JSON.parse(this.props.cancelationStatus.errorMessage)["errors"]["Reason"][1])}
-                                </div>
+                                renderErrorMessage(this.props.cancelationStatus.errorMessage, 'Reason')
+                                // <div style={{ color: 'red' }}>
+                                //     {JSON.parse(this.props.cancelationStatus.errorMessage)["errors"]["Reason"].map(() =>
+                                //         <div>
+                                //             {item}
+                                //         </div>
+                                //     )}
+                                // </div>
                             }
                         </DialogContent>
                         <DialogActions>
@@ -66,7 +68,6 @@ class EventCancelModal extends Component {
                                 confirm cancelation
                             </Button>
                         </DialogActions>
-
                     </div>
                 </Dialog>
             </>
