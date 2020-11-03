@@ -217,7 +217,7 @@ namespace EventsExpress.Core.Services
             var events = _db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
                 .AsNoTracking()
-				.AsEnumerable();
+                .AsEnumerable();
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -311,8 +311,8 @@ namespace EventsExpress.Core.Services
             var events = _db.EventRepository
                 .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
                 .Where(x => eventIds.Contains(x.Id))
-				.AsNoTracking()
-				.ToList();
+                .AsNoTracking()
+                .ToList();
 
             paginationViewModel.Count = events.Count();
 
@@ -351,19 +351,19 @@ namespace EventsExpress.Core.Services
         public byte GetRateFromUser(Guid userId, Guid eventId)
         {
             return _db.RateRepository.Get()
-                       .FirstOrDefault(r => r.UserFromId == userId && r.EventId == eventId)
-                           ?.Score ?? 0;
+                .FirstOrDefault(r => r.UserFromId == userId && r.EventId == eventId)
+                ?.Score ?? 0;
         }
 
         public double GetRate(Guid eventId)
         {
             try
             {
-                return  _db.RateRepository.Get()
-					.Where(r => r.EventId == eventId)
-					.AsNoTracking()
-					.ToList()
-					.Average(r => r.Score);
+                return _db.RateRepository.Get()
+                    .Where(r => r.EventId == eventId)
+                    .AsNoTracking()
+                    .ToList()
+                    .Average(r => r.Score);
             }
             catch (Exception)
             {
@@ -373,8 +373,8 @@ namespace EventsExpress.Core.Services
 
         public bool UserIsVisitor(Guid userId, Guid eventId) =>
             _db.EventRepository.Get("Visitors")
-				.FirstOrDefault(e => e.Id == eventId)?.Visitors
-				?.FirstOrDefault(v => v.UserId == userId) != null;
+                .FirstOrDefault(e => e.Id == eventId)?.Visitors
+                ?.FirstOrDefault(v => v.UserId == userId) != null;
 
         public bool Exists(Guid id) => _db.EventRepository.Get(id) != null;
     }
