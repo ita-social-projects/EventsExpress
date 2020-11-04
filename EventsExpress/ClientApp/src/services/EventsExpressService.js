@@ -188,13 +188,13 @@ export default class EventsExpressService {
             : await res.text();
     }
 
-    // setInventarToEvent = async (data) => {
-    //     data = {eventId: "", NeedQuantity: 4, ItemName: "Potato", UnitOfMeasuringId: "" };
-    //     const res = await this.setResourceWithData(`inventory/addinventar?eventId=${data.eventId}`, data);
-    //     return res.ok
-    //         ? console.log("Gooooood!")
-    //         : console.log("Not your day(");
-    // }
+    setInventarToEvent = async (data) => {
+    //    data = {eventId: "", NeedQuantity: 4, ItemName: "Potato", UnitOfMeasuringId: "" };
+        const res = await this.setResourceWithData(`inventory/addinventar?eventId=${data.eventId}`, data);
+        return res.ok
+            ? console.log("Gooooood!")
+            : console.log("Not your day(");
+    }
 
     getUnitsOfMeasuring = async () => {
         return await this.getResource('unitofmeasuring/getall');

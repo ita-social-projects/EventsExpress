@@ -38,6 +38,11 @@ const initialState = {
         isEventSuccess: false,
         eventError: null
     },
+    add_inventar: {
+        isInventarPending: false,
+        isInventarSuccess: false,
+        inventarError: null
+    },
     events: {
         isPending: true,
         isError: false,
