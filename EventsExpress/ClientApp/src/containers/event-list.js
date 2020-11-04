@@ -21,17 +21,13 @@ class EventListWrapper extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.hasUpdateSearchParams()) {
-            this.objQueryParams = JSON.parse(
-                JSON.stringify(this.props.events.filter)
-            );
+            this.objQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
             this.executeSearchEvents();
         }
     }
 
     componentDidMount() {
-        this.objQueryParams = JSON.parse(
-            JSON.stringify(this.props.events.filter)
-        );
+        this.objQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
 
         Object.entries(this.objQueryParams).forEach(function ([key, value]) {
             this.props.events.filter[key] = value;
@@ -41,9 +37,7 @@ class EventListWrapper extends Component {
     }
 
     hasUpdateSearchParams = function () {
-        const objFilterParams = JSON.parse(
-            JSON.stringify(this.props.events.filter)
-        );
+        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
         return !eventHelper.compareObjects(objFilterParams, this.objQueryParams);
     }
 

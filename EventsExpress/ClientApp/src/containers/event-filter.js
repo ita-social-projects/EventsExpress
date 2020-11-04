@@ -27,7 +27,7 @@ class EventFilterWrapper extends Component {
     }
 
     onSubmit = (filters) => {
-        filters = JSON.parse(JSON.stringify(filters));
+        filters = eventHelper.trimUndefinedKeys(filters);
         Object.entries(filters).forEach(function ([key, value]) {
             switch (key) {
                 case 'dateFrom':
@@ -46,7 +46,7 @@ class EventFilterWrapper extends Component {
     }
 
     buildInitialFormValues = () => {
-        const filter = JSON.parse(JSON.stringify(this.props.events.filter));
+        const filter = eventHelper.trimUndefinedKeys(this.props.events.filter);
         let values = Object.assign({}, filter);
 
         if (filter.categories.length) {
