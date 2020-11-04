@@ -1,31 +1,43 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { stringify as queryStringStringify } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import { get_eventsForAdmin } from '../actions/event-list';
-import BadRequest from '../components/Route guard/400'
-import Unauthorized from '../components/Route guard/401'
-import Forbidden from '../components/Route guard/403'
-import { Redirect } from 'react-router'
+import { get_events } from '../actions/event-list';
+import BadRequest from '../components/Route guard/400';
+import Unauthorized from '../components/Route guard/401';
+import Forbidden from '../components/Route guard/403';
 
 class AdminEventListWrapper extends Component {
-    componentWillUpdate(prevProps, prevState) {
-        if (this.props.events.isError.ErrorCode == '500') {
-            this.getEvents("?page=1");
-        }
-    }
     componentWillMount() {
-        this.getEvents(this.props.params);
+        this.props.get_events(this.props.params);
     }
-    getEvents = (page) => this.props.get_eventsForAdmin(page);
 
     render() {
-        let current_user = this.props.current_user.id != null ? this.props.current_user : {};
+        let current_user = this.props.current_user.id !== null
+            ? this.props.current_user
+            : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = data;
-
-        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/admin/events?page=1" /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
-
+        const errorMessage = isError.ErrorCode == '403'
+            ? <Forbidden />
+            : isError.ErrorCode == '500'
+                ? <Redirect
+                    from="*"
+                    to={{
+                        pathname: "/home/events",
+                        search: `?${queryStringStringify(
+                            this.props.events.filter,
+                            { arrayFormat: 'index' }
+                        )}`,
+                    }}
+                />
+                : isError.ErrorCode == '401'
+                    ? <Unauthorized />
+                    : isError.ErrorCode == '400'
+                        ? <BadRequest />
+                        : null;
         const spinner = isPending ? <Spinner /> : null;
         const content = !errorMessage
             ? <EventList
@@ -33,7 +45,7 @@ class AdminEventListWrapper extends Component {
                 data_list={items}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
-                callback={this.getEvents}
+                callback={this.props.get_events}
             />
             : null;
 
@@ -53,8 +65,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_eventsForAdmin: (page) => dispatch(get_eventsForAdmin(page))
+        get_events: (page) => dispatch(get_events(page)),
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminEventListWrapper);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AdminEventListWrapper);

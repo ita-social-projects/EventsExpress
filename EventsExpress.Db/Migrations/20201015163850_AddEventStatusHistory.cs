@@ -16,7 +16,7 @@ namespace EventsExpress.Db.Migrations
                     EventId = table.Column<Guid>(nullable: false),
                     EventStatus = table.Column<int>(nullable: false),
                     Reason = table.Column<string>(nullable: true),
-                    CreatedOn = table.Column<DateTime>(nullable: false)
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {

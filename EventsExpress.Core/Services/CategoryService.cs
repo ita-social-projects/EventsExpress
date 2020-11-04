@@ -27,11 +27,22 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
-            var categories = _mapper.Map<List<CategoryDTO>>(_db.CategoryRepository.Get().AsNoTracking().ToList());
+            var categories = _mapper.Map<List<CategoryDTO>>(
+                _db.CategoryRepository.Get()
+                .AsNoTracking()
+                .ToList());
+
             foreach (var cat in categories)
             {
-                cat.CountOfUser = _db.UserRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
-                cat.CountOfEvents = _db.EventRepository.Get("Categories").Where(x => x.Categories.Any(c => c.Category.Name == cat.Name)).Count();
+                cat.CountOfUser = _db.UserRepository.Get("Categories")
+                    .AsNoTracking()
+                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
+                    .Count();
+
+                cat.CountOfEvents = _db.EventRepository.Get("Categories")
+                    .AsNoTracking()
+                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
+                    .Count();
             }
 
             return categories;

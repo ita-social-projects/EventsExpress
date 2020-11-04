@@ -5,10 +5,7 @@ import Spinner from '../components/spinner';
 import get_event from '../actions/event-item-view';
 import { join, leave, resetEvent, cancel_event } from '../actions/event-item-view';
 
-
-
 class EventItemViewWrapper extends Component{
-    
     componentWillMount(){    
         const { id } = this.props.match.params;
         this.props.get_event(id);

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './users.css';
 import UserInfoWpapper from '../../containers/user-info';
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom';
 
 const limit = 2;
 const pageCount = 3;
-
 
 export default class Users extends Component {
     constructor() {
@@ -24,8 +23,12 @@ export default class Users extends Component {
     };
 
     renderUsers = (arr) => {
-        return arr.map(user => 
-            <UserInfoWpapper key={user.id + user.isBlocked + user.role.id} user={user} />);
+        return arr.map(user =>
+            <UserInfoWpapper
+                key={user.id + user.isBlocked + user.role.id}
+                user={user}
+            />
+        );
     }
 
     render() {
@@ -34,9 +37,8 @@ export default class Users extends Component {
             <table className="table">
                 <tbody>
                     {this.renderUsers(this.props.users)}
-                </tbody>                
+                </tbody>
             </table>
-
             <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
@@ -54,23 +56,20 @@ export default class Users extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
-
                             <div>
                                 {hasPreviousPage && (
-                                <Link className="btn btn-primary"
-                                    to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + 1)}
-                                    {...getPageItemProps({
-                                        pageValue: 1,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    first
-                              </Link>)}
-
+                                    <Link className="btn btn-primary"
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + 1)}
+                                        {...getPageItemProps({
+                                            pageValue: 1,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        first
+                                    </Link>)}
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page - 1))}
-
                                         {...getPageItemProps({
                                             pageValue: previousPage,
                                             onPageChange: this.handlePageChange
@@ -79,7 +78,6 @@ export default class Users extends Component {
                                         {"<"}
                                     </Link>
                                 )}
-
                                 {pages.map(page => {
                                     let activePage = null;
                                     if (currentPage === page) {
@@ -89,7 +87,6 @@ export default class Users extends Component {
                                         return (
                                             <Link className="btn btn-primary"
                                                 to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
-
                                                 {...getPageItemProps({
                                                     pageValue: page,
                                                     key: page,
@@ -101,11 +98,9 @@ export default class Users extends Component {
                                             </Link>
                                         );
                                     } else {
-
                                         return (
-                                            <Link 
+                                            <Link
                                                 to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
-
                                                 {...getPageItemProps({
                                                     pageValue: page,
                                                     key: page,
@@ -113,15 +108,13 @@ export default class Users extends Component {
                                                     onPageChange: this.handlePageChange
                                                 })}
                                             >
-                                             </Link>
+                                            </Link>
                                         );
                                     }
                                 })}
-
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page + 1))}
-
                                         {...getPageItemProps({
                                             pageValue: nextPage,
                                             onPageChange: this.handlePageChange
@@ -131,16 +124,15 @@ export default class Users extends Component {
                                     </Link>
                                 )}
                                 {hasNextPage && (
-                                <Link className="btn btn-primary"
-                                    to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + this.props.totalPages)}
-
-                                    {...getPageItemProps({
-                                        pageValue: this.props.totalPages,
-                                        onPageChange: this.handlePageChange
-                                    })}
-                                >
-                                    last
-                                </Link>)}
+                                    <Link className="btn btn-primary"
+                                        to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + this.props.totalPages)}
+                                        {...getPageItemProps({
+                                            pageValue: this.props.totalPages,
+                                            onPageChange: this.handlePageChange
+                                        })}
+                                    >
+                                        last
+                                    </Link>)}
                             </div>
                         )}
                 </Pagination>

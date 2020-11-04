@@ -1,11 +1,10 @@
 ﻿import React, { Component } from 'react';
-import UserInfoCard from '../user-info/User-info-card'
+import { Link } from 'react-router-dom';
 import Pagination from "react-paginating";
-import { Link } from 'react-router-dom'
+import UserInfoCard from '../user-info/User-info-card'
 
 const limit = 2;
 const pageCount = 3;
-
 
 export default class UserItemList extends Component {
     constructor() {
@@ -15,7 +14,7 @@ export default class UserItemList extends Component {
         };
     }
 
-    handlePageChange = (page, e) => { 
+    handlePageChange = (page, e) => {
         this.props.callback(window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page));
         this.setState({
             currentPage: page
@@ -32,7 +31,6 @@ export default class UserItemList extends Component {
         const { page, totalPages } = this.props;
         return <>
             {this.renderUsers(this.props.users)}
-
             <ul className="pagination justify-content-center">
                 <Pagination
                     total={totalPages * limit}
@@ -50,7 +48,6 @@ export default class UserItemList extends Component {
                         totalPages,
                         getPageItemProps
                     }) => (
-
                             <div>
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
@@ -61,12 +58,10 @@ export default class UserItemList extends Component {
                                         })}
                                     >
                                         first
-                              </Link>)}
-
+                                    </Link>)}
                                 {hasPreviousPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page - 1))}
-
                                         {...getPageItemProps({
                                             pageValue: previousPage,
                                             onPageChange: this.handlePageChange
@@ -75,7 +70,6 @@ export default class UserItemList extends Component {
                                         {"<"}
                                     </Link>
                                 )}
-
                                 {pages.map(page => {
                                     let activePage = null;
                                     if (currentPage === page) {
@@ -85,7 +79,6 @@ export default class UserItemList extends Component {
                                         return (
                                             <Link className="btn btn-primary"
                                                 to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
-
                                                 {...getPageItemProps({
                                                     pageValue: page,
                                                     key: page,
@@ -97,11 +90,9 @@ export default class UserItemList extends Component {
                                             </Link>
                                         );
                                     } else {
-
                                         return (
                                             <Link
                                                 to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + page)}
-
                                                 {...getPageItemProps({
                                                     pageValue: page,
                                                     key: page,
@@ -113,11 +104,9 @@ export default class UserItemList extends Component {
                                         );
                                     }
                                 })}
-
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + (page + 1))}
-
                                         {...getPageItemProps({
                                             pageValue: nextPage,
                                             onPageChange: this.handlePageChange
@@ -129,19 +118,17 @@ export default class UserItemList extends Component {
                                 {hasNextPage && (
                                     <Link className="btn btn-primary"
                                         to={window.location.search.replace(/(page=)[0-9]+/gm, 'page=' + this.props.totalPages)}
-
                                         {...getPageItemProps({
                                             pageValue: this.props.totalPages,
                                             onPageChange: this.handlePageChange
                                         })}
                                     >
                                         last
-                                </Link>)}
+                                    </Link>)}
                             </div>
                         )}
                 </Pagination>
             </ul>
-
         </>
     }
 }
