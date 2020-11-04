@@ -198,7 +198,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method id used to set rating to user.
+        /// This method id used to set rating to user
         /// </summary>
         /// <param name="model">Required (type: RateDto).</param>
         /// <response code="200">Rating is setted successfully.</response>

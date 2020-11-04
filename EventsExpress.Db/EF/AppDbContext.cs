@@ -12,8 +12,6 @@ namespace EventsExpress.Db.EF
             Database.Migrate();
         }
 
-        public DbSet<Role> Roles { get; set; }
-
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -21,6 +19,8 @@ namespace EventsExpress.Db.EF
         public DbSet<User> Users { get; set; }
 
         public DbSet<Rate> Rates { get; set; }
+
+        public DbSet<Role> Roles { get; set; }
 
         public DbSet<Relationship> Relationships { get; set; }
 
@@ -37,6 +37,8 @@ namespace EventsExpress.Db.EF
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }
+
+        public DbSet<EventStatusHistory> EventStatusHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -109,6 +111,14 @@ namespace EventsExpress.Db.EF
                 .HasOne(ec => ec.Category)
                 .WithMany(c => c.Events)
                 .HasForeignKey(uc => uc.CategoryId);
+
+            // EventStatusHistory config
+            builder.Entity<EventStatusHistory>()
+                .HasOne(esh => esh.User)
+                .WithMany(u => u.ChangedStatusEvents);
+            builder.Entity<EventStatusHistory>()
+                .HasOne(esh => esh.Event)
+                .WithMany(e => e.StatusHistory);
 
             // category config
             builder.Entity<Category>()
