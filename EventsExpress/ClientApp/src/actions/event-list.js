@@ -1,4 +1,3 @@
-import { data } from 'jquery';
 import EventsExpressService from '../services/EventsExpressService';
 
 export const SET_EVENTS_PENDING = "SET_EVENTS_PENDING";
