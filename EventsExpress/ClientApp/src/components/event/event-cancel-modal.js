@@ -1,10 +1,10 @@
 ﻿import React, { Component } from "react";
+import { connect } from 'react-redux';
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
 import { renderErrorMessage } from '../helpers/helpers';
-import { connect } from 'react-redux';
 import { setEventCanelationModalStatus } from '../../actions/event-item-view';
 
 class EventCancelModal extends Component {
@@ -51,20 +51,24 @@ class EventCancelModal extends Component {
                             </div>
                             {this.props.cancelationStatus.errorMessage &&
                                 renderErrorMessage(this.props.cancelationStatus.errorMessage, 'Reason')
-                                // <div style={{ color: 'red' }}>
-                                //     {JSON.parse(this.props.cancelationStatus.errorMessage)["errors"]["Reason"].map(() =>
-                                //         <div>
-                                //             {item}
-                                //         </div>
-                                //     )}
-                                // </div>
                             }
                         </DialogContent>
                         <DialogActions>
-                            <Button fullWidth={true} type="button" color="primary" onClick={this.handleClose}>
+                            <Button
+                                fullWidth={true}
+                                type="button"
+                                color="primary"
+                                onClick={this.handleClose}
+                            >
                                 discard
                             </Button>
-                            <Button fullWidth={true} type="button" value="Login" color="primary" onClick={this.submit}>
+                            <Button
+                                fullWidth={true}
+                                type="button"
+                                value="Login"
+                                color="primary"
+                                onClick={this.submit}
+                            >
                                 confirm cancelation
                             </Button>
                         </DialogActions>
@@ -83,4 +87,7 @@ const mapDispatchToProps = (dispatch) => ({
     setStatus: (data) => dispatch(setEventCanelationModalStatus(data))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventCancelModal)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EventCancelModal);
