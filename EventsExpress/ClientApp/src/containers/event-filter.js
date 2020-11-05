@@ -30,6 +30,8 @@ class EventFilterWrapper extends Component {
         filters = eventHelper.trimUndefinedKeys(filters);
         Object.entries(filters).forEach(function ([key, value]) {
             switch (key) {
+                case 'page':
+                    this.props.events.filter[key] = 1;
                 case 'dateFrom':
                 case 'dateTo':
                     this.props.events.filter[key] = new Date(value).toDateString();
