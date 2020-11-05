@@ -1,5 +1,7 @@
 'use strict';
 
+import { stringify as queryStringStringify } from 'query-string';
+
 const eventHelper = (function () {
     return {
         isObject: function (object) {
@@ -34,6 +36,12 @@ const eventHelper = (function () {
                 categories: [],
                 status: 'active',
             }
+        },
+        getQueryStringByEventFilter: function (filter) {
+            return `?${queryStringStringify(
+                filter,
+                { arrayFormat: 'index' }
+            )}`;
         },
         trimUndefinedKeys: function (eventFilter) {
             return JSON.parse(JSON.stringify(eventFilter));

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
 import { stringify as queryStringStringify } from 'query-string';
 import HeaderProfileWrapper from '../../containers/header-profile';
+import eventHelper from '../helpers/eventHelper';
 import './left-sidebar.css';
 
 const NavItem = ({ to, icon, text, my_icon }) => {
@@ -55,10 +56,7 @@ class LeftSidebar extends Component {
                         <hr />
                         <ul className="list-unstyled">
                             <NavItem
-                                to={`/home/events?${queryStringStringify(
-                                    this.props.filter,
-                                    { arrayFormat: 'index' }
-                                )}`}
+                                to={'/'}
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />

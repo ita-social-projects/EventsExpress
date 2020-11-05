@@ -215,9 +215,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .AsNoTracking()
-                .AsEnumerable();
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -228,7 +226,7 @@ namespace EventsExpress.Core.Services
 
             events = (model.DateFrom != DateTime.MinValue)
                 ? events.Where(x => x.DateFrom >= model.DateFrom)
-                 : events;
+                : events;
 
             events = (model.DateTo != DateTime.MinValue)
                 ? events.Where(x => x.DateTo <= model.DateTo)
@@ -258,10 +256,13 @@ namespace EventsExpress.Core.Services
 
             count = events.Count();
 
-            return _mapper.Map<IEnumerable<EventDTO>>(
-                events.OrderBy(x => x.DateFrom)
+            var result = events.OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize));
+                .Take(model.PageSize)
+                .AsNoTracking()
+                .ToList();
+
+            return _mapper.Map<IEnumerable<EventDTO>>(result);
         }
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)

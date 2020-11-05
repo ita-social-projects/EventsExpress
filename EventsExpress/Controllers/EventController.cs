@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -79,19 +79,26 @@ namespace EventsExpress.Controllers
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
             filter.PageSize = 6;
-            IEnumerable<EventPreviewDto> indexItems = _mapper.Map<IEnumerable<EventPreviewDto>>(
-                _eventService.GetAll(filter, out int count));
 
             if (!User.IsInRole("Admin"))
             {
-                indexItems = indexItems.Where(x => x.DateFrom >= DateTime.Today);
+                if (filter.DateFrom == DateTime.MinValue)
+                {
+                    filter.DateFrom = DateTime.Today;
+                }
+
+                if (filter.Status != EventStatus.Active)
+                {
+                    return Forbid();
+                }
             }
 
             try
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = indexItems,
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(
+                        _eventService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
@@ -179,7 +186,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method id used to set rating to user
+        /// This method id used to set rating to user.
         /// </summary>
         /// <param name="model">Required (type: RateDto).</param>
         /// <response code="200">Rating is setted successfully.</response>
