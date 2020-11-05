@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using EventsExpress.Db.Enums;
-using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.DTO
 {
@@ -9,7 +7,9 @@ namespace EventsExpress.DTO
     {
         public Guid Id { get; set; }
 
-        public TimeSpan Frequency { get; set; }
+        public int Frequency { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public DateTime LastRun { get; set; }
 

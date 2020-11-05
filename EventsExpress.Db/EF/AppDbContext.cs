@@ -2,6 +2,7 @@
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.EF
 {
@@ -133,7 +134,7 @@ namespace EventsExpress.Db.EF
 
             // event config
             builder.Entity<Event>()
-                .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
+                .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
         }
     }
 }

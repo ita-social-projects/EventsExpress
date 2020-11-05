@@ -244,8 +244,8 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeSpan>("Frequency")
-                        .HasColumnType("time");
+                    b.Property<int>("Frequency")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -261,6 +261,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<DateTime>("NextRun")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Periodicity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

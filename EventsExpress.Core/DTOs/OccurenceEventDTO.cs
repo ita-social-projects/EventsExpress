@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -8,7 +7,9 @@ namespace EventsExpress.Core.DTOs
     {
         public Guid Id { get; set; }
 
-        public TimeSpan Frequency { get; set; }
+        public int Frequency { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public DateTime LastRun { get; set; }
 
@@ -17,5 +18,13 @@ namespace EventsExpress.Core.DTOs
         public bool IsActive { get; set; }
 
         public Guid EventId { get; set; }
+
+        public Guid CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public Guid ModifiedBy { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
     }
 }

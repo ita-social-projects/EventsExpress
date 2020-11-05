@@ -12,6 +12,8 @@ namespace EventsExpress.Core.DTOs
 
         public bool IsBlocked { get; set; }
 
+        public bool IsReccurent { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -21,6 +23,10 @@ namespace EventsExpress.Core.DTOs
         public DateTime DateTo { get; set; }
 
         public int MaxParticipants { get; set; }
+
+        public int Frequency { get; set; }
+
+        public Periodicity Periodicity { get; set; }
 
         public IFormFile Photo { get; set; }
 

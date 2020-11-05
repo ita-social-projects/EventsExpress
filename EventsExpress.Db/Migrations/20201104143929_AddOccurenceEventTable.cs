@@ -7,10 +7,6 @@ namespace EventsExpress.Db.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Periodicity",
-                table: "Events");
-
             migrationBuilder.AddColumn<Guid>(
                 name: "CreatedBy",
                 table: "Events",
@@ -44,9 +40,10 @@ namespace EventsExpress.Db.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<Guid>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
-                    Frequency = table.Column<TimeSpan>(nullable: false),
+                    Frequency = table.Column<int>(nullable: false),
                     LastRun = table.Column<DateTime>(nullable: false),
                     NextRun = table.Column<DateTime>(nullable: false),
+                    Periodicity = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false)
                 },
@@ -88,13 +85,6 @@ namespace EventsExpress.Db.Migrations
             migrationBuilder.DropColumn(
                 name: "ModifiedDate",
                 table: "Events");
-
-            migrationBuilder.AddColumn<int>(
-                name: "Periodicity",
-                table: "Events",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
         }
     }
 }
