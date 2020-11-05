@@ -1,9 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { stringify as queryStringStringify } from 'query-string';
 import UserSearchFilter from '../components/users/UserSearchFilter';
 import { get_SearchUsers } from '../actions/users';
 import history from '../history';
+import eventHelper from '../components/helpers/eventHelper';
 
 class UserSearchFilterWrapper extends Component {
     onSubmit = (filters) => {
@@ -12,10 +12,7 @@ class UserSearchFilterWrapper extends Component {
                 this.props.events.filter['keyWord'] = filters.keyWord;
             }
         }
-        let queryString = `?${queryStringStringify(
-            this.props.events.filter,
-            { arrayFormat: 'index' }
-        )}`;
+        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
         this.props.search(queryString);
         history.push(window.location.pathname + queryString);
     }

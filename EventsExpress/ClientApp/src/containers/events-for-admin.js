@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { stringify as queryStringStringify } from 'query-string';
+import eventHelper from '../components/helpers/eventHelper';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event-list';
@@ -25,13 +25,7 @@ class AdminEventListWrapper extends Component {
             : isError.ErrorCode == '500'
                 ? <Redirect
                     from="*"
-                    to={{
-                        pathname: "/home/events",
-                        search: `?${queryStringStringify(
-                            this.props.events.filter,
-                            { arrayFormat: 'index' }
-                        )}`,
-                    }}
+                    to={eventHelper.getQueryStringByEventFilter(this.props.events.filter)}
                 />
                 : isError.ErrorCode == '401'
                     ? <Unauthorized />
