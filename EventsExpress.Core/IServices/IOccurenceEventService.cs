@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
@@ -11,14 +12,10 @@ namespace EventsExpress.Core.IServices
     {
         Task<OperationResult> Create(OccurenceEventDTO eventDTO);
 
-        Task<OperationResult> Edit(OccurenceEventDTO e);
+        Task<OperationResult> Edit(OccurenceEventDTO eventDTO);
 
-        Task<OperationResult> Delete(Guid eventId);
+        OccurenceEventDTO EventById(Guid eventId);
 
-        OccurenceEventDTO OccurenceEventById(Guid eventId);
-
-        IEnumerable<OccurenceEventDTO> Events(EventFilterViewModel model, out int count);
-
-        bool Exists(Guid eventId);
+        Task EventNotification(CancellationToken stoppingToken);
     }
 }

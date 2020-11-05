@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using MediatR;
@@ -16,18 +20,15 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUnitOfWork _db;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
 
         public OccurenceEventService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IMediator mediator,
-            IPhotoService photoSrv)
+            IMediator mediator)
         {
             _db = unitOfWork;
             _mapper = mapper;
-            _photoService = photoSrv;
             _mediator = mediator;
         }
 
@@ -48,29 +49,49 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public Task<OperationResult> Delete(Guid eventId)
+        public async Task<OperationResult> Edit(OccurenceEventDTO eventDTO)
         {
-            throw new NotImplementedException();
+            var ev = _db.OccurenceEventRepository.Get().FirstOrDefault(x => x.Id == eventDTO.Id);
+            ev.Frequency = eventDTO.Frequency;
+            ev.Periodicity = eventDTO.Periodicity;
+            ev.LastRun = eventDTO.LastRun;
+            ev.NextRun = eventDTO.NextRun;
+            ev.IsActive = eventDTO.IsActive;
+            ev.EventId = eventDTO.EventId;
+            ev.CreatedBy = eventDTO.CreatedBy;
+            ev.CreatedDate = eventDTO.CreatedDate;
+            ev.ModifiedBy = eventDTO.ModifiedBy;
+            ev.ModifiedDate = eventDTO.ModifiedDate;
+
+            await _db.SaveAsync();
+            return new OperationResult(true, "Edit occurence event", ev.Id.ToString());
         }
 
-        public Task<OperationResult> Edit(OccurenceEventDTO e)
-        {
-            throw new NotImplementedException();
-        }
+        public OccurenceEventDTO EventById(Guid eventId) =>
+            _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
+                .Get()
+                .FirstOrDefault(x => x.Id == eventId));
 
-        public IEnumerable<OccurenceEventDTO> Events(EventFilterViewModel model, out int count)
+        public async Task EventNotification(CancellationToken stoppingToken)
         {
-            throw new NotImplementedException();
-        }
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                var events = _db.OccurenceEventRepository.Get().Where(x => x.IsActive == false && x.LastRun == DateTime.Today);
 
-        public bool Exists(Guid eventId)
-        {
-            throw new NotImplementedException();
-        }
+                try
+                {
+                    foreach (var ev in events)
+                    {
+                        await _mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<OccurenceEventDTO>(ev)));
+                    }
+                }
+                catch (Exception ex)
+                {
+                   new OperationResult(false, ex.Message, string.Empty);
+                }
 
-        public OccurenceEventDTO OccurenceEventById(Guid eventId)
-        {
-            throw new NotImplementedException();
+                await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
+            }
         }
     }
 }

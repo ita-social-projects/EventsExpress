@@ -9,6 +9,8 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
+        Task<OperationResult> AproveEventGeneration(Guid eventId);
+
         Task<OperationResult> Create(EventDTO eventDTO);
 
         Task<OperationResult> Edit(EventDTO e);

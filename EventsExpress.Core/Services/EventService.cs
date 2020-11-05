@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -19,17 +20,20 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
+        private readonly IOccurenceEventService _occurenceEventService;
 
         public EventService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv)
+            IPhotoService photoSrv,
+            IOccurenceEventService occurenceEventService)
         {
             _db = unitOfWork;
             _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
+            _occurenceEventService = occurenceEventService;
         }
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
@@ -60,6 +64,34 @@ namespace EventsExpress.Core.Services
             await _db.SaveAsync();
 
             return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> AproveEventGeneration(Guid occurenceEventId)
+        {
+            var occurenceEvent = _occurenceEventService.EventById(occurenceEventId);
+            var parentEvent = EventById(occurenceEvent.EventId);
+
+            parentEvent.Id = Guid.Empty;
+            parentEvent.IsReccurent = false;
+            parentEvent.DateFrom = occurenceEvent.NextRun;
+            parentEvent.DateTo = occurenceEvent.NextRun;
+
+            occurenceEvent.IsActive = true;
+            occurenceEvent.LastRun = parentEvent.DateTo;
+            occurenceEvent.NextRun = DateTimeExtensions.AddDateUnit(occurenceEvent.Periodicity, occurenceEvent.Frequency, parentEvent.DateTo);
+            occurenceEvent.ModifiedDate = DateTime.Today;
+
+            try
+            {
+                await Create(parentEvent);
+                await _occurenceEventService.Edit(occurenceEvent);
+
+                return new OperationResult(true, "OccurenceEvent are aproved", string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, string.Empty);
+            }
         }
 
         public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
@@ -164,6 +196,12 @@ namespace EventsExpress.Core.Services
                 await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
+
+                if (eventDTO.IsReccurent == true)
+                {
+                    await _occurenceEventService.Create(_mapper.Map<OccurenceEventDTO>(eventDTO));
+                }
+
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
                 return new OperationResult(true, "Create new Event", result.Id.ToString());
             }
