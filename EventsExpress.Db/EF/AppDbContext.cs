@@ -1,6 +1,8 @@
-﻿using EventsExpress.Db.Entities;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
+using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace EventsExpress.Db.EF
 {
@@ -25,6 +27,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<EventOwner> EventOwners { get; set; }
 
         public DbSet<Report> Reports { get; set; }
 
@@ -61,11 +65,6 @@ namespace EventsExpress.Db.EF
 
             // user-event configs
             // user as owner
-            builder.Entity<Event>()
-                .HasOne(e => e.Owner)
-                .WithMany(u => u.Events)
-                .HasForeignKey(e => e.OwnerId).OnDelete(DeleteBehavior.Restrict);
-
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");
             builder.Entity<Event>()
@@ -131,6 +130,9 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(Int32.MaxValue);
+
+            builder.Entity<EventOwner>()
+                .HasKey(c => new { c.EventId, c.UserId });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventsExpress.Db.EF;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Db.Repo
@@ -23,6 +24,7 @@ namespace EventsExpress.Db.Repo
         private IUserRepository _userRepository;
         private IChatRepository _chatRepository;
         private IMessageRepository _messageRepository;
+        private IRepository<EventOwner> _eventOwnersRepository;
         private bool disposed = false;
 
         public UnitOfWork(
@@ -72,6 +74,9 @@ namespace EventsExpress.Db.Repo
 
         public IUserRepository UserRepository =>
             _userRepository ?? (_userRepository = new UserRepository(database));
+
+        public IRepository<EventOwner> EventOwnersRepository => 
+            _eventOwnersRepository ?? (_eventOwnersRepository = new Repository<EventOwner>(database));
 
         public void Dispose()
         {

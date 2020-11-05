@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventsExpress.Db.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace EventsExpress.Db.IRepo
@@ -32,6 +33,8 @@ namespace EventsExpress.Db.IRepo
         IChatRepository ChatRepository { get; }
 
         IMessageRepository MessageRepository { get; }
+
+        IRepository<EventOwner> EventOwnersRepository { get; }
 
         Task SaveAsync();
     }

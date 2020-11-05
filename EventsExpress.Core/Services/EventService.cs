@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -10,6 +11,7 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -117,7 +119,10 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = true;
 
             await _db.SaveAsync();
-            await _mediator.Publish(new BlockedEventMessage(uEvent.OwnerId, uEvent.Id));
+
+            var userIds = _db.EventOwnersRepository.Get().Where(x => x.EventId == eID).Select(x => x.UserId);
+
+            await _mediator.Publish(new BlockedEventMessage(userIds, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -133,7 +138,10 @@ namespace EventsExpress.Core.Services
             uEvent.IsBlocked = false;
 
             await _db.SaveAsync();
-            await _mediator.Publish(new UnblockedEventMessage(uEvent.OwnerId, uEvent.Id));
+
+            var userIds = _db.EventOwnersRepository.Get().Where(x => x.EventId == eId).Select(x => x.UserId);
+
+            await _mediator.Publish(new UnblockedEventMessage(userIds, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -212,7 +220,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count)
         {
-            var events = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false);
+            var events = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors").Where(x => x.IsBlocked == false);
 
             events = !string.IsNullOrEmpty(model.KeyWord) ? events.Where(x => x.Title.Contains(model.KeyWord)
                                                                         || x.Description.Contains(model.KeyWord)
@@ -231,6 +239,8 @@ namespace EventsExpress.Core.Services
                 events = events.Where(x => x.Categories.Any(category => categoryIds.Contains(category.CategoryId)));
             }
 
+
+            // todo
             count = events.Count();
 
             return _mapper.Map<IEnumerable<EventDTO>>(events.OrderBy(x => x.DateFrom).Skip((model.Page - 1) * model.PageSize).Take(model.PageSize));
@@ -266,8 +276,9 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                .Where(e => e.OwnerId == userId && e.DateFrom >= DateTime.Today)
+            var eventIds = _db.EventOwnersRepository.Get().Where(x => x.UserId == userId).Select(x => x.EventId);
+            var ev = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => eventIds.Contains(e.Id) && e.DateFrom >= DateTime.Today)
                 .OrderBy(e => e.DateFrom)
                 .AsEnumerable();
 
@@ -277,8 +288,9 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
+            var eventIds = _db.EventOwnersRepository.Get().Where(x => x.UserId == userId).Select(x => x.EventId);
             var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
-                 .Where(e => e.OwnerId == userId && e.DateFrom < DateTime.Today)
+                 .Where(e => eventIds.Contains(e.Id) && e.DateFrom < DateTime.Today)
                  .OrderBy(e => e.DateFrom)
                  .AsEnumerable();
 

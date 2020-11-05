@@ -6,6 +6,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.Services;
 using MediatR;
 
 namespace EventsExpress.Core.NotificationHandlers
@@ -30,18 +31,21 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                var email = _userService.GetById(notification.UserId).Email;
-                var even = _eventService.EventById(notification.Id);
-                string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
-
-                await _sender.SendEmailAsync(new EmailDTO
+                foreach (var userId in notification.UserId)
                 {
-                    Subject = "Your event was blocked",
-                    RecepientEmail = email,
-                    MessageText = $"Dear {email}, your event was blocked for some reason. " +
-                    $"To unblock it, edit this event, please: " +
-                    $"\"<a href='{eventLink}'>{even.Title}</>\"",
-                });
+                    var email = _userService.GetById(userId).Email;
+                    var even = _eventService.EventById(notification.Id);
+                    string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
+
+                    await _sender.SendEmailAsync(new EmailDTO
+                    {
+                        Subject = "Your event was blocked",
+                        RecepientEmail = email,
+                        MessageText = $"Dear {email}, your event was blocked for some reason. " +
+                        $"To unblock it, edit this event, please: " +
+                        $"\"<a href='{eventLink}'>{even.Title}</>\"",
+                    });
+                }
             }
             catch (Exception ex)
             {
