@@ -46,7 +46,9 @@ class EventListWrapper extends Component {
     }
 
     render() {
-        let current_user = this.props.current_user.id !== null ? this.props.current_user : {};
+        let current_user = this.props.current_user.id !== null
+            ? this.props.current_user
+            : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;
         const errorMessage = isError.ErrorCode == '403'
@@ -76,8 +78,10 @@ class EventListWrapper extends Component {
             : null;
 
         return <>
-            {errorMessage}
-            {spinner || content}
+            {!errorMessage
+                ? spinner || content
+                : errorMessage
+            }
         </>
     }
 }

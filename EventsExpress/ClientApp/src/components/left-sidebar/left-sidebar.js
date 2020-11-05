@@ -56,7 +56,7 @@ class LeftSidebar extends Component {
                         <hr />
                         <ul className="list-unstyled">
                             <NavItem
-                                to={`/home/events${eventHelper.getQueryStringByEventFilter(this.props.filter)}`}
+                                to={'/'}
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />

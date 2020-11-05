@@ -44,8 +44,10 @@ class AdminEventListWrapper extends Component {
             : null;
 
         return <>
-            {errorMessage}
-            {spinner || content}
+            {!errorMessage
+                ? spinner || content
+                : errorMessage
+            }
         </>
     }
 }
