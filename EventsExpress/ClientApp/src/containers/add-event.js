@@ -34,6 +34,7 @@ class AddEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
+        console.log(values);
         this.props.add_event({ ...values, user_id: this.props.user_id });
     }
 

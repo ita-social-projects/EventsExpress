@@ -82,6 +82,8 @@ class EventForm extends Component {
         });
     }
 
+
+
     render() {
         const { countries, form_values, all_categories, data } = this.props;
         let values = form_values || this.props.initialValues;
@@ -153,7 +155,18 @@ class EventForm extends Component {
                         </div>
                     }
                 </div>
-                <Inventory/>
+                <Inventory count={this.props.inventories.items.length} />
+                {
+                    this.props.inventories.items.map((item, key) => { 
+                        return (
+                    <> 
+                        <div>
+                            { item.itemName + " " + item.itemCount + " " + key}
+                        </div>
+                        {/* <input type="hidden" name={`inventory[${key}].name`} value={item.itemName} /> */}
+                        <Field type="hidden" name={`inventory[${key}].name`} component="input" value={item.itemName} />
+                    </>)})
+                }
                 <Button fullWidth={true} type="submit" color="primary" onClick={this.disableSaveButton} disabled={this.isSaveButtonDisabled}>
                     Save
                 </Button>
@@ -163,7 +176,9 @@ class EventForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    initialValues: state.event.data
+    initialValues: state.event.data,
+    inventories: state.inventories,
+
 });
 
 const mapDispatchToProps = (dispatch) => {

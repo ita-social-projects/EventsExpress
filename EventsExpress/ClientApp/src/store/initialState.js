@@ -43,6 +43,17 @@ const initialState = {
         isInventarSuccess: false,
         inventarError: null
     },
+    inventories: {
+        isPending: true,
+        isError: false,
+        count: 0,
+        items: []
+    },
+    unitsOfMeasuring: {
+        isPending: true,
+        isError: false,
+        units: []
+    },
     events: {
         isPending: true,
         isError: false,
@@ -56,7 +67,7 @@ const initialState = {
         isPending: false,
         isSuccess: false,
         Error: {}
-     },
+    },
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,

@@ -2,7 +2,7 @@ import initialState from '../store/initialState';
 
 import {
     SET_INVENTAR_SUCCESS, SET_INVENTAR_PENDING, SET_INVENTAR_ERROR
-} from '../actions/inventory';
+} from '../actions/add-inventar';
 
 export const reducer = (state = initialState.add_inventar, action) => {
 

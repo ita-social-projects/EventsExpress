@@ -24,10 +24,6 @@ export default function add_inventar(data) {
     }
 }
 
-export function get_unitofmeasuring() {
-    return api_serv.getUnitsOfMeasuring();
-}
-
 function inventarWasCreated(eventId){
     return{
       type: INVENTAR_WAS_CREATED,
