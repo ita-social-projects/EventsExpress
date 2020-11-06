@@ -58,9 +58,55 @@ namespace EventsExpress.Core.Services
                 ev.Visitors = new List<UserEvent>();
             }
 
-            ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
+            if (ev.IsPublic)
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = 0 });
+            }
+            else
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = (UserStatusEvent)2 });
+            }
+
             await _db.SaveAsync();
 
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> ApproveUserToEvent(Guid userId, Guid eventId, bool action)
+        {
+            var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
+            if (ev == null)
+            {
+                return new OperationResult(false, "Event not found!", "eventId");
+            }
+
+            var user = _db.UserRepository.Get(userId);
+            if (user == null)
+            {
+                return new OperationResult(false, "User not found!", "userID");
+            }
+
+            var userEvent = ev.Visitors?.Where(x => x.EventId == ev.Id && x.UserId == user.Id).FirstOrDefault();
+
+            if (ev.Visitors.Contains(userEvent))
+            {
+                ev.Visitors.Remove(userEvent);
+            }
+                
+            if (action)
+            {
+                userEvent.UserStatusEvent = UserStatusEvent.Approved;
+                await _mediator.Publish(new ApproveParticipantMessage(user.Id, ev.Id));
+            }
+            else
+            {
+                userEvent.UserStatusEvent = UserStatusEvent.Denied;
+                await _mediator.Publish(new DenyParticipantMessage(user.Id, ev.Id));
+            }
+
+            ev.Visitors.Add(userEvent);
+            _db.EventRepository.Update(ev);
+            await _db.SaveAsync();
             return new OperationResult(true);
         }
 
@@ -184,6 +230,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
+            ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
             {
@@ -215,9 +262,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
-                .AsNoTracking()
-                .AsEnumerable();
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -258,10 +303,13 @@ namespace EventsExpress.Core.Services
 
             count = events.Count();
 
-            return _mapper.Map<IEnumerable<EventDTO>>(
-                events.OrderBy(x => x.DateFrom)
+            var result = events.OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize));
+                .Take(model.PageSize)
+                .AsNoTracking()
+                .ToList();
+
+            return _mapper.Map<IEnumerable<EventDTO>>(result);
         }
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)

@@ -38,6 +38,8 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
 
+        Task<OperationResult> ApproveUserToEvent(Guid userId, Guid eventId, bool action);
+
         byte GetRateFromUser(Guid userId, Guid eventId);
 
         double GetRate(Guid eventId);

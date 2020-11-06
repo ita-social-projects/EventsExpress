@@ -231,6 +231,7 @@ export default class EventsExpressService {
 
         file.append('Title', data.title);
         file.append('MaxParticipants', data.maxParticipants);
+        file.append('IsPublic', data.isPublic);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
@@ -286,6 +287,11 @@ export default class EventsExpressService {
         return !res.ok
             ? { error: await res.text() }
             : res;
+    }
+
+    setApprovedUser = async (data) => {
+        const res = await this.setResource(`event/ApproveUserToEvent?userId=${data.userId}&eventId=${data.eventId}$action=${true}`)
+        return res;
     }
     //#endregion Events
 

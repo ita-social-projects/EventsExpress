@@ -10,6 +10,8 @@ import EventCancelModal from './event-cancel-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
+import Button from "@material-ui/core/Button";
+
 
 export default class EventItemView extends Component {
     state = { edit: false }
@@ -20,15 +22,32 @@ export default class EventItemView extends Component {
 
     renderUsers = arr => {
         return arr.map(x => (
-            <Link to={'/user/' + x.id} className="btn-custom">
-                <div className="d-flex align-items-center border-bottom">
-                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                    <div>
-                        <h5>{x.username}</h5>
-                        {'Age: ' + this.getAge(x.birthday)}
+            <div>
+                <Link to={'/user/' + x.id} className="btn-custom">
+                    <div className="d-flex align-items-center border-bottom">
+                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                        <div>
+                            <h5>{x.username}</h5>
+                            {'Age: ' + this.getAge(x.birthday)}
+                        </div>
                     </div>
-                </div>
-            </Link>)
+                </Link>
+                {(true)
+                    ? <div>
+                        <Button
+                            color="outline-success"
+                        >
+                            Approve
+                            </Button>
+                        <Button
+                            color="outline-danger"
+                        >
+                            Deny
+                            </Button>
+                    </div>
+                    : null
+                }
+            </div>)
         );
     }
 
@@ -79,6 +98,7 @@ export default class EventItemView extends Component {
             dateFrom,
             dateTo,
             description,
+            isPublic,
             maxParticipants,
             user,
             visitors,
@@ -105,6 +125,11 @@ export default class EventItemView extends Component {
                             <img src={photoUrl} className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
+                                <br />
+                                {(isPublic)
+                                    ? <span>Public event</span>
+                                    : <span>Private event</span>
+                                }
                                 <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
                                     ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
@@ -167,3 +192,4 @@ export default class EventItemView extends Component {
         </>
     }
 }
+

@@ -27,6 +27,10 @@ class EventItemViewWrapper extends Component{
         this.props.cancel(this.props.event.data.id, reason);
     }
 
+    onApprove = () => {
+        this.props.approve(this.props.current_user.id, this.props.event.data.id, )
+    }
+
     render(){   
         const { isPending } = this.props.event;
   

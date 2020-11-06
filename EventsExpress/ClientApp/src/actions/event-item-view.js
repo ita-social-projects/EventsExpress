@@ -90,6 +90,13 @@ export function join(userId, eventId) {
   }
 }
 
+// ACTION APPROVER FOR USER
+export function approve_user(userId, eventId) {
+    return dispatch => {
+        
+    }
+}
+
 // ACTION CREATOR FOR EVENT UNBLOCK:
 export function unblock_event(id) {
   return dispatch => {

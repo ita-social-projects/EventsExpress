@@ -126,6 +126,26 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>
+        /// <param name="action">button press.</param>
+        /// <response code="200">Approving user from event process success.</response>
+        /// <response code="400">If aproving user from event process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ApproveUserToEvent(Guid userId, Guid eventId, bool action)
+        {
+            var res = await _eventService.ApproveUserToEvent(userId, eventId, action);
+            if (res.Successed)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// This method have to add user to category.
+        /// </summary>
+        /// <param name="userId">Required.</param>
+        /// <param name="eventId">EventId.</param>
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
         [HttpPost("[action]")]
@@ -179,7 +199,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method id used to set rating to user
+        /// This method id used to set rating to user.
         /// </summary>
         /// <param name="model">Required (type: RateDto).</param>
         /// <response code="200">Rating is setted successfully.</response>
