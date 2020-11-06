@@ -26,7 +26,8 @@ export const radioButton = ({ input, ...rest }) => (
 
 export const validate = values => {
     const errors = {}
-    const numberFields = ['maxParticipants']
+    const numberFields = ['maxParticipants', 'frequency']
+    const checkBoxDependent = ['frequency', 'periodicity']
     const requiredFields = [
         'email',
         'password',
@@ -41,7 +42,7 @@ export const validate = values => {
         'newPassword',
         'repeatPassword',
         'Birthday',
-        'UserName'
+        'UserName',
     ]
 
     requiredFields.forEach(field => {
@@ -50,9 +51,17 @@ export const validate = values => {
         }
     })
 
-    if (values.maxParticipants && values.maxParticipants < 1) {
-        errors.maxParticipants = `Invalid data`;
-    }
+    numberFields.forEach(field => {
+        if (values[field] && values[field] < 1) {
+            errors[field] = `Invalid data`;
+        }
+    })
+
+    requiredFields.forEach(field => {
+        if ('checkOccurence'.checked && !values[field]) {
+            errors[field] = 'Required'
+        }
+    })
 
     if (values.visitors && values.maxParticipants && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
@@ -94,8 +103,6 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
 }
 
 export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
-
-
     value = value || defaultValue || new Date();
     minValue = minValue || new Date();
     return <DatePicker
@@ -141,6 +148,33 @@ export const renderSelectLocationField = ({
         >
             <option value=""></option>
             {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+        </Select>
+        {renderFromHelper({ touched, error })}
+    </FormControl>
+
+export const renderSelectPeriodicityField = ({
+    input,
+    label,
+    text,
+    data,
+    meta: { touched, invalid, error },
+    children,
+    ...custom
+}) =>
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+        <Select
+            native
+            {...input}
+            onBlur={() => input.onBlur()}
+            {...custom}
+            inputProps={{
+                name: text.toLowerCase() + 'Id',
+                id: 'age-native-simple'
+            }}
+        >
+            <option value=""></option>
+            {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
         {renderFromHelper({ touched, error })}
     </FormControl>

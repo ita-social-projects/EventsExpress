@@ -4,6 +4,9 @@ import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import './event-form.css';
 import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
@@ -24,7 +27,7 @@ const imageIsRequired = value => (!value ? "Required" : undefined);
 
 const { validate } = Module;
 
-class EventForm extends Component {
+class OccurenceEventForm extends Component {
 
     state = { imagefile: [] };
 
@@ -91,6 +94,7 @@ class EventForm extends Component {
     }
 
     render() {
+        const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.data;
         const { countries, form_values, all_categories, data } = this.props;
         let values = form_values || this.props.initialValues;
         let countries_list = this.renderLocations(countries);
@@ -121,7 +125,7 @@ class EventForm extends Component {
                     </Button>
 
                     <div className="mt-2">
-                        <Field name='title' component={renderTextField} defaultValue={data.title} type="input" label="Title" />
+                        <Field name='title' component={renderTextField} value={data.title} type="input" label="Title" />
                     </div>
                     <div className="mt-2">
                         <Field name='maxParticipants' component={renderTextField} defaultValue={data.maxParticipants} type="number" label="Max Count Of Participants" />
@@ -132,8 +136,8 @@ class EventForm extends Component {
                     </div>
                     {this.state.checked &&
                         <div>
-                        <div className="mt-2">
-                            <Field name="periodicity" text="Periodicity" data={periodicity}  value={this.state.value} component={renderSelectPeriodicityField} />
+                            <div className="mt-2">
+                                <Field name="periodicity" text="Periodicity" data={periodicity} value={this.state.value} component={renderSelectPeriodicityField} />
                             </div>
                             <div className="mt-2">
                                 <Field name='frequency' type="number" component={renderTextField} defaultValue={data.frequency} />
