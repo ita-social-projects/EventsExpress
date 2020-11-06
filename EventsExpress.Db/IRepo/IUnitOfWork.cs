@@ -37,6 +37,8 @@ namespace EventsExpress.Db.IRepo
 
         IUnitOfMeasuringRepository UnitOfMeasuringRepository { get; }
 
+        IEventStatusHistoryRepository EventStatusHistoryRepository { get; }
+
         Task SaveAsync();
     }
 }

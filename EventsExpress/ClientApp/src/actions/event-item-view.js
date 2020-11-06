@@ -7,6 +7,7 @@ export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";
 export const GET_EVENT_ERROR = "GET_EVENT_ERROR";
 export const RESET_EVENT = "RESET_EVENT";
 
+
 export const blockEvent = {
   PENDING: 'PENDING_BLOCK',
   SUCCESS: 'SUCCESS_BLOCK',
@@ -19,6 +20,14 @@ export const unBlockEvent = {
   SUCCESS: 'SUCCESS_UNBLOCK',
   ERROR: 'ERROR_UNBLOCK',
   UPDATE: 'UPDATE_UNBLOCKED'
+}
+
+export const cancelEvent = {
+    PENDING: 'PENDING_CANCEL',
+    SUCCESS: 'SUCCESS_CANCEL',
+    ERROR: 'ERROR_CANCEL',
+    UPDATE: 'UPDATE_CANCEL',
+    SET_EVENT_CANCELATION_MODAL_STATUS: "TOGLE_EVENT_CANCELATION_MODAL_STATUS"
 }
 
 const api_serv = new EventsExpressService();
@@ -117,6 +126,25 @@ export function block_event(id) {
   }
 }
 
+// ACTION CREATOR FOR EVENT CANCELATION:
+export function cancel_event(eventId, reason) {
+    return dispatch => {
+        dispatch(setCancelEventPending(true));
+
+        const res = api_serv.setEventCancel({EventId: eventId, Reason: reason});
+
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setCancelEventSuccess(eventId));
+                dispatch(updateCancelEvent(eventId));
+                dispatch(setEventCanelationModalStatus(false));
+            } else {
+                dispatch(setCancelEventError(response.error));
+            }
+        });
+    }
+}
+
 export function resetEvent(){
   return {
     type: RESET_EVENT,
@@ -200,3 +228,39 @@ function updateUnBlockedEvent(id) {
       payload: id
   }
 } 
+
+// cancelEvent User actions
+
+function setCancelEventSuccess() {
+    return {
+        type: cancelEvent.SUCCESS        
+    }
+}
+
+function setCancelEventPending(data) {
+    return {
+        type: cancelEvent.PENDING,
+        payload: data
+    }
+}
+
+function setCancelEventError(data) {
+    return {
+        type: cancelEvent.ERROR,
+        payload: data
+    }
+}
+
+function updateCancelEvent(data) {
+    return {
+        type: cancelEvent.UPDATE,
+        payload: data
+    }
+}
+
+export function setEventCanelationModalStatus(data) {
+    return {
+        type: cancelEvent.SET_EVENT_CANCELATION_MODAL_STATUS,
+        payload: data
+    }
+}

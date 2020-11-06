@@ -264,18 +264,16 @@ __pycache__/
 ## Ignore VisualStudioCode files.
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+!/EventsExpress/ClientApp/.vscode/tasks.json
+!/EventsExpress/ClientApp/.vscode/launch.json
+!/EventsExpress/ClientApp/.vscode/extensions.json
+/EventsExpress/ClientApp/.vscode/*
 *.code-workspace
 
 # Local History for Visual Studio Code
-.history/
+/EventsExpress/ClientApp/.history/
 
 
 ## Ignore project files.
-#EventsExpress/EventsExpress.xml
 /EventsExpress/EventsExpress.xml
 /EventsExpress/ClientApp/package-lock.json

@@ -5,4 +5,6 @@
     -ms-border-radius: 30px;
     border-radius: 30px;
     -webkit-box-shadow: none !important;
-    box-shadow: none !important; }
+    box-shadow: none !important; 
+    margin-left: 10px;
+  }

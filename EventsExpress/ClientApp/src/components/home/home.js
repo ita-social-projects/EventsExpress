@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
-import './home.css';
 import EventListWrapper from '../../containers/event-list';
-
-import { connect } from 'react-redux';
 import EventFilterWrapper from '../../containers/event-filter';
+import './home.css';
 
-
-class Home extends Component {
-
+export default class Home extends Component {
     render() {
-
         return (<>
-            <EventFilterWrapper/>
+            <EventFilterWrapper />
             <div className="events-container">
-                <EventListWrapper params={this.props.location.search} />                   
+                <EventListWrapper location={this.props.location} />
             </div>
-            
         </>);
     }
 }
-
-const mapStateToProps = state => {
-    return { id: state.user.id };
-};
-
-export default connect(mapStateToProps)(Home);
