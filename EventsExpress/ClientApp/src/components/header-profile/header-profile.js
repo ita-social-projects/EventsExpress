@@ -5,6 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import eventHelper from '../helpers/eventHelper';
 import { stringify as queryStringStringify } from 'query-string';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
@@ -45,13 +46,10 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
                                 </Link>
                                 <Link
-                                    to={{
-                                        pathname: "/home/events",
-                                        search: `?${queryStringStringify(
-                                            this.props.filter,
-                                            { arrayFormat: 'index' }
-                                        )}`,
-                                    }}
+                                to={{
+                                    pathname: "/home/events",
+                                    search: eventHelper.getQueryStringByEventFilter(this.props.filter),
+                                }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton onClick={onClick}>

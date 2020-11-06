@@ -112,15 +112,13 @@ namespace EventsExpress.Core.Services
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
         {
             Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
-            if (emailClaim is null)
+
+            if (string.IsNullOrEmpty(emailClaim?.Value))
             {
                 return null;
             }
 
-            return
-                string.IsNullOrEmpty(emailClaim.Value)
-                ? null
-                : _userService.GetByEmail(emailClaim.Value);
+            return _userService.GetByEmail(emailClaim.Value);
         }
 
         private static bool VerifyPassword(UserDTO user, string actualPassword) =>

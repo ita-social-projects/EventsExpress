@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import {
-    stringify as queryStringStringify
-} from 'query-string';
+import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event-list';
@@ -27,7 +25,7 @@ class EventListWrapper extends Component {
     }
 
     componentDidMount() {
-        this.objQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        this.objQueryParams = queryStringParse(this.props.location.search);
 
         Object.entries(this.objQueryParams).forEach(function ([key, value]) {
             this.props.events.filter[key] = value;
@@ -42,17 +40,15 @@ class EventListWrapper extends Component {
     }
 
     executeSearchEvents = () => {
-        const queryString = queryStringStringify(
-            this.props.events.filter,
-            { arrayFormat: 'index' }
-        );
-
+        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
         this.props.get_events(queryString);
-        history.push(`${this.props.location.pathname}?${queryString}`);
+        history.push(`${this.props.location.pathname}${queryString}`);
     }
 
     render() {
-        let current_user = this.props.current_user.id !== null ? this.props.current_user : {};
+        let current_user = this.props.current_user.id !== null
+            ? this.props.current_user
+            : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;
         const errorMessage = isError.ErrorCode == '403'
@@ -62,10 +58,7 @@ class EventListWrapper extends Component {
                     from="*"
                     to={{
                         pathname: "/home/events",
-                        search: `?${queryStringStringify(
-                            this.props.events.filter,
-                            { arrayFormat: 'index' }
-                        )}`,
+                        search: eventHelper.getQueryStringByEventFilter(this.props.events.filter),
                     }}
                 />
                 : isError.ErrorCode == '401'
@@ -78,15 +71,17 @@ class EventListWrapper extends Component {
             ? <EventList
                 current_user={current_user}
                 data_list={items}
+                filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
-                callback={this.getEvents}
             />
             : null;
 
         return <>
-            {errorMessage}
-            {spinner || content}
+            {!errorMessage
+                ? spinner || content
+                : errorMessage
+            }
         </>
     }
 }

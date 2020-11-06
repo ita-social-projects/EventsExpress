@@ -183,7 +183,7 @@ export default class EventsExpressService {
 
     //#region Events
     getAllEvents = async (filters) => {
-        const res = await this.getResource(`event/all?${filters}`);
+        const res = await this.getResource(`event/all${filters}`);
         return res;
     }
 

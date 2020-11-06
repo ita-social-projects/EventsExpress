@@ -273,7 +273,7 @@ namespace EventsExpress.Core.Services
 
             events = (model.DateFrom != DateTime.MinValue)
                 ? events.Where(x => x.DateFrom >= model.DateFrom)
-                 : events;
+                : events;
 
             events = (model.DateTo != DateTime.MinValue)
                 ? events.Where(x => x.DateTo <= model.DateTo)
