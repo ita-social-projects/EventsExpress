@@ -122,7 +122,9 @@ export default class EventsExpressService {
 
         file.append('Title', data.title);
         file.append('MaxParticipants', data.maxParticipants);
+        file.append('Frequency', data.frequency);
         file.append('Periodicity', data.periodicity);
+        file.append('IsReccurent', data.checkOccurence);
         file.append('Description', data.description);
         file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
@@ -249,6 +251,11 @@ export default class EventsExpressService {
 
     getEvent = async (id) => {
         const res = await this.getResource(`event/get?id=${id}`);
+        return res;
+    }
+
+    getOccurenceEvent = async () => {
+        const res = await this.getResource(`event/CreateReccurentEvent`);
         return res;
     }
 
@@ -387,9 +394,9 @@ export default class EventsExpressService {
         return res;
     }
 
-   
 
-   
+
+
 
     setUsername = async (data) => {
         const res = await this.setResource('Users/EditUsername', {
@@ -459,5 +466,5 @@ export default class EventsExpressService {
             : res;
     }
 
-   
+
 }
