@@ -3,28 +3,32 @@ import { connect } from 'react-redux';
 import UserSearchFilter from '../components/users/UserSearchFilter';
 import { get_SearchUsers } from '../actions/users';
 import history from '../history';
-class UserSearchFilterWrapper extends Component {
+import eventHelper from '../components/helpers/eventHelper';
 
+class UserSearchFilterWrapper extends Component {
     onSubmit = (filters) => {
-        var search_string = '?page=1';
-        if (filters != null) {
-            if (filters.search != null) {
-                search_string += '&keyWord=' + filters.search;
+        if (filters !== null) {
+            if (filters.keyWord !== null) {
+                this.props.events.filter['keyWord'] = filters.keyWord;
             }
         }
-        this.props.search(search_string);
-        history.push(window.location.pathname + search_string);
-
+        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
+        this.props.search(queryString);
+        history.push(window.location.pathname + queryString);
     }
 
     render() {
         return <>
-            <UserSearchFilter onSubmit={this.onSubmit} onReset={this.props.onReset}/>
+            <UserSearchFilter
+                onSubmit={this.onSubmit}
+                onReset={this.props.onReset}
+            />
         </>
     }
 }
 
 const mapStateToProps = (state) => ({
+    events: state.events,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -33,4 +37,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSearchFilterWrapper);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserSearchFilterWrapper);

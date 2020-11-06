@@ -6,13 +6,12 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
+import EventCancelModal from './event-cancel-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
 
-
 export default class EventItemView extends Component {
-
     state = { edit: false }
 
     renderCategories = arr => {
@@ -53,14 +52,17 @@ export default class EventItemView extends Component {
     getAge = birthday => {
         let today = new Date();
         let birthDate = new Date(birthday);
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        let m = today.getMonth() - birthDate.getMonth();
+
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
             age = age - 1;
         }
+
         if (age >= 100) {
             age = "---";
         }
+
         return age;
     }
 
@@ -70,17 +72,30 @@ export default class EventItemView extends Component {
 
     render() {
         const { current_user } = this.props;
-        const { photoUrl, categories, title, dateFrom, dateTo, description, maxParticipants, user, visitors, country, city } = this.props.data;
-
+        const {
+            photoUrl,
+            categories,
+            title,
+            dateFrom,
+            dateTo,
+            description,
+            maxParticipants,
+            user,
+            visitors,
+            country,
+            city
+        } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
+        const INT32_MAX_VALUE = 2147483647;
 
-        let iWillVisitIt = visitors.find(x => x.id == current_user.id) != null;
+        let iWillVisitIt = visitors.find(x => x.id === current_user.id) !== null;
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
         let isFreePlace = visitors.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
 
         return <>
             <div className="container-fluid mt-1">
@@ -89,20 +104,35 @@ export default class EventItemView extends Component {
                         <div className="col-12">
                             <img src={photoUrl} className="w-100" />
                             <div className="text-block">
-                                <span className="title">{title}</span><br />
-                                {(maxParticipants < 2147483647)
+                                <span className="title">{title}</span>
+                                <br />
+                                {(maxParticipants < INT32_MAX_VALUE)
                                     ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
                                     : <span className="maxParticipants">{visitors.length} Participants</span>
                                 }
-                                <br/>
-                                <span><Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment> {dateTo != dateFrom && <>- <Moment format="D MMM YYYY" withTitle>{dateTo}</Moment></>}</span><br />
-                                <span>{country} {city}</span><br />
+                                <br />
+                                <span>
+                                    <Moment format="D MMM YYYY" withTitle>
+                                        {dateFrom}
+                                    </Moment>
+                                    {dateTo != dateFrom &&
+                                        <>-
+                                            <Moment format="D MMM YYYY" withTitle>
+                                                {dateTo}
+                                            </Moment>
+                                        </>
+                                    }
+                                </span>
+                                <br />
+                                <span>{country} {city}</span>
+                                <br />
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}                             
-                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}                             
-                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}                             
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
+                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}
+                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
+                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit
@@ -119,8 +149,6 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-
-
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>

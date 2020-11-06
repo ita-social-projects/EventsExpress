@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
@@ -120,6 +121,7 @@ namespace EventsExpress
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IOccurenceEventService, OccurenceEventService>();
+            services.AddTransient<IEventStatusHistoryService, EventStatusHistoryService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
@@ -141,6 +143,7 @@ namespace EventsExpress
             #endregion
             services.AddCors();
             services.AddControllers();
+            services.AddHttpClient();
 
             services.AddMvc().AddFluentValidation(options =>
             {
@@ -203,7 +206,7 @@ namespace EventsExpress
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

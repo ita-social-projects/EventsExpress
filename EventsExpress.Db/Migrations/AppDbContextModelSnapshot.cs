@@ -191,6 +191,30 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("EventCategory");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<Guid>("EventId");
+
+                    b.Property<int>("EventStatus");
+
+                    b.Property<string>("Reason");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventStatusHistory");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -586,6 +610,19 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
+                        .WithMany("StatusHistory")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithMany("ChangedStatusEvents")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>

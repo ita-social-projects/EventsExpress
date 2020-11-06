@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
@@ -23,7 +22,7 @@ namespace EventsExpress.Core.IServices
 
         EventDTO EventById(Guid eventId);
 
-        IEnumerable<EventDTO> Events(EventFilterViewModel model, out int count);
+        IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count);
 
         IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
@@ -32,8 +31,6 @@ namespace EventsExpress.Core.IServices
         IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
         IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModelq);
-
-        IEnumerable<EventDTO> EventsForAdmin(EventFilterViewModel model, out int count);
 
         IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
 

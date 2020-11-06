@@ -1,12 +1,15 @@
+'use strict';
+
+import eventHelper from '../components/helpers/eventHelper';
 
 const initialState = {
-    modalWind:{
-        isOpen: false 
+    modalWind: {
+        isOpen: false
     },
     resetError: {
         isError: false,
     },
-    user:{
+    user: {
         id: null,
         name: null,
         email: null,
@@ -23,44 +26,30 @@ const initialState = {
         isError: false,
         data: []
     },
-    login:{
+    login: {
         isLoginPending: false,
         isLoginSuccess: false,
         loginError: null
     },
-    register:{
+    register: {
         isRegisterPending: false,
         isRegisterSuccess: false,
         registerError: null
-    },
-    add_event:{
-        isEventPending: false,
-        isEventSuccess: false,
-        eventError: null
-    },
-    events: {
-        isPending: true,
-        isError: false,
-        data: {
-            items: [],
-            pageViewModel: {}
-
-        }
     },
     change_avatar: {
         isPending: false,
         isSuccess: false,
         Error: {}
-     },
+    },
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
         EditUsernameError: {}
-     },
+    },
     SelectCategories: {
-         IsSelectCategoriesSeccess: false,
-         IsSelectCategoriesError: null
-     },
+        IsSelectCategoriesSeccess: false,
+        IsSelectCategoriesError: null
+    },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,
@@ -101,8 +90,7 @@ const initialState = {
         isError: false,
         data: {
             items: [],
-            pageViewModel: {}
-
+            pageViewModel: {},
         }
     },
     delete_comment: {
@@ -113,12 +101,27 @@ const initialState = {
     event: {
         isPending: true,
         isError: false,
+        cancelationModalStatus: false,
+        cancelation: {},
         data: {
-            
             dateFrom: null,
             dateTo: null,
-            photoUrl: null
+            photoUrl: null,
         }
+    },
+    add_event: {
+        isEventPending: false,
+        isEventSuccess: false,
+        eventError: null
+    },
+    events: {
+        isPending: true,
+        isError: false,
+        data: {
+            items: [],
+            pageViewModel: {},
+        },
+        filter: eventHelper.getDefaultEventFilter(),
     },
     profile: {
         isPending: true,
@@ -130,8 +133,7 @@ const initialState = {
         isError: false,
         data: {
             items: [],
-            pageViewModel: {}
-
+            pageViewModel: {},
         }
     },
     changePassword: {
@@ -142,46 +144,46 @@ const initialState = {
     recoverPassword: {
         isPending: false,
         isError: false,
-        isSucces:null,
+        isSucces: null,
     },
-    authenticate:{
-        isPending:false,
-        isSucces:false,
-        isError:null,
-        data:[]
-    },
-    chats:{
+    authenticate: {
         isPending: false,
-        isSuccess:false,
-        isError:null,
+        isSucces: false,
+        isError: null,
         data: []
     },
     hubConnection: null,
-    chat:{
+    chat: {
         isPending: false,
-        isSuccess:false,
-        isError:null,
+        isSuccess: false,
+        isError: null,
         data: {
             messages: [],
-            users: [], 
+            users: [],
             id: null
         }
     },
-    alert:{
-        variant:null,
-        message:null,
-        autoHideDuration: null,
-        open:false
-    },
-    dialog:{
-        title:null,
-        message:null,
-        open:false
-    },
-    contactUs:{
+    chats: {
         isPending: false,
-        isSuccess:false,
-        isError:null
+        isSuccess: false,
+        isError: null,
+        data: []
+    },
+    alert: {
+        variant: null,
+        message: null,
+        autoHideDuration: null,
+        open: false
+    },
+    dialog: {
+        title: null,
+        message: null,
+        open: false
+    },
+    contactUs: {
+        isPending: false,
+        isSuccess: false,
+        isError: null
     },
     notification:
     {

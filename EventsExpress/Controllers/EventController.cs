@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -79,38 +79,26 @@ namespace EventsExpress.Controllers
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
             filter.PageSize = 6;
-            try
-            {
-                var viewModel = new IndexViewModel<EventPreviewDto>
-                {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.Events(filter, out int count)),
-                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
-                };
-                return Ok(viewModel);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest();
-            }
-        }
 
-        /// <summary>
-        /// This method have to return all events fro Admin.
-        /// </summary>
-        /// <param name="filter">Required.</param>
-        /// <returns>Events.</returns>
-        /// <response code="200">Return IEnumerable EventPreviewDto.</response>
-        /// <response code="400">If return failed.</response>
-        [Authorize(Roles = "Admin")]
-        [HttpGet("[action]")]
-        public IActionResult AllForAdmin([FromQuery] EventFilterViewModel filter)
-        {
-            filter.PageSize = 6;
+            if (!User.IsInRole("Admin"))
+            {
+                if (filter.DateFrom == DateTime.MinValue)
+                {
+                    filter.DateFrom = DateTime.Today;
+                }
+
+                if (filter.Status != EventStatus.Active)
+                {
+                    return Forbid();
+                }
+            }
+
             try
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsForAdmin(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(
+                        _eventService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
@@ -380,7 +368,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method gets  events.
+        /// This method gets  events. Used for notifications.
         /// </summary>
         /// <param name="eventIds">Reguired.</param>
         /// <param name="page">CountPages.</param>
@@ -395,11 +383,13 @@ namespace EventsExpress.Controllers
                 PageSize = 1,
                 Page = page,
             };
+
             try
             {
                 var viewModel = new IndexViewModel<EventPreviewDto>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.GetEvents(eventIds, model)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(
+                        _eventService.GetEvents(eventIds, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);

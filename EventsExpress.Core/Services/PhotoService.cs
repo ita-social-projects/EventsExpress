@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
@@ -17,13 +18,18 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUnitOfWork _db;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
+        private readonly IHttpClientFactory _clientFactory;
+        private Lazy<HttpClient> _client;
 
         public PhotoService(
             IUnitOfWork uow,
-            IOptions<ImageOptionsModel> opt)
+            IOptions<ImageOptionsModel> opt,
+            IHttpClientFactory clientFactory)
         {
             _db = uow;
             _widthOptions = opt;
+            _clientFactory = clientFactory;
+            _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
         }
 
         public async Task<Photo> AddPhoto(IFormFile uploadedFile)
@@ -49,6 +55,40 @@ namespace EventsExpress.Core.Services
             await _db.SaveAsync();
 
             return photo;
+        }
+
+        public async Task<Photo> AddPhotoByURL(string url)
+        {
+            if (!await IsImageUrl(url))
+            {
+                throw new ArgumentException();
+            }
+
+            Uri uri = new Uri(url);
+            byte[] imgData = _client.Value.GetByteArrayAsync(uri).Result;
+            var photo = new Photo
+            {
+                Thumb = imgData,
+                Img = imgData,
+            };
+
+            _db.PhotoRepository.Insert(photo);
+            await _db.SaveAsync();
+
+            return photo;
+        }
+
+        private async Task<bool> IsImageUrl(string url)
+        {
+            try
+            {
+                HttpResponseMessage result = await _client.Value.GetAsync(url);
+                return result.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
         }
 
         public async Task Delete(Guid id)
