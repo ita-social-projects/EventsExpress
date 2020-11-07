@@ -36,5 +36,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventCategory> Categories { get; set; }
 
         public virtual ICollection<Rate> Rates { get; set; }
+
+        public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
     }
 }

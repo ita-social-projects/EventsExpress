@@ -33,15 +33,17 @@ namespace EventsExpress.Db.Entities
         /// <summary>Gets or sets navigation properties. </summary>
         public IEnumerable<Event> Events { get; set; }
 
-        public IEnumerable<UserEvent> EventsToVisit { get; set; }
+        public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
 
-        public IEnumerable<UserCategory> Categories { get; set; }
+        public virtual IEnumerable<UserCategory> Categories { get; set; }
 
-        public IEnumerable<Rate> Rates { get; set; }
+        public virtual IEnumerable<Rate> Rates { get; set; }
 
-        public IEnumerable<Relationship> Relationships { get; set; }
+        public virtual IEnumerable<Relationship> Relationships { get; set; }
 
-        public IEnumerable<UserChat> Chats { get; set; }
+        public virtual IEnumerable<UserChat> Chats { get; set; }
+
+        public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
     }

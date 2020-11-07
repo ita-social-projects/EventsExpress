@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
@@ -27,7 +28,10 @@ namespace EventsExpress.Test.ServiceTests
 
             MockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
 
-            PhotoService = new PhotoService(MockUnitOfWork.Object, mockOpt.Object);
+            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+
+            PhotoService = new PhotoService(
+                MockUnitOfWork.Object, mockOpt.Object, mockHttpClientFactory.Object);
         }
 
         [Test]

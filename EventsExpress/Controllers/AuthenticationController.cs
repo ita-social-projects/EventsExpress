@@ -23,17 +23,20 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
+        private readonly IPhotoService _photoService;
 
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
             IAuthService authSrv,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -83,9 +86,12 @@ namespace EventsExpress.Controllers
             {
                 var user = _mapper.Map<UserDTO>(userView);
                 user.EmailConfirmed = true;
+                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
+                user.PhotoId = user.Photo.Id;
                 await _userService.Create(user);
             }
 
+            await SetPhoto(userExisting, userView.PhotoUrl);
             var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
             if (!opResult.Successed)
             {
@@ -94,7 +100,6 @@ namespace EventsExpress.Controllers
 
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
-            userInfo.PhotoUrl = userView.PhotoUrl;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
@@ -112,7 +117,7 @@ namespace EventsExpress.Controllers
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
-            var userExisting = _userService.GetByEmail(payload.Email);
+            UserDTO userExisting = _userService.GetByEmail(payload.Email);
 
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
@@ -120,9 +125,12 @@ namespace EventsExpress.Controllers
                 user.Email = payload.Email;
                 user.EmailConfirmed = true;
                 user.Name = payload.Name;
+                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
+                user.PhotoId = user.Photo.Id;
                 await _userService.Create(user);
             }
 
+            await SetPhoto(userExisting, userView.PhotoUrl);
             var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
             if (!opResult.Successed)
             {
@@ -131,7 +139,6 @@ namespace EventsExpress.Controllers
 
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = authResponseModel.JwtToken;
-            userInfo.PhotoUrl = userView.PhotoUrl;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
         }
@@ -152,11 +159,13 @@ namespace EventsExpress.Controllers
             {
                 UserDTO user = _mapper.Map<UserDTO>(userView);
                 user.EmailConfirmed = true;
+                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
+                user.PhotoId = user.Photo.Id;
                 await _userService.Create(user);
             }
 
+            await SetPhoto(userExisting, userView.PhotoUrl);
             var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
-
             if (!opResult.Successed)
             {
                 return BadRequest(opResult.Message);
@@ -164,9 +173,24 @@ namespace EventsExpress.Controllers
 
             UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
-            userInfo.PhotoUrl = userView.PhotoUrl;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
             return Ok(userInfo);
+        }
+
+        private async Task<bool> SetPhoto(UserDTO userExisting, string urlPhoto)
+        {
+            if (userExisting != null)
+            {
+                if (userExisting.Photo == null)
+                {
+                    userExisting.Photo = await _photoService.AddPhotoByURL(urlPhoto);
+                    userExisting.PhotoId = userExisting.Photo.Id;
+                    await _userService.Update(userExisting);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

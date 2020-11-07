@@ -7,7 +7,6 @@ import { editBirthday } from '../actions/EditProfile/editBirthday';
 import { editGender } from '../actions/EditProfile/EditGender';
 import { editUsername } from '../actions/EditProfile/editUsername';
 import { changeAvatar } from '../actions/EditProfile/change-avatar';
-
 import { authenticate } from '../actions/authentication';
 
 export const reducer = (state = initialState.user, action) => {

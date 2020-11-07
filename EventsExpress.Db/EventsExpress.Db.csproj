@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201102140403_AddEventOwners.cs" />
     <Compile Remove="Migrations\20201102140403_AddEventOwners.Designer.cs" />
+    <Compile Remove="Migrations\20201107090450_MultiplyEventOwners.cs" />
+    <Compile Remove="Migrations\20201107090450_MultiplyEventOwners.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

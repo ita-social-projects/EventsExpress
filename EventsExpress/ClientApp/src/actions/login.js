@@ -1,6 +1,8 @@
 import EventsExpressService from '../services/EventsExpressService';
+import eventHelper from '../components/helpers/eventHelper';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
+import { updateEventsFilters } from './event-list';
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
@@ -34,12 +36,14 @@ export function loginGoogle(tokenId, email, name, imageUrl) {
 
 export function loginFacebook(email, name, picture) {
   return dispatch => {
-      dispatch(setLoginPending(true));
-      const res = api_serv.setFacebookLogin({
-          Email: email,
-          Name: name,
-          PhotoUrl: picture
-      });
+    dispatch(setLoginPending(true));
+
+    const res = api_serv.setFacebookLogin({
+      Email: email,
+      Name: name,
+      PhotoUrl: picture
+    });
+
     loginResponseHandler(res, dispatch);
   }
 }
@@ -60,6 +64,30 @@ export function loginTwitter(data) {
     loginResponseHandler(res, dispatch);
   }
 }
+
+const loginResponseHandler = (res, dispatch) => {
+  res.then(response => {
+    if (!response.error) {
+      const eventFilter = {
+        ...eventHelper.getDefaultEventFilter(),
+        categories: response.categories.map(item => item.id),
+      };
+
+      dispatch(setUser(response));
+      dispatch(updateEventsFilters(eventFilter));
+      dispatch(setLoginSuccess(true));
+
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('id', response.id);
+
+      dispatch(initialConnection());
+      dispatch(getUnreadMessages(response.id));
+    } else {
+      localStorage.clear();
+      dispatch(setLoginError(response.error));
+    }
+  });
+};
 
 export function setUser(data) {
   return {
@@ -88,18 +116,3 @@ export function setLoginError(loginError) {
     loginError
   };
 }
-
-const loginResponseHandler = (res, dispatch) => {
-  res.then(response => {
-    if (response.error == null) {
-      dispatch(setUser(response));
-      dispatch(setLoginSuccess(true));
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('id', response.id);
-      dispatch(initialConnection());
-      dispatch(getUnreadMessages(response.id));
-    } else {
-      dispatch(setLoginError(response.error));
-    }
-  });
-};

@@ -36,6 +36,8 @@ namespace EventsExpress.Db.IRepo
 
         IRepository<EventOwner> EventOwnersRepository { get; }
 
+        IEventStatusHistoryRepository EventStatusHistoryRepository { get; }
+
         Task SaveAsync();
     }
 }
