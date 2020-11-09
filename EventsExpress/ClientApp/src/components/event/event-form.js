@@ -78,8 +78,6 @@ class EventForm extends Component {
         });
     }
 
-
-
     render() {
         const { countries, form_values, all_categories, data } = this.props;
         let values = form_values || this.props.initialValues;
@@ -89,7 +87,7 @@ class EventForm extends Component {
         }
 
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
+            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
                         ref={(x) => { this.image = x; }}
@@ -190,9 +188,7 @@ class EventForm extends Component {
                     <> 
                         <div>
                             { item.itemName + " " + item.itemCount + " " + key}
-                        </div>
-                        {/* <input type="hidden" name={`inventory[${key}].name`} value={item.itemName} /> */}
-                        <Field type="hidden" name={`inventory[${key}].name`} component="input" value={item.itemName} />
+                        </div>                                        
                     </>)})
                 }
                 <Button
@@ -212,7 +208,6 @@ class EventForm extends Component {
 const mapStateToProps = (state) => ({
     initialValues: state.event.data,
     inventories: state.inventories,
-
 });
 
 EventForm = connect(

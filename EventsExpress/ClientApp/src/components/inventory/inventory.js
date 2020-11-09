@@ -1,8 +1,59 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { renderTextField, renderDatePicker } from '../helpers/helpers';
+import { Field, FieldArray, reduxForm } from 'redux-form'
+import { renderTextField } from '../helpers/helpers';
 import { connect } from 'react-redux';
+import { useSelector } from 'react-redux'
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
+
+  const renderInventories = ({ fields }) => {
+//class renderInventories extends Component {
+   // render() {
+        //let fields = [{}];
+       // const { unitOfMeasuringState } = this.props;
+       const unitsOfMeasuring = useSelector((state) => state.unitsOfMeasuring);
+       console.log(unitsOfMeasuring);
+    return (
+    <ul>
+      <li>
+        <button type="button" onClick={() => fields.push({})}>Add item</button>
+      </li>
+      {fields.map((item, index) =>
+        <li key={index}>
+          <button
+            type="button"
+            title="Remove item"
+            onClick={() => fields.remove(index)}/>
+          <h4>item #{index + 1}</h4>
+            <Field
+                name={`${item}.itemName`}
+                type="text"
+                fullWidth={false}
+                component={renderTextField}/>
+            <Field
+                name={`${item}.itemCount`}
+                type="number"
+                fullWidth={false}
+                component={renderTextField}/>
+            
+            {/* <Field
+                name={`${item}.unitOfMeasuring`}
+                data={props}
+                text=''
+                component={renderSelectLocationField}/> */}
+                <select>
+                    {unitOfMeasuringState.units.map((unit, key) => {
+                        return (
+                          <option key={key} value={unit}>{unit.unitName}</option>
+                        );
+                    })}
+                </select>
+        </li>
+      )}
+    </ul>
+    )
+    //}
+//}
+}
 
 
 
@@ -61,20 +112,22 @@ class Inventory extends Component {
                         this.state.isOpen 
                         ? <div>
                             <div className="mt-2">
-                                <input type="text" ref={(input) => {this.itemNameInput = input}}/>
+                                {/* <input type="text" ref={(input) => {this.itemNameInput = input}}/> */}
                                 <div className="d-flex justify-content-start">
-                                    <input type="number" ref={(input) => {this.itemCountInput = input}}/>
-                                    <select>
+                                    {/* <input type="number" ref={(input) => {this.itemCountInput = input}}/> */}
+                                    {/* <select>
                                         {units.map((unit, key) => {
                                             return (
                                                     <option key={key} value={unit}>{unit.unitName}</option>
                                             );
                                         })}
-                                    </select>
+                                    </select> */}
                                 </div>
                             </div>
 
-                            <button type="button" onClick={this.addInventarToEvent.bind(this)}>Add</button>
+                            {/* <button type="button" onClick={this.addInventarToEvent.bind(this)}>Add</button> */}
+
+                            <FieldArray name="inventories" component={renderInventories}/>
                           </div>
                         : null
                     }
@@ -96,3 +149,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Inventory);
+
+//renderInventories = connect(mapStateToProps)(renderInventories);

@@ -192,12 +192,13 @@ export const renderTextField = ({
     defaultValue,
     input,
     rows,
+    fullWidth,
     meta: { touched, invalid, error },
     ...custom
 }) => (
         <TextField
             rows={rows}
-            fullWidth
+            fullWidth={fullWidth === undefined ? true : false}
             label={label}
             placeholder={label}
             error={touched && invalid}
