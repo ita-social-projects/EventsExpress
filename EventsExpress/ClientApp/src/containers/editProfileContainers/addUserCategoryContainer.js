@@ -1,11 +1,10 @@
 ﻿import React from "react";
+import { connect } from "react-redux";
 import SelectCategoriesWrapper from '../SelectCategories';
 import add_UserCategory from '../../actions/EditProfile/addUserCategory';
-import { connect } from "react-redux";
 
 class AddUserCategory extends React.Component {
     submit = values => {
-
         this.props.add(values);
     };
 
@@ -14,8 +13,6 @@ class AddUserCategory extends React.Component {
     }
 }
 
-const mapStateToProps = () => ({ })
-
 const mapDispatchToProps = dispatch => {
     return {
         add: (data) => dispatch(add_UserCategory(data))
@@ -23,6 +20,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(AddUserCategory);
