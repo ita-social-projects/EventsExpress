@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from "@material-ui/core/styles";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AddUserCategory from '../../containers/editProfileContainers/addUserCategoryContainer';
+import SelectCategoriesWrapper from '../../containers/SelectCategories';
 import { connect } from 'react-redux';
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
@@ -138,14 +138,14 @@ const Profile = (props) => {
 
                     <Typography>
                         <MuiThemeProvider>
-                            <AddUserCategory />
+                            <SelectCategoriesWrapper />
                         </MuiThemeProvider>
                     </Typography>
 
                 </ExpansionPanelDetails>
 
             </ExpansionPanel>
-            { props.canChangePassword ? <ChangePasswordContainer /> : null }
+            { props.canChangePassword ? <ChangePasswordContainer /> : null}
         </div>
     );
 }
