@@ -131,6 +131,24 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to add user to category.
         /// </summary>
+        /// <param name="occurenceEventId">OccurenceEventId.</param>
+        /// <response code="200">aproving event generation proces success.</response>
+        /// <response code="400">If aproving event generation process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AproveEventGeneration(Guid occurenceEventId)
+        {
+            var res = await _eventService.AproveEventGeneration(occurenceEventId);
+            if (res.Successed)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// This method have to add user to category.
+        /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>
         /// <response code="200">Delete  user from event proces success.</response>
