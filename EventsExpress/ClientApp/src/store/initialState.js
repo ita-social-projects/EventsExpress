@@ -109,6 +109,16 @@ const initialState = {
             photoUrl: null,
         }
     },
+    occurenceEvent: {
+        isPending: true,
+        isError: false,
+        cancelationModalStatus: false,
+        cancelation: {},
+        data: {
+            lastRun: null,
+            nextRun: null,
+        }
+    },
     add_event: {
         isEventPending: false,
         isEventSuccess: false,
@@ -122,6 +132,13 @@ const initialState = {
             pageViewModel: {},
         },
         filter: eventHelper.getDefaultEventFilter(),
+    },
+    occurenceEvents: {
+        isPending: true,
+        isError: false,
+        data: {
+            items: [],
+        },
     },
     profile: {
         isPending: true,

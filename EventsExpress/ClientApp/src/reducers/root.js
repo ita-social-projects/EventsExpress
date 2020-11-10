@@ -9,6 +9,7 @@ import * as Register from './register';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
 import * as AddEvent from './add-event';
 import * as Events from './event-list';
+import * as OccurenceEvents from './occurenceEvent-list';
 import * as AddCategories from './add-category';
 import * as Categories from './category-list';
 import * as Countries from './countries';
@@ -18,6 +19,7 @@ import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
 import * as EventView from './event-item-view';
+import * as OccurenceEventView from './occurenceEvent-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment'; 
 import * as Comments from './comment-list';
@@ -50,6 +52,7 @@ const rootReducers = {
     selectCategories: SelectCategories.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
+    occurenceEvents: OccurenceEvents.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
     add_category: AddCategories.reducer,
@@ -58,6 +61,7 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer,
     event: EventView.reducer,
+    occurenceEvent: OccurenceEventView.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,

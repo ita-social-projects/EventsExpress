@@ -64,6 +64,10 @@ class LeftSidebar extends Component {
                                 <>
                                     <NavItem to={'/user/' + this.props.user.id} icon={'fa fa-user'} text={"Profile"} />
                                     <NavItem to={'/search/users?page=1'} icon={'fa fa-users'} text={"Search Users"} />
+                                    <NavItem to={'/occurenceEvents'} my_icon={
+                                        <Badge badgeContent={this.props.msg_for_read().length} color="primary">
+                                            <i className="fa fa-clone"></i>
+                                        </Badge>} text={"Reccurent Events"} />
                                     <NavItem to={'/user_chats'} my_icon={
                                         <Badge badgeContent={this.props.msg_for_read().length} color="primary">
                                             <i className="fa fa-envelope"></i>
