@@ -37,7 +37,7 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
-        let values = this.props.form_values || this.props.initialValues;
+        let values = this.props.form_values || this.props.data;
 
         if (this.props.isCreated) {
             const imagefile = {
@@ -82,7 +82,7 @@ class EventForm extends Component {
 
     render() {
         const { countries, form_values, all_categories, data } = this.props;
-        let values = form_values || this.props.initialValues;
+        let values = form_values || data;
 
         if (this.props.Event.isEventSuccess) {
             this.resetForm();
@@ -113,7 +113,6 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}
-                            defaultValue={data.title}
                             type="input"
                             label="Title"
                         />
@@ -122,22 +121,34 @@ class EventForm extends Component {
                         <Field
                             name='maxParticipants'
                             component={renderTextField}
-                            defaultValue={data.maxParticipants}
                             type="number"
                             label="Max Count Of Participants"
                         />
                     </div>
                     <div className="mt-2">
                         <br />
-                        <Field type="checkbox" label="Reccurent Event" name='checkOccurence' component={renderCheckbox} checked={this.state.checked} onChange={this.handleChange} />
+                        <Field
+                            type="checkbox"
+                            label="Reccurent Event"
+                            name='isReccurent'
+                            component={renderCheckbox}
+                            checked={this.state.checked}
+                            onChange={this.handleChange} />
                     </div>
                     {this.state.checked &&
                         <div>
-                        <div className="mt-2">
-                            <Field name="periodicity" text="Periodicity" data={periodicity}  value={this.state.value} component={renderSelectPeriodicityField} />
+                            <div className="mt-2">
+                                <Field
+                                    name="periodicity"
+                                    text="Periodicity"
+                                    data={periodicity}
+                                    component={renderSelectPeriodicityField} />
                             </div>
                             <div className="mt-2">
-                                <Field name='frequency' type="number" component={renderTextField} defaultValue={data.frequency} />
+                                <Field
+                                    name='frequency'
+                                    type="number"
+                                    component={renderTextField} />
                             </div>
                         </div>
                     }
@@ -152,7 +163,6 @@ class EventForm extends Component {
                             <span>To
                                 <Field
                                     name='dateTo'
-                                    defaultValue={values.dateFrom}
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
                                 />
@@ -210,13 +220,6 @@ class EventForm extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    initialValues: state.event.data
-});
-
-EventForm = connect(
-    mapStateToProps
-)(EventForm);
 
 export default reduxForm({
     form: 'event-form',

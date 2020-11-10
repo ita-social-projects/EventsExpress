@@ -8,10 +8,13 @@ import {
 import Home from '../home';
 import Profile from '../profile';
 import Category from '../category/categories';
+import SelectiveForm from '../occurenceEvent/selective-form';
 import UsersWrapper from '../../containers/users';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
+import OccurenceEventViewWrapper from '../../containers/occurence-event-item-view';
+import OccurenceEventListWrapper from '../../containers/occurenceEvent-list';
 import Layout from '../layout';
 import SearchUserWrapper from '../../containers/UserSearchWrapper';
 import NotFound from '../Route guard/404';
@@ -39,6 +42,9 @@ export default class App extends Component {
                         />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
+                        <Route path="/occurenceEvents" component={OccurenceEventListWrapper} />
+                        <Route path="/occurenceEvent/:id" component={OccurenceEventViewWrapper} />
+                        <Route path="/selectiveForm" component={SelectiveForm} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
