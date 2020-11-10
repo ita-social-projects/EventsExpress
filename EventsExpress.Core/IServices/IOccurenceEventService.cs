@@ -12,10 +12,14 @@ namespace EventsExpress.Core.IServices
     {
         Task<OperationResult> Create(OccurenceEventDTO eventDTO);
 
+        Task<OperationResult> Delete(Guid eventId);
+
         Task<OperationResult> Edit(OccurenceEventDTO eventDTO);
 
         OccurenceEventDTO EventById(Guid eventId);
 
         Task EventNotification(CancellationToken stoppingToken);
+
+        IEnumerable<OccurenceEventDTO> GetAll();
     }
 }

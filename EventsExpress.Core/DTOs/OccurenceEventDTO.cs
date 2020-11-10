@@ -19,6 +19,8 @@ namespace EventsExpress.Core.DTOs
 
         public Guid EventId { get; set; }
 
+        public EventDTO Event { get; set; }
+
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedDate { get; set; }

@@ -163,44 +163,54 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.LastRun))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => src.NextRun))
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
+                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
+                {
+                    Id = src.Event.Id,
+                    Title = src.Event.Title,
+                    IsBlocked = src.Event.IsBlocked,
+                    Description = src.Event.Description,
+                    DateTo = src.Event.DateTo,
+                    DateFrom = src.Event.DateFrom,
+                    MaxParticipants = src.Event.MaxParticipants,
+                    Owner = src.Event.Owner,
+                }));
 
-            CreateMap<OccurenceEventDTO, OccurenceEvent>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
-                .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.LastRun))
-                .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => src.NextRun))
-                .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
+            CreateMap<OccurenceEventDTO, OccurenceEvent>().ReverseMap();
 
             CreateMap<OccurenceEventDTO, OccurenceEventDto>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
-                .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.LastRun))
-                .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => src.NextRun))
-                .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
+                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
+                {
+                    Id = src.Event.Id,
+                    Title = src.Event.Title,
+                    IsBlocked = src.Event.IsBlocked,
+                    Description = src.Event.Description,
+                    DateTo = src.Event.DateTo,
+                    DateFrom = src.Event.DateFrom,
+                    MaxParticipants = src.Event.MaxParticipants,
+                    Owner = src.Event.Owner,
+                }));
 
             CreateMap<OccurenceEventDto, OccurenceEventDTO>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
-                .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.LastRun))
-                .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => src.NextRun))
-                .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
+                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
+                {
+                    Id = src.Event.Id,
+                    Title = src.Event.Title,
+                    Description = src.Event.Description,
+                    DateTo = src.Event.DateTo,
+                    DateFrom = src.Event.DateFrom,
+                    MaxParticipants = src.Event.MaxParticipants,
+                    CityId = src.Event.CityId,
+                }));
 
             CreateMap<EventDTO, OccurenceEventDTO>()
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.CreatedBy, opts => opts.MapFrom(src => src.OwnerId))
                 .ForMember(dest => dest.CreatedDate, opts => opts.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.ModifiedBy, opts => opts.MapFrom(src => src.OwnerId))
                 .ForMember(dest => dest.ModifiedDate, opts => opts.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.IsActive, opt => opt.Ignore());
 
             #endregion

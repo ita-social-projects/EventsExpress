@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.DTO
@@ -16,6 +17,8 @@ namespace EventsExpress.DTO
         public DateTime NextRun { get; set; }
 
         public bool IsActive { get; set; }
+
+        public EventDTO Event { get; set; }
 
         public Guid EventId { get; set; }
     }

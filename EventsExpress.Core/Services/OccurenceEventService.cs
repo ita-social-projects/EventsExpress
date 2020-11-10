@@ -49,6 +49,30 @@ namespace EventsExpress.Core.Services
             }
         }
 
+        public async Task<OperationResult> Delete(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return new OperationResult(false, "Id field is '0'", string.Empty);
+            }
+
+            var ev = _db.OccurenceEventRepository.Get(id);
+            if (ev == null)
+            {
+                return new OperationResult(false, "Not found", string.Empty);
+            }
+
+            var result = _db.OccurenceEventRepository.Delete(ev);
+            await _db.SaveAsync();
+
+            if (result != null)
+            {
+                return new OperationResult(true);
+            }
+
+            return new OperationResult(false, "Error!", string.Empty);
+        }
+
         public async Task<OperationResult> Edit(OccurenceEventDTO eventDTO)
         {
             var ev = _db.OccurenceEventRepository.Get().FirstOrDefault(x => x.Id == eventDTO.Id);
@@ -69,7 +93,7 @@ namespace EventsExpress.Core.Services
 
         public OccurenceEventDTO EventById(Guid eventId) =>
             _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
-                .Get()
+                .Get("Event.City.Country")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public async Task EventNotification(CancellationToken stoppingToken)
@@ -92,6 +116,14 @@ namespace EventsExpress.Core.Services
 
                 await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
             }
+        }
+
+        public IEnumerable<OccurenceEventDTO> GetAll()
+        {
+            var events = _db.OccurenceEventRepository
+                .Get("Event.City.Country").ToList();
+
+            return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
         }
     }
 }
