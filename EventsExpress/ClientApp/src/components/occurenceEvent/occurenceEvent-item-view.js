@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event';
 import CustomAvatar from '../avatar/custom-avatar';
-import RatingWrapper from '../../containers/rating';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
+import { renderPeriod } from '../occurenceEvent/render-period'
+import Typography from '@material-ui/core/Typography';
+import { useStyles } from '../occurenceEvent/card-style-const'
+import { SelectiveForm } from '../occurenceEvent/selective-form'
+import AddFromParentEventWrapper from '../../containers/add-event-from-parent';
 import '../layout/colorlib.css';
 
 export default class OccurenceEventItemView extends Component {
@@ -42,30 +49,50 @@ export default class OccurenceEventItemView extends Component {
         </Link>
     )
 
+
     render() {
-        console.log('props', this.props);
-        const {current_user} = this.props; 
-        const {isActive, frequency, periodicity, lastRun, nextRun} = this.props.occurenceEvent.data;
+
+        const classes = useStyles;
+        const { current_user } = this.props;
+        const {
+            isActive,
+            frequency,
+            periodicity,
+            lastRun,
+            nextRun,
+            event } = this.props.occurenceEvent.data;
+        const period = renderPeriod(periodicity, frequency);
 
         return <>
             <div className="container-fluid mt-1">
-                <div className="row">
-                    <div className="col-2">
-                        Last Run : {lastRun}
-                    </div>
-                        Next Run : {nextRun}
-                    <div className="col-2">
-                        Frequency : {frequency}
-                    </div>
-                    <div className="col-2">
-                        Periodicity : {periodicity}
-                    </div>
-                    <div className="col-2">
-                        Is Active : {isActive}
-                    </div>
-                    <div className="col-2">
-                    </div>
-                    
+                <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
+                    <Card
+                        className={classes.card}
+                    >
+                        <CardHeader
+                            subheader={`Reccurent event ${period}`}
+                        />
+                        <CardMedia
+                            className={classes.media}
+                            title={event.title}
+                        >
+                            <img src={event.photoUrl} className="w-100" />
+                        </CardMedia>
+                        <div className="text-block">
+                            <CardContent>
+                                <div className="title"> {event.title} </div>
+                                <div>Last Run
+                                    <Moment className="ml-2" format="D MMM YYYY" withTitle>{lastRun}</Moment>
+                                </div>
+                                <div>Next Run
+                                    <Moment className="ml-2" format="D MMM YYYY" withTitle>{nextRun}</Moment>
+                                </div>
+                            </CardContent>
+                        </div>
+                    </Card>
+                </div>
+                <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
+                    <SelectiveForm />
                 </div>
             </div>
         </>
