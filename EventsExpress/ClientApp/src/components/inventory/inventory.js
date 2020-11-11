@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form'
-import { renderTextField } from '../helpers/helpers';
+import { renderTextField, renderSelectField } from '../helpers/helpers';
 import { connect } from 'react-redux';
-import { useSelector } from 'react-redux'
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 
-  const renderInventories = ({ fields }) => {
+  const renderInventories = ({ fields, unitOfMeasuringState }) => {
 //class renderInventories extends Component {
    // render() {
         //let fields = [{}];
        // const { unitOfMeasuringState } = this.props;
-       const unitsOfMeasuring = useSelector((state) => state.unitsOfMeasuring);
-       console.log(unitsOfMeasuring);
+       //const unitsOfMeasuring = useSelector((state) => state.unitsOfMeasuring);
+      // console.log(unitOfMeasuringState);
     return (
     <ul>
       <li>
@@ -30,23 +29,23 @@ import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
                 fullWidth={false}
                 component={renderTextField}/>
             <Field
-                name={`${item}.itemCount`}
+                name={`${item}.needQuantity`}
                 type="number"
                 fullWidth={false}
                 component={renderTextField}/>
             
             {/* <Field
                 name={`${item}.unitOfMeasuring`}
-                data={props}
+                data={unitOfMeasuringState.units}
                 text=''
-                component={renderSelectLocationField}/> */}
-                <select>
-                    {unitOfMeasuringState.units.map((unit, key) => {
-                        return (
-                          <option key={key} value={unit}>{unit.unitName}</option>
-                        );
-                    })}
-                </select>
+                component={renderSelectField}/> */}
+            <Field name={`${item}.unitOfMeasuringId`} component="select">
+                <option></option>
+                {unitOfMeasuringState.units.map((unit, key) => 
+                    <option value={unit.id} key={key}>{unit.unitName}</option>
+                )}                
+            </Field>
+              
         </li>
       )}
     </ul>
@@ -92,6 +91,7 @@ class Inventory extends Component {
 
     render() {
         const { units } = this.props.unitOfMeasuringState;
+        console.log(this.props);
         return (
             <div>
                 <div className='d-flex justify-content-start align-items-center'>
@@ -127,7 +127,7 @@ class Inventory extends Component {
 
                             {/* <button type="button" onClick={this.addInventarToEvent.bind(this)}>Add</button> */}
 
-                            <FieldArray name="inventories" component={renderInventories}/>
+                            <FieldArray name="inventories" props={this.props} component={renderInventories}/>
                           </div>
                         : null
                     }

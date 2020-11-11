@@ -91,7 +91,15 @@ namespace EventsExpress.Mapping
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
-                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo));
+                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo))
+                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuringId = x.UnitOfMeasuringId,
+                        })));
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
@@ -143,7 +151,15 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuringId = x.UnitOfMeasuringId,
+                        })));
 
             #endregion
 

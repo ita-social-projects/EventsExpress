@@ -259,6 +259,12 @@ export default class EventsExpressService {
         data.categories.map(x => {
             file.append(`Categories[${i++}].Id`, x.id);
         });
+
+        data.inventories.map((item, key) => {
+            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+            file.append(`Inventories[${key}].ItemName`, item.itemName);
+            file.append(`Inventories[${key}].UnitOfMeasuringId`, item.unitOfMeasuringId);
+        });
         const res = await this.setResourceWithData('event/edit', file);
         return !res.ok
             ? { error: await res.text() }

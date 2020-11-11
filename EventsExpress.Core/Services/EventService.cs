@@ -163,6 +163,7 @@ namespace EventsExpress.Core.Services
             try
             {
                 var result = _db.EventRepository.Insert(ev);
+
                 await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
@@ -215,7 +216,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors,Inventories.UnitOfMeasuring");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)

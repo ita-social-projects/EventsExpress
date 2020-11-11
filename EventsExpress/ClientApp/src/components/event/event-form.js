@@ -183,11 +183,11 @@ class EventForm extends Component {
                 </div>
                 <Inventory count={this.props.inventories.items.length} />
                 {
-                    this.props.inventories.items.map((item, key) => { 
+                    this.props.inventories.items.map((item) => { 
                         return (
                     <> 
                         <div>
-                            { item.itemName + " " + item.itemCount + " " + key}
+                            { item.itemName + " " + item.needQuantity}
                         </div>                                        
                     </>)})
                 }
