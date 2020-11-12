@@ -53,7 +53,7 @@ namespace EventsExpress.Db.Repo
             return query;
         }
 
-        public T Get(Guid id)
+        public virtual T Get(Guid id)
         {
             return Entities.Find(id);
         }

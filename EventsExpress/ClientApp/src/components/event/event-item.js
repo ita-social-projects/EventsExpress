@@ -50,6 +50,8 @@ export default class Event extends Component {
         );
     }
 
+    
+
     render() {
         const classes = useStyles;
         const {
@@ -57,6 +59,7 @@ export default class Event extends Component {
             title,
             dateFrom,
             description,
+            isPublic,
             maxParticipants,
             photoUrl,
             categories,
@@ -131,6 +134,15 @@ export default class Event extends Component {
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                                {!isPublic && 
+                                    <Tooltip title="Private event">
+                                        <IconButton>
+                                            <Badge color="primary">
+                                                <i className="fa fa-key"></i>
+                                            </Badge>
+                                        </IconButton>
+                                </Tooltip>
+        	                    }
                                 <Link to={`/event/${id}/1`}>
                                     <IconButton className={classes.button} aria-label="view">
                                         <i className="fa fa-eye"></i>

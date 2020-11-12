@@ -3,7 +3,7 @@ import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Button from "@material-ui/core/Button";
-import { renderTextField, renderDatePicker } from '../helpers/helpers';
+import { renderTextField, renderDatePicker, renderCheckbox } from '../helpers/helpers';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
@@ -122,6 +122,15 @@ class EventForm extends Component {
                             defaultValue={data.maxParticipants}
                             type="number"
                             label="Max Count Of Participants"
+                        />
+                    </div>
+                    <div className="mt-2">
+                        <Field
+                            name='isPublic'
+                            component={renderCheckbox}
+                            defaultValue={data.isPublic}
+                            type="checkbox"
+                            label="Public"
                         />
                     </div>
                     <div className="meta-wrap m-2">

@@ -102,7 +102,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count()))
+                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
                 .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
@@ -127,6 +127,7 @@ namespace EventsExpress.Mapping
                         Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@", StringComparison.Ordinal)),
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
+                        UserStatusEvent = x.UserStatusEvent,
                     })))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
                 .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
