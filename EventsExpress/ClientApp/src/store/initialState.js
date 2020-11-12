@@ -36,17 +36,6 @@ const initialState = {
         isRegisterSuccess: false,
         registerError: null
     },
-	add_inventar: {
-        isInventarPending: false,
-        isInventarSuccess: false,
-        inventarError: null
-    },
-    inventories: {
-        isPending: true,
-        isError: false,
-        count: 0,
-        items: []
-    },
     unitsOfMeasuring: {
         isPending: true,
         isError: false,

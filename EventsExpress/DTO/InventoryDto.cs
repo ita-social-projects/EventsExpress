@@ -13,6 +13,6 @@ namespace EventsExpress.DTO
 
         public string ItemName { get; set; }
 
-        public Guid UnitOfMeasuringId { get; set; }
+        public UnitOfMeasuringDto UnitOfMeasuring { get; set; }
     }
 }

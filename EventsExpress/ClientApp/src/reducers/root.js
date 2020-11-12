@@ -26,8 +26,6 @@ import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
-import * as AddInventar from './add-inventar';
-import * as Inventories from './inventories';
 import * as UnitsOfMeasuring from './unitsOfMeasuring';
 
 import * as Chats from './chats';
@@ -53,9 +51,7 @@ const rootReducers = {
     selectCategories: SelectCategories.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
-    add_inventar: AddInventar.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
-    inventories: Inventories.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
     add_category: AddCategories.reducer,

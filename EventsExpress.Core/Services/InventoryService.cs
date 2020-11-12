@@ -59,7 +59,7 @@ namespace EventsExpress.Core.Services
             {
                 entity.ItemName = inventoryDTO.ItemName;
                 entity.NeedQuantity = inventoryDTO.NeedQuantity;
-                entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuringId;
+                entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
                 await _db.SaveAsync();
                 return new OperationResult(true, "Edit inventory", entity.Id.ToString());
             }

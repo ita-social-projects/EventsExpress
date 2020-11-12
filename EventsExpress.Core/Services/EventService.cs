@@ -210,7 +210,7 @@ namespace EventsExpress.Core.Services
 
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(_db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo,Inventories.UnitOfMeasuring")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)

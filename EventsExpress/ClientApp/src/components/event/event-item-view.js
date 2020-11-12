@@ -83,8 +83,10 @@ export default class EventItemView extends Component {
             user,
             visitors,
             country,
-            city
+            city,
+            inventories
         } = this.props.event.data;
+        console.log(this.props);
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
 
@@ -151,6 +153,12 @@ export default class EventItemView extends Component {
                                 }
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
+                                </div>
+                                <div>
+                                    <h2>Inventory</h2>
+                                    {inventories.map(item => {
+                                        return <p>{item.itemName} {item.needQuantity} {item.unitOfMeasuring.shortName}</p>
+                                    })}
                                 </div>
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />

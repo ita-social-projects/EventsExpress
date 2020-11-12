@@ -123,14 +123,6 @@ export default class EventsExpressService {
             : await res.text();
     }
 
-    setInventarToEvent = async (data) => {
-    //    data = {eventId: "", NeedQuantity: 4, ItemName: "Potato", UnitOfMeasuringId: "" };
-        const res = await this.setResourceWithData(`inventory/addinventar?eventId=${data.eventId}`, data);
-        return res.ok
-            ? console.log("Gooooood!")
-            : console.log("Not your day(");
-    }
-
     getUnitsOfMeasuring = async () => {
         return await this.getResource('unitofmeasuring/getall');
     }
@@ -263,7 +255,7 @@ export default class EventsExpressService {
         data.inventories.map((item, key) => {
             file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
             file.append(`Inventories[${key}].ItemName`, item.itemName);
-            file.append(`Inventories[${key}].UnitOfMeasuringId`, item.unitOfMeasuringId);
+            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
         });
         const res = await this.setResourceWithData('event/edit', file);
         return !res.ok

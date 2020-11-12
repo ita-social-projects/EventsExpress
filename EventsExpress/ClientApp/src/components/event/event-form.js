@@ -180,17 +180,8 @@ class EventForm extends Component {
                             />
                         </div>
                     }
+                    <Inventory />
                 </div>
-                <Inventory count={this.props.inventories.items.length} />
-                {
-                    this.props.inventories.items.map((item) => { 
-                        return (
-                    <> 
-                        <div>
-                            { item.itemName + " " + item.needQuantity}
-                        </div>                                        
-                    </>)})
-                }
                 <Button
                     fullWidth={true}
                     type="submit"
@@ -206,8 +197,7 @@ class EventForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    initialValues: state.event.data,
-    inventories: state.inventories,
+    initialValues: state.event.data
 });
 
 EventForm = connect(

@@ -47,7 +47,6 @@ class AddEventWrapper extends Component {
             values.dateTo = new Date(values.dateFrom);
         }
 
-        console.log(values);
         this.props.add_event({ ...values, user_id: this.props.user_id });
     }
 
