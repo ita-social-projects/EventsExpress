@@ -290,8 +290,12 @@ export default class EventsExpressService {
     }
 
     setApprovedUser = async (data) => {
-        const res = await this.setResource(`event/ApproveUserToEvent?userId=${data.userId}&eventId=${data.eventId}$action=${true}`)
-        return res;
+        const res = data.buttonAction
+            ? await this.setResource(`event/ApproveVisitor?userId=${data.userId}&eventId=${data.eventId}`)
+            : await this.setResource(`event/DenyVisitor?userId=${data.userId}&eventId=${data.eventId}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
     }
     //#endregion Events
 

@@ -60,11 +60,11 @@ namespace EventsExpress.Core.Services
 
             if (ev.IsPublic)
             {
-                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = 0 });
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Approved });
             }
             else
             {
-                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = (UserStatusEvent)2 });
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Pending });
             }
 
             await _db.SaveAsync();
@@ -72,40 +72,17 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> ApproveUserToEvent(Guid userId, Guid eventId, bool action)
+        public async Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
         {
-            var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
-            if (ev == null)
-            {
-                return new OperationResult(false, "Event not found!", "eventId");
-            }
+            var userEvent = _db.UserEventRepository
+                .Get(string.Empty)
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefault();
 
-            var user = _db.UserRepository.Get(userId);
-            if (user == null)
-            {
-                return new OperationResult(false, "User not found!", "userID");
-            }
+            userEvent.UserStatusEvent = status;
+            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
 
-            var userEvent = ev.Visitors?.Where(x => x.EventId == ev.Id && x.UserId == user.Id).FirstOrDefault();
-
-            if (ev.Visitors.Contains(userEvent))
-            {
-                ev.Visitors.Remove(userEvent);
-            }
-                
-            if (action)
-            {
-                userEvent.UserStatusEvent = UserStatusEvent.Approved;
-                await _mediator.Publish(new ApproveParticipantMessage(user.Id, ev.Id));
-            }
-            else
-            {
-                userEvent.UserStatusEvent = UserStatusEvent.Denied;
-                await _mediator.Publish(new DenyParticipantMessage(user.Id, ev.Id));
-            }
-
-            ev.Visitors.Add(userEvent);
-            _db.EventRepository.Update(ev);
+            _db.UserEventRepository.Update(userEvent);
             await _db.SaveAsync();
             return new OperationResult(true);
         }

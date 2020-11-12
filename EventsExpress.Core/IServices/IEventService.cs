@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.IServices
 {
@@ -38,7 +39,7 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
 
-        Task<OperationResult> ApproveUserToEvent(Guid userId, Guid eventId, bool action);
+        Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status);
 
         byte GetRateFromUser(Guid userId, Guid eventId);
 
