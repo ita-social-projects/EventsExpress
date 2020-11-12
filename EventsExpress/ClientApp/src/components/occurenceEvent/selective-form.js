@@ -1,80 +1,134 @@
 ﻿import React, { Component } from 'react';
 import Button from "@material-ui/core/Button";
-import './selective-form.css'
 import { Link } from 'react-router-dom';
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem';
+import AddFromParentEventWrapper from '../../containers/add-event-from-parent';
+import Home from '../home';
+import Tooltip from '@material-ui/core/Tooltip';
+import { Redirect } from 'react-router-dom'
+import IconButton from '@material-ui/core/IconButton';
+import OccurenceEventModal from '../occurenceEvent/occurenceEvent-modal'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import { Popup } from 'semantic-ui-react'
+import '../occurenceEvent/occurenceEvent.css'
 
 
 export class SelectiveForm extends Component {
+    constructor() {
+        super()
+        this.state = {
+            isCreateOption: false,
+            isEditOption: false,
+            isCancelOnceOption: false,
+            isCancelOption: false,
+            show: false,
+        };
+        this.EditOption = this.EditOption.bind(this);
+        this.showHandler = this.showHandler.bind(this);
+    }
 
     componentDidMount = () => {
-        let values = this.props.form_values || this.props.initialValues;
+        console.log("did mount")
     }
 
-    componentWillUnmount() {
-        this.resetForm();
+    componentDidUpdate = () => {
+        console.log("did up", this.state)
     }
 
-    isCreateButtonDisabled = false;
-    disableCreateButton = () => {
-        if (this.props.valid) {
-            this.isCreateButtonDisabled = true;
-        }
+    onClickConfirm = (e) => {
+       this.CreateOption() ||
+       this.EditOption() ||
+       this.CancelOnceOption() ||
+       this.CancelOption()
     }
 
-    isEditButtonDisabled = false;
-    disableEditButton = () => {
-        if (this.props.valid) {
-            this.isEditButtonDisabled = true;
-        }
+    CreateOption = () => {
+        console.log("Craete")
+        this.setState({
+            isCreateOption: true,
+            show: true
+        });
     }
 
-    isCancelOnceButtonDisabled = false;
-    disableCancelOnceButton = () => {
-        if (this.props.valid) {
-            this.isCancelOnceButtonDisabled = true;
-        }
+    showHandler = () => {
+        this.setState({
+            isCreateOption: false,
+            isEditOption: false,
+            isCancelOnceOption: false,
+            isCancelOption: false
+        });
+        console.log("showhandler",this.state);
     }
 
-    isCancelButtonDisabled = false;
-    disableCancelButton = () => {
-        if (this.props.valid) {
-            this.isCancelButtonDisabled = true;
-        }
+    EditOption = () => {
+        console.log(this);
+        this.setState(state => ({
+            isEditOption: true   
+        }));
+        console.log(this.state);
+    }
+
+    CancelOnceOption = () => {
+        console.log("Cancelonce")
+        this.setState({
+            isCancelOnceOption: true,
+            show: true
+        });
+    }
+
+    CancelOption = () => {
+        console.log("Cancel")
+        this.setState({
+            isCancelOption: true,
+            show: true
+        });
     }
 
     resetForm = () => {
-        this.isSaveButtonDisabled = false;
-        this.setState({ imagefile: [] });
+        this.setState({
+            imagefile: [],
+            isCreateOption: false,
+            isEditOption: false,
+            isCancelOnceOption: false,
+            isCancelOption: false
+        });
     }
 
     render() {
+
         return (
-            <div className="custom-form shadow-lg p-3 mb-5 bg-white rounded">
-                <form onSubmit={this.props.handleSubmit} encType="multipart/form-data">
-                    <p className="shadow-sm p-2 mb-3 bg-white rounded">
-                        Click Create to create the reccurent event. To edit the event, click Edit.
-                        Click Cancel Once to cancel the reccurent event. To cancel all reccurent events, click Cancel.
-                    </p>
-                    <Link to={'/home/events'}>
-                        <Button fullWidth={true} type="submit" color="primary" onClick={this.disableCreateButton} disabled={this.isCreateButtonDisabled}>
-                            Create
-                        </Button>
-                    </Link>
-                    <Link to={'/home/events'}>
-                        <Button fullWidth={true} type="submit" color="primary" onClick={this.disableEditButton} disabled={this.isEditButtonDisabled}>
-                            Edit
-                        </Button>
-                    </Link>
-                    <Button fullWidth={true} type="submit" color="primary" onClick={this.disableCancelOnceButton} disabled={this.isCancelOnceButtonDisabled}>
-                        Cancel Once
-                    </Button>
-                    <Button fullWidth={true} type="submit" color="primary" onClick={this.disableCancelButton} disabled={this.isCancelButtonDisabled}>
-                        Cancel
-                    </Button>
+            <div className="shadow-lg p-3 mb-5 bg-white rounded">
+                <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+                    <div className="row">
+                        <div className="col-8">
+                            <DropdownButton title="Select Options" className="rounded">
+                                <Dropdown.Item eventKey="0" onClick={this.CreateOption}>Create without editing</Dropdown.Item>
+                                <Dropdown.Item eventKey="1" onClick={this.EditOption}>Create with editing</Dropdown.Item>
+                                <Dropdown.Item eventKey="2" onClick={this.CancelOnceOption}>Cancel once</Dropdown.Item>
+                                <Dropdown.Item eventKey="3" onClick={this.CancelOption}>Cancel</Dropdown.Item>
+                            </DropdownButton>
+                        </div>
+                        <div className="col-3" />
+                        <div>
+                            <Popup content='Add users to your feed' trigger={<i class="fas fa-info-circle"></i>} />
+                        </div>
+                    </div>
                 </form>
+                {this.state.isEditOption && <OccurenceEventModal showHandler={this.showHandler} />}
+                {this.state.isCreateOption && <OccurenceEventModal showHandler={this.showHandler} />}
+                {this.state.isCancelOnceOption && <OccurenceEventModal showHandler={this.showHandler} />}
+                {this.state.isCancelOption && <OccurenceEventModal showHandler={this.showHandler} />}
+                {/*{this.state.isEditOption &&
+                    <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+                        <AddFromParentEventWrapper />
+                    </div>
+                }*/}
             </div>
         );
     }
 }
+
 
 export default SelectiveForm
