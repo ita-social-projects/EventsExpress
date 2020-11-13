@@ -155,11 +155,47 @@ export default class EventItemView extends Component {
                                     {description}
                                 </div>
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <h2>Inventory</h2>
-                                    {inventories.map(item => {
-                                        return <p>{item.itemName} {item.needQuantity} {item.unitOfMeasuring.shortName}</p>
-                                    })}
+                                    <div className=""><h2>Inventory</h2></div>
+                                    <div className="table-responsive">
+                                        <button type="button" className="btn btn-primary btn-rounded p-2"><i className="fa fa-plus"></i> Add New</button>
+                                        <div className="table-wrapper">
+                                            <div className="table-title">
+                                            </div>
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item name</th>
+                                                        <th>Count</th>
+                                                        <th>Measuring unit</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {inventories.map(item => {
+                                                    return (
+                                                        <tr>
+                                                            <td>{item.itemName}</td>
+                                                            <td>{item.needQuantity}</td>
+                                                            <td>{item.unitOfMeasuring.shortName}</td>
+                                                            <td className="d-flex flex-wrap justify-content-end align-items-center">
+                                                                <button type="button" title="Edit item" className="btn clear-backgroud">
+                                                                    <i className="fas fa-pencil-alt"></i>
+                                                                </button>
+                                                                <button type="button" title="Remove item" className="btn clear-backgroud">
+                                                                    <i className="fas fa-trash red"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
+                                
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
