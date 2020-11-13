@@ -49,6 +49,34 @@ export const validate = values => {
         }
     });
 
+    if (!values.inventories || !values.inventories.length) {
+
+    } else {
+        console.log(values);
+        const inventoriesArrayErrors = [];
+        values.inventories.forEach((item, index) => {
+            const inventoriesErrors = {};
+            if (!item || !item.itemName) {
+                inventoriesErrors.itemName = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (!item || !item.needQuantity) {
+                inventoriesErrors.needQuantity = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (!item || !item.unitOfMeasuring) {
+                inventoriesErrors.unitOfMeasuring = {};
+                inventoriesErrors.unitOfMeasuring.id = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+        })
+        console.log(inventoriesArrayErrors);
+        if (inventoriesArrayErrors.length) {
+            errors.inventories = inventoriesArrayErrors;
+        }
+    }
+    
+
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;
     }

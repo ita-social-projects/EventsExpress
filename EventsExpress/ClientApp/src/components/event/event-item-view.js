@@ -154,7 +154,7 @@ export default class EventItemView extends Component {
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
-                                <div>
+                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <h2>Inventory</h2>
                                     {inventories.map(item => {
                                         return <p>{item.itemName} {item.needQuantity} {item.unitOfMeasuring.shortName}</p>
