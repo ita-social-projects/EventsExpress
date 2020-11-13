@@ -74,17 +74,19 @@ export default class Event extends Component {
                     style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
                 >
                     <CardHeader
-                        avatar={
-                            <Tooltip title={user.username}>
-                                <Link to={`/user/${user.id}`} className="btn-custom">
-                                    <CustomAvatar
-                                        className={classes.avatar}
-                                        photoUrl={user.photoUrl}
-                                        name={user.username}
-                                    />
-                                </Link>
-                            </Tooltip>
-                        }
+
+                        // todo Error with user.id
+                        //avatar={
+                        //    <Tooltip title={user.username}>
+                        //        <Link to={`/user/${user.id}`} className="btn-custom">
+                        //            <CustomAvatar
+                        //                className={classes.avatar}
+                        //                photoUrl={user.photoUrl}
+                        //                name={user.username}
+                        //            />
+                        //        </Link>
+                        //    </Tooltip>
+                        //}
 
                         action={
                             <Tooltip title="Visitors">

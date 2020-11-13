@@ -39,7 +39,8 @@ export default function get_event(id) {
 
     const res = api_serv.getEvent(id);
     res.then(response => {
-      if (response.error == null) {
+        if (response.error == null) {
+          // todo error
         dispatch(getEvent(response));
 
       } else {

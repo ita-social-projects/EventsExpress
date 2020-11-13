@@ -81,12 +81,14 @@ namespace EventsExpress.Mapping
 
             CreateMap<LoginDto, UserDTO>();
             CreateMap<UserView, UserDTO>();
+            //CreateMap<EventOwner, User>();
 
             #endregion
 
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest=> dest.Owners, opt => opt.MapFrom(x=>x.Owners.Select(z=>z.User)))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -111,9 +113,10 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto
                 {
                     Id = src.OwnerId,
-                    Birthday = src.Owner.Birthday,
-                    PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
+                    // To do fix
+                    //Birthday = src.Owner.Birthday,
+                    //PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
+                    //Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
                 }));
 
             CreateMap<EventDTO, EventDto>()
@@ -128,6 +131,14 @@ namespace EventsExpress.Mapping
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
                     })))
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
+                 new UserPreviewDto
+                 {
+                     Id = x.Id,
+                     Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
+                     Birthday = x.Birthday,
+                     PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
+                 })))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
                 .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
@@ -136,9 +147,9 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewDto
                 {
                     Id = src.OwnerId,
-                    Birthday = src.Owner.Birthday,
-                    PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
+                    //Birthday = src.Owner.Birthday,
+                    //PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
+                    //Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
                 }));
 
             CreateMap<EventDto, EventDTO>()

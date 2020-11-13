@@ -27,7 +27,7 @@ namespace EventsExpress.Core.DTOs
 
         public Guid OwnerId { get; set; }
 
-        public User Owner { get; set; }
+        public IEnumerable<User> Owners { get; set; }
 
         public Guid CityId { get; set; }
 

@@ -13,6 +13,8 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Db.IRepo;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.Core.Services
 {
@@ -22,17 +24,23 @@ namespace EventsExpress.Core.Services
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
+        private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public EventService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv)
+            IPhotoService photoSrv,
+            IAuthService authService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _db = unitOfWork;
             _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
+            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
@@ -153,6 +161,9 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
+            var currentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+            ev.Owners.Add(new EventOwner() { UserId = currentUser.Id, EventId = eventDTO.Id});
+
             try
             {
                 ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
@@ -214,15 +225,15 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event", ev.Id.ToString());
         }
 
+        // todo Owner.Photo - couldn't find navigartion for Owner
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(_db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors");
-                
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -319,7 +330,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors")
+                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors")
                 .Where(x => eventIds.Contains(x.Id))
                 .AsNoTracking()
                 .ToList();

@@ -32,22 +32,37 @@ export default class EventItemView extends Component {
         );
     }
 
-    renderOwner = user => (
-        <Link to={'/user/' + user.id} className="btn-custom">
-            <div className="d-flex align-items-center border-bottom">
-                <div className='d-flex flex-column'>
-                    <IconButton className="text-warning" size="small" disabled >
-                        <i class="fas fa-crown"></i>
-                    </IconButton>
-                    <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
+    renderOwner = arr => {
+        return arr.map(x => (
+            <Link to={'/user/' + x.id} className="btn-custom">
+                <div className="d-flex align-items-center border-bottom">
+                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                    <div>
+                        <h5>{x.username}</h5>
+                        {'Age: ' + this.getAge(x.birthday)}
+                    </div>
                 </div>
-                <div>
-                    <h5>{user.username}</h5>
-                    {'Age: ' + this.getAge(user.birthday)}
-                </div>
-            </div>
-        </Link>
-    )
+            </Link>)
+        );
+    }
+    // todo Error with user.id
+
+    //renderOwner = user => (
+    //    <Link to={'/user/' + user.id} className="btn-custom">
+    //        <div className="d-flex align-items-center border-bottom">
+    //            <div className='d-flex flex-column'>
+    //                <IconButton className="text-warning" size="small" disabled >
+    //                    <i class="fas fa-crown"></i>
+    //                </IconButton>
+    //                <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
+    //            </div>
+    //            <div>
+    //                <h5>{user.username}</h5>
+    //                {'Age: ' + this.getAge(user.birthday)}
+    //            </div>
+    //        </div>
+    //    </Link>
+    //)
 
     getAge = birthday => {
         let today = new Date();
@@ -83,14 +98,15 @@ export default class EventItemView extends Component {
             user,
             visitors,
             country,
-            city
+            city,
+            owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
 
-        let iWillVisitIt = visitors.find(x => x.id === current_user.id) !== null;
+        let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
-        let isMyEvent = current_user.id === user.id;
+        let isMyEvent = owners.find(x => x.id === current_user.id);
         let isFreePlace = visitors.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
@@ -158,8 +174,9 @@ export default class EventItemView extends Component {
                             </>
                         }
                     </div>
+
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        {this.renderOwner(user)}
+                        {this.renderOwner(owners)}
                         {this.renderUsers(visitors)}
                     </div>
                 </div>
