@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201105205450_AddUserStatusEvent")]
+    partial class AddUserStatusEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,9 +162,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("PhotoId");
+                    b.HasIndex("OwnerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("Events");
                 });
@@ -180,21 +182,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("EventCategory");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventOwner", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EventId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EventOwners");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -557,13 +544,15 @@ namespace EventsExpress.Db.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EventsExpress.Db.Entities.User", "Owner")
+                        .WithMany("Events")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
-
-                    b.HasOne("EventsExpress.Db.Entities.User", null)
-                        .WithMany("Events")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -577,21 +566,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
                         .WithMany("Categories")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventOwner", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithMany("Owners")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -67,9 +67,32 @@ namespace EventsExpress.Core.Services
                 ev.Visitors = new List<UserEvent>();
             }
 
-            ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
+            if (ev.IsPublic)
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Approved });
+            }
+            else
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Pending });
+            }
+
             await _db.SaveAsync();
 
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
+        {
+            var userEvent = _db.UserEventRepository
+                .Get(string.Empty)
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefault();
+
+            userEvent.UserStatusEvent = status;
+            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
+
+            _db.UserEventRepository.Update(userEvent);
+            await _db.SaveAsync();
             return new OperationResult(true);
         }
 
@@ -202,6 +225,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
+            ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
             {

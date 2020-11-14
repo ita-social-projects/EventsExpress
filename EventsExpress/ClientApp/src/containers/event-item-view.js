@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import Spinner from '../components/spinner';
 import get_event from '../actions/event-item-view';
-import { join, leave, resetEvent, cancel_event } from '../actions/event-item-view';
+import { join, leave, resetEvent, cancel_event, approveUser } from '../actions/event-item-view';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    
@@ -27,6 +27,10 @@ class EventItemViewWrapper extends Component{
         this.props.cancel(this.props.event.data.id, reason);
     }
 
+    onApprove = (userId, buttonAction) => {
+        this.props.approveUser(userId, this.props.event.data.id, buttonAction);
+    }
+
     render(){   
         const { isPending } = this.props.event;
   
@@ -38,6 +42,7 @@ class EventItemViewWrapper extends Component{
                 onLeave={this.onLeave} 
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
+                onApprove={this.onApprove}
                 current_user={this.props.current_user} 
             />
     }
@@ -53,6 +58,7 @@ const mapDispatchToProps = (dispatch) => ({
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),
+    approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     reset: () => dispatch(resetEvent())
 })
 

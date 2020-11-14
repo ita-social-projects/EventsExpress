@@ -35,6 +35,8 @@ namespace EventsExpress.DTO
 
         public int CountVisitor { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public IEnumerable<CategoryDto> Categories { get; set; }
     }
 }

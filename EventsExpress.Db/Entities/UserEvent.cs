@@ -14,5 +14,7 @@ namespace EventsExpress.Db.Entities
         public virtual Event Event { get; set; }
 
         public Status Status { get; set; }
+
+        public UserStatusEvent UserStatusEvent { get; set; }
     }
 }

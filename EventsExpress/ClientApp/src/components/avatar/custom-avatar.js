@@ -24,7 +24,6 @@ export default class CustomAvatar extends Component {
                     />
                     : <Avatar className={size}>
                         <div className={`${firstLetterSize} text-light`}>
-                            // todo name = null
                             {name.charAt(0).toUpperCase()}
                         </div>
                     </Avatar>}
