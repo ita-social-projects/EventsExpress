@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class InventoryController : Controller
     {
@@ -29,6 +29,13 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This method have to add inventar to event..
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <param name="eventId">Required.</param>
+        /// <response code="200">Adding inventar from event proces success.</response>
+        /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> AddInventar([FromBody] InventoryDto model, Guid eventId)
         {
@@ -46,6 +53,12 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method is for edit inventar.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit inventar proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditInventar([FromBody] InventoryDto model)
         {
@@ -58,12 +71,24 @@ namespace EventsExpress.Controllers
             return Ok(result.Property);
         }
 
+        /// <summary>
+        /// This method have to return all inventories from event.
+        /// </summary>
+        /// <param name="eventId">Required.</param>
+        /// <returns>All inventories from event.</returns>
+        /// <response code="200">Return IEnumerable InventoryDto.</response>
         [HttpGet("[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
             return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
         }
 
+        /// <summary>
+        /// This method have to return inventar.
+        /// </summary>
+        /// <param name="inventoryId">Required.</param>
+        /// <returns>Inventory.</returns>
+        /// <response code="200">Return InventoryDto model.</response>
         [HttpGet("[action]")]
         public IActionResult GetInventarById(Guid inventoryId)
         {

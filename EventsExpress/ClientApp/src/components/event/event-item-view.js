@@ -12,7 +12,23 @@ import '../layout/colorlib.css';
 import './event-item-view.css';
 
 export default class EventItemView extends Component {
-    state = { edit: false }
+
+    constructor() {
+        super();
+
+        this.state = {
+            isOpen: true,
+            edit: false
+        };
+
+        this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
+    }
+
+    handleOnClickCaret() {
+        this.setState(state => ({
+            isOpen: !state.isOpen
+        }));
+    }
 
     renderCategories = arr => {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
@@ -155,9 +171,23 @@ export default class EventItemView extends Component {
                                     {description}
                                 </div>
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <div className=""><h2>Inventory</h2></div>
+                                    <div className="d-flex justify-content-start align-items-center">
+                                        <h2>Inventory</h2>
+                                        {this.state.isOpen
+                                                ? <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={this.handleOnClickCaret}>
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fillRule="evenodd" d="M3.204 5L8 10.481 12.796 5H3.204zm-.753.659l4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+                                                    </svg>
+                                                </button>
+                                            :  <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={this.handleOnClickCaret}>
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">                            
+                                                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                                </svg>
+                                            </button>
+                                        }
+                                    </div>
+                                    { this.state.isOpen &&
                                     <div className="table-responsive">
-                                        <button type="button" className="btn btn-primary btn-rounded p-2"><i className="fa fa-plus"></i> Add New</button>
                                         <div className="table-wrapper">
                                             <div className="table-title">
                                             </div>
@@ -167,7 +197,6 @@ export default class EventItemView extends Component {
                                                         <th>Item name</th>
                                                         <th>Count</th>
                                                         <th>Measuring unit</th>
-                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -177,14 +206,6 @@ export default class EventItemView extends Component {
                                                             <td>{item.itemName}</td>
                                                             <td>{item.needQuantity}</td>
                                                             <td>{item.unitOfMeasuring.shortName}</td>
-                                                            <td className="d-flex flex-wrap justify-content-end align-items-center">
-                                                                <button type="button" title="Edit item" className="btn clear-backgroud">
-                                                                    <i className="fas fa-pencil-alt"></i>
-                                                                </button>
-                                                                <button type="button" title="Remove item" className="btn clear-backgroud">
-                                                                    <i className="fas fa-trash red"></i>
-                                                                </button>
-                                                            </td>
                                                         </tr>
                                                     )
                                                 })}
@@ -193,7 +214,7 @@ export default class EventItemView extends Component {
                                             </table>
                                         </div>
                                     </div>
-                                    
+                                    }
                                 </div>
                                 
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

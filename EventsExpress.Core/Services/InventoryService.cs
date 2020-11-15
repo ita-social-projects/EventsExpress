@@ -36,7 +36,6 @@ namespace EventsExpress.Core.Services
             {
                 var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
                 entity.EventId = eventId;
-                //entity.UnitOfMeasuringId = new Guid("f298634e-56e9-420d-7a33-08d87b70947d"); very important property, it's can't be null!
                 var result = _db.InventoryRepository.Insert(entity);
                 await _db.SaveAsync();
                 return new OperationResult(true, "Invertar was added", result.Id.ToString());

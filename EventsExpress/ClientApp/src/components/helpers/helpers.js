@@ -60,8 +60,16 @@ export const validate = values => {
                 inventoriesErrors.itemName = 'Required';
                 inventoriesArrayErrors[index] = inventoriesErrors;
             }
+            if (item.itemName && item.itemName.length > 30) {
+                inventoriesErrors.itemName = 'Invalid length: 1 - 30 symbols';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }            
             if (!item || !item.needQuantity) {
                 inventoriesErrors.needQuantity = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (item.needQuantity <= 0) {
+                inventoriesErrors.needQuantity = 'Can not be negative';
                 inventoriesArrayErrors[index] = inventoriesErrors;
             }
             if (!item || !item.unitOfMeasuring) {

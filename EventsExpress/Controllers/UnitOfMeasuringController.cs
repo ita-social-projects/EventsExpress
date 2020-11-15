@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class UnitOfMeasuringController : Controller
     {
@@ -27,6 +27,12 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This method is for create unit of measuring.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Create unit of measuring proces success.</response>
+        /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringDto model)
         {
@@ -44,6 +50,12 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method is for edit unit of measuring.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit unit of measuring proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringDto model)
         {
@@ -61,12 +73,24 @@ namespace EventsExpress.Controllers
             return BadRequest(result.Message);
         }
 
+        /// <summary>
+        /// This method have to return all units of measuring.
+        /// </summary>
+        /// <returns>All units of measuring.</returns>
+        /// <response code="200">Return IEnumerable UnitOfMeasuringDto.</response>
+        /// <response code="400">If return failed.</response>
         [HttpGet("[action]")]
         public IActionResult GetAll()
         {
             return Ok(_mapper.Map<ICollection<UnitOfMeasuringDTO>, ICollection<UnitOfMeasuringDto>>(_unitOfMeasuringService.GetAll()));
         }
 
+        /// <summary>
+        /// This method have to return unit of measuring.
+        /// </summary>
+        /// <param name="id">Required.</param>
+        /// <returns>Unit of measuring.</returns>
+        /// <response code="200">Return UnitOfMeasuringDto model.</response>
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {

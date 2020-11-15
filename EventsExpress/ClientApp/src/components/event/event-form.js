@@ -79,7 +79,7 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, form_values, all_categories, data } = this.props;
+        const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
 
         if (this.props.Event.isEventSuccess) {
@@ -180,7 +180,7 @@ class EventForm extends Component {
                             />
                         </div>
                     }
-                    <Inventory />
+                    {isCreated ? null : <Inventory />}
                 </div>
                 <Button
                     fullWidth={true}

@@ -78,7 +78,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
-            filter.PageSize = 3;
+            filter.PageSize = 6;
 
             if (!User.IsInRole("Admin"))
             {
