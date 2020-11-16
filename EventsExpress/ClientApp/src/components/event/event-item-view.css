@@ -23,15 +23,14 @@
   padding-right: 20px;
 }
 
-.btn-join{
-  
-  font-size: 42px;
+.btn{
+  font-size: 36px;
+}
+
+.btn-edit{
   background: #da2121ab
 }
 
-
-.btn-join:hover{
-  
-  font-size: 42px;
+.btn-edit:hover{
   background: #da2121;
 }

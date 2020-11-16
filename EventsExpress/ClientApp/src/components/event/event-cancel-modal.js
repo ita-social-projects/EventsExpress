@@ -36,7 +36,7 @@ class EventCancelModal extends Component {
     render() {
         return (
             <>
-                <button onClick={this.handleClickOpen} className="btn btn-join">Cancel</button>
+                <button onClick={this.handleClickOpen} className="btn btn-edit">Cancel</button>
                 <Dialog
                     open={this.props.status}
                     onClose={this.handleClose}
