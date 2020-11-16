@@ -27,5 +27,11 @@ namespace EventsExpress.Db.Repo
                                 .ToList();
             return categories;
         }
+
+        public bool Exists(Guid id) =>
+            Database.Categories.Count(x => x.Id == id) > 0;
+
+        public bool ExistsAll(IEnumerable<Guid> ids) =>
+            Database.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
     }
 }

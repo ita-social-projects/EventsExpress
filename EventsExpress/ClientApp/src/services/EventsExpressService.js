@@ -432,9 +432,7 @@ export default class EventsExpressService {
     }
 
     setUserCategory = async (data) => {
-        const res = await this.setResource('Users/EditUserCategory', {
-            Categories: data.Categories
-        });
+        const res = await this.setResource('Users/EditUserCategory', data);
         return !res.ok
             ? { error: await res.text() }
             : res;
