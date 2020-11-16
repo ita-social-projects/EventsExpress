@@ -8,7 +8,6 @@ import {
 import Home from '../home';
 import Profile from '../profile';
 import Category from '../category/categories';
-import SelectiveForm from '../occurenceEvent/selective-form';
 import UsersWrapper from '../../containers/users';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UserItemViewWrapper from '../../containers/user-item-view';

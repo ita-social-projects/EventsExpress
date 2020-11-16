@@ -7,13 +7,7 @@ import '../occurenceEvent/occurenceEvent.css'
 export class OccurenceEventModal extends Component {
     constructor() {
         super()
-        this.state = { show: true, setShow: false };
-        this.handleClose = this.handleClose.bind(this);
-        this.handleShow = this.handleShow.bind(this);
     }
-
-    handleClose = () => this.setState(state => ({ show: false }));
-    handleShow = () => this.setState({ show: true });
 
     render() {
 
@@ -21,8 +15,8 @@ export class OccurenceEventModal extends Component {
             <>
                 <Modal
                     className="custom-center"
-                    show={this.state.show}
-                    onHide={this.handleClose}
+                    show={this.props.show}
+                    onHide={() => this.props.cancelHandler()}
                     backdrop="static"
                     keyboard={false}
                 >
@@ -30,13 +24,13 @@ export class OccurenceEventModal extends Component {
                         <Modal.Title>Comfirmation</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Are you shure?
+                        {this.props.message}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button color="primary" variant="secondary" onClick={() => this.props.showHandler()}>
+                        <Button color="primary" variant="secondary" onClick={() => this.props.cancelHandler()}>
                             Cancel
                         </Button>
-                        <Button color="primary" variant="primary">Submit</Button>
+                        <Button color="primary" variant="primary" onClick={() => this.props.submitHandler()}>Submit</Button>
                     </Modal.Footer>
                 </Modal>
             </>

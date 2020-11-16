@@ -100,7 +100,7 @@ namespace EventsExpress.Core.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var events = _db.OccurenceEventRepository.Get().Where(x => x.IsActive == false && x.LastRun == DateTime.Today);
+                var events = _db.OccurenceEventRepository.Get().Where(x => x.LastRun == DateTime.Today);
 
                 try
                 {
@@ -121,7 +121,9 @@ namespace EventsExpress.Core.Services
         public IEnumerable<OccurenceEventDTO> GetAll()
         {
             var events = _db.OccurenceEventRepository
-                .Get("Event.City.Country,Event.Photo,Event.Owner,Event.Categories.Category").ToList();
+                .Get("Event.City.Country,Event.Photo,Event.Owner,Event.Categories.Category")
+                .Where(opt => opt.IsActive == true)
+                .ToList();
 
             return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
         }

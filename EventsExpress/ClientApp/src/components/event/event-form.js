@@ -17,7 +17,7 @@ const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [] };
+    state = { imagefile: [], checked: false };
 
     handleFile(fieldName, event) {
         event.preventDefault();
@@ -37,7 +37,7 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
-        let values = this.props.form_values || this.props.data;
+        let values = this.props.initialValues || this.props.data;
 
         if (this.props.isCreated) {
             const imagefile = {
@@ -62,11 +62,10 @@ class EventForm extends Component {
         }
     }
 
-    checked = false;
     handleChange = () => {
-        this.setState({
-            checked: !this.state.checked,
-        });
+        this.setState(state => ({
+            checked: !state.checked,
+        }));
     }
 
     resetForm = () => {
@@ -81,8 +80,8 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, form_values, all_categories, data } = this.props;
-        let values = form_values || data;
+        const { countries, selectedCountries, formValues, all_categories, initialValues, data } = this.props;
+
 
         if (this.props.Event.isEventSuccess) {
             this.resetForm();
@@ -125,7 +124,8 @@ class EventForm extends Component {
                             label="Max Count Of Participants"
                         />
                     </div>
-                    <div className="mt-2">
+                    {this.props.haveReccurentCheckBox  &&
+                        <div className="mt-2">
                         <br />
                         <Field
                             type="checkbox"
@@ -135,6 +135,7 @@ class EventForm extends Component {
                             checked={this.state.checked}
                             onChange={this.handleChange} />
                     </div>
+                    }
                     {this.state.checked &&
                         <div>
                             <div className="mt-2">
@@ -159,11 +160,12 @@ class EventForm extends Component {
                                 component={renderDatePicker}
                             />
                         </span>
-                        {values.dateFrom != null &&
+                        {initialValues.dateFrom != null &&
                             <span>To
                                 <Field
                                     name='dateTo'
-                                    minValue={values.dateFrom}
+                                    defaultValue={initialValues.dateFrom}
+                                    minValue={initialValues.dateFrom}
                                     component={renderDatePicker}
                                 />
                             </span>
@@ -191,11 +193,12 @@ class EventForm extends Component {
                         <Field onChange={this.props.onChangeCountry}
                             name='countryId'
                             data={countries}
+                            value={selectedCountries}
                             text='Country'
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values.countryId != null &&
+                    {initialValues.countryId != null &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'

@@ -5,18 +5,22 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
+import { connect } from 'react-redux';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { renderPeriod } from '../occurenceEvent/render-period'
-import Typography from '@material-ui/core/Typography';
 import { useStyles } from '../occurenceEvent/card-style-const'
 import { SelectiveForm } from '../occurenceEvent/selective-form'
-import AddFromParentEventWrapper from '../../containers/add-event-from-parent';
 import '../layout/colorlib.css';
+import get_event from '../../actions/event-item-view';
 
-export default class OccurenceEventItemView extends Component {
+class OccurenceEventItemView extends Component {
+
+    componentWillMount(){
+        console.log("oeiw", this.props);
+        this.props.get_event(this.props.occurenceEvent.data.eventId);
+    }
 
     renderUsers = arr => {
         return arr.map(x => (
@@ -60,9 +64,10 @@ export default class OccurenceEventItemView extends Component {
             periodicity,
             lastRun,
             nextRun,
-            event } = this.props.occurenceEvent.data;
+            event,
+            eventId } = this.props.occurenceEvent.data;
         const period = renderPeriod(periodicity, frequency);
-
+        console.log("item-view", this.props);
         return <>
             <div className="container-fluid mt-1">
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
@@ -92,9 +97,20 @@ export default class OccurenceEventItemView extends Component {
                     </Card>
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                    <SelectiveForm />
+                    <SelectiveForm eventId={eventId} />
                 </div>
             </div>
         </>
     }
 }
+
+const mapStateToProps = (state) => ({
+    occurenceEvent: state.occurenceEvent,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    get_event: (id) => dispatch(get_event(id))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(OccurenceEventItemView);

@@ -7,9 +7,9 @@ namespace EventsExpress.Core.Notifications
     {
         public CreateEventVerificationMessage(OccurenceEventDTO eventDto)
         {
-            Event = eventDto;
+            OccurenceEvent = eventDto;
         }
 
-        public OccurenceEventDTO Event { get; }
+        public OccurenceEventDTO OccurenceEvent { get; }
     }
 }

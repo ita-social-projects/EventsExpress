@@ -27,17 +27,17 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var user = _userService.GetById(notification.Event.CreatedBy);
+            var user = _userService.GetById(notification.OccurenceEvent.CreatedBy);
 
             try
             {
-                    string link = $"ref..";
-                    await _sender.SendEmailAsync(new EmailDTO
-                    {
-                        Subject = "Aprove your reccurent event!",
-                        RecepientEmail = user.Email,
-                        MessageText = $"Follow the <a href='{link}'>link</a> to create reccurent event for {notification.Event.EventId} event.",
-                    });
+                string link = $"{AppHttpContext.AppBaseUrl}/occurenceEvent/{notification.OccurenceEvent.Id}";
+                await _sender.SendEmailAsync(new EmailDTO
+                {
+                    Subject = "Aprove your reccurent event!",
+                    RecepientEmail = user.Email,
+                    MessageText = $"Follow the <a href='{link}'>link</a> to create the reccurent event.",
+                });
             }
             catch (Exception ex)
             {
