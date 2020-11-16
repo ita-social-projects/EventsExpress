@@ -44,7 +44,6 @@ export default class App extends Component {
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/occurenceEvents" component={OccurenceEventListWrapper} />
                         <Route path="/occurenceEvent/:id" component={OccurenceEventViewWrapper} />
-                        <Route path="/selectiveForm" component={SelectiveForm} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />

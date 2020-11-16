@@ -93,7 +93,7 @@ namespace EventsExpress.Core.Services
 
         public OccurenceEventDTO EventById(Guid eventId) =>
             _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
-                .Get("Event.City.Country")
+                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public async Task EventNotification(CancellationToken stoppingToken)
@@ -111,7 +111,7 @@ namespace EventsExpress.Core.Services
                 }
                 catch (Exception ex)
                 {
-                   new OperationResult(false, ex.Message, string.Empty);
+                    new OperationResult(false, ex.Message, string.Empty);
                 }
 
                 await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
@@ -121,7 +121,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<OccurenceEventDTO> GetAll()
         {
             var events = _db.OccurenceEventRepository
-                .Get("Event.City.Country").ToList();
+                .Get("Event.City.Country,Event.Photo,Event.Owner,Event.Categories.Category").ToList();
 
             return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
         }

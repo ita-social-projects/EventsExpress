@@ -8,6 +8,7 @@ import * as User from './user';
 import * as Register from './register';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
 import * as AddEvent from './add-event';
+import * as AddOccurenceEvent from './add-occurenceEvent';
 import * as Events from './event-list';
 import * as OccurenceEvents from './occurenceEvent-list';
 import * as AddCategories from './add-category';
@@ -51,6 +52,7 @@ const rootReducers = {
     register: Register.reducer,
     selectCategories: SelectCategories.reducer,
     add_event: AddEvent.reducer,
+    add_occurenceEvent: AddOccurenceEvent.reducer,
     events: Events.reducer,
     occurenceEvents: OccurenceEvents.reducer,
     countries: Countries.reducer,

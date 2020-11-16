@@ -26,7 +26,6 @@ export const radioButton = ({ input, ...rest }) => (
 export const validate = values => {
     const errors = {};
     const numberFields = ['maxParticipants', 'frequency']
-    const checkBoxDependent = ['frequency', 'periodicity']
     const requiredFields = [
         'email',
         'password',
@@ -36,9 +35,11 @@ export const validate = values => {
         'categories',
         'countryId',
         'cityId',
+        'frequency',
         'RepeatPassword',
         'oldPassword',
         'newPassword',
+        'periodicity',
         'repeatPassword',
         'Birthday',
         'UserName',

@@ -297,6 +297,24 @@ export default class EventsExpressService {
     //#endregion Events
 
     //#region Occurence Events
+    setOccurenceEvent = async (data) => {
+        let file = new FormData();
+        if (data.id != null) {
+            file.append('Id', data.id);
+        }
+
+        file.append('Frequency', data.frequency);
+        file.append('LastRun', data.lastRun);
+        file.append('NextRun', data.nextRun);
+        file.append('Periodicity', data.periodicity);
+        file.append('IsActive', data.isActive);
+
+        const res = await this.setResourceWithData('occurenceEvent/edit', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
     getAllOccurenceEvents = async () => {
         const res = await this.getResource(`occurenceEvent/all`);
         return res;
@@ -412,30 +430,6 @@ export default class EventsExpressService {
         const res = await this.getResource(`comment/all/${data}?page=${page}`);
         return res;
     }
-
-    getVisitedEvents = async (id, page) => {
-        const res = await this.getResource(`event/visitedEvents?id=${id}&page=${page}`);
-        return res;
-    }
-
-    getFutureEvents = async (id, page) => {
-        const res = await this.getResource(`event/futureEvents?id=${id}&page=${page}`);
-        return res;
-    }
-
-    getPastEvents = async (id, page) => {
-        const res = await this.getResource(`event/pastEvents?id=${id}&page=${page}`);
-        return res;
-    }
-
-    getEventsToGo = async (id, page) => {
-        const res = await this.getResource(`event/EventsToGo?id=${id}&page=${page}`);
-        return res;
-    }
-
-
-
-
 
     setUsername = async (data) => {
         const res = await this.setResource('Users/EditUsername', {

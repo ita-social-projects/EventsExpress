@@ -124,6 +124,11 @@ const initialState = {
         isEventSuccess: false,
         eventError: null
     },
+    add_occurenceEvent: {
+        isOccurenceEventPending: false,
+        isOccurenceEventSuccess: false,
+        occurenceEventError: null
+    },
     events: {
         isPending: true,
         isError: false,
