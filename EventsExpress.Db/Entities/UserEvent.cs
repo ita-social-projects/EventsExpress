@@ -17,5 +17,7 @@ namespace EventsExpress.Db.Entities
         public Status Status { get; set; }
 
         public virtual ICollection<UserEventInventory> Inventories { get; set; }
+
+        public UserStatusEvent UserStatusEvent { get; set; }
     }
 }

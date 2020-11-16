@@ -10,6 +10,9 @@ import EventCancelModal from './event-cancel-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
+import Button from "@material-ui/core/Button";
+import EventVisitors from './event-visitors';
+
 
 export default class EventItemView extends Component {
 
@@ -34,21 +37,7 @@ export default class EventItemView extends Component {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
     }
 
-    renderUsers = arr => {
-        return arr.map(x => (
-            <Link to={'/user/' + x.id} className="btn-custom">
-                <div className="d-flex align-items-center border-bottom">
-                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                    <div>
-                        <h5>{x.username}</h5>
-                        {'Age: ' + this.getAge(x.birthday)}
-                    </div>
-                </div>
-            </Link>)
-        );
-    }
-
-    renderOwner = user => (
+    renderOwners = user => (
         <Link to={'/user/' + user.id} className="btn-custom">
             <div className="d-flex align-items-center border-bottom">
                 <div className='d-flex flex-column'>
@@ -64,6 +53,86 @@ export default class EventItemView extends Component {
             </div>
         </Link>
     )
+
+    renderApprovedUsers = (arr, isMyPrivateEvent) => {
+        return arr.map(x => (
+            <div>
+                <Link to={'/user/' + x.id} className="btn-custom">
+                    <div className="d-flex align-items-center border-bottom">
+                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                        <div>
+                            <h5>{x.username}</h5>
+                            {'Age: ' + this.getAge(x.birthday)}
+                        </div>
+                    </div>
+                </Link>
+                {isMyPrivateEvent &&
+                    <Button
+                        onClick={() => this.props.onApprove(x.id, false)}
+                        variant="outlined"
+                        color="success"
+                        >
+                            Delete from event
+                    </Button>
+                }
+            </div>)
+        );
+    }
+
+    renderPendingUsers = arr => {
+        return arr.map(x => (
+            <div>
+                <Link to={'/user/' + x.id} className="btn-custom">
+                    <div className="d-flex align-items-center border-bottom">
+                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                        <div>
+                            <h5>{x.username}</h5>
+                            {'Age: ' + this.getAge(x.birthday)}
+                        </div>
+                    </div>
+                </Link>
+                <div>
+                    <Button
+                    variant="outlined"
+                    color="success"
+                    onClick={() => this.props.onApprove(x.id, true)}
+                    >
+                        Approve
+                        </Button>
+                    <Button
+                    onClick={() => this.props.onApprove(x.id, false)}
+                    variant="outlined"
+                    color="danger"
+                    >
+                        Deny
+                        </Button>
+                </div>
+            </div>)
+        );
+    }
+
+    renderDeniedUsers = arr => {
+        return arr.map(x => (
+            <div>
+                <Link to={'/user/' + x.id} className="btn-custom">
+                    <div className="d-flex align-items-center border-bottom">
+                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                        <div>
+                            <h5>{x.username}</h5>
+                            {'Age: ' + this.getAge(x.birthday)}
+                        </div>
+                    </div>
+                </Link>
+                <Button
+                    onClick={() => this.props.onApprove(x.id, true)}
+                    variant="outlined"
+                    color="success"
+                    >
+                        Add to event
+                </Button>
+            </div>)
+        );
+    }
 
     getAge = birthday => {
         let today = new Date();
@@ -82,6 +151,20 @@ export default class EventItemView extends Component {
         return age;
     }
 
+    getUserEventStatus = visitor => {
+        if (visitor !== undefined) {
+            switch (visitor.userStatusEvent) {
+                case 0:
+                    return "Approving participation.";
+                case 1:
+                    return "Denying participation.";
+                case 2:
+                    return "Pending participation.";
+            }
+        }
+        return "Not in event.";
+    }
+
     onEdit = () => {
         this.setState({ edit: true });
     }
@@ -95,6 +178,7 @@ export default class EventItemView extends Component {
             dateFrom,
             dateTo,
             description,
+            isPublic,
             maxParticipants,
             user,
             visitors,
@@ -105,15 +189,23 @@ export default class EventItemView extends Component {
         console.log(this.props);
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
+        const visitorsEnum = {
+            approvedUsers: visitors.filter(x => x.userStatusEvent == 0), 
+            deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
+            pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
+        };
 
-        let iWillVisitIt = visitors.find(x => x.id === current_user.id) !== null;
+        let iWillVisitIt = visitors.find(x => x.id === current_user.id) != null;
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = current_user.id === user.id;
-        let isFreePlace = visitors.length < maxParticipants;
+        let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
-        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
+        let isMyPrivateEvent = isMyEvent && !isPublic;
+        let isPending = !isMyEvent && visitorsEnum.pendingUsers.find(x => x.id === current_user.id) != null;
+        debugger;
 
         return <>
             <div className="container-fluid mt-1">
@@ -124,9 +216,14 @@ export default class EventItemView extends Component {
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
+                                {(isPublic)
+                                    ? <span>Public event</span>
+                                    : <span>Private event</span>
+                                }
+                                <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
-                                    ? <span className="maxParticipants">{visitors.length}/{maxParticipants} Participants</span>
-                                    : <span className="maxParticipants">{visitors.length} Participants</span>
+                                    ? <span className="maxParticipants">{visitorsEnum.approvedUsers.length}/{maxParticipants} Participants</span>
+                                    : <span className="maxParticipants">{visitorsEnum.approvedUsers.length} Participants</span>
                                 }
                                 <br />
                                 <span>
@@ -148,7 +245,7 @@ export default class EventItemView extends Component {
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
-                                {canJoin && <button onClick={this.props.onJoin} className="btn btn-join">Join</button>}
+                                {canJoin && <button onClick={this.props.onJoin} className=" btn btn-join">Join</button>}
                                 {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
                                 {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
                             </div>
@@ -165,6 +262,13 @@ export default class EventItemView extends Component {
                                             eventId={this.props.data.id}
                                             userId={current_user.id}
                                         />
+                                    </div>
+                                }
+                                {(!isMyEvent) && 
+                                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                        <label>
+                                            Current status: <span>{this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}</span>
+                                        </label>
                                     </div>
                                 }
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
@@ -224,11 +328,19 @@ export default class EventItemView extends Component {
                         }
                     </div>
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        {this.renderOwner(user)}
-                        {this.renderUsers(visitors)}
+                        <EventVisitors data={{}}
+                            admins = {user}
+                            renderOwners = {this.renderOwners}
+                            visitors = {visitorsEnum}
+                            renderApprovedUsers = {this.renderApprovedUsers}
+                            isMyPrivateEvent = {isMyPrivateEvent}
+                            renderPendingUsers = {this.renderPendingUsers}
+                            renderDeniedUsers = {this.renderDeniedUsers}
+                        />
                     </div>
                 </div>
             </div>
         </>
     }
 }
+

@@ -90,6 +90,27 @@ export function join(userId, eventId) {
   }
 }
 
+// ACTION APPROVER FOR USER
+export function approveUser(userId, eventId, buttonAction) {
+  return dispatch => {
+    const res = api_serv.setApprovedUser({ userId: userId, eventId: eventId, buttonAction: buttonAction });
+    res.then(response => {
+      if (response.error == null) {
+
+        const res1 = api_serv.getEvent(eventId);
+        res1.then(response => {
+          if (response.error == null) {
+            dispatch(getEvent(response));
+
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        });
+      }
+    });
+  }
+}
+
 // ACTION CREATOR FOR EVENT UNBLOCK:
 export function unblock_event(id) {
   return dispatch => {

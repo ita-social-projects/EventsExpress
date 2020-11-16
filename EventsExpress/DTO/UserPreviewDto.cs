@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.DTO
 {
@@ -15,5 +16,7 @@ namespace EventsExpress.DTO
         public DateTime Birthday { get; set; }
 
         public double Rating { get; set; }
+
+        public UserStatusEvent? UserStatusEvent { get; set; }
     }
 }

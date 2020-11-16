@@ -15,6 +15,8 @@ namespace EventsExpress.Db.Entities
 
         public DateTime DateTo { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public Guid CityId { get; set; }
 
         public virtual City City { get; set; }

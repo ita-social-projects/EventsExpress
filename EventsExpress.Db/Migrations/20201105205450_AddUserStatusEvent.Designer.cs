@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201105205450_AddUserStatusEvent")]
+    partial class AddUserStatusEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,33 +182,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("EventCategory");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("NeedQuantity")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("UnitOfMeasuringId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UnitOfMeasuringId");
-
-                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -431,23 +406,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UnitOfMeasurings");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -550,27 +508,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("UserEvent");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
-                {
-                    b.Property<Guid>("InventoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("InventoryId", "UserId", "EventId");
-
-                    b.HasIndex("UserId", "EventId");
-
-                    b.ToTable("UserEventInventories");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.City", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Country", "Country")
@@ -630,21 +567,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("Categories")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithMany("Inventories")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.UnitOfMeasuring", "UnitOfMeasuring")
-                        .WithMany("Inventories")
-                        .HasForeignKey("UnitOfMeasuringId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -790,21 +712,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("EventsToVisit")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Inventory", "Inventory")
-                        .WithMany("UserEventInventories")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.UserEvent", "UserEvent")
-                        .WithMany("Inventories")
-                        .HasForeignKey("UserId", "EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
