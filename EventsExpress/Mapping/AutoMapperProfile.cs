@@ -6,6 +6,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventsExpress.Mapping
 {
@@ -87,12 +88,14 @@ namespace EventsExpress.Mapping
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
-                .ForMember(dest => dest.Frequency, opt => opt.Ignore())
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
-                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo));
+                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.OccurenceEvent.Frequency))
+                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.OccurenceEvent.Periodicity))
+                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.OccurenceEvent.EventId == src.Id) ? true : false))
+                .ForMember(dest => dest.PhotoBytes, opts => opts.MapFrom(src => src.Photo));
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
@@ -168,11 +171,17 @@ namespace EventsExpress.Mapping
                     Id = src.Event.Id,
                     Title = src.Event.Title,
                     IsBlocked = src.Event.IsBlocked,
+                    IsReccurent = true,
                     Description = src.Event.Description,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
                     MaxParticipants = src.Event.MaxParticipants,
-                    Owner = src.Event.Owner,
+                    Frequency = src.Frequency,
+                    Periodicity = src.Periodicity,
+                    PhotoBytes = src.Event.Photo,
+                    CityName = src.Event.City.Name,
+                    CountryName = src.Event.City.Country.Name,
+                    Categories = src.Event.Categories.Select(x => new CategoryDTO { Id = x.Category.Id, Name = x.Category.Name }),
                 }));
 
             CreateMap<OccurenceEventDTO, OccurenceEvent>().ReverseMap();
@@ -183,11 +192,17 @@ namespace EventsExpress.Mapping
                     Id = src.Event.Id,
                     Title = src.Event.Title,
                     IsBlocked = src.Event.IsBlocked,
+                    IsReccurent = true,
                     Description = src.Event.Description,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
                     MaxParticipants = src.Event.MaxParticipants,
-                    Owner = src.Event.Owner,
+                    Frequency = src.Frequency,
+                    Periodicity = src.Periodicity,
+                    PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
+                    CityName = src.Event.City.Name,
+                    CountryName = src.Event.City.Country.Name,
+                    Categories = src.Event.Categories,
                 }));
 
             CreateMap<OccurenceEventDto, OccurenceEventDTO>()
@@ -199,7 +214,13 @@ namespace EventsExpress.Mapping
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
                     MaxParticipants = src.Event.MaxParticipants,
+                    Frequency = src.Frequency,
+                    Periodicity = src.Periodicity,
                     CityId = src.Event.CityId,
+                    IsReccurent = true,
+                    PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
+                    CityName = src.Event.City.Name,
+                    CountryName = src.Event.City.Country.Name,
                 }));
 
             CreateMap<EventDTO, OccurenceEventDTO>()
@@ -215,7 +236,7 @@ namespace EventsExpress.Mapping
 
             #endregion
 
-            #region CATEGORY MAPPING
+                #region CATEGORY MAPPING
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CategoryDTO, CategoryDto>().ReverseMap();
             CreateMap<CategoryDto, Category>();

@@ -26,9 +26,15 @@ namespace EventsExpress.Core.DTOs
 
         public int Frequency { get; set; }
 
+        public string CountryName { get; set; }
+
+        public string CityName { get; set; }
+
         public Periodicity Periodicity { get; set; }
 
         public IFormFile Photo { get; set; }
+
+        public string PhotoUrl { get; set; }
 
         public Photo PhotoBytes { get; set; }
 
