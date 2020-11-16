@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using EventsExpress.Core.DTOs;
+
 namespace EventsExpress.DTO
 {
     public class EditUserCategoriesDto
     {
-        public EditUserCategoriesDto()
-        {
-        }
+        public IEnumerable<CategoryDTO> Categories { get; set; }
     }
 }

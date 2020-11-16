@@ -13,7 +13,9 @@ class SelectCategoriesWrapper extends Component {
     componentDidMount = () => this.props.get_categories();
 
     handleSubmit(event) {
-        this.props.setUserCategory(event.categories);
+        this.props.setUserCategory({
+            categories: event.categories
+        });
     }
 
     render() {
