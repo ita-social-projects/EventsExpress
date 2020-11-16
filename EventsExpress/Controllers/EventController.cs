@@ -129,7 +129,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to add user to category.
+        /// This method have to approved user on event.
         /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>
@@ -148,7 +148,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to add user to category.
+        /// This method have to denied participation in event.
         /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>
