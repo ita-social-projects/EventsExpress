@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, FieldArray } from 'redux-form'
+import { Field, FieldArray, getFormSyncErrors } from 'redux-form'
 import { renderTextField, renderSelectField } from '../helpers/helpers';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
@@ -85,7 +85,7 @@ class Inventory extends Component {
         return (
             <div>
                 <div className='d-flex justify-content-start align-items-center'>
-                    <h3>Inventory</h3>                    
+                    <h3>Inventory</h3>
                     {this.state.isOpen
                         ? <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={this.handleOnClickCaret}>
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -98,6 +98,10 @@ class Inventory extends Component {
                                 </svg>
                         </button>
                     }
+                    {this.props.syncErrors.inventories && !this.state.isOpen && 
+                        <span className="red"><i class="fas fa-exclamation-circle red"></i>required</span>
+                    }                    
+
                 </div>
                 <div className={this.state.isOpen ? "d-block" : "d-none"}>
                     <FieldArray name="inventories" props={this.props} component={renderInventories}/>
@@ -108,7 +112,8 @@ class Inventory extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    unitOfMeasuringState: state.unitsOfMeasuring
+    unitOfMeasuringState: state.unitsOfMeasuring,
+    syncErrors: getFormSyncErrors('event-form')(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
