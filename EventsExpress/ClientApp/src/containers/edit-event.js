@@ -27,6 +27,19 @@ class EditEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
+
+        if (!values.maxParticipants) {
+            values.maxParticipants = 2147483647;
+        }
+
+        if (!values.dateFrom) {
+            values.dateFrom = new Date(Date.now());
+        }
+
+        if (!values.dateTo) {
+            values.dateTo = new Date(values.dateFrom);
+        }
+
         this.props.add_event({ ...values, user_id: this.props.user_id, id: this.props.initialValues.id });
     }
 
@@ -34,53 +47,47 @@ class EditEventWrapper extends Component {
         this.props.get_cities(e.target.value);
     }
 
-    handleCheckBox = (checked) => {
-        if (checked) {
-            /*shou your message*/
+
+    render() {
+        return <>
+            <EventForm
+                all_categories={this.props.all_categories}
+                cities={this.props.cities.data}
+                onChangeCountry={this.onChangeCountry}
+                onSubmit={this.onSubmit}
+                countries={this.props.countries.data}
+                initialValues={this.props.initialValues}
+                Event={{}}
+                checked={this.props.initialValues.isReccurent}
+                haveReccurentCheckBox={false}
+                isCreated={true} />
+        </>
+    }
 }
-        else {//hide it}
+
+const mapStateToProps = (state) => ({
+    user_id: state.user.id,
+    add_event_status: state.add_event,
+    countries: state.countries,
+    cities: state.cities,
+    all_categories: state.categories,
+    initialValues: state.event.data,
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        add_event: (data) => dispatch(edit_event(data)),
+        get_countries: () => dispatch(get_countries()),
+        get_cities: (country) => dispatch(get_cities(country)),
+        get_categories: () => dispatch(get_categories()),
+        resetEvent: () => dispatch(resetEvent()),
+        reset: () => {
+            dispatch(reset('event-form'));
+            dispatch(setEventPending(true));
+            dispatch(setEventSuccess(false));
+            dispatch(setEventError(null));
         }
     }
+};
 
-            render(){
-                return <>
-                    <EventForm data={this.props.initialValues}
-                        all_categories={this.props.all_categories}
-                        cities={this.props.cities.data}
-                        onChangeCountry={this.onChangeCountry}
-                        onSubmit={this.onSubmit}
-                        countries={this.props.countries.data}
-                        form_values={this.props.form_values}
-                        Event={{}}
-                        isCreated={true} />
-                </>
-            }
-        }
-
-        const mapStateToProps = (state) => ({
-            user_id: state.user.id,
-            add_event_status: state.add_event,
-            countries: state.countries,
-            cities: state.cities,
-            all_categories: state.categories,
-            initialValues: state.event.data,
-            form_values: getFormValues('event-form')(state)
-        });
-
-        const mapDispatchToProps = (dispatch) => {
-            return {
-                add_event: (data) => dispatch(edit_event(data)),
-                get_countries: () => dispatch(get_countries()),
-                get_cities: (country) => dispatch(get_cities(country)),
-                get_categories: () => dispatch(get_categories()),
-                resetEvent: () => dispatch(resetEvent()),
-                reset: () => {
-                    dispatch(reset('event-form'));
-                    dispatch(setEventPending(true));
-                    dispatch(setEventSuccess(false));
-                    dispatch(setEventError(null));
-                }
-            }
-        };
-
-        export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);

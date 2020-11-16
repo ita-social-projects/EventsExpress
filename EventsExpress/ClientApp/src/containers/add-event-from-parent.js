@@ -11,11 +11,6 @@ import get_categories from '../actions/category-list';
 
 class AddFromParentEventWrapper extends Component {
 
-    componentWillMount = () => {
-        this.props.get_countries();
-        this.props.get_categories();
-        this.props.get_cities(this.props.initialValues.countryId);
-    }
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
@@ -26,39 +21,27 @@ class AddFromParentEventWrapper extends Component {
         this.props.reset();
     }
 
-    onSubmit = (values) => {
+    onSubmit = () => {
 
-        if (!values.maxParticipants) {
-            values.maxParticipants = 2147483647;
+        if (!this.props.initialValues.maxParticipants) {
+            this.props.initialValues.maxParticipants = 2147483647;
         }
 
-        if (!values.dateFrom) {
-            values.dateFrom = new Date(Date.now());
+        if (!this.props.initialValues.dateFrom) {
+            this.props.initialValues.dateFrom = new Date(Date.now());
         }
 
-        if (!values.dateTo) {
-            values.dateTo = new Date(values.dateFrom);
+        if (!this.props.initialValues.dateTo) {
+            this.props.initialValues.dateTo = new Date(this.props.initialValues.dateFrom);
         }
 
-        this.props.add_event({ ...values, user_id: this.props.user_id});
-    }
+        this.props.add_event({ ...this.props.initialValues, user_id: this.props.user_id });
 
-    onChangeCountry = (e) => {
-        this.props.get_cities(e.target.value);
     }
 
     render() {
         return <>
-            <EventForm
-                all_categories={this.props.all_categories}
-                cities={this.props.cities.data}
-                onChangeCountry={this.onChangeCountry}
-                onSubmit={this.onSubmit}
-                countries={this.props.countries.data}
-                initialValues={this.props.initialValues}
-                Event={{}}
-                haveReccurentCheckBox={false}
-                isCreated={true} />
+
         </>
     }
 }
@@ -67,6 +50,7 @@ const mapStateToProps = (state) => ({
     user_id: state.user.id,
     add_event_status: state.add_event,
     countries: state.countries,
+    selectedCountries: state.occurenceEvent.data.event.countryName,
     cities: state.cities,
     all_categories: state.categories.data,
     initialValues: state.occurenceEvent.data.event,

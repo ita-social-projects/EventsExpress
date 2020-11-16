@@ -1,35 +1,29 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import add_event from '../actions/add-event';
+import add_event  from '../actions/add-event';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-import { SetAlert } from '../actions/alert';
+import { resetEvent } from '../actions/event-item-view';
 import get_categories from '../actions/category-list';
 
-class AddEventWrapper extends Component {
+class EditFromParentEventWrapper extends Component {
 
-    state = {
-        open: false
-    }
-
-    componentDidMount = () => {
+    componentWillMount = () => {
         this.props.get_countries();
         this.props.get_categories();
+        this.props.get_cities(this.props.initialValues.countryId);
     }
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
-            this.props.resetEventStatus();
-            this.props.alert({ variant: 'success', message: 'Your event was created!', autoHideDuration: 5000 });
         }
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         this.props.reset();
-        this.props.resetEventStatus();
     }
 
     onSubmit = (values) => {
@@ -41,39 +35,32 @@ class AddEventWrapper extends Component {
         if (!values.dateFrom) {
             values.dateFrom = new Date(Date.now());
         }
-            
+
         if (!values.dateTo) {
             values.dateTo = new Date(values.dateFrom);
         }
 
         this.props.add_event({ ...values, user_id: this.props.user_id });
+
     }
 
     onChangeCountry = (e) => {
         this.props.get_cities(e.target.value);
     }
 
-    handleClose = () => {
-        this.setState({ open: false });
-    }
-
     render() {
-        if (this.props.add_event_status.isEventSuccess) {
-            this.setState({ open: true });
-        }
-        return <div className="w-50 m-auto">
-            <EventForm data={{}}
+        return <>
+            <EventForm
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
-                onSubmit={this.onSubmit} 
+                onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 initialValues={this.props.initialValues}
-                form_values={this.props.form_values}
-                haveReccurentCheckBox={true}
-                Event={this.props.add_event_status}
-                isCreated={false} />
-        </div>
+                Event={{}}
+                haveReccurentCheckBox={false}
+                isCreated={true} />
+        </>
     }
 }
 
@@ -82,9 +69,8 @@ const mapStateToProps = (state) => ({
     add_event_status: state.add_event,
     countries: state.countries,
     cities: state.cities,
+    all_categories: state.categories.data,
     initialValues: state.event.data,
-    all_categories: state.categories,
-    form_values: getFormValues('event-form')(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -93,11 +79,9 @@ const mapDispatchToProps = (dispatch) => {
         get_countries: () => dispatch(get_countries()),
         get_cities: (country) => dispatch(get_cities(country)),
         get_categories: () => dispatch(get_categories()),
+        resetEvent: () => dispatch(resetEvent()),
         reset: () => {
             dispatch(reset('event-form'));
-        },
-        alert: (data) => dispatch(SetAlert(data)),
-        resetEventStatus: () => {
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));
             dispatch(setEventError(null));
@@ -105,4 +89,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddEventWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEventWrapper);
