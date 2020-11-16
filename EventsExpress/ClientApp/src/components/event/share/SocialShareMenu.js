@@ -5,7 +5,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ShareButtons from './ShareButtons'
 
-
 const StyledMenu = withStyles({
     paper: {
         border: '1px solid #d3d4d5',
@@ -37,9 +36,9 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus(props) {
+export default function SocialShareMenu(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
-  
+
     function handleClick(event) {
         setAnchorEl(event.currentTarget);
     }
@@ -53,10 +52,9 @@ export default function CustomizedMenus(props) {
             <IconButton className="btn"
                 aria-controls="customized-menu"
                 aria-haspopup="true"
-            
                 onClick={handleClick}
             >
-             <i class="fas fa-share-alt"></i>
+                <i className="fas fa-share-alt"></i>
             </IconButton>
             <StyledMenu
                 id="customized-menu"
@@ -66,7 +64,7 @@ export default function CustomizedMenus(props) {
                 onClose={handleClose}
             >
                 <StyledMenuItem>
-                    <ShareButtons href={props.href}/>
+                    <ShareButtons href={props.href} />
                 </StyledMenuItem>
             </StyledMenu>
         </div>

@@ -1,31 +1,44 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SelectCategories from '../components/SelectCategories/SelectCategories';
-import add_UserCategory from '../actions/EditProfile/addUserCategory';
+import setUserCategory from '../actions/EditProfile/addUserCategory';
 import get_categories from '../actions/category-list';
 
 class SelectCategoriesWrapper extends Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
     componentDidMount = () => this.props.get_categories();
+
+    handleSubmit(event) {
+        this.props.setUserCategory(event.categories);
+    }
 
     render() {
         return <SelectCategories
             items={this.props.allCategories.data}
-            initialValues={this.props.selectedCategories}
-            onSubmit={this.props.add}
+            initialValues={this.props.user.categories}
+            onSubmit={this.handleSubmit}
         />;
     }
 }
 const mapStateToProps = state => {
     return {
         allCategories: state.categories,
-        selectedCategories: state.user.categories,
+        user: state.user,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add: (data) => dispatch(add_UserCategory(data)),
+        setUserCategory: (data) => dispatch(setUserCategory(data)),
         get_categories: () => dispatch(get_categories())
     }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(SelectCategoriesWrapper);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SelectCategoriesWrapper)

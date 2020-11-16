@@ -265,7 +265,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditUserCategory(UserInfo userInfo)
+        public async Task<IActionResult> EditUserCategory(IEnumerable<CategoryDTO> categories)
         {
             if (!ModelState.IsValid)
             {
@@ -278,7 +278,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var newCategories = _mapper.Map<IEnumerable<Category>>(userInfo.Categories);
+            var newCategories = _mapper.Map<IEnumerable<Category>>(categories);
 
             var result = await _userService.EditFavoriteCategories(user, newCategories);
             if (result.Successed)
@@ -393,6 +393,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method help to get current user from JWT.
         /// </summary>
+        [NonAction]
         private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
     }
 }

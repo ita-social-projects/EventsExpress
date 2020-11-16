@@ -97,7 +97,7 @@ class EventFilter extends Component {
                         <Button
                             key={this.state.viewMore}
                             fullWidth={true}
-                            color="info"
+                            color="secondary"
                             onClick={() => {
                                 this.setState({ viewMore: !this.state.viewMore });
                             }}
