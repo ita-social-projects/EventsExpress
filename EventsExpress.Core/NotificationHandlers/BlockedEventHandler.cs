@@ -38,9 +38,9 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     Subject = "Your event was blocked",
                     RecepientEmail = email,
-                    MessageText = $"Dear {email}, your event was blocked for some reason. " +
-                    $"To unblock it, edit this event, please: " +
-                    $"\"<a href='{eventLink}'>{even.Title}</>\"",
+                    MessageText = $@"Dear {email}.
+Your event was blocked for some reason. 
+To unblock it, edit this event, please: <a href='{eventLink}'>{even.Title}</>",
                 });
             }
             catch (Exception ex)
