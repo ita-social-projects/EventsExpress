@@ -33,6 +33,22 @@ class AddEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
+        if (!values.maxParticipants) {
+            values.maxParticipants = 2147483647;
+        }
+
+        if (!values.dateFrom) {
+            values.dateFrom = new Date(Date.now());
+        }
+            
+        if (!values.dateTo) {
+            values.dateTo = new Date(values.dateFrom);
+        }
+
+        if (!values.isPublic) {
+            values.isPublic = false;
+        }
+
         this.props.add_event({ ...values, user_id: this.props.user_id });
     }
 
