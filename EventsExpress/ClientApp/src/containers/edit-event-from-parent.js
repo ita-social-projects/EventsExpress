@@ -28,6 +28,10 @@ class EditFromParentEventWrapper extends Component {
 
     onSubmit = (values) => {
 
+        if(values.id) {
+            values.id = null;
+        }
+        
         if (!values.maxParticipants) {
             values.maxParticipants = 2147483647;
         }

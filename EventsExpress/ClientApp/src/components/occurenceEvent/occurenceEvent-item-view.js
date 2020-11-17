@@ -97,7 +97,7 @@ class OccurenceEventItemView extends Component {
                     </Card>
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                    <SelectiveForm eventId={eventId} />
+                    <SelectiveForm eventId={eventId} event={this.props.event}/>
                 </div>
             </div>
         </>

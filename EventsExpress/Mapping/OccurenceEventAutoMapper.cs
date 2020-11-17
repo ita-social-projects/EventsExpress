@@ -23,22 +23,9 @@ namespace EventsExpress.Mapping
            {
                Id = src.Event.Id,
                Title = src.Event.Title,
-               IsBlocked = src.Event.IsBlocked,
-               IsReccurent = true,
-               Description = src.Event.Description,
                DateTo = src.Event.DateTo,
                DateFrom = src.Event.DateFrom,
-               MaxParticipants = src.Event.MaxParticipants,
-               Frequency = src.Frequency,
-               Periodicity = src.Periodicity,
                PhotoBytes = src.Event.Photo,
-               CityName = src.Event.City.Name,
-               CountryName = src.Event.City.Country.Name,
-               Categories = src.Event.Categories.Select(x => new CategoryDTO
-               {
-                   Id = x.Category.Id,
-                   Name = x.Category.Name
-               }),
            }));
 
             CreateMap<OccurenceEventDTO, OccurenceEvent>().ReverseMap();
@@ -48,18 +35,9 @@ namespace EventsExpress.Mapping
                 {
                     Id = src.Event.Id,
                     Title = src.Event.Title,
-                    IsBlocked = src.Event.IsBlocked,
-                    IsReccurent = true,
-                    Description = src.Event.Description,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
-                    MaxParticipants = src.Event.MaxParticipants,
-                    Frequency = src.Frequency,
-                    Periodicity = src.Periodicity,
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
-                    CityName = src.Event.City.Name,
-                    CountryName = src.Event.City.Country.Name,
-                    Categories = src.Event.Categories,
                 }));
 
             CreateMap<OccurenceEventDto, OccurenceEventDTO>()
@@ -67,17 +45,9 @@ namespace EventsExpress.Mapping
                 {
                     Id = src.Event.Id,
                     Title = src.Event.Title,
-                    Description = src.Event.Description,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
-                    MaxParticipants = src.Event.MaxParticipants,
-                    Frequency = src.Frequency,
-                    Periodicity = src.Periodicity,
-                    CityId = src.Event.CityId,
-                    IsReccurent = true,
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
-                    CityName = src.Event.City.Name,
-                    CountryName = src.Event.City.Country.Name,
                 }));
 
             CreateMap<EventDTO, OccurenceEventDTO>()

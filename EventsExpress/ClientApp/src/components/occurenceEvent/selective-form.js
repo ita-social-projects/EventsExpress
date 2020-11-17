@@ -8,7 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import Popover from '@material-ui/core/Popover';
 import EditFromParentEventWrapper from '../../containers/edit-event-from-parent'
+import add_event from '../../actions/add-event';
 import '../occurenceEvent/occurenceEvent.css'
+
 
 
 export class SelectiveForm extends Component {
@@ -28,12 +30,10 @@ export class SelectiveForm extends Component {
         this.submitHandler = this.submitHandler.bind(this);
     }
 
-
-    onClickConfirm = (e) => {
-        this.CreateOption() ||
-            this.EditOption() ||
-            this.CancelOnceOption() ||
-            this.CancelOption()
+    componentDidUpdate(){
+        if(this.state.isCreateOption && this.state.submit){
+            this.onAddEvent();
+        }
     }
 
     CreateOption = () => {
@@ -105,6 +105,28 @@ export class SelectiveForm extends Component {
 
     onFocusChange = () => {
         this.setState({ isFocused: true });
+    }
+
+    onAddEvent = () => {
+
+        if(this.props.event.id) {
+            this.props.event.id = null;
+        }
+
+        if (!this.props.event.maxParticipants) {
+            this.props.event.maxParticipants = 2147483647;
+        }
+
+        if (!this.props.event.dateFrom) {
+            this.props.event.dateFrom = new Date(Date.now());
+        }
+
+        if (!this.props.event.dateTo) {
+            this.props.event.dateTo = new Date(this.props.event.dateFrom);
+        }
+        console.log("on add event", this.props);
+        this.props.add_event({ ...this.props.event, user_id: this.props.user_id });
+
     }
 
     resetForm = () => {
@@ -183,4 +205,10 @@ export class SelectiveForm extends Component {
 }
 
 
-export default SelectiveForm;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        add_event: (data) => dispatch(add_event(data))
+    }
+};
+
+export default connect(mapDispatchToProps)(SelectiveForm);

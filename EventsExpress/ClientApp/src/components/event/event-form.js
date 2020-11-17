@@ -80,9 +80,9 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, selectedCountries, formValues, all_categories, initialValues, data } = this.props;
-
-
+        const { countries, all_categories, initialValues, data, form_values } = this.props;
+        const values = form_values || this.props.initialData;
+        console.log("event-form", this.props);
         if (this.props.Event.isEventSuccess) {
             this.resetForm();
         }
@@ -193,12 +193,11 @@ class EventForm extends Component {
                         <Field onChange={this.props.onChangeCountry}
                             name='countryId'
                             data={countries}
-                            value={selectedCountries}
                             text='Country'
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {initialValues.countryId != null &&
+                    {values.countryId != null &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'
@@ -223,6 +222,13 @@ class EventForm extends Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    initialData: state.event.data
+});
+
+EventForm = connect(
+    mapStateToProps
+)(EventForm);
 
 export default reduxForm({
     form: 'event-form',

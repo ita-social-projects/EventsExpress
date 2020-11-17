@@ -191,6 +191,10 @@ namespace EventsExpress.Core.Services
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
+            ev.CreatedBy = ev.OwnerId;
+            ev.ModifiedBy = ev.OwnerId;
+            ev.CreatedDate = DateTime.Today;
+            ev.ModifiedDate = DateTime.Today;
 
             try
             {
@@ -222,6 +226,8 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
+            ev.ModifiedBy = e.OwnerId;
+            ev.ModifiedDate = DateTime.Today;
 
             if (e.Photo != null && ev.Photo != null)
             {

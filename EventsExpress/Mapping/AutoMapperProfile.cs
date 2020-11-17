@@ -92,6 +92,7 @@ namespace EventsExpress.Mapping
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
+                .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.OccurenceEvent.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.OccurenceEvent.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.OccurenceEvent.EventId == src.Id) ? true : false))
