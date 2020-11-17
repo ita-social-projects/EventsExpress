@@ -40,7 +40,7 @@ export default class EventItemView extends Component {
             <div className="d-flex align-items-center border-bottom">
                 <div className='d-flex flex-column'>
                     <IconButton className="text-warning" size="small" disabled >
-                        <i class="fas fa-crown"></i>
+                        <i className="fas fa-crown"></i>
                     </IconButton>
                     <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
                 </div>
@@ -228,7 +228,7 @@ export default class EventItemView extends Component {
                 <div className="row">
                     <div className="col-9">
                         <div className="col-12">
-                            <img src={photoUrl} className="w-100" />
+                            <img src={photoUrl} className="w-100" alt="Event" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
@@ -246,7 +246,7 @@ export default class EventItemView extends Component {
                                     <Moment format="D MMM YYYY" withTitle>
                                         {dateFrom}
                                     </Moment>
-                                    {dateTo != dateFrom &&
+                                    {dateTo !== dateFrom &&
                                         <>-
                                             <Moment format="D MMM YYYY" withTitle>
                                                 {dateTo}

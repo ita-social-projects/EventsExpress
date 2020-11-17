@@ -72,7 +72,9 @@ export default function MySnackbar(props) {
         aria-describedby="client-snackbar"
         message={
           <span id="client-snackbar" className={classes.message}>
-            <Icon className={clsx(classes.icon, classes.iconVariant)} />
+            {Icon &&
+              <Icon className={clsx(classes.icon, classes.iconVariant)} />
+            }
             {message}
           </span>
         }
@@ -84,6 +86,5 @@ export default function MySnackbar(props) {
         {...other}
       />
     </Snackbar>
-
   )
 }

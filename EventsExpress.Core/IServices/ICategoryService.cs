@@ -18,5 +18,9 @@ namespace EventsExpress.Core.IServices
         Task<OperationResult> Edit(CategoryDTO category);
 
         Task<OperationResult> Delete(Guid id);
+
+        bool Exists(Guid id);
+
+        bool ExistsAll(IEnumerable<Guid> ids);
     }
 }

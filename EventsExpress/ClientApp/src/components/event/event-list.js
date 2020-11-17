@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event-list';
 import Event from './event-item';
 
-const limit = 2;
-const pageCount = 3;
-
 class EventList extends Component {
     handlePageChange = (page) => {
         this.props.updateEventsFilters({

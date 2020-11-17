@@ -6,7 +6,6 @@ import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import eventHelper from '../helpers/eventHelper';
-import { stringify as queryStringStringify } from 'query-string';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
@@ -32,7 +31,7 @@ export default class HeaderProfile extends Component {
                                 <Link to={'/profile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
-                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <i className="fa fa-cog" aria-hidden="true"></i>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
@@ -40,20 +39,20 @@ export default class HeaderProfile extends Component {
                                     <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
                                             <Badge badgeContent={this.props.notification} color="primary">
-                                                <i class="fas fa-bell"></i>
+                                                <i className="fas fa-bell"></i>
                                             </Badge>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
                                 <Link
-                                to={{
-                                    pathname: "/home/events",
-                                    search: eventHelper.getQueryStringByEventFilter(this.props.filter),
-                                }}
+                                    to={{
+                                        pathname: "/home/events",
+                                        search: eventHelper.getQueryStringByEventFilter(this.props.filter),
+                                    }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton onClick={onClick}>
-                                            <i class="fas fa-sign-out-alt"></i>
+                                            <i className="fas fa-sign-out-alt"></i>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
