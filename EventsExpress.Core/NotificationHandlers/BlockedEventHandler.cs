@@ -32,7 +32,6 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var email = _userService.GetById(notification.UserId).Email;
                 var even = _eventService.EventById(notification.Id);
-                string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
 
                 await _sender.SendEmailAsync(new EmailDTO
                 {
@@ -40,7 +39,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     RecepientEmail = email,
                     MessageText = $@"Dear {email}.
 Your event was blocked for some reason. 
-To unblock it, edit this event, please: <a href='{eventLink}'>{even.Title}</>",
+To unblock it, edit this event, please: <a href='{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1'>{even.Title}</>",
                 });
             }
             catch (Exception ex)
