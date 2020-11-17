@@ -240,7 +240,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors,Inventories.UnitOfMeasuring");
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)

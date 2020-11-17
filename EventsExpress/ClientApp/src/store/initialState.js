@@ -40,7 +40,8 @@ const initialState = {
         isPending: true,
         isError: false,
         units: []
-    },    change_avatar: {
+    },
+    change_avatar: {
         isPending: false,
         isSuccess: false,
         Error: {}

@@ -63,7 +63,7 @@ namespace EventsExpress.Core.Services
 
         public ICollection<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = _db.UnitOfMeasuringRepository.Get("Inventories").ToList();
+            var entities = _db.UnitOfMeasuringRepository.Get().ToList();
             if (entities == null)
             {
                 return new List<UnitOfMeasuringDTO>();
@@ -79,7 +79,6 @@ namespace EventsExpress.Core.Services
             var entity = _db.UnitOfMeasuringRepository.Get(unitOfMeasuringId);
             if (entity == null)
             {
-                //throw new NotImplementedException("Object not found!");
                 return new UnitOfMeasuringDTO();
             }
 

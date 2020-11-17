@@ -26,7 +26,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
         {
-            var ev = _db.EventRepository.Get("Inventories").FirstOrDefault(e => e.Id == eventId);
+            var ev = _db.EventRepository.Get().FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
                 return new OperationResult(false, "Event not found!", eventId.ToString());

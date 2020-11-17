@@ -13,6 +13,7 @@ import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
 import EventLeaveModal from './event-leave-modal';
+import InventoryList from '../inventory/InventoryList';
 
 const userStatus = {
     APPROVED: 0,
@@ -26,17 +27,8 @@ export default class EventItemView extends Component {
         super();
 
         this.state = {
-            isOpen: true,
             edit: false
         };
-
-        this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
-    }
-
-    handleOnClickCaret() {
-        this.setState(state => ({
-            isOpen: !state.isOpen
-        }));
     }
 
     renderCategories = arr => {
@@ -208,7 +200,6 @@ export default class EventItemView extends Component {
             city,
             inventories
         } = this.props.event.data;
-        console.log(this.props);
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
@@ -291,50 +282,7 @@ export default class EventItemView extends Component {
                                     {description}
                                 </div>
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <div className="d-flex justify-content-start align-items-center">
-                                        <h2>Inventory</h2>
-                                        {this.state.isOpen
-                                                ? <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={this.handleOnClickCaret}>
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fillRule="evenodd" d="M3.204 5L8 10.481 12.796 5H3.204zm-.753.659l4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                                                    </svg>
-                                                </button>
-                                            :  <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={this.handleOnClickCaret}>
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">                            
-                                                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                                                </svg>
-                                            </button>
-                                        }
-                                    </div>
-                                    { this.state.isOpen &&
-                                    <div className="table-responsive">
-                                        <div className="table-wrapper">
-                                            <div className="table-title">
-                                            </div>
-                                            <table className="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Item name</th>
-                                                        <th>Count</th>
-                                                        <th>Measuring unit</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                {inventories.map(item => {
-                                                    return (
-                                                        <tr>
-                                                            <td>{item.itemName}</td>
-                                                            <td>{item.needQuantity}</td>
-                                                            <td>{item.unitOfMeasuring.shortName}</td>
-                                                        </tr>
-                                                    )
-                                                })}
-                                                    
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    }
+                                    <InventoryList inventories={inventories}/>
                                 </div>
                                 
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

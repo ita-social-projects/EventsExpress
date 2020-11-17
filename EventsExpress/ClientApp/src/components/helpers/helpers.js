@@ -49,10 +49,7 @@ export const validate = values => {
         }
     });
 
-    if (!values.inventories || !values.inventories.length) {
-
-    } else {
-        console.log(values);
+    if (values.inventories != null) {
         const inventoriesArrayErrors = [];
         values.inventories.forEach((item, index) => {
             const inventoriesErrors = {};
@@ -78,12 +75,10 @@ export const validate = values => {
                 inventoriesArrayErrors[index] = inventoriesErrors;
             }
         })
-        console.log(inventoriesArrayErrors);
         if (inventoriesArrayErrors.length) {
             errors.inventories = inventoriesArrayErrors;
         }
-    }
-    
+    }  
 
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;

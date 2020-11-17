@@ -22,15 +22,12 @@
   padding-right: 20px;
 }
 
-.btn{
+.btn-edit {
   font-size: 36px;
-}
-
-.btn-edit{
   background: #da2121ab;
 }
 
-.btn-edit:hover{
+.btn-edit:hover {
   background: #da2121;
 }
 
