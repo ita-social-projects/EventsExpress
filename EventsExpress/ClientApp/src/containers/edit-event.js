@@ -57,6 +57,7 @@ class EditEventWrapper extends Component {
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 initialValues={this.props.initialValues}
+                form_values={this.props.form_values}
                 Event={{}}
                 checked={this.props.initialValues.isReccurent}
                 haveReccurentCheckBox={false}
@@ -71,6 +72,7 @@ const mapStateToProps = (state) => ({
     countries: state.countries,
     cities: state.cities,
     all_categories: state.categories,
+    form_values: getFormValues('event-form')(state),
     initialValues: state.event.data,
 });
 
