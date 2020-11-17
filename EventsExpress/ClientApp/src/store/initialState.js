@@ -36,6 +36,11 @@ const initialState = {
         isRegisterSuccess: false,
         registerError: null
     },
+    unitsOfMeasuring: {
+        isPending: true,
+        isError: false,
+        units: []
+    },
     change_avatar: {
         isPending: false,
         isSuccess: false,

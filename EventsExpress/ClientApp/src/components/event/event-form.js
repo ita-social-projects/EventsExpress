@@ -14,6 +14,7 @@ import {
     renderTextArea
 } from '../helpers/helpers';
 import './event-form.css';
+import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
 
@@ -78,7 +79,7 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, form_values, all_categories, data } = this.props;
+        const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
 
         if (this.props.Event.isEventSuccess) {
@@ -86,7 +87,7 @@ class EventForm extends Component {
         }
 
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
+            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
                         ref={(x) => { this.image = x; }}
@@ -188,6 +189,7 @@ class EventForm extends Component {
                             />
                         </div>
                     }
+                    {isCreated ? null : <Inventory />}
                 </div>
                 <Button
                     fullWidth={true}

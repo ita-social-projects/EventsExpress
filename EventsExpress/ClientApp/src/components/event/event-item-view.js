@@ -13,6 +13,7 @@ import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
 import EventLeaveModal from './event-leave-modal';
+import InventoryList from '../inventory/InventoryList';
 
 const userStatus = {
     APPROVED: 0,
@@ -21,7 +22,14 @@ const userStatus = {
 };
 
 export default class EventItemView extends Component {
-    state = { edit: false }
+
+    constructor() {
+        super();
+
+        this.state = {
+            edit: false
+        };
+    }
 
     renderCategories = arr => {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
@@ -189,7 +197,8 @@ export default class EventItemView extends Component {
             user,
             visitors,
             country,
-            city
+            city,
+            inventories
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
@@ -272,6 +281,10 @@ export default class EventItemView extends Component {
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
+                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <InventoryList inventories={inventories}/>
+                                </div>
+                                
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>

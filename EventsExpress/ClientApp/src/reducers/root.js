@@ -25,6 +25,8 @@ import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
+import * as UnitsOfMeasuring from './unitsOfMeasuring';
+
 import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
@@ -47,6 +49,7 @@ const rootReducers = {
     register: Register.reducer,
     add_event: AddEvent.reducer,
     events: Events.reducer,
+    unitsOfMeasuring: UnitsOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
     add_category: AddCategories.reducer,
