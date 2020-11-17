@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EventsExpress.Validation
 {
-    public class UserInfoGenderValidation : AbstractValidator<UserInfo>
+    public class EditUserGenderDtoValidator : AbstractValidator<EditUserGenderDto>
     {
-        public UserInfoGenderValidation()
+        public EditUserGenderDtoValidator()
         {
             RuleFor(x => x.Gender)
                 .InclusiveBetween((byte)0, (byte)2)

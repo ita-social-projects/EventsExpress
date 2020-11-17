@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -11,7 +12,6 @@ using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using EventsExpress.Validation;
 using EventsExpress.ViewModel;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -165,11 +165,12 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditUsername(UserInfo userInfo)
+        public async Task<IActionResult> EditUsername(string name)
         {
-            var validator = new UserInfoNameValidator();
-
-            var validationResult = validator.Validate(userInfo);
+            var validator = new EditUserNameDtoValidator();
+            EditUserNameDto userName = new EditUserNameDto();
+            userName.Name = name;
+            var validationResult = validator.Validate(userName);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
@@ -181,7 +182,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            user.Name = userInfo.Name;
+            user.Name = userName.Name;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -194,15 +195,17 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit date of birthday.
         /// </summary>
-        /// <param name="userInfo">Required.</param>
+        /// <param name="birthday">Required.</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditBirthday(UserInfo userInfo)
+        public async Task<IActionResult> EditBirthday(string birthday)
         {
-            var validator = new UserInfoAgeValidator();
+            var validator = new EditUserBirthDtoValidator();
+            EditUserBirthDto userBirthday = new EditUserBirthDto();
+            userBirthday.Birthday = Convert.ToDateTime(birthday);
 
-            var validationResult = validator.Validate(userInfo);
+            var validationResult = validator.Validate(userBirthday);
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
@@ -214,7 +217,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            user.Birthday = userInfo.Birthday;
+            user.Birthday = userBirthday.Birthday;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -227,15 +230,17 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit gender.
         /// </summary>
-        /// <param name="userInfo">Required.</param>
+        /// <param name="gender">Required</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditGender(UserInfo userInfo)
+        public async Task<IActionResult> EditGender(byte gender)
         {
-            var validator = new UserInfoGenderValidation();
+            EditUserGenderDto userGender = new EditUserGenderDto();
+            userGender.Gender = gender;
+            var validator = new EditUserGenderDtoValidator();
 
-            var validationResult = validator.Validate(userInfo);
+            var validationResult = validator.Validate(userGender);
 
             if (!validationResult.IsValid)
             {
@@ -248,7 +253,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            user.Gender = (Gender)userInfo.Gender;
+            user.Gender = (Gender)userGender.Gender;
             var result = await _userService.Update(user);
             if (result.Successed)
             {

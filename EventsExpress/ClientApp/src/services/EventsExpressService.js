@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
@@ -405,27 +403,22 @@ export default class EventsExpressService {
     }
 
     setUsername = async (data) => {
-        const res = await this.setResource('Users/EditUsername', {
-            Name: data.UserName
-        });
+        const res = await this.setResource(`Users/EditUsername?name=${data.UserName}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
     setBirthday = async (data) => {
-        const res = await this.setResource('Users/EditBirthday', {
-            Birthday: new Date(data.Birthday).toDateString()
-        });
+        debugger;
+        const res = await this.setResource(`Users/EditBirthday?birthday=${new Date(data.Birthday).toDateString()}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
     setGender = async (data) => {
-        const res = await this.setResource('Users/EditGender', {
-            Gender: data.Gender
-        });
+        const res = await this.setResource(`Users/EditGender?gender=${data.Gender}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
