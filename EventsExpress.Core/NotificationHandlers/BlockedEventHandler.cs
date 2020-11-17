@@ -46,7 +46,7 @@ Your event was blocked for some reason.
 To unblock it, edit this event, please: <a href='{eventLink}'>{even.Title}</>",
                 });
             }
-            catch (Ex
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
