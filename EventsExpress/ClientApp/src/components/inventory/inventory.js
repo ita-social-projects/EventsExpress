@@ -90,7 +90,6 @@ class Inventory extends Component {
                     {this.props.syncErrors.inventories && !this.state.isOpen && 
                         <span className="red"><i class="fas fa-exclamation-circle red"></i>required</span>
                     }                  
-
                 </div>
                 <div className={this.state.isOpen ? "d-block" : "d-none"}>
                     <FieldArray name="inventories" props={this.props} component={renderInventories}/>
