@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EventsExpress.Validation
 {
-    public class UserInfoNameValidator : AbstractValidator<UserInfo>
+    public class EditUserNameDtoValidator : AbstractValidator<EditUserNameDto>
     {
-        public UserInfoNameValidator()
+        public EditUserNameDtoValidator()
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
         }

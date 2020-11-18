@@ -11,7 +11,6 @@ using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
 using EventsExpress.Validation;
 using EventsExpress.ViewModel;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -161,27 +160,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit username.
         /// </summary>
-        /// <param name="userInfo">Required.</param>
+        /// <param name="userName">Required.</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditUsername(UserInfo userInfo)
+        public async Task<IActionResult> EditUsername(EditUserNameDto userName)
         {
-            var validator = new UserInfoNameValidator();
-
-            var validationResult = validator.Validate(userInfo);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            user.Name = userInfo.Name;
+            user.Name = userName.Name;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -194,27 +185,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit date of birthday.
         /// </summary>
-        /// <param name="userInfo">Required.</param>
+        /// <param name="userBirthday">Required.</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditBirthday(UserInfo userInfo)
+        public async Task<IActionResult> EditBirthday(EditUserBirthDto userBirthday)
         {
-            var validator = new UserInfoAgeValidator();
-
-            var validationResult = validator.Validate(userInfo);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            user.Birthday = userInfo.Birthday;
+            user.Birthday = userBirthday.Birthday;
             var result = await _userService.Update(user);
             if (result.Successed)
             {
@@ -227,28 +210,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit gender.
         /// </summary>
-        /// <param name="userInfo">Required.</param>
+        /// <param name="userGender">Required</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditGender(UserInfo userInfo)
+        public async Task<IActionResult> EditGender(EditUserGenderDto userGender)
         {
-            var validator = new UserInfoGenderValidation();
-
-            var validationResult = validator.Validate(userInfo);
-
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            user.Gender = (Gender)userInfo.Gender;
+            user.Gender = (Gender)userGender.Gender;
             var result = await _userService.Update(user);
             if (result.Successed)
             {

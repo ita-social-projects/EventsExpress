@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
@@ -406,7 +404,7 @@ export default class EventsExpressService {
 
     setUsername = async (data) => {
         const res = await this.setResource('Users/EditUsername', {
-            Name: data.UserName
+            name: data.UserName
         });
         return !res.ok
             ? { error: await res.text() }
@@ -415,7 +413,7 @@ export default class EventsExpressService {
 
     setBirthday = async (data) => {
         const res = await this.setResource('Users/EditBirthday', {
-            Birthday: new Date(data.Birthday).toDateString()
+            birthday: new Date(data.Birthday)
         });
         return !res.ok
             ? { error: await res.text() }
@@ -424,7 +422,7 @@ export default class EventsExpressService {
 
     setGender = async (data) => {
         const res = await this.setResource('Users/EditGender', {
-            Gender: data.Gender
+            gender: Number(data.Gender)
         });
         return !res.ok
             ? { error: await res.text() }
