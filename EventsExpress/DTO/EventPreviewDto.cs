@@ -21,7 +21,7 @@ namespace EventsExpress.DTO
 
         public string PhotoUrl { get; set; }
 
-        public UserPreviewDto User { get; set; }
+        public IEnumerable<UserPreviewDto> Owners { get; set; }
 
         public string Country { get; set; }
 

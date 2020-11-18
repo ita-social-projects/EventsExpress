@@ -31,8 +31,8 @@ export default class EventItemView extends Component {
                     <div>
                     <h5>{x.username}</h5>
                     {'Age: ' + this.getAge(x.birthday)}
-                        </div>
                     </div>
+                </div>
             </Link>
         ));
     }
@@ -163,7 +163,6 @@ export default class EventItemView extends Component {
             description,
             isPublic,
             maxParticipants,
-            user,
             visitors,
             country,
             city,

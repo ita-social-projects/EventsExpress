@@ -49,9 +49,7 @@ export default class Event extends Component {
         return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
         );
     }
-
     
-
     render() {
         const classes = useStyles;
         const {
@@ -63,12 +61,13 @@ export default class Event extends Component {
             maxParticipants,
             photoUrl,
             categories,
-            user,
             countVisitor,
-            isBlocked
+            isBlocked,
+            owners
         } = this.props.item;
         const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
+        var owner = owners.find(x => x);
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -77,19 +76,21 @@ export default class Event extends Component {
                     style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
                 >
                     <CardHeader
-
-                        // todo Error with user.id
-                        //avatar={
-                        //    <Tooltip title={user.username}>
-                        //        <Link to={`/user/${user.id}`} className="btn-custom">
-                        //            <CustomAvatar
-                        //                className={classes.avatar}
-                        //                photoUrl={user.photoUrl}
-                        //                name={user.username}
-                        //            />
-                        //        </Link>
-                        //    </Tooltip>
-                        //}
+                        avatar={
+                          <Tooltip title={owner.username}>
+                              <IconButton>
+                                    <Link to={`/user/${owner.id}`} classname="btn-custom">
+                                        <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
+                                            <CustomAvatar
+                                                classname={classes.avatar}
+                                                photourl={owner.photourl}
+                                                name={owner.username}
+                                            />
+                                        </Badge>
+                                    </Link>
+                              </IconButton>
+                          </Tooltip>
+                        }
 
                         action={
                             <Tooltip title="Visitors">

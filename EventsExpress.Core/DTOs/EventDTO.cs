@@ -25,7 +25,7 @@ namespace EventsExpress.Core.DTOs
 
         public Photo PhotoBytes { get; set; }
 
-        public Guid OwnerId { get; set; }
+        public IEnumerable<Guid> OwnerId { get; set; }
 
         public IEnumerable<User> Owners { get; set; }
 
