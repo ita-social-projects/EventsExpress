@@ -23,7 +23,7 @@ export default function add_event(data) {
           }
         });
     }
-  }
+}
 
   
 export function edit_event(data) {

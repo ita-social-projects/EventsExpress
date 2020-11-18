@@ -37,5 +37,7 @@ namespace EventsExpress.DTO
         public IEnumerable<CategoryDto> Categories { get; set; }
 
         public IEnumerable<UserPreviewDto> Visitors { get; set; }
+
+        public IEnumerable<InventoryDto> Inventories { get; set; }
     }
 }

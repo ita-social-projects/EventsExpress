@@ -123,6 +123,10 @@ export default class EventsExpressService {
             : await res.text();
     }
 
+    getUnitsOfMeasuring = async () => {
+        return await this.getResource('unitofmeasuring/getall');
+    }
+
     //#region Authentication
     auth = async (data) => {
         const res = await this.setResource(`Authentication/verify/${data.userId}/${data.token}`);
@@ -247,6 +251,12 @@ export default class EventsExpressService {
         let i = 0;
         data.categories.map(x => {
             file.append(`Categories[${i++}].Id`, x.id);
+        });
+
+        data.inventories.map((item, key) => {
+            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+            file.append(`Inventories[${key}].ItemName`, item.itemName);
+            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
         });
         const res = await this.setResourceWithData('event/edit', file);
         return !res.ok
