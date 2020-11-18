@@ -1,7 +1,6 @@
 import initialState from '../store/initialState';
 import { SET_USER } from '../actions/login';
 import { SET_LOGOUT } from '../actions/logout';
-
 import { addUserCategory } from '../actions/EditProfile/addUserCategory';
 import { editBirthday } from '../actions/EditProfile/editBirthday';
 import { editGender } from '../actions/EditProfile/EditGender';
@@ -24,7 +23,7 @@ export const reducer = (state = initialState.user, action) => {
         case addUserCategory.UPDATE:
             return {
                 ...state,
-                categories: action.payload.Categories
+                categories: action.payload
             }
         case editBirthday.UPDATE:
             return {

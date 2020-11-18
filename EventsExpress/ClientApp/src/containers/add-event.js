@@ -19,6 +19,7 @@ class AddEventWrapper extends Component {
         this.props.get_countries();
         this.props.get_categories();
     }
+    
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();

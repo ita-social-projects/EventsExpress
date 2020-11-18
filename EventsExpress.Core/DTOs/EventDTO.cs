@@ -38,5 +38,8 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<CategoryDTO> Categories { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
+
+        public IEnumerable<InventoryDTO> Inventories { get; set; }
+
     }
 }

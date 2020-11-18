@@ -97,5 +97,9 @@ namespace EventsExpress.Core.Services
             await _db.SaveAsync();
             return new OperationResult(true);
         }
+
+        public bool Exists(Guid id) => _db.CategoryRepository.Exists(id);
+
+        public bool ExistsAll(IEnumerable<Guid> ids) => _db.CategoryRepository.ExistsAll(ids);
     }
 }

@@ -186,6 +186,7 @@ namespace EventsExpress.Core.Services
             try
             {
                 var result = _db.EventRepository.Insert(ev);
+
                 await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
@@ -233,7 +234,7 @@ namespace EventsExpress.Core.Services
 
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(_db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo,Inventories.UnitOfMeasuring")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)

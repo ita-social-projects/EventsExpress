@@ -12,10 +12,24 @@ import '../layout/colorlib.css';
 import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
+import EventLeaveModal from './event-leave-modal';
+import InventoryList from '../inventory/InventoryList';
 
+const userStatus = {
+    APPROVED: 0,
+    DENIED: 1,
+    PENDING: 2
+};
 
 export default class EventItemView extends Component {
-    state = { edit: false }
+
+    constructor() {
+        super();
+
+        this.state = {
+            edit: false
+        };
+    }
 
     renderCategories = arr => {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
@@ -26,7 +40,7 @@ export default class EventItemView extends Component {
             <div className="d-flex align-items-center border-bottom">
                 <div className='d-flex flex-column'>
                     <IconButton className="text-warning" size="small" disabled >
-                        <i class="fas fa-crown"></i>
+                        <i className="fas fa-crown"></i>
                     </IconButton>
                     <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
                 </div>
@@ -138,15 +152,31 @@ export default class EventItemView extends Component {
     getUserEventStatus = visitor => {
         if (visitor !== undefined) {
             switch (visitor.userStatusEvent) {
-                case 0:
-                    return "Approving participation.";
-                case 1:
-                    return "Denying participation.";
-                case 2:
-                    return "Pending participation.";
+                case userStatus.APPROVED:
+                    return (
+                        <span className="alert alert-success shadow" role="alert">
+                            You are gonna visit.
+                            </span>
+                            );
+                case userStatus.DENIED:
+                    return (
+                        <span className="alert alert-danger shadow" role="alert">
+                            Denied participation.
+                            </span>
+                            );
+                case userStatus.PENDING:
+                    return (
+                        <span className="alert alert-warning shadow" role="alert">
+                            Wait until admin approve your request.
+                            </span>
+                            );
             }
         }
-        return "Not in event.";
+        return (
+            <span className="alert alert-secondary shadow" role="alert">
+                You are not in event yet.
+                </span>
+                );
     }
 
     onEdit = () => {
@@ -167,7 +197,8 @@ export default class EventItemView extends Component {
             user,
             visitors,
             country,
-            city
+            city,
+            inventories
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
@@ -175,6 +206,11 @@ export default class EventItemView extends Component {
             approvedUsers: visitors.filter(x => x.userStatusEvent == 0), 
             deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
             pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
+        };
+        const userStatus = {
+            APPROVED: 0,
+            DENIED: 1,
+            PENDING: 2
         };
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id) != null;
@@ -186,15 +222,13 @@ export default class EventItemView extends Component {
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
         let isMyPrivateEvent = isMyEvent && !isPublic;
-        let isPending = !isMyEvent && visitorsEnum.pendingUsers.find(x => x.id === current_user.id) != null;
-        debugger;
 
         return <>
             <div className="container-fluid mt-1">
                 <div className="row">
                     <div className="col-9">
                         <div className="col-12">
-                            <img src={photoUrl} className="w-100" />
+                            <img src={photoUrl} className="w-100" alt="Event" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
@@ -212,7 +246,7 @@ export default class EventItemView extends Component {
                                     <Moment format="D MMM YYYY" withTitle>
                                         {dateFrom}
                                     </Moment>
-                                    {dateTo != dateFrom &&
+                                    {dateTo !== dateFrom &&
                                         <>-
                                             <Moment format="D MMM YYYY" withTitle>
                                                 {dateTo}
@@ -226,9 +260,7 @@ export default class EventItemView extends Component {
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {canEdit && <button onClick={this.onEdit} className="btn btn-join">Edit</button>}
-                                {canJoin && <button onClick={this.props.onJoin} className=" btn btn-join">Join</button>}
-                                {canLeave && <button onClick={this.props.onLeave} className="btn btn-join">Leave</button>}
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
                                 {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
@@ -246,16 +278,13 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-                                {(!isMyEvent) && 
-                                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                        <label>
-                                            Current status: <span>{this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}</span>
-                                        </label>
-                                    </div>
-                                }
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
+                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <InventoryList inventories={inventories}/>
+                                </div>
+                                
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
@@ -263,6 +292,26 @@ export default class EventItemView extends Component {
                         }
                     </div>
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
+                        {(!isMyEvent) && 
+                            <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="d-flex justify-content-center">
+                                    {this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}
+                                </div>
+                                <br />
+                                {canJoin && 
+                                    <button onClick={this.props.onJoin}
+                                        type="button"
+                                        className="btn btn-success"
+                                        variant="contained"
+                                    >
+                                        Join
+                                    </button>}
+                                {canLeave && 
+                                    <EventLeaveModal data={{}}
+                                        submitLeave={this.props.onLeave} 
+                                        status={false}/>}
+                            </div>
+                        }
                         <EventVisitors data={{}}
                             admins = {user}
                             renderOwners = {this.renderOwners}
