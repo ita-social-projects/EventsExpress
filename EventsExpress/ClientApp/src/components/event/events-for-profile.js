@@ -1,9 +1,6 @@
 ﻿import React, { Component } from 'react';
 import Event from './event-item';
-import Pagination from "react-paginating";
-
-const limit = 2;
-const pageCount = 3;
+import PagePagination from '../shared/pagePagination';
 
 export default class EventsForProfile extends Component {
     constructor() {
@@ -44,99 +41,13 @@ export default class EventsForProfile extends Component {
                 {items}
             </div>
             <br />
-            <ul className="pagination justify-content-center">
-                <Pagination
-                    total={totalPages * limit}
-                    limit={limit}
-                    pageCount={pageCount}
+            {totalPages > 1 &&
+                <PagePagination
                     currentPage={page}
-                >
-                    {({
-                        pages,
-                        currentPage,
-                        hasNextPage,
-                        hasPreviousPage,
-                        previousPage,
-                        nextPage,
-                        totalPages,
-                        getPageItemProps
-                    }) => (
-
-                            <div>
-                                {hasPreviousPage && (
-                                    <button className="btn btn-primary"
-                                        {...getPageItemProps({
-                                            pageValue: 1,
-                                            onPageChange: this.handlePageChange
-                                        })}
-                                    >
-                                        first
-                                    </button>)}
-
-                                {hasPreviousPage && (
-                                    <button className="btn btn-primary"
-
-                                        {...getPageItemProps({
-                                            pageValue: previousPage,
-                                            onPageChange: this.handlePageChange
-                                        })}
-                                    >
-                                        {"<"}
-                                    </button>
-                                )}
-
-                                {pages.map(page => {
-                                    let activePage = null;
-                                    if (currentPage === page) {
-                                        activePage = { backgroundColor: "	#ffffff", color: "#00BFFF" };
-                                    }
-                                    if (totalPages != 1) {
-                                        return (
-                                            <button className="btn btn-primary"
-
-                                                {...getPageItemProps({
-                                                    pageValue: page,
-                                                    key: page,
-                                                    style: activePage,
-                                                    onPageChange: this.handlePageChange
-                                                })}
-                                            >
-                                                {page}
-                                            </button>
-                                        );
-                                    } else {
-
-                                        return (
-                                            <></>
-                                        );
-                                    }
-                                })}
-
-                                {hasNextPage && (
-                                    <button className="btn btn-primary"
-
-                                        {...getPageItemProps({
-                                            pageValue: nextPage,
-                                            onPageChange: this.handlePageChange
-                                        })}
-                                    >
-                                        {">"}
-                                    </button>
-                                )}
-                                {hasNextPage && (
-                                    <button className="btn btn-primary"
-
-                                        {...getPageItemProps({
-                                            pageValue: this.props.totalPages,
-                                            onPageChange: this.handlePageChange
-                                        })}
-                                    >
-                                        last
-                                    </button>)}
-                            </div>
-                        )}
-                </Pagination>
-            </ul>
+                    totalPages={totalPages}
+                    callback={this.handlePageChange}
+                />
+            }
         </>
     }
 }

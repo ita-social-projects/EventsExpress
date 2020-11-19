@@ -3,13 +3,14 @@ import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Button from "@material-ui/core/Button";
-import { renderTextField, renderDatePicker } from '../helpers/helpers';
+import { renderTextField, renderDatePicker, renderCheckbox } from '../helpers/helpers';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
 import periodicity from '../../constants/PeriodicityConstants'
 import { renderMultiselect, renderSelectLocationField, renderTextArea, renderSelectPeriodicityField, renderCheckbox } from '../helpers/helpers';
+import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
 
@@ -91,11 +92,11 @@ class EventForm extends Component {
     }
 
     render() {
-        const { countries, all_categories, initialValues, data, form_values } = this.props;
-        const values = form_values || this.props.initialData;
+        const { countries, form_values, all_categories, data, isCreated } = this.props;
+        let values = form_values || this.props.initialValues;
 
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
+            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
                         ref={(x) => { this.image = x; }}
@@ -160,7 +161,15 @@ class EventForm extends Component {
                             </div>
                         </div>
                     }
-                    <div className="meta-wrap m-2">
+                    <div className="mt-2">
+                        <Field
+                            name='isPublic'
+                            component={renderCheckbox}
+                            defaultValue={data.isPublic}
+                            type="checkbox"
+                            label="Public"
+                        />
+                    </div>                    <div className="meta-wrap m-2">
                         <span>From
                             <Field
                                 name='dateFrom'
@@ -216,6 +225,7 @@ class EventForm extends Component {
                             />
                         </div>
                     }
+                    {isCreated ? null : <Inventory />}
                 </div>
                 <Button
                     fullWidth={true}

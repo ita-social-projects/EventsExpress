@@ -62,7 +62,15 @@ namespace EventsExpress.Core.Services
                 ev.Visitors = new List<UserEvent>();
             }
 
-            ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId });
+            if (ev.IsPublic)
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Approved });
+            }
+            else
+            {
+                ev.Visitors.Add(new UserEvent { EventId = eventId, UserId = userId, UserStatusEvent = UserStatusEvent.Pending });
+            }
+
             await _db.SaveAsync();
 
             return new OperationResult(true);
@@ -94,6 +102,21 @@ namespace EventsExpress.Core.Services
             {
                 return new OperationResult(false, ex.Message, string.Empty);
             }
+        }
+
+        public async Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
+        {
+            var userEvent = _db.UserEventRepository
+                .Get(string.Empty)
+                .Where(x => x.EventId == eventId && x.UserId == userId)
+                .FirstOrDefault();
+
+            userEvent.UserStatusEvent = status;
+            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
+
+            _db.UserEventRepository.Update(userEvent);
+            await _db.SaveAsync();
+            return new OperationResult(true);
         }
 
         public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
@@ -207,6 +230,7 @@ namespace EventsExpress.Core.Services
             try
             {
                 var result = _db.EventRepository.Insert(ev);
+
                 await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
@@ -265,6 +289,7 @@ namespace EventsExpress.Core.Services
             ev.CityId = e.CityId;
             ev.ModifiedBy = e.OwnerId;
             ev.ModifiedDate = DateTime.Today;
+            ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
             {
@@ -315,7 +340,7 @@ namespace EventsExpress.Core.Services
 
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(_db.EventRepository
-                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo,OccurenceEvent")
+                .Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo,Inventories.UnitOfMeasuring")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)

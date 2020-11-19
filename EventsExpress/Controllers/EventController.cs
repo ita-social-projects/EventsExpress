@@ -177,6 +177,44 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method have to approved user on event.
+        /// </summary>
+        /// <param name="userId">Required.</param>
+        /// <param name="eventId">EventId.</param>
+        /// <response code="200">Approving user from event process success.</response>
+        /// <response code="400">If aproving user from event process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ApproveVisitor(Guid userId, Guid eventId)
+        {
+            var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
+            if (res.Successed)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// This method have to denied participation in event.
+        /// </summary>
+        /// <param name="userId">Required.</param>
+        /// <param name="eventId">EventId.</param>
+        /// <response code="200">Denying user from event process success.</response>
+        /// <response code="400">If denying user from event process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<ActionResult> DenyVisitor(Guid userId, Guid eventId)
+        {
+            var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
+            if (res.Successed)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
         /// This method have to add user to category.
         /// </summary>
         /// <param name="userId">Required.</param>

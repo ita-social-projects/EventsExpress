@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
-import SocialShare from '././share/ShareMenu'
+import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
 
@@ -50,6 +50,8 @@ export default class Event extends Component {
         );
     }
 
+    
+
     render() {
         const classes = useStyles;
         const {
@@ -57,6 +59,7 @@ export default class Event extends Component {
             title,
             dateFrom,
             description,
+            isPublic,
             maxParticipants,
             photoUrl,
             categories,
@@ -103,7 +106,7 @@ export default class Event extends Component {
                         title={title}
                     >
                         <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" />
+                            <img src={photoUrl} className="w-100" alt="Event" />
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
@@ -131,12 +134,26 @@ export default class Event extends Component {
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                                {!isPublic && 
+                                    <Tooltip title="Private event">
+                                        <IconButton>
+                                            <Badge color="primary">
+                                                <i className="fa fa-key"></i>
+                                            </Badge>
+                                        </IconButton>
+                                </Tooltip>
+        	                    }
+                                <Link to={`/event/${id}/1`}>
+                                    <IconButton className={classes.button} aria-label="view">
+                                        <i className="fa fa-eye"></i>
+                                    </IconButton>
+                                </Link>
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
                                     ? <EventManagmentWrapper eventItem={this.props.item} />
                                     : null
                                 }
-                                <SocialShare href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
+                                <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
                     </CardActions>

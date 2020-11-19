@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
@@ -14,5 +15,9 @@ namespace EventsExpress.Db.Entities
         public virtual Event Event { get; set; }
 
         public Status Status { get; set; }
+
+        public virtual ICollection<UserEventInventory> Inventories { get; set; }
+
+        public UserStatusEvent UserStatusEvent { get; set; }
     }
 }

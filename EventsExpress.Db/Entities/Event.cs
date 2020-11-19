@@ -16,6 +16,8 @@ namespace EventsExpress.Db.Entities
 
         public DateTime DateTo { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public Guid CityId { get; set; }
 
         public virtual City City { get; set; }
@@ -37,6 +39,8 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventCategory> Categories { get; set; }
 
         public virtual ICollection<Rate> Rates { get; set; }
+
+        public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
     }

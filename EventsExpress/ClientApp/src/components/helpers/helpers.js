@@ -56,6 +56,40 @@ export const validate = values => {
             errors[field] = `Invalid data`;
         }
     })
+    if (values.inventories != null) {
+        const inventoriesArrayErrors = [];
+        values.inventories.forEach((item, index) => {
+            const inventoriesErrors = {};
+            if (!item || !item.itemName) {
+                inventoriesErrors.itemName = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (item.itemName && item.itemName.length > 30) {
+                inventoriesErrors.itemName = 'Invalid length: 1 - 30 symbols';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }            
+            if (!item || !item.needQuantity) {
+                inventoriesErrors.needQuantity = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (item.needQuantity <= 0) {
+                inventoriesErrors.needQuantity = 'Can not be negative';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (!item || !item.unitOfMeasuring) {
+                inventoriesErrors.unitOfMeasuring = {};
+                inventoriesErrors.unitOfMeasuring.id = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+        })
+        if (inventoriesArrayErrors.length) {
+            errors.inventories = inventoriesArrayErrors;
+        }
+    }  
+
+    if (values.maxParticipants && values.maxParticipants < 1) {
+        errors.maxParticipants = `Invalid data`;
+    }
 
     requiredFields.forEach(field => {
         if ('checkOccurence'.checked && !values[field]) {
@@ -224,12 +258,13 @@ export const renderTextField = ({
     defaultValue,
     input,
     rows,
+    fullWidth,
     meta: { touched, invalid, error },
     ...custom
 }) => (
         <TextField
             rows={rows}
-            fullWidth
+            fullWidth={fullWidth === undefined ? true : false}
             label={label}
             placeholder={label}
             error={touched && invalid}

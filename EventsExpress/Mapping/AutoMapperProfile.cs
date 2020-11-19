@@ -96,19 +96,39 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.OccurenceEvent.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.OccurenceEvent.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.OccurenceEvent.EventId == src.Id) ? true : false))
-                .ForMember(dest => dest.PhotoBytes, opts => opts.MapFrom(src => src.Photo))
-                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId));
+                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
+                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringDTO
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })));
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
-                .ForMember(dest => dest.Categories, opt => opt.Ignore());
+                .ForMember(dest => dest.Categories, opt => opt.Ignore())
+                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new Inventory
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuringId = x.UnitOfMeasuring.Id,
+                        })));
 
             CreateMap<EventDTO, EventPreviewDto>()
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count()))
+                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
                 .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
@@ -133,6 +153,7 @@ namespace EventsExpress.Mapping
                         Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@", StringComparison.Ordinal)),
                         Birthday = x.User.Birthday,
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
+                        UserStatusEvent = x.UserStatusEvent,
                     })))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
                 .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
@@ -148,14 +169,39 @@ namespace EventsExpress.Mapping
                     Birthday = src.Owner.Birthday,
                     PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
                     Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
-                }));
+                }))
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDto
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringDto
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })));
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringDTO
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })));
 
             #endregion
 
@@ -238,6 +284,15 @@ namespace EventsExpress.Mapping
             CreateMap<RefreshTokenDTO, RefreshToken>();
             #endregion
 
+            #region INVENTORY MAPPING
+            CreateMap<Inventory, InventoryDTO>().ReverseMap();
+            CreateMap<InventoryDTO, InventoryDto>().ReverseMap();
+            #endregion
+
+            #region UNITOFMEASURING MAPPING
+            CreateMap<UnitOfMeasuring, UnitOfMeasuringDTO>().ReverseMap();
+            CreateMap<UnitOfMeasuringDTO, UnitOfMeasuringDto>().ReverseMap();
+            #endregion
         }
     }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event-list';
+import InternalServerError from '../components/Route guard/500';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';
@@ -14,35 +14,40 @@ import eventHelper from '../components/helpers/eventHelper';
 class EventListWrapper extends Component {
     constructor(props) {
         super(props);
-        this.objQueryParams = Object.create(null);
+        this.objCurrentQueryParams = Object.create(null);
+    }
+
+    componentDidMount() {
+        this.setSearchParamsToEventFilter(this.props.location.search);
+        this.executeSearchEvents();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.hasUpdateSearchParams()) {
-            this.objQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        if (this.hasUpdateSearchParams(objFilterParams)) {
+            this.objCurrentQueryParams = objFilterParams;
             this.executeSearchEvents();
         }
     }
 
-    componentDidMount() {
-        this.objQueryParams = queryStringParse(this.props.location.search);
-
-        Object.entries(this.objQueryParams).forEach(function ([key, value]) {
-            this.props.events.filter[key] = value;
-        }.bind(this));
-
-        this.executeSearchEvents();
-    }
-
-    hasUpdateSearchParams = function () {
-        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
-        return !eventHelper.compareObjects(objFilterParams, this.objQueryParams);
+    hasUpdateSearchParams = objFilterParams => {
+        return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
     }
 
     executeSearchEvents = () => {
         const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
         this.props.get_events(queryString);
         history.push(`${this.props.location.pathname}${queryString}`);
+    }
+
+    setSearchParamsToEventFilter = search => {
+        this.objCurrentQueryParams = queryStringParse(search);
+
+        Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
+            this.props.events.filter[key] = value;
+        }.bind(this));
+
+        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
     }
 
     render() {
@@ -54,13 +59,7 @@ class EventListWrapper extends Component {
         const errorMessage = isError.ErrorCode == '403'
             ? <Forbidden />
             : isError.ErrorCode == '500'
-                ? <Redirect
-                    from="*"
-                    to={{
-                        pathname: "/home/events",
-                        search: eventHelper.getQueryStringByEventFilter(this.props.events.filter),
-                    }}
-                />
+                ? <InternalServerError />
                 : isError.ErrorCode == '401'
                     ? <Unauthorized />
                     : isError.ErrorCode == '400'

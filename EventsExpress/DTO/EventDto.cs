@@ -41,8 +41,12 @@ namespace EventsExpress.DTO
 
         public Guid CountryId { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public IEnumerable<CategoryDto> Categories { get; set; }
 
         public IEnumerable<UserPreviewDto> Visitors { get; set; }
+
+        public IEnumerable<InventoryDto> Inventories { get; set; }
     }
 }

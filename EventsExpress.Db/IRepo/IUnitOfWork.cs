@@ -35,7 +35,13 @@ namespace EventsExpress.Db.IRepo
 
         IMessageRepository MessageRepository { get; }
 
+        IInventoryRepository InventoryRepository { get; }
+
+        IUnitOfMeasuringRepository UnitOfMeasuringRepository { get; }
+
         IEventStatusHistoryRepository EventStatusHistoryRepository { get; }
+
+        IUserEventRepository UserEventRepository { get; }
 
         Task SaveAsync();
     }

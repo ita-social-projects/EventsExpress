@@ -44,8 +44,13 @@ namespace EventsExpress.Core.DTOs
 
         public City City { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public IEnumerable<CategoryDTO> Categories { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
+
+        public IEnumerable<InventoryDTO> Inventories { get; set; }
+
     }
 }
