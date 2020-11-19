@@ -6,6 +6,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 
@@ -16,6 +17,9 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IMediator> mockMediator;
+        private static Mock<IAuthService> mockAuthService;
+        private static Mock<IHttpContextAccessor> httpContextAccessor;
+
         private EventService service;
         private List<Event> events;
 
@@ -30,7 +34,10 @@ namespace EventsExpress.Test.ServiceTests
                 MockUnitOfWork.Object,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object);
+                mockPhotoService.Object,
+                mockAuthService.Object,
+                httpContextAccessor.Object
+                );
 
             events = new List<Event>
             {

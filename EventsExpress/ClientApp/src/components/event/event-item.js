@@ -77,19 +77,17 @@ export default class Event extends Component {
                 >
                     <CardHeader
                         avatar={
-                          <Tooltip title={owner.username}>
-                              <IconButton>
-                                    <Link to={`/user/${owner.id}`} classname="btn-custom">
-                                        <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
-                                            <CustomAvatar
-                                                classname={classes.avatar}
-                                                photourl={owner.photourl}
-                                                name={owner.username}
-                                            />
-                                        </Badge>
-                                    </Link>
-                              </IconButton>
-                          </Tooltip>
+                            <Tooltip title={owner.username}>
+                                <Link to={`/user/${owner.id}`} classname="btn-custom">
+                                    <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
+                                        <CustomAvatar
+                                            classname={classes.avatar}
+                                            photourl={owner.photourl}
+                                            name={owner.username}
+                                        />
+                                    </Badge>
+                                </Link>
+                            </Tooltip>
                         }
 
                         action={

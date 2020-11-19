@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import Spinner from '../components/spinner';
 import get_event from '../actions/event-item-view';
-import { join, leave, resetEvent, cancel_event, approveUser } from '../actions/event-item-view';
+import { join, leave, resetEvent, cancel_event, approveUser, deleteFromOwners } from '../actions/event-item-view';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    
@@ -31,6 +31,9 @@ class EventItemViewWrapper extends Component{
         this.props.approveUser(userId, this.props.event.data.id, buttonAction);
     }
 
+    onDeleteFromOwners = (userId) => {
+        this.props.deleteFromOwners(userId);
+    }
     render(){   
         const { isPending } = this.props.event;
   
@@ -43,7 +46,8 @@ class EventItemViewWrapper extends Component{
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onApprove={this.onApprove}
-                current_user={this.props.current_user} 
+                onDeleteFromOwners={this.props.onDeleteFromOwners}
+                current_user={this.props.current_user}
             />
     }
 }

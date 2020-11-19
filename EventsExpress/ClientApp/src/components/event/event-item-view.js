@@ -12,7 +12,7 @@ import '../layout/colorlib.css';
 import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
-
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default class EventItemView extends Component {
     state = { edit: false }
@@ -21,19 +21,30 @@ export default class EventItemView extends Component {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
     }
 
-    renderOwners = arr => {
+    renderOwners = (arr, isMyEvent, current_user_id) => {
         return arr.map(x => (
-            <Link to={'/user/' + x.id} className="btn-custom">
-                <div className="d-flex align-items-center border-bottom">
-                    <div className='d-flex flex-column'>
-                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+            <div>
+                <div className="d-flex align-items-center border-bottom w-100">
+                    <div className="flex-grow-1">
+                        <Link to={'/user/' + x.id} className="btn-custom">
+                            <div className="d-flex align-items-center border-bottom">
+                                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                                <div>
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
+                                </div>
+                            </div>
+                        </Link>
                     </div>
-                    <div>
-                    <h5>{x.username}</h5>
-                    {'Age: ' + this.getAge(x.birthday)}
-                    </div>
+                    {(isMyEvent && x.id != current_user_id) &&
+                        <div>
+                            <IconButton aria-label="delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+                    }
                 </div>
-            </Link>
+            </div>
         ));
     }
 
@@ -178,7 +189,7 @@ export default class EventItemView extends Component {
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
-        let isMyEvent = owners.find(x => x.id === current_user.id);
+        let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
@@ -186,7 +197,6 @@ export default class EventItemView extends Component {
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
         let isMyPrivateEvent = isMyEvent && !isPublic;
         let isPending = !isMyEvent && visitorsEnum.pendingUsers.find(x => x.id === current_user.id) != null;
-        debugger;
 
         return <>
             <div className="container-fluid mt-1">
@@ -269,6 +279,8 @@ export default class EventItemView extends Component {
                             visitors = {visitorsEnum}
                             renderApprovedUsers = {this.renderApprovedUsers}
                             isMyPrivateEvent = {isMyPrivateEvent}
+                            isMyEvent = {isMyEvent}
+                            current_user_id = {current_user.id}
                             renderPendingUsers = {this.renderPendingUsers}
                             renderDeniedUsers = {this.renderDeniedUsers}
                         />
