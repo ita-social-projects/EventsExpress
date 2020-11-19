@@ -1,4 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
+import { SetAlert } from './alert';
 
 export const SET_CANCEL_NEXT_EVENT_SUCCESS = "SET_CANCEL_NEXT_EVENT_SUCCESS";
 export const SET_CANCEL_NEXT_EVENT_PENDING = "SET_CANCEL_NEXT_EVENT_PENDING";
@@ -16,7 +17,9 @@ export default function cancel_next_occurenceEvent(eventId) {
       res.then(response => {
         if(response.error == null){
             dispatch(setCancelNextOccurenceEventSuccess(true));
-            response.text().then(x => { dispatch(cancelNextOccurenceEventWasCreated(x));} );
+            response.json().then(x => { 
+              dispatch(cancelNextOccurenceEventWasCreated(x));
+              dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));} );
           }else{
             dispatch(setCancelNextOccurenceEventError(response.error));
           }

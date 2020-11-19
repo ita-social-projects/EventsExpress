@@ -1,4 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
+import { SetAlert } from './alert';
 
 export const SET_CANCEL_ALL_EVENT_SUCCESS = "SET_CANCEL_ALL_EVENT_SUCCESS";
 export const SET_CANCEL_ALL_EVENT_PENDING = "SET_CANCEL_ALL_EVENT_PENDING";
@@ -16,7 +17,8 @@ export default function cancel_all_occurenceEvent(eventId) {
       res.then(response => {
         if(response.error == null){
             dispatch(setCancelAllOccurenceEventsSuccess(true));
-            response.text().then(x => { dispatch(cancelAllOccurenceEventsWasCreated(x));} );
+            response.json().then(x => { dispatch(cancelAllOccurenceEventsWasCreated(x));
+            dispatch(SetAlert({ variant: 'success', message: 'Your events was canceled!'}));} );
           }else{
             dispatch(setCancelAllOccurenceEventsError(response.error));
           }

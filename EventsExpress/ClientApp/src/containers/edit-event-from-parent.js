@@ -12,12 +12,11 @@ import {
     setEventFromParentSuccess
 }
     from '../actions/edit-event-from-parent';
-import { resetEvent } from '../actions/event-item-view';
 import * as moment from 'moment';
 import get_categories from '../actions/category-list';
 import { Redirect } from 'react-router-dom'
 
-class EditFromParentEventWrapper extends Component {
+class EditFromParentEvent extends Component {
 
     state = {
         redirect: false
@@ -28,12 +27,12 @@ class EditFromParentEventWrapper extends Component {
         this.props.get_categories();
         this.props.get_cities(this.props.initialValues.countryId);
     }
+
     componentDidUpdate = () => {
         if (!this.props.edit_event_from_parent_status.eventFromParentError && 
             this.props.edit_event_from_parent_status.isEventFromParentSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.props.alert({ variant: 'success', message: 'Your event was created!' });
             this.setState({
                 redirect: true
             })
@@ -69,12 +68,6 @@ class EditFromParentEventWrapper extends Component {
         this.props.get_cities(e.target.value);
     }
 
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            return <Redirect to='/home/events' />
-        }
-    }
-
     render() {
         let data = {
             ...this.props.initialValues,
@@ -85,7 +78,6 @@ class EditFromParentEventWrapper extends Component {
         }
 
         return <>
-            {this.renderRedirect()}
             <EventForm
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
@@ -96,6 +88,8 @@ class EditFromParentEventWrapper extends Component {
                 haveReccurentCheckBox={false}
                 disabledDate={true}
                 isCreated={true} />
+            {this.state.redirect &&
+            <Redirect to='/home/events' />}
         </>
     }
 }
@@ -126,4 +120,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEventWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEvent);

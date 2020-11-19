@@ -16,6 +16,7 @@ class EditEventWrapper extends Component {
         this.props.get_categories();
         this.props.get_cities(this.props.initialValues.countryId);
     }
+    
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();

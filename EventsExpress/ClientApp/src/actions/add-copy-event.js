@@ -1,5 +1,4 @@
 import EventsExpressService from '../services/EventsExpressService';
-import history from '../history';
 import { SetAlert } from './alert';
 
 export const SET_COPY_EVENT_SUCCESS = "SET_COPY_EVENT_SUCCESS";
@@ -20,8 +19,7 @@ export default function add_copy_event(eventId) {
                 dispatch(setCopyEventSuccess(true));
                 response.json().then(x => { 
                     dispatch(copyEventWasCreated(x));
-                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));
-                    history.push(`/event/${x.id}/1`); });
+                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));});
             } else {
                 dispatch(setCopyEventError(response.error));
             }

@@ -1,4 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
+import { SetAlert } from './alert';
 
 export const SET_EVENT_FROM_PARENT_SUCCESS = "SET_EVENT_FROM_PARENT_SUCCESS";
 export const SET_EVENT_FROM_PARENT_PENDING = "SET_EVENT_FROM_PARENT_PENDING";
@@ -16,7 +17,9 @@ export default function edit_event_from_parent(data) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(setEventFromParentSuccess(true));
-                response.text().then(x => { dispatch(eventFromParentWasCreated(x)); });
+                response.json().then(x => { 
+                    dispatch(eventFromParentWasCreated(x));
+                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!' })); });
             } else {
                 dispatch(setEventFromParentError(response.error));
             }
