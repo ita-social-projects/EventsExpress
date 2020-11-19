@@ -2,12 +2,12 @@
 
 import {
     SET_COPY_EVENT_ERROR, SET_COPY_EVENT_PENDING, SET_COPY_EVENT_SUCCESS
-}from '../actions/add-copy-event';
+} from '../actions/add-copy-event';
 
 export const reducer = (state = initialState.add_copy_event, action) => {
 
-    switch(action.type){
-        
+    switch (action.type) {
+
         case SET_COPY_EVENT_ERROR:
             return {
                 ...state,

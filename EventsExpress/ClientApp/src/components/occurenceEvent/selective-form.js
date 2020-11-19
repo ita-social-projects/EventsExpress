@@ -112,7 +112,7 @@ class SelectiveForm extends Component {
     resetForm = () => {
         this.setState({
             edit: false,
-            show : false,
+            show: false,
             submit: false
         });
     }
@@ -125,7 +125,7 @@ class SelectiveForm extends Component {
     }
 
     render() {
-        console.log("render", this.props);
+
         return (
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 <div className="row">
@@ -161,11 +161,11 @@ class SelectiveForm extends Component {
                             To create the event with editing you can choose second option. Click Cancel Once to cancel the next event, to cancel all events click Cancel.</Typography>
                     </Popover>
                 </div>
-                    <OccurenceEventModal
-                        cancelHandler={this.cancelHandler}
-                        message={this.state.message} show={this.state.show}
-                        submitHandler={this.state.submitHandler} />
-                    {this.state.edit && <EditFromParentEventWrapper/>}
+                <OccurenceEventModal
+                    cancelHandler={this.cancelHandler}
+                    message={this.state.message} show={this.state.show}
+                    submitHandler={this.state.submitHandler} />
+                {this.state.edit && <EditFromParentEventWrapper />}
             </div>
         );
     }

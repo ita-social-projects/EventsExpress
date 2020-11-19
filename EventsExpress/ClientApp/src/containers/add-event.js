@@ -41,7 +41,7 @@ class AddEventWrapper extends Component {
         if (!values.dateFrom) {
             values.dateFrom = new Date(Date.now());
         }
-            
+
         if (!values.dateTo) {
             values.dateTo = new Date(values.dateFrom);
         }
@@ -50,8 +50,6 @@ class AddEventWrapper extends Component {
     }
 
     onChangeCountry = (e) => {
-        console.log("e.target", e.target.value);
-        console.log("chnge country props", this.props);
         this.props.get_cities(e.target.value);
     }
 
@@ -68,7 +66,7 @@ class AddEventWrapper extends Component {
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
-                onSubmit={this.onSubmit} 
+                onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 form_values={this.props.form_values}
                 disabledDate={false}

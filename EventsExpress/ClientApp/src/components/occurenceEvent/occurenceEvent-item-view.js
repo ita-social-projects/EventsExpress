@@ -11,14 +11,13 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 import { renderPeriod } from '../occurenceEvent/render-period'
 import { useStyles } from '../occurenceEvent/card-style-const'
-import  SelectiveForm  from '../occurenceEvent/selective-form'
+import SelectiveForm from '../occurenceEvent/selective-form'
 import '../layout/colorlib.css';
 import get_event from '../../actions/event-item-view';
 
 class OccurenceEventItemView extends Component {
 
-    componentWillMount(){
-        console.log("oeiw", this.props);
+    componentWillMount() {
         this.props.get_event(this.props.occurenceEvent.data.eventId);
     }
 
@@ -55,7 +54,7 @@ class OccurenceEventItemView extends Component {
 
 
     render() {
-        console.log("occur-item-view",this.props);
+
         const classes = useStyles;
         const { current_user } = this.props;
         const {
@@ -67,7 +66,7 @@ class OccurenceEventItemView extends Component {
             event,
             eventId } = this.props.occurenceEvent.data;
         const period = renderPeriod(periodicity, frequency);
-        console.log("item-view", this.props);
+
         return <>
             <div className="container-fluid mt-1">
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
@@ -97,9 +96,9 @@ class OccurenceEventItemView extends Component {
                     </Card>
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                {current_user.id == event.ownerId &&
-                    <SelectiveForm eventId={eventId} event={this.props.event}/>
-                }
+                    {current_user.id == event.ownerId &&
+                        <SelectiveForm eventId={eventId} event={this.props.event} />
+                    }
                 </div>
             </div>
         </>

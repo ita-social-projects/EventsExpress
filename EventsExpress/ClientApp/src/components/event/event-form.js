@@ -55,7 +55,7 @@ class EventForm extends Component {
         if (status && status.isEventSuccess) {
             this.resetForm();
         }
-    }   
+    }
 
     componentWillUnmount() {
         this.resetForm();
@@ -86,15 +86,13 @@ class EventForm extends Component {
         });
     }
 
-    componentWillMount(){
-        console.log("will mount", this.props)
+    componentWillMount() {
         this.resetForm();
     }
 
     render() {
         const { countries, all_categories, initialValues, data, form_values } = this.props;
         const values = form_values || this.props.initialData;
-        console.log("event-form", this.props);
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
@@ -133,17 +131,17 @@ class EventForm extends Component {
                             label="Max Count Of Participants"
                         />
                     </div>
-                    {this.props.haveReccurentCheckBox  &&
+                    {this.props.haveReccurentCheckBox &&
                         <div className="mt-2">
-                        <br />
-                        <Field
-                            type="checkbox"
-                            label="Reccurent Event"
-                            name='isReccurent'
-                            component={renderCheckbox}
-                            checked={this.state.checked}
-                            onChange={this.handleChange} />
-                    </div>
+                            <br />
+                            <Field
+                                type="checkbox"
+                                label="Reccurent Event"
+                                name='isReccurent'
+                                component={renderCheckbox}
+                                checked={this.state.checked}
+                                onChange={this.handleChange} />
+                        </div>
                     }
                     {this.state.checked &&
                         <div>
@@ -167,7 +165,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 component={renderDatePicker}
-                                disabled={this.props.disabledDate ? true: false}
+                                disabled={this.props.disabledDate ? true : false}
                             />
                         </span>
                         {values.dateFrom != null &&
@@ -177,7 +175,7 @@ class EventForm extends Component {
                                     defaultValue={values.dateFrom}
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
-                                    disabled={this.props.disabledDate  ? true: false}
+                                    disabled={this.props.disabledDate ? true : false}
                                 />
                             </span>
                         }

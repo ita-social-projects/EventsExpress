@@ -122,9 +122,8 @@ export default class EventsExpressService {
             file.append('Frequency', data.frequency);
             file.append('Periodicity', data.periodicity);
         }
-        
-        if(data.photoId)
-        {
+
+        if (data.photoId) {
             file.append('PhotoId', data.photoId);
         }
 
@@ -161,7 +160,7 @@ export default class EventsExpressService {
             file.append('Periodicity', data.periodicity);
         }
 
-        if(data.photoId) {
+        if (data.photoId) {
             file.append('PhotoId', data.photoId);
         }
 
@@ -173,12 +172,11 @@ export default class EventsExpressService {
         file.append('DateFrom', new Date(data.dateFrom).toDateString());
         file.append('DateTo', new Date(data.dateTo).toDateString());
 
-
         let i = 0;
         data.categories.map(x => {
             return file.append(`Categories[${i++}].Id`, x.id);
         });
-        console.log("service", data);
+
         const res = await this.setResourceWithData('event/EditEventFromParent', file);
         return !res.ok
             ? { error: await res.text() }
@@ -358,7 +356,7 @@ export default class EventsExpressService {
         file.append('LastRun', data.lastRun);
         file.append('NextRun', data.nextRun);
         file.append('Periodicity', data.periodicity);
-        file.append('IsActive', data.isActive);      
+        file.append('IsActive', data.isActive);
 
         const res = await this.setResourceWithData('occurenceEvent/edit', file);
         return !res.ok

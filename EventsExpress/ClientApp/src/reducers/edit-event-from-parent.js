@@ -2,12 +2,12 @@
 
 import {
     SET_EVENT_FROM_PARENT_ERROR, SET_EVENT_FROM_PARENT_PENDING, SET_EVENT_FROM_PARENT_SUCCESS
-}from '../actions/edit-event-from-parent';
+} from '../actions/edit-event-from-parent';
 
 export const reducer = (state = initialState.edit_event_from_parent, action) => {
 
-    switch(action.type){
-        
+    switch (action.type) {
+
         case SET_EVENT_FROM_PARENT_ERROR:
             return {
                 ...state,

@@ -10,45 +10,45 @@ const api_serv = new EventsExpressService();
 export default function add_copy_event(eventId) {
 
     return dispatch => {
-      dispatch(setCopyEventPending(true));
-  
-      const res = api_serv.setCopyEvent(eventId);
-      res.then(response => {
-        if(response.error == null){
-            dispatch(setCopyEventSuccess(true));
-            response.text().then(x => { dispatch(copyEventWasCreated(x));} );
-          }else{
-            dispatch(setCopyEventError(response.error));
-          }
+        dispatch(setCopyEventPending(true));
+
+        const res = api_serv.setCopyEvent(eventId);
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setCopyEventSuccess(true));
+                response.text().then(x => { dispatch(copyEventWasCreated(x)); });
+            } else {
+                dispatch(setCopyEventError(response.error));
+            }
         });
     }
-  }
-
-function copyEventWasCreated(eventId){
-  return{
-    type: EVENT_COPY_WAS_CREATED,
-    payload: eventId
-  }
 }
 
-  export function setCopyEventSuccess(eventId) {
+function copyEventWasCreated(eventId) {
     return {
-      type: SET_COPY_EVENT_SUCCESS,
-      payload: eventId
+        type: EVENT_COPY_WAS_CREATED,
+        payload: eventId
+    }
+}
+
+export function setCopyEventSuccess(eventId) {
+    return {
+        type: SET_COPY_EVENT_SUCCESS,
+        payload: eventId
     };
-  }
+}
 
 export function setCopyEventPending(eventId) {
-  return {
-    type: SET_COPY_EVENT_PENDING,
-    payload: eventId
-  };
+    return {
+        type: SET_COPY_EVENT_PENDING,
+        payload: eventId
+    };
 }
 
 export function setCopyEventError(eventId) {
-  return {
-    type: SET_COPY_EVENT_ERROR,
-    payload: eventId
-  };
+    return {
+        type: SET_COPY_EVENT_ERROR,
+        payload: eventId
+    };
 }
 

@@ -62,7 +62,7 @@ class EditFromParentEventWrapper extends Component {
                 .add(new moment(this.props.occurenceEvent.nextRun)
                     .diff(new moment(this.props.initialValues.dateFrom), 'days'), 'days')
         }
-        console.log("edit", this.props);
+
         return <>
             <EventForm
                 all_categories={this.props.all_categories}

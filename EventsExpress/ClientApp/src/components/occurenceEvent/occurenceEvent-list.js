@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reset_occurenceEvents} from '../../actions/occurenceEvent-list';
+import { reset_occurenceEvents } from '../../actions/occurenceEvent-list';
 import OccurenceEvent from './occurenceEvent-item';
 
 const limit = 2;
@@ -19,7 +19,7 @@ class OccurenceEventList extends Component {
 
     render() {
         const items = this.renderItems(this.props.data_list);
-        const {data_list } = this.props;
+        const { data_list } = this.props;
 
         return <>
             <div className="row">

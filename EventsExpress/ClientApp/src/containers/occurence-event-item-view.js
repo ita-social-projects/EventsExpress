@@ -20,8 +20,8 @@ class OccurenceEventItemViewWrapper extends Component {
     render() {
         const { isPending } = this.props.occurenceEvent;
         return isPending
-        ? <Spinner />
-        :<OccurenceEventItemView 
+            ? <Spinner />
+            : <OccurenceEventItemView
                 occurenceEvent={this.props.occurenceEvent}
                 match={this.props.match}
                 event={this.props.event}

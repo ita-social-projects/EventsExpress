@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { renderPeriod } from '../occurenceEvent/render-period'
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
