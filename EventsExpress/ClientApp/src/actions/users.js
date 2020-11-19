@@ -5,6 +5,7 @@ export const GET_USERS_PENDING = "GET_USERS_PENDING";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_ERROR = "GET_USERS_ERROR";
 export const RESET_USERS = "RESET_USERS";
+export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
 
 const api_serv = new EventsExpressService();
 
@@ -21,6 +22,12 @@ export function get_users(filters) {
                 dispatch(getUsersError(response.error));
             }
         });
+    }
+}
+
+export function change_Filter(filters) {
+    return dispatch => {
+        dispatch(changeFilters(filters));
     }
 }
 
@@ -50,6 +57,13 @@ function getUsersPending(data) {
 function getUsers(data) {
     return {
         type: GET_USERS_SUCCESS,
+        payload: data
+    }
+}
+
+function changeFilters(data) {
+    return {
+        type: CHANGE_USERS_FILTER,
         payload: data
     }
 }

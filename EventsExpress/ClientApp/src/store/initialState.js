@@ -75,6 +75,7 @@ const initialState = {
         isPending: true,
         isError: false,
         editedUser: null,
+        filter: null,
         data: {
             items: [],
             pageViewModel: {}

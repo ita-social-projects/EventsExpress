@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS } from '../actions/users';
+import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users';
 import { blockUser, unBlockUser, changeUserRole } from '../actions/user';
 
 export const reducer = (state = initialState.users, action) => {
@@ -69,6 +69,13 @@ export const reducer = (state = initialState.users, action) => {
             });
             return newState;
         }
+
+        case CHANGE_USERS_FILTER: {
+                return {
+                    ...state,
+                    filter: action.payload
+                }
+            }
 
         default:
             return state;
