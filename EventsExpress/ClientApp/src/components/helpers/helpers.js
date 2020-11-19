@@ -104,7 +104,7 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
     />
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime, disabled }) => {
     value = value || defaultValue || new Date();
     minValue = minValue || new Date();
 
@@ -112,6 +112,7 @@ export const renderDatePicker = ({ input: { onChange, value }, defaultValue, min
         onChange={onChange}
         minDate={new Date(minValue)}
         selected={new Date(value) || new Date()}
+        disabled={disabled}
     />
 }
 

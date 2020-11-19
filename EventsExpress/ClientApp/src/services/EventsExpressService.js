@@ -122,6 +122,11 @@ export default class EventsExpressService {
             file.append('Frequency', data.frequency);
             file.append('Periodicity', data.periodicity);
         }
+        
+        if(data.photoId)
+        {
+            file.append('PhotoId', data.photoId);
+        }
 
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -136,6 +141,52 @@ export default class EventsExpressService {
             return file.append(`Categories[${i++}].Id`, x.id);
         });
         const res = await this.setResourceWithData('event/edit', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setEventFromParent = async (data) => {
+        let file = new FormData();
+        if (data.id) {
+            file.append('Id', data.id);
+        }
+
+        if (data.image != null) {
+            file.append('Photo', data.image.file);
+        }
+
+        if (data.isReccurent) {
+            file.append('Frequency', data.frequency);
+            file.append('Periodicity', data.periodicity);
+        }
+
+        if(data.photoId) {
+            file.append('PhotoId', data.photoId);
+        }
+
+        file.append('Title', data.title);
+        file.append('Description', data.description);
+        file.append('CityId', data.cityId);
+        file.append('User.Id', data.user_id);
+        file.append('MaxParticipants', data.maxParticipants);
+        file.append('DateFrom', new Date(data.dateFrom).toDateString());
+        file.append('DateTo', new Date(data.dateTo).toDateString());
+
+
+        let i = 0;
+        data.categories.map(x => {
+            return file.append(`Categories[${i++}].Id`, x.id);
+        });
+        console.log("service", data);
+        const res = await this.setResourceWithData('event/EditEventFromParent', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setCopyEvent = async (eventId) => {
+        const res = await this.setResourceWithData(`event/CreateEventFromParent/?eventId=${eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -307,9 +358,23 @@ export default class EventsExpressService {
         file.append('LastRun', data.lastRun);
         file.append('NextRun', data.nextRun);
         file.append('Periodicity', data.periodicity);
-        file.append('IsActive', data.isActive);
+        file.append('IsActive', data.isActive);      
 
         const res = await this.setResourceWithData('occurenceEvent/edit', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setNextOccurenceEventCancel = async (eventId) => {
+        const res = await this.setResourceWithData(`occurenceEvent/CancelNextEvent?eventId=${eventId}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setOccurenceEventsCancel = async (eventId) => {
+        const res = await this.setResourceWithData(`occurenceEvent/CancelAllEvents?eventId=${eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;

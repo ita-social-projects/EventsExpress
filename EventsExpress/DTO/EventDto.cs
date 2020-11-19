@@ -27,6 +27,8 @@ namespace EventsExpress.DTO
 
         public IFormFile Photo { get; set; }
 
+        public Guid PhotoId { get; set; }
+
         public string PhotoUrl { get; set; }
 
         public UserPreviewDto User { get; set; }

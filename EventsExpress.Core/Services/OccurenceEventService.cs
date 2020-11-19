@@ -32,9 +32,27 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
+        public async Task<OperationResult> CancelEvents(Guid eventId)
+        {
+            var eventDTO = OccurenceEventByEventId(eventId);
+            eventDTO.IsActive = false;
+            return await Edit(eventDTO);
+        }
+
+        public async Task<OperationResult> CancelNextEvent(Guid eventId)
+        {
+            var eventDTO = OccurenceEventByEventId(eventId);
+            eventDTO.LastRun = eventDTO.NextRun;
+            eventDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(eventDTO.Periodicity, eventDTO.Frequency, eventDTO.LastRun);
+            return await Edit(eventDTO);
+        }
+
         public async Task<OperationResult> Create(OccurenceEventDTO eventDTO)
         {
             var ev = _mapper.Map<OccurenceEventDTO, OccurenceEvent>(eventDTO);
+            ev.CreatedBy = eventDTO.Event.OwnerId;
+            ev.CreatedDate = DateTime.Today;
 
             try
             {
@@ -100,7 +118,7 @@ namespace EventsExpress.Core.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var events = _db.OccurenceEventRepository.Get().Where(x => x.LastRun == DateTime.Today);
+                var events = _db.OccurenceEventRepository.Get().Where(x => x.LastRun == DateTime.Today && x.IsActive == true);
 
                 try
                 {
@@ -127,5 +145,10 @@ namespace EventsExpress.Core.Services
 
             return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
         }
+
+        public OccurenceEventDTO OccurenceEventByEventId(Guid eventId) =>
+            _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
+                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+                .FirstOrDefault(x => x.EventId == eventId));
     }
 }

@@ -74,6 +74,59 @@ namespace EventsExpress.Controllers
             var result = model.Id == Guid.Empty
                 ? null
                 : await _occurenceEventService.Edit(_mapper.Map<OccurenceEventDTO>(model));
+
+            if (result.Successed)
+            {
+                return Ok(result.Property);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Required.</param>
+        /// <response code="200">Cancel All Events proces success.</response>
+        /// <response code="400">Cancel All Events process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CancelAllEvents(Guid eventId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = eventId == Guid.Empty
+                ? null
+                : await _occurenceEventService.CancelEvents(eventId);
+
+            if (result.Successed)
+            {
+                return Ok(result.Property);
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Required.</param>
+        /// <response code="200">Cancel Next Event event proces success.</response>
+        /// <response code="400">Cancel Next Event process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CancelNextEvent(Guid eventId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = eventId == Guid.Empty
+                ? null
+                : await _occurenceEventService.CancelNextEvent(eventId);
+
             if (result.Successed)
             {
                 return Ok(result.Property);

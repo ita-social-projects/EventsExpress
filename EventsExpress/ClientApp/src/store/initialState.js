@@ -124,10 +124,30 @@ const initialState = {
         isEventSuccess: false,
         eventError: null
     },
+    add_copy_event: {
+        isCopyEventPending: false,
+        isCopyEventSuccess: false,
+        copyEventError: null
+    },
+    edit_event_from_parent: {
+        isEventFromParentPending: false,
+        isEventFromParentSuccess: false,
+        eventFromParentError: null
+    },
     add_occurenceEvent: {
         isOccurenceEventPending: false,
         isOccurenceEventSuccess: false,
         occurenceEventError: null
+    },
+    cancel_next_occurenceEvent: {
+        isCancelNextOccurenceEventPending: false,
+        isCancelNextOccurenceEventSuccess: false,
+        cancelNextOccurenceEventError: null
+    },
+    cancel_occurenceEvents: {
+        isCancelOccurenceEventsPending: false,
+        isCancelOccurenceEventsSuccess: false,
+        cancelOccurenceEventsError: null
     },
     events: {
         isPending: true,

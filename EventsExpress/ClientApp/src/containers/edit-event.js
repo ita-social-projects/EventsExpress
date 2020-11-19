@@ -58,9 +58,9 @@ class EditEventWrapper extends Component {
                 countries={this.props.countries.data}
                 initialValues={this.props.initialValues}
                 form_values={this.props.form_values}
-                Event={{}}
                 checked={this.props.initialValues.isReccurent}
                 haveReccurentCheckBox={false}
+                disabledDate={false}
                 isCreated={true} />
         </>
     }

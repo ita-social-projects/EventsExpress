@@ -50,6 +50,13 @@ class EventForm extends Component {
         }
     }
 
+    componentDidUpdate = () => {
+        let status = this.props.addEventStatus;
+        if (status && status.isEventSuccess) {
+            this.resetForm();
+        }
+    }   
+
     componentWillUnmount() {
         this.resetForm();
     }
@@ -79,13 +86,15 @@ class EventForm extends Component {
         });
     }
 
+    componentWillMount(){
+        console.log("will mount", this.props)
+        this.resetForm();
+    }
+
     render() {
         const { countries, all_categories, initialValues, data, form_values } = this.props;
         const values = form_values || this.props.initialData;
         console.log("event-form", this.props);
-        if (this.props.Event.isEventSuccess) {
-            this.resetForm();
-        }
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
@@ -158,15 +167,17 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 component={renderDatePicker}
+                                disabled={this.props.disabledDate ? true: false}
                             />
                         </span>
-                        {initialValues.dateFrom != null &&
+                        {values.dateFrom != null &&
                             <span>To
                                 <Field
                                     name='dateTo'
-                                    defaultValue={initialValues.dateFrom}
-                                    minValue={initialValues.dateFrom}
+                                    defaultValue={values.dateFrom}
+                                    minValue={values.dateFrom}
                                     component={renderDatePicker}
+                                    disabled={this.props.disabledDate  ? true: false}
                                 />
                             </span>
                         }

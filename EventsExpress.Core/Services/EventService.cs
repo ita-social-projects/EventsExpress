@@ -178,13 +178,21 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-            try
+
+            if (eventDTO.Photo == null)
             {
-                ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
+                ev.PhotoId = eventDTO.PhotoId;
             }
-            catch
+            else
             {
-                return new OperationResult(false, "Invalid file", string.Empty);
+                try
+                {
+                    ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
+                }
+                catch (ArgumentException)
+                {
+                    return new OperationResult(false, "Invalid file", string.Empty);
+                }
             }
 
             var eventCategories = eventDTO.Categories?
@@ -210,6 +218,35 @@ namespace EventsExpress.Core.Services
 
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
                 return new OperationResult(true, "Create new Event", result.Id.ToString());
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, string.Empty);
+            }
+        }
+
+        public async Task<OperationResult> CreateNextEvent(Guid eventId)
+        {
+            var eventDTO = EventById(eventId);
+            var occurenceEventDTO = _occurenceEventService.OccurenceEventByEventId(eventId);
+
+            var ticksDiff = eventDTO.DateTo.Ticks - eventDTO.DateFrom.Ticks;
+            eventDTO.Id = Guid.Empty;
+            eventDTO.IsReccurent = false;
+            eventDTO.DateFrom = occurenceEventDTO.NextRun;
+            eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
+
+            occurenceEventDTO.ModifiedBy = eventDTO.OwnerId;
+            occurenceEventDTO.ModifiedDate = DateTime.Today;
+            occurenceEventDTO.LastRun = eventDTO.DateTo;
+            occurenceEventDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(occurenceEventDTO.Periodicity, occurenceEventDTO.Frequency, eventDTO.DateTo);
+
+            try
+            {
+                await Create(eventDTO);
+                await _occurenceEventService.Edit(occurenceEventDTO);
+                return new OperationResult(true);
             }
             catch (Exception ex)
             {
@@ -249,6 +286,31 @@ namespace EventsExpress.Core.Services
 
             await _db.SaveAsync();
             return new OperationResult(true, "Edit event", ev.Id.ToString());
+        }
+
+        public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
+        {
+            var occurenceEventDTO = _occurenceEventService.OccurenceEventByEventId(eventDTO.Id);
+
+            occurenceEventDTO.ModifiedBy = eventDTO.OwnerId;
+            occurenceEventDTO.ModifiedDate = DateTime.Today;
+            occurenceEventDTO.LastRun = eventDTO.DateTo;
+            occurenceEventDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(occurenceEventDTO.Periodicity, occurenceEventDTO.Frequency, eventDTO.DateTo);
+
+            eventDTO.IsReccurent = false;
+            eventDTO.Id = Guid.Empty;
+
+            try
+            {
+                await Create(eventDTO);
+                await _occurenceEventService.Edit(occurenceEventDTO);
+                return new OperationResult(true);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, string.Empty);
+            }
         }
 
         public EventDTO EventById(Guid eventId) =>

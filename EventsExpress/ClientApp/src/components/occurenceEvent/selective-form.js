@@ -7,20 +7,19 @@ import '../occurenceEvent/occurenceEvent.css'
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import Popover from '@material-ui/core/Popover';
+import add_copy_event from '../../actions/add-copy-event';
 import EditFromParentEventWrapper from '../../containers/edit-event-from-parent'
-import add_event from '../../actions/add-event';
+import cancel_all_occurenceEvent from '../../actions/cancel-all-occurenceEvents';
+import cancel_next_occurence_event from '../../actions/cancel-next-occurenceEvent';
 import '../occurenceEvent/occurenceEvent.css'
 
 
 
-export class SelectiveForm extends Component {
+class SelectiveForm extends Component {
     constructor() {
         super()
         this.state = {
-            isCreateOption: false,
-            isEditOption: false,
-            isCancelOnceOption: false,
-            isCancelOption: false,
+            edit: false,
             anchorEl: false,
             show: false,
             submit: false,
@@ -30,64 +29,67 @@ export class SelectiveForm extends Component {
         this.submitHandler = this.submitHandler.bind(this);
     }
 
-    componentDidUpdate(){
-        if(this.state.isCreateOption && this.state.submit){
-            this.onAddEvent();
-        }
-    }
-
-    CreateOption = () => {
-        this.setState({
-            isCreateOption: true,
-            isEditOption: false,
-            isCancelOption: false,
-            isCancelOnceOption: false,
-            show: true,
-            submit: false
-        });
-    }
-
     cancelHandler = () => {
         this.resetForm();
     }
 
-    submitHandler = () => {
-        this.setState({
-            submit: true,
-            show: false
-        });
-    }
-
-    EditOption = () => {
-        this.setState(state => ({
-            isEditOption: true,
-            isCreateOption: false,
-            isCancelOption: false,
-            isCancelOnceOption: false,
-            show: true,
-            submit: false
-        }));
-    }
-
     CancelOnceOption = () => {
         this.setState({
-            isEditOption: false,
-            isCreateOption: false,
-            isCancelOnceOption: true,
-            isCancelOption: false,
-            show: true,
-            submit: false
+            submitHandler: this.cancelOnceSubmitHandler,
+            message: "You you sure to cancel the next event?",
+            show: true
         });
     }
 
     CancelOption = () => {
         this.setState({
-            isEditOption: false,
-            isCreateOption: false,
-            isCancelOnceOption: false,
-            isCancelOption: true,
-            show: true,
-            submit: false
+            submitHandler: this.cancelSubmitHandler,
+            message: "You you sure to cancel all events?",
+            show: true
+        });
+    }
+
+    cancelOnceSubmitHandler = () => {
+        this.setState({
+            show: false
+        });
+        this.props.cancel_next_occurence_event(this.props.initialValues.id);
+    }
+
+    cancelSubmitHandler = () => {
+        this.setState({
+            show: false
+        });
+        this.props.cancel_all_occurenceEvent(this.props.initialValues.id);
+    }
+
+    CreateOption = () => {
+        this.setState({
+            submitHandler: this.createSubmitHandler,
+            message: "You you sure to create event without editing?",
+            show: true
+        });
+    }
+
+    createSubmitHandler = () => {
+        this.setState({
+            show: false
+        });
+        this.props.add_copy_event(this.props.initialValues.id);
+    }
+
+    EditOption = () => {
+        this.setState({
+            submitHandler: this.editSubmitHandler,
+            message: "You you sure to create event with editing?",
+            show: true
+        });
+    }
+
+    editSubmitHandler = () => {
+        this.setState({
+            show: false,
+            edit: true
         });
     }
 
@@ -107,36 +109,18 @@ export class SelectiveForm extends Component {
         this.setState({ isFocused: true });
     }
 
-    onAddEvent = () => {
-
-        if(this.props.event.id) {
-            this.props.event.id = null;
-        }
-
-        if (!this.props.event.maxParticipants) {
-            this.props.event.maxParticipants = 2147483647;
-        }
-
-        if (!this.props.event.dateFrom) {
-            this.props.event.dateFrom = new Date(Date.now());
-        }
-
-        if (!this.props.event.dateTo) {
-            this.props.event.dateTo = new Date(this.props.event.dateFrom);
-        }
-        console.log("on add event", this.props);
-        this.props.add_event({ ...this.props.event, user_id: this.props.user_id });
-
-    }
-
     resetForm = () => {
         this.setState({
-            imagefile: [],
-            isCreateOption: false,
-            isEditOption: false,
-            isCancelOnceOption: false,
-            isCancelOption: false,
+            edit: false,
+            show : false,
             submit: false
+        });
+    }
+
+    submitHandler = () => {
+        this.setState({
+            submit: true,
+            show: false
         });
     }
 
@@ -177,38 +161,28 @@ export class SelectiveForm extends Component {
                             To create the event with editing you can choose second option. Click Cancel Once to cancel the next event, to cancel all events click Cancel.</Typography>
                     </Popover>
                 </div>
-                {this.state.isCreateOption &&
                     <OccurenceEventModal
                         cancelHandler={this.cancelHandler}
-                        message={"Create the event without editing?"} show={this.state.show}
-                        submitHandler={this.submitHandler} />}
-                {this.state.isEditOption &&
-                    <OccurenceEventModal
-                        cancelHandler={this.cancelHandler}
-                        message={"Create the event with editing?"} show={this.state.show}
-                        submitHandler={this.submitHandler} />}
-                {this.state.isEditOption && this.state.submit &&
-                    <EditFromParentEventWrapper />}
-                {this.state.isCancelOnceOption &&
-                    <OccurenceEventModal
-                        cancelHandler={this.cancelHandler}
-                        message={"Cancel the next event?"} show={this.state.show}
-                        submitHandler={this.submitHandler} />}
-                {this.state.isCancelOption &&
-                    <OccurenceEventModal
-                        cancelHandler={this.cancelHandler}
-                        message={"Cancel all events?"} show={this.state.show}
-                        submitHandler={this.submitHandler} />}
+                        message={this.state.message} show={this.state.show}
+                        submitHandler={this.state.submitHandler} />
+                    {this.state.edit && <EditFromParentEventWrapper/>}
             </div>
         );
     }
 }
 
 
+const mapStateToProps = (state) => ({
+    user_id: state.user.id,
+    initialValues: state.event.data,
+});
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_event: (data) => dispatch(add_event(data))
+        add_copy_event: (eventId) => dispatch(add_copy_event(eventId)),
+        cancel_all_occurenceEvent: (eventId) => dispatch(cancel_all_occurenceEvent(eventId)),
+        cancel_next_occurence_event: (eventId) => dispatch(cancel_next_occurence_event(eventId))
     }
 };
 
-export default connect(mapDispatchToProps)(SelectiveForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectiveForm);

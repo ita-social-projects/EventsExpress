@@ -96,7 +96,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.OccurenceEvent.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.OccurenceEvent.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.OccurenceEvent.EventId == src.Id) ? true : false))
-                .ForMember(dest => dest.PhotoBytes, opts => opts.MapFrom(src => src.Photo));
+                .ForMember(dest => dest.PhotoBytes, opts => opts.MapFrom(src => src.Photo))
+                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId));
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())

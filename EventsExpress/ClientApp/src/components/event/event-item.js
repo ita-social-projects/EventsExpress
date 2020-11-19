@@ -131,11 +131,6 @@ export default class Event extends Component {
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                                <Link to={`/event/${id}/1`}>
-                                    <IconButton className={classes.button} aria-label="view">
-                                        <i className="fa fa-eye"></i>
-                                    </IconButton>
-                                </Link>
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
                                     ? <EventManagmentWrapper eventItem={this.props.item} />

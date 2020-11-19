@@ -50,6 +50,8 @@ class AddEventWrapper extends Component {
     }
 
     onChangeCountry = (e) => {
+        console.log("e.target", e.target.value);
+        console.log("chnge country props", this.props);
         this.props.get_cities(e.target.value);
     }
 
@@ -68,10 +70,10 @@ class AddEventWrapper extends Component {
                 onChangeCountry={this.onChangeCountry}
                 onSubmit={this.onSubmit} 
                 countries={this.props.countries.data}
-                initialValues={this.props.initialValues}
                 form_values={this.props.form_values}
+                disabledDate={false}
                 haveReccurentCheckBox={true}
-                Event={this.props.add_event_status}
+                addEventStatus={this.props.add_event_status}
                 isCreated={false} />
         </div>
     }
@@ -82,7 +84,6 @@ const mapStateToProps = (state) => ({
     add_event_status: state.add_event,
     countries: state.countries,
     cities: state.cities,
-    initialValues: state.event.data,
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state)
 });

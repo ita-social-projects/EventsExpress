@@ -32,6 +32,8 @@ namespace EventsExpress.Core.DTOs
 
         public string PhotoUrl { get; set; }
 
+        public Guid PhotoId { get; set; }
+
         public Photo PhotoBytes { get; set; }
 
         public Guid OwnerId { get; set; }

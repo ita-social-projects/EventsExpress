@@ -12,11 +12,17 @@ namespace EventsExpress.Core.IServices
     {
         Task<OperationResult> Create(OccurenceEventDTO eventDTO);
 
+        Task<OperationResult> CancelEvents(Guid eventId);
+
+        Task<OperationResult> CancelNextEvent(Guid eventId);
+
         Task<OperationResult> Delete(Guid eventId);
 
         Task<OperationResult> Edit(OccurenceEventDTO eventDTO);
 
         OccurenceEventDTO EventById(Guid eventId);
+
+        OccurenceEventDTO OccurenceEventByEventId(Guid eventId);
 
         Task EventNotification(CancellationToken stoppingToken);
 

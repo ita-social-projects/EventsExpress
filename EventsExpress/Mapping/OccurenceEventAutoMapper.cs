@@ -25,6 +25,7 @@ namespace EventsExpress.Mapping
                Title = src.Event.Title,
                DateTo = src.Event.DateTo,
                DateFrom = src.Event.DateFrom,
+               OwnerId = src.Event.OwnerId,
                PhotoBytes = src.Event.Photo,
            }));
 
@@ -37,6 +38,7 @@ namespace EventsExpress.Mapping
                     Title = src.Event.Title,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
+                    OwnerId = src.Event.OwnerId,
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
                 }));
 
@@ -47,6 +49,7 @@ namespace EventsExpress.Mapping
                     Title = src.Event.Title,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
+                    OwnerId = src.Event.OwnerId,
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
                 }));
 
