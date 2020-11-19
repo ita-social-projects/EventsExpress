@@ -5,6 +5,7 @@ import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
 import { SetAlert } from '../actions/alert';
 import { reset } from 'redux-form';
+import OccurenceEventModal from '../components/occurenceEvent/occurenceEvent-modal'
 import get_cities from '../actions/cities';
 import {
     setEventFromParentError,
@@ -14,13 +15,8 @@ import {
     from '../actions/edit-event-from-parent';
 import * as moment from 'moment';
 import get_categories from '../actions/category-list';
-import { Redirect } from 'react-router-dom'
 
-class EditFromParentEvent extends Component {
-
-    state = {
-        redirect: false
-    }
+class EditFromParentEventWraper extends Component {
 
     componentWillMount = () => {
         this.props.get_countries();
@@ -33,9 +29,6 @@ class EditFromParentEvent extends Component {
             this.props.edit_event_from_parent_status.isEventFromParentSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.setState({
-                redirect: true
-            })
         }
     }
 
@@ -78,6 +71,12 @@ class EditFromParentEvent extends Component {
         }
 
         return <>
+            <OccurenceEventModal
+                cancelHandler={() => this.props.cancelHandler()}
+                message="Are you sure to create the event with editing?"
+                show={this.props.show}
+                submitHandler={() => this.props.submitHandler()} />
+            {this.props.submit &&
             <EventForm
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
@@ -88,8 +87,7 @@ class EditFromParentEvent extends Component {
                 haveReccurentCheckBox={false}
                 disabledDate={true}
                 isCreated={true} />
-            {this.state.redirect &&
-            <Redirect to='/home/events' />}
+            }
         </>
     }
 }
@@ -120,4 +118,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEvent);
+export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEventWraper);

@@ -10,13 +10,11 @@ import {
     setCancelAllOccurenceEventsSuccess
 }
     from '../actions/cancel-all-occurenceEvents';
-import { Redirect } from 'react-router-dom'
 
 class CancelAllEventsWrapper extends Component {
     constructor() {
         super()
         this.state = {
-            redirect: false,
             show: false,
             submit: false
         };
@@ -29,9 +27,6 @@ class CancelAllEventsWrapper extends Component {
             this.props.cancel_all_occurenceEvent_status.isCancelOccurenceEventsSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.setState({
-                redirect: true
-            })
         }
     }
 
@@ -66,8 +61,6 @@ class CancelAllEventsWrapper extends Component {
                 message="Are you sure to cancel all events?"
                 show={this.state.show}
                 submitHandler={this.submitHandler} />
-            {this.state.redirect &&
-                <Redirect to='/occurenceEvents' />}
         </>
     }
 }

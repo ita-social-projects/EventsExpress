@@ -1,5 +1,6 @@
 import EventsExpressService from '../services/EventsExpressService';
 import { SetAlert } from './alert';
+import {createBrowserHistory} from 'history';
 
 export const SET_CANCEL_NEXT_EVENT_SUCCESS = "SET_CANCEL_NEXT_EVENT_SUCCESS";
 export const SET_CANCEL_NEXT_EVENT_PENDING = "SET_CANCEL_NEXT_EVENT_PENDING";
@@ -7,6 +8,7 @@ export const SET_CANCEL_NEXT_EVENT_ERROR = "SET_CANCEL_NEXT_EVENT_ERROR";
 export const EVENT_CANCEL_NEXT_WAS_CREATED = "EVENT_CANCEL_NEXT_WAS_CREATED";
 
 const api_serv = new EventsExpressService();
+const history = createBrowserHistory({forceRefresh:true});
 
 export default function cancel_next_occurenceEvent(eventId) {
 
@@ -17,9 +19,10 @@ export default function cancel_next_occurenceEvent(eventId) {
       res.then(response => {
         if(response.error == null){
             dispatch(setCancelNextOccurenceEventSuccess(true));
-            response.json().then(x => { 
+            response.text().then(x => { 
               dispatch(cancelNextOccurenceEventWasCreated(x));
-              dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));} );
+              dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));
+              dispatch(history.push(`/occurenceEvents`));} );
           }else{
             dispatch(setCancelNextOccurenceEventError(response.error));
           }

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import Popover from '@material-ui/core/Popover';
 import AddFromParentEventWrapper from '../../containers/add-event-from-parent'
-import EditFromParentEventWrapper from '../../containers/edit-from-parent-event'
+import EditFromParentEventWrapper from '../../containers/edit-event-from-parent'
 import CancelNextEventWrapper from '../../containers/cancel-next-event'
 import CancelAllEventsWrapper from '../../containers/cancel-all-events'
 import '../occurenceEvent/occurenceEvent.css'
@@ -66,7 +66,6 @@ class SelectiveForm extends Component {
 
     render() {
 
-        console.log(this.state);
         return <>
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 <div className="row">

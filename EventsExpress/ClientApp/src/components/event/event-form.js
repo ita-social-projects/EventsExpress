@@ -99,10 +99,10 @@ class EventForm extends Component {
     }
 
     render() {
-        console.log("event-form", this.props);
+
         const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
-        console.log("values", values);
+
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">

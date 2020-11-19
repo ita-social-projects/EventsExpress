@@ -10,13 +10,11 @@ import {
     setCopyEventSuccess
 }
     from '../actions/add-copy-event';
-import { Redirect } from 'react-router-dom'
 
 class AddFromParentEventWrapper extends Component {
     constructor() {
         super()
         this.state = {
-            redirect: false,
             show: false,
             submit: false
         };
@@ -25,13 +23,11 @@ class AddFromParentEventWrapper extends Component {
     }
 
     componentDidUpdate = () => {
+
         if (!this.props.add_copy_event_status.copyEventError &&
             this.props.add_copy_event_status.isCopyEventSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.setState({
-                redirect: true
-            })
         }
     }
 
@@ -66,8 +62,6 @@ class AddFromParentEventWrapper extends Component {
                 message="Are you sure to create the event without editing?"
                 show={this.state.show}
                 submitHandler={this.submitHandler} />
-            {this.state.redirect &&
-                <Redirect to='/home/events' />}
         </>
     }
 }

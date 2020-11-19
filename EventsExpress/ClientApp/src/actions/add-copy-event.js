@@ -1,5 +1,6 @@
 import EventsExpressService from '../services/EventsExpressService';
 import { SetAlert } from './alert';
+import {createBrowserHistory} from 'history';
 
 export const SET_COPY_EVENT_SUCCESS = "SET_COPY_EVENT_SUCCESS";
 export const SET_COPY_EVENT_PENDING = "SET_COPY_EVENT_PENDING";
@@ -7,6 +8,7 @@ export const SET_COPY_EVENT_ERROR = "SET_COPY_EVENT_ERROR";
 export const EVENT_COPY_WAS_CREATED = "EVENT_COPY_WAS_CREATED";
 
 const api_serv = new EventsExpressService();
+const history = createBrowserHistory({forceRefresh:true});
 
 export default function add_copy_event(eventId) {
 
@@ -19,7 +21,8 @@ export default function add_copy_event(eventId) {
                 dispatch(setCopyEventSuccess(true));
                 response.json().then(x => { 
                     dispatch(copyEventWasCreated(x));
-                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));});
+                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));
+                    dispatch(history.push(`/event/${x.id}/1`));} );
             } else {
                 dispatch(setCopyEventError(response.error));
             }

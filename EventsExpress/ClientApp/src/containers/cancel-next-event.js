@@ -10,13 +10,11 @@ import {
     setCancelNextOccurenceEventSuccess
 }
     from '../actions/cancel-next-occurenceEvent';
-import { Redirect } from 'react-router-dom'
 
 class CancelNextEventWrapper extends Component {
     constructor() {
         super()
         this.state = {
-            redirect: false,
             show: false,
             submit: false
         };
@@ -29,9 +27,6 @@ class CancelNextEventWrapper extends Component {
             this.props.cancel_next_occurenceEvent_status.isCancelNextOccurenceEventSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.setState({
-                redirect: true
-            })
         }
     }
 
@@ -66,8 +61,6 @@ class CancelNextEventWrapper extends Component {
                 message="Are you sure to cancel the next event?"
                 show={this.state.show}
                 submitHandler={this.submitHandler} />
-            {this.state.redirect &&
-                <Redirect to='/occurenceEvents' />}
         </>
     }
 }
