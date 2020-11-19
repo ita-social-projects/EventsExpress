@@ -65,6 +65,7 @@ class AddEventWrapper extends Component {
         if (this.props.add_event_status.isEventSuccess) {
             this.setState({ open: true });
         }
+        console.log("add-container", this.props);
         return <div className="w-50 m-auto">
             <EventForm data={{}}
                 all_categories={this.props.all_categories}

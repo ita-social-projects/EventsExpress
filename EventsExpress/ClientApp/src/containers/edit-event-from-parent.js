@@ -3,14 +3,25 @@ import EventForm from '../components/event/event-form';
 import edit_event_from_parent from '../actions/edit-event-from-parent';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
+import { SetAlert } from '../actions/alert';
 import { reset } from 'redux-form';
 import get_cities from '../actions/cities';
-import { setEventFromParentError, setEventFromParentPending, setEventFromParentSuccess } from '../actions/edit-event-from-parent';
+import {
+    setEventFromParentError,
+    setEventFromParentPending,
+    setEventFromParentSuccess
+}
+    from '../actions/edit-event-from-parent';
 import { resetEvent } from '../actions/event-item-view';
 import * as moment from 'moment';
 import get_categories from '../actions/category-list';
+import { Redirect } from 'react-router-dom'
 
 class EditFromParentEventWrapper extends Component {
+
+    state = {
+        redirect: false
+    }
 
     componentWillMount = () => {
         this.props.get_countries();
@@ -18,10 +29,14 @@ class EditFromParentEventWrapper extends Component {
         this.props.get_cities(this.props.initialValues.countryId);
     }
     componentDidUpdate = () => {
-        if (!this.props.edit_event_from_parent_status.errorEvent && this.props.edit_event_from_parent_status.isEventSuccess) {
+        if (!this.props.edit_event_from_parent_status.eventFromParentError && 
+            this.props.edit_event_from_parent_status.isEventFromParentSuccess) {
             this.props.resetEvent();
             this.props.reset();
-            this.props.alert({ variant: 'success', message: 'Your event was created!', autoHideDuration: 5000 });
+            this.props.alert({ variant: 'success', message: 'Your event was created!' });
+            this.setState({
+                redirect: true
+            })
         }
     }
 
@@ -54,6 +69,12 @@ class EditFromParentEventWrapper extends Component {
         this.props.get_cities(e.target.value);
     }
 
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/home/events' />
+        }
+    }
+
     render() {
         let data = {
             ...this.props.initialValues,
@@ -64,6 +85,7 @@ class EditFromParentEventWrapper extends Component {
         }
 
         return <>
+            {this.renderRedirect()}
             <EventForm
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
@@ -94,9 +116,9 @@ const mapDispatchToProps = (dispatch) => {
         get_countries: () => dispatch(get_countries()),
         get_cities: (country) => dispatch(get_cities(country)),
         get_categories: () => dispatch(get_categories()),
-        resetEvent: () => dispatch(resetEvent()),
+        resetEvent: () => dispatch(reset('event-form')),
+        alert: (data) => dispatch(SetAlert(data)),
         reset: () => {
-            dispatch(reset('event-form'));
             dispatch(setEventFromParentPending(true));
             dispatch(setEventFromParentSuccess(false));
             dispatch(setEventFromParentError(null));

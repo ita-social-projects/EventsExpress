@@ -268,9 +268,9 @@ namespace EventsExpress.Core.Services
 
             try
             {
-                await Create(eventDTO);
+                var createResult = await Create(eventDTO);
                 await _occurenceEventService.Edit(occurenceEventDTO);
-                return new OperationResult(true);
+                return new OperationResult(true, "new eventId", createResult.Property);
             }
             catch (Exception ex)
             {

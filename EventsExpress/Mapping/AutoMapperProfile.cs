@@ -113,9 +113,10 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId))
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
-                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                         src.Inventories.Select(x => new Inventory
                         {
                             Id = x.Id,
@@ -187,6 +188,7 @@ namespace EventsExpress.Mapping
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -197,7 +199,6 @@ namespace EventsExpress.Mapping
                             NeedQuantity = x.NeedQuantity,
                             UnitOfMeasuring = new UnitOfMeasuringDTO
                             {
-                                Id = x.UnitOfMeasuring.Id,
                                 UnitName = x.UnitOfMeasuring.UnitName,
                                 ShortName = x.UnitOfMeasuring.ShortName,
                             },

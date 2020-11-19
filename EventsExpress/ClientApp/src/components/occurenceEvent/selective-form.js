@@ -11,6 +11,27 @@ import add_copy_event from '../../actions/add-copy-event';
 import EditFromParentEventWrapper from '../../containers/edit-event-from-parent'
 import cancel_all_occurenceEvent from '../../actions/cancel-all-occurenceEvents';
 import cancel_next_occurence_event from '../../actions/cancel-next-occurenceEvent';
+import { Redirect } from 'react-router-dom'
+import { SetAlert } from '../../actions/alert';
+import {
+    setCancelAllOccurenceEventsPending,
+    setCancelAllOccurenceEventsSuccess,
+    setCancelAllOccurenceEventsError
+}
+    from '../../actions/cancel-all-occurenceEvents';
+import {
+    setCancelNextOccurenceEventPending,
+    setCancelNextOccurenceEventSuccess,
+    setCancelNextOccurenceEventError
+}
+    from '../../actions/cancel-next-occurenceEvent';
+import {
+    setCopyEventPending,
+    setCopyEventSuccess,
+    setCopyEventError
+}
+    from '../../actions/add-copy-event';
+import { reset } from 'redux-form';
 import '../occurenceEvent/occurenceEvent.css'
 
 
@@ -23,7 +44,8 @@ class SelectiveForm extends Component {
             anchorEl: false,
             show: false,
             submit: false,
-            isFocused: false
+            isFocused: false,
+            redirect: false
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -61,6 +83,28 @@ class SelectiveForm extends Component {
             show: false
         });
         this.props.cancel_all_occurenceEvent(this.props.initialValues.id);
+    }
+
+    componentDidUpdate(){
+
+        // if (!this.props.cancel_next_occurence_event_status.cancelNextOccurenceEventError && 
+        //     this.props.cancel_next_occurence_event_status.isCancelNextOccurenceEventSuccess) {
+        //     this.props.resetEvent();
+        //     this.props.resetCancel();
+        //     this.props.alert({ variant: 'success', message: 'Your next event was canceled!'});
+        //     this.setState({
+        //         redirect: true
+        //       })
+        // }
+        // if (!this.props.cancel_all_occurenceEvent_status.cancelOccurenceEventsError && 
+        //     this.props.cancel_all_occurenceEvent_status.isCancelOccurenceEventsSuccess) {
+        //     this.props.resetEvent();
+        //     this.props.resetCancelAll();
+        //     this.props.alert({ variant: 'success', message: 'Your events was canceled!'});
+        //     this.setState({
+        //         redirect: true
+        //       })
+        // }
     }
 
     CreateOption = () => {
@@ -109,6 +153,12 @@ class SelectiveForm extends Component {
         this.setState({ isFocused: true });
     }
 
+    renderRedirect = () => {
+        if (this.state.redirect) {
+          return <Redirect to='/home/events' />
+        }
+      }
+
     resetForm = () => {
         this.setState({
             edit: false,
@@ -126,7 +176,8 @@ class SelectiveForm extends Component {
 
     render() {
 
-        return (
+        return <>
+            {this.renderRedirect()}
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 <div className="row">
                     <div className="col-11 mb-3">
@@ -167,12 +218,15 @@ class SelectiveForm extends Component {
                     submitHandler={this.state.submitHandler} />
                 {this.state.edit && <EditFromParentEventWrapper />}
             </div>
-        );
+        </>
     }
 }
 
 
 const mapStateToProps = (state) => ({
+    add_copy_event_status: state.add_copy_event,
+    cancel_all_occurenceEvent_status: state.cancel_all_occurenceEvent,
+    cancel_next_occurence_event_status: state.cancel_next_occurence_event,
     user_id: state.user.id,
     initialValues: state.event.data,
 });
@@ -181,7 +235,24 @@ const mapDispatchToProps = (dispatch) => {
     return {
         add_copy_event: (eventId) => dispatch(add_copy_event(eventId)),
         cancel_all_occurenceEvent: (eventId) => dispatch(cancel_all_occurenceEvent(eventId)),
-        cancel_next_occurence_event: (eventId) => dispatch(cancel_next_occurence_event(eventId))
+        cancel_next_occurence_event: (eventId) => dispatch(cancel_next_occurence_event(eventId)),
+        resetEvent: () => dispatch(reset('event-form')),
+        alert: (data) => dispatch(SetAlert(data)),
+        resetCreate: () => {
+            dispatch(setCopyEventPending(true));
+            dispatch(setCopyEventSuccess(false));
+            dispatch(setCopyEventError(null));
+        },
+        resetCancel: () => {
+            dispatch(setCancelNextOccurenceEventPending(true));
+            dispatch(setCancelNextOccurenceEventSuccess(false));
+            dispatch(setCancelNextOccurenceEventError(null));
+        },
+        resetCancelAll: () => {
+            dispatch(setCancelAllOccurenceEventsPending(true));
+            dispatch(setCancelAllOccurenceEventsSuccess(false));
+            dispatch(setCancelAllOccurenceEventsError(null));
+        }
     }
 };
 

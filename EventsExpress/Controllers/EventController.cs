@@ -73,7 +73,7 @@ namespace EventsExpress.Controllers
 
             if (result.Successed)
             {
-                return Ok(result.Property);
+                return Ok(new { id = result.Property });
             }
 
             return BadRequest(result.Message);
