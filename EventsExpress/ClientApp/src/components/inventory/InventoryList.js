@@ -22,6 +22,7 @@ class InventoryList extends Component {
 
     addItemToList() {
         const undateList = [...this.state.inventoryList, {
+            id: getRandomId(),
             itemName: '',
             needQuantity: 0,
             unitOfMeasuring: ''
@@ -39,6 +40,32 @@ class InventoryList extends Component {
   
         this.setState({
             inventoryList: undateList
+        });
+    }
+
+    markItemAsEdit = inventar => {
+        let updateList = this.state.inventoryList;
+        updateList.map(item => {
+            if (inventar.id === item.id)
+                item.isEdit = true;
+        });
+
+        this.setState({
+            inventoryList: updateList
+        });
+    }
+
+    editItem = inventar => {
+        let updateList = this.state.inventoryList;
+        updateList.map(item => {
+            if (inventar.id === item.id) {
+                item.isEdit = false;
+                item.itemName = this.newItemName.value;
+            }
+        });
+        console.log('edit', updateList);
+        this.setState({
+            inventoryList: updateList
         });
     }
 
@@ -77,12 +104,25 @@ class InventoryList extends Component {
                                 <tbody>
                                 {this.state.inventoryList.map(item => {
                                     return (
-                                        <tr>
+                                        item.isEdit 
+                                        ? <tr>
+                                            <td>
+                                                <input type="text" defaultValue={item.itemName} ref={(input) => this.newItemName = input}/>
+                                            </td>
+                                            <td>{item.needQuantity}</td>
+                                            <td>{item.unitOfMeasuring.shortName}</td>
+                                            <td className="d-flex justify-content-end align-items-center">
+                                                <div onClick={this.editItem.bind(this, item)} className="btn">
+                                                    Ok
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        : <tr>
                                             <td>{item.itemName}</td>
                                             <td>{item.needQuantity}</td>
                                             <td>{item.unitOfMeasuring.shortName}</td>
                                             <td className="d-flex justify-content-end align-items-center">
-                                                <button type="button" title="Remove item" class="btn clear-backgroud">
+                                                <button type="button" onClick={this.markItemAsEdit.bind(this, item)} title="Edit item" class="btn clear-backgroud">
                                                     <i class="fas fa-pencil-alt orange"></i>
                                                 </button>
                                                 <button type="button" onClick={this.deleteItemFromList.bind(this, item)} title="Remove item" class="btn clear-backgroud">
@@ -99,9 +139,14 @@ class InventoryList extends Component {
                     </div>
                 </div>
                 }
+                <h1>Hi)</h1>
             </>
         );
     }
+}
+
+function getRandomId() {
+    return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 }
 
 export default InventoryList;
