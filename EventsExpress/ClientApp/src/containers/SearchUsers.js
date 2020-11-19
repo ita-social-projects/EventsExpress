@@ -10,6 +10,7 @@ import Forbidden from '../components/Route guard/403'
 import { Redirect } from 'react-router'
 import history from '../history';
 import { reset } from 'redux-form';
+
 class SearchUsers extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {
@@ -27,15 +28,24 @@ class SearchUsers extends Component {
         this.props.reset_filters();
         var search_string = '?page=1';
         this.props.get_SearchUsers(search_string);
-        history.push(window.location.pathname + search_string);   
+        history.push(window.location.pathname + search_string);
     }
     getUsers = (page) => this.props.get_SearchUsers(page);
 
     render() {
         const { isPending, isError } = this.props.users;
         const spinner = isPending ? <Spinner /> : null;
-        const errorMessage = isError.ErrorCode == '403' ? <Forbidden /> : isError.ErrorCode == '500' ? <Redirect from="*" to="/search/users?page=1" /> : isError.ErrorCode == '401' ? <Unauthorized /> : isError.ErrorCode == '400' ? <BadRequest /> : null;
-        const content = (errorMessage == null) ? <UserItemList users={this.props.users.data.items} page={this.props.users.data.pageViewModel.pageNumber} totalPages={this.props.users.data.pageViewModel.totalPages} callback={this.getUsers} />
+        const errorMessage = isError.ErrorCode == '403' 
+            ? <Forbidden /> : isError.ErrorCode == '500' 
+            ? <Redirect from="*" to="/search/users?page=1" /> 
+            : isError.ErrorCode == '401' ? <Unauthorized /> 
+            : isError.ErrorCode == '400' ? <BadRequest /> 
+            : null;
+        const content = (errorMessage == null) 
+            ? <UserItemList users={this.props.users.data.items} 
+                page={this.props.users.data.pageViewModel.pageNumber} 
+                totalPages={this.props.users.data.pageViewModel.totalPages} 
+                callback={this.getUsers} />
             : null;
         return <>
             <div className="row">
