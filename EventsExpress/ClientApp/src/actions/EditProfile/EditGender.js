@@ -1,5 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-import { SetAlert} from '../alert';
+import { setAlert} from '../alert';
 
 export const editGender = {
     PENDING : "SET_EDITGENDER_PENDING",
@@ -22,10 +22,10 @@ export default function edit_Gender(data) {
 
                 dispatch(setEditGenderSuccess(true));
                 dispatch(updateGender(data));
-                dispatch(SetAlert({variant:'success', message:'Set gender successed'}));
+                dispatch(setAlert({variant:'success', message:'Set gender successed'}));
             } else {
                 dispatch(setEditGenderError(response.error));
-                dispatch(SetAlert({variant:'error', message:'Failed'}));
+                dispatch(setAlert({variant:'error', message:'Failed'}));
             }
         });
     }
