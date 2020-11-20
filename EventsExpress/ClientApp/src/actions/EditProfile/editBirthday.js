@@ -1,5 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-import { SetAlert } from '../alert';
+import { setAlert } from '../alert';
 
 export const editBirthday = {
     PENDING: "SET_EDITBIRTHDAY_PENDING",
@@ -18,10 +18,10 @@ export default function edit_Birthday(data) {
             if (response.error == null) {
                 dispatch(setEditBirthdaySuccess(true));
                 dispatch(updateBirthday(data.Birthday));
-                dispatch(SetAlert({ variant: 'success', message: 'Set date of birth successed' }));
+                dispatch(setAlert({ variant: 'success', message: 'Set date of birth successed' }));
             } else {
                 dispatch(setEditBirthdayError(response.error));
-                dispatch(SetAlert({ variant: 'error', message: 'Failed' }));
+                dispatch(setAlert({ variant: 'error', message: 'Failed' }));
             }
         });
     }
