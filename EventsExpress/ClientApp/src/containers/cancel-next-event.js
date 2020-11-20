@@ -16,7 +16,6 @@ class CancelNextEventWrapper extends Component {
         super()
         this.state = {
             show: false,
-            submit: false
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -32,9 +31,7 @@ class CancelNextEventWrapper extends Component {
 
     cancelHandler = () => {
         this.setState({
-            redirect: false,
             show: false,
-            submit: false
         });
     }
 
@@ -47,7 +44,6 @@ class CancelNextEventWrapper extends Component {
     submitHandler = () => {
         this.setState({
             show: false,
-            submit: true
         });
         this.props.cancel_next_occurenceEvent(this.props.initialValues.id);
     }

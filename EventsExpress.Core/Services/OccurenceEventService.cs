@@ -52,7 +52,7 @@ namespace EventsExpress.Core.Services
         {
             var ev = _mapper.Map<OccurenceEventDTO, OccurenceEvent>(eventDTO);
             ev.CreatedBy = eventDTO.Event.OwnerId;
-            ev.CreatedDate = DateTime.Today;
+            ev.CreatedDateTime = DateTime.UtcNow;
 
             try
             {
@@ -67,30 +67,6 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<OperationResult> Delete(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return new OperationResult(false, "Id field is '0'", string.Empty);
-            }
-
-            var ev = _db.OccurenceEventRepository.Get(id);
-            if (ev == null)
-            {
-                return new OperationResult(false, "Not found", string.Empty);
-            }
-
-            var result = _db.OccurenceEventRepository.Delete(ev);
-            await _db.SaveAsync();
-
-            if (result != null)
-            {
-                return new OperationResult(true);
-            }
-
-            return new OperationResult(false, "Error!", string.Empty);
-        }
-
         public async Task<OperationResult> Edit(OccurenceEventDTO eventDTO)
         {
             var ev = _db.OccurenceEventRepository.Get().FirstOrDefault(x => x.Id == eventDTO.Id);
@@ -101,40 +77,18 @@ namespace EventsExpress.Core.Services
             ev.IsActive = eventDTO.IsActive;
             ev.EventId = eventDTO.EventId;
             ev.CreatedBy = eventDTO.CreatedBy;
-            ev.CreatedDate = eventDTO.CreatedDate;
+            ev.CreatedDateTime = DateTime.UtcNow;
             ev.ModifiedBy = eventDTO.ModifiedBy;
-            ev.ModifiedDate = eventDTO.ModifiedDate;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             await _db.SaveAsync();
             return new OperationResult(true, "Edit occurence event", ev.Id.ToString());
         }
 
-        public OccurenceEventDTO EventById(Guid eventId) =>
+        public OccurenceEventDTO OccurenceEventById(Guid Id) =>
             _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
                 .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
-                .FirstOrDefault(x => x.Id == eventId));
-
-        public async Task EventNotification(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                var events = _db.OccurenceEventRepository.Get().Where(x => x.LastRun == DateTime.Today && x.IsActive == true);
-
-                try
-                {
-                    foreach (var ev in events)
-                    {
-                        await _mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<OccurenceEventDTO>(ev)));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    new OperationResult(false, ex.Message, string.Empty);
-                }
-
-                await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
-            }
-        }
+                .FirstOrDefault(x => x.Id == Id));
 
         public IEnumerable<OccurenceEventDTO> GetAll()
         {
@@ -146,9 +100,19 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
         }
 
+        public IEnumerable<OccurenceEventDTO> GetUrgentOccurenceEvents()
+        {
+            var events = _db.OccurenceEventRepository
+                .Get()
+                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<OccurenceEventDTO>>(events);
+        }
+
         public OccurenceEventDTO OccurenceEventByEventId(Guid eventId) =>
             _mapper.Map<OccurenceEventDTO>(_db.OccurenceEventRepository
-                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+                .Get()
                 .FirstOrDefault(x => x.EventId == eventId));
     }
 }

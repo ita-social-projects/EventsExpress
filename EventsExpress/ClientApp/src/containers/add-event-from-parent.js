@@ -16,7 +16,6 @@ class AddFromParentEventWrapper extends Component {
         super()
         this.state = {
             show: false,
-            submit: false
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -33,9 +32,7 @@ class AddFromParentEventWrapper extends Component {
 
     cancelHandler = () => {
         this.setState({
-            redirect: false,
             show: false,
-            submit: false
         });
     }
 
@@ -48,7 +45,6 @@ class AddFromParentEventWrapper extends Component {
     submitHandler = () => {
         this.setState({
             show: false,
-            submit: true
         });
         this.props.add_copy_event(this.props.initialValues.id);
     }

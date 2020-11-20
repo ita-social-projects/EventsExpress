@@ -16,16 +16,14 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> CancelNextEvent(Guid eventId);
 
-        Task<OperationResult> Delete(Guid eventId);
-
         Task<OperationResult> Edit(OccurenceEventDTO eventDTO);
 
-        OccurenceEventDTO EventById(Guid eventId);
+        OccurenceEventDTO OccurenceEventById(Guid eventId);
 
         OccurenceEventDTO OccurenceEventByEventId(Guid eventId);
 
-        Task EventNotification(CancellationToken stoppingToken);
-
         IEnumerable<OccurenceEventDTO> GetAll();
+
+        IEnumerable<OccurenceEventDTO> GetUrgentOccurenceEvents();
     }
 }

@@ -161,7 +161,6 @@ namespace EventsExpress
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
-            services.AddAutoMapper(typeof(OccurenceEventAutoMapper).GetTypeInfo().Assembly);
 
             services.AddSwaggerGen(c =>
             {

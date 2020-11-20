@@ -1,5 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { SetAlert } from './alert';
+import { setAlert } from './alert';
 import {createBrowserHistory} from 'history';
 
 export const SET_CANCEL_ALL_EVENT_SUCCESS = "SET_CANCEL_ALL_EVENT_SUCCESS";
@@ -20,7 +20,7 @@ export default function cancel_all_occurenceEvent(eventId) {
         if(response.error == null){
             dispatch(setCancelAllOccurenceEventsSuccess(true));
             response.text().then(x => { dispatch(cancelAllOccurenceEventsWasCreated(x));
-            dispatch(SetAlert({ variant: 'success', message: 'Your events was canceled!'}));
+            dispatch(setAlert({ variant: 'success', message: 'Your events was canceled!'}));
             dispatch(history.push(`/occurenceEvents`));} );
           }else{
             dispatch(setCancelAllOccurenceEventsError(response.error));

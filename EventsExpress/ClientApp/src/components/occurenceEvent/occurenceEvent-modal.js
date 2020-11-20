@@ -5,10 +5,7 @@ import '../occurenceEvent/occurenceEvent.css'
 
 
 export class OccurenceEventModal extends Component {
-    constructor() {
-        super()
-    }
-
+    
     render() {
 
         return (

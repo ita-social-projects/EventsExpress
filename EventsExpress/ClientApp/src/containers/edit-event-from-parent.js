@@ -3,9 +3,8 @@ import EventForm from '../components/event/event-form';
 import edit_event_from_parent from '../actions/edit-event-from-parent';
 import get_countries from '../actions/countries';
 import { connect } from 'react-redux';
-import { SetAlert } from '../actions/alert';
+import { setAlert } from '../actions/alert';
 import { reset } from 'redux-form';
-import OccurenceEventModal from '../components/occurenceEvent/occurenceEvent-modal'
 import get_cities from '../actions/cities';
 import {
     setEventFromParentError,
@@ -14,6 +13,7 @@ import {
 }
     from '../actions/edit-event-from-parent';
 import * as moment from 'moment';
+import { validateEventForm } from '../components/helpers/helpers'
 import get_categories from '../actions/category-list';
 
 class EditFromParentEventWraper extends Component {
@@ -27,7 +27,6 @@ class EditFromParentEventWraper extends Component {
     componentDidUpdate = () => {
         if (!this.props.edit_event_from_parent_status.eventFromParentError && 
             this.props.edit_event_from_parent_status.isEventFromParentSuccess) {
-            this.props.resetEvent();
             this.props.reset();
         }
     }
@@ -37,24 +36,10 @@ class EditFromParentEventWraper extends Component {
     }
 
     onSubmit = (values) => {
-
         if (values.isReccurent) {
             values.isReccurent = false;
         }
-
-        if (!values.maxParticipants) {
-            values.maxParticipants = 2147483647;
-        }
-
-        if (!values.dateFrom) {
-            values.dateFrom = new Date(Date.now());
-        }
-
-        if (!values.dateTo) {
-            values.dateTo = new Date(values.dateFrom);
-        }
-
-        this.props.edit_event_from_parent({ ...values, user_id: this.props.user_id });
+        this.props.edit_event_from_parent({ ...validateEventForm(values), user_id: this.props.user_id });
     }
 
     onChangeCountry = (e) => {
@@ -71,12 +56,6 @@ class EditFromParentEventWraper extends Component {
         }
 
         return <>
-            <OccurenceEventModal
-                cancelHandler={() => this.props.cancelHandler()}
-                message="Are you sure to create the event with editing?"
-                show={this.props.show}
-                submitHandler={() => this.props.submitHandler()} />
-            {this.props.submit &&
             <EventForm
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
@@ -87,7 +66,6 @@ class EditFromParentEventWraper extends Component {
                 haveReccurentCheckBox={false}
                 disabledDate={true}
                 isCreated={true} />
-            }
         </>
     }
 }
@@ -109,7 +87,7 @@ const mapDispatchToProps = (dispatch) => {
         get_cities: (country) => dispatch(get_cities(country)),
         get_categories: () => dispatch(get_categories()),
         resetEvent: () => dispatch(reset('event-form')),
-        alert: (data) => dispatch(SetAlert(data)),
+        alert: (data) => dispatch(setAlert(data)),
         reset: () => {
             dispatch(setEventFromParentPending(true));
             dispatch(setEventFromParentSuccess(false));

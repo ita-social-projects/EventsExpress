@@ -25,7 +25,8 @@ export const radioButton = ({ input, ...rest }) => (
 
 export const validate = values => {
     const errors = {};
-    const numberFields = ['maxParticipants', 'frequency']
+    const numberFields = ['maxParticipants', 'frequency'];
+    const occurenceFields = ['periodicity', 'frequency'];
     const requiredFields = [
         'email',
         'password',
@@ -35,11 +36,9 @@ export const validate = values => {
         'categories',
         'countryId',
         'cityId',
-        'frequency',
         'RepeatPassword',
         'oldPassword',
         'newPassword',
-        'periodicity',
         'repeatPassword',
         'Birthday',
         'UserName',
@@ -50,6 +49,12 @@ export const validate = values => {
             errors[field] = 'Required'
         }
     });
+
+    occurenceFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    })
 
     numberFields.forEach(field => {
         if (values[field] && values[field] < 1) {
@@ -91,7 +96,7 @@ export const validate = values => {
         errors.maxParticipants = `Invalid data`;
     }
 
-    requiredFields.forEach(field => {
+    occurenceFields.forEach(field => {
         if ('checkOccurence'.checked && !values[field]) {
             errors[field] = 'Required'
         }
@@ -119,6 +124,27 @@ export const validate = values => {
     }
 
     return errors;
+}
+
+export const validateEventForm = values =>{
+
+    if (!values.isPublic) {
+        values.isPublic = true;
+    }
+
+    if (!values.maxParticipants) {
+        values.maxParticipants = 2147483647;
+    }
+
+    if (!values.dateFrom) {
+        values.dateFrom = new Date(Date.now());
+    }
+
+    if (!values.dateTo) {
+        values.dateTo = new Date(values.dateFrom);
+    }
+
+    return values;
 }
 
 export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
+import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import get_categories from '../actions/category-list';
 
@@ -28,20 +29,7 @@ class EditEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
-
-        if (!values.maxParticipants) {
-            values.maxParticipants = 2147483647;
-        }
-
-        if (!values.dateFrom) {
-            values.dateFrom = new Date(Date.now());
-        }
-
-        if (!values.dateTo) {
-            values.dateTo = new Date(values.dateFrom);
-        }
-
-        this.props.add_event({ ...values, user_id: this.props.user_id, id: this.props.initialValues.id });
+        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.initialValues.id });
     }
 
     onChangeCountry = (e) => {

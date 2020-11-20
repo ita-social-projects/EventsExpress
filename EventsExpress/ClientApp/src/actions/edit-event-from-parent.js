@@ -1,5 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { SetAlert } from './alert';
+import { setAlert } from './alert';
 import {createBrowserHistory} from 'history';
 
 export const SET_EVENT_FROM_PARENT_SUCCESS = "SET_EVENT_FROM_PARENT_SUCCESS";
@@ -21,7 +21,7 @@ export default function edit_event_from_parent(data) {
                 dispatch(setEventFromParentSuccess(true));
                 response.json().then(x => { 
                     dispatch(eventFromParentWasCreated(x));
-                    dispatch(SetAlert({ variant: 'success', message: 'Your event was created!' }));
+                    dispatch(setAlert({ variant: 'success', message: 'Your event was created!' }));
                     dispatch(history.push(`/event/${x.id}/1`)); } );
             } else {
                 dispatch(setEventFromParentError(response.error));

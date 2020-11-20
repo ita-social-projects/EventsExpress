@@ -37,13 +37,4 @@ class OccurenceEventList extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        reset_occurenceEvents: () => dispatch(reset_occurenceEvents()),
-    }
-};
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(OccurenceEventList);
+export default OccurenceEventList;

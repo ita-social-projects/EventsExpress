@@ -129,7 +129,7 @@ namespace EventsExpress.Controllers
 
             if (result.Successed)
             {
-                return Ok(result.Property);
+                return Ok(new { id = result.Property });
             }
 
             return BadRequest(result.Message);
@@ -144,6 +144,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<OccurenceEventDto>(_occurenceEventService.EventById(id)));
+            Ok(_mapper.Map<OccurenceEventDto>(_occurenceEventService.OccurenceEventById(id)));
     }
 }

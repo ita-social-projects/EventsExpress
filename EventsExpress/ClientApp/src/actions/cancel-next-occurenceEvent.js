@@ -1,5 +1,5 @@
 import EventsExpressService from '../services/EventsExpressService';
-import { SetAlert } from './alert';
+import { setAlert } from './alert';
 import {createBrowserHistory} from 'history';
 
 export const SET_CANCEL_NEXT_EVENT_SUCCESS = "SET_CANCEL_NEXT_EVENT_SUCCESS";
@@ -21,7 +21,7 @@ export default function cancel_next_occurenceEvent(eventId) {
             dispatch(setCancelNextOccurenceEventSuccess(true));
             response.text().then(x => { 
               dispatch(cancelNextOccurenceEventWasCreated(x));
-              dispatch(SetAlert({ variant: 'success', message: 'Your event was created!'}));
+              dispatch(setAlert({ variant: 'success', message: 'The next event was canceled!'}));
               dispatch(history.push(`/occurenceEvents`));} );
           }else{
             dispatch(setCancelNextOccurenceEventError(response.error));

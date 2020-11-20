@@ -78,7 +78,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> AproveEventGeneration(Guid occurenceEventId)
         {
-            var occurenceEvent = _occurenceEventService.EventById(occurenceEventId);
+            var occurenceEvent = _occurenceEventService.OccurenceEventById(occurenceEventId);
             var parentEvent = EventById(occurenceEvent.EventId);
 
             parentEvent.Id = Guid.Empty;
@@ -89,7 +89,7 @@ namespace EventsExpress.Core.Services
             occurenceEvent.IsActive = true;
             occurenceEvent.LastRun = parentEvent.DateTo;
             occurenceEvent.NextRun = DateTimeExtensions.AddDateUnit(occurenceEvent.Periodicity, occurenceEvent.Frequency, parentEvent.DateTo);
-            occurenceEvent.ModifiedDate = DateTime.Today;
+            occurenceEvent.ModifiedDate = DateTime.UtcNow;
 
             try
             {
@@ -224,8 +224,8 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
             ev.CreatedBy = ev.OwnerId;
             ev.ModifiedBy = ev.OwnerId;
-            ev.CreatedDate = DateTime.Today;
-            ev.ModifiedDate = DateTime.Today;
+            ev.CreatedDateTime = DateTime.UtcNow;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             try
             {
@@ -261,7 +261,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
 
             occurenceEventDTO.ModifiedBy = eventDTO.OwnerId;
-            occurenceEventDTO.ModifiedDate = DateTime.Today;
+            occurenceEventDTO.ModifiedDate = DateTime.UtcNow;
             occurenceEventDTO.LastRun = eventDTO.DateTo;
             occurenceEventDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(occurenceEventDTO.Periodicity, occurenceEventDTO.Frequency, eventDTO.DateTo);
@@ -288,7 +288,7 @@ namespace EventsExpress.Core.Services
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
             ev.ModifiedBy = e.OwnerId;
-            ev.ModifiedDate = DateTime.Today;
+            ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -318,7 +318,7 @@ namespace EventsExpress.Core.Services
             var occurenceEventDTO = _occurenceEventService.OccurenceEventByEventId(eventDTO.Id);
 
             occurenceEventDTO.ModifiedBy = eventDTO.OwnerId;
-            occurenceEventDTO.ModifiedDate = DateTime.Today;
+            occurenceEventDTO.ModifiedDate = DateTime.UtcNow;
             occurenceEventDTO.LastRun = eventDTO.DateTo;
             occurenceEventDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(occurenceEventDTO.Periodicity, occurenceEventDTO.Frequency, eventDTO.DateTo);

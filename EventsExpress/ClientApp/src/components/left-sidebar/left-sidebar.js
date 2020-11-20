@@ -66,11 +66,7 @@ class LeftSidebar extends Component {
                                     />
                                     <NavItem
                                         to={'/occurenceEvents'}
-                                        my_icon={
-                                            <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                                <i className="fa fa-clone"></i>
-                                            </Badge>
-                                        }
+                                        my_icon={<i className="fa fa-clone"></i>}
                                         text={"Reccurent Events"}
                                     />
                                     <NavItem
