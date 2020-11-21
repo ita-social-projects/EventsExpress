@@ -210,7 +210,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit gender.
         /// </summary>
-        /// <param name="userGender">Required</param>
+        /// <param name="userGender">Required.</param>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]

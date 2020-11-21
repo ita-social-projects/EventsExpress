@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-import { SetAlert } from '../actions/alert';
+import { setAlert } from '../actions/alert';
 import get_categories from '../actions/category-list';
+import { validateEventForm } from '../components/helpers/helpers'
 
 class AddEventWrapper extends Component {
 
@@ -34,23 +35,7 @@ class AddEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
-        if (!values.maxParticipants) {
-            values.maxParticipants = 2147483647;
-        }
-
-        if (!values.dateFrom) {
-            values.dateFrom = new Date(Date.now());
-        }
-            
-        if (!values.dateTo) {
-            values.dateTo = new Date(values.dateFrom);
-        }
-
-        if (!values.isPublic) {
-            values.isPublic = false;
-        }
-
-        this.props.add_event({ ...values, user_id: this.props.user_id });
+        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id });
     }
 
     onChangeCountry = (e) => {
@@ -65,6 +50,7 @@ class AddEventWrapper extends Component {
         if (this.props.add_event_status.isEventSuccess) {
             this.setState({ open: true });
         }
+
         return <div className="w-50 m-auto">
             <EventForm data={{}}
                 all_categories={this.props.all_categories}
@@ -73,7 +59,9 @@ class AddEventWrapper extends Component {
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 form_values={this.props.form_values}
-                Event={this.props.add_event_status}
+                disabledDate={false}
+                haveReccurentCheckBox={true}
+                addEventStatus={this.props.add_event_status}
                 isCreated={false} />
         </div>
     }
@@ -97,7 +85,7 @@ const mapDispatchToProps = (dispatch) => {
         reset: () => {
             dispatch(reset('event-form'));
         },
-        alert: (data) => dispatch(SetAlert(data)),
+        alert: (data) => dispatch(setAlert(data)),
         resetEventStatus: () => {
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));

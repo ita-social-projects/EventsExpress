@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
@@ -119,6 +120,7 @@ namespace EventsExpress
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IEventScheduleService, EventScheduleService>();
             services.AddTransient<IEventStatusHistoryService, EventStatusHistoryService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IUserService, UserService>();
@@ -139,6 +141,7 @@ namespace EventsExpress
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();
             services.AddControllers();
