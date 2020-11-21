@@ -4,7 +4,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
-    public class Event : ManageableEvent
+    public class Event : ManageableEntity
     {
         public bool IsBlocked { get; set; }
 

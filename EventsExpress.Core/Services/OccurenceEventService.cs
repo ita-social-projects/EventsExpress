@@ -34,18 +34,19 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> CancelEvents(Guid eventId)
         {
-            var eventDTO = OccurenceEventByEventId(eventId);
-            eventDTO.IsActive = false;
-            return await Edit(eventDTO);
+            var occurenceEventDTO = OccurenceEventByEventId(eventId);
+            occurenceEventDTO.IsActive = false;
+            return await Edit(occurenceEventDTO);
         }
 
         public async Task<OperationResult> CancelNextEvent(Guid eventId)
         {
-            var eventDTO = OccurenceEventByEventId(eventId);
-            eventDTO.LastRun = eventDTO.NextRun;
-            eventDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventDTO.Periodicity, eventDTO.Frequency, eventDTO.LastRun);
-            return await Edit(eventDTO);
+            var occurenceEventDTO = OccurenceEventByEventId(eventId);
+            occurenceEventDTO.LastRun = occurenceEventDTO.NextRun;
+            occurenceEventDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(occurenceEventDTO.Periodicity, 
+                occurenceEventDTO.Frequency, occurenceEventDTO.LastRun);
+            return await Edit(occurenceEventDTO);
         }
 
         public async Task<OperationResult> Create(OccurenceEventDTO eventDTO)

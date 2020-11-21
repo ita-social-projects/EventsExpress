@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EventsExpress.Db.Entities
 {
-    public class ManageableEvent : BaseEntity
+    public class ManageableEntity : BaseEntity
     {
         public Guid CreatedBy { get; set; }
 

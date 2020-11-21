@@ -14,13 +14,16 @@ namespace EventsExpress.Core.NotificationHandlers
 {
     public class CreateEventVerificationHandler : INotificationHandler<CreateEventVerificationMessage>
     {
+        private readonly ILogger<CreateEventVerificationHandler> _logger;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
 
         public CreateEventVerificationHandler(
+            ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
             IUserService userService)
         {
+            _logger = logger;
             _sender = sender;
             _userService = userService;
         }
@@ -41,7 +44,7 @@ namespace EventsExpress.Core.NotificationHandlers
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
             }
         }
     }

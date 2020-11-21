@@ -75,35 +75,7 @@ namespace EventsExpress.Core.Services
 
             return new OperationResult(true);
         }
-
-        public async Task<OperationResult> AproveEventGeneration(Guid occurenceEventId)
-        {
-            var occurenceEvent = _occurenceEventService.OccurenceEventById(occurenceEventId);
-            var parentEvent = EventById(occurenceEvent.EventId);
-
-            parentEvent.Id = Guid.Empty;
-            parentEvent.IsReccurent = false;
-            parentEvent.DateFrom = occurenceEvent.NextRun;
-            parentEvent.DateTo = occurenceEvent.NextRun;
-
-            occurenceEvent.IsActive = true;
-            occurenceEvent.LastRun = parentEvent.DateTo;
-            occurenceEvent.NextRun = DateTimeExtensions.AddDateUnit(occurenceEvent.Periodicity, occurenceEvent.Frequency, parentEvent.DateTo);
-            occurenceEvent.ModifiedDate = DateTime.UtcNow;
-
-            try
-            {
-                await Create(parentEvent);
-                await _occurenceEventService.Edit(occurenceEvent);
-
-                return new OperationResult(true, "OccurenceEvent are aproved", string.Empty);
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, ex.Message, string.Empty);
-            }
-        }
-
+       
         public async Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
         {
             var userEvent = _db.UserEventRepository

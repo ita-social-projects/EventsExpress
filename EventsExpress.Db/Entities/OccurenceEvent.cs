@@ -3,7 +3,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
-    public class OccurenceEvent : ManageableEvent
+    public class OccurenceEvent : ManageableEntity
     {
         public int Frequency { get; set; }
 

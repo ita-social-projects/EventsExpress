@@ -55,7 +55,7 @@ namespace EventsExpress.Core.HostedService
                     }
                     catch (Exception ex)
                     {
-                        new OperationResult(false, ex.Message, string.Empty);
+                        _logger.LogError(ex.Message);
                     }
 
                     await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
