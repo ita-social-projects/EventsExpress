@@ -7,7 +7,13 @@ import * as Birthday from './editReducers/EditBirthdayReducer';
 import * as User from './user';
 import * as Register from './register';
 import * as AddEvent from './add-event';
+import * as AddCopyEvent from './add-copy-event';
+import * as EditEventFromParent from './edit-event-from-parent';
+import * as AddOccurenceEvent from './add-occurenceEvent';
+import * as CancelNextOccurenceEvent from './cancel-next-occurenceEvent';
+import * as CancelAllOccurenceEvents from './cancel-all-occurenceEvents';
 import * as Events from './event-list';
+import * as OccurenceEvents from './occurenceEvent-list';
 import * as AddCategories from './add-category';
 import * as Categories from './category-list';
 import * as Countries from './countries';
@@ -17,6 +23,7 @@ import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
 import * as EventView from './event-item-view';
+import * as OccurenceEventView from './occurenceEvent-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
@@ -48,7 +55,13 @@ const rootReducers = {
     editBirthday: Birthday.reducer,
     register: Register.reducer,
     add_event: AddEvent.reducer,
+    add_copy_event: AddCopyEvent.reducer,
+    edit_event_from_parent: EditEventFromParent.reducer,
+    add_occurenceEvent: AddOccurenceEvent.reducer,
+    cancel_next_occurenceEvent: CancelNextOccurenceEvent.reducer,
+    cancel_all_occurenceEvent: CancelAllOccurenceEvents.reducer,
     events: Events.reducer,
+    occurenceEvents: OccurenceEvents.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
@@ -58,6 +71,7 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer,
     event: EventView.reducer,
+    occurenceEvent: OccurenceEventView.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,

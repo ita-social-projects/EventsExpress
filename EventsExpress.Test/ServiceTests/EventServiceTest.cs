@@ -15,6 +15,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTest : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private static Mock<IOccurenceEventService> mockOccurenceEventService;
         private static Mock<IMediator> mockMediator;
         private EventService service;
         private List<Event> events;
@@ -25,12 +26,14 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
+            mockOccurenceEventService = new Mock<IOccurenceEventService>();
 
             service = new EventService(
                 MockUnitOfWork.Object,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object);
+                mockPhotoService.Object,
+                mockOccurenceEventService.Object);
 
             events = new List<Event>
             {

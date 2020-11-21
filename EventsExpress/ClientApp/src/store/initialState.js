@@ -114,10 +114,45 @@ const initialState = {
             photoUrl: null,
         }
     },
+    occurenceEvent: {
+        isPending: true,
+        isError: false,
+        cancelationModalStatus: false,
+        cancelation: {},
+        data: {
+            lastRun: null,
+            nextRun: null,
+        }
+    },
     add_event: {
         isEventPending: false,
         isEventSuccess: false,
         eventError: null
+    },
+    add_copy_event: {
+        isCopyEventPending: false,
+        isCopyEventSuccess: false,
+        copyEventError: null
+    },
+    edit_event_from_parent: {
+        isEventFromParentPending: false,
+        isEventFromParentSuccess: false,
+        eventFromParentError: null
+    },
+    add_occurenceEvent: {
+        isOccurenceEventPending: false,
+        isOccurenceEventSuccess: false,
+        occurenceEventError: null
+    },
+    cancel_next_occurenceEvent: {
+        isCancelNextOccurenceEventPending: false,
+        isCancelNextOccurenceEventSuccess: false,
+        cancelNextOccurenceEventError: null
+    },
+    cancel_occurenceEvents: {
+        isCancelOccurenceEventsPending: false,
+        isCancelOccurenceEventsSuccess: false,
+        cancelOccurenceEventsError: null
     },
     events: {
         isPending: true,
@@ -127,6 +162,13 @@ const initialState = {
             pageViewModel: {},
         },
         filter: eventHelper.getDefaultEventFilter(),
+    },
+    occurenceEvents: {
+        isPending: true,
+        isError: false,
+        data: {
+            items: [],
+        },
     },
     profile: {
         isPending: true,
