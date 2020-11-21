@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reset_occurenceEvents } from '../../actions/occurenceEvent-list';
-import OccurenceEvent from './occurenceEvent-item';
+import { reset_EventsSchedule } from '../../actions/eventSchedules-list';
+import EventSchedule from './eventSchedule-item';
 
 const limit = 2;
 const pageCount = 3;
 
-class OccurenceEventList extends Component {
+class EventSchedulesList extends Component {
 
     renderItems = arr =>
         arr.map(item => (
-            <OccurenceEvent
+            <EventSchedule
                 key={item.id}
                 item={item}
                 current_user={this.props.current_user}
@@ -37,4 +37,4 @@ class OccurenceEventList extends Component {
     }
 }
 
-export default OccurenceEventList;
+export default EventSchedulesList;

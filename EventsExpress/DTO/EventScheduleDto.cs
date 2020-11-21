@@ -1,9 +1,10 @@
 ﻿using System;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Enums;
 
-namespace EventsExpress.Core.DTOs
+namespace EventsExpress.DTO
 {
-    public class OccurenceEventDTO
+    public class EventScheduleDto
     {
         public Guid Id { get; set; }
 
@@ -17,16 +18,8 @@ namespace EventsExpress.Core.DTOs
 
         public bool IsActive { get; set; }
 
-        public Guid EventId { get; set; }
-
         public EventDTO Event { get; set; }
 
-        public Guid CreatedBy { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public Guid ModifiedBy { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
+        public Guid EventId { get; set; }
     }
 }

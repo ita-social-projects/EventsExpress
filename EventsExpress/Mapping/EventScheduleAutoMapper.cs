@@ -8,11 +8,11 @@ using EventsExpress.DTO;
 
 namespace EventsExpress.Mapping
 {
-    public class OccurenceEventAutoMapper : Profile
+    public class EventScheduleAutoMapper : Profile
     {
-        public OccurenceEventAutoMapper()
+        public EventScheduleAutoMapper()
         {
-            CreateMap<OccurenceEvent, OccurenceEventDTO>()
+            CreateMap<EventSchedule, EventScheduleDTO>()
            .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
            .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
            .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
@@ -29,9 +29,9 @@ namespace EventsExpress.Mapping
                PhotoBytes = src.Event.Photo,
            }));
 
-            CreateMap<OccurenceEventDTO, OccurenceEvent>().ReverseMap();
+            CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
 
-            CreateMap<OccurenceEventDTO, OccurenceEventDto>()
+            CreateMap<EventScheduleDTO, EventScheduleDto>()
                 .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
                 {
                     Id = src.Event.Id,
@@ -42,7 +42,7 @@ namespace EventsExpress.Mapping
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
                 }));
 
-            CreateMap<OccurenceEventDto, OccurenceEventDTO>()
+            CreateMap<EventScheduleDto, EventScheduleDTO>()
                 .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
                 {
                     Id = src.Event.Id,
@@ -53,14 +53,14 @@ namespace EventsExpress.Mapping
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
                 }));
 
-            CreateMap<EventDTO, OccurenceEventDTO>()
+            CreateMap<EventDTO, EventScheduleDTO>()
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))
                 .ForMember(dest => dest.CreatedBy, opts => opts.MapFrom(src => src.OwnerId))
-                .ForMember(dest => dest.CreatedDate, opts => opts.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.CreatedDateTime, opts => opts.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.ModifiedBy, opts => opts.MapFrom(src => src.OwnerId))
-                .ForMember(dest => dest.ModifiedDate, opts => opts.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.ModifiedDateTime, opts => opts.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true));
         }

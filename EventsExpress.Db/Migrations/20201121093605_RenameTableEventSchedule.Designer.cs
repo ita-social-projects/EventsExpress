@@ -4,14 +4,16 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201121093605_RenameTableEventSchedule")]
+    partial class RenameTableEventSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,9 +133,7 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(5144));
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
@@ -159,9 +159,7 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ModifiedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(6334));
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -208,9 +206,7 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(8321));
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
@@ -228,9 +224,7 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ModifiedDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(8703));
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("NextRun")
                         .HasColumnType("datetime2");

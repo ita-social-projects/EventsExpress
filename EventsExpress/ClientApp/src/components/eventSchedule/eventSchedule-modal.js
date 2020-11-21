@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal'
 import Button from "@material-ui/core/Button";
-import '../occurenceEvent/occurenceEvent.css'
+import './eventSchedule.css'
 
 
-export class OccurenceEventModal extends Component {
+export class EventScheduleModal extends Component {
     
     render() {
 
@@ -35,4 +35,4 @@ export class OccurenceEventModal extends Component {
     }
 }
 
-export default OccurenceEventModal
+export default EventScheduleModal

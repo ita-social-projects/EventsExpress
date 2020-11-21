@@ -2,10 +2,10 @@
 import Button from "@material-ui/core/Button";
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-import '../occurenceEvent/occurenceEvent.css'
+import './eventSchedule.css'
 
 
-export class OccurenceEventPopover extends Component {
+export class EventSchedulePopover extends Component {
 
     state = {
         anchorEl: false,
@@ -58,4 +58,4 @@ export class OccurenceEventPopover extends Component {
     }
 }
 
-export default OccurenceEventPopover
+export default EventSchedulePopover

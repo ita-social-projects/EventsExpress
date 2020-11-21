@@ -27,7 +27,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Event> Events { get; set; }
 
-        public DbSet<OccurenceEvent> OccurenceEvents { get; set; }
+        public DbSet<EventSchedule> EventSchedules { get; set; }
 
         public DbSet<Report> Reports { get; set; }
 
@@ -150,6 +150,22 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
+
+            // event config
+            builder.Entity<Event>()
+                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
+
+            // event config
+            builder.Entity<Event>()
+                .Property(c => c.ModifiedDateTime).HasDefaultValue(DateTime.UtcNow);
+
+            // EventSchedule config
+            builder.Entity<EventSchedule>()
+                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
+
+            // EventSchedule config
+            builder.Entity<EventSchedule>()
+                .Property(c => c.ModifiedDateTime).HasDefaultValue(DateTime.UtcNow);
 
             // inventory config
             builder.Entity<Inventory>()

@@ -114,7 +114,7 @@ const initialState = {
             photoUrl: null,
         }
     },
-    occurenceEvent: {
+    eventSchedule: {
         isPending: true,
         isError: false,
         cancelationModalStatus: false,
@@ -139,20 +139,20 @@ const initialState = {
         isEventFromParentSuccess: false,
         eventFromParentError: null
     },
-    add_occurenceEvent: {
-        isOccurenceEventPending: false,
-        isOccurenceEventSuccess: false,
-        occurenceEventError: null
+    add_eventSchedule: {
+        isEventSchedulePending: false,
+        isEventScheduleSuccess: false,
+        eventScheduleError: null
     },
-    cancel_next_occurenceEvent: {
-        isCancelNextOccurenceEventPending: false,
-        isCancelNextOccurenceEventSuccess: false,
-        cancelNextOccurenceEventError: null
+    cancel_next_eventSchedule: {
+        isCancelNextEventSchedulePending: false,
+        isCancelNextEventScheduleSuccess: false,
+        cancelNextEventScheduleError: null
     },
-    cancel_occurenceEvents: {
-        isCancelOccurenceEventsPending: false,
-        isCancelOccurenceEventsSuccess: false,
-        cancelOccurenceEventsError: null
+    cancel_eventSchedules: {
+        isCancelEventSchedulesPending: false,
+        isCancelEventSchedulesSuccess: false,
+        cancelEventSchedulesError: null
     },
     events: {
         isPending: true,
@@ -163,7 +163,7 @@ const initialState = {
         },
         filter: eventHelper.getDefaultEventFilter(),
     },
-    occurenceEvents: {
+    eventSchedules: {
         isPending: true,
         isError: false,
         data: {

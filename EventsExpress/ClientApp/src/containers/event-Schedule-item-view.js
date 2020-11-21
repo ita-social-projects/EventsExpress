@@ -1,16 +1,16 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import OccurenceEventItemView from '../components/occurenceEvent/occurenceEvent-item-view';
+import EventScheduleItemView from '../components/eventSchedule/eventSchedule-item-view';
 import Spinner from '../components/spinner';
-import getOccurenceEvent from '../actions/occurenceEvent-item-view';
+import getEventSchedule from '../actions/eventSchedule-item-view';
 import get_event from '../actions/event-item-view';
-import { resetOccurenceEvent } from '../actions/occurenceEvent-item-view';
+import { resetEventSchedule } from '../actions/eventSchedule-item-view';
 import { resetEvent } from '../actions/event-item-view';
 
-class OccurenceEventItemViewWrapper extends Component {
+class EventScheduleItemViewWrapper extends Component {
     componentWillMount() {
         const { id } = this.props.match.params;
-        this.props.getOccurenceEvent(id);
+        this.props.getEventSchedule(id);
     }
 
     componentWillUnmount() {
@@ -18,11 +18,11 @@ class OccurenceEventItemViewWrapper extends Component {
     }
 
     render() {
-        const { isPending } = this.props.occurenceEvent;
+        const { isPending } = this.props.eventSchedule;
         return isPending
             ? <Spinner />
-            : <OccurenceEventItemView
-                occurenceEvent={this.props.occurenceEvent}
+            : <EventScheduleItemView
+                eventSchedule={this.props.eventSchedule}
                 match={this.props.match}
                 event={this.props.event}
                 current_user={this.props.current_user}
@@ -32,15 +32,15 @@ class OccurenceEventItemViewWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     event: state.event,
-    occurenceEvent: state.occurenceEvent,
+    eventSchedule: state.eventSchedule,
     current_user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
-    getOccurenceEvent: (id) => dispatch(getOccurenceEvent(id)),
-    reset: () => dispatch(resetOccurenceEvent())
+    getEventSchedule: (id) => dispatch(getEventSchedule(id)),
+    reset: () => dispatch(resetEventSchedule())
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(OccurenceEventItemViewWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemViewWrapper);

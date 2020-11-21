@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import cancel_next_occurenceEvent from '../actions/cancel-next-occurenceEvent';
+import cancel_next_eventSchedule from '../actions/cancel-next-eventSchedule';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { reset } from 'redux-form';
-import OccurenceEventModal from '../components/occurenceEvent/occurenceEvent-modal'
+import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
 import {
-    setCancelNextOccurenceEventPending,
-    setCancelNextOccurenceEventError,
-    setCancelNextOccurenceEventSuccess
+    setCancelNextEventSchedulePending,
+    setCancelNextEventScheduleError,
+    setCancelNextEventScheduleSuccess
 }
-    from '../actions/cancel-next-occurenceEvent';
+    from '../actions/cancel-next-eventSchedule';
 
 class CancelNextEventWrapper extends Component {
     constructor() {
@@ -22,8 +22,8 @@ class CancelNextEventWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.cancel_next_occurenceEvent_status.cancelNextOccurenceEventError &&
-            this.props.cancel_next_occurenceEvent_status.isCancelNextOccurenceEventSuccess) {
+        if (!this.props.cancel_next_eventSchedule_status.cancelNextEventScheduleError &&
+            this.props.cancel_next_eventSchedule_status.isCancelNextEventScheduleSuccess) {
             this.props.resetEvent();
             this.props.reset();
         }
@@ -45,14 +45,14 @@ class CancelNextEventWrapper extends Component {
         this.setState({
             show: false,
         });
-        this.props.cancel_next_occurenceEvent(this.props.initialValues.id);
+        this.props.cancel_next_eventSchedule(this.props.initialValues.id);
     }
 
     render() {
 
         return <>
             <Dropdown.Item onClick={this.handleClick}>Cancel once</Dropdown.Item>
-            <OccurenceEventModal
+            <EventScheduleModal
                 cancelHandler={this.cancelHandler}
                 message="Are you sure to cancel the next event?"
                 show={this.state.show}
@@ -63,18 +63,18 @@ class CancelNextEventWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
-    cancel_next_occurenceEvent_status: state.cancel_next_occurenceEvent,
+    cancel_next_eventSchedule_status: state.cancel_next_eventSchedule,
     initialValues: state.event.data,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        cancel_next_occurenceEvent: (data) => dispatch(cancel_next_occurenceEvent(data)),
+        cancel_next_eventSchedule: (data) => dispatch(cancel_next_eventSchedule(data)),
         resetEvent: () => dispatch(reset('event-form')),
         reset: () => {
-            dispatch(setCancelNextOccurenceEventPending(true));
-            dispatch(setCancelNextOccurenceEventSuccess(false));
-            dispatch(setCancelNextOccurenceEventError(null));
+            dispatch(setCancelNextEventSchedulePending(true));
+            dispatch(setCancelNextEventScheduleSuccess(false));
+            dispatch(setCancelNextEventScheduleError(null));
         }
     }
 };

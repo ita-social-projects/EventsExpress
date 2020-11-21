@@ -4,9 +4,9 @@ using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Db.Repo
 {
-    public class OccurenceEventRepository : Repository<OccurenceEvent>, IOccurenceEventRepository
+    public class EventScheduleRepository : Repository<EventSchedule>, IEventScheduleRepository
     {
-        public OccurenceEventRepository(AppDbContext db)
+        public EventScheduleRepository(AppDbContext db)
             : base(db)
         {
         }

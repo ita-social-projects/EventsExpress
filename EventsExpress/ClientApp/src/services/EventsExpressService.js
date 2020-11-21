@@ -327,8 +327,8 @@ export default class EventsExpressService {
     }
     //#endregion Events
 
-    //#region Occurence Events
-    setOccurenceEvent = async (data) => {
+    //#region Event Schedule
+    setEventSchedule = async (data) => {
         let file = new FormData();
         if (data.id != null) {
             file.append('Id', data.id);
@@ -340,36 +340,36 @@ export default class EventsExpressService {
         file.append('Periodicity', data.periodicity);
         file.append('IsActive', data.isActive);
 
-        const res = await this.setResourceWithData('occurenceEvent/edit', file);
+        const res = await this.setResourceWithData('eventSchedule/edit', file);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
-    setNextOccurenceEventCancel = async (eventId) => {
-        const res = await this.setResourceWithData(`occurenceEvent/CancelNextEvent?eventId=${eventId}`);
+    setNextEventScheduleCancel = async (eventId) => {
+        const res = await this.setResourceWithData(`eventSchedule/CancelNextEvent?eventId=${eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
-    setOccurenceEventsCancel = async (eventId) => {
-        const res = await this.setResourceWithData(`occurenceEvent/CancelAllEvents?eventId=${eventId}`);
+    setEventSchedulesCancel = async (eventId) => {
+        const res = await this.setResourceWithData(`eventSchedule/CancelAllEvents?eventId=${eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
-    getAllOccurenceEvents = async () => {
-        const res = await this.getResource(`occurenceEvent/all`);
+    getAllEventSchedules = async () => {
+        const res = await this.getResource(`eventSchedule/all`);
         return res;
     }
 
-    getOccurenceEvent = async (id) => {
-        const res = await this.getResource(`occurenceEvent/get?id=${id}`);
+    getEventSchedule = async (id) => {
+        const res = await this.getResource(`eventSchedule/get?id=${id}`);
         return res;
     }
-    //#endregion Occurence Events
+    //#endregion Event Schedule
 
     getUsers = async (filter) => {
         const res = await this.getResource(`users/get${filter}`);

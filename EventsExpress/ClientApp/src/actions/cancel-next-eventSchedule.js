@@ -10,48 +10,48 @@ export const EVENT_CANCEL_NEXT_WAS_CREATED = "EVENT_CANCEL_NEXT_WAS_CREATED";
 const api_serv = new EventsExpressService();
 const history = createBrowserHistory({forceRefresh:true});
 
-export default function cancel_next_occurenceEvent(eventId) {
+export default function cancel_next_eventSchedule(eventId) {
 
     return dispatch => {
-      dispatch(setCancelNextOccurenceEventPending(true));
+      dispatch(setCancelNextEventSchedulePending(true));
   
-      const res = api_serv.setNextOccurenceEventCancel(eventId);
+      const res = api_serv.setNextEventScheduleCancel(eventId);
       res.then(response => {
         if(response.error == null){
-            dispatch(setCancelNextOccurenceEventSuccess(true));
+            dispatch(setCancelNextEventScheduleSuccess(true));
             response.text().then(x => { 
-              dispatch(cancelNextOccurenceEventWasCreated(x));
+              dispatch(cancelNextEventScheduleWasCreated(x));
               dispatch(setAlert({ variant: 'success', message: 'The next event was canceled!'}));
-              dispatch(history.push(`/occurenceEvents`));} );
+                dispatch(history.push(`/eventSchedules`));} );
           }else{
-            dispatch(setCancelNextOccurenceEventError(response.error));
+            dispatch(setCancelNextEventScheduleError(response.error));
           }
         });
     }
   }
 
-function cancelNextOccurenceEventWasCreated(eventId){
+function cancelNextEventScheduleWasCreated(eventId){
   return{
     type: EVENT_CANCEL_NEXT_WAS_CREATED,
     payload: eventId
   }
 }
 
-  export function setCancelNextOccurenceEventSuccess(eventId) {
+  export function setCancelNextEventScheduleSuccess(eventId) {
     return {
       type: SET_CANCEL_NEXT_EVENT_SUCCESS,
       payload: eventId
     };
   }
 
-export function setCancelNextOccurenceEventPending(eventId) {
+export function setCancelNextEventSchedulePending(eventId) {
   return {
     type: SET_CANCEL_NEXT_EVENT_PENDING,
     payload: eventId
   };
 }
 
-export function setCancelNextOccurenceEventError(eventId) {
+export function setCancelNextEventScheduleError(eventId) {
   return {
     type: SET_CANCEL_NEXT_EVENT_ERROR,
     payload: eventId

@@ -30,11 +30,11 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var user = _userService.GetById(notification.OccurenceEvent.CreatedBy);
+            var user = _userService.GetById(notification.EventSchedule.CreatedBy);
 
             try
             {
-                string link = $"{AppHttpContext.AppBaseUrl}/occurenceEvent/{notification.OccurenceEvent.Id}";
+                string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
                 await _sender.SendEmailAsync(new EmailDTO
                 {
                     Subject = "Aprove your reccurent event!",

@@ -2,28 +2,28 @@
 
 import {
     SET_CANCEL_NEXT_EVENT_ERROR, SET_CANCEL_NEXT_EVENT_PENDING, SET_CANCEL_NEXT_EVENT_SUCCESS
-}from '../actions/cancel-next-occurenceEvent';
+}from '../actions/cancel-next-eventSchedule';
 
-export const reducer = (state = initialState.cancel_next_occurenceEvent, action) => {
+export const reducer = (state = initialState.cancel_next_eventSchedule, action) => {
 
     switch(action.type){
         
         case SET_CANCEL_NEXT_EVENT_ERROR:
             return {
                 ...state,
-                isCancelNextOccurenceEventPending: false,
-                cancelNextOccurenceEventError: action.payload
+                isCancelNextEventSchedulePending: false,
+                cancelNextEventScheduleError: action.payload
             };
         case SET_CANCEL_NEXT_EVENT_PENDING:
             return {
                 ...state,
-                isCancelNextOccurenceEventPending: action.payload
+                isCancelNextEventSchedulePending: action.payload
             };
         case SET_CANCEL_NEXT_EVENT_SUCCESS:
             return {
                 ...state,
-                isCancelNextOccurenceEventPending: false,
-                isCancelNextOccurenceEventSuccess: action.payload
+                isCancelNextEventSchedulePending: false,
+                isCancelNextEventScheduleSuccess: action.payload
             };
         default:
             break;

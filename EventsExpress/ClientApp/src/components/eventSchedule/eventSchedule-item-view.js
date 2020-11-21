@@ -9,16 +9,16 @@ import { connect } from 'react-redux';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
-import { renderPeriod } from '../occurenceEvent/render-period'
-import { useStyles } from '../occurenceEvent/card-style-const'
-import SelectiveForm from '../occurenceEvent/selective-form'
+import { renderPeriod } from './render-period'
+import { useStyles } from './card-style-const'
+import SelectiveForm from './selective-form'
 import '../layout/colorlib.css';
 import get_event from '../../actions/event-item-view';
 
-class OccurenceEventItemView extends Component {
+class EventScheduleItemView extends Component {
 
     componentWillMount() {
-        this.props.get_event(this.props.occurenceEvent.data.eventId);
+        this.props.get_event(this.props.eventSchedule.data.eventId);
     }
 
     renderUsers = arr => {
@@ -64,7 +64,7 @@ class OccurenceEventItemView extends Component {
             lastRun,
             nextRun,
             event,
-            eventId } = this.props.occurenceEvent.data;
+            eventId } = this.props.eventSchedule.data;
         const period = renderPeriod(periodicity, frequency);
 
         return <>
@@ -106,7 +106,7 @@ class OccurenceEventItemView extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    occurenceEvent: state.occurenceEvent,
+    eventSchedule: state.eventSchedule,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -114,4 +114,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(OccurenceEventItemView);
+export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemView);

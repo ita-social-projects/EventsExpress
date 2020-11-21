@@ -5,11 +5,11 @@ namespace EventsExpress.Core.Notifications
 {
     public class CreateEventVerificationMessage : INotification
     {
-        public CreateEventVerificationMessage(OccurenceEventDTO eventDto)
+        public CreateEventVerificationMessage(EventScheduleDTO eventScheduleDto)
         {
-            OccurenceEvent = eventDto;
+            EventSchedule = eventScheduleDto;
         }
 
-        public OccurenceEventDTO OccurenceEvent { get; }
+        public EventScheduleDTO EventSchedule { get; }
     }
 }

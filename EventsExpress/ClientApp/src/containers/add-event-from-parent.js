@@ -3,7 +3,7 @@ import add_copy_event from '../actions/add-copy-event';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { reset } from 'redux-form';
-import OccurenceEventModal from '../components/occurenceEvent/occurenceEvent-modal'
+import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
 import {
     setCopyEventError,
     setCopyEventPending,
@@ -53,7 +53,7 @@ class AddFromParentEventWrapper extends Component {
 
         return <>
             <Dropdown.Item onClick={this.handleClick}>Create without editing</Dropdown.Item>
-            <OccurenceEventModal
+            <EventScheduleModal
                 cancelHandler={this.cancelHandler}
                 message="Are you sure to create the event without editing?"
                 show={this.state.show}

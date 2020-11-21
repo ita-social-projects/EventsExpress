@@ -129,7 +129,7 @@ export const validate = values => {
 export const validateEventForm = values =>{
 
     if (!values.isPublic) {
-        values.isPublic = true;
+        values.isPublic = false;
     }
 
     if (!values.maxParticipants) {

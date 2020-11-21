@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
-import { renderPeriod } from '../occurenceEvent/render-period'
+import { renderPeriod } from './render-period'
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -10,10 +10,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import { useStyles } from '../occurenceEvent/card-style-const'
+import { useStyles } from './card-style-const'
 
 
-export default class OccurenceEvent extends Component {
+export default class EventSchedule extends Component {
 
     render() {
 
@@ -40,7 +40,7 @@ export default class OccurenceEvent extends Component {
                         className={classes.media}
                         title={event.title}
                     >
-                        <Link to={`/occurenceEvent/${id}`}>
+                        <Link to={`/eventSchedule/${id}`}>
                             <img src={event.photoUrl} className="w-100" />
                         </Link>
                     </CardMedia>

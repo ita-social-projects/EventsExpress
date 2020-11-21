@@ -16,18 +16,18 @@ namespace EventsExpress.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class OccurenceEventController : ControllerBase
+    public class EventScheduleController : ControllerBase
     {
-        private readonly IOccurenceEventService _occurenceEventService;
+        private readonly IEventScheduleService _eventScheduleService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public OccurenceEventController(
-            IOccurenceEventService occurenceEventService,
+        public EventScheduleController(
+            IEventScheduleService eventScheduleService,
             IAuthService authSrv,
             IMapper mapper)
         {
-            _occurenceEventService = occurenceEventService;
+            _eventScheduleService = eventScheduleService;
             _authService = authSrv;
             _mapper = mapper;
         }
@@ -44,10 +44,10 @@ namespace EventsExpress.Controllers
         {
             try
             {
-                var viewModel = new IndexViewModel<OccurenceEventDto>
+                var viewModel = new IndexViewModel<EventScheduleDto>
                 {
-                    Items = _mapper.Map<IEnumerable<OccurenceEventDto>>(
-                        _occurenceEventService.GetAll()),
+                    Items = _mapper.Map<IEnumerable<EventScheduleDto>>(
+                        _eventScheduleService.GetAll()),
                 };
                 return Ok(viewModel);
             }
@@ -64,7 +64,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromForm] OccurenceEventDto model)
+        public async Task<IActionResult> Edit([FromForm] EventScheduleDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace EventsExpress.Controllers
 
             var result = model.Id == Guid.Empty
                 ? null
-                : await _occurenceEventService.Edit(_mapper.Map<OccurenceEventDTO>(model));
+                : await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
 
             if (result.Successed)
             {
@@ -99,7 +99,7 @@ namespace EventsExpress.Controllers
 
             var result = eventId == Guid.Empty
                 ? null
-                : await _occurenceEventService.CancelEvents(eventId);
+                : await _eventScheduleService.CancelEvents(eventId);
 
             if (result.Successed)
             {
@@ -125,7 +125,7 @@ namespace EventsExpress.Controllers
 
             var result = eventId == Guid.Empty
                 ? null
-                : await _occurenceEventService.CancelNextEvent(eventId);
+                : await _eventScheduleService.CancelNextEvent(eventId);
 
             if (result.Successed)
             {
@@ -144,6 +144,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<OccurenceEventDto>(_occurenceEventService.OccurenceEventById(id)));
+            Ok(_mapper.Map<EventScheduleDto>(_eventScheduleService.EventScheduleById(id)));
     }
 }

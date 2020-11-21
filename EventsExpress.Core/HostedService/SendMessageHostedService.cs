@@ -41,16 +41,16 @@ namespace EventsExpress.Core.HostedService
             {
                 var scopedProcessingService =
                     scope.ServiceProvider
-                        .GetRequiredService<IOccurenceEventService>();
+                        .GetRequiredService<IEventScheduleService>();
 
                 while (!stoppingToken.IsCancellationRequested)
                 {
-                    var events = scopedProcessingService.GetUrgentOccurenceEvents();
+                    var events = scopedProcessingService.GetUrgentEventSchedules();
                     try
                     {
                         foreach (var ev in events)
                         {
-                            await _mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<OccurenceEventDTO>(ev)));
+                            await _mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDTO>(ev)));
                         }
                     }
                     catch (Exception ex)

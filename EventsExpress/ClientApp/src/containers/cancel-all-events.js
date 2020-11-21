@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import cancel_all_occurenceEvent from '../actions/cancel-all-occurenceEvents';
+import cancel_all_eventSchedules from '../actions/cancel-all-eventSchedules';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { reset } from 'redux-form';
-import OccurenceEventModal from '../components/occurenceEvent/occurenceEvent-modal'
+import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
 import {
-    setCancelAllOccurenceEventsPending,
-    setCancelAllOccurenceEventsError,
-    setCancelAllOccurenceEventsSuccess
+    setCancelAllEventSchedulesPending,
+    setCancelAllEventSchedulesError,
+    setCancelAllEventSchedulesSuccess
 }
-    from '../actions/cancel-all-occurenceEvents';
+    from '../actions/cancel-all-eventSchedules';
 
 class CancelAllEventsWrapper extends Component {
     constructor() {
@@ -22,8 +22,9 @@ class CancelAllEventsWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.cancel_all_occurenceEvent_status.cancelOccurenceEventsError &&
-            this.props.cancel_all_occurenceEvent_status.isCancelOccurenceEventsSuccess) {
+        console.log(this.props);
+        if (!this.props.cancel_all_eventSchedule_status.cancelEventSchedulesError &&
+            this.props.cancel_all_eventSchedule_status.isCancelEventSchedulesSuccess) {
             this.props.resetEvent();
             this.props.reset();
         }
@@ -46,14 +47,14 @@ class CancelAllEventsWrapper extends Component {
         this.setState({
             show: false,
         });
-        this.props.cancel_all_occurenceEvent(this.props.initialValues.id);
+        this.props.cancel_all_eventSchedules(this.props.initialValues.id);
     }
 
     render() {
 
         return <>
             <Dropdown.Item onClick={this.handleClick}>Cancel</Dropdown.Item>
-            <OccurenceEventModal
+            <EventScheduleModal
                 cancelHandler={this.cancelHandler}
                 message="Are you sure to cancel all events?"
                 show={this.state.show}
@@ -64,18 +65,18 @@ class CancelAllEventsWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
-    cancel_all_occurenceEvent_status: state.cancel_all_occurenceEvent,
+    cancel_all_eventSchedule_status: state.cancel_all_eventSchedules,
     initialValues: state.event.data,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        cancel_all_occurenceEvent: (data) => dispatch(cancel_all_occurenceEvent(data)),
+        cancel_all_eventSchedules: (data) => dispatch(cancel_all_eventSchedules(data)),
         resetEvent: () => dispatch(reset('event-form')),
         reset: () => {
-            dispatch(setCancelAllOccurenceEventsPending(true));
-            dispatch(setCancelAllOccurenceEventsSuccess(false));
-            dispatch(setCancelAllOccurenceEventsError(null));
+            dispatch(setCancelAllEventSchedulesPending(true));
+            dispatch(setCancelAllEventSchedulesSuccess(false));
+            dispatch(setCancelAllEventSchedulesError(null));
         }
     }
 };

@@ -49,9 +49,9 @@ class EditFromParentEventWraper extends Component {
     render() {
         let data = {
             ...this.props.initialValues,
-            dateFrom: this.props.occurenceEvent.nextRun,
+            dateFrom: this.props.eventSchedule.nextRun,
             dateTo: new moment(this.props.initialValues.dateTo)
-                .add(new moment(this.props.occurenceEvent.nextRun)
+                .add(new moment(this.props.eventSchedule.nextRun)
                     .diff(new moment(this.props.initialValues.dateFrom), 'days'), 'days')
         }
 
@@ -76,7 +76,7 @@ const mapStateToProps = (state) => ({
     countries: state.countries,
     cities: state.cities,
     all_categories: state.categories.data,
-    occurenceEvent: state.occurenceEvent.data,
+    eventSchedule: state.eventSchedule.data,
     initialValues: state.event.data,
 });
 

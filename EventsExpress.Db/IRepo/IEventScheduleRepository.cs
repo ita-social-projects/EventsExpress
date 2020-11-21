@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Db.IRepo
 {
-    public interface IOccurenceEventRepository : IRepository<OccurenceEvent>
+    public interface IEventScheduleRepository : IRepository<EventSchedule>
     {
     }
 }

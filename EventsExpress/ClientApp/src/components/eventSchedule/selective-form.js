@@ -2,14 +2,14 @@
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import '../occurenceEvent/occurenceEvent.css'
+import './eventSchedule.css'
 import AddFromParentEventWrapper from '../../containers/add-event-from-parent'
 import EditFromParentEventWrapper from '../../containers/edit-event-from-parent'
 import CancelNextEventWrapper from '../../containers/cancel-next-event'
 import CancelAllEventsWrapper from '../../containers/cancel-all-events'
-import OccurenceEventPopover from './occurenceEvent-popover'
-import OccurenceEventModal from './occurenceEvent-modal'
-import '../occurenceEvent/occurenceEvent.css'
+import EventSchedulePopover from './eventSchedule-popover'
+import EventScheduleModal from './eventSchedule-modal'
+import './eventSchedule.css'
 
 
 class SelectiveForm extends Component {
@@ -64,9 +64,9 @@ class SelectiveForm extends Component {
                             <Dropdown.Item as={CancelAllEventsWrapper}></Dropdown.Item>
                         </DropdownButton>
                     </div>
-                    <OccurenceEventPopover />
+                    <EventSchedulePopover />
                 </div>
-                <OccurenceEventModal
+                <EventScheduleModal
                     cancelHandler={() => this.cancelHandler()}
                     message="Are you sure to create the event with editing?"
                     show={this.state.show}

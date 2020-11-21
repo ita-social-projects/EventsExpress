@@ -10,7 +10,7 @@ namespace EventsExpress.Db.Repo
         private readonly AppDbContext database;
 
         private IEventRepository _eventRepository;
-        private IOccurenceEventRepository _occurenceEventRepository;
+        private IEventScheduleRepository _eventScheduleRepository;
         private ICategoryRepository _categoryRepository;
         private ICityRepository _cityRepository;
         private ICountryRepository _countryRepository;
@@ -45,8 +45,8 @@ namespace EventsExpress.Db.Repo
         public IEventRepository EventRepository =>
            _eventRepository ?? (_eventRepository = new EventRepository(database));
 
-        public IOccurenceEventRepository OccurenceEventRepository =>
-           _occurenceEventRepository ?? (_occurenceEventRepository = new OccurenceEventRepository(database));
+        public IEventScheduleRepository EventScheduleRepository =>
+           _eventScheduleRepository ?? (_eventScheduleRepository = new EventScheduleRepository(database));
 
         public ICategoryRepository CategoryRepository =>
            _categoryRepository ?? (_categoryRepository = new CategoryRepository(database));

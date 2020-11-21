@@ -26,7 +26,7 @@ namespace EventsExpress.Db.Entities
 
         public Guid? PhotoId { get; set; }
 
-        public virtual OccurenceEvent OccurenceEvent { get; set; }
+        public virtual EventSchedule EventSchedule { get; set; }
 
         public virtual Photo Photo { get; set; }
 

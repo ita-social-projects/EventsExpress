@@ -65,7 +65,7 @@ class LeftSidebar extends Component {
                                         text={"Search Users"}
                                     />
                                     <NavItem
-                                        to={'/occurenceEvents'}
+                                        to={'/eventSchedules'}
                                         my_icon={<i className="fa fa-clone"></i>}
                                         text={"Reccurent Events"}
                                     />

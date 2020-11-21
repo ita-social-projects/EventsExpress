@@ -120,7 +120,7 @@ namespace EventsExpress
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEventService, EventService>();
-            services.AddTransient<IOccurenceEventService, OccurenceEventService>();
+            services.AddTransient<IEventScheduleService, EventScheduleService>();
             services.AddTransient<IEventStatusHistoryService, EventStatusHistoryService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IUserService, UserService>();

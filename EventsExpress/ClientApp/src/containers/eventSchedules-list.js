@@ -1,32 +1,32 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import OccurenceEventList from '../components/occurenceEvent/occurenceEvent-list';
+import EventSchedulesList from '../components/eventSchedule/eventSchedule-list';
 import Spinner from '../components/spinner';
-import { getOccurenceEvents } from '../actions/occurenceEvent-list';
+import { getEventSchedules } from '../actions/eventSchedules-list';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';
 
-class OccurenceEventListWrapper extends Component {
+class EventSchedulesListWrapper extends Component {
     constructor(props) {
         super(props);
-        this.props.getOccurenceEvents();
+        this.props.getEventSchedules();
     }
 
     render() {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending, isError } = this.props.occurenceEvents;
-        const { items } = this.props.occurenceEvents.data;
+        const { data, isPending, isError } = this.props.eventSchedules;
+        const { items } = this.props.eventSchedules.data;
         const errorMessage = isError.ErrorCode == '403'
             ? <Forbidden />
             : isError.ErrorCode == '500'
                 ? <Redirect
                     from="*"
                     to={{
-                        pathname: "/home/occurenceEvents",
+                        pathname: "/home/eventSchedules",
                     }}
                 />
                 : isError.ErrorCode == '401'
@@ -36,7 +36,7 @@ class OccurenceEventListWrapper extends Component {
                         : null;
         const spinner = isPending ? <Spinner /> : null;
         const content = !errorMessage
-            ? <OccurenceEventList
+            ? <EventSchedulesList
                 current_user={current_user}
                 data_list={data.items}
             />
@@ -53,18 +53,18 @@ class OccurenceEventListWrapper extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        occurenceEvents: state.occurenceEvents,
+        eventSchedules: state.eventSchedules,
         current_user: state.user
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getOccurenceEvents: () => dispatch(getOccurenceEvents()),
+        getEventSchedules: () => dispatch(getEventSchedules()),
     }
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(OccurenceEventListWrapper);
+)(EventSchedulesListWrapper);
