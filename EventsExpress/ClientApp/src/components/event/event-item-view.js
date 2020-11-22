@@ -13,6 +13,7 @@ import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export default class EventItemView extends Component {
     state = { edit: false }
@@ -22,6 +23,33 @@ export default class EventItemView extends Component {
     }
 
     renderOwners = (arr, isMyEvent, current_user_id) => {
+        return arr.map(x => (
+            <div>
+                <div className="d-flex align-items-center border-bottom">
+                    <div className="flex-grow-1">
+                        <Link to={'/user/' + x.id} className="btn-custom">
+                            <div className="d-flex align-items-center border-bottom">
+                                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                                <div>
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                    {(isMyEvent && x.id != current_user_id) &&
+                        <div>
+                            <IconButton aria-label="delete" onClick = {() => this.props.onDeleteFromOwners(x.id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+                    }
+                </div>
+            </div>
+        ));
+    }
+
+    renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
         return arr.map(x => (
             <div>
                 <div className="d-flex align-items-center border-bottom w-100">
@@ -36,55 +64,48 @@ export default class EventItemView extends Component {
                             </div>
                         </Link>
                     </div>
-                    {(isMyEvent && x.id != current_user_id) &&
+                    {(isMyEvent) &&
                         <div>
-                            <IconButton aria-label="delete">
-                                <DeleteIcon />
-                            </IconButton>
+                            <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                                    <AddCircleOutlineIcon />
+                                </IconButton>
                         </div>
+                    }
+                    {isMyPrivateEvent &&
+                        <Button
+                            onClick={() => this.props.onApprove(x.id, false)}
+                            variant="outlined"
+                            color="success"
+                            >
+                                Delete from event
+                        </Button>
                     }
                 </div>
             </div>
         ));
     }
 
-    renderApprovedUsers = (arr, isMyPrivateEvent) => {
+    renderPendingUsers = (arr, isMyEvent) => {
         return arr.map(x => (
             <div>
-                <Link to={'/user/' + x.id} className="btn-custom">
-                    <div className="d-flex align-items-center border-bottom">
-                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                        <div>
+                <div className="flex-grow-1">
+                    <Link to={'/user/' + x.id} className="btn-custom">
+                        <div className="d-flex align-items-center border-bottom">
+                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                            <div>
                             <h5>{x.username}</h5>
                             {'Age: ' + this.getAge(x.birthday)}
+                            </div>
                         </div>
+                    </Link>
+                </div>
+                {(isMyEvent) &&
+                    <div>
+                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                            <DeleteIcon />
+                        </IconButton>
                     </div>
-                </Link>
-                {isMyPrivateEvent &&
-                    <Button
-                        onClick={() => this.props.onApprove(x.id, false)}
-                        variant="outlined"
-                        color="success"
-                        >
-                            Delete from event
-                    </Button>
                 }
-            </div>
-        ));
-    }
-
-    renderPendingUsers = arr => {
-        return arr.map(x => (
-            <div>
-                <Link to={'/user/' + x.id} className="btn-custom">
-                    <div className="d-flex align-items-center border-bottom">
-                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                        <div>
-                            <h5>{x.username}</h5>
-                            {'Age: ' + this.getAge(x.birthday)}
-                        </div>
-                    </div>
-                </Link>
                 <div>
                     <Button
                     variant="outlined"
@@ -105,18 +126,27 @@ export default class EventItemView extends Component {
         );
     }
 
-    renderDeniedUsers = arr => {
+    renderDeniedUsers = (arr, isMyEvent) => {
         return arr.map(x => (
             <div>
-                <Link to={'/user/' + x.id} className="btn-custom">
-                    <div className="d-flex align-items-center border-bottom">
-                        <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                        <div>
+                <div className="flex-grow-1">
+                    <Link to={'/user/' + x.id} className="btn-custom">
+                        <div className="d-flex align-items-center border-bottom">
+                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                            <div>
                             <h5>{x.username}</h5>
                             {'Age: ' + this.getAge(x.birthday)}
+                            </div>
                         </div>
+                    </Link>
+                </div>
+                {(isMyEvent) &&
+                    <div>
+                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                            <DeleteIcon />
+                        </IconButton>
                     </div>
-                </Link>
+                }
                 <Button
                     onClick={() => this.props.onApprove(x.id, true)}
                     variant="outlined"

@@ -112,6 +112,44 @@ export function approveUser(userId, eventId, buttonAction) {
   }
 }
 
+export function deleteFromOwners(userId, eventId) {
+  return dispatch => {
+    const res = api_serv.OnDeleteFromOwners({ userId: userId, eventId: eventId});
+    res.then(response =>{
+      if(response.error == null)
+      {
+        const res1 = api_serv.getEvent(eventId);
+        res1.then(response => {
+          if(response.error == null){
+            dispatch(getEvent(response));
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        })
+      }
+    })
+  }
+}
+
+export function promoteToOwner(userId, eventId) {
+  return dispatch => {
+    const res = api_serv.OnPromoteToOwner({ userId: userId, eventId: eventId});
+    res.then(response =>{
+      if(response.error == null)
+      {
+        const res1 = api_serv.getEvent(eventId);
+        res1.then(response => {
+          if(response.error == null){
+            dispatch(getEvent(response));
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        })
+      }
+    })
+  }
+}
+
 // ACTION CREATOR FOR EVENT UNBLOCK:
 export function unblock_event(id) {
   return dispatch => {

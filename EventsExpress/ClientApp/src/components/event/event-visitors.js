@@ -36,8 +36,8 @@ class EventVisitors extends Component {
                         <Typography>Visitors</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography>
-                            {this.props.renderApprovedUsers(visitors.approvedUsers, isMyPrivateEvent)}
+                        <Typography className = "w-100">
+                            {this.props.renderApprovedUsers(visitors.approvedUsers, isMyEvent, isMyPrivateEvent)}
                         </Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel> 

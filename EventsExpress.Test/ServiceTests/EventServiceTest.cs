@@ -48,7 +48,13 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    //OwnerId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
                     PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndsndj",
                     IsBlocked = false,
@@ -61,7 +67,13 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    //OwnerId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
                     PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
