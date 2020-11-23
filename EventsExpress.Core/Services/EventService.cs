@@ -257,6 +257,7 @@ namespace EventsExpress.Core.Services
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
             ev.ModifiedBy = ev.OwnerId;
+            ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)

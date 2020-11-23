@@ -8,10 +8,10 @@ namespace EventsExpress.Db.Entities
     {
         public Guid CreatedBy { get; set; }
 
-        public DateTime CreatedDateTime { get; set; }
+        public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
         public Guid ModifiedBy { get; set; }
 
-        public DateTime ModifiedDateTime { get; set; }
+        public DateTime? ModifiedDateTime { get; set; }
     }
 }

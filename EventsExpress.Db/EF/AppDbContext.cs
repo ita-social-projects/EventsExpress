@@ -151,18 +151,6 @@ namespace EventsExpress.Db.EF
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
 
-            // event config
-            builder.Entity<Event>()
-                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
-
-            // event config
-            builder.Entity<Event>()
-                .Property(c => c.ModifiedDateTime).HasDefaultValue(DateTime.UtcNow);
-
-            // EventSchedule config
-            builder.Entity<EventSchedule>()
-                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
-
             // inventory config
             builder.Entity<Inventory>()
                 .HasOne(i => i.Event)

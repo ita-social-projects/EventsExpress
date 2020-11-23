@@ -52,6 +52,8 @@ namespace EventsExpress.Core.Services
         {
             var ev = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
             ev.CreatedBy = eventScheduleDTO.CreatedBy;
+            ev.ModifiedBy = eventScheduleDTO.CreatedBy;
+            ev.ModifiedDateTime = DateTime.Now;
 
             try
             {
@@ -77,6 +79,7 @@ namespace EventsExpress.Core.Services
             ev.EventId = eventScheduleDTO.EventId;
             ev.CreatedBy = eventScheduleDTO.CreatedBy;
             ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             await _db.SaveAsync();
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
