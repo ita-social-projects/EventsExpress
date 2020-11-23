@@ -25,6 +25,7 @@ export default class EventLeaveModal extends Component {
     };
     
     render() {
+        debugger;
         return (
             <div>
                 <button onClick={this.handleClickOpen}
