@@ -128,6 +128,11 @@ const initialState = {
         },
         filter: eventHelper.getDefaultEventFilter(),
     },
+    inventories: {
+        isPending: true,
+        isError: false,
+        items: []
+    },
     profile: {
         isPending: true,
         isError: false,

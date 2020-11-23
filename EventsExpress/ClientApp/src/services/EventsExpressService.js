@@ -309,6 +309,11 @@ export default class EventsExpressService {
     }
     //#endregion Events
 
+    getInventoriesByEventId = async (eventId) => {
+        const res = await this.getResource(`inventory/GetInventar?eventId=${eventId}`);
+        return res;
+    }
+
     getUsers = async (filter) => {
         const res = await this.getResource(`users/get${filter}`);
         return res;

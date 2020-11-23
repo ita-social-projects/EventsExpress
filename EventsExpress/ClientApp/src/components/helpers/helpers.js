@@ -40,7 +40,10 @@ export const validate = values => {
         'newPassword',
         'repeatPassword',
         'Birthday',
-        'UserName'
+        'UserName',
+        'itemName',
+        'needQuantity',
+        'unitOfMeasuring'
     ];
 
     requiredFields.forEach(field => {

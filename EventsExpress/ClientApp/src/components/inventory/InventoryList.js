@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
+import ItemFrom from './itemForm';
+import { connect } from 'react-redux';
+import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
+import {get_inventories_by_event_id} from '../../actions/inventory-list';
 
 class InventoryList extends Component {
 
@@ -8,15 +12,24 @@ class InventoryList extends Component {
 
         this.state = {
             isOpen: true,
-            inventoryList: []
+            inventoryList: [],
+            disabledEdit: false
         };
 
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onCancel = this.onCancel.bind(this);
+    }
+
+    
+    componentWillMount() {
+        this.props.get_unitsOfMeasuring();
+        this.props.get_inventories_by_event_id(this.props.eventId);
     }
 
     componentDidMount() {
         this.setState({
-            inventoryList: this.props.inventories
+            inventoryList: this.props.inventories.items
         })
     }
 
@@ -25,11 +38,14 @@ class InventoryList extends Component {
             id: getRandomId(),
             itemName: '',
             needQuantity: 0,
-            unitOfMeasuring: ''
+            unitOfMeasuring: {},
+            isEdit: true,
+            isNew: true
         }];
 
         this.setState({
-            inventoryList: undateList
+            inventoryList: undateList,
+            disabledEdit: true
         });
     }
 
@@ -51,21 +67,8 @@ class InventoryList extends Component {
         });
 
         this.setState({
-            inventoryList: updateList
-        });
-    }
-
-    editItem = inventar => {
-        let updateList = this.state.inventoryList;
-        updateList.map(item => {
-            if (inventar.id === item.id) {
-                item.isEdit = false;
-                item.itemName = this.newItemName.value;
-            }
-        });
-        console.log('edit', updateList);
-        this.setState({
-            inventoryList: updateList
+            inventoryList: updateList,
+            disabledEdit: true
         });
     }
 
@@ -75,8 +78,50 @@ class InventoryList extends Component {
         }));
     }
 
+    onSubmit(values) {
+        let updateList = this.state.inventoryList;
+        updateList.map(item => {
+            if (item.isEdit) {
+                item.isEdit = false;
+                item.isNew = false;
+                item.itemName = values.itemName;
+                item.needQuantity = values.needQuantity;
+                const found = this.props.unitOfMeasuringState.units.find(element => element.id === values.unitOfMeasuring);
+                item.unitOfMeasuring = found;
+            }
+        });
+ 
+        this.setState({
+            inventoryList: updateList,
+            disabledEdit: false
+        });
+    }
+
+    onCancel = inventar => {
+        if (inventar.isNew) {
+            this.deleteItemFromList(inventar);
+            this.setState({
+                disabledEdit: false
+            })
+            return;
+        }
+        let updateList = this.state.inventoryList;
+
+        updateList.map(item => {
+            if (item.isEdit) {
+                item.isEdit = false;
+            }
+        });
+
+        this.setState({
+            inventoryList: updateList,
+            disabledEdit: false
+        });
+    }
+
     render() {
-        const { inventories } = this.props;
+        const { inventories, eventId } = this.props;
+        console.log(this.props);
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -92,54 +137,44 @@ class InventoryList extends Component {
                         </div>
                     <div className="table-responsive">
                         <div className="table-wrapper">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Item name</th>
-                                        <th>Count</th>
-                                        <th>Measuring unit</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.inventoryList.map(item => {
+                            <div className="table">
+                                    <div className="row p-2">
+                                        <div className="col col-md-5"><b>Item name</b></div>
+                                        <div className="col"><b>Count</b></div>
+                                        <div className="col"><b>Measuring unit</b></div>
+                                        <div className="col"><b>Action</b></div>
+                                    </div>
+                                {inventories.items.map(item => {
                                     return (
                                         item.isEdit 
-                                        ? <tr>
-                                            <td>
-                                                <input type="text" defaultValue={item.itemName} ref={(input) => this.newItemName = input}/>
-                                            </td>
-                                            <td>{item.needQuantity}</td>
-                                            <td>{item.unitOfMeasuring.shortName}</td>
-                                            <td className="d-flex justify-content-end align-items-center">
-                                                <div onClick={this.editItem.bind(this, item)} className="btn">
-                                                    Ok
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        : <tr>
-                                            <td>{item.itemName}</td>
-                                            <td>{item.needQuantity}</td>
-                                            <td>{item.unitOfMeasuring.shortName}</td>
-                                            <td className="d-flex justify-content-end align-items-center">
-                                                <button type="button" onClick={this.markItemAsEdit.bind(this, item)} title="Edit item" class="btn clear-backgroud">
+                                        ? <div className="row p-2">
+                                            <ItemFrom 
+                                                onSubmit={this.onSubmit} 
+                                                onCancel={this.onCancel}
+                                                unitOfMeasuringState={this.props.unitOfMeasuringState}
+                                                initialValues={item}/>
+                                        </div>
+                                        : <div className="row p-2">
+                                            <div className="col col-md-5">{item.itemName}</div>
+                                            <div className="col">{item.needQuantity}</div>
+                                            <div className="col">{item.unitOfMeasuring.shortName}</div>
+                                            <div className="col">
+                                                <button type="button" disabled={this.state.disabledEdit} onClick={this.markItemAsEdit.bind(this, item)} title="Edit item" class="btn clear-backgroud">
                                                     <i class="fas fa-pencil-alt orange"></i>
                                                 </button>
                                                 <button type="button" onClick={this.deleteItemFromList.bind(this, item)} title="Remove item" class="btn clear-backgroud">
                                                     <i class="fas fa-trash red"></i>
                                                 </button>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </div>
                                     )
                                 })}
                                                     
-                                </tbody>
-                            </table>
+                            </div>
                         </div>
                     </div>
                 </div>
                 }
-                <h1>Hi)</h1>
             </>
         );
     }
@@ -149,4 +184,19 @@ function getRandomId() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 }
 
-export default InventoryList;
+const mapStateToProps = (state) => ({
+    unitOfMeasuringState: state.unitsOfMeasuring,
+    inventories: state.inventories
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
+        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId))
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(InventoryList);
