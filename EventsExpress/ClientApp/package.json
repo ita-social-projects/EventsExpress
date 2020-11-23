@@ -24,7 +24,7 @@
         "query-string": "6.13.6",
         "react": "16.8.6",
         "react-alert": "5.5.0",
-        "react-bootstrap": "0.32.4",
+        "react-bootstrap": "1.4.0",
         "react-custom-share": "0.4.8",
         "react-datepicker": "2.8.0",
         "react-dom": "16.8.6",
