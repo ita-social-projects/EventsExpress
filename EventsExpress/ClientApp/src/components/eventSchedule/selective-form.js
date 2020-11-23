@@ -16,18 +16,11 @@ class SelectiveForm extends Component {
     constructor() {
         super()
         this.state = {
-            edit: false,
             show: false,
             submit: false,
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
-    }
-
-    cancelEdit = () => {
-        this.setState({
-            edit: false
-        });
     }
 
     cancelHandler = () => {
@@ -39,7 +32,6 @@ class SelectiveForm extends Component {
 
     onEdit = () => {
         this.setState({
-            edit: true,
             show: true
         });
     }
@@ -71,7 +63,7 @@ class SelectiveForm extends Component {
                     message="Are you sure to create the event with editing?"
                     show={this.state.show}
                     submitHandler={this.submitHandler} />
-                {this.state.edit && this.state.submit &&
+                {this.state.submit &&
                     <EditFromParentEventWrapper />}
             </div>
         </>

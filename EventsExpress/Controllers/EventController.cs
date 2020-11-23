@@ -32,7 +32,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is for edit and create events.
+        /// This method is for edit event from event schedule and create it.
         /// </summary>
         /// <param name="model">Required.</param>
         /// <response code="200">Create event proces success.</response>
@@ -56,7 +56,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is for edit and create events.
+        /// This method is for create event from event schedule.
         /// </summary>
         /// <param name="eventId">Required.</param>
         /// <response code="200">Create event proces success.</response>

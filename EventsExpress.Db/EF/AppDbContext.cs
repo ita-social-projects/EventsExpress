@@ -163,10 +163,6 @@ namespace EventsExpress.Db.EF
             builder.Entity<EventSchedule>()
                 .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
 
-            // EventSchedule config
-            builder.Entity<EventSchedule>()
-                .Property(c => c.ModifiedDateTime).HasDefaultValue(DateTime.UtcNow);
-
             // inventory config
             builder.Entity<Inventory>()
                 .HasOne(i => i.Event)

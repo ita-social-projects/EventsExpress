@@ -33,7 +33,7 @@ namespace EventsExpress.Controllers
         /// This method have to add inventar to event..
         /// </summary>
         /// <param name="model">Required.</param>
-        /// <param name="eventId">Requiredd.</param>
+        /// <param name="eventId">Required.</param>
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]

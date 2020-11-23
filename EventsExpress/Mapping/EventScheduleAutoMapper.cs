@@ -13,12 +13,6 @@ namespace EventsExpress.Mapping
         public EventScheduleAutoMapper()
         {
             CreateMap<EventSchedule, EventScheduleDTO>()
-           .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-           .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-           .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
-           .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.LastRun))
-           .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => src.NextRun))
-           .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => src.IsActive))
            .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
            {
                Id = src.Event.Id,

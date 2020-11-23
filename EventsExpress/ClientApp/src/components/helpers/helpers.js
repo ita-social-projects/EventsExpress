@@ -50,12 +50,6 @@ export const validate = values => {
         }
     });
 
-    occurenceFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
-
     numberFields.forEach(field => {
         if (values[field] && values[field] < 1) {
             errors[field] = `Invalid data`;

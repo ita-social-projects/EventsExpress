@@ -68,7 +68,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventScheduleDTO eventScheduleDTO)
         {
-            var ev = _db.EventScheduleRepository.Get().FirstOrDefault(x => x.Id == eventScheduleDTO.Id);
+            var ev = _db.EventScheduleRepository.Get(eventScheduleDTO.Id);
             ev.Frequency = eventScheduleDTO.Frequency;
             ev.Periodicity = eventScheduleDTO.Periodicity;
             ev.LastRun = eventScheduleDTO.LastRun;
@@ -91,7 +91,7 @@ namespace EventsExpress.Core.Services
         {
             var eventSchedules = _db.EventScheduleRepository
                 .Get("Event.City.Country,Event.Photo,Event.Owner,Event.Categories.Category")
-                .Where(opt => opt.IsActive == true)
+                .Where(opt => opt.IsActive)
                 .ToList();
 
             return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);

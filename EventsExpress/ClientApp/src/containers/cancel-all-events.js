@@ -22,7 +22,6 @@ class CancelAllEventsWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        console.log(this.props);
         if (!this.props.cancel_all_eventSchedule_status.cancelEventSchedulesError &&
             this.props.cancel_all_eventSchedule_status.isCancelEventSchedulesSuccess) {
             this.props.resetEvent();

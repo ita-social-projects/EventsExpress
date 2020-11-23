@@ -133,7 +133,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(5144));
+                        .HasDefaultValue(DateTime.UtcNow);
 
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
@@ -161,7 +161,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime>("ModifiedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(6334));
+                        .HasDefaultValue(DateTime.UtcNow);
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -210,7 +210,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(8321));
+                        .HasDefaultValue(DateTime.UtcNow);
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
@@ -230,7 +230,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime>("ModifiedDateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 11, 21, 11, 35, 55, 387, DateTimeKind.Utc).AddTicks(8703));
+                        .HasDefaultValue(DateTime.UtcNow);
 
                     b.Property<DateTime>("NextRun")
                         .HasColumnType("datetime2");
