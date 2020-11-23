@@ -10,7 +10,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 
-
 namespace EventsExpress.Core.Services
 {
     public class UnitOfMeasuringService : IUnitOfMeasuringService

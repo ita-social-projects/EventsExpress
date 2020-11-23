@@ -5,10 +5,10 @@ export const _alert={
 
 }
 
-export  function SetAlert(data){
+export  function setAlert(data){
 
     return dispatch => { 
-        dispatch(setAlert(data));
+        dispatch(set_alert(data));
         dispatch(setAlertOpen(true));
     }
 }
@@ -22,7 +22,7 @@ export  function ResetAlert(data){
 }
 
 
-function setAlert(data){
+function set_alert(data){
     return{
         type:_alert.SET,
         payload:data

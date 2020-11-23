@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Db.EF
@@ -25,6 +26,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<EventSchedule> EventSchedules { get; set; }
 
         public DbSet<Report> Reports { get; set; }
 
@@ -147,6 +150,18 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
+
+            // event config
+            builder.Entity<Event>()
+                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
+
+            // event config
+            builder.Entity<Event>()
+                .Property(c => c.ModifiedDateTime).HasDefaultValue(DateTime.UtcNow);
+
+            // EventSchedule config
+            builder.Entity<EventSchedule>()
+                .Property(c => c.CreatedDateTime).HasDefaultValue(DateTime.UtcNow);
 
             // inventory config
             builder.Entity<Inventory>()
