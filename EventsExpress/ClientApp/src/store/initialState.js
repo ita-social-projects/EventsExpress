@@ -74,7 +74,8 @@ const initialState = {
     cities: {
         isPending: false,
         isError: false,
-        data: []
+        data: [],
+        userSearchFilter: null
     },
     users: {
         isPending: true,

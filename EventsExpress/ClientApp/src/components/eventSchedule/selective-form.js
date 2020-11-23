@@ -9,7 +9,6 @@ import CancelNextEventWrapper from '../../containers/cancel-next-event'
 import CancelAllEventsWrapper from '../../containers/cancel-all-events'
 import EventSchedulePopover from './eventSchedule-popover'
 import EventScheduleModal from './eventSchedule-modal'
-import './eventSchedule.css'
 
 
 class SelectiveForm extends Component {
