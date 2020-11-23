@@ -1,6 +1,6 @@
 import EventsExpressService from '../services/EventsExpressService';
 import * as SignalR from '@aspnet/signalr';
-import { SetAlert } from './alert';
+import { setAlert } from './alert';
 
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
@@ -45,7 +45,7 @@ export function initialConnection() {
                 hubConnection.on('ReceiveMessage', (data) => {
                     dispatch(ReceiveMsg(data));
                     if (data.senderId != localStorage.getItem('id')) {
-                        dispatch(SetAlert({ variant: 'info', message: "You have received new message", autoHideDuration: 5000 }));
+                        dispatch(setAlert({ variant: 'info', message: "You have received new message", autoHideDuration: 5000 }));
                     }
                 });
                 hubConnection.on('wasSeen', (data) => {
@@ -54,7 +54,7 @@ export function initialConnection() {
 
                 hubConnection.on('ReceivedNewEvent', (data) => {
                     dispatch(receivedNewEvent(data));
-                    dispatch(SetAlert({
+                    dispatch(setAlert({
                         variant: 'info',
                         message: `The event was created which could interested you.`,
                         autoHideDuration: 5000
