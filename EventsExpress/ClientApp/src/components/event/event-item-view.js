@@ -273,7 +273,7 @@ export default class EventItemView extends Component {
                                     <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                         <RatingWrapper
                                             iWillVisitIt={iWillVisitIt}
-                                            eventId={this.props.event.data.id}
+                                            eventId={this.props.data.id}
                                             userId={current_user.id}
                                         />
                                     </div>
