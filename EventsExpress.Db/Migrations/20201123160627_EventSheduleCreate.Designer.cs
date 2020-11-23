@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20201123094736_FixCreatedDateTime")]
-    partial class FixCreatedDateTime
+    [Migration("20201123160627_EventSheduleCreate")]
+    partial class EventSheduleCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -14,12 +14,16 @@
 }
 
 .button-block {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 28px;
-  padding-left: 20px;
-  padding-right: 20px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.join-leave {
+    font-size: 20px;
 }
 
 .btn-edit {
