@@ -77,7 +77,6 @@ namespace EventsExpress.Core.Services
             ev.NextRun = eventScheduleDTO.NextRun;
             ev.IsActive = eventScheduleDTO.IsActive;
             ev.EventId = eventScheduleDTO.EventId;
-            ev.CreatedBy = eventScheduleDTO.CreatedBy;
             ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
             ev.ModifiedDateTime = DateTime.UtcNow;
 
