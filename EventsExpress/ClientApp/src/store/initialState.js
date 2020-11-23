@@ -80,6 +80,7 @@ const initialState = {
         isPending: true,
         isError: false,
         editedUser: null,
+        userSearchFilter: null,
         data: {
             items: [],
             pageViewModel: {}

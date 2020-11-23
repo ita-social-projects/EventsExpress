@@ -1,20 +1,14 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserSearchFilter from '../components/users/UserSearchFilter';
-import { get_SearchUsers } from '../actions/users';
-import history from '../history';
-import eventHelper from '../components/helpers/eventHelper';
+import { get_SearchUsers, change_Filter } from '../actions/users';
+
 
 class UserSearchFilterWrapper extends Component {
     onSubmit = (filters) => {
         if (filters !== null) {
-            if (filters.keyWord !== null) {
-                this.props.events.filter['keyWord'] = filters.keyWord;
-            }
+            this.props.change_Filter(filters);
         }
-        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
-        this.props.search(queryString);
-        history.push(window.location.pathname + queryString);
     }
 
     render() {
@@ -28,12 +22,13 @@ class UserSearchFilterWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    events: state.events,
+    users: state.users,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        search: (values) => dispatch(get_SearchUsers(values))
+        search: (values) => dispatch(get_SearchUsers(values)),
+        change_Filter: (values) => dispatch(change_Filter(values))
     }
 };
 
