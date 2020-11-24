@@ -134,6 +134,12 @@ export default class EventsExpressService {
         file.append('DateFrom', new Date(data.dateFrom).toDateString());
         file.append('DateTo', new Date(data.dateTo).toDateString());
 
+        data.inventories.map((item, key) => {
+            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+            file.append(`Inventories[${key}].ItemName`, item.itemName);
+            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
+        });
+
         let i = 0;
         data.categories.map(x => {
             return file.append(`Categories[${i++}].Id`, x.id);
