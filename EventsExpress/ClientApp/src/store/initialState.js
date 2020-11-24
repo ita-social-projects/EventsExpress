@@ -74,13 +74,13 @@ const initialState = {
     cities: {
         isPending: false,
         isError: false,
-        data: []
+        data: [],
+        userSearchFilter: null
     },
     users: {
         isPending: true,
         isError: false,
         editedUser: null,
-        userSearchFilter: null,
         data: {
             items: [],
             pageViewModel: {}
