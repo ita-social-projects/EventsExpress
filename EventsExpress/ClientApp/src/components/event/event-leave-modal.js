@@ -29,7 +29,7 @@ export default class EventLeaveModal extends Component {
             <div>
                 <button onClick={this.handleClickOpen}
                     type="button"
-                    className="btn btn-edit"
+                    className="btn btn-danger join-leave"
                     variant="contained"
                 >
                     Leave
