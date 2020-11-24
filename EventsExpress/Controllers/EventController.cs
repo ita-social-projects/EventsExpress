@@ -163,10 +163,8 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> PromoteToOwner(Guid userId, Guid eventId)
         {
-            // var res = await _eventService.DeleteUserFromEvent(userId, eventId);
             var res = await _eventService.PromoteToOwner(userId, eventId);
 
-            // var promote_res = await _eventService.PromoteToOwner(userId, eventId);
             if (res.Successed)
             {
                 return Ok();

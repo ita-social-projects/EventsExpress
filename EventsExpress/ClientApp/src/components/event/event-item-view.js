@@ -71,7 +71,8 @@ export default class EventItemView extends Component {
                                 </IconButton>
                         </div>
                     }
-                    {isMyPrivateEvent &&
+                </div>
+                {isMyPrivateEvent &&
                         <Button
                             onClick={() => this.props.onApprove(x.id, false)}
                             variant="outlined"
@@ -80,7 +81,6 @@ export default class EventItemView extends Component {
                                 Delete from event
                         </Button>
                     }
-                </div>
             </div>
         ));
     }

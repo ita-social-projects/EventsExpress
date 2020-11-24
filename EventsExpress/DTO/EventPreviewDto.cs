@@ -5,8 +5,6 @@ namespace EventsExpress.DTO
 {
     public class EventPreviewDto
     {
-
-        // todo Add Owners
         public Guid Id { get; set; }
 
         public string Title { get; set; }

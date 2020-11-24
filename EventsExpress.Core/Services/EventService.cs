@@ -278,7 +278,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
-            var events = _db.EventRepository.Get("Photo,Owners.User,City.Country,Categories.Category,Visitors");
+            var events = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -318,6 +318,8 @@ namespace EventsExpress.Core.Services
             }
 
             count = events.Count();
+
+            var data = events.ToList();
 
             var result = events.OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)

@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Db.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.DTO
 {

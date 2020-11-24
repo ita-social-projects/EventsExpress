@@ -77,8 +77,9 @@ namespace EventsExpress.Db.Repo
         public IUserRepository UserRepository =>
             _userRepository ?? (_userRepository = new UserRepository(database));
 
-        public IRepository<EventOwner> EventOwnersRepository => 
+        public IRepository<EventOwner> EventOwnersRepository =>
             _eventOwnersRepository ?? (_eventOwnersRepository = new Repository<EventOwner>(database));
+
         public IEventStatusHistoryRepository EventStatusHistoryRepository =>
             _eventStatusHistoryRepository ?? (_eventStatusHistoryRepository = new EventStatusHistoryRepository(database));
 

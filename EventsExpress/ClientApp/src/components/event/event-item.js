@@ -57,8 +57,6 @@ export default class Event extends Component {
         return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
         );
     }
-
-    
   
     handleClick = (event) => {
         this.setState({ anchorEl: event.currentTarget });
@@ -95,7 +93,7 @@ export default class Event extends Component {
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar 
-                                    photourl={x.photourl}
+                                    photoUrl={x.photoUrl}
                                     name={x.username} 
                                 />
                                 <div>
@@ -136,7 +134,7 @@ export default class Event extends Component {
                                     <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
                                         <CustomAvatar
                                             className={classes.avatar}
-                                            photourl={owner.photourl}
+                                            photoUrl={owner.photoUrl}
                                             name={owner.username}
                                         />
                                     </Badge>
