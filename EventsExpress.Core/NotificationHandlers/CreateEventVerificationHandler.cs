@@ -30,7 +30,12 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var user = _userService.GetById(notification.EventSchedule.CreatedBy);
+            if (!notification.EventSchedule.CreatedBy.HasValue)
+            {
+                return;
+            }
+
+            var user = _userService.GetById(notification.EventSchedule.CreatedBy.Value);
 
             try
             {

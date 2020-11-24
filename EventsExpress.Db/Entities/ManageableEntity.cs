@@ -6,11 +6,11 @@ namespace EventsExpress.Db.Entities
 {
     public class ManageableEntity : BaseEntity
     {
-        public Guid CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
 
         public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
 
-        public Guid ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
 
         public DateTime? ModifiedDateTime { get; set; }
     }
