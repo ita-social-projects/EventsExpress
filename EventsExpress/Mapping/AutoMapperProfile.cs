@@ -199,6 +199,7 @@ namespace EventsExpress.Mapping
                             NeedQuantity = x.NeedQuantity,
                             UnitOfMeasuring = new UnitOfMeasuringDTO
                             {
+                                Id = x.UnitOfMeasuring.Id,
                                 UnitName = x.UnitOfMeasuring.UnitName,
                                 ShortName = x.UnitOfMeasuring.ShortName,
                             },
