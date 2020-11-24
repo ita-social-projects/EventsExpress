@@ -10,8 +10,7 @@ namespace EventsExpress.Db.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "CreatedBy",
                 table: "Events",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                nullable: false);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedDateTime",
@@ -22,8 +21,7 @@ namespace EventsExpress.Db.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "ModifiedBy",
                 table: "Events",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                nullable: false);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ModifiedDateTime",
