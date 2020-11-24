@@ -127,12 +127,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
@@ -152,12 +146,6 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -192,50 +180,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("EventCategory");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Frequency")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NextRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Periodicity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId")
-                        .IsUnique();
-
-                    b.ToTable("EventSchedules");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -689,14 +633,6 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithOne("EventSchedule")
-                        .HasForeignKey("EventsExpress.Db.Entities.EventSchedule", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
                 {
