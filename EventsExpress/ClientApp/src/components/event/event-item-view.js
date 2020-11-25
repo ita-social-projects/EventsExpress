@@ -7,14 +7,13 @@ import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import EventCancelModal from './event-cancel-modal';
+import SimpleModal from './simple-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
 import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-
 export default class EventItemView extends Component {
     state = { edit: false }
 
@@ -39,9 +38,16 @@ export default class EventItemView extends Component {
                     </div>
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
-                            <IconButton aria-label="delete" onClick = {() => this.props.onDeleteFromOwners(x.id)}>
-                                <DeleteIcon />
-                            </IconButton>
+                            <SimpleModal
+                                Id = {x.id} 
+                                action = {this.props.onDeleteFromOwners}
+                                data = {'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
+                                button = {
+                                    <IconButton aria-label="delete">
+                                        <i className="far fa-trash-alt"></i>
+                                    </IconButton>
+                                }
+                            />
                         </div>
                     }
                 </div>
@@ -66,9 +72,16 @@ export default class EventItemView extends Component {
                     </div>
                     {(isMyEvent) &&
                         <div>
-                            <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
-                                    <AddCircleOutlineIcon />
-                                </IconButton>
+                            <SimpleModal
+                                Id = {x.id} 
+                                action = {this.props.onPromoteToOwner}
+                                data = {'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
+                                button = {
+                                    <IconButton aria-label="delete">
+                                        <i className="fas fa-plus-circle"></i>
+                                    </IconButton>
+                                }
+                            />
                         </div>
                     }
                 </div>
