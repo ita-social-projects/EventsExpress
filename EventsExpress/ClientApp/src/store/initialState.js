@@ -133,6 +133,15 @@ const initialState = {
         isError: false,
         items: []
     },
+    inventar: {
+        isPending: true,
+        isError: false,
+        data: {
+            itemName: null,
+            needQuantity: null,
+            unitsOfMeasuring: null
+        }
+    },
     profile: {
         isPending: true,
         isError: false,

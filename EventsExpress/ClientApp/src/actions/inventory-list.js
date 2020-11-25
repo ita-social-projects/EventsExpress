@@ -22,6 +22,12 @@ export function get_inventories_by_event_id(eventId) {
     }
 }
 
+export function update_inventories(inventoryList) {
+    return dispatch => {
+        dispatch(getInventory(inventoryList));
+    }
+}
+
 export function setInventoryPending(data) {
     return {
         type: SET_INVENTORY_PENDING,

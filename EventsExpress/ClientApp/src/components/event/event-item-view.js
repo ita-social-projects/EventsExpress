@@ -282,7 +282,10 @@ export default class EventItemView extends Component {
                                     {description}
                                 </div>
                                 {/* <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded"> */}
-                                    <InventoryList eventId={id}/>
+                                    <InventoryList 
+                                        eventId={id} 
+                                        inventories={this.props.inventories}
+                                        get_inventories_by_event_id={this.props.get_inventories_by_event_id}/>
                                 {/* </div> */}
                                 
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

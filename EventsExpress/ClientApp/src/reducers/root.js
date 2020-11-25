@@ -27,6 +27,7 @@ import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
 import * as UnitsOfMeasuring from './unitsOfMeasuring';
 import * as Inventory from './inventory-list';
+import * as Inventar from './inventar';
 import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
@@ -50,6 +51,7 @@ const rootReducers = {
     add_event: AddEvent.reducer,
     events: Events.reducer,
     inventories: Inventory.reducer,
+    inventar: Inventar.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,

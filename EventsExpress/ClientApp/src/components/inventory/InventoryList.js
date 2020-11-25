@@ -3,16 +3,15 @@ import InventoryHeaderButton from './InventoryHeaderButton';
 import ItemFrom from './itemForm';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
-import {get_inventories_by_event_id} from '../../actions/inventory-list';
+import { update_inventories }  from '../../actions/inventory-list';
+import { add_item, delete_item } from '../../actions/inventar';
 
 class InventoryList extends Component {
 
     constructor() {
         super();
-
         this.state = {
             isOpen: true,
-            inventoryList: [],
             disabledEdit: false
         };
 
@@ -20,43 +19,36 @@ class InventoryList extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
     }
-
     
     componentWillMount() {
         this.props.get_unitsOfMeasuring();
         this.props.get_inventories_by_event_id(this.props.eventId);
     }
-
-    componentDidMount() {
-        this.setState({
-            inventoryList: this.props.inventories.items
-        })
-    }
-
-    addItemToList() {
-        const undateList = [...this.state.inventoryList, {
-            id: getRandomId(),
+ 
+    addItemToList = () => {
+        const updateList = [...this.props.inventories.items, {
+            id: '',
             itemName: '',
             needQuantity: 0,
             unitOfMeasuring: {},
             isEdit: true,
             isNew: true
         }];
-
+        
+        this.props.get_inventories(updateList);
         this.setState({
-            inventoryList: undateList,
             disabledEdit: true
         });
     }
 
     deleteItemFromList = inventar => {
-        const undateList = this.state.inventoryList.filter(function(item){
+        const updateList = this.props.inventories.items.filter(function(item){
             return item.id !== inventar.id;
         });
-  
-        this.setState({
-            inventoryList: undateList
-        });
+        
+        console.log(inventar);
+        this.props.delete_item(inventar.id);
+        this.props.get_inventories(updateList);
     }
 
     markItemAsEdit = inventar => {
@@ -66,33 +58,33 @@ class InventoryList extends Component {
                 item.isEdit = true;
         });
 
+        this.props.get_inventories(updateList);
         this.setState({
-            inventoryList: updateList,
             disabledEdit: true
         });
     }
 
-    handleOnClickCaret() {
+    handleOnClickCaret = () => {
         this.setState(state => ({
             isOpen: !state.isOpen
         }));
     }
 
-    onSubmit(values) {
-        let updateList = this.state.inventoryList;
-        updateList.map(item => {
-            if (item.isEdit) {
-                item.isEdit = false;
-                item.isNew = false;
-                item.itemName = values.itemName;
-                item.needQuantity = values.needQuantity;
-                const found = this.props.unitOfMeasuringState.units.find(element => element.id === values.unitOfMeasuring);
-                item.unitOfMeasuring = found;
-            }
-        });
- 
+    onSubmit = values => {
+        console.log('onSubmit', values);
+        if (values.isNew) {
+            this.props.add_item(values, this.props.eventId);
+        }
+
+        // let updateList = [...this.props.inventories.items];
+        // values.isNew = false;
+        // values.isEdit = false;
+        // updateList[this.props.inventories.items.length - 1] = values;
+        // console.log(updateList);
+        // this.props.get_inventories(updateList);
+        console.log(this.props)
+        // this.props.get_inventories_by_event_id(this.props.eventId);
         this.setState({
-            inventoryList: updateList,
             disabledEdit: false
         });
     }
@@ -112,16 +104,15 @@ class InventoryList extends Component {
                 item.isEdit = false;
             }
         });
+        this.props.get_inventories(updateList);
 
         this.setState({
-            inventoryList: updateList,
             disabledEdit: false
         });
     }
 
     render() {
         const { inventories, eventId } = this.props;
-        console.log(this.props);
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -180,19 +171,16 @@ class InventoryList extends Component {
     }
 }
 
-function getRandomId() {
-    return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-}
-
 const mapStateToProps = (state) => ({
     unitOfMeasuringState: state.unitsOfMeasuring,
-    inventories: state.inventories
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
-        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId))
+        add_item: (item, eventId) => dispatch(add_item(item, eventId)),
+        delete_item: (id) => dispatch(delete_item(id)),
+        get_inventories: (inventories) => dispatch(update_inventories(inventories))
     }
 };
 

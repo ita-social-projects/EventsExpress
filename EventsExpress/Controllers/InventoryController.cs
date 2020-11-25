@@ -71,6 +71,18 @@ namespace EventsExpress.Controllers
             return Ok(result.Property);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteInventar(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("id is empty");
+            }
+
+            var result = await _inventoryService.DeleteInventar(id);
+            return Ok(result.Property);
+        }
+
         /// <summary>
         /// This method have to return all inventories from event.
         /// </summary>

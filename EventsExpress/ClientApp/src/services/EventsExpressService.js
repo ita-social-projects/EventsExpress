@@ -314,6 +314,25 @@ export default class EventsExpressService {
         return res;
     }
 
+    setItemToInventory = async (item, eventId) => {
+        const value = {
+            itemName: item.itemName,
+            needQuantity: Number(item.needQuantity),
+            unitOfMeasuring: {id: item.unitOfMeasuring}
+        }
+        const res = await this.setResource(`inventory/AddInventar/?eventId=${eventId}`, value);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setItemDelete = async (id) => {
+        const res = await this.setResource(`inventory/DeleteInventar/?id=${id}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
     getUsers = async (filter) => {
         const res = await this.getResource(`users/get${filter}`);
         return res;
