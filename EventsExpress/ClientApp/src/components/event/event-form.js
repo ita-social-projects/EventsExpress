@@ -3,17 +3,21 @@ import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Button from "@material-ui/core/Button";
-import { renderTextField, renderDatePicker, renderCheckbox } from '../helpers/helpers';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
+import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
     renderSelectLocationField,
-    renderTextArea
+    renderTextArea,
+    renderSelectPeriodicityField,
+    renderCheckbox,
+    renderTextField,
+    renderDatePicker
 } from '../helpers/helpers';
-import './event-form.css';
+import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
 
@@ -21,7 +25,7 @@ const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [] };
+    state = { imagefile: [], checked: false };
 
     handleFile(fieldName, event) {
         event.preventDefault();
@@ -41,7 +45,7 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
-        let values = this.props.form_values || this.props.initialValues;
+        let values = this.props.initialValues || this.props.data;
 
         if (this.props.isCreated) {
             const imagefile = {
@@ -51,6 +55,13 @@ class EventForm extends Component {
                 size: 1
             };
             this.setState({ imagefile: [imagefile] });
+        }
+    }
+
+    componentDidUpdate = () => {
+        let status = this.props.addEventStatus;
+        if (status && status.isEventSuccess) {
+            this.resetForm();
         }
     }
 
@@ -66,6 +77,12 @@ class EventForm extends Component {
         }
     }
 
+    handleChange = () => {
+        this.setState(state => ({
+            checked: !state.checked,
+        }));
+    }
+
     resetForm = () => {
         this.isSaveButtonDisabled = false;
         this.setState({ imagefile: [] });
@@ -77,16 +94,17 @@ class EventForm extends Component {
         });
     }
 
+    componentWillMount() {
+        this.resetForm();
+    }
+
     render() {
-        const { countries, form_values, all_categories, data } = this.props;
+
+        const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
 
-        if (this.props.Event.isEventSuccess) {
-            this.resetForm();
-        }
-
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off">
+            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
                         ref={(x) => { this.image = x; }}
@@ -110,7 +128,6 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}
-                            defaultValue={data.title}
                             type="input"
                             label="Title"
                         />
@@ -119,34 +136,62 @@ class EventForm extends Component {
                         <Field
                             name='maxParticipants'
                             component={renderTextField}
-                            defaultValue={data.maxParticipants}
                             type="number"
                             label="Max Count Of Participants"
                         />
                     </div>
+                    {this.props.haveReccurentCheckBox &&
+                        <div className="mt-2">
+                            <br />
+                            <Field
+                                type="checkbox"
+                                label="Reccurent Event"
+                                name='isReccurent'
+                                component={renderCheckbox}
+                                checked={this.state.checked}
+                                onChange={this.handleChange} />
+                        </div>
+                    }
+                    {this.state.checked &&
+                        <div>
+                            <div className="mt-2">
+                                <Field
+                                    name="periodicity"
+                                    text="Periodicity"
+                                    data={periodicity}
+                                    component={renderSelectPeriodicityField} />
+                            </div>
+                            <div className="mt-2">
+                                <Field
+                                    name='frequency'
+                                    type="number"
+                                    component={renderTextField} />
+                            </div>
+                        </div>
+                    }
                     <div className="mt-2">
                         <Field
                             name='isPublic'
                             component={renderCheckbox}
-                            defaultValue={data.isPublic}
                             type="checkbox"
                             label="Public"
                         />
-                    </div>
+                    </div>                    
                     <div className="meta-wrap m-2">
                         <span>From
                             <Field
                                 name='dateFrom'
                                 component={renderDatePicker}
+                                disabled={this.props.disabledDate ? true : false}
                             />
                         </span>
-                        {values.dateFrom != null &&
+                        {values && values.dateFrom &&
                             <span>To
                                 <Field
                                     name='dateTo'
-                                    defaultValue={values.dateFrom}
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
+                                    disabled={this.props.disabledDate ? true : false}
                                 />
                             </span>
                         }
@@ -167,8 +212,7 @@ class EventForm extends Component {
                             valueField={"id"}
                             textField={"name"}
                             className="form-control mt-2"
-                            placeholder='#hashtags'
-                        />
+                            placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
                         <Field onChange={this.props.onChangeCountry}
@@ -178,7 +222,7 @@ class EventForm extends Component {
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values.countryId != null &&
+                    {values && values.countryId  &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'
@@ -188,6 +232,7 @@ class EventForm extends Component {
                             />
                         </div>
                     }
+                    {isCreated ? null : <Inventory />}
                 </div>
                 <Button
                     fullWidth={true}
@@ -204,7 +249,7 @@ class EventForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    initialValues: state.event.data
+    initialData: state.event.data
 });
 
 EventForm = connect(

@@ -25,7 +25,8 @@ export const radioButton = ({ input, ...rest }) => (
 
 export const validate = values => {
     const errors = {};
-    const numberFields = ['maxParticipants']
+    const numberFields = ['maxParticipants', 'frequency'];
+    const occurenceFields = ['periodicity', 'frequency'];
     const requiredFields = [
         'email',
         'password',
@@ -40,7 +41,7 @@ export const validate = values => {
         'newPassword',
         'repeatPassword',
         'Birthday',
-        'UserName'
+        'UserName',
     ];
 
     requiredFields.forEach(field => {
@@ -49,13 +50,53 @@ export const validate = values => {
         }
     });
 
+    numberFields.forEach(field => {
+        if (values[field] && values[field] < 1) {
+            errors[field] = `Invalid data`;
+        }
+    })
+    if (values.inventories != null) {
+        const inventoriesArrayErrors = [];
+        values.inventories.forEach((item, index) => {
+            const inventoriesErrors = {};
+            if (!item || !item.itemName) {
+                inventoriesErrors.itemName = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (item.itemName && item.itemName.length > 30) {
+                inventoriesErrors.itemName = 'Invalid length: 1 - 30 symbols';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }            
+            if (!item || !item.needQuantity) {
+                inventoriesErrors.needQuantity = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (item.needQuantity <= 0) {
+                inventoriesErrors.needQuantity = 'Can not be negative';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+            if (!item || !item.unitOfMeasuring) {
+                inventoriesErrors.unitOfMeasuring = {};
+                inventoriesErrors.unitOfMeasuring.id = 'Required';
+                inventoriesArrayErrors[index] = inventoriesErrors;
+            }
+        })
+        if (inventoriesArrayErrors.length) {
+            errors.inventories = inventoriesArrayErrors;
+        }
+    }  
+
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;
     }
 
-    if (values.visitors
-        && values.maxParticipants
-        && values.maxParticipants < values.visitors.length) {
+    occurenceFields.forEach(field => {
+        if ('checkOccurence'.checked && !values[field]) {
+            errors[field] = 'Required'
+        }
+    })
+
+    if (values.visitors && values.maxParticipants && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 
@@ -79,6 +120,27 @@ export const validate = values => {
     return errors;
 }
 
+export const validateEventForm = values =>{
+
+    if (!values.isPublic) {
+        values.isPublic = false;
+    }
+
+    if (!values.maxParticipants) {
+        values.maxParticipants = 2147483647;
+    }
+
+    if (!values.dateFrom) {
+        values.dateFrom = new Date(Date.now());
+    }
+
+    if (!values.dateTo) {
+        values.dateTo = new Date(values.dateFrom);
+    }
+
+    return values;
+}
+
 export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
     value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
     minValue = new Date().getFullYear() - 115;
@@ -96,7 +158,7 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
     />
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime }) => {
+export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime, disabled }) => {
     value = value || defaultValue || new Date();
     minValue = minValue || new Date();
 
@@ -104,6 +166,7 @@ export const renderDatePicker = ({ input: { onChange, value }, defaultValue, min
         onChange={onChange}
         minDate={new Date(minValue)}
         selected={new Date(value) || new Date()}
+        disabled={disabled}
     />
 }
 
@@ -148,12 +211,35 @@ export const renderSelectLocationField = ({
         {renderFromHelper({ touched, error })}
     </FormControl>
 
-export const renderMultiselect = ({
+export const renderSelectPeriodicityField = ({
     input,
+    label,
+    text,
     data,
-    valueField,
-    textField,
-    placeholder,
+    meta: { touched, invalid, error },
+    children,
+    ...custom
+}) =>
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
+        <Select
+            native
+            {...input}
+            onBlur={() => input.onBlur()}
+            {...custom}
+            inputProps={{
+                name: text.toLowerCase() + 'Id',
+                id: 'age-native-simple'
+            }}
+        >
+            <option value=""></option>
+            {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
+        </Select>
+        {renderFromHelper({ touched, error })}
+    </FormControl>
+
+
+export const renderMultiselect = ({ input, data, valueField, textField, placeholder,
     meta: { touched, invalid, error } }) =>
     <>
         <Multiselect {...input}
@@ -192,12 +278,13 @@ export const renderTextField = ({
     defaultValue,
     input,
     rows,
+    fullWidth,
     meta: { touched, invalid, error },
     ...custom
 }) => (
         <TextField
             rows={rows}
-            fullWidth
+            fullWidth={fullWidth === undefined ? true : false}
             label={label}
             placeholder={label}
             error={touched && invalid}

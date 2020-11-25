@@ -12,6 +12,8 @@ import UsersWrapper from '../../containers/users';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
+import EventScheduleViewWrapper from '../../containers/event-Schedule-item-view';
+import EventSchedulesListWrapper from '../../containers/eventSchedules-list';
 import Layout from '../layout';
 import SearchUserWrapper from '../../containers/UserSearchWrapper';
 import NotFound from '../Route guard/404';
@@ -39,6 +41,8 @@ export default class App extends Component {
                         />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
+                        <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
+                        <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />

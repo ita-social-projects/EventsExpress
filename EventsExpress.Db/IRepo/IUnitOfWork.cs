@@ -16,6 +16,8 @@ namespace EventsExpress.Db.IRepo
 
         IEventRepository EventRepository { get; }
 
+        IEventScheduleRepository EventScheduleRepository { get; }
+
         IPermissionRepository PermissionRepository { get; }
 
         IPhotoRepository PhotoRepository { get; }
@@ -35,6 +37,10 @@ namespace EventsExpress.Db.IRepo
         IMessageRepository MessageRepository { get; }
 
         IRepository<EventOwner> EventOwnersRepository { get; }
+
+        IInventoryRepository InventoryRepository { get; }
+
+        IUnitOfMeasuringRepository UnitOfMeasuringRepository { get; }
 
         IEventStatusHistoryRepository EventStatusHistoryRepository { get; }
 

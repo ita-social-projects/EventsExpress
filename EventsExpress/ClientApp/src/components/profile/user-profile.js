@@ -136,7 +136,7 @@ export default class UserItemView extends Component {
                                         className={attitude == '0' ? 'text-success' : ''}
                                         onClick={attitude != '0' ? this.props.onLike : this.props.onReset}
                                     >
-                                        <i class="fas fa-thumbs-up"></i>
+                                        <i className="fas fa-thumbs-up"></i>
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Dislike this user" placement="bottom" TransitionComponent={Zoom}>
@@ -144,7 +144,7 @@ export default class UserItemView extends Component {
                                         className={attitude == '1' ? 'text-danger' : ''}
                                         onClick={attitude != '1' ? this.props.onDislike : this.props.onReset}
                                     >
-                                        <i class="fas fa-thumbs-down"></i>
+                                        <i className="fas fa-thumbs-down"></i>
                                     </IconButton>
                                 </Tooltip>
                             </div>
@@ -176,7 +176,7 @@ export default class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 0 ? '' : 'primary'}>
-                                    <i class="far fa-calendar-alt"></i>
+                                    <i className="far fa-calendar-alt"></i>
                                 </IconButton>}
                             {...a11yProps(0)}
                         />
@@ -185,7 +185,7 @@ export default class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 1 ? '' : 'primary'}>
-                                    <i class="fas fa-archive"></i>
+                                    <i className="fas fa-archive"></i>
                                 </IconButton>}
                             {...a11yProps(1)}
                         />
@@ -194,7 +194,7 @@ export default class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 2 ? '' : 'primary'}>
-                                    <i class="fas fa-history"></i>
+                                    <i className="fas fa-history"></i>
                                 </IconButton>}
                             {...a11yProps(2)}
                         />
@@ -203,7 +203,7 @@ export default class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 3 ? '' : 'primary'}>
-                                    <i class="fas fa-map-marker-alt"></i>
+                                    <i className="fas fa-map-marker-alt"></i>
                                 </IconButton>}
                             {...a11yProps(3)}
                         />
@@ -214,7 +214,7 @@ export default class UserItemView extends Component {
                                     <IconButton
                                         color={this.state.value === 4 ? '' : 'primary'}
                                     >
-                                        <i class="fas fa-plus"></i>
+                                        <i className="fas fa-plus"></i>
                                     </IconButton>
                                 }
                                 {...a11yProps(4)}

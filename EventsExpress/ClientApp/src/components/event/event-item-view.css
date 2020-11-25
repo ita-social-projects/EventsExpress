@@ -1,37 +1,44 @@
 .text-block {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    background-color: #252424a6;
-    color: white;
-    font-size: 28px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-.title{
-    font-size: 48px;
-
-}
-
-.button-block{
   position: absolute;
   bottom: 20px;
-  right: 20px;
+  left: 20px;
+  background-color: #252424a6;
+  color: white;
   font-size: 28px;
   padding-left: 20px;
   padding-right: 20px;
 }
 
-.btn-join{
-  
-  font-size: 42px;
-  background: #da2121ab
+.title {
+  font-size: 48px;
 }
 
+.button-block {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
-.btn-join:hover{
-  
-  font-size: 42px;
+.join-leave {
+    font-size: 20px;
+}
+
+.btn-edit {
+  font-size: 36px;
+  background: #da2121ab;
+}
+
+.btn-edit:hover {
   background: #da2121;
+}
+
+.clear-backgroud {
+  background-color: white;
+}
+
+.clear-backgroud:hover {
+  background-color: #ebebeb;
 }

@@ -11,6 +11,7 @@ namespace EventsExpress.Db.Repo
         private readonly AppDbContext database;
 
         private IEventRepository _eventRepository;
+        private IEventScheduleRepository _eventScheduleRepository;
         private ICategoryRepository _categoryRepository;
         private ICityRepository _cityRepository;
         private ICountryRepository _countryRepository;
@@ -25,6 +26,8 @@ namespace EventsExpress.Db.Repo
         private IChatRepository _chatRepository;
         private IMessageRepository _messageRepository;
         private IRepository<EventOwner> _eventOwnersRepository;
+        private IInventoryRepository _inventoryRepository;
+        private IUnitOfMeasuringRepository _unitOfMeasuringRepository;
         private IEventStatusHistoryRepository _eventStatusHistoryRepository;
         private IUserEventRepository _userEventRepository;
         private bool disposed = false;
@@ -43,6 +46,9 @@ namespace EventsExpress.Db.Repo
 
         public IEventRepository EventRepository =>
            _eventRepository ?? (_eventRepository = new EventRepository(database));
+
+        public IEventScheduleRepository EventScheduleRepository =>
+           _eventScheduleRepository ?? (_eventScheduleRepository = new EventScheduleRepository(database));
 
         public ICategoryRepository CategoryRepository =>
            _categoryRepository ?? (_categoryRepository = new CategoryRepository(database));
@@ -79,6 +85,12 @@ namespace EventsExpress.Db.Repo
 
         public IRepository<EventOwner> EventOwnersRepository =>
             _eventOwnersRepository ?? (_eventOwnersRepository = new Repository<EventOwner>(database));
+
+        public IInventoryRepository InventoryRepository =>
+            _inventoryRepository ?? (_inventoryRepository = new InventoryRepository(database));
+
+        public IUnitOfMeasuringRepository UnitOfMeasuringRepository =>
+            _unitOfMeasuringRepository ?? (_unitOfMeasuringRepository = new UnitOfMeasuringRepository(database));
 
         public IEventStatusHistoryRepository EventStatusHistoryRepository =>
             _eventStatusHistoryRepository ?? (_eventStatusHistoryRepository = new EventStatusHistoryRepository(database));

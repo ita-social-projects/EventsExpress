@@ -179,7 +179,8 @@ namespace EventsExpress.Core.Services
             var users = Db.UserRepository.Get("Photo,Role").AsNoTracking().AsEnumerable();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
-                ? users.Where(x => x.Email.Contains(model.KeyWord) || x.Name.Contains(model.KeyWord))
+                ? users.Where(x => x.Email.Contains(model.KeyWord) || 
+                    (x.Name != null && x.Name.Contains(model.KeyWord)))
                 : users;
 
             users = !string.IsNullOrEmpty(model.Role)

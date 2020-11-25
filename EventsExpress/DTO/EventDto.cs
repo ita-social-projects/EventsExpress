@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.DTO
@@ -16,9 +17,17 @@ namespace EventsExpress.DTO
 
         public DateTime DateTo { get; set; }
 
+        public bool IsReccurent { get; set; }
+
         public int MaxParticipants { get; set; }
 
+        public int Frequency { get; set; }
+
+        public Periodicity Periodicity { get; set; }
+
         public IFormFile Photo { get; set; }
+
+        public Guid PhotoId { get; set; }
 
         public string PhotoUrl { get; set; }
 
@@ -37,5 +46,7 @@ namespace EventsExpress.DTO
         public IEnumerable<UserPreviewDto> Visitors { get; set; }
 
         public IEnumerable<UserPreviewDto> Owners { get; set; }
+
+        public IEnumerable<InventoryDto> Inventories { get; set; }
     }
 }

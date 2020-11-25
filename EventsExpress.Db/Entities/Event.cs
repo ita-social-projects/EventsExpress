@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
 {
-    public class Event : BaseEntity
+    public class Event : ManageableEntity
     {
         public bool IsBlocked { get; set; }
 
@@ -25,6 +25,8 @@ namespace EventsExpress.Db.Entities
 
         public Guid? PhotoId { get; set; }
 
+        public virtual EventSchedule EventSchedule { get; set; }
+
         public virtual Photo Photo { get; set; }
 
         // public ICollection<Guid> OwnerId { get; set; }
@@ -38,6 +40,8 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventCategory> Categories { get; set; }
 
         public virtual ICollection<Rate> Rates { get; set; }
+
+        public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
     }

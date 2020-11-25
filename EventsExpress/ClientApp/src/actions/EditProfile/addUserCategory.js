@@ -1,37 +1,36 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-import { SetAlert} from '../alert';
+import { setAlert } from '../alert';
+
 export const addUserCategory = {
     PENDING: "SET_ADDUSERCATEGORY_PENDING",
     SUCCESS: "SET_ADDUSERCATEGORY_SUCCESS",
     ERROR: "SET_ADDUSERCATEGORY_ERROR",
-    UPDATE: "UPDATE_CATEGORIES"
+    UPDATE: "UPDATE_CATEGORIES",
 }
 
 const api_serv = new EventsExpressService();
 
-export default function add_UserCategory(data) {
+export default function setUserCategory(data) {
     return dispatch => {
         dispatch(setAddUserCategoryPending(true));
         const res = api_serv.setUserCategory(data);
         res.then(response => {
-            if (response.error == null) {
-
+            if (!response.error) {
                 dispatch(setAddUserCategorySuccess(true));
                 dispatch(updateCategories(data));
-                dispatch(SetAlert({variant:'success', message:'Favarote categoris is updated'}));
+                dispatch(setAlert({ variant: 'success', message: 'Favarote categoris is updated' }));
             } else {
                 dispatch(setAddUserCategoryError(response.error));
-                dispatch(SetAlert({variant:'error', message:'Failed'}));
+                dispatch(setAlert({ variant: 'error', message: 'Failed' }));
             }
         });
-
     }
 }
 
 function updateCategories(data) {
     return {
         type: addUserCategory.UPDATE,
-        payload: data
+        payload: data.categories,
     };
 }
 

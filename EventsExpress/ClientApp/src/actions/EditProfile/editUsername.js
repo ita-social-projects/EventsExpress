@@ -1,5 +1,5 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
-import { SetAlert} from '../alert';
+import { setAlert} from '../alert';
 
 export const editUsername = {
     PENDING : "SET_EDITUSERNAME_PENDING",
@@ -22,10 +22,10 @@ export default function edit_Username(data) {
 
                 dispatch(setEditUsernameSuccess(true));
                 dispatch(updateUsername(data));
-                dispatch(SetAlert({variant:'success', message:'Username is changed'}));
+                dispatch(setAlert({variant:'success', message:'Username is changed'}));
             } else {
                 dispatch(setEditUsernameError(response.error));
-                dispatch(SetAlert({variant:'error', message:'Failed'}));
+                dispatch(setAlert({variant:'error', message:'Failed'}));
             }
         });
     }

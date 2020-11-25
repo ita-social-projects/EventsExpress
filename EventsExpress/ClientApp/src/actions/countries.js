@@ -11,7 +11,7 @@ const api_serv = new EventsExpressService();
 export default function get_countries() {
 
     return dispatch => {
-        dispatch(setCountryPending(true));
+      dispatch(setCountryPending(true));
   
       const res = api_serv.getCountries();
       res.then(response => {

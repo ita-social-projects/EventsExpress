@@ -32,6 +32,54 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method is for edit event from event schedule and create it.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Create event proces success.</response>
+        /// <response code="400">If Create process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditEventFromParent([FromForm] EventDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
+
+            if (result.Successed)
+            {
+                return Ok(new { Id = result.Property });
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        /// <summary>
+        /// This method is for create event from event schedule.
+        /// </summary>
+        /// <param name="eventId">Required.</param>
+        /// <response code="200">Create event proces success.</response>
+        /// <response code="400">If Create process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateEventFromParent(Guid eventId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.CreateNextEvent(eventId);
+
+            if (result.Successed)
+            {
+                return Ok(new { id = result.Property });
+            }
+
+            return BadRequest(result.Message);
+        }
+
+        /// <summary>
         /// This method is for edit and create events.
         /// </summary>
         /// <param name="model">Required.</param>
@@ -129,7 +177,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to add user to category.
+        /// This method have to approved user on event.
         /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>
@@ -174,7 +222,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to add user to category.
+        /// This method have to denied participation in event.
         /// </summary>
         /// <param name="userId">Required.</param>
         /// <param name="eventId">EventId.</param>

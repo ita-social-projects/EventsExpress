@@ -9,5 +9,9 @@ namespace EventsExpress.Db.IRepo
         Category GetByTitle(string title);
 
         List<Category> EventCategories(Guid id);
+
+        public bool Exists(Guid id);
+
+        public bool ExistsAll(IEnumerable<Guid> ids);
     }
 }

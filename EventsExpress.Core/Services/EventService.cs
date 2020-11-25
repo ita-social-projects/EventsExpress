@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -26,6 +27,7 @@ namespace EventsExpress.Core.Services
         private readonly IMediator _mediator;
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEventScheduleService _eventScheduleService;
 
         public EventService(
             IUnitOfWork unitOfWork,
@@ -33,7 +35,9 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             IPhotoService photoSrv,
             IAuthService authService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IPhotoService photoSrv,
+            IEventScheduleService eventScheduleService)
         {
             _db = unitOfWork;
             _mapper = mapper;
@@ -41,6 +45,7 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
+            _eventScheduleService = eventScheduleService;
         }
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
@@ -207,29 +212,72 @@ namespace EventsExpress.Core.Services
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
             var currentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
             ev.Owners.Add(new EventOwner() { UserId = currentUser.Id, EventId = eventDTO.Id});
-
-            try
+            if (eventDTO.Photo == null)
             {
-                ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
+                ev.PhotoId = eventDTO.PhotoId;
             }
-            catch
+            else
             {
-                return new OperationResult(false, "Invalid file", string.Empty);
+                try
+                {
+                    ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
+                }
+                catch (ArgumentException)
+                {
+                    return new OperationResult(false, "Invalid file", string.Empty);
+                }
             }
 
             var eventCategories = eventDTO.Categories?
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
+            ev.CreatedBy = ev.OwnerId;
+            ev.ModifiedBy = ev.OwnerId;
 
             try
             {
                 var result = _db.EventRepository.Insert(ev);
+
                 await _db.SaveAsync();
 
                 eventDTO.Id = result.Id;
+
+                if (eventDTO.IsReccurent)
+                {
+                    await _eventScheduleService.Create(_mapper.Map<EventScheduleDTO>(eventDTO));
+                }
+
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
                 return new OperationResult(true, "Create new Event", result.Id.ToString());
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, string.Empty);
+            }
+        }
+
+        public async Task<OperationResult> CreateNextEvent(Guid eventId)
+        {
+            var eventDTO = EventById(eventId);
+            var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
+
+            var ticksDiff = eventDTO.DateTo.Ticks - eventDTO.DateFrom.Ticks;
+            eventDTO.Id = Guid.Empty;
+            eventDTO.IsReccurent = false;
+            eventDTO.DateFrom = eventScheduleDTO.NextRun;
+            eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
+
+            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.LastRun = eventDTO.DateTo;
+            eventScheduleDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
+
+            try
+            {
+                var createResult = await Create(eventDTO);
+                await _eventScheduleService.Edit(eventScheduleDTO);
+                return new OperationResult(true, "new eventId", createResult.Property);
             }
             catch (Exception ex)
             {
@@ -246,6 +294,8 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
+            ev.ModifiedBy = ev.OwnerId;
+            ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -270,10 +320,33 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event", ev.Id.ToString());
         }
 
-        // todo Owner.Photo - couldn't find navigartion for Owner
+        public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
+        {
+            var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
+
+            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.LastRun = eventDTO.DateTo;
+            eventScheduleDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
+
+            eventDTO.IsReccurent = false;
+            eventDTO.Id = Guid.Empty;
+
+            try
+            {
+                var createResult = await Create(eventDTO);
+                await _eventScheduleService.Edit(eventScheduleDTO);
+                return new OperationResult(true, "new eventId", createResult.Property);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message, string.Empty);
+            }
+        }
+
         public EventDTO EventById(Guid eventId) =>
             _mapper.Map<EventDTO>(_db.EventRepository
-                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo,Inventories.UnitOfMeasuring")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)

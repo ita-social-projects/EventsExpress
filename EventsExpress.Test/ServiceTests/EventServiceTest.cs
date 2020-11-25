@@ -5,7 +5,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
@@ -16,6 +15,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTest : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
         private static Mock<IHttpContextAccessor> httpContextAccessor;
@@ -29,6 +29,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
+            mockEventScheduleService = new Mock<IEventScheduleService>();
 
             service = new EventService(
                 MockUnitOfWork.Object,
@@ -36,6 +37,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockMediator.Object,
                 mockPhotoService.Object,
                 mockAuthService.Object,
+                mockEventScheduleService.Object,
                 httpContextAccessor.Object
                 );
 
@@ -59,6 +61,7 @@ namespace EventsExpress.Test.ServiceTests
                     Title = "SLdndsndj",
                     IsBlocked = false,
                     Categories = null,
+                    MaxParticipants = 2147483647,
                 },
                 new Event
                 {
@@ -78,6 +81,7 @@ namespace EventsExpress.Test.ServiceTests
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
                     Categories = null,
+                    MaxParticipants = 2147483647,
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent

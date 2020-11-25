@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.DTOs
@@ -10,6 +11,8 @@ namespace EventsExpress.Core.DTOs
         public Guid Id { get; set; }
 
         public bool IsBlocked { get; set; }
+
+        public bool IsReccurent { get; set; }
 
         public string Title { get; set; }
 
@@ -21,7 +24,15 @@ namespace EventsExpress.Core.DTOs
 
         public int MaxParticipants { get; set; }
 
+        public int Frequency { get; set; }
+
+        public Periodicity Periodicity { get; set; }
+
         public IFormFile Photo { get; set; }
+
+        public string PhotoUrl { get; set; }
+
+        public Guid PhotoId { get; set; }
 
         public Photo PhotoBytes { get; set; }
 
@@ -38,5 +49,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<CategoryDTO> Categories { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
+
+        public IEnumerable<InventoryDTO> Inventories { get; set; }
     }
 }
