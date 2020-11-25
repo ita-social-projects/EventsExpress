@@ -5,7 +5,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Moq;
 using NUnit.Framework;
 
@@ -49,6 +48,7 @@ namespace EventsExpress.Test.ServiceTests
                     Title = "SLdndsndj",
                     IsBlocked = false,
                     Categories = null,
+                    MaxParticipants = 2147483647,
                 },
                 new Event
                 {
@@ -62,6 +62,7 @@ namespace EventsExpress.Test.ServiceTests
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
                     Categories = null,
+                    MaxParticipants = 2147483647,
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent
