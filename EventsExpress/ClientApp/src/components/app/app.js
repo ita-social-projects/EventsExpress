@@ -42,7 +42,6 @@ export default class App extends Component {
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path="/admin/users" component={UserPWrapper} />
-                        <Route path="/admin/events" component={EventsForAdmin} />
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/admin/users" component={UsersWrapper} />
                         <Route path="/user_chats" component={UserChats} />
