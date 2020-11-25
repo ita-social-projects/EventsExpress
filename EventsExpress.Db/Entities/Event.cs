@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
