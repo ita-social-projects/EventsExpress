@@ -49,6 +49,10 @@ namespace EventsExpress.Db.EF
 
         public DbSet<UnitOfMeasuring> UnitOfMeasurings { get; set; }
 
+        public DbSet<Developer> Developers { get; set; }
+
+        public DbSet<Team> Teams{ get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -172,6 +176,16 @@ namespace EventsExpress.Db.EF
                 .HasOne(uei => uei.Inventory)
                 .WithMany(i => i.UserEventInventories)
                 .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
+
+            // teamPhoto
+            builder.Entity<TeamPhoto>()
+                .HasKey(tph => new { tph.TeamId, tph.PhotoId });
+            builder.Entity<TeamPhoto>()
+                .HasOne(tph => tph.Photo);
+            builder.Entity<TeamPhoto>()
+                .HasOne(tph => tph.Team)
+                .WithMany(t => t.TeamPhotos)
+                .HasForeignKey(tph => tph.TeamId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

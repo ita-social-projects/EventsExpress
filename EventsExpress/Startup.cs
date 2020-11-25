@@ -131,6 +131,7 @@ namespace EventsExpress
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IInventoryService, InventoryService>();
             services.AddTransient<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddTransient<ITeamService, TeamService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddTransient<IPhotoService, PhotoService>();

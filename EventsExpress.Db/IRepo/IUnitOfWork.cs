@@ -43,6 +43,10 @@ namespace EventsExpress.Db.IRepo
 
         IUserEventRepository UserEventRepository { get; }
 
+        ITeamRepository TeamRepository { get; }
+
+        IDeveloperRepository DeveloperRepository { get; }
+
         Task SaveAsync();
     }
 }

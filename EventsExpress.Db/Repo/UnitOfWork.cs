@@ -28,6 +28,8 @@ namespace EventsExpress.Db.Repo
         private IUnitOfMeasuringRepository _unitOfMeasuringRepository;
         private IEventStatusHistoryRepository _eventStatusHistoryRepository;
         private IUserEventRepository _userEventRepository;
+        private IDeveloperRepository _developerRepository;
+        private ITeamRepository _teamRepository;
         private bool disposed = false;
 
         public UnitOfWork(
@@ -92,6 +94,12 @@ namespace EventsExpress.Db.Repo
 
         public IUserEventRepository UserEventRepository =>
             _userEventRepository ?? (_userEventRepository = new UserEventRepository(database));
+
+        public ITeamRepository TeamRepository =>
+            _teamRepository ?? (_teamRepository = new TeamRepository(database));
+
+        public IDeveloperRepository DeveloperRepository =>
+            _developerRepository ?? (_developerRepository = new DeveloperRepository(database));
 
         public void Dispose()
         {
