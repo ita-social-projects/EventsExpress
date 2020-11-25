@@ -6,8 +6,6 @@ namespace EventsExpress.Core.DTOs
 {
     public class EventScheduleDTO : ManageableEntity
     {
-        public Guid Id { get; set; }
-
         public int Frequency { get; set; }
 
         public Periodicity Periodicity { get; set; }
