@@ -84,10 +84,14 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
         }
 
-        public EventScheduleDTO EventScheduleById(Guid id) =>
-            _mapper.Map<EventScheduleDTO>(_db.EventScheduleRepository
+        public EventScheduleDTO EventScheduleById(Guid id)
+        {
+            var res = _db.EventScheduleRepository
                 .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
-                .FirstOrDefault(x => x.Id == id));
+                .FirstOrDefault(x => x.Id == id);
+
+            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
+        }
 
         public IEnumerable<EventScheduleDTO> GetAll()
         {
@@ -110,7 +114,7 @@ namespace EventsExpress.Core.Services
         }
 
         public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
-            _mapper.Map<EventScheduleDTO>(_db.EventScheduleRepository
+            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
                 .Get()
                 .FirstOrDefault(x => x.EventId == eventId));
     }
