@@ -12,7 +12,7 @@ export function get_inventories_by_event_id(eventId) {
         dispatch(setInventoryError(false));
         const res = api_serv.getInventoriesByEventId(eventId);
         res.then(response => {
-            console.log('action', response);
+            console.log('geted', response);
             if (response.error == null) {
                 dispatch(getInventory(response));
             } else {

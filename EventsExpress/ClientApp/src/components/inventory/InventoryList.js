@@ -3,8 +3,8 @@ import InventoryHeaderButton from './InventoryHeaderButton';
 import ItemFrom from './itemForm';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
-import { update_inventories }  from '../../actions/inventory-list';
-import { add_item, delete_item } from '../../actions/inventar';
+import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
+import { add_item, delete_item, edit_item } from '../../actions/inventar';
 
 class InventoryList extends Component {
 
@@ -20,7 +20,8 @@ class InventoryList extends Component {
         this.onCancel = this.onCancel.bind(this);
     }
     
-    componentWillMount() {
+    componentDidMount() {
+        console.log('mount');
         this.props.get_unitsOfMeasuring();
         this.props.get_inventories_by_event_id(this.props.eventId);
     }
@@ -42,17 +43,12 @@ class InventoryList extends Component {
     }
 
     deleteItemFromList = inventar => {
-        const updateList = this.props.inventories.items.filter(function(item){
-            return item.id !== inventar.id;
-        });
-        
-        console.log(inventar);
-        this.props.delete_item(inventar.id);
-        this.props.get_inventories(updateList);
+        console.log('before deleting', this.props.eventId);
+        this.props.delete_item(inventar.id, this.props.eventId);
     }
 
     markItemAsEdit = inventar => {
-        let updateList = this.state.inventoryList;
+        let updateList = this.props.inventories.items;
         updateList.map(item => {
             if (inventar.id === item.id)
                 item.isEdit = true;
@@ -75,15 +71,11 @@ class InventoryList extends Component {
         if (values.isNew) {
             this.props.add_item(values, this.props.eventId);
         }
+        else {
+            console.log(this.props.eventId);
+            this.props.edit_item(values, this.props.eventId);
+        }
 
-        // let updateList = [...this.props.inventories.items];
-        // values.isNew = false;
-        // values.isEdit = false;
-        // updateList[this.props.inventories.items.length - 1] = values;
-        // console.log(updateList);
-        // this.props.get_inventories(updateList);
-        console.log(this.props)
-        // this.props.get_inventories_by_event_id(this.props.eventId);
         this.setState({
             disabledEdit: false
         });
@@ -97,14 +89,16 @@ class InventoryList extends Component {
             })
             return;
         }
-        let updateList = this.state.inventoryList;
+        // let updateList = this.props.inventories.items;
 
-        updateList.map(item => {
-            if (item.isEdit) {
-                item.isEdit = false;
-            }
-        });
-        this.props.get_inventories(updateList);
+        // updateList.map(item => {
+        //     if (item.isEdit) {
+        //         item.isEdit = false;
+        //     }
+        // });
+        // this.props.get_inventories(updateList);
+
+        this.props.get_inventories_by_event_id(this.props.eventId);
 
         this.setState({
             disabledEdit: false
@@ -113,6 +107,7 @@ class InventoryList extends Component {
 
     render() {
         const { inventories, eventId } = this.props;
+        console.log('render', this.props);
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -179,8 +174,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
         add_item: (item, eventId) => dispatch(add_item(item, eventId)),
-        delete_item: (id) => dispatch(delete_item(id)),
-        get_inventories: (inventories) => dispatch(update_inventories(inventories))
+        delete_item: (itemId, eventId) => dispatch(delete_item(itemId, eventId)),
+        edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
+        get_inventories: (inventories) => dispatch(update_inventories(inventories)),
+        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId))
     }
 };
 

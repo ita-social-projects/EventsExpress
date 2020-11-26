@@ -253,11 +253,13 @@ export default class EventsExpressService {
             file.append(`Categories[${i++}].Id`, x.id);
         });
 
-        data.inventories.map((item, key) => {
-            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
-            file.append(`Inventories[${key}].ItemName`, item.itemName);
-            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
-        });
+        if (data.inventories) {
+            data.inventories.map((item, key) => {
+                file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+                file.append(`Inventories[${key}].ItemName`, item.itemName);
+                file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
+            });
+        }
         const res = await this.setResourceWithData('event/edit', file);
         return !res.ok
             ? { error: await res.text() }
@@ -328,6 +330,19 @@ export default class EventsExpressService {
 
     setItemDelete = async (id) => {
         const res = await this.setResource(`inventory/DeleteInventar/?id=${id}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setItem = async (item) => {
+        const value = {
+            id: item.id,
+            itemName: item.itemName,
+            needQuantity: Number(item.needQuantity),
+            unitOfMeasuring: {id: item.unitOfMeasuring}
+        }
+        const res = await this.setResource(`inventory/EditInventar`, value);
         return !res.ok
             ? { error: await res.text() }
             : res;
