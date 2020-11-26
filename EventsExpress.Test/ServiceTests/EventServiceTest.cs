@@ -4,6 +4,7 @@ using System.Linq;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -18,6 +19,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IMediator> mockMediator;
         private EventService service;
         private List<Event> events;
+        private UserEvent userEvent;
 
         [SetUp]
         protected override void Initialize()
@@ -47,6 +49,7 @@ namespace EventsExpress.Test.ServiceTests
                     PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndsndj",
                     IsBlocked = false,
+                    IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
                 },
@@ -61,18 +64,28 @@ namespace EventsExpress.Test.ServiceTests
                     PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
+                    IsPublic = false,
                     Categories = null,
                     MaxParticipants = 2147483647,
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent
                         {
-                                    Status = Db.Enums.Status.WillGo,
+                                    UserStatusEvent = UserStatusEvent.Pending,
+                                    Status = Status.WillGo,
                                     UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
                                     EventId = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
                         },
                     },
                 },
+            };
+
+            userEvent = new UserEvent
+            {
+                UserStatusEvent = UserStatusEvent.Pending,
+                Status = Status.WillGo,
+                UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                EventId = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
             };
 
             List<User> users = new List<User>()
@@ -93,6 +106,9 @@ namespace EventsExpress.Test.ServiceTests
 
             MockUnitOfWork.Setup(u => u.UserRepository
                 .Get(It.IsAny<Guid>())).Returns((Guid i) => users.Where(x => x.Id == i).FirstOrDefault());
+
+            MockUnitOfWork.Setup(u => u.UserEventRepository
+                .Update(It.IsAny<UserEvent>())).Returns((UserEvent i) => i);
         }
 
         [Test]
@@ -177,6 +193,21 @@ namespace EventsExpress.Test.ServiceTests
             var result = service.DeleteUserFromEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA641C-AD14-5BCC-A860-E5A2664B019D"));
 
             Assert.IsFalse(result.Result.Successed);
+        }
+
+        [Test]
+        public void ChangeVisitorStatus_ReturnTrue()
+        {
+            MockUnitOfWork.Setup(u => u.UserEventRepository
+                .Get(string.Empty))
+                .Returns(new List<UserEvent> { userEvent }.AsQueryable());
+
+            var test = service.ChangeVisitorStatus(
+                new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
+                UserStatusEvent.Approved);
+
+            Assert.IsTrue(test.Result.Successed);
         }
     }
 }

@@ -76,10 +76,13 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
         }
 
-        public EventScheduleDTO EventScheduleById(Guid id) =>
-            _mapper.Map<EventScheduleDTO>(
-                 Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+        public EventScheduleDTO EventScheduleById(Guid id)
+        {
+            var res = _db.EventScheduleRepository
+                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
                 .FirstOrDefault(x => x.Id == id));
+            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
+        }
 
         public IEnumerable<EventScheduleDTO> GetAll()
         {
@@ -96,11 +99,9 @@ namespace EventsExpress.Core.Services
                 .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
                 .ToList());
         }
-
-        public EventScheduleDTO EventScheduleByEventId(Guid eventId)
-        {
-            return _mapper.Map<EventScheduleDTO>(
-                 Get()
+        public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
+            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
+                .Get()
                 .FirstOrDefault(x => x.EventId == eventId));
         }
     }
