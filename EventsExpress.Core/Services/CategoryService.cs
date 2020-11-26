@@ -9,7 +9,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
@@ -100,10 +99,10 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public bool Exists(Guid id) => 
+        public bool Exists(Guid id) =>
             Get().Count(x => x.Id == id) > 0;
 
-        public bool ExistsAll(IEnumerable<Guid> ids) => 
+        public bool ExistsAll(IEnumerable<Guid> ids) =>
             Get().Count(x => ids.Contains(x.Id)) == ids.Count();
     }
 }

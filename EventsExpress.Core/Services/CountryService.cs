@@ -7,7 +7,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {

@@ -6,7 +6,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
@@ -20,7 +19,7 @@ namespace EventsExpress.Core.Services
             _context = context;
         }
 
-        public IQueryable<City> GetCitiesByCountryId(Guid id) => 
+        public IQueryable<City> GetCitiesByCountryId(Guid id) =>
             Get().Where(c => c.CountryId == id);
 
         public IQueryable<City> GetAll() => Get();

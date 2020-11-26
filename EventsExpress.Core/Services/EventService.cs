@@ -12,7 +12,6 @@ using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.IRepo;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

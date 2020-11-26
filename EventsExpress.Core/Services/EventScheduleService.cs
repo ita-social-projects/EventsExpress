@@ -78,9 +78,8 @@ namespace EventsExpress.Core.Services
 
         public EventScheduleDTO EventScheduleById(Guid id)
         {
-            var res = _db.EventScheduleRepository
-                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
-                .FirstOrDefault(x => x.Id == id));
+            var res = Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+                .FirstOrDefault(x => x.Id == id);
             return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 
@@ -99,10 +98,10 @@ namespace EventsExpress.Core.Services
                 .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
                 .ToList());
         }
+
         public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
-            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
-                .Get()
+            _mapper.Map<EventSchedule, EventScheduleDTO>(
+                 Get()
                 .FirstOrDefault(x => x.EventId == eventId));
-        }
     }
 }
