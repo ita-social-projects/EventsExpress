@@ -8,7 +8,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface ICityService
     {
-        City Get(Guid id);
+        City GetById(Guid id);
 
         IQueryable<City> GetCitiesByCountryId(Guid id);
 

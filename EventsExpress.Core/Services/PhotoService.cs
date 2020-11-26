@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 using Microsoft.AspNetCore.Http;
@@ -14,19 +16,20 @@ using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.Services
 {
-    public class PhotoService : IPhotoService
+    public class PhotoService : BaseService<Photo>, IPhotoService
     {
-        private readonly IUnitOfWork _db;
+        private readonly AppDbContext _context;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
         private readonly IHttpClientFactory _clientFactory;
         private Lazy<HttpClient> _client;
 
         public PhotoService(
-            IUnitOfWork uow,
+            AppDbContext context,
             IOptions<ImageOptionsModel> opt,
             IHttpClientFactory clientFactory)
+            : base(context)
         {
-            _db = uow;
+            _context = context;
             _widthOptions = opt;
             _clientFactory = clientFactory;
             _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
@@ -51,8 +54,8 @@ namespace EventsExpress.Core.Services
                 Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
             };
 
-            _db.PhotoRepository.Insert(photo);
-            await _db.SaveAsync();
+            Insert(photo);
+            await _context.SaveChangesAsync();
 
             return photo;
         }
@@ -72,8 +75,8 @@ namespace EventsExpress.Core.Services
                 Img = imgData,
             };
 
-            _db.PhotoRepository.Insert(photo);
-            await _db.SaveAsync();
+            Insert(photo);
+            await _context.SaveChangesAsync();
 
             return photo;
         }
@@ -93,11 +96,11 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var photo = _db.PhotoRepository.Get(id);
+            var photo = Get(id);
             if (photo != null)
             {
-                _db.PhotoRepository.Delete(photo);
-                await _db.SaveAsync();
+                Delete(photo);
+                await _context.SaveChangesAsync();
             }
         }
 

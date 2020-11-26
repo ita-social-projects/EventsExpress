@@ -7,21 +7,24 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class UnitOfMeasuringService : IUnitOfMeasuringService
+    public class UnitOfMeasuringService : BaseService<UnitOfMeasuring>, IUnitOfMeasuringService
     {
-        private readonly IUnitOfWork _db;
+        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
         public UnitOfMeasuringService(
-            IUnitOfWork unitOfWork,
+            AppDbContext context,
             IMapper mapper)
+            : base(context)
         {
-            _db = unitOfWork;
+            _context = context;
             _mapper = mapper;
         }
 
@@ -29,8 +32,8 @@ namespace EventsExpress.Core.Services
         {
             try
             {
-                var result = _db.UnitOfMeasuringRepository.Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-                await _db.SaveAsync();
+                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+                await _context.SaveChangesAsync();
                 return new OperationResult(true, "Unit of measuring was created!", result.Id.ToString());
             }
             catch (Exception ex)
@@ -41,7 +44,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var entity = _db.UnitOfMeasuringRepository.Get(unitOfMeasuringDTO.Id);
+            var entity = Get(unitOfMeasuringDTO.Id);
             if (entity == null)
             {
                 return new OperationResult(false, "Object not found", unitOfMeasuringDTO.Id.ToString());
@@ -51,7 +54,7 @@ namespace EventsExpress.Core.Services
             {
                 entity.ShortName = unitOfMeasuringDTO.ShortName;
                 entity.UnitName = unitOfMeasuringDTO.UnitName;
-                await _db.SaveAsync();
+                await _context.SaveChangesAsync();
                 return new OperationResult(true, "Edit unit of measuring", entity.Id.ToString());
             }
             catch (Exception ex)
@@ -62,7 +65,7 @@ namespace EventsExpress.Core.Services
 
         public ICollection<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = _db.UnitOfMeasuringRepository.Get().ToList();
+            var entities = Get().ToList();
             if (entities == null)
             {
                 return new List<UnitOfMeasuringDTO>();
@@ -75,7 +78,7 @@ namespace EventsExpress.Core.Services
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
         {
-            var entity = _db.UnitOfMeasuringRepository.Get(unitOfMeasuringId);
+            var entity = Get(unitOfMeasuringId);
             if (entity == null)
             {
                 return new UnitOfMeasuringDTO();

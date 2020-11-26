@@ -32,7 +32,7 @@ namespace EventsExpress.Test.ServiceTests
             MockUnitOfWork.Setup(u => u.CategoryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
                 .Returns(new Category() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "random" });
 
-            var res = service.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"));
+            var res = service.GetById(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"));
 
             Assert.IsNotEmpty(res.Name);
         }

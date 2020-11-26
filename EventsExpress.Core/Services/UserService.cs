@@ -7,6 +7,8 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Db.Helpers;
@@ -17,8 +19,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService<User>, IUserService
     {
+        private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
@@ -26,14 +29,15 @@ namespace EventsExpress.Core.Services
         private readonly IEmailService _emailService;
 
         public UserService(
-            IUnitOfWork uow,
+            AppDbContext context,
             IMapper mapper,
             IPhotoService photoSrv,
             IMediator mediator,
             ICacheHelper cacheHelper,
             IEmailService emailService)
+            : base(context)
         {
-            Db = uow;
+            _context = context;
             _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
@@ -41,26 +45,24 @@ namespace EventsExpress.Core.Services
             _emailService = emailService;
         }
 
-        public IUnitOfWork Db { get; set; }
-
         public async Task<OperationResult> Create(UserDTO userDto)
         {
-            if (Db.UserRepository.Get().Any(u => u.Email == userDto.Email))
+            if (Get().Any(u => u.Email == userDto.Email))
             {
                 return new OperationResult(false, "Email already exists in database", "Email");
             }
 
             var user = _mapper.Map<User>(userDto);
 
-            user.Role = Db.RoleRepository.Get().FirstOrDefault(r => r.Name == "User");
+            user.Role = _context.Roles.FirstOrDefault(r => r.Name == "User");
 
-            var result = Db.UserRepository.Insert(user);
+            var result = Insert(user);
             if (result.Email != user.Email || result.Id == Guid.Empty)
             {
                 return new OperationResult(false, "Registration failed", string.Empty);
             }
 
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
             userDto.Id = result.Id;
             if (!userDto.EmailConfirmed)
             {
@@ -72,7 +74,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> ConfirmEmail(CacheDTO cacheDto)
         {
-            var user = Db.UserRepository.Get(cacheDto.UserId);
+            var user = Get(cacheDto.UserId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
@@ -89,14 +91,14 @@ namespace EventsExpress.Core.Services
             }
 
             user.EmailConfirmed = true;
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
             _cacheHelper.Delete(cacheDto.UserId);
             return new OperationResult(true, "Verify succeeded", string.Empty);
         }
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
         {
-            var user = Db.UserRepository.Get(userDto.Id);
+            var user = Get(userDto.Id);
             if (user == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -107,7 +109,7 @@ namespace EventsExpress.Core.Services
 
             try
             {
-                await Db.SaveAsync();
+                await _context.SaveChangesAsync();
                 await _emailService.SendEmailAsync(new EmailDTO
                 {
                     Subject = "EventsExpress password recovery",
@@ -129,7 +131,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "EMAIL cannot be empty", "Email");
             }
 
-            if (!Db.UserRepository.Get().Any(u => u.Id == userDTO.Id))
+            if (!Get().Any(u => u.Id == userDTO.Id))
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
@@ -137,8 +139,8 @@ namespace EventsExpress.Core.Services
             var result = _mapper.Map<UserDTO, User>(userDTO);
             try
             {
-                Db.UserRepository.Update(result);
-                await Db.SaveAsync();
+                Update(result);
+                await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -150,8 +152,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository
-                .Get("Photo,Categories.Category,Events,Role")
+            var user = _mapper.Map<UserDTO>(Get("Photo,Categories.Category,Events,Role")
                 .FirstOrDefault(x => x.Id == id));
 
             user.Rating = GetRating(user.Id);
@@ -160,8 +161,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetByEmail(string email)
         {
-            var user = _mapper.Map<UserDTO>(Db.UserRepository
-                .Get("Role,Categories.Category,Photo")
+            var user = _mapper.Map<UserDTO>(Get("Role,Categories.Category,Photo")
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Email == email));
 
@@ -176,10 +176,10 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
-            var users = Db.UserRepository.Get("Photo,Role").AsNoTracking().AsEnumerable();
+            var users = Get("Photo,Role").AsNoTracking().AsEnumerable();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
-                ? users.Where(x => x.Email.Contains(model.KeyWord) || 
+                ? users.Where(x => x.Email.Contains(model.KeyWord) ||
                     (x.Name != null && x.Name.Contains(model.KeyWord)))
                 : users;
 
@@ -210,7 +210,7 @@ namespace EventsExpress.Core.Services
             {
                 u.Rating = GetRating(u.Id);
 
-                var rel = Db.RelationshipRepository.Get()
+                var rel = _context.Relationships
                     .FirstOrDefault(x => x.UserFromId == id && x.UserToId == u.Id);
 
                 u.Attitude = (rel != null) ? (byte)rel.Attitude : (byte)2;
@@ -221,7 +221,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetUsersByRole(string role)
         {
-            var users = Db.UserRepository.Get("Role")
+            var users = Get("Role")
                .Where(user => user.Role.Name == role)
                .Include(user => user.RefreshTokens)
                .AsNoTracking()
@@ -234,7 +234,7 @@ namespace EventsExpress.Core.Services
         {
             var categoryIds = categories.Select(x => x.Id).ToList();
 
-            var users = Db.UserRepository.Get("Photo,Role,Categories.Category")
+            var users = Get("Photo,Role,Categories.Category")
                 .Where(user => user.Categories
                 .Any(category => categoryIds.Contains(category.Category.Id)))
                 .Distinct()
@@ -245,7 +245,7 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetUserByRefreshToken(string token)
         {
-            var user = Db.UserRepository.Get("Role,RefreshTokens").AsNoTracking()
+            var user = Get("Role,RefreshTokens").AsNoTracking()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
 
             return _mapper.Map<UserDTO>(user);
@@ -253,27 +253,27 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> ChangeRole(Guid uId, Guid rId)
         {
-            var newRole = Db.RoleRepository.Get(rId);
+            var newRole = _context.Roles.Find(rId);
             if (newRole == null)
             {
                 return new OperationResult(false, "Invalid role Id", "roleId");
             }
 
-            var user = Db.UserRepository.Get(uId);
+            var user = Get(uId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
 
             user.Role = newRole;
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
 
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
         {
-            var user = Db.UserRepository.Get("Photo").FirstOrDefault(u => u.Id == uId);
+            var user = Get("Photo").FirstOrDefault(u => u.Id == uId);
             if (user == null)
             {
                 return new OperationResult(false, "User not found", "Id");
@@ -287,8 +287,8 @@ namespace EventsExpress.Core.Services
             try
             {
                 user.Photo = await _photoService.AddPhoto(avatar);
-                Db.UserRepository.Update(user);
-                await Db.SaveAsync();
+                Update(user);
+                await _context.SaveChangesAsync();
                 return new OperationResult(true);
             }
             catch
@@ -299,35 +299,35 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Unblock(Guid uId)
         {
-            var user = Db.UserRepository.Get(uId);
+            var user = Get(uId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
 
             user.IsBlocked = false;
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
             await _mediator.Publish(new UnblockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> Block(Guid uId)
         {
-            var user = Db.UserRepository.Get(uId);
+            var user = Get(uId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
             }
 
             user.IsBlocked = true;
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
             await _mediator.Publish(new BlockedUserMessage(user.Email));
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
         {
-            var u = Db.UserRepository.Get("Categories")
+            var u = Get("Categories")
                 .Single(user => user.Id == userDTO.Id);
 
             var newCategories = categories
@@ -338,8 +338,8 @@ namespace EventsExpress.Core.Services
 
             try
             {
-                Db.UserRepository.Update(u);
-                await Db.SaveAsync();
+                Update(u);
+                await _context.SaveChangesAsync();
 
                 return new OperationResult(true);
             }
@@ -351,15 +351,15 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> SetAttitude(AttitudeDTO attitude)
         {
-            var currentAttitude = Db.RelationshipRepository.Get()
+            var currentAttitude = _context.Relationships
                 .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId);
             if (currentAttitude == null)
             {
                 var rel = _mapper.Map<AttitudeDTO, Relationship>(attitude);
                 try
                 {
-                    Db.RelationshipRepository.Insert(rel);
-                    await Db.SaveAsync();
+                    _context.Relationships.Add(rel);
+                    await _context.SaveChangesAsync();
 
                     return new OperationResult(true);
                 }
@@ -370,19 +370,19 @@ namespace EventsExpress.Core.Services
             }
 
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
             return new OperationResult(true);
         }
 
         public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
-            _mapper.Map<Relationship, AttitudeDTO>(Db.RelationshipRepository.Get()
+            _mapper.Map<Relationship, AttitudeDTO>(_context.Relationships
                 .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
 
         public ProfileDTO GetProfileById(Guid id, Guid fromId)
         {
             var user = _mapper.Map<UserDTO, ProfileDTO>(GetById(id));
 
-            var rel = Db.RelationshipRepository.Get()
+            var rel = _context.Relationships
                 .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == id);
             user.Attitude = (rel != null)
                 ? (byte)rel.Attitude
@@ -395,11 +395,11 @@ namespace EventsExpress.Core.Services
 
         public double GetRating(Guid userId)
         {
-            var ownEventsIds = Db.EventRepository.Get()
+            var ownEventsIds = _context.Events
                 .Where(e => e.OwnerId == userId).Select(e => e.Id).ToList();
             try
             {
-                return Db.RateRepository.Get()
+                return _context.Rates
                     .Where(r => ownEventsIds.Contains(r.EventId))
                     .Average(r => r.Score);
             }

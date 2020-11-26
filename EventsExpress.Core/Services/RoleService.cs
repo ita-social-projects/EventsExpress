@@ -1,20 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class RoleService : IRoleService
+    public class RoleService : BaseService<Role>, IRoleService
     {
-        private readonly IUnitOfWork _db;
+        private readonly AppDbContext _context;
 
-        public RoleService(IUnitOfWork uow)
+        public RoleService(AppDbContext context)
+            : base(context)
         {
-            _db = uow;
+            _context = context;
         }
 
-        public IEnumerable<Role> All() => _db.RoleRepository.Get().AsEnumerable();
+        public IEnumerable<Role> All() => Get().AsEnumerable();
     }
 }

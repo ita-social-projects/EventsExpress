@@ -4,33 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class CountryService : ICountryService
+    public class CountryService : BaseService<Country>, ICountryService
     {
-        private readonly IUnitOfWork _db;
+        private readonly AppDbContext _context;
 
-        public CountryService(IUnitOfWork uow)
+        public CountryService(AppDbContext context)
+            : base(context)
         {
-            _db = uow;
+            _context = context;
         }
 
-        public IEnumerable<Country> GetCountries() => _db.CountryRepository.Get();
+        public IEnumerable<Country> GetCountries() => Get();
 
-        public Country GetById(Guid id) => _db.CountryRepository.Get(id);
+        public Country GetById(Guid id) => Get(id);
 
         public async Task<OperationResult> CreateCountryAsync(Country country)
         {
-            if (_db.CountryRepository.Get().Any(c => c.Name == country.Name))
+            if (Get().Any(c => c.Name == country.Name))
             {
                 return new OperationResult(false, "Country is already exist", string.Empty);
             }
 
-            _db.CountryRepository.Insert(country);
-            await _db.SaveAsync();
+            Insert(country);
+            await _context.SaveChangesAsync();
 
             return new OperationResult(true);
         }
@@ -42,14 +45,14 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
 
-            var oldCountry = _db.CountryRepository.Get(country.Id);
+            var oldCountry = Get(country.Id);
             if (oldCountry == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
 
             oldCountry.Name = country.Name;
-            await _db.SaveAsync();
+            await _context.SaveChangesAsync();
 
             return new OperationResult(true);
         }
@@ -61,14 +64,14 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
 
-            var country = _db.CountryRepository.Get(id);
+            var country = Get(id);
             if (country == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
 
-            _db.CountryRepository.Delete(country);
-            await _db.SaveAsync();
+            Delete(country);
+            await _context.SaveChangesAsync();
             return new OperationResult(true);
         }
     }
