@@ -84,12 +84,6 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
         }
 
-                .Get("Event.Owners.User,Event.Photo")
-                .FirstOrDefault(x => x.Id == id);
-
-            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
-        }
-
         public IEnumerable<EventScheduleDTO> GetAll()
         {
             var eventSchedules = _db.EventScheduleRepository
@@ -114,5 +108,14 @@ namespace EventsExpress.Core.Services
             _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
                 .Get()
                 .FirstOrDefault(x => x.EventId == eventId));
+
+        public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
+        {
+            var res = _db.EventScheduleRepository
+                .Get("Event.Owners.User,Event.Photo")
+                .FirstOrDefault(x => x.Id == eventScheduleId);
+
+            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
+        }
     }
 }
