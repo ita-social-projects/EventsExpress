@@ -28,6 +28,7 @@ namespace EventsExpress.Core.Services
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
+        private UserDTO CurrentUser { get; set; }
 
         public EventService(
             IUnitOfWork unitOfWork,
@@ -36,7 +37,6 @@ namespace EventsExpress.Core.Services
             IPhotoService photoSrv,
             IAuthService authService,
             IHttpContextAccessor httpContextAccessor,
-            IPhotoService photoSrv,
             IEventScheduleService eventScheduleService)
         {
             _db = unitOfWork;
@@ -46,8 +46,8 @@ namespace EventsExpress.Core.Services
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
+            this.CurrentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
         }
-
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
@@ -210,8 +210,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-            var currentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
-            ev.Owners.Add(new EventOwner() { UserId = currentUser.Id, EventId = eventDTO.Id});
+            ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id});
             if (eventDTO.Photo == null)
             {
                 ev.PhotoId = eventDTO.PhotoId;
@@ -232,8 +231,8 @@ namespace EventsExpress.Core.Services
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
-            ev.CreatedBy = ev.OwnerId;
-            ev.ModifiedBy = ev.OwnerId;
+            ev.CreatedBy = CurrentUser.Id;
+            ev.ModifyBy(CurrentUser.Id);
 
             try
             {
@@ -268,7 +267,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
 
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifyBy(CurrentUser.Id);
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -294,8 +293,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
-            ev.ModifiedBy = ev.OwnerId;
-            ev.ModifiedDateTime = DateTime.UtcNow;
+            ev.ModifyBy(CurrentUser.Id);
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -324,7 +322,7 @@ namespace EventsExpress.Core.Services
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
 
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifyBy(CurrentUser.Id);
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);

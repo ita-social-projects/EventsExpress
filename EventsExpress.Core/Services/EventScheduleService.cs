@@ -86,13 +86,13 @@ namespace EventsExpress.Core.Services
 
         public EventScheduleDTO EventScheduleById(Guid id) =>
             _mapper.Map<EventScheduleDTO>(_db.EventScheduleRepository
-                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+                .Get("Event.Owners.User,Event.Photo")
                 .FirstOrDefault(x => x.Id == id));
 
         public IEnumerable<EventScheduleDTO> GetAll()
         {
             var eventSchedules = _db.EventScheduleRepository
-                .Get("Event.City.Country,Event.Photo,Event.Owner,Event.Categories.Category")
+                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
                 .Where(opt => opt.IsActive)
                 .ToList();
 

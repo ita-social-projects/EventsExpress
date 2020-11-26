@@ -12,6 +12,7 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+            Database.SetCommandTimeout(30);
             Database.Migrate();
         }
 

@@ -37,8 +37,8 @@ namespace EventsExpress.Test.ServiceTests
                 mockMediator.Object,
                 mockPhotoService.Object,
                 mockAuthService.Object,
-                mockEventScheduleService.Object,
-                httpContextAccessor.Object
+                httpContextAccessor.Object,
+                mockEventScheduleService.Object
                 );
 
             events = new List<Event>

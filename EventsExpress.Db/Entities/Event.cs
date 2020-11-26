@@ -29,10 +29,6 @@ namespace EventsExpress.Db.Entities
 
         public virtual Photo Photo { get; set; }
 
-        // public ICollection<Guid> OwnerId { get; set; }
-
-        // public virtual ICollection<User> Owner { get; set; }
-
         public virtual ICollection<EventOwner> Owners { get; set; }
 
         public virtual ICollection<UserEvent> Visitors { get; set; }

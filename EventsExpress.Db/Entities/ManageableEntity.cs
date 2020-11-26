@@ -13,5 +13,11 @@ namespace EventsExpress.Db.Entities
         public Guid? ModifiedBy { get; set; }
 
         public DateTime? ModifiedDateTime { get; set; }
+
+        public void ModifyBy(Guid UserId)
+        {
+            this.ModifiedDateTime = DateTime.UtcNow;
+            this.ModifiedBy = UserId;
+        }
     }
 }

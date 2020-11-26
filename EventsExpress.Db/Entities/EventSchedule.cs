@@ -18,5 +18,6 @@ namespace EventsExpress.Db.Entities
         public Guid EventId { get; set; }
 
         public virtual Event Event { get; set; }
+
     }
 }
