@@ -15,16 +15,11 @@ namespace EventsExpress.Core.Services
 {
     public class UnitOfMeasuringService : BaseService<UnitOfMeasuring>, IUnitOfMeasuringService
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
-
         public UnitOfMeasuringService(
             AppDbContext context,
             IMapper mapper)
-            : base(context)
+            : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         public async Task<OperationResult> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
@@ -43,7 +38,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var entity = Get(unitOfMeasuringDTO.Id);
+            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null)
             {
                 return new OperationResult(false, "Object not found", unitOfMeasuringDTO.Id.ToString());
@@ -62,26 +57,16 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public ICollection<UnitOfMeasuringDTO> GetAll()
+        public IEnumerable<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = Get().ToList();
-            if (entities == null)
-            {
-                return new List<UnitOfMeasuringDTO>();
-            }
-            else
-            {
-                return _mapper.Map<ICollection<UnitOfMeasuring>, ICollection<UnitOfMeasuringDTO>>(entities);
-            }
+            var entities = _context.UnitOfMeasurings.AsEnumerable();
+
+            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
         }
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
         {
-            var entity = Get(unitOfMeasuringId);
-            if (entity == null)
-            {
-                return new UnitOfMeasuringDTO();
-            }
+            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
 
             return _mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
         }

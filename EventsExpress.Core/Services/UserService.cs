@@ -20,8 +20,6 @@ namespace EventsExpress.Core.Services
 {
     public class UserService : BaseService<User>, IUserService
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
         private readonly ICacheHelper _cacheHelper;
@@ -34,10 +32,8 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             ICacheHelper cacheHelper,
             IEmailService emailService)
-            : base(context)
+            : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
             _photoService = photoSrv;
             _mediator = mediator;
             _cacheHelper = cacheHelper;
@@ -46,7 +42,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(UserDTO userDto)
         {
-            if (Get().Any(u => u.Email == userDto.Email))
+            if (_context.Users.Any(u => u.Email == userDto.Email))
             {
                 return new OperationResult(false, "Email already exists in database", "Email");
             }
@@ -73,7 +69,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> ConfirmEmail(CacheDTO cacheDto)
         {
-            var user = Get(cacheDto.UserId);
+            var user = _context.Users.Find(cacheDto.UserId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
@@ -97,7 +93,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> PasswordRecover(UserDTO userDto)
         {
-            var user = Get(userDto.Id);
+            var user = _context.Users.Find(userDto.Id);
             if (user == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -130,7 +126,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "EMAIL cannot be empty", "Email");
             }
 
-            if (!Get().Any(u => u.Id == userDTO.Id))
+            if (!_context.Users.Any(u => u.Id == userDTO.Id))
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
@@ -151,7 +147,13 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetById(Guid id)
         {
-            var user = _mapper.Map<UserDTO>(Get("Photo,Categories.Category,Events,Role")
+            var user = _mapper.Map<UserDTO>(
+                _context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Events)
+                .Include(u => u.Role)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == id));
 
             user.Rating = GetRating(user.Id);
@@ -160,7 +162,13 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetByEmail(string email)
         {
-            var user = _mapper.Map<UserDTO>(Get("Role,Categories.Category,Photo")
+            var user = _mapper.Map<UserDTO>(
+                 _context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Events)
+                .Include(u => u.Role)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Email == email));
 
@@ -175,7 +183,11 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
         {
-            var users = Get("Photo,Role").AsNoTracking().AsEnumerable();
+            var users = _context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Role)
+                .AsNoTracking()
+                .AsEnumerable();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
                 ? users.Where(x => x.Email.Contains(model.KeyWord) ||
@@ -220,7 +232,8 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDTO> GetUsersByRole(string role)
         {
-            var users = Get("Role")
+            var users = _context.Users
+               .Include(u => u.Role)
                .Where(user => user.Role.Name == role)
                .Include(user => user.RefreshTokens)
                .AsNoTracking()
@@ -233,9 +246,13 @@ namespace EventsExpress.Core.Services
         {
             var categoryIds = categories.Select(x => x.Id).ToList();
 
-            var users = Get("Photo,Role,Categories.Category")
+            var users = _context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Role)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
                 .Where(user => user.Categories
-                .Any(category => categoryIds.Contains(category.Category.Id)))
+                    .Any(category => categoryIds.Contains(category.Category.Id)))
                 .Distinct()
                 .AsEnumerable();
 
@@ -244,7 +261,9 @@ namespace EventsExpress.Core.Services
 
         public UserDTO GetUserByRefreshToken(string token)
         {
-            var user = Get("Role,RefreshTokens").AsNoTracking()
+            var user = _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.RefreshTokens)
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
 
             return _mapper.Map<UserDTO>(user);
@@ -258,7 +277,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Invalid role Id", "roleId");
             }
 
-            var user = Get(uId);
+            var user = _context.Users.Find(uId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
@@ -270,9 +289,12 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> ChangeAvatar(Guid uId, IFormFile avatar)
+        public async Task<OperationResult> ChangeAvatar(Guid userId, IFormFile avatar)
         {
-            var user = Get("Photo").FirstOrDefault(u => u.Id == uId);
+            var user = _context.Users
+                .Include(u => u.Photo)
+                .FirstOrDefault(u => u.Id == userId);
+
             if (user == null)
             {
                 return new OperationResult(false, "User not found", "Id");
@@ -296,9 +318,9 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<OperationResult> Unblock(Guid uId)
+        public async Task<OperationResult> Unblock(Guid userId)
         {
-            var user = Get(uId);
+            var user = _context.Users.Find(userId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
@@ -312,7 +334,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Block(Guid uId)
         {
-            var user = Get(uId);
+            var user = _context.Users.Find(uId);
             if (user == null)
             {
                 return new OperationResult(false, "Invalid user Id", "userId");
@@ -326,7 +348,8 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
         {
-            var u = Get("Categories")
+            var u = _context.Users
+                .Include(u => u.Categories)
                 .Single(user => user.Id == userDTO.Id);
 
             var newCategories = categories
@@ -375,7 +398,9 @@ namespace EventsExpress.Core.Services
 
         public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
             _mapper.Map<Relationship, AttitudeDTO>(_context.Relationships
-                .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId));
+                .FirstOrDefault(x =>
+                    x.UserFromId == attitude.UserFromId && 
+                    x.UserToId == attitude.UserToId));
 
         public ProfileDTO GetProfileById(Guid id, Guid fromId)
         {
@@ -385,7 +410,7 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == id);
             user.Attitude = (rel != null)
                 ? (byte)rel.Attitude
-                : (byte)2;
+                : (byte)Attitude.None;
 
             user.Rating = GetRating(user.Id);
 

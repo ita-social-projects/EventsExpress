@@ -9,14 +9,11 @@ namespace EventsExpress.Core.Services
 {
     public class RoleService : BaseService<Role>, IRoleService
     {
-        private readonly AppDbContext _context;
-
         public RoleService(AppDbContext context)
             : base(context)
         {
-            _context = context;
         }
 
-        public IEnumerable<Role> All() => Get().AsEnumerable();
+        public IEnumerable<Role> All() => _context.Roles.AsEnumerable();
     }
 }

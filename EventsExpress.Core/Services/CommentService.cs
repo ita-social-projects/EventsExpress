@@ -15,21 +15,19 @@ namespace EventsExpress.Core.Services
 {
     public class CommentService : BaseService<Comments>, ICommentService
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
         public CommentService(AppDbContext context, IMapper mapper)
-            : base(context)
+            : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
-            count = Get().Count(x => x.EventId == id && x.CommentsId == null);
+            count = _context.Comments.Count(x => x.EventId == id && x.CommentsId == null);
 
-            var comments = Get("User.Photo,Children")
+            var comments = _context.Comments
+                .Include(c => c.Children)
+                .Include(c => c.User)
+                    .ThenInclude(u => u.Photo)
                 .Where(x => x.EventId == id && x.CommentsId == null)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -81,7 +79,10 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is null", string.Empty);
             }
 
-            var comment = Get("Children").Where(x => x.Id == id).FirstOrDefault();
+            var comment = _context.Comments
+                .Include(c => c.Children)
+                .FirstOrDefault(x => x.Id == id);
+
             if (comment == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -91,7 +92,7 @@ namespace EventsExpress.Core.Services
             {
                 foreach (var com in comment.Children)
                 {
-                    var res = Delete(Get(com.Id));
+                    var res = Delete(_context.Comments.Find(com.Id));
                 }
             }
 

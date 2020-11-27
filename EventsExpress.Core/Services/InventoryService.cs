@@ -9,21 +9,17 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
     public class InventoryService : BaseService<Inventory>, IInventoryService
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
-
         public InventoryService(
             AppDbContext context,
             IMapper mapper)
-            : base(context)
+            : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         public async Task<OperationResult> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
@@ -50,7 +46,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
         {
-            var entity = Get(inventoryDTO.Id);
+            var entity = _context.Inventories.Find(inventoryDTO.Id);
             if (entity == null)
             {
                 return new OperationResult(false, "Object not found", inventoryDTO.Id.ToString());
@@ -78,12 +74,16 @@ namespace EventsExpress.Core.Services
                 return new List<InventoryDTO>();
             }
 
-            return _mapper.Map<IEnumerable<InventoryDTO>>(Get("UnitOfMeasuring").Where(i => i.EventId == eventId));
+            return _mapper.Map<IEnumerable<InventoryDTO>>(
+                _context.Inventories
+                    .Include(i => i.UnitOfMeasuring)
+                    .Where(i => i.EventId == eventId));
         }
 
         public InventoryDTO GetInventarById(Guid inventoryId)
         {
-            var entity = Get(inventoryId);
+            var entity = _context.Inventories.Find(inventoryId);
+
             if (entity == null)
             {
                 return new InventoryDTO();

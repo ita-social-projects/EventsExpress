@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AutoMapper;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +12,17 @@ namespace EventsExpress.Db.BaseService
     public class BaseService<T> : IBaseService<T>
         where T : class
     {
-        public BaseService(AppDbContext context)
+        protected readonly AppDbContext _context;
+        protected readonly IMapper _mapper;
+
+        public BaseService(AppDbContext context, IMapper mapper = null)
         {
-            Database = context;
+            _context = context;
             Entities = context.Set<T>();
+            _mapper = mapper;
         }
 
         protected DbSet<T> Entities { get; }
-
-        protected AppDbContext Database { get; }
 
         public T Delete(T entity)
         {
@@ -30,23 +33,6 @@ namespace EventsExpress.Db.BaseService
 
             Entities.Remove(entity);
             return entity;
-        }
-
-        public T Get(Guid id)
-        {
-            return Entities.Find(id);
-        }
-
-        public IQueryable<T> Get(string includeProperties = "")
-        {
-            IQueryable<T> query = Entities;
-            foreach (var includeProperty in
-                includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            return query;
         }
 
         public T Insert(T entity)

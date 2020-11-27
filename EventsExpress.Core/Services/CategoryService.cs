@@ -15,25 +15,20 @@ namespace EventsExpress.Core.Services
 {
     public class CategoryService : BaseService<Category>, ICategoryService
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-
         public CategoryService(AppDbContext context, IMapper mapper)
-            : base(context)
+            : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
         public Category GetById(Guid id)
         {
-            return Get(id);
+            return _context.Categories.Find(id);
         }
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
             var categories = _mapper.Map<List<CategoryDTO>>(
-                Get().ToList());
+                _context.Categories.ToList());
 
             foreach (var cat in categories)
             {
@@ -51,7 +46,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(string title)
         {
-            if (Get().Any(c => c.Name == title))
+            if (_context.Categories.Any(c => c.Name == title))
             {
                 return new OperationResult(false, "The same category is already exist in database", string.Empty);
             }
@@ -64,13 +59,13 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(CategoryDTO category)
         {
-            var oldCategory = Get(category.Id);
+            var oldCategory = _context.Categories.Find(category.Id);
             if (oldCategory == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
 
-            if (Get().Any(c => c.Name == category.Name))
+            if (_context.Categories.Any(c => c.Name == category.Name))
             {
                 return new OperationResult(false, "The same category is already exist in database", string.Empty);
             }
@@ -83,7 +78,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Delete(Guid id)
         {
-            var category = Get(id);
+            var category = _context.Categories.Find(id);
             if (category == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -100,9 +95,9 @@ namespace EventsExpress.Core.Services
         }
 
         public bool Exists(Guid id) =>
-            Get().Count(x => x.Id == id) > 0;
+            _context.Categories.Count(x => x.Id == id) > 0;
 
         public bool ExistsAll(IEnumerable<Guid> ids) =>
-            Get().Count(x => ids.Contains(x.Id)) == ids.Count();
+            _context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
     }
 }

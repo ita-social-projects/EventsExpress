@@ -14,7 +14,6 @@ namespace EventsExpress.Core.Services
 {
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
-        private readonly AppDbContext _context;
         private readonly IMediator _mediator;
 
         public EventStatusHistoryService(
@@ -22,7 +21,6 @@ namespace EventsExpress.Core.Services
             IMediator mediator)
              : base(context)
         {
-            _context = context;
             _mediator = mediator;
         }
 

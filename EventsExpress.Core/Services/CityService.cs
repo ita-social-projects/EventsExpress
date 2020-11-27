@@ -11,20 +11,17 @@ namespace EventsExpress.Core.Services
 {
     public class CityService : BaseService<City>, ICityService
     {
-        private readonly AppDbContext _context;
-
         public CityService(AppDbContext context)
             : base(context)
         {
-            _context = context;
         }
 
         public IQueryable<City> GetCitiesByCountryId(Guid id) =>
-            Get().Where(c => c.CountryId == id);
+            _context.Cities.Where(c => c.CountryId == id);
 
-        public IQueryable<City> GetAll() => Get();
+        public IQueryable<City> GetAll() => _context.Cities;
 
-        public City GetById(Guid id) => Get(id);
+        public City GetById(Guid id) => _context.Cities.Find(id);
 
         public async Task<OperationResult> CreateCityAsync(City city)
         {
@@ -64,7 +61,7 @@ namespace EventsExpress.Core.Services
 
             city.Country = country;
 
-            var oldCity = Get(city.Id);
+            var oldCity = _context.Cities.Find(city.Id);
             if (oldCity == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -79,7 +76,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> DeleteCityAsync(Guid id)
         {
-            var city = Get(id);
+            var city = _context.Cities.Find(id);
             if (city == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);

@@ -13,12 +13,9 @@ namespace EventsExpress.Core.Services
 {
     public class MessageService : BaseService<Message>, IMessageService
     {
-        private readonly AppDbContext _context;
-
         public MessageService(AppDbContext context)
             : base(context)
         {
-            _context = context;
         }
 
         public IEnumerable<ChatRoom> GetUserChats(Guid userId)
@@ -35,7 +32,11 @@ namespace EventsExpress.Core.Services
             var chat = _context.ChatRoom
                 .FirstOrDefault(x => x.Id == chatId) ??
                 _context.ChatRoom
-                .FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
+                .FirstOrDefault(x =>
+                    x.Users.Count == 2 &&
+                    x.Users.Any(y => y.UserId == chatId) &&
+                    x.Users.Any(y => y.UserId == sender));
+
             if (chat == null)
             {
                 chat = new ChatRoom();
@@ -80,7 +81,7 @@ namespace EventsExpress.Core.Services
         {
             foreach (var x in messageIds)
             {
-                var msg = Get(x);
+                var msg = _context.Message.Find(x);
                 if (msg == null)
                 {
                     return new OperationResult(false, "Msg not found", string.Empty);
@@ -90,13 +91,16 @@ namespace EventsExpress.Core.Services
                 await _context.SaveChangesAsync();
             }
 
-            return new OperationResult(true, string.Empty, Get(messageIds[0]).ChatRoomId.ToString());
+            return new OperationResult(true, string.Empty, _context.Message.Find(messageIds[0]).ChatRoomId.ToString());
         }
 
         public List<Message> GetUnreadMessages(Guid userId)
         {
             var chats = GetUserChats(userId).Select(y => y.Id).ToList();
-            return Get(string.Empty).Where(x => chats.Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen).ToList();
+            return _context.Message
+                .Where(x => chats
+                    .Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen)
+                .ToList();
         }
     }
 }

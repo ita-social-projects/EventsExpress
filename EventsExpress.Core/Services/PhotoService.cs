@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -17,7 +18,6 @@ namespace EventsExpress.Core.Services
 {
     public class PhotoService : BaseService<Photo>, IPhotoService
     {
-        private readonly AppDbContext _context;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
         private readonly IHttpClientFactory _clientFactory;
         private Lazy<HttpClient> _client;
@@ -28,7 +28,6 @@ namespace EventsExpress.Core.Services
             IHttpClientFactory clientFactory)
             : base(context)
         {
-            _context = context;
             _widthOptions = opt;
             _clientFactory = clientFactory;
             _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
@@ -95,7 +94,7 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var photo = Get(id);
+            var photo = _context.Photos.Find(id);
             if (photo != null)
             {
                 Delete(photo);

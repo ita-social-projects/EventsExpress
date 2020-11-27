@@ -12,21 +12,18 @@ namespace EventsExpress.Core.Services
 {
     public class CountryService : BaseService<Country>, ICountryService
     {
-        private readonly AppDbContext _context;
-
         public CountryService(AppDbContext context)
             : base(context)
         {
-            _context = context;
         }
 
-        public IEnumerable<Country> GetCountries() => Get();
+        public IEnumerable<Country> GetCountries() => _context.Countries;
 
-        public Country GetById(Guid id) => Get(id);
+        public Country GetById(Guid id) => _context.Countries.Find(id);
 
         public async Task<OperationResult> CreateCountryAsync(Country country)
         {
-            if (Get().Any(c => c.Name == country.Name))
+            if (_context.Countries.Any(c => c.Name == country.Name))
             {
                 return new OperationResult(false, "Country is already exist", string.Empty);
             }
@@ -44,7 +41,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
 
-            var oldCountry = Get(country.Id);
+            var oldCountry = _context.Countries.Find(country.Id);
             if (oldCountry == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -63,7 +60,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "Id field is NULL", "Id");
             }
 
-            var country = Get(id);
+            var country = _context.Countries.Find(id);
             if (country == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
