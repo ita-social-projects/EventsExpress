@@ -19,11 +19,6 @@ namespace EventsExpress.Db.Migrations
                 name: "OwnerId",
                 table: "Events");
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UserId",
-                table: "Events",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "EventOwners",
                 columns: table => new

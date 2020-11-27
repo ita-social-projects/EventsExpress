@@ -203,7 +203,7 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDto, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.CityId))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewDto { Id = x.Id })))
+                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewDto { Id = x.Id })))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>

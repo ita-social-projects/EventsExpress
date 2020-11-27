@@ -125,6 +125,7 @@ namespace EventsExpress
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IEventOwnersService, EventOwnersService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();

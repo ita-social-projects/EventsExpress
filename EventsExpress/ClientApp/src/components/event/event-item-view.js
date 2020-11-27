@@ -253,7 +253,7 @@ export default class EventItemView extends Component {
             country,
             city,
             owners,
-			inventories
+            inventories
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
@@ -277,7 +277,6 @@ export default class EventItemView extends Component {
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
         let isMyPrivateEvent = isMyEvent && !isPublic;
-        //let isPending = !isMyEvent && visitorsEnum.pendingUsers.find(x => x.id === current_user.id) != null;
 
         return <>
             <div className="container-fluid mt-1">

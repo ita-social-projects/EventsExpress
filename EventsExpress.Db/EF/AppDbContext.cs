@@ -12,7 +12,7 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            Database.SetCommandTimeout(30);
+            Database.SetCommandTimeout(60);
             Database.Migrate();
         }
 
@@ -75,7 +75,6 @@ namespace EventsExpress.Db.EF
                 .WithMany(e => e.Visitors)
                 .HasForeignKey(ue => ue.EventId);
 
-            // user-event configs
             // user as owner
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");

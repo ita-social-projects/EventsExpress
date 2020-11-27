@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
@@ -30,6 +31,9 @@ namespace EventsExpress.Test.ServiceTests
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(new Mock<HttpContext>().Object);
+            mockAuthService = new Mock<IAuthService>();
 
             service = new EventService(
                 MockUnitOfWork.Object,
@@ -38,8 +42,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockAuthService.Object,
                 httpContextAccessor.Object,
-                mockEventScheduleService.Object
-                );
+                mockEventScheduleService.Object);
 
             events = new List<Event>
             {

@@ -45,8 +45,6 @@ namespace EventsExpress.Core.Services
         {
             var record = new EventStatusHistory();
             record.EventId = e.Id;
-            // todo change logic for many owners
-            // record.UserId = e.OwnerId;
             record.EventStatus = status;
             record.Reason = reason;
 

@@ -195,32 +195,6 @@ namespace EventsExpress.Controllers
             return BadRequest();
         }
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult> DeleteFromOwners(Guid userId, Guid eventId)
-        {
-            var res = await _eventService.DeleteOwnerFromEvent(userId, eventId);
-            if (res.Successed)
-            {
-                return Ok(res.Property);
-            }
-
-
-            return BadRequest();
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> PromoteToOwner(Guid userId, Guid eventId)
-        {
-            var res = await _eventService.PromoteToOwner(userId, eventId);
-
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
         /// <summary>
         /// This method have to denied participation in event.
         /// </summary>

@@ -83,7 +83,6 @@ export default class Event extends Component {
         } = this.props.item;
         const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
-        var owner = owners.find(x => x);
         const { anchorEl } = this.state;
 
         const PrintMenuItems = owners.map(x => (
@@ -130,12 +129,12 @@ export default class Event extends Component {
                     </Menu>
                     <CardHeader
                         avatar={
-                            <Button title={owner.username} className="btn-custom" onClick={this.handleClick}>
+                            <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
                                     <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
                                         <CustomAvatar
                                             className={classes.avatar}
-                                            photoUrl={owner.photoUrl}
-                                            name={owner.username}
+                                            photoUrl={owners[0].photoUrl}
+                                            name={owners[0].username}
                                         />
                                     </Badge>
                             </Button>

@@ -8,11 +8,11 @@ namespace EventsExpress.Core.Notifications
     {
         public BlockedEventMessage(IEnumerable<Guid> userId, Guid id)
         {
-            UserId = userId;
+            UserIds = userId;
             Id = id;
         }
 
-        public IEnumerable<Guid> UserId { get; }
+        public IEnumerable<Guid> UserIds { get; }
 
         public Guid Id { get; }
     }

@@ -325,15 +325,15 @@ export default class EventsExpressService {
             : res;
     }
 
-    OnDeleteFromOwners = async (data) => {
-        const res = await this.setResource(`event/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
+    onDeleteFromOwners = async (data) => {
+        const res = await this.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
-    OnPromoteToOwner = async (data) => {
-        const res = await this.setResource(`event/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
+    onPromoteToOwner = async (data) => {
+        const res = await this.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;

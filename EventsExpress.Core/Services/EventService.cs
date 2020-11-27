@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -13,9 +12,8 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Db.IRepo;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -28,7 +26,7 @@ namespace EventsExpress.Core.Services
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
-        private UserDTO CurrentUser { get; set; }
+
 
         public EventService(
             IUnitOfWork unitOfWork,
@@ -46,8 +44,10 @@ namespace EventsExpress.Core.Services
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
-            this.CurrentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
         }
+
+        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
+
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             var ev = _db.EventRepository.Get("Visitors").FirstOrDefault(e => e.Id == eventId);
@@ -119,27 +119,6 @@ namespace EventsExpress.Core.Services
             }
 
             return new OperationResult(false, "Visitor not found!", "visitorId");
-        }
-
-        public async Task<OperationResult> PromoteToOwner(Guid userId, Guid eventId)
-        {
-            if (!_db.EventOwnersRepository.Get().Any(x => x.EventId == eventId && x.UserId == userId))
-            {
-                _db.EventOwnersRepository.Insert(new EventOwner { EventId = eventId, UserId = userId });
-
-                _db.UserEventRepository.Delete(new UserEvent { UserId = userId, EventId = eventId });
-
-                await _db.SaveAsync();
-            }
-
-            return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> DeleteOwnerFromEvent(Guid userId, Guid eventId)
-        {
-            _db.EventOwnersRepository.Delete(new EventOwner { UserId = userId, EventId = eventId });
-            await _db.SaveAsync();
-            return new OperationResult(true);
         }
 
         public async Task<OperationResult> Delete(Guid id)
@@ -232,7 +211,8 @@ namespace EventsExpress.Core.Services
                 .ToList();
             ev.Categories = eventCategories;
             ev.CreatedBy = CurrentUser.Id;
-            ev.ModifyBy(CurrentUser.Id);
+            ev.ModifiedBy = CurrentUser.Id;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             try
             {
@@ -266,8 +246,8 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
-
-            eventScheduleDTO.ModifyBy(CurrentUser.Id);
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -293,7 +273,8 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
-            ev.ModifyBy(CurrentUser.Id);
+            ev.ModifiedBy = CurrentUser.Id;
+            ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -321,8 +302,8 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-
-            eventScheduleDTO.ModifyBy(CurrentUser.Id);
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -349,7 +330,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
-            var events = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors");
+            var events = _db.EventRepository.Get("Photo,City.Country,Owners.User.Photo,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -389,8 +370,6 @@ namespace EventsExpress.Core.Services
             }
 
             count = events.Count();
-
-            var data = events.ToList();
 
             var result = events.OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)

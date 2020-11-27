@@ -32,20 +32,38 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
-        public async Task<OperationResult> CancelEvents(Guid eventId)
+        public IEnumerable<EventScheduleDTO> GetAll()
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.IsActive = false;
-            return await Edit(eventScheduleDTO);
+            var eventSchedules = _db.EventScheduleRepository
+                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
+                .Where(opt => opt.IsActive)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
         }
 
-        public async Task<OperationResult> CancelNextEvent(Guid eventId)
+        public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
-            eventScheduleDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
-            return await Edit(eventScheduleDTO);
+            var res = _db.EventScheduleRepository
+                .Get("Event.Owners.User,Event.Photo")
+                .FirstOrDefault(x => x.Id == eventScheduleId);
+
+            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
+        }
+
+        public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
+            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
+                .Get()
+                .FirstOrDefault(x => x.EventId == eventId));
+
+        public IEnumerable<EventScheduleDTO> GetUrgentEventSchedules()
+        {
+            var eventSchedules = _db.EventScheduleRepository
+                .Get()
+                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
         }
 
         public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)
@@ -84,38 +102,21 @@ namespace EventsExpress.Core.Services
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
         }
 
-        public IEnumerable<EventScheduleDTO> GetAll()
+        public async Task<OperationResult> CancelEvents(Guid eventId)
         {
-            var eventSchedules = _db.EventScheduleRepository
-                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
-                .Where(opt => opt.IsActive)
-                .ToList();
-
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
+            var eventScheduleDTO = EventScheduleByEventId(eventId);
+            eventScheduleDTO.IsActive = false;
+            return await Edit(eventScheduleDTO);
         }
 
-        public IEnumerable<EventScheduleDTO> GetUrgentEventSchedules()
+        public async Task<OperationResult> CancelNextEvent(Guid eventId)
         {
-            var eventSchedules = _db.EventScheduleRepository
-                .Get()
-                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
-                .ToList();
-
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
+            var eventScheduleDTO = EventScheduleByEventId(eventId);
+            eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
+            eventScheduleDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
+            return await Edit(eventScheduleDTO);
         }
 
-        public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
-            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
-                .Get()
-                .FirstOrDefault(x => x.EventId == eventId));
-
-        public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
-        {
-            var res = _db.EventScheduleRepository
-                .Get("Event.Owners.User,Event.Photo")
-                .FirstOrDefault(x => x.Id == eventScheduleId);
-
-            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
-        }
     }
 }

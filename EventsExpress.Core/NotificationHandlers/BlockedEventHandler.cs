@@ -31,7 +31,7 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                foreach (var userId in notification.UserId)
+                foreach (var userId in notification.UserIds)
                 {
                     var email = _userService.GetById(userId).Email;
                     var even = _eventService.EventById(notification.Id);

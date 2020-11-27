@@ -41,10 +41,6 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
 
-        Task<OperationResult> DeleteOwnerFromEvent(Guid userId, Guid eventId);
-
-        Task<OperationResult> PromoteToOwner(Guid userId, Guid eventId);
-
         Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
 
         Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status);

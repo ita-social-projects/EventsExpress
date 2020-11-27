@@ -11,17 +11,17 @@ export default class SimpleModal extends Component {
         super(props)
 
         this.state = {
-            IsOpen: false,
+            isOpen: false,
             Id: null,
         }
     }
 
     onclick = () => {
-        this.setState({IsOpen: true});
+        this.setState({isOpen: true});
     }
 
     onClose = () => {
-        this.setState({IsOpen: false, Id: null});
+        this.setState({isOpen: false, Id: null});
     }
 
     render() {
@@ -29,7 +29,7 @@ export default class SimpleModal extends Component {
             <>
                 <div onClick={this.onclick}>{this.props.button}</div>
                 <Dialog
-                    open={this.state.IsOpen}
+                    open={this.state.isOpen}
                     onClose={this.onClose}
                 >
                     <div className="eventCancel">
