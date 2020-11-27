@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { renderTextField, renderSelectField } from '../helpers/helpers';
-import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
-import { connect } from 'react-redux';
+import IconButton from "@material-ui/core/IconButton";
 import Module from '../helpers';
 
 const { validate } = Module;
@@ -42,12 +41,12 @@ class ItemForm extends Component {
                     </Field>
                 </div>
                 <div className="col">
-                <button type="submit" className='btn'>
-                    ok
-                </button>
-                <button type="button" onClick={() => this.props.onCancel(initialValues)} className='btn'>
-                    cancel
-                </button>
+                <IconButton type="submit">
+                    <i className = "fa-sm fas fa-check text-success"></i>
+                </IconButton>
+                <IconButton onClick={() => this.props.onCancel(initialValues)}>
+                    <i className = "fa-sm fas fa-times text-danger"></i>
+                </IconButton>
                 </div>
             </form>
         );

@@ -6,12 +6,13 @@ export const reducer = (state = initialState.inventories, action) => {
         case SET_INVENTORY_ERROR:
             return {
                 ...state,
-                isError: action.payload
+                listInventoriesErrorMessage: action.payload
             };
         case SET_INVENTORY_PENDING:
             return {
                 ...state,
-                isPending: true
+                isPending: true,
+                listInventoriesErrorMessage: null
             };
         case GET_INVENTORY_SUCCESS:
             return {

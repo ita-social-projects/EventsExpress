@@ -9,12 +9,10 @@ const api_serv = new EventsExpressService();
 export function get_inventories_by_event_id(eventId) {
     return dispatch => {
         dispatch(setInventoryPending(true));
-        dispatch(setInventoryError(false));
         const res = api_serv.getInventoriesByEventId(eventId);
         res.then(response => {
-            console.log('geted', response);
             if (response.error == null) {
-                dispatch(getInventory(response));
+                dispatch(getInventorySuccess(response));
             } else {
                 dispatch(setInventoryError(response.error));
             }
@@ -24,7 +22,7 @@ export function get_inventories_by_event_id(eventId) {
 
 export function update_inventories(inventoryList) {
     return dispatch => {
-        dispatch(getInventory(inventoryList));
+        dispatch(getInventorySuccess(inventoryList));
     }
 }
 
@@ -35,7 +33,7 @@ export function setInventoryPending(data) {
     }
 }
 
-export function getInventory(data) {
+export function getInventorySuccess(data) {
     return {
         type: GET_INVENTORY_SUCCESS,
         payload: data

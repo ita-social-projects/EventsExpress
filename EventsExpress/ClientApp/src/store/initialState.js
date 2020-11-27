@@ -130,17 +130,9 @@ const initialState = {
     },
     inventories: {
         isPending: true,
-        isError: false,
+        listInventoriesErrorMessage: false,
+        setItemErrorMessage: null,
         items: []
-    },
-    inventar: {
-        isPending: true,
-        isError: false,
-        data: {
-            itemName: null,
-            needQuantity: null,
-            unitsOfMeasuring: null
-        }
     },
     profile: {
         isPending: true,

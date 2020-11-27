@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
 import { add_item, delete_item, edit_item } from '../../actions/inventar';
+import IconButton from "@material-ui/core/IconButton";
 
 class InventoryList extends Component {
 
@@ -72,7 +73,6 @@ class InventoryList extends Component {
             this.props.add_item(values, this.props.eventId);
         }
         else {
-            console.log(this.props.eventId);
             this.props.edit_item(values, this.props.eventId);
         }
 
@@ -108,49 +108,49 @@ class InventoryList extends Component {
                 
                 { this.state.isOpen &&
                 <div>
-                        <div className="">
-                            <button type="button" disabled={this.state.disabledEdit} onClick={this.addItemToList.bind(this)} title="Remove item" class="btn btn-secondary btn-icon p-2" >
-                                <span class="icon"><i class="fas fa-plus"></i></span> Add item
-                            </button>
-                        </div>
-                    <div className="table-responsive">
-                        <div className="table-wrapper">
-                            <div className="table">
-                                    <div className="row p-2">
-                                        <div className="col col-md-5"><b>Item name</b></div>
-                                        <div className="col"><b>Count</b></div>
-                                        <div className="col"><b>Measuring unit</b></div>
-                                        <div className="col"><b>Action</b></div>
-                                    </div>
-                                {inventories.items.map(item => {
-                                    return (
-                                        item.isEdit 
-                                        ? <div className="row p-2">
-                                            <ItemFrom 
-                                                onSubmit={this.onSubmit} 
-                                                onCancel={this.onCancel}
-                                                unitOfMeasuringState={this.props.unitOfMeasuringState}
-                                                initialValues={item}/>
-                                        </div>
-                                        : <div className="row p-2">
-                                            <div className="col col-md-5">{item.itemName}</div>
-                                            <div className="col">{item.needQuantity}</div>
-                                            <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                            <div className="col">
-                                                <button type="button" disabled={this.state.disabledEdit} onClick={this.markItemAsEdit.bind(this, item)} title="Edit item" class="btn clear-backgroud">
-                                                    <i class="fas fa-pencil-alt orange"></i>
-                                                </button>
-                                                <button type="button" disabled={this.state.disabledEdit} onClick={this.deleteItemFromList.bind(this, item)} title="Remove item" class="btn clear-backgroud">
-                                                    <i class="fas fa-trash red"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                                                    
+                        <IconButton
+                            disabled = {this.state.disabledEdit}
+                            onClick = {this.addItemToList.bind(this)}
+                            size = "small">
+                            <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item &nbsp;
+                        </IconButton>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col col-md-5"><b>Item name</b></div>
+                                <div className="col"><b>Count</b></div>
+                                <div className="col"><b>Measuring unit</b></div>
+                                <div className="col"><b>Action</b></div>
                             </div>
+                            {inventories.items.map(item => {
+                                return (
+                                    item.isEdit 
+                                    ? <div className="row">
+                                        <ItemFrom 
+                                            onSubmit={this.onSubmit} 
+                                            onCancel={this.onCancel}
+                                            unitOfMeasuringState={this.props.unitOfMeasuringState}
+                                            initialValues={item}/>
+                                    </div>
+                                    : <div className="row">
+                                        <div className="col col-md-5">{item.itemName}</div>
+                                        <div className="col">{item.needQuantity}</div>
+                                        <div className="col">{item.unitOfMeasuring.shortName}</div>
+                                        <div className="col">
+                                            <IconButton 
+                                                disabled = {this.state.disabledEdit} 
+                                                onClick = {this.markItemAsEdit.bind(this, item)}>
+                                                <i class = "fa-sm fas fa-pencil-alt text-warning"></i>
+                                            </IconButton>
+                                            <IconButton
+                                                disabled = {this.state.disabledEdit} 
+                                                onClick = {this.deleteItemFromList.bind(this, item)}>
+                                                <i className = "fa-sm fas fa-trash text-danger"></i>
+                                            </IconButton>
+                                        </div>
+                                    </div>
+                                )
+                            })}                    
                         </div>
-                    </div>
                 </div>
                 }
             </>
