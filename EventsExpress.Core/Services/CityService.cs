@@ -3,29 +3,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class CityService : ICityService
+    public class CityService : BaseService<City>, ICityService
     {
-        private readonly IUnitOfWork _db;
-
-        public CityService(IUnitOfWork uow)
+        public CityService(AppDbContext context)
+            : base(context)
         {
-            _db = uow;
         }
 
-        public IQueryable<City> GetCitiesByCountryId(Guid id) => _db.CityRepository.Get().Where(c => c.CountryId == id);
+        public IQueryable<City> GetCitiesByCountryId(Guid id) =>
+            _context.Cities.Where(c => c.CountryId == id);
 
-        public IQueryable<City> GetAll() => _db.CityRepository.Get();
+        public IQueryable<City> GetAll() => _context.Cities;
 
-        public City Get(Guid id) => _db.CityRepository.Get(id);
+        public City GetById(Guid id) => _context.Cities.Find(id);
 
         public async Task<OperationResult> CreateCityAsync(City city)
         {
-            var country = _db.CountryRepository.Get(city.CountryId);
+            var country = _context.Countries
+                .Where(x => x.Id == city.CountryId)
+                .FirstOrDefault();
 
             if (country == null)
             {
@@ -41,15 +43,17 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "City is already exist!", string.Empty);
             }
 
-            _db.CityRepository.Insert(city);
-            await _db.SaveAsync();
+            Insert(city);
+            await _context.SaveChangesAsync();
 
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> EditCityAsync(City city)
         {
-            var country = _db.CountryRepository.Get(city.CountryId);
+            var country = _context.Countries
+                .Where(x => x.Id == city.CountryId)
+                .FirstOrDefault();
             if (country == null)
             {
                 return new OperationResult(false, $"Bad country Id: {city.CountryId}", string.Empty);
@@ -57,7 +61,7 @@ namespace EventsExpress.Core.Services
 
             city.Country = country;
 
-            var oldCity = _db.CityRepository.Get(city.Id);
+            var oldCity = _context.Cities.Find(city.Id);
             if (oldCity == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -65,21 +69,21 @@ namespace EventsExpress.Core.Services
 
             oldCity.Name = city.Name;
             oldCity.CountryId = city.CountryId;
-            await _db.SaveAsync();
+            await _context.SaveChangesAsync();
 
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> DeleteCityAsync(Guid id)
         {
-            var city = _db.CityRepository.Get(id);
+            var city = _context.Cities.Find(id);
             if (city == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
             }
 
-            _db.CityRepository.Delete(city);
-            await _db.SaveAsync();
+            Delete(city);
+            await _context.SaveChangesAsync();
             return new OperationResult(true);
         }
     }

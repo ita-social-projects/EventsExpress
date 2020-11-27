@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -24,6 +22,10 @@ namespace EventsExpress.Test.ServiceTests
 
         private UserDTO existingUserDTO;
         private User existingUser;
+        private Role role;
+
+        private Guid roleId = Guid.NewGuid();
+        private Guid userId = Guid.NewGuid();
 
         [SetUp]
         protected override void Initialize()
@@ -34,24 +36,51 @@ namespace EventsExpress.Test.ServiceTests
             mockEmailService = new Mock<IEmailService>();
             mockCacheHelper = new Mock<ICacheHelper>();
 
-            service = new UserService(MockUnitOfWork.Object, MockMapper.Object, mockPhotoService.Object, mockMediator.Object, mockCacheHelper.Object, mockEmailService.Object);
+            service = new UserService(
+                Context,
+                MockMapper.Object,
+                mockPhotoService.Object,
+                mockMediator.Object,
+                mockCacheHelper.Object,
+                mockEmailService.Object);
 
             const string existingEmail = "existingEmail@gmail.com";
-            var id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D");
             var name = "existingName";
 
-            existingUser = new User { Id = id, Name = name, Email = existingEmail };
-            existingUserDTO = new UserDTO { Id = id, Name = name, Email = existingEmail };
+            role = new Role
+            {
+                Id = roleId,
+                Name = "Admin",
+            };
+
+            existingUser = new User
+            {
+                Id = userId,
+                Name = name,
+                Email = existingEmail,
+                Role = role,
+            };
+
+            existingUserDTO = new UserDTO
+            {
+                Id = userId,
+                Name = name,
+                Email = existingEmail,
+            };
+
+            Context.Roles.Add(role);
+            Context.Users.Add(existingUser);
+            Context.SaveChanges();
         }
 
         [Test]
         public void Create_RepeatEmail_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.UserRepository
-            .Get(string.Empty))
-            .Returns(new List<User> { existingUser }.AsQueryable());
-
-            UserDTO newUser = new UserDTO() { Id = Guid.NewGuid(), Email = existingUserDTO.Email };
+            UserDTO newUser = new UserDTO()
+            {
+                Id = Guid.NewGuid(),
+                Email = existingUserDTO.Email,
+            };
 
             var result = service.Create(newUser);
 
@@ -69,38 +98,19 @@ namespace EventsExpress.Test.ServiceTests
                 .Map<User>(newUserDTO))
                     .Returns(newUser);
 
-            MockUnitOfWork.Setup(u => u.RoleRepository
-            .Get(string.Empty))
-                .Returns(new List<Role> { new Role() { Name = "SameRole" } }.AsQueryable);
-
-            MockUnitOfWork.Setup(u => u.UserRepository
-                .Insert(newUser))
-                    .Returns(new User { Id = Guid.NewGuid(), Email = newUser.Email });
-
             var result = service.Create(newUserDTO);
 
             Assert.IsTrue(result.Result.Successed);
         }
 
         [Test]
-
         public void Create_InsertFailed_ReturnFalse()
         {
-            UserDTO newUserDTO = new UserDTO() { Email = "correctemail@example.com" };
-            User newUser = new User() { Email = "correctemail@example.com" };
-
             MockMapper.Setup(m => m
-                .Map<User>(newUserDTO))
-                    .Returns(newUser);
+                .Map<User>(existingUserDTO))
+                    .Returns(existingUser);
 
-            MockUnitOfWork.Setup(u => u.RoleRepository
-                .Get(string.Empty))
-                    .Returns(new List<Role> { new Role { Name = "User" } }.AsQueryable);
-            MockUnitOfWork.Setup(u => u.UserRepository
-                .Insert(newUser))
-                    .Returns(newUser);
-
-            var result = service.Create(newUserDTO);
+            var result = service.Create(existingUserDTO);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -109,7 +119,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ConfirmEmail_NotCorrectUserId_ReturnFalse()
         {
             CacheDTO cache = new CacheDTO() { };
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(cache.UserId));
+
             var result = service.ConfirmEmail(cache);
 
             Assert.IsFalse(result.Result.Successed);
@@ -120,10 +130,11 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase("")]
         public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
         {
-            CacheDTO cache = new CacheDTO() { UserId = existingUser.Id, Token = token };
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(cache.UserId))
-                .Returns(existingUser);
+            CacheDTO cache = new CacheDTO()
+            {
+                UserId = existingUser.Id,
+                Token = token,
+            };
 
             var result = service.ConfirmEmail(cache);
 
@@ -133,10 +144,11 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_ValidCacheDto_ReturnTrue()
         {
-            CacheDTO cache = new CacheDTO() { UserId = existingUser.Id, Token = "validToken" };
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(cache.UserId))
-                .Returns(existingUser);
+            CacheDTO cache = new CacheDTO()
+            {
+                UserId = existingUser.Id,
+                Token = "validToken",
+            };
 
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = cache.Token });
@@ -149,10 +161,11 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_CachingFailed_ReturnFalse()
         {
-            CacheDTO cache = new CacheDTO() { UserId = existingUser.Id, Token = "validToken" };
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(cache.UserId))
-                .Returns(existingUser);
+            CacheDTO cache = new CacheDTO()
+            {
+                UserId = existingUser.Id,
+                Token = "validToken,",
+            };
 
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = "invalidToken" });
@@ -165,19 +178,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void PasswordRecovery_UserNoFoundInDb_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(existingUserDTO.Id));
-
-            var result = service.PasswordRecover(existingUserDTO);
-
-            Assert.IsFalse(result.Result.Successed);
-        }
-
-        [Test]
-        public void PasswordRecovery_UserNotFoundInDb_ReturnFalse()
-        {
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(existingUserDTO.Id));
-
-            var result = service.PasswordRecover(existingUserDTO);
+            var result = service.PasswordRecover(new UserDTO());
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -185,9 +186,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void PasswordRecovery_ValidUserDto_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(existingUserDTO.Id))
-                .Returns(existingUser);
-
             var result = service.PasswordRecover(existingUserDTO);
 
             Assert.IsTrue(result.Result.Successed);
@@ -207,8 +205,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Update_UserInDbNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(existingUserDTO.Id));
-
             var result = service.Update(existingUserDTO);
 
             Assert.IsFalse(result.Result.Successed);
@@ -217,10 +213,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Update_UserDtoIsvalid_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.UserRepository
-           .Get(string.Empty))
-           .Returns(new List<User> { existingUser }.AsQueryable());
-
             MockMapper.Setup(m => m
                 .Map<UserDTO, User>(existingUserDTO))
                     .Returns(existingUser);
@@ -235,7 +227,6 @@ namespace EventsExpress.Test.ServiceTests
         {
             var roleId = Guid.NewGuid();
             var userId = Guid.NewGuid();
-            MockUnitOfWork.Setup(u => u.RoleRepository.Get(roleId));
 
             var result = service.ChangeRole(userId, roleId);
 
@@ -247,10 +238,6 @@ namespace EventsExpress.Test.ServiceTests
         {
             var roleId = Guid.NewGuid();
             var userId = Guid.NewGuid();
-            MockUnitOfWork.Setup(u => u.RoleRepository.Get(roleId))
-            .Returns(new Role() { Name = "sameName" });
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId));
 
             var result = service.ChangeRole(userId, roleId);
 
@@ -260,14 +247,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangeRole_RoleIdAndUserIdIsValid_ReturnTrue()
         {
-            var roleId = Guid.NewGuid();
-            var userId = Guid.NewGuid();
-            MockUnitOfWork.Setup(u => u.RoleRepository.Get(roleId))
-            .Returns(new Role() { Name = "sameName" });
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId))
-                .Returns(new User() { Name = "sameName" });
-
             var result = service.ChangeRole(userId, roleId);
 
             Assert.IsTrue(result.Result.Successed);
@@ -277,8 +256,6 @@ namespace EventsExpress.Test.ServiceTests
         public void Unblock_InvalidUser_ReturnFalse()
         {
             var userId = Guid.NewGuid();
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId));
 
             var result = service.Unblock(userId);
 
@@ -290,9 +267,6 @@ namespace EventsExpress.Test.ServiceTests
         {
             var userId = existingUser.Id;
 
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId))
-                .Returns(existingUser);
-
             var result = service.Unblock(userId);
 
             Assert.IsTrue(result.Result.Successed);
@@ -303,8 +277,6 @@ namespace EventsExpress.Test.ServiceTests
         {
             var userId = Guid.NewGuid();
 
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId));
-
             var result = service.Block(userId);
 
             Assert.IsFalse(result.Result.Successed);
@@ -314,9 +286,6 @@ namespace EventsExpress.Test.ServiceTests
         public void Block_AllIsValid_ReturnFalse()
         {
             var userId = existingUser.Id;
-
-            MockUnitOfWork.Setup(u => u.UserRepository.Get(userId))
-                .Returns(existingUser);
 
             var result = service.Block(userId);
 
