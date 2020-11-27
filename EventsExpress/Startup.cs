@@ -117,7 +117,6 @@ namespace EventsExpress
             #region Configure our services...
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IEventScheduleService, EventScheduleService>();
@@ -126,6 +125,7 @@ namespace EventsExpress
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IEventOwnersService, EventOwnersService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICommentService, CommentService>();

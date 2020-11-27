@@ -66,11 +66,6 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromForm] EventScheduleDto model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var result = model.Id == Guid.Empty
                 ? null
                 : await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));

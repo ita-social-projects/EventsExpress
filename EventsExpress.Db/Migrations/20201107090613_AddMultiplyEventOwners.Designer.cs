@@ -4,18 +4,20 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201107090613_AddMultiplyEventOwners")]
+    partial class AddMultiplyEventOwners
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -127,12 +129,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
@@ -145,28 +141,19 @@ namespace EventsExpress.Db.Migrations
                     b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("bit");
-
                     b.Property<int>("MaxParticipants")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -209,50 +196,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("EventOwners");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Frequency")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NextRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Periodicity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId")
-                        .IsUnique();
-
-                    b.ToTable("EventSchedules");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -281,33 +224,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("EventStatusHistory");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("NeedQuantity")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("UnitOfMeasuringId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UnitOfMeasuringId");
-
-                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
@@ -502,23 +418,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UnitOfMeasurings");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -611,35 +510,11 @@ namespace EventsExpress.Db.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserStatusEvent")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "EventId");
 
                     b.HasIndex("EventId");
 
                     b.ToTable("UserEvent");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
-                {
-                    b.Property<Guid>("InventoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
-                    b.HasKey("InventoryId", "UserId", "EventId");
-
-                    b.HasIndex("UserId", "EventId");
-
-                    b.ToTable("UserEventInventories");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.City", b =>
@@ -717,15 +592,6 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithOne("EventSchedule")
-                        .HasForeignKey("EventsExpress.Db.Entities.EventSchedule", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
@@ -738,21 +604,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("ChangedStatusEvents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithMany("Inventories")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.UnitOfMeasuring", "UnitOfMeasuring")
-                        .WithMany("Inventories")
-                        .HasForeignKey("UnitOfMeasuringId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -883,21 +734,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("EventsToVisit")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Inventory", "Inventory")
-                        .WithMany("UserEventInventories")
-                        .HasForeignKey("InventoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.UserEvent", "UserEvent")
-                        .WithMany("Inventories")
-                        .HasForeignKey("UserId", "EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

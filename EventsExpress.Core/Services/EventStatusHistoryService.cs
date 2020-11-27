@@ -45,7 +45,6 @@ namespace EventsExpress.Core.Services
         {
             var record = new EventStatusHistory();
             record.EventId = e.Id;
-            record.UserId = e.OwnerId;
             record.EventStatus = status;
             record.Reason = reason;
 

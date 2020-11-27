@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 
@@ -17,6 +19,9 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
+        private static Mock<IAuthService> mockAuthService;
+        private static Mock<IHttpContextAccessor> httpContextAccessor;
+
         private EventService service;
         private List<Event> events;
         private UserEvent userEvent;
@@ -28,12 +33,17 @@ namespace EventsExpress.Test.ServiceTests
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(new Mock<HttpContext>().Object);
+            mockAuthService = new Mock<IAuthService>();
 
             service = new EventService(
                 MockUnitOfWork.Object,
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
+                mockAuthService.Object,
+                httpContextAccessor.Object,
                 mockEventScheduleService.Object);
 
             events = new List<Event>
@@ -45,7 +55,13 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    OwnerId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
                     PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndsndj",
                     IsBlocked = false,
@@ -60,7 +76,13 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    OwnerId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
                     PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
