@@ -87,6 +87,10 @@ export const validate = values => {
         errors.maxParticipants = `Invalid data`;
     }
 
+    if (values.needQuantity && values.needQuantity < 1) {
+        errors.needQuantity = `Invalid data`;
+    }
+
     if (values.visitors
         && values.maxParticipants
         && values.maxParticipants < values.visitors.length) {

@@ -89,14 +89,6 @@ class InventoryList extends Component {
             })
             return;
         }
-        // let updateList = this.props.inventories.items;
-
-        // updateList.map(item => {
-        //     if (item.isEdit) {
-        //         item.isEdit = false;
-        //     }
-        // });
-        // this.props.get_inventories(updateList);
 
         this.props.get_inventories_by_event_id(this.props.eventId);
 
@@ -117,7 +109,7 @@ class InventoryList extends Component {
                 { this.state.isOpen &&
                 <div>
                         <div className="">
-                            <button type="button" onClick={this.addItemToList.bind(this)} title="Remove item" class="btn btn-secondary btn-icon p-2" >
+                            <button type="button" disabled={this.state.disabledEdit} onClick={this.addItemToList.bind(this)} title="Remove item" class="btn btn-secondary btn-icon p-2" >
                                 <span class="icon"><i class="fas fa-plus"></i></span> Add item
                             </button>
                         </div>
@@ -148,7 +140,7 @@ class InventoryList extends Component {
                                                 <button type="button" disabled={this.state.disabledEdit} onClick={this.markItemAsEdit.bind(this, item)} title="Edit item" class="btn clear-backgroud">
                                                     <i class="fas fa-pencil-alt orange"></i>
                                                 </button>
-                                                <button type="button" onClick={this.deleteItemFromList.bind(this, item)} title="Remove item" class="btn clear-backgroud">
+                                                <button type="button" disabled={this.state.disabledEdit} onClick={this.deleteItemFromList.bind(this, item)} title="Remove item" class="btn clear-backgroud">
                                                     <i class="fas fa-trash red"></i>
                                                 </button>
                                             </div>
