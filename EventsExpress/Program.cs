@@ -4,6 +4,7 @@ using EventsExpress.Db.DbInitialize;
 using EventsExpress.Db.EF;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -21,6 +22,7 @@ namespace EventsExpress
                 try
                 {
                     var dbContext = services.GetRequiredService<AppDbContext>();
+                    dbContext.Database.Migrate();
                     DbInitializer.Seed(dbContext);
                 }
                 catch (Exception ex)

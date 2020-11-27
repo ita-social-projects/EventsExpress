@@ -18,11 +18,10 @@ namespace EventsExpress.Db.BaseService
         public BaseService(AppDbContext context, IMapper mapper = null)
         {
             _context = context;
-            Entities = context.Set<T>();
             _mapper = mapper;
         }
 
-        protected DbSet<T> Entities { get; }
+        protected DbSet<T> Entities { get => _context.Set<T>(); }
 
         public T Delete(T entity)
         {

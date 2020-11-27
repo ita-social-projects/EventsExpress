@@ -10,10 +10,7 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            if (Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-            {
-                Database.Migrate();
-            }
+
         }
 
         public DbSet<Permission> Permissions { get; set; }

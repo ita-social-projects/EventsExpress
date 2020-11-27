@@ -10,31 +10,34 @@ namespace EventsExpress.Test.ServiceTests
     internal class CountryServiceTests : TestInitializer
     {
         private Country country;
+        private Guid countryId = Guid.NewGuid();
         private CountryService countryService;
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
-            countryService = new CountryService(MockUnitOfWork.Object);
-            country = new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "RandomName" };
+            countryService = new CountryService(Context);
+            country = new Country()
+            {
+                Id = countryId,
+                Name = "Country",
+            };
+
+            Context.Countries.Add(country);
+            Context.SaveChanges();
         }
 
         [Test]
         public void Delete_ExistingId_Success()
         {
-            MockUnitOfWork.Setup(u => u.CountryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")))
-                .Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "City1" });
-
-            var res = countryService.DeleteAsync(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"));
+            var res = countryService.DeleteAsync(countryId);
             Assert.IsTrue(res.Result.Successed);
         }
 
         [Test]
         public void Delete_NotExistId_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.CountryRepository.Get(new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D")));
-
             var res = countryService.DeleteAsync(default);
             Assert.IsFalse(res.Result.Successed);
         }
@@ -42,7 +45,11 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Insert_NewObject_ReturnsTrue()
         {
-            MockUnitOfWork.Setup(c => c.CountryRepository.Insert(country));
+            var country = new Country()
+            {
+                Id = Guid.NewGuid(),
+                Name = "RandomName",
+            };
 
             var res = countryService.CreateCountryAsync(country);
 
@@ -52,8 +59,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Update_OldCountryIdNull_false()
         {
-            MockUnitOfWork.Setup(c => c.CountryRepository.Get(country.Id)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
-
             var res = countryService.EditCountryAsync(new Country());
 
             Assert.IsFalse(res.Result.Successed);
@@ -62,8 +67,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Update_Object_true()
         {
-            MockUnitOfWork.Setup(c => c.CountryRepository.Get(country.Id)).Returns(new Country() { Id = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"), Name = "Country1" });
-
             var res = countryService.EditCountryAsync(country);
 
             Assert.IsTrue(res.Result.Successed);
