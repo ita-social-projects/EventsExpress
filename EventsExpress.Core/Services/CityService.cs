@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
@@ -16,10 +17,10 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public IQueryable<City> GetCitiesByCountryId(Guid id) =>
+        public IEnumerable<City> GetCitiesByCountryId(Guid id) =>
             _context.Cities.Where(c => c.CountryId == id);
 
-        public IQueryable<City> GetAll() => _context.Cities;
+        public IEnumerable<City> GetAll() => _context.Cities;
 
         public City GetById(Guid id) => _context.Cities.Find(id);
 

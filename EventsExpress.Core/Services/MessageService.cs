@@ -21,8 +21,10 @@ namespace EventsExpress.Core.Services
         public IEnumerable<ChatRoom> GetUserChats(Guid userId)
         {
             var res = _context.ChatRoom
-                .Include("Users.User.Photo")
-                .Include("Messages")
+                .Include(c => c.Users)
+                    .ThenInclude(u => u.User)
+                        .ThenInclude(u => u.Photo)
+                .Include(c => c.Messages)
                 .Where(x => x.Users.Any(u => u.UserId == userId));
             return res.AsEnumerable();
         }

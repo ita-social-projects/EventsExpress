@@ -30,17 +30,6 @@ namespace EventsExpress.Core.Services
             var categories = _mapper.Map<List<CategoryDTO>>(
                 _context.Categories.ToList());
 
-            foreach (var cat in categories)
-            {
-                cat.CountOfUser = _context.Users.Include("Categories")
-                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
-                    .Count();
-
-                cat.CountOfEvents = _context.Events.Include("Categories")
-                    .Where(x => x.Categories.Any(c => c.Category.Name == cat.Name))
-                    .Count();
-            }
-
             return categories;
         }
 
