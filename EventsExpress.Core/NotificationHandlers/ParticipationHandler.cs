@@ -36,7 +36,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     ? "Approving participation"
                     : "Denying participation",
                 RecepientEmail = email,
-                MessageText = $"Dear {email}, " + 
+                MessageText = $"Dear {email}, " +
                 message +
                 $"To check it, please, visit " +
                 $"\"<a href='{eventLink}'>EventExpress</>\"",

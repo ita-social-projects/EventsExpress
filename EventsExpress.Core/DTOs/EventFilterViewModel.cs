@@ -16,6 +16,10 @@ namespace EventsExpress.Core.DTOs
 
         public DateTime DateTo { get; set; }
 
+        public Guid? VisitorId { get; set; }
+
+        public Guid? OwnerId { get; set; }
+
         public List<string> Categories { get; set; }
 
         public SortBy SortBy { get; set; }
