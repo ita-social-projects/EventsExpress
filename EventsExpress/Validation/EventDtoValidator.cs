@@ -15,6 +15,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.DateTo).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.User).NotNull().WithMessage("User does not exist!");
             RuleFor(x => x.CityId).NotEqual(Guid.Empty).WithMessage("Field is required!");
+            RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Input correct quantity of participants!");
         }
     }
 }

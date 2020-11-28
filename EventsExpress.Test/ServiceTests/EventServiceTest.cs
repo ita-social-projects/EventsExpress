@@ -38,7 +38,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockEventScheduleService.Object);
 
-
             List<User> users = new List<User>()
             {
                 new User
