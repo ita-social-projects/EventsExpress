@@ -19,6 +19,8 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class PhotoServiceTests : TestInitializer
     {
+        private Guid photoId = Guid.NewGuid();
+
         public PhotoService PhotoService { get; set; }
 
         private Photo Photo { get; set; }
@@ -36,8 +38,6 @@ namespace EventsExpress.Test.ServiceTests
             mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
             mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
 
-            MockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
-
             HttpClientFactoryMock = new Mock<IHttpClientFactory>();
             HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
@@ -46,14 +46,17 @@ namespace EventsExpress.Test.ServiceTests
                 .Verifiable();
 
             PhotoService = new PhotoService(
-                MockUnitOfWork.Object, mockOpt.Object, HttpClientFactoryMock.Object);
+                Context, mockOpt.Object, HttpClientFactoryMock.Object);
 
             Photo = new Photo
             {
-                Id = new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D"),
+                Id = photoId,
                 Thumb = new byte[0],
                 Img = new byte[0],
             };
+
+            Context.Photos.Add(Photo);
+            Context.SaveChanges();
         }
 
         private void SetUpHttpHandlerMock(HttpStatusCode statusCode)
@@ -128,9 +131,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_DoesNotThrows()
         {
-            MockUnitOfWork.Setup(u => u.PhotoRepository.Get((Guid)Photo.Id)).Returns(Photo);
-
-            Assert.DoesNotThrowAsync(async () => await PhotoService.Delete(new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D")));
+            Assert.DoesNotThrowAsync(async () => await PhotoService.Delete(photoId));
         }
 
         private string GetContentType(string fileName)

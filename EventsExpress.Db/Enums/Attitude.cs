@@ -4,6 +4,6 @@
     {
         Like,
         Dislike,
-        Reset,
+        None,
     }
 }
