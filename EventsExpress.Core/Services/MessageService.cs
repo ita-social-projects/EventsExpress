@@ -52,8 +52,10 @@ namespace EventsExpress.Core.Services
             }
 
             var res = _context.ChatRoom
-                .Include("Users.User.Photo")
-                .Include("Messages")
+                .Include(c => c.Users)
+                    .ThenInclude(u => u.User)
+                        .ThenInclude(u => u.Photo)
+                .Include(c => c.Messages)
                 .FirstOrDefault(x => x.Id == chat.Id);
             return res;
         }
@@ -75,7 +77,7 @@ namespace EventsExpress.Core.Services
         public List<string> GetChatUserIds(Guid chatId)
         {
             return _context.ChatRoom
-                .Include("Users")
+                .Include(c => c.Users)
                 .FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
         }
 
