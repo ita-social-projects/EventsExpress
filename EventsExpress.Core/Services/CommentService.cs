@@ -26,6 +26,8 @@ namespace EventsExpress.Core.Services
 
             var comments = _context.Comments
                 .Include(c => c.Children)
+                    .ThenInclude(c => c.User)
+                        .ThenInclude(u => u.Photo)
                 .Include(c => c.User)
                     .ThenInclude(u => u.Photo)
                 .Where(x => x.EventId == id && x.CommentsId == null)
@@ -39,9 +41,7 @@ namespace EventsExpress.Core.Services
                 c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
                 foreach (var child in c.Children)
                 {
-                    child.User = _context.Users
-                        .Include(u => u.Photo)
-                        .FirstOrDefault(u => u.Id == child.UserId);
+                    child.User = c.User;
                 }
             }
 
