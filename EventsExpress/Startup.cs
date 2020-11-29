@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
-using EventsExpress.Db.IRepo;
-using EventsExpress.Db.Repo;
+using EventsExpress.Db.IBaseService;
 using EventsExpress.DTO;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
@@ -115,30 +116,30 @@ namespace EventsExpress
 
             #region Configure our services...
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-
-            services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IEventService, EventService>();
-            services.AddTransient<IEventStatusHistoryService, EventStatusHistoryService>();
-            services.AddTransient<IMessageService, MessageService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRoleService, RoleService>();
-            services.AddTransient<ICountryService, CountryService>();
-            services.AddTransient<ICityService, CityService>();
-            services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IInventoryService, InventoryService>();
-            services.AddTransient<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IEventScheduleService, EventScheduleService>();
+            services.AddScoped<IEventStatusHistoryService, EventStatusHistoryService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();
             services.AddControllers();

@@ -82,7 +82,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAll()
         {
-            return Ok(_mapper.Map<ICollection<UnitOfMeasuringDTO>, ICollection<UnitOfMeasuringDto>>(_unitOfMeasuringService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringDto>>(_unitOfMeasuringService.GetAll()));
         }
 
         /// <summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EventsExpress.Db.Entities
 {
-    public class Event : BaseEntity
+    public class Event : ManageableEntity
     {
         public bool IsBlocked { get; set; }
 
@@ -24,6 +24,8 @@ namespace EventsExpress.Db.Entities
         public int MaxParticipants { get; set; }
 
         public Guid? PhotoId { get; set; }
+
+        public virtual EventSchedule EventSchedule { get; set; }
 
         public virtual Photo Photo { get; set; }
 

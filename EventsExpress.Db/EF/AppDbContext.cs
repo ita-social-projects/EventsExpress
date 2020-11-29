@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Db.EF
@@ -9,7 +10,7 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            Database.Migrate();
+
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -26,11 +27,15 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Event> Events { get; set; }
 
+        public DbSet<EventSchedule> EventSchedules { get; set; }
+
         public DbSet<Report> Reports { get; set; }
 
         public DbSet<Comments> Comments { get; set; }
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<ChatRoom> ChatRoom { get; set; }
 
         public DbSet<Photo> Photos { get; set; }
 
@@ -38,9 +43,13 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Message> Message { get; set; }
+
         public DbSet<EventStatusHistory> EventStatusHistory { get; set; }
 
         public DbSet<UserEventInventory> UserEventInventories { get; set; }
+
+        public DbSet<UserEvent> UserEvent { get; set; }
 
         public DbSet<Inventory> Inventories { get; set; }
 

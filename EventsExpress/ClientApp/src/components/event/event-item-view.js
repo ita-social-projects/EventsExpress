@@ -304,7 +304,7 @@ export default class EventItemView extends Component {
                                 {canJoin && 
                                     <button onClick={this.props.onJoin}
                                         type="button"
-                                        className="btn btn-success"
+                                        className="btn btn-success join-leave"
                                         variant="contained"
                                     >
                                         Join

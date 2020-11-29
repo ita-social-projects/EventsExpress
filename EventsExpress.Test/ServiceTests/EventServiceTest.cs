@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Moq;
 using NUnit.Framework;
 
@@ -15,9 +14,14 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTest : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
         private EventService service;
         private List<Event> events;
+
+        private Guid userId = Guid.NewGuid();
+        private Guid firstEventId = Guid.NewGuid();
+        private Guid eventId = Guid.NewGuid();
 
         [SetUp]
         protected override void Initialize()
@@ -25,95 +29,79 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
+            mockEventScheduleService = new Mock<IEventScheduleService>();
 
             service = new EventService(
-                MockUnitOfWork.Object,
+                Context,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object);
+                mockPhotoService.Object,
+                mockEventScheduleService.Object);
 
-            events = new List<Event>
-            {
-                new Event
-                {
-                    Id = new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D"),
-                    CityId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"),
-                    DateFrom = DateTime.Today,
-                    DateTo = DateTime.Today,
-                    Description = "sjsdnl sdmkskdl dsnlndsl",
-                    OwnerId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                    PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
-                    Title = "SLdndsndj",
-                    IsBlocked = false,
-                    Categories = null,
-                },
-                new Event
-                {
-                    Id = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
-                    CityId = new Guid("31FA647C-AD54-4BCC-A860-E5A2664B019D"),
-                    DateFrom = DateTime.Today,
-                    DateTo = DateTime.Today,
-                    Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    OwnerId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                    PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
-                    Title = "SLdndstrhndj",
-                    IsBlocked = false,
-                    Categories = null,
-                    Visitors = new List<UserEvent>()
-                    {
-                        new UserEvent
-                        {
-                                    Status = Db.Enums.Status.WillGo,
-                                    UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                                    EventId = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
-                        },
-                    },
-                },
-            };
 
             List<User> users = new List<User>()
             {
                 new User
                 {
-                    Id = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    Id = userId,
                     Name = "NameIsExist",
                     Email = "stas@gmail.com",
                 },
             };
 
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Delete(It.IsAny<Event>())).Returns((Event i) => events.Where(x => x.Id == i.Id).FirstOrDefault());
+            events = new List<Event>
+            {
+                new Event
+                {
+                    Id = firstEventId,
+                    CityId = Guid.NewGuid(),
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "...",
+                    OwnerId = Guid.NewGuid(),
+                    PhotoId = Guid.NewGuid(),
+                    Title = "Title",
+                    IsBlocked = false,
+                    IsPublic = true,
+                    Categories = null,
+                    MaxParticipants = 2147483647,
+                },
+                new Event
+                {
+                    Id = eventId,
+                    CityId = Guid.NewGuid(),
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "sjsdnl fgr sdmkskdl dsnlndsl",
+                    OwnerId = Guid.NewGuid(),
+                    PhotoId = Guid.NewGuid(),
+                    Title = "Title",
+                    IsBlocked = false,
+                    IsPublic = false,
+                    Categories = null,
+                    MaxParticipants = 2147483647,
+                    Visitors = new List<UserEvent>()
+                    {
+                        new UserEvent
+                        {
+                                    UserStatusEvent = UserStatusEvent.Pending,
+                                    Status = Status.WillGo,
+                                    UserId = userId,
+                                    User = users[0],
+                                    EventId = eventId,
+                        },
+                    },
+                },
+            };
 
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get(It.IsAny<Guid>())).Returns((Guid i) => events.Where(x => x.Id == i).FirstOrDefault());
-
-            MockUnitOfWork.Setup(u => u.UserRepository
-                .Get(It.IsAny<Guid>())).Returns((Guid i) => users.Where(x => x.Id == i).FirstOrDefault());
-        }
-
-        [Test]
-        public void DeleteEvent_ReturnTrue()
-        {
-            var result = service.Delete(new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D"));
-
-            Assert.IsTrue(result.Result.Successed);
-        }
-
-        [Test]
-        public void DeleteEvent_ReturnFalse()
-        {
-            var result = service.Delete(new Guid("12FA643C-AD14-5BCC-A860-E5A2664B019D"));
-
-            Assert.IsFalse(result.Result.Successed);
+            Context.Events.AddRange(events);
+            Context.SaveChanges();
         }
 
         [Test]
         public void AddUserToEvent_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(userId, firstEventId);
 
             Assert.IsTrue(result.Result.Successed);
         }
@@ -121,10 +109,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA627C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(Guid.NewGuid(), eventId);
 
             StringAssert.Contains("User not found!", result.Result.Message);
             Assert.IsFalse(result.Result.Successed);
@@ -133,10 +118,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA644C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(userId, Guid.NewGuid());
 
             StringAssert.Contains("Event not found!", result.Result.Message);
             Assert.IsFalse(result.Result.Successed);
@@ -145,10 +127,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(userId, eventId);
 
             Assert.IsTrue(result.Result.Successed);
         }
@@ -156,10 +135,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_UserNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA347C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(Guid.NewGuid(), eventId);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -167,12 +143,20 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_EventNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA641C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(userId, Guid.NewGuid());
 
             Assert.IsFalse(result.Result.Successed);
+        }
+
+        [Test]
+        public void ChangeVisitorStatus_ReturnTrue()
+        {
+            var test = service.ChangeVisitorStatus(
+                userId,
+                eventId,
+                UserStatusEvent.Approved);
+
+            Assert.IsTrue(test.Result.Successed);
         }
     }
 }

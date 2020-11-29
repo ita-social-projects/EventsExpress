@@ -13,7 +13,7 @@ namespace EventsExpress.Core.IServices
 
         Task<OperationResult> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO);
 
-        ICollection<UnitOfMeasuringDTO> GetAll();
+        IEnumerable<UnitOfMeasuringDTO> GetAll();
 
         UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId);
     }

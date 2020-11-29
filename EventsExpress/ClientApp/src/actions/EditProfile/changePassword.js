@@ -1,6 +1,6 @@
 ﻿import EventsExpressService from '../../services/EventsExpressService';
 import { reset } from 'redux-form';
-import { SetAlert } from '../alert';
+import { setAlert } from '../alert';
 
 export const changePassword = {
     PENDING: "SET_CHANGEPASSWORD_PENDING",
@@ -20,14 +20,14 @@ export default function change_Password(data) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(setChangePasswordSuccess(true));
-                dispatch(SetAlert({
+                dispatch(setAlert({
                     variant: 'success',
                     message: 'Password was succesfully changed'
                 }));
                 dispatch(reset('ChangePassword'));
             } else {
                 dispatch(setChangePasswordError(response.error));
-                dispatch(SetAlert({ variant: 'error', message: 'Failed' }));
+                dispatch(setAlert({ variant: 'error', message: 'Failed' }));
             }
         });
     }

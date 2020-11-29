@@ -79,8 +79,7 @@ const Profile = (props) => {
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel2bh-content"
-                    id="panel2bh-header"
-                >
+                    id="panel2bh-header">
                     <Typography className={classes.heading}>Gender</Typography>
                     <Typography className={classes.secondaryHeading}>{genders[props.gender]}</Typography>
                 </ExpansionPanelSummary>

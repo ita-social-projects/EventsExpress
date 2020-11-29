@@ -7,7 +7,13 @@ import * as Birthday from './editReducers/EditBirthdayReducer';
 import * as User from './user';
 import * as Register from './register';
 import * as AddEvent from './add-event';
+import * as AddCopyEvent from './add-copy-event';
+import * as EditEventFromParent from './edit-event-from-parent';
+import * as AddEventSchedule from './add-eventSchedule';
+import * as CancelNextEventSchedule from './cancel-next-eventSchedule';
+import * as CancelAllEventSchedules from './cancel-all-eventSchedules';
 import * as Events from './event-list';
+import * as EventSchedules from './eventSchedules-list';
 import * as AddCategories from './add-category';
 import * as Categories from './category-list';
 import * as Countries from './countries';
@@ -17,6 +23,7 @@ import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
 import * as ChangePassword from './editReducers/ChangePasswordReducer';
 import * as EventView from './event-item-view';
+import * as EventScheduleView from './eventSchedule-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
@@ -49,9 +56,15 @@ const rootReducers = {
     editBirthday: Birthday.reducer,
     register: Register.reducer,
     add_event: AddEvent.reducer,
+    add_copy_event: AddCopyEvent.reducer,
+    edit_event_from_parent: EditEventFromParent.reducer,
+    add_eventSchedule: AddEventSchedule.reducer,
+    cancel_next_eventSchedule: CancelNextEventSchedule.reducer,
+    cancel_all_eventSchedules: CancelAllEventSchedules.reducer,
     events: Events.reducer,
+    eventSchedules: EventSchedules.reducer,
     inventories: Inventory.reducer,
-    inventar: Inventar.reducer,
+
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
@@ -61,6 +74,7 @@ const rootReducers = {
     change_avatar: ChangeAvatar.reducer,
     changePassword: ChangePassword.reducer,
     event: EventView.reducer,
+    eventSchedule: EventScheduleView.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 using Moq;
+using Moq.Protected;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
@@ -15,7 +19,15 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class PhotoServiceTests : TestInitializer
     {
+        private Guid photoId = Guid.NewGuid();
+
         public PhotoService PhotoService { get; set; }
+
+        private Photo Photo { get; set; }
+
+        private Mock<HttpMessageHandler> HttpMessageHandlerMock { get; set; }
+
+        private Mock<IHttpClientFactory> HttpClientFactoryMock { get; set; }
 
         [SetUp]
         protected override void Initialize()
@@ -26,12 +38,42 @@ namespace EventsExpress.Test.ServiceTests
             mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
             mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
 
-            MockUnitOfWork.Setup(u => u.PhotoRepository.Insert(It.IsAny<Photo>()));
+            HttpClientFactoryMock = new Mock<IHttpClientFactory>();
+            HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
-            var mockHttpClientFactory = new Mock<IHttpClientFactory>();
+            HttpClientFactoryMock.Setup(f => f.CreateClient(string.Empty))
+                .Returns(new HttpClient((HttpMessageHandler)HttpMessageHandlerMock.Object))
+                .Verifiable();
 
             PhotoService = new PhotoService(
-                MockUnitOfWork.Object, mockOpt.Object, mockHttpClientFactory.Object);
+                Context, mockOpt.Object, HttpClientFactoryMock.Object);
+
+            Photo = new Photo
+            {
+                Id = photoId,
+                Thumb = new byte[0],
+                Img = new byte[0],
+            };
+
+            Context.Photos.Add(Photo);
+            Context.SaveChanges();
+        }
+
+        private void SetUpHttpHandlerMock(HttpStatusCode statusCode)
+        {
+            HttpMessageHandlerMock
+                   .Protected()
+                   .Setup<Task<HttpResponseMessage>>(
+                         "SendAsync",
+                         ItExpr.IsAny<HttpRequestMessage>(),
+                         ItExpr.IsAny<CancellationToken>())
+                   .ReturnsAsync(new HttpResponseMessage()
+                   {
+                       StatusCode = statusCode,
+                       Content = new StringContent($"{{\"expires_in\": 100, \"access_token\":\"\"}}"),
+                   })
+
+                   .Verifiable();
         }
 
         [Test]
@@ -66,6 +108,30 @@ namespace EventsExpress.Test.ServiceTests
                 };
                 Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhoto(file));
             }
+        }
+
+        [Test]
+        public void AddPhotoByURL_ValidResponse()
+        {
+            SetUpHttpHandlerMock(HttpStatusCode.OK);
+
+            string url = "https://google.com";
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhotoByURL(url));
+        }
+
+        [Test]
+        public void AddPhotoByURL_InvalidResponse()
+        {
+            SetUpHttpHandlerMock(HttpStatusCode.BadRequest);
+
+            string url = "https://google.com";
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhotoByURL(url));
+        }
+
+        [Test]
+        public void Delete_DoesNotThrows()
+        {
+            Assert.DoesNotThrowAsync(async () => await PhotoService.Delete(photoId));
         }
 
         private string GetContentType(string fileName)

@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
     <PackageReference Include="Moq" Version="4.12.0" />
     <PackageReference Include="nunit" Version="3.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
@@ -21,6 +22,27 @@
   <ItemGroup>
     <ProjectReference Include="..\EventsExpress.Core\EventsExpress.Core.csproj" />
     <ProjectReference Include="..\EventsExpress\EventsExpress.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\invalidFile.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\invalidFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\tooSmallImage.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Images\valid-image.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ServiceTests\Images\invalidFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ServiceTests\Images\valid-image.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
