@@ -98,8 +98,7 @@ class InventoryList extends Component {
     }
 
     render() {
-        const { inventories, eventId } = this.props;
-        console.log('render', this.props);
+        const { inventories, event, user } = this.props;
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -108,18 +107,25 @@ class InventoryList extends Component {
                 
                 { this.state.isOpen &&
                 <div>
-                        <IconButton
+                    {event.user.id === user.id 
+                    ?  <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
                             <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item &nbsp;
                         </IconButton>
+                    :   null
+                    }
                         <div className="container">
                             <div className="row">
                                 <div className="col col-md-5"><b>Item name</b></div>
                                 <div className="col"><b>Count</b></div>
                                 <div className="col"><b>Measuring unit</b></div>
-                                <div className="col"><b>Action</b></div>
+                                {event.user.id === user.id
+                                ? <div className="col"><b>Action</b></div>
+                                : null
+                                }
+                                
                             </div>
                             {inventories.items.map(item => {
                                 return (
@@ -135,18 +141,21 @@ class InventoryList extends Component {
                                         <div className="col col-md-5">{item.itemName}</div>
                                         <div className="col">{item.needQuantity}</div>
                                         <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        <div className="col">
-                                            <IconButton 
-                                                disabled = {this.state.disabledEdit} 
-                                                onClick = {this.markItemAsEdit.bind(this, item)}>
-                                                <i class = "fa-sm fas fa-pencil-alt text-warning"></i>
-                                            </IconButton>
-                                            <IconButton
-                                                disabled = {this.state.disabledEdit} 
-                                                onClick = {this.deleteItemFromList.bind(this, item)}>
-                                                <i className = "fa-sm fas fa-trash text-danger"></i>
-                                            </IconButton>
-                                        </div>
+                                        {event.user.id === user.id
+                                        ? <div className="col">
+                                                <IconButton 
+                                                    disabled = {this.state.disabledEdit} 
+                                                    onClick = {this.markItemAsEdit.bind(this, item)}>
+                                                    <i class = "fa-sm fas fa-pencil-alt text-warning"></i>
+                                                </IconButton>
+                                                <IconButton
+                                                    disabled = {this.state.disabledEdit} 
+                                                    onClick = {this.deleteItemFromList.bind(this, item)}>
+                                                    <i className = "fa-sm fas fa-trash text-danger"></i>
+                                                </IconButton>
+                                            </div>
+                                        : null
+                                        }   
                                     </div>
                                 )
                             })}                    
@@ -160,6 +169,8 @@ class InventoryList extends Component {
 
 const mapStateToProps = (state) => ({
     unitOfMeasuringState: state.unitsOfMeasuring,
+    event: state.event.data,
+    user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => {
