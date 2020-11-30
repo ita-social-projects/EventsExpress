@@ -107,12 +107,10 @@ export function approveUser(userId, eventId, buttonAction) {
 
 export function deleteFromOwners(userId, eventId) {
   return dispatch => {
-    const res = api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId});
-    res.then(response =>{
+    api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId}).then(response =>{
       if(response.error == null)
       {
-        const res1 = api_serv.getEvent(eventId);
-        res1.then(response => {
+        api_serv.getEvent(eventId).then(response => {
           if(response.error == null){
             dispatch(getEvent(response));
           } else {
@@ -126,12 +124,10 @@ export function deleteFromOwners(userId, eventId) {
 
 export function promoteToOwner(userId, eventId) {
   return dispatch => {
-    const res = api_serv.onPromoteToOwner({ userId: userId, eventId: eventId});
-    res.then(response =>{
+    api_serv.onPromoteToOwner({ userId: userId, eventId: eventId}).then(response =>{
       if(response.error == null)
       {
-        const res1 = api_serv.getEvent(eventId);
-        res1.then(response => {
+        api_serv.getEvent(eventId).then(response => {
           if(response.error == null){
             dispatch(getEvent(response));
           } else {

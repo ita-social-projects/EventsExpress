@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class AddMultiplyEventOwners : Migration
+    public partial class AddEventOwners : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,42 +42,12 @@ namespace EventsExpress.Db.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_UserId",
-                table: "Events",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventOwners_UserId",
-                table: "EventOwners",
-                column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Events_Users_UserId",
-                table: "Events",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Events_Users_UserId",
-                table: "Events");
-
             migrationBuilder.DropTable(
                 name: "EventOwners");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Events_UserId",
-                table: "Events");
-
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Events");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "OwnerId",

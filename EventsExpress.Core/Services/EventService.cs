@@ -27,7 +27,6 @@ namespace EventsExpress.Core.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
 
-
         public EventService(
             IUnitOfWork unitOfWork,
             IMapper mapper,

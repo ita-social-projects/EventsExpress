@@ -12,7 +12,7 @@ export default class SimpleModal extends Component {
 
         this.state = {
             isOpen: false,
-            Id: null,
+            id: null,
         }
     }
 
@@ -21,7 +21,7 @@ export default class SimpleModal extends Component {
     }
 
     onClose = () => {
-        this.setState({isOpen: false, Id: null});
+        this.setState({isOpen: false, id: null});
     }
 
     render() {
@@ -52,7 +52,7 @@ export default class SimpleModal extends Component {
                                 type="button"
                                 value="Login"
                                 color="primary"
-                                onClick={() => this.props.action(this.props.Id)}
+                                onClick={() => this.props.action(this.props.id)}
                             >
                                 confirm
                             </Button>

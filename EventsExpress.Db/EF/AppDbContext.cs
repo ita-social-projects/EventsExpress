@@ -152,6 +152,15 @@ namespace EventsExpress.Db.EF
 
             builder.Entity<EventOwner>()
                 .HasKey(c => new { c.EventId, c.UserId });
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.Events)
+                .HasForeignKey(ue => ue.UserId);
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.Event)
+                .WithMany(e => e.Owners)
+                .HasForeignKey(ue => ue.EventId);
+
 
             // inventory config
             builder.Entity<Inventory>()

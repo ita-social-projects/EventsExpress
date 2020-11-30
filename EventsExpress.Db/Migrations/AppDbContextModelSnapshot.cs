@@ -159,9 +159,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
 
@@ -173,8 +170,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("CityId");
 
                     b.HasIndex("PhotoId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Events");
                 });
@@ -681,10 +676,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()
                         .HasForeignKey("PhotoId");
-
-                    b.HasOne("EventsExpress.Db.Entities.User", null)
-                        .WithMany("Events")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -711,7 +702,7 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

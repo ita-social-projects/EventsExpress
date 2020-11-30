@@ -55,7 +55,7 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                Id = {x.id} 
+                                id = {x.id} 
                                 action = {this.props.onDeleteFromOwners}
                                 data = {'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button = {
@@ -89,7 +89,7 @@ export default class EventItemView extends Component {
                     {(isMyEvent) &&
                         <div>
                             <SimpleModal
-                                Id = {x.id} 
+                                id = {x.id} 
                                 action = {this.props.onPromoteToOwner}
                                 data = {'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
                                 button = {
