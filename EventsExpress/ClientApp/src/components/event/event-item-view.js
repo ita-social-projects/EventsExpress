@@ -186,6 +186,7 @@ export default class EventItemView extends Component {
     render() {
         const { current_user } = this.props;
         const {
+            id,
             photoUrl,
             categories,
             title,
@@ -197,8 +198,7 @@ export default class EventItemView extends Component {
             user,
             visitors,
             country,
-            city,
-            inventories
+            city
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
@@ -273,7 +273,7 @@ export default class EventItemView extends Component {
                                     <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                         <RatingWrapper
                                             iWillVisitIt={iWillVisitIt}
-                                            eventId={this.props.event.data.id}
+                                            eventId={id}
                                             userId={current_user.id}
                                         />
                                     </div>
@@ -281,8 +281,11 @@ export default class EventItemView extends Component {
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <InventoryList inventories={inventories}/>
+                                <div className="shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <InventoryList 
+                                        eventId={id} 
+                                        inventories={this.props.inventories}
+                                        get_inventories_by_event_id={this.props.get_inventories_by_event_id}/>
                                 </div>
                                 
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

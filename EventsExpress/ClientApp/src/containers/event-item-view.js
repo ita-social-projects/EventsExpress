@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import Spinner from '../components/spinner';
 import get_event from '../actions/event-item-view';
+import { get_inventories_by_event_id }  from '../actions/inventory-list';
 import { join, leave, resetEvent, cancel_event, approveUser } from '../actions/event-item-view';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    
         const { id } = this.props.match.params;
         this.props.get_event(id);
+        this.props.get_inventories_by_event_id(id);
     }
 
     componentWillUnmount(){
@@ -33,28 +35,31 @@ class EventItemViewWrapper extends Component{
 
     render(){   
         const { isPending } = this.props.event;
-  
         return isPending
             ? <Spinner />
-            : <EventItemView 
+            : <EventItemView
+                inventories={this.props.inventories} 
                 event={this.props.event}
                 match={this.props.match} 
                 onLeave={this.onLeave} 
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onApprove={this.onApprove}
-                current_user={this.props.current_user} 
+                current_user={this.props.current_user}
+                get_inventories_by_event_id={this.props.get_inventories_by_event_id} 
             />
     }
 }
 
 const mapStateToProps = (state) => ({
     event: state.event, 
-    current_user: state.user
+    current_user: state.user,
+    inventories: state.inventories
 });
 
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
+    get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),

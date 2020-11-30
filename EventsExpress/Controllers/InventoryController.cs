@@ -71,6 +71,18 @@ namespace EventsExpress.Controllers
             return Ok(result.Property);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteInventar(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("id is empty");
+            }
+
+            var result = await _inventoryService.DeleteInventar(id);
+            return Ok(result.Property);
+        }
+
         /// <summary>
         /// This method have to return all inventories from event.
         /// </summary>
@@ -80,7 +92,14 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
-            return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
+            if (eventId == Guid.Empty)
+            {
+                return BadRequest("Event id is empty");
+            }
+            else
+            {
+                return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
+            }
         }
 
         /// <summary>
@@ -92,7 +111,14 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventarById(Guid inventoryId)
         {
-            return Ok(_mapper.Map<InventoryDTO, InventoryDto>(_inventoryService.GetInventarById(inventoryId)));
+            if (inventoryId == Guid.Empty)
+            {
+                return BadRequest("Inventory id is empty");
+            }
+            else
+            {
+                return Ok(_mapper.Map<InventoryDTO, InventoryDto>(_inventoryService.GetInventarById(inventoryId)));
+            }
         }
     }
 }
