@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
@@ -21,54 +22,49 @@ namespace EventsExpress.Core.Services
 
         public Country GetById(Guid id) => _context.Countries.Find(id);
 
-        public async Task<OperationResult> CreateCountryAsync(Country country)
+        public async Task CreateCountryAsync(Country country)
         {
             if (_context.Countries.Any(c => c.Name == country.Name))
             {
-                return new OperationResult(false, "Country is already exist", string.Empty);
+                throw new EventsExpressException("Country is already exist");
             }
 
             Insert(country);
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> EditCountryAsync(Country country)
+        public async Task EditCountryAsync(Country country)
         {
             if (country.Id == Guid.Empty)
             {
-                return new OperationResult(false, "Id field is NULL", "Id");
+                throw new EventsExpressException("Id field is NULL");
             }
 
             var oldCountry = _context.Countries.Find(country.Id);
             if (oldCountry == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             oldCountry.Name = country.Name;
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return new OperationResult(false, "Id field is NULL", "Id");
+                throw new EventsExpressException("Id field is NULL");
             }
 
             var country = _context.Countries.Find(id);
             if (country == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             Delete(country);
             await _context.SaveChangesAsync();
-            return new OperationResult(true);
         }
     }
 }

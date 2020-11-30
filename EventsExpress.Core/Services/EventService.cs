@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -36,11 +37,11 @@ namespace EventsExpress.Core.Services
             _eventScheduleService = eventScheduleService;
         }
 
-        public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
+        public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!_context.Events.Any(e => e.Id == eventId))
             {
-                return new OperationResult(false, "Event not found!", "eventId");
+                throw new EventsExpressException("Event not found!");
             }
 
             var ev = _context.Events
@@ -49,13 +50,13 @@ namespace EventsExpress.Core.Services
 
             if (ev.MaxParticipants <= ev.Visitors.Count)
             {
-                return new OperationResult(false, "To much participants!", " ");
+                throw new EventsExpressException("To much participants!");
             }
 
             var us = _context.Users.Find(userId);
             if (us == null)
             {
-                return new OperationResult(false, "User not found!", "userID");
+                throw new EventsExpressException("User not found!");
             }
 
             if (ev.Visitors == null)
@@ -71,11 +72,9 @@ namespace EventsExpress.Core.Services
             });
 
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
+        public async Task ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
         {
             var userEvent = _context.UserEvent
                 .Where(x => x.EventId == eventId && x.UserId == userId)
@@ -86,10 +85,9 @@ namespace EventsExpress.Core.Services
 
             _context.UserEvent.Update(userEvent);
             await _context.SaveChangesAsync();
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        public async Task DeleteUserFromEvent(Guid userId, Guid eventId)
         {
             var ev = _context.Events
                 .Include(e => e.Visitors)
@@ -97,7 +95,7 @@ namespace EventsExpress.Core.Services
 
             if (ev == null)
             {
-                return new OperationResult(false, "Event not found!", "eventId");
+                throw new EventsExpressException("Event not found!");
             }
 
             var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);
@@ -106,46 +104,40 @@ namespace EventsExpress.Core.Services
             {
                 ev.Visitors.Remove(v);
                 await _context.SaveChangesAsync();
-
-                return new OperationResult(true);
             }
 
-            return new OperationResult(false, "Visitor not found!", "visitorId");
+            throw new EventsExpressException("Visitor not found!");
         }
 
-        public async Task<OperationResult> BlockEvent(Guid id)
+        public async Task BlockEvent(Guid id)
         {
             var evnt = _context.Events.Find(id);
             if (evnt == null)
             {
-                return new OperationResult(false, "Invalid event id", "eventId");
+                throw new EventsExpressException("Invalid event id");
             }
 
             evnt.IsBlocked = true;
 
             await _context.SaveChangesAsync();
             await _mediator.Publish(new BlockedEventMessage(evnt.OwnerId, evnt.Id));
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> UnblockEvent(Guid id)
+        public async Task UnblockEvent(Guid Id)
         {
             var evnt = _context.Events.Find(id);
             if (evnt == null)
             {
-                return new OperationResult(false, "Invalid event Id", "eventId");
+                throw new EventsExpressException("Invalid event Id");
             }
 
             evnt.IsBlocked = false;
 
             await _context.SaveChangesAsync();
             await _mediator.Publish(new UnblockedEventMessage(evnt.OwnerId, evnt.Id));
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Create(EventDTO eventDTO)
+        public async Task<Guid> Create(EventDTO eventDTO)
         {
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
@@ -164,7 +156,7 @@ namespace EventsExpress.Core.Services
                 }
                 catch (ArgumentException)
                 {
-                    return new OperationResult(false, "Invalid file", string.Empty);
+                    throw new EventsExpressException("Invalid file");
                 }
             }
 
@@ -189,15 +181,15 @@ namespace EventsExpress.Core.Services
                 }
 
                 await _mediator.Publish(new EventCreatedMessage(eventDTO));
-                return new OperationResult(true, "Create new Event", result.Id.ToString());
+                return result.Id;
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, ex.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 
-        public async Task<OperationResult> CreateNextEvent(Guid eventId)
+        public async Task<Guid> CreateNextEvent(Guid eventId)
         {
             var eventDTO = EventById(eventId);
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
@@ -217,15 +209,15 @@ namespace EventsExpress.Core.Services
             {
                 var createResult = await Create(eventDTO);
                 await _eventScheduleService.Edit(eventScheduleDTO);
-                return new OperationResult(true, "new eventId", createResult.Property);
+                return createResult;
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, ex.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 
-        public async Task<OperationResult> Edit(EventDTO e)
+        public async Task<Guid> Edit(EventDTO e)
         {
             var ev = _context.Events
                 .Include(e => e.Photo)
@@ -252,7 +244,7 @@ namespace EventsExpress.Core.Services
                 }
                 catch
                 {
-                    return new OperationResult(false, "Invalid file", string.Empty);
+                    throw new EventsExpressException("Invalid file");
                 }
             }
 
@@ -262,10 +254,10 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
 
             await _context.SaveChangesAsync();
-            return new OperationResult(true, "Edit event", ev.Id.ToString());
+            return ev.Id;
         }
 
-        public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
+        public async Task<Guid> EditNextEvent(EventDTO eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
 
@@ -281,11 +273,11 @@ namespace EventsExpress.Core.Services
             {
                 var createResult = await Create(eventDTO);
                 await _eventScheduleService.Edit(eventScheduleDTO);
-                return new OperationResult(true, "new eventId", createResult.Property);
+                return createResult;
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, ex.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 
@@ -466,7 +458,7 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<EventDTO>>(events);
         }
 
-        public async Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate)
+        public async Task SetRate(Guid userId, Guid eventId, byte rate)
         {
             try
             {
@@ -474,7 +466,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Rates)
                 .FirstOrDefault(e => e.Id == eventId);
 
-                ev.Rates = ev.Rates ?? new List<Rate>();
+                ev.Rates ??= new List<Rate>();
 
                 var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
 
@@ -488,11 +480,10 @@ namespace EventsExpress.Core.Services
                 }
 
                 await _context.SaveChangesAsync();
-                return new OperationResult(true);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return new OperationResult(false, e.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 
