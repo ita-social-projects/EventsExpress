@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        Task<OperationResult> Create(EventDTO eventDTO);
+        Task<Guid> Create(EventDTO eventDTO);
 
-        Task<OperationResult> CreateNextEvent(Guid eventId);
+        Task<Guid> CreateNextEvent(Guid eventId);
 
-        Task<OperationResult> EditNextEvent(EventDTO eventDTO);
+        Task<Guid> EditNextEvent(EventDTO eventDTO);
 
-        Task<OperationResult> Edit(EventDTO e);
+        Task<Guid> Edit(EventDTO e);
 
-        Task<OperationResult> Delete(Guid eventId);
+        Task Delete(Guid eventId);
 
-        Task<OperationResult> BlockEvent(Guid eID);
+        Task BlockEvent(Guid eID);
 
-        Task<OperationResult> UnblockEvent(Guid eId);
+        Task UnblockEvent(Guid eId);
 
         EventDTO EventById(Guid eventId);
 
@@ -37,13 +36,13 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
 
-        Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId);
+        Task AddUserToEvent(Guid userId, Guid eventId);
 
-        Task<OperationResult> DeleteUserFromEvent(Guid userId, Guid eventId);
+        Task DeleteUserFromEvent(Guid userId, Guid eventId);
 
-        Task<OperationResult> SetRate(Guid userId, Guid eventId, byte rate);
+        Task SetRate(Guid userId, Guid eventId, byte rate);
 
-        Task<OperationResult> ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status);
+        Task ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status);
 
         byte GetRateFromUser(Guid userId, Guid eventId);
 

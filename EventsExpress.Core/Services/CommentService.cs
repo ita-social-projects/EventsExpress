@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
@@ -47,16 +48,16 @@ namespace EventsExpress.Core.Services
             return com;
         }
 
-        public async Task<OperationResult> Create(CommentDTO comment)
+        public async Task Create(CommentDTO comment)
         {
             if (Db.UserRepository.Get(comment.UserId) == null)
             {
-                return new OperationResult(false, "Current user does not exist!", string.Empty);
+                throw new EventsExpressException("Current user does not exist!");
             }
 
             if (Db.EventRepository.Get(comment.EventId) == null)
             {
-                return new OperationResult(false, "Wrong event id!", string.Empty);
+                throw new EventsExpressException("Wrong event id!");
             }
 
             Db.CommentsRepository.Insert(new Comments()
@@ -69,21 +70,19 @@ namespace EventsExpress.Core.Services
             });
 
             await Db.SaveAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return new OperationResult(false, "Id field is null", string.Empty);
+                throw new EventsExpressException("Id field is null");
             }
 
             var comment = Db.CommentsRepository.Get("Children").Where(x => x.Id == id).FirstOrDefault();
             if (comment == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             if (comment.Children != null)
@@ -96,7 +95,6 @@ namespace EventsExpress.Core.Services
 
             var result = Db.CommentsRepository.Delete(comment);
             await Db.SaveAsync();
-            return new OperationResult(true);
         }
     }
 }

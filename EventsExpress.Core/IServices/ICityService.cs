@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Core.IServices
@@ -14,10 +13,10 @@ namespace EventsExpress.Core.IServices
 
         IQueryable<City> GetAll();
 
-        Task<OperationResult> CreateCityAsync(City city);
+        Task CreateCityAsync(City city);
 
-        Task<OperationResult> EditCityAsync(City city);
+        Task EditCityAsync(City city);
 
-        Task<OperationResult> DeleteCityAsync(Guid id);
+        Task DeleteCityAsync(Guid id);
     }
 }

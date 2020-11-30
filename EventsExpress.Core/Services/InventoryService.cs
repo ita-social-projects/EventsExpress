@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
@@ -24,12 +25,12 @@ namespace EventsExpress.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<OperationResult> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
+        public async Task<Guid> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
         {
             var ev = _db.EventRepository.Get().FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
-                return new OperationResult(false, "Event not found!", eventId.ToString());
+                throw new EventsExpressException("Event not found!");
             }
 
             try
@@ -38,20 +39,20 @@ namespace EventsExpress.Core.Services
                 entity.EventId = eventId;
                 var result = _db.InventoryRepository.Insert(entity);
                 await _db.SaveAsync();
-                return new OperationResult(true, "Invertar was added", result.Id.ToString());
+                return result.Id;
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, ex.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 
-        public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
+        public async Task<Guid> EditInventar(InventoryDTO inventoryDTO)
         {
             var entity = _db.InventoryRepository.Get(inventoryDTO.Id);
             if (entity == null)
             {
-                return new OperationResult(false, "Object not found", inventoryDTO.Id.ToString());
+                throw new EventsExpressException("Object not found");
             }
 
             try
@@ -60,11 +61,11 @@ namespace EventsExpress.Core.Services
                 entity.NeedQuantity = inventoryDTO.NeedQuantity;
                 entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
                 await _db.SaveAsync();
-                return new OperationResult(true, "Edit inventory", entity.Id.ToString());
+                return entity.Id;
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
+                throw new EventsExpressException(ex.Message);
             }
         }
 

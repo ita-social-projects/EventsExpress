@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
@@ -69,21 +70,21 @@ namespace EventsExpress.Core.Services
             return _db.ChatRepository.Get("Users").FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
         }
 
-        public async Task<OperationResult> MsgSeen(List<Guid> messageIds)
+        public async Task<Guid> MsgSeen(List<Guid> messageIds)
         {
             foreach (var x in messageIds)
             {
                 var msg = _db.MessageRepository.Get(x);
                 if (msg == null)
                 {
-                    return new OperationResult(false, "Msg not found", string.Empty);
+                    throw new EventsExpressException("Msg not found");
                 }
 
                 msg.Seen = true;
                 await _db.SaveAsync();
             }
 
-            return new OperationResult(true, string.Empty, _db.MessageRepository.Get(messageIds[0]).ChatRoomId.ToString());
+            return _db.MessageRepository.Get(messageIds[0]).ChatRoomId;
         }
 
         public List<Message> GetUnreadMessages(Guid userId)
