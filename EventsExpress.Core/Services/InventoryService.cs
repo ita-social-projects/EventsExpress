@@ -34,7 +34,7 @@ namespace EventsExpress.Core.Services
             {
                 var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
                 entity.EventId = eventId;
-                entity.UnitOfMeasuring = null;;
+                entity.UnitOfMeasuring = null;
                 var result = Insert(entity);
                 await _context.SaveChangesAsync();
                 return new OperationResult(true, "Invertar was added", result.Id.ToString());
@@ -47,7 +47,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> DeleteInventar(Guid id)
         {
-            var i = _db.InventoryRepository.Get(id);
+            var i = _context.Inventories.Find(id);
             if (i == null)
             {
                 return new OperationResult(false, "Not found", string.Empty);
@@ -55,15 +55,14 @@ namespace EventsExpress.Core.Services
 
             try
             {
-                var result = _db.InventoryRepository.Delete(i);
-                await _db.SaveAsync();
-                return new OperationResult(true, "Inventar was deleted", result.Id.ToString());
+                var result = _context.Inventories.Remove(i);
+                await _context.SaveChangesAsync();
+                return new OperationResult(true, "Inventar was deleted", i.Id.ToString());
             }
             catch (Exception ex)
             {
                 return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
             }
-
         }
 
         public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
@@ -90,8 +89,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<InventoryDTO> GetInventar(Guid eventId)
         {
-            var ev = _context.Events.Where(x => x.Id == eventId);
-            if (ev == null)
+            if (!_context.Events.Any(x => x.Id == eventId))
             {
                 return new List<InventoryDTO>();
             }
