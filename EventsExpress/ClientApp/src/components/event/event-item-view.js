@@ -223,6 +223,8 @@ export default class EventItemView extends Component {
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
         let isMyPrivateEvent = isMyEvent && !isPublic;
 
+        console.log(this.props);
+
         return <>
             <div className="container-fluid mt-1">
                 <div className="row">
@@ -255,7 +257,7 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <span>{country} {city}</span>
+                                <span>{country.name} {city.name}</span>
                                 <br />
                                 {categories_list}
                             </div>

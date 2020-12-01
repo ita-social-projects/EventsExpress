@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,14 +34,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create unit of measuring proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] UnitOfMeasuringDto model)
+        public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringDTO>(model));
+            var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
             if (result.Successed)
             {
                 return Ok(result.Property);
@@ -57,14 +57,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit unit of measuring proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringDto model)
+        public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringDTO>(model));
+            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
             if (result.Successed)
             {
                 return Ok(result.Property);
@@ -82,7 +82,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAll()
         {
-            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringDto>>(_unitOfMeasuringService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
-            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringDto>(_unitOfMeasuringService.GetById(id)));
+            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(_unitOfMeasuringService.GetById(id)));
         }
     }
 }

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
-using EventsExpress.ViewModel;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,14 +35,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddInventar([FromBody] InventoryDto model, Guid eventId)
+        public async Task<IActionResult> AddInventar([FromBody] InventoryViewModel model, Guid eventId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryDto, InventoryDTO>(model));
+            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryViewModel, InventoryDTO>(model));
             if (result.Successed)
             {
                 return Ok(result.Property);
@@ -60,14 +58,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit inventar proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditInventar([FromBody] InventoryDto model)
+        public async Task<IActionResult> EditInventar([FromBody] InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryDto, InventoryDTO>(model));
+            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryViewModel, InventoryDTO>(model));
             return Ok(result.Property);
         }
 
@@ -80,7 +78,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
-            return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
+            return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
         }
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventarById(Guid inventoryId)
         {
-            return Ok(_mapper.Map<InventoryDTO, InventoryDto>(_inventoryService.GetInventarById(inventoryId)));
+            return Ok(_mapper.Map<InventoryDTO, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
         }
     }
 }

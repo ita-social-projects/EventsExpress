@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.ActionFilters;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
@@ -14,7 +15,8 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
+using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
 using FluentValidation;
@@ -139,6 +141,7 @@ namespace EventsExpress
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSingleton<UserAccessTypeFilter>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();

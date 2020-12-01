@@ -222,7 +222,7 @@ class EventForm extends Component {
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values && values.countryId  &&
+                    {values && values.country.id  &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'

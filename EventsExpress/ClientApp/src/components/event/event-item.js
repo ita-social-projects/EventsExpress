@@ -128,7 +128,7 @@ export default class Event extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             <div className='mb-2'>
-                                {`${city}, ${country}`}
+                                {`${city.name}, ${country.name}`}
                             </div>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}

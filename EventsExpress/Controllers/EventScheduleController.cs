@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
-using EventsExpress.ViewModel;
+using EventsExpress.Filters;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
@@ -44,9 +42,9 @@ namespace EventsExpress.Controllers
         {
             try
             {
-                var viewModel = new IndexViewModel<EventScheduleDto>
+                var viewModel = new IndexViewModel<EventScheduleViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventScheduleDto>>(
+                    Items = _mapper.Map<IEnumerable<EventScheduleViewModel>>(
                         _eventScheduleService.GetAll()),
                 };
                 return Ok(viewModel);
@@ -64,7 +62,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromForm] EventScheduleDto model)
+        public async Task<IActionResult> Edit([FromForm] EventScheduleViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -90,6 +88,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Cancel All Events proces success.</response>
         /// <response code="400">Cancel All Events process failed.</response>
         [HttpPost("[action]")]
+        [UserAccessTypeFilter]
         public async Task<IActionResult> CancelAllEvents(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -116,6 +115,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Cancel Next Event event proces success.</response>
         /// <response code="400">Cancel Next Event process failed.</response>
         [HttpPost("[action]")]
+        [UserAccessTypeFilter]
         public async Task<IActionResult> CancelNextEvent(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -144,6 +144,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<EventScheduleDto>(_eventScheduleService.EventScheduleById(id)));
+            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(id)));
     }
 }
