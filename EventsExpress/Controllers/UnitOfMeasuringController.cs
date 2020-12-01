@@ -6,6 +6,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
+using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create unit of measuring proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)
@@ -42,12 +44,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -57,6 +55,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit unit of measuring proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)
@@ -65,12 +64,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>

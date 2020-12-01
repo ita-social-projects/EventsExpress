@@ -385,7 +385,7 @@ namespace EventsExpress.Core.Services
         public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
             _mapper.Map<Relationship, AttitudeDTO>(_context.Relationships
                 .FirstOrDefault(x =>
-                    x.UserFromId == attitude.UserFromId && 
+                    x.UserFromId == attitude.UserFromId &&
                     x.UserToId == attitude.UserToId));
 
         public ProfileDTO GetProfileById(Guid id, Guid fromId)

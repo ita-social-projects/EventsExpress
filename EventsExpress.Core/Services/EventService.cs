@@ -105,8 +105,10 @@ namespace EventsExpress.Core.Services
                 ev.Visitors.Remove(v);
                 await _context.SaveChangesAsync();
             }
-
-            throw new EventsExpressException("Visitor not found!");
+            else
+            {
+                throw new EventsExpressException("Visitor not found!");
+            }
         }
 
         public async Task BlockEvent(Guid id)
@@ -123,9 +125,9 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new BlockedEventMessage(evnt.OwnerId, evnt.Id));
         }
 
-        public async Task UnblockEvent(Guid Id)
+        public async Task UnblockEvent(Guid eId)
         {
-            var evnt = _context.Events.Find(id);
+            var evnt = _context.Events.Find(eId);
             if (evnt == null)
             {
                 throw new EventsExpressException("Invalid event Id");

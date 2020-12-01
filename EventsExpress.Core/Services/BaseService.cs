@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoMapper;
 using System.Text;
 using AutoMapper;
 using EventsExpress.Db.EF;

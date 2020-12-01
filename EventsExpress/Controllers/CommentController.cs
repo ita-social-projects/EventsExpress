@@ -5,6 +5,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
+using EventsExpress.Filters;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit/Create process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Edit(CommentDto model)
         {
             if (!ModelState.IsValid)
@@ -41,14 +43,9 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
+            await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -59,16 +56,12 @@ namespace EventsExpress.Controllers
         /// <response code="400">If delete process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]/{id}")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var res = await _commentService.Delete(id);
+            await _commentService.Delete(id);
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>

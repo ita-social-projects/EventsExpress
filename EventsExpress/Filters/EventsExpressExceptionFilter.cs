@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventsExpress.Core.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace EventsExpress.Filters
 {
@@ -9,15 +8,13 @@ namespace EventsExpress.Filters
     {
         public override void OnException(ExceptionContext context)
         {
-            var result = new ViewResult { StatusCode = 400 };
-            var modelMetadata = new EmptyModelMetadataProvider();
-            result.ViewData = new ViewDataDictionary(
-                    modelMetadata, context.ModelState);
-            result.ViewData.Add(
-                "HandleException",
-                context.Exception);
-            context.Result = result;
-            context.ExceptionHandled = true;
+            if (context.Result is EventsExpressException eventsExpressException)
+            {
+                context.ModelState.AddModelError(string.Empty, eventsExpressException.Message);
+                var result = new ObjectResult(context.ModelState) { StatusCode = 400 };
+                context.Result = result;
+                context.ExceptionHandled = true;
+            }
         }
     }
 }
