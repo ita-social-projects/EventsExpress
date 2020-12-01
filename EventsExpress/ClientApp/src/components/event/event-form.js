@@ -102,6 +102,8 @@ class EventForm extends Component {
 
         const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
+        values.countryId = this.props.initialValues.country.id;
+        values.cityId = this.props.initialValues.city.id;
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
@@ -222,7 +224,7 @@ class EventForm extends Component {
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values && values.country.id  &&
+                    {values && values.countryId  &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'

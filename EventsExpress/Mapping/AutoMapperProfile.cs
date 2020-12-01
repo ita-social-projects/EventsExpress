@@ -132,12 +132,12 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
                 {
-                    Id = src.Id,
+                    Id = src.City.Country.Id,
                     Name = src.City.Country.Name,
                 }))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
                 {
-                    Id = src.Id,
+                    Id = src.City.Id,
                     Name = src.City.Name,
                 }))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
@@ -164,12 +164,12 @@ namespace EventsExpress.Mapping
                     })))
                 .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
                 {
-                    Id = src.Id,
+                    Id = src.City.Country.Id,
                     Name = src.City.Country.Name,
                 }))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
                 {
-                    Id = src.Id,
+                    Id = src.City.Id,
                     Name = src.City.Name,
                 }))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))

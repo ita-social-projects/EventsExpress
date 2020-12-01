@@ -15,7 +15,7 @@ class EditEventWrapper extends Component {
     componentWillMount = () => {
         this.props.get_countries();
         this.props.get_categories();
-        this.props.get_cities(this.props.initialValues.countryId);
+        this.props.get_cities(this.props.initialValues.country.id);
     }
     
     componentDidUpdate = () => {
