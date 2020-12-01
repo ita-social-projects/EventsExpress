@@ -45,6 +45,27 @@ namespace EventsExpress.Core.Services
             }
         }
 
+        public async Task<OperationResult> DeleteInventar(Guid id)
+        {
+            var inventar = _context.Inventories.Find(id);
+            if (inventar == null)
+            {
+                return new OperationResult(false, "Not found", string.Empty);
+            }
+
+            try
+            {
+                var result = _context.Inventories.Remove(inventar);
+                await _context.SaveChangesAsync();
+                return new OperationResult(true, "Inventar was deleted", inventar.Id.ToString());
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
+            }
+        }
+
+        public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
         public async Task<Guid> EditInventar(InventoryDTO inventoryDTO)
         {
             var entity = _context.Inventories.Find(inventoryDTO.Id);
@@ -69,8 +90,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<InventoryDTO> GetInventar(Guid eventId)
         {
-            var ev = _context.Events.Where(x => x.Id == eventId);
-            if (ev == null)
+            if (!_context.Events.Any(x => x.Id == eventId))
             {
                 return new List<InventoryDTO>();
             }
