@@ -164,6 +164,12 @@ const initialState = {
         },
         filter: eventHelper.getDefaultEventFilter(),
     },
+    inventories: {
+        isPending: true,
+        listInventoriesErrorMessage: false,
+        setItemErrorMessage: null,
+        items: []
+    },
     eventSchedules: {
         isPending: true,
         isError: false,
