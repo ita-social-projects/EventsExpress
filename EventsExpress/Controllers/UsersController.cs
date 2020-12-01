@@ -9,7 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
-using EventsExpress.Validation;
+using EventsExpress.Filters;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -108,13 +108,10 @@ namespace EventsExpress.Controllers
         /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
-            var result = await _userService.ChangeRole(userId, roleId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.ChangeRole(userId, roleId);
 
             return Ok();
         }
@@ -127,13 +124,10 @@ namespace EventsExpress.Controllers
         /// <response code="400">Block process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Unblock(Guid userId)
         {
-            var result = await _userService.Unblock(userId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.Unblock(userId);
 
             return Ok();
         }
@@ -146,13 +140,10 @@ namespace EventsExpress.Controllers
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Block(Guid userId)
         {
-            var result = await _userService.Block(userId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.Block(userId);
 
             return Ok();
         }
@@ -164,6 +155,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditUsername(EditUserNameDto userName)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -173,13 +165,9 @@ namespace EventsExpress.Controllers
             }
 
             user.Name = userName.Name;
-            var result = await _userService.Update(user);
-            if (result.Successed)
-            {
-                return Ok();
-            }
+            await _userService.Update(user);
 
-            return BadRequest(result.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -189,6 +177,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditBirthday(EditUserBirthDto userBirthday)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -198,13 +187,9 @@ namespace EventsExpress.Controllers
             }
 
             user.Birthday = userBirthday.Birthday;
-            var result = await _userService.Update(user);
-            if (result.Successed)
-            {
-                return Ok();
-            }
+            await _userService.Update(user);
 
-            return BadRequest(result.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -214,6 +199,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditGender(EditUserGenderDto userGender)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -223,13 +209,9 @@ namespace EventsExpress.Controllers
             }
 
             user.Gender = (Gender)userGender.Gender;
-            var result = await _userService.Update(user);
-            if (result.Successed)
-            {
-                return Ok();
-            }
+            await _userService.Update(user);
 
-            return BadRequest(result.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -239,6 +221,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditUserCategory(EditUserCategoriesDto model)
         {
             if (!ModelState.IsValid)
@@ -254,13 +237,9 @@ namespace EventsExpress.Controllers
 
             var newCategories = _mapper.Map<IEnumerable<Category>>(model.Categories);
 
-            var result = await _userService.EditFavoriteCategories(user, newCategories);
-            if (result.Successed)
-            {
-                return Ok();
-            }
+            await _userService.EditFavoriteCategories(user, newCategories);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>
@@ -269,6 +248,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> ChangeAvatar()
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -279,13 +259,10 @@ namespace EventsExpress.Controllers
 
             var newAva = HttpContext.Request.Form.Files[0];
 
-            var result = await _userService.ChangeAvatar(user.Id, newAva);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.ChangeAvatar(user.Id, newAva);
 
             var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+
             return Ok(updatedPhoto);
         }
 
@@ -346,6 +323,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Attitude set success.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpPost("[action]")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
             if (!ModelState.IsValid)
@@ -353,11 +331,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
 
             return Ok();
         }

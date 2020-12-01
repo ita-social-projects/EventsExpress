@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using NUnit.Framework;
@@ -31,15 +32,13 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_ExistingId_Success()
         {
-            var res = countryService.DeleteAsync(countryId);
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await countryService.DeleteAsync(countryId));
         }
 
         [Test]
         public void Delete_NotExistId_ReturnFalse()
         {
-            var res = countryService.DeleteAsync(default);
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await countryService.DeleteAsync(default));
         }
 
         [Test]
@@ -51,25 +50,19 @@ namespace EventsExpress.Test.ServiceTests
                 Name = "RandomName",
             };
 
-            var res = countryService.CreateCountryAsync(country);
-
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await countryService.CreateCountryAsync(country));
         }
 
         [Test]
         public void Update_OldCountryIdNull_false()
         {
-            var res = countryService.EditCountryAsync(new Country());
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await countryService.EditCountryAsync(new Country()));
         }
 
         [Test]
         public void Update_Object_true()
         {
-            var res = countryService.EditCountryAsync(country);
-
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await countryService.EditCountryAsync(country));
         }
     }
 }

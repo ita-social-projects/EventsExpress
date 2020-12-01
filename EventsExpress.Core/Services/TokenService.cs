@@ -74,17 +74,15 @@ namespace EventsExpress.Core.Services
         public RefreshToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return new RefreshToken
             {
-                rng.GetBytes(randomNumber);
-                return new RefreshToken
-                {
-                    Token = Convert.ToBase64String(randomNumber),
-                    Expires = DateTime.Now.AddDays(7),
-                    Created = DateTime.Now,
-                    CreatedByIp = IpAddress,
-                };
-            }
+                Token = Convert.ToBase64String(randomNumber),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now,
+                CreatedByIp = IpAddress,
+            };
         }
 
         public ClaimsPrincipal GetPrincipalFromJwt(string token)

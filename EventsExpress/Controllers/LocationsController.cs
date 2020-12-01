@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
+using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,18 +45,21 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create country proces success.</response>
         /// <response code="400">If Edit/Create country failed.</response>
         [HttpPost("countries/edit")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditCountry(Country country)
         {
             if (ModelState.IsValid)
             {
-                var result = country.Id == Guid.Empty
-                    ? await _countryService.CreateCountryAsync(country)
-                    : await _countryService.EditCountryAsync(country);
-
-                if (result.Successed)
+                if (country.Id == Guid.Empty)
                 {
-                    return Ok();
+                    await _countryService.CreateCountryAsync(country);
                 }
+                else
+                {
+                    await _countryService.EditCountryAsync(country);
+                }
+
+                return Ok();
             }
 
             return BadRequest();
@@ -68,15 +72,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete country proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("countries/delete")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
             if (id != Guid.Empty)
             {
-                var result = await _countryService.DeleteAsync(id);
-                if (result.Successed)
-                {
-                    return Ok();
-                }
+                await _countryService.DeleteAsync(id);
+
+                return Ok();
             }
 
             return BadRequest();
@@ -103,18 +106,21 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create city proces success.</response>
         /// <response code="400">If Edit/Create city failed.</response>
         [HttpPost("cities/edit")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditCity(City city)
         {
             if (ModelState.IsValid)
             {
-                var result = city.Id == Guid.Empty ?
-                    await _cityService.CreateCityAsync(city) :
-                    await _cityService.EditCityAsync(city);
-
-                if (result.Successed)
+                if (city.Id == Guid.Empty)
                 {
-                    return Ok();
+                    await _cityService.CreateCityAsync(city);
                 }
+                else
+                {
+                    await _cityService.EditCityAsync(city);
+                }
+
+                return Ok();
             }
 
             return BadRequest();
@@ -127,15 +133,14 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete city proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("cities/delete")]
+        [EventsExpressExceptionFilter]
         public async Task<IActionResult> DeleteCity(Guid id)
         {
             if (id != Guid.Empty)
             {
-                var result = await _cityService.DeleteCityAsync(id);
-                if (result.Successed)
-                {
-                    return Ok();
-                }
+                await _cityService.DeleteCityAsync(id);
+
+                return Ok();
             }
 
             return BadRequest();
