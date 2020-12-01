@@ -129,6 +129,20 @@ namespace EventsExpress
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IEventScheduleService, EventScheduleService>();
+            services.AddTransient<IEventStatusHistoryService, EventStatusHistoryService>();
+            services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IEventOwnersService, EventOwnersService>();
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IInventoryService, InventoryService>();
+            services.AddTransient<IUnitOfMeasuringService, UnitOfMeasuringService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

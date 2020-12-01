@@ -134,11 +134,13 @@ export default class EventsExpressService {
         file.append('DateFrom', new Date(data.dateFrom).toDateString());
         file.append('DateTo', new Date(data.dateTo).toDateString());
 
-        data.inventories.map((item, key) => {
-            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
-            file.append(`Inventories[${key}].ItemName`, item.itemName);
-            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
-        });
+        if (data.inventories) {
+            data.inventories.map((item, key) => {
+                file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+                file.append(`Inventories[${key}].ItemName`, item.itemName);
+                file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
+            });
+        }
 
         let i = 0;
         data.categories.map(x => {
@@ -318,6 +320,20 @@ export default class EventsExpressService {
 
     setUserToEvent = async (data) => {
         const res = await this.setResource(`event/AddUserToEvent?userId=${data.userId}&eventId=${data.eventId}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    onDeleteFromOwners = async (data) => {
+        const res = await this.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    onPromoteToOwner = async (data) => {
+        const res = await this.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;

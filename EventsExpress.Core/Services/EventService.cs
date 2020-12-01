@@ -13,6 +13,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
@@ -21,6 +22,8 @@ namespace EventsExpress.Core.Services
     {
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
+        private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
 
         public EventService(
@@ -28,13 +31,19 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoSrv,
+            IAuthService authService,
+            IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService)
             : base(context, mapper)
         {
             _photoService = photoSrv;
             _mediator = mediator;
+            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
         }
+
+        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -123,8 +132,11 @@ namespace EventsExpress.Core.Services
 
             evnt.IsBlocked = true;
 
-            await _context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedEventMessage(evnt.OwnerId, evnt.Id));
+            await _db.SaveAsync();
+
+            var userIds = _db.EventOwnersRepository.Get().Where(x => x.EventId == eID).Select(x => x.UserId);
+
+            await _mediator.Publish(new BlockedEventMessage(userIds, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -139,8 +151,11 @@ namespace EventsExpress.Core.Services
 
             evnt.IsBlocked = false;
 
-            await _context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedEventMessage(evnt.OwnerId, evnt.Id));
+            await _db.SaveAsync();
+
+            var userIds = _db.EventOwnersRepository.Get().Where(x => x.EventId == eId).Select(x => x.UserId);
+
+            await _mediator.Publish(new UnblockedEventMessage(userIds, uEvent.Id));
 
             return new OperationResult(true);
         }
@@ -151,7 +166,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-
+            ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id});
             if (eventDTO.Photo == null)
             {
                 ev.PhotoId = eventDTO.PhotoId;
@@ -172,8 +187,9 @@ namespace EventsExpress.Core.Services
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
-            ev.CreatedBy = ev.OwnerId;
-            ev.ModifiedBy = ev.OwnerId;
+            ev.CreatedBy = CurrentUser.Id;
+            ev.ModifiedBy = CurrentUser.Id;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             try
             {
@@ -207,8 +223,8 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
-
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -239,7 +255,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
-            ev.ModifiedBy = ev.OwnerId;
+            ev.ModifiedBy = CurrentUser.Id;
             ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
@@ -268,8 +284,8 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -290,35 +306,13 @@ namespace EventsExpress.Core.Services
         }
 
         public EventDTO EventById(Guid eventId) =>
-            _mapper.Map<EventDTO>(
-                _context.Events
-                .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
-                .Include(e => e.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(e => e.Inventories)
-                    .ThenInclude(i => i.UnitOfMeasuring)
-                .Include(e => e.Visitors)
-                    .ThenInclude(v => v.User)
-                        .ThenInclude(u => u.Photo)
+            _mapper.Map<EventDTO>(_db.EventRepository
+                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo,Inventories.UnitOfMeasuring")
                 .FirstOrDefault(x => x.Id == eventId));
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
-            var events = _context.Events
-                .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
-                .Include(e => e.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(e => e.Visitors)
-                .AsNoTracking()
-                .AsQueryable();
+            var events = _db.EventRepository.Get("Photo,City.Country,Owners.User.Photo,Categories.Category,Visitors");
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
@@ -377,13 +371,11 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var filter = new EventFilterViewModel
-            {
-                OwnerId = userId,
-                DateFrom = DateTime.Today,
-                Page = paginationViewModel.Page,
-                PageSize = paginationViewModel.PageSize,
-            };
+            var eventIds = _db.EventOwnersRepository.Get().Where(x => x.UserId == userId).Select(x => x.EventId);
+            var ev = _db.EventRepository.Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                .Where(e => eventIds.Contains(e.Id) && e.DateFrom >= DateTime.Today)
+                .OrderBy(e => e.DateFrom)
+                .AsEnumerable();
 
             var evnts = this.GetAll(filter, out int count);
 
@@ -394,13 +386,11 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
-            var filter = new EventFilterViewModel
-            {
-                OwnerId = userId,
-                DateTo = DateTime.Today,
-                Page = paginationViewModel.Page,
-                PageSize = paginationViewModel.PageSize,
-            };
+            var eventIds = _db.EventOwnersRepository.Get().Where(x => x.UserId == userId).Select(x => x.EventId);
+            var ev = _db.EventRepository.Get("Photo,Owner.Photo,City.Country,Categories.Category,Visitors.User.Photo")
+                 .Where(e => eventIds.Contains(e.Id) && e.DateFrom < DateTime.Today)
+                 .OrderBy(e => e.DateFrom)
+                 .AsEnumerable();
 
             var evnts = this.GetAll(filter, out int count);
 
@@ -445,15 +435,8 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
-            var events = _context.Events
-                .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
-                .Include(e => e.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(e => e.Visitors)
+            var events = _db.EventRepository
+                .Get("Photo,Owners.User.Photo,City.Country,Categories.Category,Visitors")
                 .Where(x => eventIds.Contains(x.Id))
                 .AsNoTracking()
                 .AsQueryable();

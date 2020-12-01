@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography.X509Certificates;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +12,8 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
+            Database.SetCommandTimeout(60);
+            Database.Migrate();
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -26,6 +29,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<EventOwner> EventOwners { get; set; }
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 
@@ -76,13 +81,7 @@ namespace EventsExpress.Db.EF
                 .WithMany(e => e.Visitors)
                 .HasForeignKey(ue => ue.EventId);
 
-            // user-event configs
             // user as owner
-            builder.Entity<Event>()
-                .HasOne(e => e.Owner)
-                .WithMany(u => u.Events)
-                .HasForeignKey(e => e.OwnerId).OnDelete(DeleteBehavior.Restrict);
-
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");
             builder.Entity<Event>()
@@ -156,6 +155,18 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
+
+            builder.Entity<EventOwner>()
+                .HasKey(c => new { c.EventId, c.UserId });
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.Events)
+                .HasForeignKey(ue => ue.UserId);
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.Event)
+                .WithMany(e => e.Owners)
+                .HasForeignKey(ue => ue.EventId);
+
 
             // inventory config
             builder.Entity<Inventory>()
