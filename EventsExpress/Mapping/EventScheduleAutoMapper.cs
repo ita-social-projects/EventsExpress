@@ -19,7 +19,10 @@ namespace EventsExpress.Mapping
                Title = src.Event.Title,
                DateTo = src.Event.DateTo,
                DateFrom = src.Event.DateFrom,
-               Owners = src.Event.Owners.Select(x => x.User),
+               Owners = src.Event.Owners.Select(x => new User
+               {
+                   Id = x.UserId,
+               }),
                PhotoBytes = src.Event.Photo,
            }));
 

@@ -27,8 +27,6 @@ namespace EventsExpress.Controllers
             {
                 return Ok(res.Property);
             }
-
-
             return BadRequest();
         }
 

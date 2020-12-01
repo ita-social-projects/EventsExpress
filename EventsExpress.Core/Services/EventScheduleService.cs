@@ -23,36 +23,43 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EventScheduleDTO> GetAll()
         {
-            var eventSchedules = _db.EventScheduleRepository
-                .Get("Event.City.Country,Event.Photo,Event.Categories.Category")
-                .Where(opt => opt.IsActive)
-                .ToList();
-
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
+                _context.EventSchedules
+                    .Include(es => es.Event)
+                        .ThenInclude(e => e.City)
+                            .ThenInclude(c => c.Country)
+                    .Include(es => es.Event)
+                        .ThenInclude(e => e.Photo)
+                    .Where(opt => opt.IsActive)
+                    .ToList());
         }
 
         public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
         {
-            var res = _db.EventScheduleRepository
-                .Get("Event.Owners.User,Event.Photo")
+            var res = _context.EventSchedules
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.City)
+                        .ThenInclude(c => c.Country)
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.Photo)
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.Owners)
+                        .ThenInclude(d => d.User)
                 .FirstOrDefault(x => x.Id == eventScheduleId);
-
             return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 
         public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
-            _mapper.Map<EventSchedule, EventScheduleDTO>(_db.EventScheduleRepository
-                .Get()
+            _mapper.Map<EventSchedule, EventScheduleDTO>(
+                 _context.EventSchedules
                 .FirstOrDefault(x => x.EventId == eventId));
 
         public IEnumerable<EventScheduleDTO> GetUrgentEventSchedules()
         {
-            var eventSchedules = _db.EventScheduleRepository
-                .Get()
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
+                 _context.EventSchedules
                 .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
-                .ToList();
-
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(eventSchedules);
+                .ToList());
         }
 
         public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)

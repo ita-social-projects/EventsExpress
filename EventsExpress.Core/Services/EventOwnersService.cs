@@ -1,7 +1,8 @@
 ﻿using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,33 +12,40 @@ using System.Threading.Tasks;
 namespace EventsExpress.Core.Services
 {
 
-    public class EventOwnersService : IEventOwnersService
+    public class EventOwnersService : BaseService<EventOwner>, IEventOwnersService
     {
-        private readonly IUnitOfWork _db;
 
-        public EventOwnersService(IUnitOfWork unitOfWork)
+        public EventOwnersService(AppDbContext context)
+            : base(context)
         {
-            _db = unitOfWork;
         }
 
         public async Task<OperationResult> PromoteToOwner(Guid userId, Guid eventId)
         {
-            if (!_db.EventOwnersRepository.Get().Any(x => x.EventId == eventId && x.UserId == userId))
+            if (!_context.EventOwners.Any(x => x.EventId == eventId && x.UserId == userId))
             {
-                _db.EventOwnersRepository.Insert(new EventOwner { EventId = eventId, UserId = userId });
+                try
+                {
+                    _context.EventOwners.Add(new EventOwner { EventId = eventId, UserId = userId });
 
-                _db.UserEventRepository.Delete(new UserEvent { UserId = userId, EventId = eventId });
+                    _context.UserEvent.Remove(new UserEvent { UserId = userId, EventId = eventId });
 
-                await _db.SaveAsync();
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    return new OperationResult(true, ex.Message, string.Empty);
+                }
             }
-
             return new OperationResult(true);
+
         }
 
         public async Task<OperationResult> DeleteOwnerFromEvent(Guid userId, Guid eventId)
         {
-            _db.EventOwnersRepository.Delete(new EventOwner { UserId = userId, EventId = eventId });
-            await _db.SaveAsync();
+            _context.EventOwners.Remove(new EventOwner { UserId = userId, EventId = eventId });
+            await _context.SaveChangesAsync();
             return new OperationResult(true);
         }
     }

@@ -20,20 +20,12 @@ namespace EventsExpress.Core.Services
         private readonly IAuthService _authService;
 
         public EventStatusHistoryService(
-<<<<<<< HEAD
-            IUnitOfWork unitOfWork,
             IMediator mediator,
             IHttpContextAccessor httpContextAccessor,
-            IAuthService authService)
-=======
-            AppDbContext context,
-            IMediator mediator,
-            IHttpContextAccessor httpContextAccessor,
-            IAuthService authService)
+            IAuthService authService,
+            AppDbContext context)
              : base(context)
->>>>>>> development
         {
-            _mediator = mediator;
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
         }

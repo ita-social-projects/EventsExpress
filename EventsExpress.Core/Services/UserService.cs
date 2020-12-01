@@ -419,7 +419,7 @@ namespace EventsExpress.Core.Services
 
         public double GetRating(Guid userId)
         {
-            var ownEventsIds = Db.EventOwnersRepository.Get()
+            var ownEventsIds = _context.EventOwners
                 .Where(e => e.UserId == userId).Select(e => e.EventId).ToList();
             try
             {

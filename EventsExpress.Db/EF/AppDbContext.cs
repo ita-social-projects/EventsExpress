@@ -81,6 +81,17 @@ namespace EventsExpress.Db.EF
                 .WithMany(e => e.Visitors)
                 .HasForeignKey(ue => ue.EventId);
 
+            builder.Entity<EventOwner>()
+                .HasKey(c => new { c.UserId, c.EventId });
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.Events)
+                .HasForeignKey(ue => ue.UserId);
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.Event)
+                .WithMany(e => e.Owners)
+                .HasForeignKey(ue => ue.EventId);
+
             // user as owner
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");
@@ -156,16 +167,7 @@ namespace EventsExpress.Db.EF
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
 
-            builder.Entity<EventOwner>()
-                .HasKey(c => new { c.EventId, c.UserId });
-            builder.Entity<EventOwner>()
-                .HasOne(ue => ue.User)
-                .WithMany(u => u.Events)
-                .HasForeignKey(ue => ue.UserId);
-            builder.Entity<EventOwner>()
-                .HasOne(ue => ue.Event)
-                .WithMany(e => e.Owners)
-                .HasForeignKey(ue => ue.EventId);
+            
 
 
             // inventory config
