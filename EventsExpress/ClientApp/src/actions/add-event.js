@@ -30,7 +30,7 @@ export function edit_event(data) {
   return dispatch => {
     dispatch(setEventPending(true));
 
-    const res = api_serv.setEvent(data);
+    const res = api_serv.editEvent(data);
     res.then(response => {
       if(response.error == null){
         dispatch(setEventSuccess(true));

@@ -197,6 +197,27 @@ namespace EventsExpress.Mapping
                             },
                         })));
 
+            CreateMap<EventEditViewModel, EventDTO>().ReverseMap();
+
+            CreateMap<EventCreateViewModel, EventDTO>()
+                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
+                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringDTO
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })));
+
             CreateMap<EventViewModel, EventDTO>()
                 .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))

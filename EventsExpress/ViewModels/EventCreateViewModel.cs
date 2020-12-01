@@ -35,6 +35,8 @@ namespace EventsExpress.ViewModels
 
         public bool IsPublic { get; set; }
 
+        public UserPreviewViewModel User { get; set; }
+
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
         public IEnumerable<InventoryViewModel> Inventories { get; set; }

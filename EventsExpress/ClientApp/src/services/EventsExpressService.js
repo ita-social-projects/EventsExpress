@@ -127,7 +127,7 @@ export default class EventsExpressService {
 
         file.append('Title', data.title);
         file.append('Description', data.description);
-        file.append('CityId', data.cityId);
+        file.append('CityId', data.city.id);
         file.append('User.Id', data.user_id);
         file.append('IsPublic', data.isPublic);
         file.append('MaxParticipants', data.maxParticipants);
@@ -152,8 +152,12 @@ export default class EventsExpressService {
             : res;
     }
 
-    setEvent = async(data) => {
+    editEvent = async(data) => {
         return this.setEventTemplate(data,`event/edit/?eventId=${data.id}`)
+    }
+
+    setEvent = async (data) => {
+        return this.setEventTemplate(data, `event/create`)
     }
 
     setEventFromParent = async (data) => {
