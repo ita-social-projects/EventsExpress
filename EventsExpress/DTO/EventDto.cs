@@ -31,8 +31,6 @@ namespace EventsExpress.DTO
 
         public string PhotoUrl { get; set; }
 
-        public UserPreviewDto User { get; set; }
-
         public string Country { get; set; }
 
         public string City { get; set; }
@@ -46,6 +44,8 @@ namespace EventsExpress.DTO
         public IEnumerable<CategoryDto> Categories { get; set; }
 
         public IEnumerable<UserPreviewDto> Visitors { get; set; }
+
+        public IEnumerable<UserPreviewDto> Owners { get; set; }
 
         public IEnumerable<InventoryDto> Inventories { get; set; }
     }
