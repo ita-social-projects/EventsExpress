@@ -42,6 +42,9 @@ export const validate = values => {
         'repeatPassword',
         'Birthday',
         'UserName',
+        'itemName',
+        'needQuantity',
+        'unitOfMeasuring'
     ];
 
     requiredFields.forEach(field => {
@@ -96,7 +99,13 @@ export const validate = values => {
         }
     })
 
-    if (values.visitors && values.maxParticipants && values.maxParticipants < values.visitors.length) {
+    if (values.needQuantity && values.needQuantity < 1) {
+        errors.needQuantity = `Invalid data`;
+    }
+
+    if (values.visitors
+        && values.maxParticipants
+        && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 

@@ -33,17 +33,16 @@ class EventItemViewWrapper extends Component{
 
     render(){   
         const { isPending } = this.props.event;
-  
         return isPending
             ? <Spinner />
-            : <EventItemView 
+            : <EventItemView
                 event={this.props.event}
                 match={this.props.match} 
                 onLeave={this.onLeave} 
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onApprove={this.onApprove}
-                current_user={this.props.current_user} 
+                current_user={this.props.current_user}
             />
     }
 }
