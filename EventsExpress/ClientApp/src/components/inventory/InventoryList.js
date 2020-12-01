@@ -43,7 +43,6 @@ class InventoryList extends Component {
     }
 
     deleteItemFromList = inventar => {
-        console.log('before deleting', this.props.eventId);
         this.props.delete_item(inventar.id, this.props.eventId);
     }
 
@@ -67,7 +66,6 @@ class InventoryList extends Component {
     }
 
     onSubmit = values => {
-        console.log('onSubmit', values);
         if (values.isNew) {
             this.props.add_item(values, this.props.eventId);
         }

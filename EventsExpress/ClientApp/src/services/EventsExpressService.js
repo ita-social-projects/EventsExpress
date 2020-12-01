@@ -105,51 +105,6 @@ export default class EventsExpressService {
         return res;
     }
 
-    setEventTemplate = async (data, path) => {
-        let file = new FormData();
-        if (data.id != null) {
-            file.append('Id', data.id);
-        }
-
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
-        }
-
-        if (data.isReccurent) {
-            file.append('IsReccurent', data.isReccurent);
-            file.append('Frequency', data.frequency);
-            file.append('Periodicity', data.periodicity);
-        }
-
-        if (data.photoId) {
-            file.append('PhotoId', data.photoId);
-        }
-
-        file.append('Title', data.title);
-        file.append('Description', data.description);
-        file.append('CityId', data.cityId);
-        file.append('User.Id', data.user_id);
-        file.append('IsPublic', data.isPublic);
-        file.append('MaxParticipants', data.maxParticipants);
-        file.append('DateFrom', new Date(data.dateFrom).toDateString());
-        file.append('DateTo', new Date(data.dateTo).toDateString());
-
-        data.inventories.map((item, key) => {
-            file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
-            file.append(`Inventories[${key}].ItemName`, item.itemName);
-            file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
-        });
-
-        let i = 0;
-        data.categories.map(x => {
-            return file.append(`Categories[${i++}].Id`, x.id);
-        });
-        const res = await this.setResourceWithData(path, file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
     setEvent = async(data) => {
         return this.setEventTemplate(data,'event/edit')
     }
