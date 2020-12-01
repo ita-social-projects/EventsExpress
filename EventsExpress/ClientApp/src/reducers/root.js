@@ -33,7 +33,8 @@ import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
 import * as UnitsOfMeasuring from './unitsOfMeasuring';
-
+import * as Inventory from './inventory-list';
+import * as Inventar from './inventar';
 import * as Chats from './chats';
 import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
@@ -62,6 +63,8 @@ const rootReducers = {
     cancel_all_eventSchedules: CancelAllEventSchedules.reducer,
     events: Events.reducer,
     eventSchedules: EventSchedules.reducer,
+    inventories: Inventory.reducer,
+
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
