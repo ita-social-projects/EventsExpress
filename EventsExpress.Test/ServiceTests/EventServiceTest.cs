@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using System.Linq;
+=======
+>>>>>>> development
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -24,7 +27,10 @@ namespace EventsExpress.Test.ServiceTests
 
         private EventService service;
         private List<Event> events;
-        private UserEvent userEvent;
+
+        private Guid userId = Guid.NewGuid();
+        private Guid firstEventId = Guid.NewGuid();
+        private Guid eventId = Guid.NewGuid();
 
         [SetUp]
         protected override void Initialize()
@@ -38,7 +44,7 @@ namespace EventsExpress.Test.ServiceTests
             mockAuthService = new Mock<IAuthService>();
 
             service = new EventService(
-                MockUnitOfWork.Object,
+                Context,
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
@@ -46,12 +52,23 @@ namespace EventsExpress.Test.ServiceTests
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
 
+
+            List<User> users = new List<User>()
+            {
+                new User
+                {
+                    Id = userId,
+                    Name = "NameIsExist",
+                    Email = "stas@gmail.com",
+                },
+            };
+
             events = new List<Event>
             {
                 new Event
                 {
-                    Id = new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D"),
-                    CityId = new Guid("62FA647C-AD54-4BCC-A860-E5A2664B019D"),
+                    Id = firstEventId,
+                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
@@ -71,8 +88,8 @@ namespace EventsExpress.Test.ServiceTests
                 },
                 new Event
                 {
-                    Id = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
-                    CityId = new Guid("31FA647C-AD54-4BCC-A860-E5A2664B019D"),
+                    Id = eventId,
+                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
@@ -95,67 +112,22 @@ namespace EventsExpress.Test.ServiceTests
                         {
                                     UserStatusEvent = UserStatusEvent.Pending,
                                     Status = Status.WillGo,
-                                    UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                                    EventId = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
+                                    UserId = userId,
+                                    User = users[0],
+                                    EventId = eventId,
                         },
                     },
                 },
             };
 
-            userEvent = new UserEvent
-            {
-                UserStatusEvent = UserStatusEvent.Pending,
-                Status = Status.WillGo,
-                UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                EventId = new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
-            };
-
-            List<User> users = new List<User>()
-            {
-                new User
-                {
-                    Id = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                    Name = "NameIsExist",
-                    Email = "stas@gmail.com",
-                },
-            };
-
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Delete(It.IsAny<Event>())).Returns((Event i) => events.Where(x => x.Id == i.Id).FirstOrDefault());
-
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get(It.IsAny<Guid>())).Returns((Guid i) => events.Where(x => x.Id == i).FirstOrDefault());
-
-            MockUnitOfWork.Setup(u => u.UserRepository
-                .Get(It.IsAny<Guid>())).Returns((Guid i) => users.Where(x => x.Id == i).FirstOrDefault());
-
-            MockUnitOfWork.Setup(u => u.UserEventRepository
-                .Update(It.IsAny<UserEvent>())).Returns((UserEvent i) => i);
-        }
-
-        [Test]
-        public void DeleteEvent_ReturnTrue()
-        {
-            var result = service.Delete(new Guid("62FA643C-AD14-5BCC-A860-E5A2664B019D"));
-
-            Assert.IsTrue(result.Result.Successed);
-        }
-
-        [Test]
-        public void DeleteEvent_ReturnFalse()
-        {
-            var result = service.Delete(new Guid("12FA643C-AD14-5BCC-A860-E5A2664B019D"));
-
-            Assert.IsFalse(result.Result.Successed);
+            Context.Events.AddRange(events);
+            Context.SaveChanges();
         }
 
         [Test]
         public void AddUserToEvent_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(userId, firstEventId);
 
             Assert.IsTrue(result.Result.Successed);
         }
@@ -163,10 +135,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA627C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(Guid.NewGuid(), eventId);
 
             StringAssert.Contains("User not found!", result.Result.Message);
             Assert.IsFalse(result.Result.Successed);
@@ -175,10 +144,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.AddUserToEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA644C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.AddUserToEvent(userId, Guid.NewGuid());
 
             StringAssert.Contains("Event not found!", result.Result.Message);
             Assert.IsFalse(result.Result.Successed);
@@ -187,10 +153,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(userId, eventId);
 
             Assert.IsTrue(result.Result.Successed);
         }
@@ -198,10 +161,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_UserNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA347C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(Guid.NewGuid(), eventId);
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -209,10 +169,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void DeleteUserFromEvent_EventNotFound_ReturnFalse()
         {
-            MockUnitOfWork.Setup(u => u.EventRepository
-                .Get("Visitors")).Returns(events.AsQueryable());
-
-            var result = service.DeleteUserFromEvent(new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"), new Guid("32FA641C-AD14-5BCC-A860-E5A2664B019D"));
+            var result = service.DeleteUserFromEvent(userId, Guid.NewGuid());
 
             Assert.IsFalse(result.Result.Successed);
         }
@@ -220,13 +177,9 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangeVisitorStatus_ReturnTrue()
         {
-            MockUnitOfWork.Setup(u => u.UserEventRepository
-                .Get(string.Empty))
-                .Returns(new List<UserEvent> { userEvent }.AsQueryable());
-
             var test = service.ChangeVisitorStatus(
-                new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
-                new Guid("32FA643C-AD14-5BCC-A860-E5A2664B019D"),
+                userId,
+                eventId,
                 UserStatusEvent.Approved);
 
             Assert.IsTrue(test.Result.Successed);

@@ -11,9 +11,9 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
-using EventsExpress.Db.IRepo;
-using EventsExpress.Db.Repo;
+using EventsExpress.Db.IBaseService;
 using EventsExpress.DTO;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
@@ -116,7 +116,23 @@ namespace EventsExpress
 
             #region Configure our services...
 
+<<<<<<< HEAD
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+=======
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IEventScheduleService, EventScheduleService>();
+            services.AddScoped<IEventStatusHistoryService, EventStatusHistoryService>();
+            services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
+>>>>>>> development
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<IEventScheduleService, EventScheduleService>();
@@ -133,10 +149,10 @@ namespace EventsExpress
             services.AddTransient<IUnitOfMeasuringService, UnitOfMeasuringService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

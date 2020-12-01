@@ -128,6 +128,10 @@ namespace EventsExpress.Controllers
         {
             filter.PageSize = 6;
 
+            // TODO : Add this functionality on UI
+            filter.OwnerId = null;
+            filter.VisitorId = null;
+
             if (!User.IsInRole("Admin"))
             {
                 if (filter.DateFrom == DateTime.MinValue)

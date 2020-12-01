@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Notifications;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
-using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
-    public class EventScheduleService : IEventScheduleService
+    public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        private readonly IUnitOfWork _db;
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
-
-        public EventScheduleService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IMediator mediator)
+        public EventScheduleService(AppDbContext context, IMapper mapper)
+            : base(context, mapper)
         {
-            _db = unitOfWork;
-            _mapper = mapper;
-            _mediator = mediator;
         }
 
         public IEnumerable<EventScheduleDTO> GetAll()
@@ -68,15 +57,13 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)
         {
-            var ev = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
-            ev.CreatedBy = eventScheduleDTO.CreatedBy;
-            ev.ModifiedBy = eventScheduleDTO.CreatedBy;
-            ev.ModifiedDateTime = DateTime.Now;
+            var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
+            eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
 
             try
             {
-                var result = _db.EventScheduleRepository.Insert(ev);
-                await _db.SaveAsync();
+                var result = Insert(eventScheduleEntity);
+                await _context.SaveChangesAsync();
 
                 return new OperationResult(true, "Create new EventSchedule", result.Id.ToString());
             }
@@ -88,7 +75,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<OperationResult> Edit(EventScheduleDTO eventScheduleDTO)
         {
-            var ev = _db.EventScheduleRepository.Get(eventScheduleDTO.Id);
+            var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
             ev.Frequency = eventScheduleDTO.Frequency;
             ev.Periodicity = eventScheduleDTO.Periodicity;
             ev.LastRun = eventScheduleDTO.LastRun;
@@ -98,7 +85,7 @@ namespace EventsExpress.Core.Services
             ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
             ev.ModifiedDateTime = DateTime.UtcNow;
 
-            await _db.SaveAsync();
+            await _context.SaveChangesAsync();
             return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
         }
 

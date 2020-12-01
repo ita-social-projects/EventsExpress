@@ -11,7 +11,7 @@ namespace EventsExpress.Core.IServices
     {
         IEnumerable<CategoryDTO> GetAllCategories();
 
-        Category Get(Guid id);
+        Category GetById(Guid id);
 
         Task<OperationResult> Create(string title);
 

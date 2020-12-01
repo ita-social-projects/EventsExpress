@@ -40,15 +40,21 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<ChatRoom> ChatRoom { get; set; }
+
         public DbSet<Photo> Photos { get; set; }
 
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Message> Message { get; set; }
+
         public DbSet<EventStatusHistory> EventStatusHistory { get; set; }
 
         public DbSet<UserEventInventory> UserEventInventories { get; set; }
+
+        public DbSet<UserEvent> UserEvent { get; set; }
 
         public DbSet<Inventory> Inventories { get; set; }
 
