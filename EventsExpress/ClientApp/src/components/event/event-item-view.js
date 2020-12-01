@@ -253,8 +253,7 @@ export default class EventItemView extends Component {
             visitors,
             country,
             city,
-            owners,
-            inventories
+            owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
