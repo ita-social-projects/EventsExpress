@@ -197,7 +197,8 @@ namespace EventsExpress.Mapping
                             },
                         })));
 
-            CreateMap<EventEditViewModel, EventDTO>().ReverseMap();
+            CreateMap<EventEditViewModel, EventDTO>()
+                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
             CreateMap<EventCreateViewModel, EventDTO>()
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))

@@ -161,7 +161,7 @@ export default class EventsExpressService {
     }
 
     setEventFromParent = async (data) => {
-        return this.setEventTemplate(data,'event/EditEventFromParent');
+        return this.setEventTemplate(data,`event/EditEventFromParent/?eventId=${data.id}`);
     }
 
     setCopyEvent = async (eventId) => {
