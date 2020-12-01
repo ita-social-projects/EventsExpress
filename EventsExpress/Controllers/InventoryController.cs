@@ -72,7 +72,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is for edit inventar.
+        /// This method is for delete inventar.
         /// </summary>
         /// <param name="id">Required.</param>
         /// <response code="200">Delete inventar proces success.</response>
