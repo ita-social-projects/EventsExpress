@@ -39,12 +39,8 @@ namespace EventsExpress.Core.ChatHub
         public async Task Seen(List<Guid> msgIds)
         {
             var res = await _messageService.MsgSeen(msgIds);
-
-            if (res.Successed)
-            {
-                var users = _messageService.GetChatUserIds(Guid.Parse(res.Property));
-                await Clients.Users(users).SendAsync("WasSeen", msgIds);
-            }
+            var users = _messageService.GetChatUserIds(Guid.Parse(res.ToString()));
+            await Clients.Users(users).SendAsync("WasSeen", msgIds);
         }
 
         public async Task EventWasCreated(Guid eventId)

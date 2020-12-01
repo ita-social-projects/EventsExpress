@@ -6,30 +6,27 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class UnitOfMeasuringService : IUnitOfMeasuringService
+    public class UnitOfMeasuringService : BaseService<UnitOfMeasuring>, IUnitOfMeasuringService
     {
-        private readonly IUnitOfWork _db;
-        private readonly IMapper _mapper;
-
         public UnitOfMeasuringService(
-            IUnitOfWork unitOfWork,
+            AppDbContext context,
             IMapper mapper)
+            : base(context, mapper)
         {
-            _db = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
             try
             {
-                var result = _db.UnitOfMeasuringRepository.Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-                await _db.SaveAsync();
+                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+                await _context.SaveChangesAsync();
                 return result.Id;
             }
             catch (Exception ex)
@@ -40,7 +37,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var entity = _db.UnitOfMeasuringRepository.Get(unitOfMeasuringDTO.Id);
+            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null)
             {
                 throw new EventsExpressException("Object not found");
@@ -50,7 +47,7 @@ namespace EventsExpress.Core.Services
             {
                 entity.ShortName = unitOfMeasuringDTO.ShortName;
                 entity.UnitName = unitOfMeasuringDTO.UnitName;
-                await _db.SaveAsync();
+                await _context.SaveChangesAsync();
                 return entity.Id;
             }
             catch (Exception ex)
@@ -59,26 +56,16 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public ICollection<UnitOfMeasuringDTO> GetAll()
+        public IEnumerable<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = _db.UnitOfMeasuringRepository.Get().ToList();
-            if (entities == null)
-            {
-                return new List<UnitOfMeasuringDTO>();
-            }
-            else
-            {
-                return _mapper.Map<ICollection<UnitOfMeasuring>, ICollection<UnitOfMeasuringDTO>>(entities);
-            }
+            var entities = _context.UnitOfMeasurings.AsEnumerable();
+
+            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
         }
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
         {
-            var entity = _db.UnitOfMeasuringRepository.Get(unitOfMeasuringId);
-            if (entity == null)
-            {
-                return new UnitOfMeasuringDTO();
-            }
+            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
 
             return _mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
         }

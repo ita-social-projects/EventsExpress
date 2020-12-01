@@ -4,38 +4,38 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.IRepo;
 using MediatR;
 
 namespace EventsExpress.Core.Services
 {
-    public class EventStatusHistoryService : IEventStatusHistoryService
+    public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
-        private readonly IUnitOfWork _db;
         private readonly IMediator _mediator;
 
         public EventStatusHistoryService(
-            IUnitOfWork unitOfWork,
+            AppDbContext context,
             IMediator mediator)
+             : base(context)
         {
-            _db = unitOfWork;
             _mediator = mediator;
         }
 
         public async Task CancelEvent(Guid eventId, string reason)
         {
-            var uEvent = _db.EventRepository.Get(eventId);
+            var uEvent = _context.Events.Find(eventId);
             if (uEvent == null)
             {
                 throw new EventsExpressException("Invalid event id");
             }
 
             var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
-            _db.EventStatusHistoryRepository.Insert(record);
+            Insert(record);
 
-            await _db.SaveAsync();
+            await _context.SaveChangesAsync();
             await _mediator.Publish(new CancelEventMessage(eventId));
         }
 
@@ -54,7 +54,7 @@ namespace EventsExpress.Core.Services
 
         public EventStatusHistory GetLastRecord(Guid eventId, EventStatus status)
         {
-            return _db.EventStatusHistoryRepository.GetLastRecord(eventId, status);
+            return GetLastRecord(eventId, status);
         }
     }
 }

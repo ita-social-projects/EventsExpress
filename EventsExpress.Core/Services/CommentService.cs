@@ -7,29 +7,30 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
-    public class CommentService : ICommentService
+    public class CommentService : BaseService<Comments>, ICommentService
     {
-        private readonly IMapper _mapper;
-
-        public CommentService(IUnitOfWork uow, IMapper mapper)
+        public CommentService(AppDbContext context, IMapper mapper)
+            : base(context, mapper)
         {
-            Db = uow;
-            _mapper = mapper;
         }
-
-        public IUnitOfWork Db { get; set; }
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
-            count = Db.CommentsRepository.Get().Count(x => x.EventId == id && x.CommentsId == null);
+            count = _context.Comments.Count(x => x.EventId == id && x.CommentsId == null);
 
-            var comments = Db.CommentsRepository
-                .Get("User.Photo,Children")
+            var comments = _context.Comments
+                .Include(c => c.Children)
+                    .ThenInclude(c => c.User)
+                        .ThenInclude(u => u.Photo)
+                .Include(c => c.User)
+                    .ThenInclude(u => u.Photo)
                 .Where(x => x.EventId == id && x.CommentsId == null)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -41,7 +42,7 @@ namespace EventsExpress.Core.Services
                 c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
                 foreach (var child in c.Children)
                 {
-                    child.User = Db.UserRepository.Get("Photo").FirstOrDefault(u => u.Id == child.UserId);
+                    child.User = c.User;
                 }
             }
 
@@ -50,17 +51,17 @@ namespace EventsExpress.Core.Services
 
         public async Task Create(CommentDTO comment)
         {
-            if (Db.UserRepository.Get(comment.UserId) == null)
+            if (_context.Users.Find(comment.UserId) == null)
             {
                 throw new EventsExpressException("Current user does not exist!");
             }
 
-            if (Db.EventRepository.Get(comment.EventId) == null)
+            if (_context.Events.Find(comment.EventId) == null)
             {
                 throw new EventsExpressException("Wrong event id!");
             }
 
-            Db.CommentsRepository.Insert(new Comments()
+            Insert(new Comments()
             {
                 Text = comment.Text,
                 Date = DateTime.Now,
@@ -69,7 +70,7 @@ namespace EventsExpress.Core.Services
                 CommentsId = comment.CommentsId,
             });
 
-            await Db.SaveAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
@@ -79,7 +80,10 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Id field is null");
             }
 
-            var comment = Db.CommentsRepository.Get("Children").Where(x => x.Id == id).FirstOrDefault();
+            var comment = _context.Comments
+                .Include(c => c.Children)
+                .FirstOrDefault(x => x.Id == id);
+
             if (comment == null)
             {
                 throw new EventsExpressException("Not found");
@@ -89,12 +93,12 @@ namespace EventsExpress.Core.Services
             {
                 foreach (var com in comment.Children)
                 {
-                    var res = Db.CommentsRepository.Delete(Db.CommentsRepository.Get(com.Id));
+                    var res = Delete(_context.Comments.Find(com.Id));
                 }
             }
 
-            var result = Db.CommentsRepository.Delete(comment);
-            await Db.SaveAsync();
+            var result = Delete(comment);
+            await _context.SaveChangesAsync();
         }
     }
 }

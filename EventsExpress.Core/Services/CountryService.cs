@@ -5,33 +5,32 @@ using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.IRepo;
 
 namespace EventsExpress.Core.Services
 {
-    public class CountryService : ICountryService
+    public class CountryService : BaseService<Country>, ICountryService
     {
-        private readonly IUnitOfWork _db;
-
-        public CountryService(IUnitOfWork uow)
+        public CountryService(AppDbContext context)
+            : base(context)
         {
-            _db = uow;
         }
 
-        public IEnumerable<Country> GetCountries() => _db.CountryRepository.Get();
+        public IEnumerable<Country> GetCountries() => _context.Countries;
 
-        public Country GetById(Guid id) => _db.CountryRepository.Get(id);
+        public Country GetById(Guid id) => _context.Countries.Find(id);
 
         public async Task CreateCountryAsync(Country country)
         {
-            if (_db.CountryRepository.Get().Any(c => c.Name == country.Name))
+            if (_context.Countries.Any(c => c.Name == country.Name))
             {
                 throw new EventsExpressException("Country is already exist");
             }
 
-            _db.CountryRepository.Insert(country);
-            await _db.SaveAsync();
+            Insert(country);
+            await _context.SaveChangesAsync();
         }
 
         public async Task EditCountryAsync(Country country)
@@ -41,14 +40,14 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Id field is NULL");
             }
 
-            var oldCountry = _db.CountryRepository.Get(country.Id);
+            var oldCountry = _context.Countries.Find(country.Id);
             if (oldCountry == null)
             {
                 throw new EventsExpressException("Not found");
             }
 
             oldCountry.Name = country.Name;
-            await _db.SaveAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Guid id)
@@ -58,14 +57,14 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Id field is NULL");
             }
 
-            var country = _db.CountryRepository.Get(id);
+            var country = _context.Countries.Find(id);
             if (country == null)
             {
                 throw new EventsExpressException("Not found");
             }
 
-            _db.CountryRepository.Delete(country);
-            await _db.SaveAsync();
+            Delete(country);
+            await _context.SaveChangesAsync();
         }
     }
 }

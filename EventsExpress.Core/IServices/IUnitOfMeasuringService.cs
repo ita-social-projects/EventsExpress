@@ -11,7 +11,7 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO);
 
-        ICollection<UnitOfMeasuringDTO> GetAll();
+        IEnumerable<UnitOfMeasuringDTO> GetAll();
 
         UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId);
     }
