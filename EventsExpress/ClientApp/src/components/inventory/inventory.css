@@ -20,6 +20,10 @@
   color: red;
 }
 
+.orange {
+  color: orange;
+}
+
 li {
   list-style-type: none;
   padding: 0;

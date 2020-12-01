@@ -40,10 +40,9 @@ class EventItemViewWrapper extends Component{
     }
     render(){   
         const { isPending } = this.props.event;
-  
         return isPending
             ? <Spinner />
-            : <EventItemView 
+            : <EventItemView
                 event={this.props.event}
                 match={this.props.match} 
                 onLeave={this.onLeave} 

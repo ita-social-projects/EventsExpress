@@ -241,6 +241,7 @@ export default class EventItemView extends Component {
     render() {
         const { current_user } = this.props;
         const {
+            id,
             photoUrl,
             categories,
             title,
@@ -328,7 +329,7 @@ export default class EventItemView extends Component {
                                     <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                         <RatingWrapper
                                             iWillVisitIt={iWillVisitIt}
-                                            eventId={this.props.event.data.id}
+                                            eventId={id}
                                             userId={current_user.id}
                                         />
                                     </div>
@@ -336,8 +337,9 @@ export default class EventItemView extends Component {
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <InventoryList inventories={inventories}/>
+                                <div className="shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <InventoryList 
+                                        eventId={id}/>
                                 </div>
                                 
                                 <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">

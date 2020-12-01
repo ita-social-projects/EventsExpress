@@ -105,53 +105,6 @@ export default class EventsExpressService {
         return res;
     }
 
-    setEventTemplate = async (data, path) => {
-        let file = new FormData();
-        if (data.id != null) {
-            file.append('Id', data.id);
-        }
-
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
-        }
-
-        if (data.isReccurent) {
-            file.append('IsReccurent', data.isReccurent);
-            file.append('Frequency', data.frequency);
-            file.append('Periodicity', data.periodicity);
-        }
-
-        if (data.photoId) {
-            file.append('PhotoId', data.photoId);
-        }
-
-        file.append('Title', data.title);
-        file.append('Description', data.description);
-        file.append('CityId', data.cityId);
-        file.append('User.Id', data.user_id);
-        file.append('IsPublic', data.isPublic);
-        file.append('MaxParticipants', data.maxParticipants);
-        file.append('DateFrom', new Date(data.dateFrom).toDateString());
-        file.append('DateTo', new Date(data.dateTo).toDateString());
-
-        if (data.inventories) {
-            data.inventories.map((item, key) => {
-                file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
-                file.append(`Inventories[${key}].ItemName`, item.itemName);
-                file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
-            });
-        }
-
-        let i = 0;
-        data.categories.map(x => {
-            return file.append(`Categories[${i++}].Id`, x.id);
-        });
-        const res = await this.setResourceWithData(path, file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
     setEvent = async(data) => {
         return this.setEventTemplate(data,'event/edit')
     }
@@ -290,6 +243,49 @@ export default class EventsExpressService {
         return res;
     }
 
+    setEventTemplate = async (data) => {
+        let file = new FormData();
+        if (data.id != null) {
+            file.append('Id', data.id);
+        }
+
+        if (data.image != null) {
+            file.append('Photo', data.image.file);
+        }
+
+        file.append('Title', data.title);
+        file.append('MaxParticipants', data.maxParticipants);
+        file.append('IsPublic', data.isPublic);
+        file.append('Description', data.description);
+        file.append('CityId', data.cityId);
+        file.append('User.Id', data.user_id);
+
+        data.dateFrom != null
+            ? file.append('DateFrom', new Date(data.dateFrom).toDateString())
+            : file.append('DateFrom', new Date(Date.now()).toDateString());
+
+        data.dateTo != null
+            ? file.append('DateTo', new Date(data.dateTo).toDateString())
+            : file.append('DateTo', new Date(data.dateFrom).toDateString());
+
+        let i = 0;
+        data.categories.map(x => {
+            file.append(`Categories[${i++}].Id`, x.id);
+        });
+
+        if (data.inventories) {
+            data.inventories.map((item, key) => {
+                file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
+                file.append(`Inventories[${key}].ItemName`, item.itemName);
+                file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
+            });
+        }
+        const res = await this.setResourceWithData('event/edit', file);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
     setEventBlock = async (id) => {
         const res = await this.setResource(`Event/Block/?eventId=${id}`);
         return !res.ok
@@ -348,6 +344,43 @@ export default class EventsExpressService {
             : res;
     }
     //#endregion Events
+
+    getInventoriesByEventId = async (eventId) => {
+        const res = await this.getResource(`inventory/GetInventar?eventId=${eventId}`);
+        return res;
+    }
+
+    setItemToInventory = async (item, eventId) => {
+        const value = {
+            itemName: item.itemName,
+            needQuantity: Number(item.needQuantity),
+            unitOfMeasuring: {id: item.unitOfMeasuring}
+        }
+        const res = await this.setResource(`inventory/AddInventar/?eventId=${eventId}`, value);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setItemDelete = async (id) => {
+        const res = await this.setResource(`inventory/DeleteInventar/?id=${id}`);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setItem = async (item) => {
+        const value = {
+            id: item.id,
+            itemName: item.itemName,
+            needQuantity: Number(item.needQuantity),
+            unitOfMeasuring: {id: item.unitOfMeasuring}
+        }
+        const res = await this.setResource(`inventory/EditInventar`, value);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
 
     //#region Event Schedule
     setEventSchedule = async (data) => {

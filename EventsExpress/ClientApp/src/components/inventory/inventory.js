@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, FieldArray, getFormSyncErrors } from 'redux-form'
+import { Field, FieldArray, getFormSyncErrors } from 'redux-form';
 import { renderTextField, renderSelectField } from '../helpers/helpers';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
@@ -48,7 +48,7 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
                         </Field>
                     </div>
                     <button type="button" title="Remove item" class="p-2 btn btn-circle clear-backgroud align-self-end" onClick={() => fields.remove(index)}>
-                        <i class="fas fa-trash red"></i>
+                        <i class="fas fa-trash text-danger"></i>
                     </button>
                 </div>
             </li>
@@ -88,7 +88,7 @@ class Inventory extends Component {
                 <div className='d-flex justify-content-start align-items-center'>
                     <InventoryHeaderButton isOpen={this.state.isOpen} handleOnClickCaret={this.handleOnClickCaret}/>
                     {this.props.syncErrors.inventories && !this.state.isOpen && 
-                        <span className="red"><i class="fas fa-exclamation-circle red"></i>required</span>
+                        <span className="text-danger"><i class="fas fa-exclamation-circle text-danger"></i>required</span>
                     }                  
                 </div>
                 <div className={this.state.isOpen ? "d-block" : "d-none"}>
