@@ -288,7 +288,7 @@ export default class EventsExpressService {
         return res;
     }
 
-    setEvent = async (data) => {
+    setEventTemplate = async (data) => {
         let file = new FormData();
         if (data.id != null) {
             file.append('Id', data.id);

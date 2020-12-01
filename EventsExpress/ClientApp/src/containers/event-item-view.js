@@ -38,7 +38,6 @@ class EventItemViewWrapper extends Component{
         return isPending
             ? <Spinner />
             : <EventItemView
-                inventories={this.props.inventories} 
                 event={this.props.event}
                 match={this.props.match} 
                 onLeave={this.onLeave} 
@@ -46,15 +45,13 @@ class EventItemViewWrapper extends Component{
                 onCancel={this.onCancel}
                 onApprove={this.onApprove}
                 current_user={this.props.current_user}
-                get_inventories_by_event_id={this.props.get_inventories_by_event_id} 
             />
     }
 }
 
 const mapStateToProps = (state) => ({
     event: state.event, 
-    current_user: state.user,
-    inventories: state.inventories
+    current_user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({

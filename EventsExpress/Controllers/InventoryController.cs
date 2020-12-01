@@ -71,6 +71,12 @@ namespace EventsExpress.Controllers
             return Ok(result.Property);
         }
 
+        /// <summary>
+        /// This method is for edit inventar.
+        /// </summary>
+        /// <param name="id">Required.</param>
+        /// <response code="200">Delete inventar proces success.</response>
+        /// <response code="400">If id param is empty.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteInventar(Guid id)
         {

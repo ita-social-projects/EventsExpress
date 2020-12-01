@@ -22,7 +22,6 @@ class InventoryList extends Component {
     }
     
     componentDidMount() {
-        console.log('mount');
         this.props.get_unitsOfMeasuring();
         this.props.get_inventories_by_event_id(this.props.eventId);
     }
@@ -112,7 +111,7 @@ class InventoryList extends Component {
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
-                            <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item &nbsp;
+                            <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
                         </IconButton>
                     :   null
                     }
@@ -170,7 +169,8 @@ class InventoryList extends Component {
 const mapStateToProps = (state) => ({
     unitOfMeasuringState: state.unitsOfMeasuring,
     event: state.event.data,
-    user: state.user
+    user: state.user,
+    inventories: state.inventories
 });
 
 const mapDispatchToProps = (dispatch) => {

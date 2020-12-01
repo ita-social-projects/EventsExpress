@@ -189,8 +189,8 @@ namespace EventsExpress.Db.EF
                     new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Grams", ShortName = "g"},
                     new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Liters", ShortName = "l"},
                     new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Miliiters", ShortName = "ml"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Metre", ShortName = "m"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeterі", ShortName = "sm"},
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m"},
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm"},
                 });
         }
     }
