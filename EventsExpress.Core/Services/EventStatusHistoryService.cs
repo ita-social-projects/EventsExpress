@@ -8,19 +8,25 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Services
 {
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
         private readonly IMediator _mediator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthService _authService;
 
         public EventStatusHistoryService(
-            AppDbContext context,
-            IMediator mediator)
+            IMediator mediator,
+            IHttpContextAccessor httpContextAccessor,
+            IAuthService authService,
+            AppDbContext context)
              : base(context)
         {
-            _mediator = mediator;
+            _httpContextAccessor = httpContextAccessor;
+            _authService = authService;
         }
 
         public async Task CancelEvent(Guid eventId, string reason)
@@ -47,6 +53,7 @@ namespace EventsExpress.Core.Services
                 EventStatus = status,
                 Reason = reason,
             };
+            record.UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id;
 
             return record;
         }
