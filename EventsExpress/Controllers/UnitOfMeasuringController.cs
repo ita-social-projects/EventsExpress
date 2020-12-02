@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +33,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create unit of measuring proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)
@@ -55,7 +52,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit unit of measuring proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringDto model)
         {
             if (!ModelState.IsValid)

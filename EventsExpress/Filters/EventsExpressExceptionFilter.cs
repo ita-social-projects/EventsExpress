@@ -15,6 +15,15 @@ namespace EventsExpress.Filters
                 context.Result = result;
                 context.ExceptionHandled = true;
             }
+            else
+            {
+                string message = "Unhandled exception occurred. Please try again. " +
+                    "If this error persists - contact system administrator.";
+                context.ModelState.AddModelError(string.Empty, message);
+                var result = new ObjectResult(context.ModelState) { StatusCode = 500 };
+                context.Result = result;
+                context.ExceptionHandled = true;
+            }
         }
     }
 }

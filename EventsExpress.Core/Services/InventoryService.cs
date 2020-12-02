@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -31,41 +30,28 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Event not found!");
             }
 
-            try
-            {
-                var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
-                entity.EventId = eventId;
-                var result = Insert(entity);
-                await _context.SaveChangesAsync();
-                return result.Id;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
+            entity.EventId = eventId;
+            var result = Insert(entity);
+            await _context.SaveChangesAsync();
+
+            return result.Id;
         }
 
-        public async Task<OperationResult> DeleteInventar(Guid id)
+        public async Task<Guid> DeleteInventar(Guid id)
         {
             var inventar = _context.Inventories.Find(id);
             if (inventar == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
-            try
-            {
-                var result = _context.Inventories.Remove(inventar);
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Inventar was deleted", inventar.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
-            }
+            var result = _context.Inventories.Remove(inventar);
+            await _context.SaveChangesAsync();
+
+            return inventar.Id;
         }
 
-        public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
         public async Task<Guid> EditInventar(InventoryDTO inventoryDTO)
         {
             var entity = _context.Inventories.Find(inventoryDTO.Id);
@@ -74,18 +60,12 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Object not found");
             }
 
-            try
-            {
-                entity.ItemName = inventoryDTO.ItemName;
-                entity.NeedQuantity = inventoryDTO.NeedQuantity;
-                entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
-                await _context.SaveChangesAsync();
-                return entity.Id;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            entity.ItemName = inventoryDTO.ItemName;
+            entity.NeedQuantity = inventoryDTO.NeedQuantity;
+            entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
+            await _context.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public IEnumerable<InventoryDTO> GetInventar(Guid eventId)

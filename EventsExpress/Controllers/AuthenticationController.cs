@@ -5,7 +5,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Helpers;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -50,7 +49,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpPost("[action]")]
         [Produces("application/json")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Login(LoginDto authRequest)
         {
             if (!ModelState.IsValid)
@@ -76,7 +74,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> FacebookLogin(UserView userView)
         {
             UserDTO userExisting = _userService.GetByEmail(userView.Email);
@@ -108,7 +105,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> GoogleLogin([FromBody] UserView userView)
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
@@ -143,7 +139,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> TwitterLogin([FromBody] UserView userView)
         {
             UserDTO userExisting = _userService.GetByEmail(userView.Email);
@@ -208,7 +203,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If register process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Register(LoginDto authRequest)
         {
             if (!ModelState.IsValid)
@@ -231,7 +225,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If password recover process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> PasswordRecovery(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -240,11 +233,6 @@ namespace EventsExpress.Controllers
             }
 
             var user = _userService.GetByEmail(email);
-
-            if (user == null)
-            {
-                return BadRequest("User with this email is not found");
-            }
 
             await _userService.PasswordRecover(user);
 
@@ -261,7 +249,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">If emeil confirm process failed.</response>
         [AllowAnonymous]
         [HttpPost("verify/{userid}/{token}")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EmailConfirm(string userid, string token)
         {
             var cache = new CacheDTO { Token = token };
@@ -291,7 +278,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Password change succesful.</response>
         /// <response code="400">If assword change process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
             if (!ModelState.IsValid)

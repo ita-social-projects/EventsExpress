@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoMapper;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -123,6 +122,7 @@ namespace EventsExpress.Core.Services
         {
             using var ms = new MemoryStream();
             imageIn.Save(ms, ImageFormat.Png);
+
             return ms.ToArray();
         }
     }

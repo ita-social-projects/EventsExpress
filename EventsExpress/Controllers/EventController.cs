@@ -6,7 +6,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +38,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditEventFromParent([FromForm] EventDto model)
         {
             if (!ModelState.IsValid)
@@ -59,7 +57,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> CreateEventFromParent(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -79,7 +76,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Edit([FromForm] EventDto model)
         {
             if (!ModelState.IsValid)
@@ -102,7 +98,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
         [HttpGet("[action]")]
-        [EventsExpressExceptionFilter]
         public IActionResult Get(Guid id) =>
             Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
 
@@ -160,7 +155,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding user from event proces success.</response>
         /// <response code="400">If adding user from event process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
         {
             await _eventService.AddUserToEvent(userId, eventId);
@@ -176,7 +170,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<ActionResult> ApproveVisitor(Guid userId, Guid eventId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
@@ -192,7 +185,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<ActionResult> DenyVisitor(Guid userId, Guid eventId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
@@ -208,7 +200,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
         {
             await _eventService.DeleteUserFromEvent(userId, eventId);
@@ -225,7 +216,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">Block process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Block(Guid eventId)
         {
             await _eventService.BlockEvent(eventId);
@@ -240,7 +230,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process is failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
             await _eventService.UnblockEvent(eventId);
@@ -255,7 +244,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Rating is setted successfully.</response>
         /// <response code="400">Setting rating is failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> SetRate(RateDto model)
         {
             if (!ModelState.IsValid)

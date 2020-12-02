@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -58,6 +57,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Photo)
                 .Include(c => c.Messages)
                 .FirstOrDefault(x => x.Id == chat.Id);
+
             return res;
         }
 
@@ -72,6 +72,7 @@ namespace EventsExpress.Core.Services
 
             var msg = Insert(new Message { ChatRoomId = chat.Id, SenderId = sender, Text = text });
             await _context.SaveChangesAsync();
+
             return msg;
         }
 
@@ -102,6 +103,7 @@ namespace EventsExpress.Core.Services
         public List<Message> GetUnreadMessages(Guid userId)
         {
             var chats = GetUserChats(userId).Select(y => y.Id).ToList();
+
             return _context.Message
                 .Where(x => chats
                     .Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen)

@@ -5,7 +5,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +43,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create category proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Edit(CategoryDto model)
         {
             if (!ModelState.IsValid)
@@ -71,7 +69,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete category proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("[action]/{id}")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == Guid.Empty)

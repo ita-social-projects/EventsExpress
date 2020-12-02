@@ -23,16 +23,10 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            try
-            {
-                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-                await _context.SaveChangesAsync();
-                return result.Id;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+            await _context.SaveChangesAsync();
+
+            return result.Id;
         }
 
         public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
@@ -43,17 +37,11 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Object not found");
             }
 
-            try
-            {
-                entity.ShortName = unitOfMeasuringDTO.ShortName;
-                entity.UnitName = unitOfMeasuringDTO.UnitName;
-                await _context.SaveChangesAsync();
-                return entity.Id;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            entity.ShortName = unitOfMeasuringDTO.ShortName;
+            entity.UnitName = unitOfMeasuringDTO.UnitName;
+            await _context.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public IEnumerable<UnitOfMeasuringDTO> GetAll()

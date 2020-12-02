@@ -100,20 +100,13 @@ namespace EventsExpress.Core.Services
             var newPassword = Guid.NewGuid().ToString();
             user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
 
-            try
+            await _context.SaveChangesAsync();
+            await _emailService.SendEmailAsync(new EmailDTO
             {
-                await _context.SaveChangesAsync();
-                await _emailService.SendEmailAsync(new EmailDTO
-                {
-                    Subject = "EventsExpress password recovery",
-                    RecepientEmail = user.Email,
-                    MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}",
-                });
-            }
-            catch (Exception)
-            {
-                throw new EventsExpressException("Something is wrong");
-            }
+                Subject = "EventsExpress password recovery",
+                RecepientEmail = user.Email,
+                MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}",
+            });
         }
 
         public async Task Update(UserDTO userDTO)
@@ -129,15 +122,9 @@ namespace EventsExpress.Core.Services
             }
 
             var result = _mapper.Map<UserDTO, User>(userDTO);
-            try
-            {
-                Update(result);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+
+            Update(result);
+            await _context.SaveChangesAsync();
         }
 
         public UserDTO GetById(Guid id)
@@ -152,6 +139,7 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.Id == id));
 
             user.Rating = GetRating(user.Id);
+
             return user;
         }
 
@@ -304,7 +292,7 @@ namespace EventsExpress.Core.Services
                 Update(user);
                 await _context.SaveChangesAsync();
             }
-            catch
+            catch (ArgumentException)
             {
                 throw new EventsExpressException("Bad image file");
             }
@@ -366,19 +354,14 @@ namespace EventsExpress.Core.Services
             if (currentAttitude == null)
             {
                 var rel = _mapper.Map<AttitudeDTO, Relationship>(attitude);
-                try
-                {
-                    _context.Relationships.Add(rel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw new EventsExpressException("Set failing");
-                }
+
+                _context.Relationships.Add(rel);
+                await _context.SaveChangesAsync();
             }
 
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
             await _context.SaveChangesAsync();
+
             return;
         }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -74,14 +73,21 @@ namespace EventsExpress.Core.Services
 
         public async Task DeleteCityAsync(Guid id)
         {
-            var city = _context.Cities.Find(id);
-            if (city == null)
+            if (id != Guid.Empty)
             {
-                throw new EventsExpressException("Not found");
-            }
+                var city = _context.Cities.Find(id);
+                if (city == null)
+                {
+                    throw new EventsExpressException("Not found");
+                }
 
-            Delete(city);
-            await _context.SaveChangesAsync();
+                Delete(city);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new EventsExpressException("Id is null");
+            }
         }
     }
 }

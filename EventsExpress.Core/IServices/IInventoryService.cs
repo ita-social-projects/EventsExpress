@@ -11,7 +11,7 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> EditInventar(InventoryDTO inventoryDTO);
 
-        Task<OperationResult> DeleteInventar(Guid id);
+        Task<Guid> DeleteInventar(Guid id);
 
         IEnumerable<InventoryDTO> GetInventar(Guid eventId);
 

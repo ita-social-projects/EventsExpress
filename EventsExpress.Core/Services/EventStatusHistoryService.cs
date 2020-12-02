@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.BaseService;

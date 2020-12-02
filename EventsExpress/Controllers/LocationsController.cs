@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
-using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,7 +44,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create country proces success.</response>
         /// <response code="400">If Edit/Create country failed.</response>
         [HttpPost("countries/edit")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditCountry(Country country)
         {
             if (ModelState.IsValid)
@@ -72,17 +70,11 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete country proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("countries/delete")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
-            if (id != Guid.Empty)
-            {
-                await _countryService.DeleteAsync(id);
+            await _countryService.DeleteAsync(id);
 
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
 
         // Methods for cities CRUD:
@@ -106,7 +98,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create city proces success.</response>
         /// <response code="400">If Edit/Create city failed.</response>
         [HttpPost("cities/edit")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditCity(City city)
         {
             if (ModelState.IsValid)
@@ -133,7 +124,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete city proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("cities/delete")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> DeleteCity(Guid id)
         {
             if (id != Guid.Empty)

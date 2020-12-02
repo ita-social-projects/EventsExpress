@@ -6,7 +6,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +35,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> AddInventar([FromBody] InventoryDto model, Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -56,7 +54,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit inventar proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditInventar([FromBody] InventoryDto model)
         {
             if (!ModelState.IsValid)
@@ -84,7 +81,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _inventoryService.DeleteInventar(id);
-            return Ok(result.Property);
+
+            return Ok(result);
         }
 
         /// <summary>

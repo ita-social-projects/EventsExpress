@@ -6,7 +6,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.BaseService;
@@ -169,26 +168,20 @@ namespace EventsExpress.Core.Services
             ev.CreatedBy = ev.OwnerId;
             ev.ModifiedBy = ev.OwnerId;
 
-            try
+            var result = Insert(ev);
+
+            await _context.SaveChangesAsync();
+
+            eventDTO.Id = result.Id;
+
+            if (eventDTO.IsReccurent)
             {
-                var result = Insert(ev);
-
-                await _context.SaveChangesAsync();
-
-                eventDTO.Id = result.Id;
-
-                if (eventDTO.IsReccurent)
-                {
-                    await _eventScheduleService.Create(_mapper.Map<EventScheduleDTO>(eventDTO));
-                }
-
-                await _mediator.Publish(new EventCreatedMessage(eventDTO));
-                return result.Id;
+                await _eventScheduleService.Create(_mapper.Map<EventScheduleDTO>(eventDTO));
             }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+
+            await _mediator.Publish(new EventCreatedMessage(eventDTO));
+
+            return result.Id;
         }
 
         public async Task<Guid> CreateNextEvent(Guid eventId)
@@ -207,16 +200,10 @@ namespace EventsExpress.Core.Services
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
 
-            try
-            {
-                var createResult = await Create(eventDTO);
-                await _eventScheduleService.Edit(eventScheduleDTO);
-                return createResult;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            var createResult = await Create(eventDTO);
+            await _eventScheduleService.Edit(eventScheduleDTO);
+
+            return createResult;
         }
 
         public async Task<Guid> Edit(EventDTO e)
@@ -244,7 +231,7 @@ namespace EventsExpress.Core.Services
                 {
                     ev.Photo = await _photoService.AddPhoto(e.Photo);
                 }
-                catch
+                catch (ArgumentException)
                 {
                     throw new EventsExpressException("Invalid file");
                 }
@@ -256,6 +243,7 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
 
             await _context.SaveChangesAsync();
+
             return ev.Id;
         }
 
@@ -271,16 +259,10 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.Id = Guid.Empty;
 
-            try
-            {
-                var createResult = await Create(eventDTO);
-                await _eventScheduleService.Edit(eventScheduleDTO);
-                return createResult;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            var createResult = await Create(eventDTO);
+            await _eventScheduleService.Edit(eventScheduleDTO);
+
+            return createResult;
         }
 
         public EventDTO EventById(Guid eventId) =>
@@ -462,31 +444,24 @@ namespace EventsExpress.Core.Services
 
         public async Task SetRate(Guid userId, Guid eventId, byte rate)
         {
-            try
-            {
-                var ev = _context.Events
+            var ev = _context.Events
                 .Include(e => e.Rates)
                 .FirstOrDefault(e => e.Id == eventId);
 
-                ev.Rates ??= new List<Rate>();
+            ev.Rates ??= new List<Rate>();
 
-                var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
+            var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
 
-                if (currentRate == null)
-                {
-                    ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
-                }
-                else
-                {
-                    currentRate.Score = rate;
-                }
-
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
+            if (currentRate == null)
             {
-                throw new EventsExpressException(ex.Message);
+                ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
             }
+            else
+            {
+                currentRate.Score = rate;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public byte GetRateFromUser(Guid userId, Guid eventId)

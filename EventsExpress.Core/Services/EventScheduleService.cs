@@ -6,7 +6,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -24,18 +23,30 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> CancelEvents(Guid eventId)
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.IsActive = false;
-            return await Edit(eventScheduleDTO);
+            if (eventId != Guid.Empty)
+            {
+                var eventScheduleDTO = EventScheduleByEventId(eventId);
+                eventScheduleDTO.IsActive = false;
+
+                return await Edit(eventScheduleDTO);
+            }
+
+            throw new EventsExpressException("Id is null");
         }
 
         public async Task<Guid> CancelNextEvent(Guid eventId)
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
-            eventScheduleDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
-            return await Edit(eventScheduleDTO);
+            if (eventId != Guid.Empty)
+            {
+                var eventScheduleDTO = EventScheduleByEventId(eventId);
+                eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
+                eventScheduleDTO.NextRun = DateTimeExtensions
+                    .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
+
+                return await Edit(eventScheduleDTO);
+            }
+
+            throw new EventsExpressException("Id is null");
         }
 
         public async Task<Guid> Create(EventScheduleDTO eventScheduleDTO)
@@ -43,33 +54,32 @@ namespace EventsExpress.Core.Services
             var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
             eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
 
-            try
-            {
-                var result = Insert(eventScheduleEntity);
-                await _context.SaveChangesAsync();
+            var result = Insert(eventScheduleEntity);
+            await _context.SaveChangesAsync();
 
-                return result.Id;
-            }
-            catch (Exception ex)
-            {
-                throw new EventsExpressException(ex.Message);
-            }
+            return result.Id;
         }
 
         public async Task<Guid> Edit(EventScheduleDTO eventScheduleDTO)
         {
-            var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
-            ev.Frequency = eventScheduleDTO.Frequency;
-            ev.Periodicity = eventScheduleDTO.Periodicity;
-            ev.LastRun = eventScheduleDTO.LastRun;
-            ev.NextRun = eventScheduleDTO.NextRun;
-            ev.IsActive = eventScheduleDTO.IsActive;
-            ev.EventId = eventScheduleDTO.EventId;
-            ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
-            ev.ModifiedDateTime = DateTime.UtcNow;
+            if (eventScheduleDTO.Id != Guid.Empty)
+            {
+                var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
+                ev.Frequency = eventScheduleDTO.Frequency;
+                ev.Periodicity = eventScheduleDTO.Periodicity;
+                ev.LastRun = eventScheduleDTO.LastRun;
+                ev.NextRun = eventScheduleDTO.NextRun;
+                ev.IsActive = eventScheduleDTO.IsActive;
+                ev.EventId = eventScheduleDTO.EventId;
+                ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
+                ev.ModifiedDateTime = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-            return eventScheduleDTO.Id;
+                await _context.SaveChangesAsync();
+
+                return eventScheduleDTO.Id;
+            }
+
+            throw new EventsExpressException("Id not found");
         }
 
         public EventScheduleDTO EventScheduleById(Guid id)
@@ -81,6 +91,7 @@ namespace EventsExpress.Core.Services
                 .Include(es => es.Event)
                     .ThenInclude(e => e.Photo)
                 .FirstOrDefault(x => x.Id == id);
+
             return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 

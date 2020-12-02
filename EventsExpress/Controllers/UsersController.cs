@@ -9,7 +9,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.DTO;
-using EventsExpress.Filters;
 using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -59,6 +58,7 @@ namespace EventsExpress.Controllers
                     Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
+
                 return Ok(viewModel);
             }
             catch (ArgumentOutOfRangeException)
@@ -91,6 +91,7 @@ namespace EventsExpress.Controllers
                     Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
+
                 return Ok(viewModel);
             }
             catch (ArgumentOutOfRangeException)
@@ -108,7 +109,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
             await _userService.ChangeRole(userId, roleId);
@@ -124,7 +124,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">Block process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Unblock(Guid userId)
         {
             await _userService.Unblock(userId);
@@ -140,7 +139,6 @@ namespace EventsExpress.Controllers
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> Block(Guid userId)
         {
             await _userService.Block(userId);
@@ -155,7 +153,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditUsername(EditUserNameDto userName)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -177,7 +174,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditBirthday(EditUserBirthDto userBirthday)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -199,7 +195,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditGender(EditUserGenderDto userGender)
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -221,7 +216,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> EditUserCategory(EditUserCategoriesDto model)
         {
             if (!ModelState.IsValid)
@@ -248,7 +242,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> ChangeAvatar()
         {
             var user = GetCurrentUser(HttpContext.User);
@@ -323,7 +316,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Attitude set success.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpPost("[action]")]
-        [EventsExpressExceptionFilter]
         public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
         {
             if (!ModelState.IsValid)

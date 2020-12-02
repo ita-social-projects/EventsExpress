@@ -1,7 +1,5 @@
 ﻿using System;
 using AutoMapper;
-using System.Text;
-using AutoMapper;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using Microsoft.EntityFrameworkCore;
