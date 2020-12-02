@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [Authorize]
     [ApiController]
     public class EventScheduleController : ControllerBase
@@ -37,7 +37,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult All()
         {
             try
@@ -61,7 +61,7 @@ namespace EventsExpress.Controllers
         /// <param name="model">Required.</param>
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventScheduleViewModel model)
         {
@@ -88,7 +88,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <response code="200">Cancel All Events proces success.</response>
         /// <response code="400">Cancel All Events process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> CancelAllEvents(Guid eventId)
         {
@@ -115,7 +115,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <response code="200">Cancel Next Event event proces success.</response>
         /// <response code="400">Cancel Next Event process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> CancelNextEvent(Guid eventId)
         {
@@ -143,7 +143,7 @@ namespace EventsExpress.Controllers
         /// <returns>Event.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
             Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(id)));
     }

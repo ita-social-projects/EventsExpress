@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [Authorize]
     [ApiController]
     public class EventController : ControllerBase
@@ -37,7 +37,7 @@ namespace EventsExpress.Controllers
         /// <param name="model">Required.</param>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> EditEventFromParent(Guid eventId, [FromForm] EventEditViewModel model)
         {
@@ -62,7 +62,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> CreateEventFromParent(Guid eventId)
         {
@@ -87,7 +87,7 @@ namespace EventsExpress.Controllers
         /// <param name="model">Required.</param>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromForm] EventCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -111,7 +111,7 @@ namespace EventsExpress.Controllers
         /// <param name="model">Required.</param>
         /// <response code="200">Edit event proces success.</response>
         /// <response code="400">If Edit process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
         {
@@ -138,7 +138,7 @@ namespace EventsExpress.Controllers
         /// <returns>Event.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
             Ok(_mapper.Map<EventViewModel>(_eventService.EventById(id)));
 
@@ -150,7 +150,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
             filter.PageSize = 6;
@@ -195,7 +195,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">EventId.</param>
         /// <response code="200">Adding user from event proces success.</response>
         /// <response code="400">If adding user from event process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> AddUserToEvent(Guid eventId, Guid userId)
         {
             var res = await _eventService.AddUserToEvent(userId, eventId);
@@ -214,7 +214,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">EventId.</param>
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
@@ -234,7 +234,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">EventId.</param>
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [UserAccessTypeFilter]
         public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
         {
@@ -254,7 +254,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">EventId.</param>
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> DeleteUserFromEvent(Guid eventId, Guid userId)
         {
             var res = await _eventService.DeleteUserFromEvent(userId, eventId);
@@ -273,7 +273,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Block is succesful.</response>
         /// <response code="302">If user isn't admin.</response>
         /// <response code="400">Block process failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid eventId)
         {
@@ -292,7 +292,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process is failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
@@ -311,7 +311,7 @@ namespace EventsExpress.Controllers
         /// <param name="model">Required (type: RateDto).</param>
         /// <response code="200">Rating is setted successfully.</response>
         /// <response code="400">Setting rating is failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> SetRate(RateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -334,7 +334,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required (type: Guid).</param>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult GetCurrentRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -354,7 +354,7 @@ namespace EventsExpress.Controllers
         /// <returns>RateOfEvent.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet("/{eventId}")]
+        [HttpGet("[action]")]
         public IActionResult GetAverageRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -372,7 +372,7 @@ namespace EventsExpress.Controllers
         /// <param name="page">CountPages.</param>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult FutureEvents(Guid id, int page = 1)
         {
             var model = new PaginationViewModel
@@ -402,7 +402,7 @@ namespace EventsExpress.Controllers
         /// <param name="page">CountPages.</param>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult PastEvents(Guid id, int page = 1)
         {
             var model = new PaginationViewModel
@@ -433,7 +433,7 @@ namespace EventsExpress.Controllers
         /// <returns>Events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult EventsToGo(Guid id, int page = 1)
         {
             var model = new PaginationViewModel
@@ -464,7 +464,7 @@ namespace EventsExpress.Controllers
         /// <returns>Events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult VisitedEvents(Guid id, int page = 1)
         {
             var model = new PaginationViewModel
@@ -495,7 +495,7 @@ namespace EventsExpress.Controllers
         /// <returns>Events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpPost]
+        [HttpPost("[action]")]
         public IActionResult GetEvents([FromBody] List<Guid> eventIds, [FromQuery] int page = 1)
         {
             var model = new PaginationViewModel
