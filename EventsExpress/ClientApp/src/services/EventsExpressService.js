@@ -302,7 +302,7 @@ export default class EventsExpressService {
     }
 
     setEventCancel = async (data) => {
-        const res = await this.setResource('EventStatusHistory/Cancel', data);
+        const res = await this.setResource(`EventStatusHistory/Cancel/?eventId=${data.EventId}`, data);
         return !res.ok
             ? { error: await res.text() }
             : await res.json();
