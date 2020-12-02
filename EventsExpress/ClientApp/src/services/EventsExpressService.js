@@ -316,14 +316,14 @@ export default class EventsExpressService {
     }
 
     setUserFromEvent = async (data) => {
-        const res = await this.setResource(`event/DeleteUserFromEvent?userId=${data.userId}&eventId=${data.eventId}`);
+        const res = await this.setResource(`event/DeleteUserFromEvent?eventId=${data.eventId}&userId=${data.userId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
     setUserToEvent = async (data) => {
-        const res = await this.setResource(`event/AddUserToEvent?userId=${data.userId}&eventId=${data.eventId}`);
+        const res = await this.setResource(`event/AddUserToEvent?eventId=${data.eventId}&userId=${data.userId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -331,8 +331,8 @@ export default class EventsExpressService {
 
     setApprovedUser = async (data) => {
         const res = data.buttonAction
-            ? await this.setResource(`event/ApproveVisitor?userId=${data.userId}&eventId=${data.eventId}`)
-            : await this.setResource(`event/DenyVisitor?userId=${data.userId}&eventId=${data.eventId}`);
+            ? await this.setResource(`event/ApproveVisitor?eventId=${data.eventId}&userId=${data.userId}`)
+            : await this.setResource(`event/DenyVisitor?eventId=${data.eventId}&userId=${data.userId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -352,7 +352,7 @@ export default class EventsExpressService {
         file.append('Periodicity', data.periodicity);
         file.append('IsActive', data.isActive);
 
-        const res = await this.setResourceWithData('eventSchedule/edit', file);
+        const res = await this.setResourceWithData(`eventSchedule/edit/?eventId=${data.eventId}`, file);
         return !res.ok
             ? { error: await res.text() }
             : res;

@@ -38,8 +38,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost]
-        [UserAccessTypeFilter(eventId: "model")]
-        public async Task<IActionResult> EditEventFromParent([FromForm] EventEditViewModel model)
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> EditEventFromParent(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +62,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
-        [HttpPost("[action]")]
+        [HttpPost]
         [UserAccessTypeFilter]
         public async Task<IActionResult> CreateEventFromParent(Guid eventId)
         {
@@ -85,11 +85,11 @@ namespace EventsExpress.Controllers
         /// This method is for edit and create events.
         /// </summary>
         /// <param name="model">Required.</param>
-        /// <response code="200">Edit/Create event proces success.</response>
-        /// <response code="400">If Edit/Create process failed.</response>
-        [HttpPost("/{eventId}")]
-        [UserAccessTypeFilter(eventId: "model")]
-        public async Task<IActionResult> Create(Guid eventId, [FromForm] EventCreateViewModel model)
+        /// <response code="200">Create event proces success.</response>
+        /// <response code="400">If Create process failed.</response>
+        [HttpPost]
+        //[UserAccessTypeFilter(eventId: "model")]
+        public async Task<IActionResult> Create([FromForm] EventCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -110,10 +110,10 @@ namespace EventsExpress.Controllers
         /// This method is for edit and create events.
         /// </summary>
         /// <param name="model">Required.</param>
-        /// <response code="200">Edit/Create event proces success.</response>
-        /// <response code="400">If Edit/Create process failed.</response>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
         [HttpPost]
-        [UserAccessTypeFilter(eventId: "model")]
+        [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -197,7 +197,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding user from event proces success.</response>
         /// <response code="400">If adding user from event process failed.</response>
         [HttpPost]
-        public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
+        public async Task<IActionResult> AddUserToEvent(Guid eventId, Guid userId)
         {
             var res = await _eventService.AddUserToEvent(userId, eventId);
             if (res.Successed)
@@ -216,7 +216,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
         [HttpPost]
-        public async Task<ActionResult> ApproveVisitor(Guid userId, Guid eventId)
+        [UserAccessTypeFilter]
+        public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
             var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
             if (res.Successed)
@@ -235,7 +236,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost]
-        public async Task<ActionResult> DenyVisitor(Guid userId, Guid eventId)
+        [UserAccessTypeFilter]
+        public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
         {
             var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
             if (res.Successed)
@@ -254,7 +256,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
         [HttpPost]
-        public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        public async Task<IActionResult> DeleteUserFromEvent(Guid eventId, Guid userId)
         {
             var res = await _eventService.DeleteUserFromEvent(userId, eventId);
             if (res.Successed)
@@ -332,7 +334,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required (type: Guid).</param>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet("[action]/{eventId}")]
+        [HttpGet]
         public IActionResult GetCurrentRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -352,7 +354,7 @@ namespace EventsExpress.Controllers
         /// <returns>RateOfEvent.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet("[action]/{eventId}")]
+        [HttpGet("/{eventId}")]
         public IActionResult GetAverageRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
