@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
 {
     public class BlockedEventMessage : INotification
     {
-        public BlockedEventMessage(Guid userId, Guid id)
+        public BlockedEventMessage(IEnumerable<Guid> userId, Guid id)
         {
-            UserId = userId;
+            UserIds = userId;
             Id = id;
         }
 
-        public Guid UserId { get; }
+        public IEnumerable<Guid> UserIds { get; }
 
         public Guid Id { get; }
     }

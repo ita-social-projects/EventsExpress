@@ -419,8 +419,8 @@ namespace EventsExpress.Core.Services
 
         public double GetRating(Guid userId)
         {
-            var ownEventsIds = _context.Events
-                .Where(e => e.OwnerId == userId).Select(e => e.Id).ToList();
+            var ownEventsIds = _context.EventOwners
+                .Where(e => e.UserId == userId).Select(e => e.EventId).ToList();
             try
             {
                 return _context.Rates

@@ -13,6 +13,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
@@ -21,6 +22,8 @@ namespace EventsExpress.Core.Services
     {
         private readonly IPhotoService _photoService;
         private readonly IMediator _mediator;
+        private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
 
         public EventService(
@@ -28,13 +31,19 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoSrv,
+            IAuthService authService,
+            IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService)
             : base(context, mapper)
         {
             _photoService = photoSrv;
             _mediator = mediator;
+            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
         }
+
+        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
         public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -124,9 +133,10 @@ namespace EventsExpress.Core.Services
             evnt.IsBlocked = true;
 
             await _context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedEventMessage(evnt.OwnerId, evnt.Id));
 
-            return new OperationResult(true);
+            var userIds = _context.EventOwners.Where(x => x.EventId == id).Select(x => x.UserId);
+
+            return new OperationResult(false, "Error!", string.Empty);
         }
 
         public async Task<OperationResult> UnblockEvent(Guid id)
@@ -140,7 +150,10 @@ namespace EventsExpress.Core.Services
             evnt.IsBlocked = false;
 
             await _context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedEventMessage(evnt.OwnerId, evnt.Id));
+
+            var userIds = _context.EventOwners.Where(x => x.EventId == id).Select(x => x.UserId);
+
+            await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
 
             return new OperationResult(true);
         }
@@ -151,6 +164,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
+            ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)
             {
@@ -172,16 +186,17 @@ namespace EventsExpress.Core.Services
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
-            ev.CreatedBy = ev.OwnerId;
-            ev.ModifiedBy = ev.OwnerId;
+            ev.CreatedBy = CurrentUser.Id;
+            ev.ModifiedBy = CurrentUser.Id;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
             try
             {
                 var result = Insert(ev);
 
-                await _context.SaveChangesAsync();
-
                 eventDTO.Id = result.Id;
+
+                await _context.SaveChangesAsync();
 
                 if (eventDTO.IsReccurent)
                 {
@@ -207,8 +222,8 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
-
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -239,7 +254,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
-            ev.ModifiedBy = ev.OwnerId;
+            ev.ModifiedBy = CurrentUser.Id;
             ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
@@ -268,8 +283,8 @@ namespace EventsExpress.Core.Services
         public async Task<OperationResult> EditNextEvent(EventDTO eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-
-            eventScheduleDTO.ModifiedBy = eventDTO.OwnerId;
+            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
+            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -293,10 +308,11 @@ namespace EventsExpress.Core.Services
             _mapper.Map<EventDTO>(
                 _context.Events
                 .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
+                .Include(e => e.Owners)
+                    .ThenInclude(o => o.User)
+                        .ThenInclude(c => c.Photo)
                 .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
+                    .ThenInclude(o => o.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
@@ -310,8 +326,9 @@ namespace EventsExpress.Core.Services
         {
             var events = _context.Events
                 .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
+                .Include(e => e.Owners)
+                    .ThenInclude(o => o.User)
+                        .ThenInclude(c => c.Photo)
                 .Include(e => e.City)
                     .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
@@ -336,7 +353,7 @@ namespace EventsExpress.Core.Services
                 : events;
 
             events = (model.OwnerId != null)
-                ? events.Where(x => x.OwnerId == model.OwnerId)
+                ? events.Where(x => x.Owners.Any(c => c.UserId == model.OwnerId))
                 : events;
 
             events = (model.VisitorId != null)
@@ -447,8 +464,9 @@ namespace EventsExpress.Core.Services
         {
             var events = _context.Events
                 .Include(e => e.Photo)
-                .Include(e => e.Owner)
-                    .ThenInclude(o => o.Photo)
+                .Include(e => e.Owners)
+                    .ThenInclude(o => o.User)
+                        .ThenInclude(c => c.Photo)
                 .Include(e => e.City)
                     .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
