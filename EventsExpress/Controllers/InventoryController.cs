@@ -37,7 +37,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]
         [UserAccessTypeFilter]
-        public async Task<IActionResult> AddInventar([FromBody] InventoryViewModel model, Guid eventId)
+        public async Task<IActionResult> AddInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit inventar proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditInventar([FromBody] InventoryViewModel model)
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> EditInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -74,18 +75,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete inventar.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="itemId)">Required.</param>
         /// <response code="200">Delete inventar proces success.</response>
         /// <response code="400">If id param is empty.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteInventar(Guid id)
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> DeleteInventar(Guid eventId, Guid itemId)
         {
-            if (id == Guid.Empty)
+            if (itemId == Guid.Empty)
             {
                 return BadRequest("id is empty");
             }
 
-            var result = await _inventoryService.DeleteInventar(id);
+            var result = await _inventoryService.DeleteInventar(itemId);
             return Ok(result.Property);
         }
 

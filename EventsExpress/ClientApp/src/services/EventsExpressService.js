@@ -370,21 +370,21 @@ export default class EventsExpressService {
             : res;
     }
 
-    setItemDelete = async (id) => {
-        const res = await this.setResource(`inventory/DeleteInventar/?id=${id}`);
+    setItemDelete = async (itemId, eventId) => {
+        const res = await this.setResource(`inventory/DeleteInventar/?itemId=${itemId}&eventId=${eventId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
-    setItem = async (item) => {
+    setItem = async (item, eventId) => {
         const value = {
             id: item.id,
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
             unitOfMeasuring: {id: item.unitOfMeasuring}
         }
-        const res = await this.setResource(`inventory/EditInventar`, value);
+        const res = await this.setResource(`inventory/EditInventar/?eventId=${eventId}`, value);
         return !res.ok
             ? { error: await res.text() }
             : res;
