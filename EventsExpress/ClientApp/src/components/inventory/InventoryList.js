@@ -96,6 +96,7 @@ class InventoryList extends Component {
 
     render() {
         const { inventories, event, user } = this.props;
+        let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -104,7 +105,7 @@ class InventoryList extends Component {
                 
                 { this.state.isOpen &&
                 <div>
-                    {event.user.id === user.id 
+                    {isMyEvent
                     ?  <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
@@ -118,7 +119,7 @@ class InventoryList extends Component {
                                 <div className="col col-md-5"><b>Item name</b></div>
                                 <div className="col"><b>Count</b></div>
                                 <div className="col"><b>Measuring unit</b></div>
-                                {event.user.id === user.id
+                                {isMyEvent
                                 ? <div className="col"><b>Action</b></div>
                                 : null
                                 }
@@ -138,7 +139,7 @@ class InventoryList extends Component {
                                         <div className="col col-md-5">{item.itemName}</div>
                                         <div className="col">{item.needQuantity}</div>
                                         <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        {event.user.id === user.id
+                                        {isMyEvent
                                         ? <div className="col">
                                                 <IconButton 
                                                     disabled = {this.state.disabledEdit} 
