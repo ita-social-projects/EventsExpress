@@ -88,6 +88,7 @@ namespace EventsExpress.Mapping
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z=>z.User)))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -113,7 +114,12 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventDTO, Event>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
-                .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.OwnerId))
+                .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Owners.Select(x =>
+                   new EventOwner
+                   {
+                       UserId = x.Id,
+                       EventId = src.Id,
+                   })))
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -141,13 +147,15 @@ namespace EventsExpress.Mapping
                     Name = src.City.Name,
                 }))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewViewModel
-                {
-                    Id = src.OwnerId,
-                    Birthday = src.Owner.Birthday,
-                    PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
-                }));
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
+                   new UserPreviewDto
+                    {
+                        Birthday = x.Birthday,
+                        Id = x.Id,
+                        PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
+                        Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
+                    }
+               )));
 
             CreateMap<EventDTO, EventViewModel>()
                 .ForMember(
@@ -172,17 +180,29 @@ namespace EventsExpress.Mapping
                     Id = src.City.Id,
                     Name = src.City.Name,
                 }))
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
+                 new UserPreviewDto
+                 {
+                     Id = x.Id,
+                     Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
+                     Birthday = x.Birthday,
+                     PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
+                 })))
+                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => src.City.Country.Name))
+                .ForMember(dest => dest.CountryId, opts => opts.MapFrom(src => src.City.Country.Id))
+                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .ForMember(dest => dest.User, opts => opts.MapFrom(src => new UserPreviewViewModel
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewDto
                 {
-                    Id = src.OwnerId,
-                    Birthday = src.Owner.Birthday,
-                    PhotoUrl = src.Owner.Photo != null ? src.Owner.Photo.Thumb.ToRenderablePictureString() : null,
-                    Username = src.Owner.Name ?? src.Owner.Email.Substring(0, src.Owner.Email.IndexOf("@", StringComparison.Ordinal)),
-                }))
+                    Id = x.Id,
+                    Birthday = x.Birthday,
+                    PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
+                    Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
+                })))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                         src.Inventories.Select(x => new InventoryViewModel
                         {
@@ -201,8 +221,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id));
 
             CreateMap<EventCreateViewModel, EventDTO>()
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-                .ForMember(dest => dest.OwnerId, opts => opts.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewDto { Id = x.Id })))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -213,7 +232,6 @@ namespace EventsExpress.Mapping
                             NeedQuantity = x.NeedQuantity,
                             UnitOfMeasuring = new UnitOfMeasuringDTO
                             {
-                                Id = x.UnitOfMeasuring.Id,
                                 UnitName = x.UnitOfMeasuring.UnitName,
                                 ShortName = x.UnitOfMeasuring.ShortName,
                             },
@@ -321,7 +339,9 @@ namespace EventsExpress.Mapping
             #endregion
 
             #region INVENTORY MAPPING
-            CreateMap<Inventory, InventoryDTO>().ReverseMap();
+            CreateMap<Inventory, InventoryDTO>();
+            CreateMap<InventoryDTO, Inventory>()
+                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.Ignore());
             CreateMap<InventoryDTO, InventoryViewModel>().ReverseMap();
             #endregion
 

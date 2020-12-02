@@ -31,7 +31,7 @@ namespace EventsExpress.Db.Entities
         public virtual Photo Photo { get; set; }
 
         /// <summary>Gets or sets navigation properties. </summary>
-        public IEnumerable<Event> Events { get; set; }
+        public IEnumerable<EventOwner> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
 

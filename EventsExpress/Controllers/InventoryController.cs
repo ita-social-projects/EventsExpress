@@ -72,6 +72,24 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method is for delete inventar.
+        /// </summary>
+        /// <param name="id">Required.</param>
+        /// <response code="200">Delete inventar proces success.</response>
+        /// <response code="400">If id param is empty.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteInventar(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("id is empty");
+            }
+
+            var result = await _inventoryService.DeleteInventar(id);
+            return Ok(result.Property);
+        }
+
+        /// <summary>
         /// This method have to return all inventories from event.
         /// </summary>
         /// <param name="eventId">Required.</param>
@@ -80,7 +98,14 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
-            return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
+            if (eventId == Guid.Empty)
+            {
+                return BadRequest("Event id is empty");
+            }
+            else
+            {
+                return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
+            }
         }
 
         /// <summary>
@@ -92,7 +117,14 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetInventarById(Guid inventoryId)
         {
-            return Ok(_mapper.Map<InventoryDTO, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
+            if (inventoryId == Guid.Empty)
+            {
+                return BadRequest("Inventory id is empty");
+            }
+            else
+            {
+                return Ok(_mapper.Map<InventoryDTO, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
+            }
         }
     }
 }

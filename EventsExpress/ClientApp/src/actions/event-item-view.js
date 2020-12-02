@@ -51,12 +51,9 @@ export default function get_event(id) {
 
 export function leave(userId, eventId) {
   return dispatch => {
-    const res = api_serv.setUserFromEvent({ userId: userId, eventId: eventId });
-    res.then(response => {
+    api_serv.setUserFromEvent({ userId: userId, eventId: eventId }).then(response => {
       if (response.error == null) {
-
-        const res1 = api_serv.getEvent(eventId);
-        res1.then(response => {
+        api_serv.getEvent(eventId).then(response => {
           if (response.error == null) {
             dispatch(getEvent(response));
 
@@ -72,12 +69,9 @@ export function leave(userId, eventId) {
 
 export function join(userId, eventId) {
   return dispatch => {
-    const res = api_serv.setUserToEvent({ userId: userId, eventId: eventId });
-    res.then(response => {
+    api_serv.setUserToEvent({ userId: userId, eventId: eventId }).then(response => {
       if (response.error == null) {
-
-        const res1 = api_serv.getEvent(eventId);
-        res1.then(response => {
+        api_serv.getEvent(eventId).then(response => {
           if (response.error == null) {
             dispatch(getEvent(response));
 
@@ -108,6 +102,40 @@ export function approveUser(userId, eventId, buttonAction) {
         });
       }
     });
+  }
+}
+
+export function deleteFromOwners(userId, eventId) {
+  return dispatch => {
+    api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId}).then(response =>{
+      if(response.error == null)
+      {
+        api_serv.getEvent(eventId).then(response => {
+          if(response.error == null){
+            dispatch(getEvent(response));
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        })
+      }
+    })
+  }
+}
+
+export function promoteToOwner(userId, eventId) {
+  return dispatch => {
+    api_serv.onPromoteToOwner({ userId: userId, eventId: eventId}).then(response =>{
+      if(response.error == null)
+      {
+        api_serv.getEvent(eventId).then(response => {
+          if(response.error == null){
+            dispatch(getEvent(response));
+          } else {
+            dispatch(getEventError(response.error));
+          }
+        })
+      }
+    })
   }
 }
 

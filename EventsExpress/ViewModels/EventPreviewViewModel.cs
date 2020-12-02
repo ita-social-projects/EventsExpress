@@ -19,7 +19,7 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public UserPreviewViewModel User { get; set; }
+        public IEnumerable<UserPreviewDto> Owners { get; set; }
 
         public CountryViewModel Country { get; set; }
 

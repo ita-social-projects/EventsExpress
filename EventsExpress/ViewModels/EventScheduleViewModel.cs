@@ -18,7 +18,7 @@ namespace EventsExpress.ViewModels
 
         public bool IsActive { get; set; }
 
-        public EventDTO Event { get; set; }
+        public EventPreviewDto Event { get; set; }
 
         public Guid EventId { get; set; }
     }

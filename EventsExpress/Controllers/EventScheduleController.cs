@@ -65,11 +65,6 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventScheduleViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var result = model.Id == Guid.Empty
                 ? null
                 : await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
