@@ -115,7 +115,6 @@ namespace EventsExpress
                     .GetConnectionString("DefaultConnection")));
 
             #region Configure our services...
-
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventScheduleService, EventScheduleService>();
@@ -129,6 +128,7 @@ namespace EventsExpress
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddScoped<IEventOwnersService, EventOwnersService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
@@ -30,17 +31,20 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                var email = _userService.GetById(notification.UserId).Email;
-                var even = _eventService.EventById(notification.Id);
-                string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
-
-                await _sender.SendEmailAsync(new EmailDTO
+                foreach (var userId in notification.UserId)
                 {
-                    Subject = "Your event was Unblocked",
-                    RecepientEmail = email,
-                    MessageText = $"Dear {email}, congratulations, your event was Unblocked! " +
-                    $"\"<a href='{link}'>{even.Title}</>\"",
-                });
+                    var email = _userService.GetById(userId).Email;
+                    var even = _eventService.EventById(notification.Id);
+                    string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
+
+                    await _sender.SendEmailAsync(new EmailDTO
+                    {
+                        Subject = "Your event was Unblocked",
+                        RecepientEmail = email,
+                        MessageText = $"Dear {email}, congratulations, your event was Unblocked! " +
+                        $"\"<a href='{link}'>{even.Title}</>\"",
+                    });
+                }
             }
             catch (Exception ex)
             {

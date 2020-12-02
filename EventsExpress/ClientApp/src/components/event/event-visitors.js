@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 class EventVisitors extends Component {
     render() {
-        const {isMyPrivateEvent, visitors, admins } = this.props;
+        const {isMyPrivateEvent, visitors, admins, isMyEvent, current_user_id} = this.props;
 
         return (
             <div>
@@ -20,8 +20,10 @@ class EventVisitors extends Component {
                         <Typography>Admins</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography>
-                            {this.props.renderOwners(admins)}
+                        <Typography className = "w-100">
+                            {
+                                this.props.renderOwners(admins, isMyEvent, current_user_id)
+                            }
                         </Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
@@ -34,8 +36,8 @@ class EventVisitors extends Component {
                         <Typography>Visitors</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography>
-                            {this.props.renderApprovedUsers(visitors.approvedUsers, isMyPrivateEvent)}
+                        <Typography className = "w-100">
+                            {this.props.renderApprovedUsers(visitors.approvedUsers, isMyEvent, isMyPrivateEvent)}
                         </Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel> 
