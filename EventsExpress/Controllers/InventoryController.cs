@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
-using EventsExpress.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,12 +43,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryDto, InventoryDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -68,7 +62,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _inventoryService.EditInventar(_mapper.Map<InventoryDto, InventoryDTO>(model));
-            return Ok(result.Property);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -86,7 +81,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _inventoryService.DeleteInventar(id);
-            return Ok(result.Property);
+
+            return Ok(result);
         }
 
         /// <summary>

@@ -207,10 +207,8 @@ namespace EventsExpress.Test.ServiceTests
             esDTO.Id = Guid.NewGuid();
 
             // Act
-            var res = service.Create(esDTO);
-
             // Assert
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Create(esDTO));
         }
 
         [Test]
@@ -219,10 +217,8 @@ namespace EventsExpress.Test.ServiceTests
             // Arrange
 
             // Act
-            var res = service.Edit(esDTO);
-
             // Assert
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Edit(esDTO));
         }
     }
 }

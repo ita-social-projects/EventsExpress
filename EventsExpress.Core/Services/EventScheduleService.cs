@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -46,6 +45,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(e => e.Owners)
                         .ThenInclude(d => d.User)
                 .FirstOrDefault(x => x.Id == eventScheduleId);
+
             return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 
@@ -62,25 +62,18 @@ namespace EventsExpress.Core.Services
                 .ToList());
         }
 
-        public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)
+        public async Task<Guid> Create(EventScheduleDTO eventScheduleDTO)
         {
             var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
             eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
 
-            try
-            {
-                var result = Insert(eventScheduleEntity);
-                await _context.SaveChangesAsync();
+            var result = Insert(eventScheduleEntity);
+            await _context.SaveChangesAsync();
 
-                return new OperationResult(true, "Create new EventSchedule", result.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, ex.Message, string.Empty);
-            }
+            return result.Id;
         }
 
-        public async Task<OperationResult> Edit(EventScheduleDTO eventScheduleDTO)
+        public async Task<Guid> Edit(EventScheduleDTO eventScheduleDTO)
         {
             var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
             ev.Frequency = eventScheduleDTO.Frequency;
@@ -93,24 +86,26 @@ namespace EventsExpress.Core.Services
             ev.ModifiedDateTime = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
+
+            return eventScheduleDTO.Id;
         }
 
-        public async Task<OperationResult> CancelEvents(Guid eventId)
+        public async Task<Guid> CancelEvents(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.IsActive = false;
+
             return await Edit(eventScheduleDTO);
         }
 
-        public async Task<OperationResult> CancelNextEvent(Guid eventId)
+        public async Task<Guid> CancelNextEvent(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
+
             return await Edit(eventScheduleDTO);
         }
-
     }
 }

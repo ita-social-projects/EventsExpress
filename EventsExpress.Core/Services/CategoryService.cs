@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -33,54 +33,49 @@ namespace EventsExpress.Core.Services
             return categories;
         }
 
-        public async Task<OperationResult> Create(string title)
+        public async Task Create(string title)
         {
             if (_context.Categories.Any(c => c.Name == title))
             {
-                return new OperationResult(false, "The same category is already exist in database", string.Empty);
+                throw new EventsExpressException("The same category is already exist in database");
             }
 
             Insert(new Category { Name = title });
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Edit(CategoryDTO category)
+        public async Task Edit(CategoryDTO category)
         {
             var oldCategory = _context.Categories.Find(category.Id);
             if (oldCategory == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             if (_context.Categories.Any(c => c.Name == category.Name))
             {
-                return new OperationResult(false, "The same category is already exist in database", string.Empty);
+                throw new EventsExpressException("The same category is already exist in database");
             }
 
             oldCategory.Name = category.Name;
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             var category = _context.Categories.Find(id);
             if (category == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             var result = Delete(category);
             if (result.Id != id)
             {
-                return new OperationResult(false, string.Empty, string.Empty);
+                throw new EventsExpressException(string.Empty);
             }
 
             await _context.SaveChangesAsync();
-            return new OperationResult(true);
         }
 
         public bool Exists(Guid id) =>

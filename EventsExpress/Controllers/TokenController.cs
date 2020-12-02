@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using EventsExpress.Core.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
