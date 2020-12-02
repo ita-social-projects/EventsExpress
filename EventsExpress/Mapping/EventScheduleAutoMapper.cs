@@ -29,13 +29,13 @@ namespace EventsExpress.Mapping
             CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
 
             CreateMap<EventScheduleDTO, EventScheduleViewModel>()
-                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventPreviewDto
+                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventPreviewViewModel
                 {
                     Id = src.Event.Id,
                     Title = src.Event.Title,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
-                    Owners = src.Event.Owners.Select(x => new UserPreviewDto
+                    Owners = src.Event.Owners.Select(x => new UserPreviewViewModel
                     {
                         Id = x.Id,
                     }),

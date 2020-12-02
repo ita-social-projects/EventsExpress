@@ -63,7 +63,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        [UserAccessTypeFilter]
         public async Task<IActionResult> CreateEventFromParent(Guid eventId)
         {
             if (!ModelState.IsValid)

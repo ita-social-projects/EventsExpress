@@ -219,6 +219,7 @@ namespace EventsExpress.Core.Services
 
             var ticksDiff = eventDTO.DateTo.Ticks - eventDTO.DateFrom.Ticks;
             eventDTO.Id = Guid.Empty;
+            eventDTO.Owners = null;
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);

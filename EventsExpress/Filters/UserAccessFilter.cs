@@ -36,7 +36,7 @@ namespace EventsExpress.ActionFilters
                 };
             }
 
-            if (context.HttpContext.User.Identity.Name != ev.Owner.Id.ToString())
+            if (!ev.Owners.Any(e => e.Id == new Guid(context.HttpContext.User.Identity.Name)))
             {
                 context.Result = new ObjectResult("User hasn't permission for this action!")
                 {

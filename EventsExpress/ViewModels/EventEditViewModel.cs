@@ -39,6 +39,8 @@ namespace EventsExpress.ViewModels
 
         public UserPreviewViewModel User { get; set; }
 
+        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
+
         public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

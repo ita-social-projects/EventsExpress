@@ -41,5 +41,7 @@ namespace EventsExpress.ViewModels
         public IEnumerable<UserPreviewViewModel> Visitors { get; set; }
 
         public IEnumerable<InventoryViewModel> Inventories { get; set; }
+
+        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
     }
 }
