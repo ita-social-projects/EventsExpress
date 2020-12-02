@@ -185,13 +185,14 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Update_UserInDbNotFound_ReturnFalse()
+        public void Update_UserInDbNotFound_Throws()
         {
+            existingUserDTO.Id = Guid.NewGuid();
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(existingUserDTO));
         }
 
         [Test]
-        public void Update_UserDtoIsvalid_ReturnTrue()
+        public void Update_UserDtoIsvalid_DoesNotThrow()
         {
             MockMapper.Setup(m => m
                 .Map<UserDTO, User>(existingUserDTO))
