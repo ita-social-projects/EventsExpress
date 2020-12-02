@@ -102,12 +102,7 @@ class EventForm extends Component {
 
         const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
-
-        if (values) {
-            values.countryId = null;
-            values.cityId = null;
-        }
-
+        
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">

@@ -24,7 +24,7 @@ namespace EventsExpress.ActionFilters
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var evId = GetEventId(context, EventId);
+            var evId = new Guid(context.ActionArguments[EventId].ToString());
 
             var ev = _eventService.EventById(evId);
 
@@ -42,20 +42,6 @@ namespace EventsExpress.ActionFilters
                 {
                     StatusCode = 403,
                 };
-            }
-        }
-
-        private Guid GetEventId(ActionExecutingContext context, string id)
-        {
-            switch (id)
-            {
-                case "model":
-                    EventViewModel model = (EventViewModel)context.ActionArguments[EventId];
-                    return model.Id;
-                case "eventId":
-                    return new Guid(context.ActionArguments[EventId].ToString());
-                default:
-                    return Guid.Empty;
             }
         }
     }
