@@ -41,14 +41,9 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
+            await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -61,14 +56,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var res = await _commentService.Delete(id);
+            await _commentService.Delete(id);
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -97,6 +87,7 @@ namespace EventsExpress.Controllers
                 PageViewModel = new PageViewModel(count, page, pageSize),
                 Items = res,
             };
+
             return Ok(viewModel);
         }
     }

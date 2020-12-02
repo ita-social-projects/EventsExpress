@@ -13,7 +13,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UnitName = table.Column<string>(nullable: true),
-                    ShortName = table.Column<string>(nullable: true)
+                    ShortName = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -28,7 +28,7 @@ namespace EventsExpress.Db.Migrations
                     NeedQuantity = table.Column<double>(nullable: false),
                     ItemName = table.Column<string>(nullable: true),
                     EventId = table.Column<Guid>(nullable: false),
-                    UnitOfMeasuringId = table.Column<Guid>(nullable: false)
+                    UnitOfMeasuringId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -54,7 +54,7 @@ namespace EventsExpress.Db.Migrations
                     EventId = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     InventoryId = table.Column<Guid>(nullable: false),
-                    Quantity = table.Column<double>(nullable: false)
+                    Quantity = table.Column<double>(nullable: false),
                 },
                 constraints: table =>
                 {

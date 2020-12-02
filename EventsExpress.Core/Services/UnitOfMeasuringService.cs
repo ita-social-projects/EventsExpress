@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -22,39 +21,27 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<OperationResult> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            try
-            {
-                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Unit of measuring was created!", result.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
-            }
+            var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+            await _context.SaveChangesAsync();
+
+            return result.Id;
         }
 
-        public async Task<OperationResult> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
             var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null)
             {
-                return new OperationResult(false, "Object not found", unitOfMeasuringDTO.Id.ToString());
+                throw new EventsExpressException("Object not found");
             }
 
-            try
-            {
-                entity.ShortName = unitOfMeasuringDTO.ShortName;
-                entity.UnitName = unitOfMeasuringDTO.UnitName;
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Edit unit of measuring", entity.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
-            }
+            entity.ShortName = unitOfMeasuringDTO.ShortName;
+            entity.UnitName = unitOfMeasuringDTO.UnitName;
+            await _context.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public IEnumerable<UnitOfMeasuringDTO> GetAll()

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -28,11 +27,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Cancel([FromBody]EventStatusHistoryDto eventStatus)
         {
-            var result = await _eventStatusHistoryService.CancelEvent(eventStatus.EventId, eventStatus.Reason);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _eventStatusHistoryService.CancelEvent(eventStatus.EventId, eventStatus.Reason);
 
             return Ok(eventStatus);
         }

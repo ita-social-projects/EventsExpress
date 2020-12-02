@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoMapper;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -20,7 +19,7 @@ namespace EventsExpress.Core.Services
     {
         private readonly IOptions<ImageOptionsModel> _widthOptions;
         private readonly IHttpClientFactory _clientFactory;
-        private Lazy<HttpClient> _client;
+        private readonly Lazy<HttpClient> _client;
 
         public PhotoService(
             AppDbContext context,
@@ -106,28 +105,25 @@ namespace EventsExpress.Core.Services
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
-            using (var memoryStream = file.OpenReadStream())
+            using var memoryStream = file.OpenReadStream();
+            var oldBitMap = new Bitmap(memoryStream);
+            var newSize = new Size
             {
-                var oldBitMap = new Bitmap(memoryStream);
-                var newSize = new Size
-                {
-                    Width = newWidth,
-                    Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
-                };
+                Width = newWidth,
+                Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
+            };
 
-                var newBitmap = new Bitmap(oldBitMap, newSize);
+            var newBitmap = new Bitmap(oldBitMap, newSize);
 
-                return ImageToByteArray(newBitmap);
-            }
+            return ImageToByteArray(newBitmap);
         }
 
         private byte[] ImageToByteArray(Image imageIn)
         {
-            using (var ms = new MemoryStream())
-            {
-                imageIn.Save(ms, ImageFormat.Png);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            imageIn.Save(ms, ImageFormat.Png);
+
+            return ms.ToArray();
         }
     }
 }

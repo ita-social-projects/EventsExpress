@@ -24,7 +24,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    EventId = table.Column<Guid>(nullable: false)
+                    EventId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {

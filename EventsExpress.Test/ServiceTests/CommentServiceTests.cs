@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using Moq;
@@ -57,17 +58,13 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_Existing_returnTrue()
         {
-            var test = service.Delete(commentId);
-
-            Assert.IsTrue(test.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Delete(commentId));
         }
 
         [Test]
         public void Delete_NotExisting_returnFalse()
         {
-            var test = service.Delete(Guid.NewGuid());
-
-            Assert.IsFalse(test.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Delete(Guid.NewGuid()));
         }
 
         [Test]
@@ -82,9 +79,7 @@ namespace EventsExpress.Test.ServiceTests
                 Text = "Text",
             };
 
-            var test = service.Create(comment);
-
-            Assert.IsTrue(test.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Create(comment));
         }
 
         [Test]
@@ -98,9 +93,7 @@ namespace EventsExpress.Test.ServiceTests
                 Text = "Text",
             };
 
-            var test = service.Create(comment);
-
-            Assert.IsFalse(test.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(comment));
         }
 
         [Test]
@@ -114,9 +107,7 @@ namespace EventsExpress.Test.ServiceTests
                 Text = "Text",
             };
 
-            var test = service.Create(comment);
-
-            Assert.IsFalse(test.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(comment));
         }
     }
 }

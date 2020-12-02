@@ -88,7 +88,7 @@ namespace EventsExpress.Mapping
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
-                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z=>z.User)))
+                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -148,8 +148,7 @@ namespace EventsExpress.Mapping
                         Id = x.Id,
                         PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
                         Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
-                    }
-               )));
+                    })));
 
             CreateMap<EventDTO, EventDto>()
                 .ForMember(

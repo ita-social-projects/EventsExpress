@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -48,16 +48,16 @@ namespace EventsExpress.Core.Services
             return com;
         }
 
-        public async Task<OperationResult> Create(CommentDTO comment)
+        public async Task Create(CommentDTO comment)
         {
             if (_context.Users.Find(comment.UserId) == null)
             {
-                return new OperationResult(false, "Current user does not exist!", string.Empty);
+                throw new EventsExpressException("Current user does not exist!");
             }
 
             if (_context.Events.Find(comment.EventId) == null)
             {
-                return new OperationResult(false, "Wrong event id!", string.Empty);
+                throw new EventsExpressException("Wrong event id!");
             }
 
             Insert(new Comments()
@@ -70,15 +70,13 @@ namespace EventsExpress.Core.Services
             });
 
             await _context.SaveChangesAsync();
-
-            return new OperationResult(true);
         }
 
-        public async Task<OperationResult> Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return new OperationResult(false, "Id field is null", string.Empty);
+                throw new EventsExpressException("Id field is null");
             }
 
             var comment = _context.Comments
@@ -87,7 +85,7 @@ namespace EventsExpress.Core.Services
 
             if (comment == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
             if (comment.Children != null)
@@ -100,7 +98,6 @@ namespace EventsExpress.Core.Services
 
             var result = Delete(comment);
             await _context.SaveChangesAsync();
-            return new OperationResult(true);
         }
     }
 }
