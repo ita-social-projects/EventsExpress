@@ -56,16 +56,12 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var (opResult, authResponseModel) = await _authService.Authenticate(authRequest.Email, authRequest.Password);
-            if (!opResult.Successed)
-            {
-                return BadRequest(opResult.Message);
-            }
-
+            var authResponseModel = await _authService.Authenticate(authRequest.Email, authRequest.Password);
             var user = _userService.GetByEmail(authRequest.Email);
             var userInfo = _mapper.Map<UserInfo>(user);
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
             return Ok(userInfo);
         }
 
@@ -92,15 +88,11 @@ namespace EventsExpress.Controllers
             }
 
             await SetPhoto(userExisting, userView.PhotoUrl);
-            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
-            if (!opResult.Successed)
-            {
-                return BadRequest(opResult.Message);
-            }
-
+            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
             return Ok(userInfo);
         }
 
@@ -131,15 +123,11 @@ namespace EventsExpress.Controllers
             }
 
             await SetPhoto(userExisting, userView.PhotoUrl);
-            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
-            if (!opResult.Successed)
-            {
-                return BadRequest(opResult.Message);
-            }
-
+            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
             var userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(payload.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
             return Ok(userInfo);
         }
 
@@ -165,15 +153,11 @@ namespace EventsExpress.Controllers
             }
 
             await SetPhoto(userExisting, userView.PhotoUrl);
-            var (opResult, authResponseModel) = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
-            if (!opResult.Successed)
-            {
-                return BadRequest(opResult.Message);
-            }
-
+            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
             UserInfo userInfo = _mapper.Map<UserInfo>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
             return Ok(userInfo);
         }
 
@@ -186,6 +170,7 @@ namespace EventsExpress.Controllers
                     userExisting.Photo = await _photoService.AddPhotoByURL(urlPhoto);
                     userExisting.PhotoId = userExisting.Photo.Id;
                     await _userService.Update(userExisting);
+
                     return true;
                 }
             }
@@ -227,11 +212,9 @@ namespace EventsExpress.Controllers
 
             var user = _mapper.Map<LoginDto, UserDTO>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
-            var result = await _userService.Create(user);
-            return
-                !result.Successed
-                ? (IActionResult)BadRequest(result.Message)
-                : Ok();
+            await _userService.Create(user);
+
+            return Ok();
         }
 
         /// <summary>
@@ -251,17 +234,7 @@ namespace EventsExpress.Controllers
 
             var user = _userService.GetByEmail(email);
 
-            if (user == null)
-            {
-                return BadRequest("User with this email is not found");
-            }
-
-            var result = await _userService.PasswordRecover(user);
-
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.PasswordRecover(user);
 
             return Ok();
         }
@@ -286,18 +259,15 @@ namespace EventsExpress.Controllers
 
             cache.UserId = userId;
 
-            var result = await _userService.ConfirmEmail(cache);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _userService.ConfirmEmail(cache);
 
             var user = _userService.GetById(cache.UserId);
             var userInfo = _mapper.Map<UserDTO, UserInfo>(user);
-            var (_, authResponseModel) = await _authService.FirstAuthenticate(user);
+            var authResponseModel = await _authService.FirstAuthenticate(user);
             userInfo.Token = authResponseModel.JwtToken;
             await _userService.Update(user);
             userInfo.AfterEmailConfirmation = true;
+
             return Ok(userInfo);
         }
 
@@ -316,12 +286,7 @@ namespace EventsExpress.Controllers
             }
 
             var user = _authService.GetCurrentUser(HttpContext.User);
-            var result = await _authService.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
-
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _authService.ChangePasswordAsync(user, changePasswordDto.OldPassword, changePasswordDto.NewPassword);
 
             return Ok();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
@@ -123,25 +124,20 @@ namespace EventsExpress.Test.ServiceTests
         public void AddInventar_ReturnTrue()
         {
             inventoryDTO.Id = Guid.NewGuid();
-            var result = service.AddInventar(eventId, inventoryDTO);
 
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.AddInventar(eventId, inventoryDTO));
         }
 
         [Test]
         public void DeleteInventar_ReturnTrue()
         {
-            var result = service.DeleteInventar(inventoryId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.DeleteInventar(inventoryId));
         }
 
         [Test]
         public void EditInventar_ReturnTrue()
         {
-            var result = service.EditInventar(inventoryDTO);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.EditInventar(inventoryDTO));
         }
 
         [Test]

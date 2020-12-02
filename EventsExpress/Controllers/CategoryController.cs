@@ -50,14 +50,16 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
-                                       : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
-            if (res.Successed)
+            if (model.Id == Guid.Empty)
             {
-                return Ok();
+                await _categoryService.Create(model.Name);
+            }
+            else
+            {
+                await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
             }
 
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -74,13 +76,9 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var res = await _categoryService.Delete(id);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _categoryService.Delete(id);
 
-            return BadRequest(res.Message);
+            return Ok();
         }
     }
 }

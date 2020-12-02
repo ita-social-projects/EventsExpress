@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
@@ -84,11 +85,11 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new UserEvent
                         {
-                                    UserStatusEvent = UserStatusEvent.Pending,
-                                    Status = Status.WillGo,
-                                    UserId = userId,
-                                    User = users[0],
-                                    EventId = eventId,
+                            UserStatusEvent = UserStatusEvent.Pending,
+                            Status = Status.WillGo,
+                            UserId = userId,
+                            User = users[0],
+                            EventId = eventId,
                         },
                     },
                 },
@@ -101,62 +102,46 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_ReturnTrue()
         {
-            var result = service.AddUserToEvent(userId, firstEventId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, firstEventId));
         }
 
         [Test]
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
-            var result = service.AddUserToEvent(Guid.NewGuid(), eventId);
-
-            StringAssert.Contains("User not found!", result.Result.Message);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
-            var result = service.AddUserToEvent(userId, Guid.NewGuid());
-
-            StringAssert.Contains("Event not found!", result.Result.Message);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
         public void DeleteUserFromEvent_ReturnTrue()
         {
-            var result = service.DeleteUserFromEvent(userId, eventId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.DeleteUserFromEvent(userId, eventId));
         }
 
         [Test]
         public void DeleteUserFromEvent_UserNotFound_ReturnFalse()
         {
-            var result = service.DeleteUserFromEvent(Guid.NewGuid(), eventId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
         public void DeleteUserFromEvent_EventNotFound_ReturnFalse()
         {
-            var result = service.DeleteUserFromEvent(userId, Guid.NewGuid());
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
         public void ChangeVisitorStatus_ReturnTrue()
         {
-            var test = service.ChangeVisitorStatus(
+            Assert.DoesNotThrowAsync(async () => await service.ChangeVisitorStatus(
                 userId,
                 eventId,
-                UserStatusEvent.Approved);
-
-            Assert.IsTrue(test.Result.Successed);
+                UserStatusEvent.Approved));
         }
     }
 }

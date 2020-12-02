@@ -48,14 +48,16 @@ namespace EventsExpress.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = country.Id == Guid.Empty
-                    ? await _countryService.CreateCountryAsync(country)
-                    : await _countryService.EditCountryAsync(country);
-
-                if (result.Successed)
+                if (country.Id == Guid.Empty)
                 {
-                    return Ok();
+                    await _countryService.CreateCountryAsync(country);
                 }
+                else
+                {
+                    await _countryService.EditCountryAsync(country);
+                }
+
+                return Ok();
             }
 
             return BadRequest();
@@ -70,16 +72,9 @@ namespace EventsExpress.Controllers
         [HttpPost("countries/delete")]
         public async Task<IActionResult> DeleteCountry(Guid id)
         {
-            if (id != Guid.Empty)
-            {
-                var result = await _countryService.DeleteAsync(id);
-                if (result.Successed)
-                {
-                    return Ok();
-                }
-            }
+            await _countryService.DeleteAsync(id);
 
-            return BadRequest();
+            return Ok();
         }
 
         // Methods for cities CRUD:
@@ -107,14 +102,16 @@ namespace EventsExpress.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = city.Id == Guid.Empty ?
-                    await _cityService.CreateCityAsync(city) :
-                    await _cityService.EditCityAsync(city);
-
-                if (result.Successed)
+                if (city.Id == Guid.Empty)
                 {
-                    return Ok();
+                    await _cityService.CreateCityAsync(city);
                 }
+                else
+                {
+                    await _cityService.EditCityAsync(city);
+                }
+
+                return Ok();
             }
 
             return BadRequest();
@@ -131,11 +128,9 @@ namespace EventsExpress.Controllers
         {
             if (id != Guid.Empty)
             {
-                var result = await _cityService.DeleteCityAsync(id);
-                if (result.Successed)
-                {
-                    return Ok();
-                }
+                await _cityService.DeleteCityAsync(id);
+
+                return Ok();
             }
 
             return BadRequest();
