@@ -28,8 +28,6 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public UserPreviewViewModel User { get; set; }
-
         public CityViewModel City { get; set; }
 
         public CountryViewModel Country { get; set; }

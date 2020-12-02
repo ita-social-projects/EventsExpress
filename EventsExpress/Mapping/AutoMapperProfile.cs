@@ -88,7 +88,7 @@ namespace EventsExpress.Mapping
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
-                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z=>z.User)))
+                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -149,13 +149,12 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                    new UserPreviewViewModel
-                    {
-                        Birthday = x.Birthday,
-                        Id = x.Id,
-                        PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
-                        Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
-                    }
-               )));
+                   {
+                       Birthday = x.Birthday,
+                       Id = x.Id,
+                       PhotoUrl = x.Photo != null ? x.Photo.Thumb.ToRenderablePictureString() : null,
+                       Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
+                   })));
 
             CreateMap<EventDTO, EventViewModel>()
                 .ForMember(
@@ -191,20 +190,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => new InventoryViewModel
-                        {
-                            Id = x.Id,
-                            ItemName = x.ItemName,
-                            NeedQuantity = x.NeedQuantity,
-                            UnitOfMeasuring = new UnitOfMeasuringViewModel
-                            {
-                                Id = x.UnitOfMeasuring.Id,
-                                UnitName = x.UnitOfMeasuring.UnitName,
-                                ShortName = x.UnitOfMeasuring.ShortName,
-                            },
-                        })));
+                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
 
             CreateMap<EventEditViewModel, EventDTO>()
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewViewModel { Id = x.Id })));
@@ -221,6 +207,7 @@ namespace EventsExpress.Mapping
                             NeedQuantity = x.NeedQuantity,
                             UnitOfMeasuring = new UnitOfMeasuringDTO
                             {
+                                Id = x.UnitOfMeasuring.Id,
                                 UnitName = x.UnitOfMeasuring.UnitName,
                                 ShortName = x.UnitOfMeasuring.ShortName,
                             },
