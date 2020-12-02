@@ -45,7 +45,7 @@ namespace EventsExpress.Core.Services
 
         private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
-        public async Task<OperationResult> AddUserToEvent(Guid userId, Guid eventId)
+        public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!_context.Events.Any(e => e.Id == eventId))
             {
@@ -132,8 +132,6 @@ namespace EventsExpress.Core.Services
             await _context.SaveChangesAsync();
 
             var userIds = _context.EventOwners.Where(x => x.EventId == id).Select(x => x.UserId);
-
-            return new OperationResult(false, "Error!", string.Empty);
         }
 
         public async Task UnblockEvent(Guid eId)
@@ -148,11 +146,9 @@ namespace EventsExpress.Core.Services
 
             await _context.SaveChangesAsync();
 
-            var userIds = _context.EventOwners.Where(x => x.EventId == id).Select(x => x.UserId);
+            var userIds = _context.EventOwners.Where(x => x.EventId == eId).Select(x => x.UserId);
 
             await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
-
-            return new OperationResult(true);
         }
 
         public async Task<Guid> Create(EventDTO eventDTO)
@@ -189,9 +185,9 @@ namespace EventsExpress.Core.Services
 
             var result = Insert(ev);
 
-                eventDTO.Id = result.Id;
+            eventDTO.Id = result.Id;
 
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             if (eventDTO.IsReccurent)
             {

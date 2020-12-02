@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
@@ -46,6 +45,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(e => e.Owners)
                         .ThenInclude(d => d.User)
                 .FirstOrDefault(x => x.Id == eventScheduleId);
+
             return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 
@@ -62,7 +62,7 @@ namespace EventsExpress.Core.Services
                 .ToList());
         }
 
-        public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)
+        public async Task<Guid> Create(EventScheduleDTO eventScheduleDTO)
         {
             var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
             eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
@@ -75,41 +75,37 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Edit(EventScheduleDTO eventScheduleDTO)
         {
-            if (eventScheduleDTO.Id != Guid.Empty)
-            {
-                var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
-                ev.Frequency = eventScheduleDTO.Frequency;
-                ev.Periodicity = eventScheduleDTO.Periodicity;
-                ev.LastRun = eventScheduleDTO.LastRun;
-                ev.NextRun = eventScheduleDTO.NextRun;
-                ev.IsActive = eventScheduleDTO.IsActive;
-                ev.EventId = eventScheduleDTO.EventId;
-                ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
-                ev.ModifiedDateTime = DateTime.UtcNow;
+            var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
+            ev.Frequency = eventScheduleDTO.Frequency;
+            ev.Periodicity = eventScheduleDTO.Periodicity;
+            ev.LastRun = eventScheduleDTO.LastRun;
+            ev.NextRun = eventScheduleDTO.NextRun;
+            ev.IsActive = eventScheduleDTO.IsActive;
+            ev.EventId = eventScheduleDTO.EventId;
+            ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
+            ev.ModifiedDateTime = DateTime.UtcNow;
 
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-                return eventScheduleDTO.Id;
-            }
-
-            throw new EventsExpressException("Id not found");
+            return eventScheduleDTO.Id;
         }
 
-        public async Task<OperationResult> CancelEvents(Guid eventId)
+        public async Task<Guid> CancelEvents(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.IsActive = false;
+
             return await Edit(eventScheduleDTO);
         }
 
-        public async Task<OperationResult> CancelNextEvent(Guid eventId)
+        public async Task<Guid> CancelNextEvent(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
+
             return await Edit(eventScheduleDTO);
         }
-
     }
 }

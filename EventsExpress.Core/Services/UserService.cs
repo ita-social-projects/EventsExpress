@@ -336,15 +336,8 @@ namespace EventsExpress.Core.Services
 
             u.Categories = newCategories;
 
-            try
-            {
-                Update(u);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new EventsExpressException("Update failing");
-            }
+            Update(u);
+            await _context.SaveChangesAsync();
         }
 
         public async Task SetAttitude(AttitudeDTO attitude)

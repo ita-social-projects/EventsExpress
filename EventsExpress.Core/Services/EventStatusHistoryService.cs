@@ -49,11 +49,10 @@ namespace EventsExpress.Core.Services
             var record = new EventStatusHistory
             {
                 EventId = e.Id,
-                UserId = e.OwnerId,
+                UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id,
                 EventStatus = status,
                 Reason = reason,
             };
-            record.UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id;
 
             return record;
         }

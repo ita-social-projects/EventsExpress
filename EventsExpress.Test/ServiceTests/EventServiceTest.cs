@@ -48,7 +48,6 @@ namespace EventsExpress.Test.ServiceTests
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
 
-
             List<User> users = new List<User>()
             {
                 new User
