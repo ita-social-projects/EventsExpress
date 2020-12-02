@@ -17,6 +17,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.ViewModels;
 using EventsExpress.Filters;
+using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
 using FluentValidation;
@@ -162,6 +163,11 @@ namespace EventsExpress
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(EventsExpressExceptionFilter));
+            });
 
             services.AddSwaggerGen(c =>
             {

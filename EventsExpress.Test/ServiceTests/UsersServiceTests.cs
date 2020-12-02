@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -82,9 +83,7 @@ namespace EventsExpress.Test.ServiceTests
                 Email = existingUserDTO.Email,
             };
 
-            var result = service.Create(newUser);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newUser));
         }
 
         [Test]
@@ -98,9 +97,7 @@ namespace EventsExpress.Test.ServiceTests
                 .Map<User>(newUserDTO))
                     .Returns(newUser);
 
-            var result = service.Create(newUserDTO);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Create(newUserDTO));
         }
 
         [Test]
@@ -110,9 +107,7 @@ namespace EventsExpress.Test.ServiceTests
                 .Map<User>(existingUserDTO))
                     .Returns(existingUser);
 
-            var result = service.Create(existingUserDTO);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
         }
 
         [Test]
@@ -120,9 +115,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             CacheDTO cache = new CacheDTO() { };
 
-            var result = service.ConfirmEmail(cache);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));
         }
 
         [Test]
@@ -136,9 +129,7 @@ namespace EventsExpress.Test.ServiceTests
                 Token = token,
             };
 
-            var result = service.ConfirmEmail(cache);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));
         }
 
         [Test]
@@ -153,9 +144,7 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = cache.Token });
 
-            var result = service.ConfirmEmail(cache);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.ConfirmEmail(cache));
         }
 
         [Test]
@@ -170,25 +159,19 @@ namespace EventsExpress.Test.ServiceTests
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
                 .Returns(new CacheDTO { Token = "invalidToken" });
 
-            var result = service.ConfirmEmail(cache);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));
         }
 
         [Test]
         public void PasswordRecovery_UserNoFoundInDb_ReturnFalse()
         {
-            var result = service.PasswordRecover(new UserDTO());
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.PasswordRecover(new UserDTO()));
         }
 
         [Test]
         public void PasswordRecovery_ValidUserDto_ReturnTrue()
         {
-            var result = service.PasswordRecover(existingUserDTO);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.PasswordRecover(existingUserDTO));
         }
 
         [Test]
@@ -197,29 +180,25 @@ namespace EventsExpress.Test.ServiceTests
         public void Update_EmailIsNull_ReturnFalse(string email)
         {
             UserDTO newUser = new UserDTO() { Email = email };
-            var result = service.Update(newUser);
 
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(newUser));
         }
 
         [Test]
-        public void Update_UserInDbNotFound_ReturnFalse()
+        public void Update_UserInDbNotFound_Throws()
         {
-            var result = service.Update(existingUserDTO);
-
-            Assert.IsFalse(result.Result.Successed);
+            existingUserDTO.Id = Guid.NewGuid();
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(existingUserDTO));
         }
 
         [Test]
-        public void Update_UserDtoIsvalid_ReturnTrue()
+        public void Update_UserDtoIsvalid_DoesNotThrow()
         {
             MockMapper.Setup(m => m
                 .Map<UserDTO, User>(existingUserDTO))
                     .Returns(existingUser);
 
-            var result = service.Update(existingUserDTO);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Update(existingUserDTO));
         }
 
         [Test]
@@ -228,9 +207,7 @@ namespace EventsExpress.Test.ServiceTests
             var roleId = Guid.NewGuid();
             var userId = Guid.NewGuid();
 
-            var result = service.ChangeRole(userId, roleId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeRole(userId, roleId));
         }
 
         [Test]
@@ -239,57 +216,37 @@ namespace EventsExpress.Test.ServiceTests
             var roleId = Guid.NewGuid();
             var userId = Guid.NewGuid();
 
-            var result = service.ChangeRole(userId, roleId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeRole(userId, roleId));
         }
 
         [Test]
         public void ChangeRole_RoleIdAndUserIdIsValid_ReturnTrue()
         {
-            var result = service.ChangeRole(userId, roleId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.ChangeRole(userId, roleId));
         }
 
         [Test]
         public void Unblock_InvalidUser_ReturnFalse()
         {
-            var userId = Guid.NewGuid();
-
-            var result = service.Unblock(userId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Unblock(Guid.NewGuid()));
         }
 
         [Test]
         public void Unblock_AllIsValid_ReturnFalse()
         {
-            var userId = existingUser.Id;
-
-            var result = service.Unblock(userId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Unblock(existingUser.Id));
         }
 
         [Test]
         public void Block_InvalidUser_ReturnFalse()
         {
-            var userId = Guid.NewGuid();
-
-            var result = service.Block(userId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Block(Guid.NewGuid()));
         }
 
         [Test]
         public void Block_AllIsValid_ReturnFalse()
         {
-            var userId = existingUser.Id;
-
-            var result = service.Block(userId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Block(existingUser.Id));
         }
     }
 }

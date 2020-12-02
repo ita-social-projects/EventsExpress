@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -42,12 +41,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -65,12 +60,8 @@ namespace EventsExpress.Controllers
             }
 
             var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Core.IServices
@@ -14,7 +13,7 @@ namespace EventsExpress.Core.IServices
 
         List<Message> GetUnreadMessages(Guid userId);
 
-        Task<OperationResult> MsgSeen(List<Guid> messageIds);
+        Task<Guid> MsgSeen(List<Guid> messageIds);
 
         IEnumerable<ChatRoom> GetUserChats(Guid userId);
 

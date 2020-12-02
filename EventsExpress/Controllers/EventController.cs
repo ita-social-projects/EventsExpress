@@ -48,12 +48,7 @@ namespace EventsExpress.Controllers
 
             var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
 
-            if (result.Successed)
-            {
-                return Ok(new { Id = result.Property });
-            }
-
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -72,12 +67,7 @@ namespace EventsExpress.Controllers
 
             var result = await _eventService.CreateNextEvent(eventId);
 
-            if (result.Successed)
-            {
-                return Ok(new { id = result.Property });
-            }
-
-            return BadRequest(result.Message);
+            return Ok(new { id = result });
         }
 
         /// <summary>
@@ -122,12 +112,8 @@ namespace EventsExpress.Controllers
             var result = model.Id == Guid.Empty
                 ? null
                 : await _eventService.Edit(_mapper.Map<EventDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
 
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -197,13 +183,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddUserToEvent(Guid eventId, Guid userId)
         {
-            var res = await _eventService.AddUserToEvent(userId, eventId);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _eventService.AddUserToEvent(userId, eventId);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>
@@ -217,13 +199,9 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
-            var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>
@@ -237,13 +215,9 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
         {
-            var res = await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>
@@ -256,13 +230,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> DeleteUserFromEvent(Guid eventId, Guid userId)
         {
-            var res = await _eventService.DeleteUserFromEvent(userId, eventId);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _eventService.DeleteUserFromEvent(userId, eventId);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>
@@ -276,11 +246,7 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid eventId)
         {
-            var result = await _eventService.BlockEvent(eventId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _eventService.BlockEvent(eventId);
 
             return Ok();
         }
@@ -295,11 +261,7 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
-            var result = await _eventService.UnblockEvent(eventId);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _eventService.UnblockEvent(eventId);
 
             return Ok();
         }
@@ -318,13 +280,9 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.SetRate(model.UserId, model.EventId, model.Rate);
-            if (result.Successed)
-            {
-                return Ok();
-            }
+            await _eventService.SetRate(model.UserId, model.EventId, model.Rate);
 
-            return BadRequest();
+            return Ok();
         }
 
         /// <summary>

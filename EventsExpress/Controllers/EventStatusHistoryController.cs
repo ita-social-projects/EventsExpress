@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.Filters;
 using EventsExpress.ViewModels;
@@ -30,11 +29,7 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<IActionResult> Cancel(Guid eventId, [FromBody]EventStatusHistoryViewModel eventStatus)
         {
-            var result = await _eventStatusHistoryService.CancelEvent(eventStatus.EventId, eventStatus.Reason);
-            if (!result.Successed)
-            {
-                return BadRequest(result.Message);
-            }
+            await _eventStatusHistoryService.CancelEvent(eventStatus.EventId, eventStatus.Reason);
 
             return Ok(eventStatus);
         }

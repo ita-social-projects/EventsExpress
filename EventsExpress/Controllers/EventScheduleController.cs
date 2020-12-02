@@ -17,16 +17,13 @@ namespace EventsExpress.Controllers
     public class EventScheduleController : ControllerBase
     {
         private readonly IEventScheduleService _eventScheduleService;
-        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public EventScheduleController(
             IEventScheduleService eventScheduleService,
-            IAuthService authSrv,
             IMapper mapper)
         {
             _eventScheduleService = eventScheduleService;
-            _authService = authSrv;
             _mapper = mapper;
         }
 
@@ -65,16 +62,9 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventScheduleViewModel model)
         {
-            var result = model.Id == Guid.Empty
-                ? null
-                : await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
+            var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
 
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
-
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -92,16 +82,9 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = eventId == Guid.Empty
-                ? null
-                : await _eventScheduleService.CancelEvents(eventId);
+            var result = await _eventScheduleService.CancelEvents(eventId);
 
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
-
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -119,16 +102,9 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = eventId == Guid.Empty
-                ? null
-                : await _eventScheduleService.CancelNextEvent(eventId);
+            var result = await _eventScheduleService.CancelNextEvent(eventId);
 
-            if (result.Successed)
-            {
-                return Ok(new { id = result.Property });
-            }
-
-            return BadRequest(result.Message);
+            return Ok(new { id = result });
         }
 
         /// <summary>

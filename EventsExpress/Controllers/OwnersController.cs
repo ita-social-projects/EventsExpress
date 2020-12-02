@@ -22,25 +22,17 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> DeleteFromOwners(Guid userId, Guid eventId)
         {
-            var res = await _eventOwnersService.DeleteOwnerFromEvent(userId, eventId);
-            if (res.Successed)
-            {
-                return Ok(res.Property);
-            }
-            return BadRequest();
+            await _eventOwnersService.DeleteOwnerFromEvent(userId, eventId);
+
+            return Ok();
         }
 
         [HttpPost("[action]")]
         public async Task<ActionResult> PromoteToOwner(Guid userId, Guid eventId)
         {
-            var res = await _eventOwnersService.PromoteToOwner(userId, eventId);
+            await _eventOwnersService.PromoteToOwner(userId, eventId);
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
     }
 }
