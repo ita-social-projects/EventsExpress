@@ -86,12 +86,7 @@ namespace EventsExpress.Controllers
 
             var result = await _eventService.Create(_mapper.Map<EventDTO>(model));
 
-            if (result.Successed)
-            {
-                return Ok(new { eventId = result.Property });
-            }
-
-            return BadRequest(result.Message);
+            return Ok(result);
         }
 
         /// <summary>
@@ -109,9 +104,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = model.Id == Guid.Empty
-                ? null
-                : await _eventService.Edit(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Edit(_mapper.Map<EventDTO>(model));
 
             return Ok(result);
         }
