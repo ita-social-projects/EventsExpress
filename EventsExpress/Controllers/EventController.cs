@@ -48,7 +48,7 @@ namespace EventsExpress.Controllers
 
             var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
 
-            return Ok(result);
+            return Ok(new { id = result });
         }
 
         /// <summary>
