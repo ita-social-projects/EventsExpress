@@ -88,7 +88,6 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost]
-        //[UserAccessTypeFilter(eventId: "model")]
         public async Task<IActionResult> Create([FromForm] EventCreateViewModel model)
         {
             if (!ModelState.IsValid)
@@ -100,7 +99,7 @@ namespace EventsExpress.Controllers
 
             if (result.Successed)
             {
-                return Ok(result.Property);
+                return Ok(new { eventId = result.Property });
             }
 
             return BadRequest(result.Message);
@@ -294,6 +293,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process is failed.</response>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
             var result = await _eventService.UnblockEvent(eventId);

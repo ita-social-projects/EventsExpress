@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Filters;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
         [HttpPost("[action]")]
+        [UserAccessTypeFilter]
         public async Task<IActionResult> AddInventar([FromBody] InventoryViewModel model, Guid eventId)
         {
             if (!ModelState.IsValid)
