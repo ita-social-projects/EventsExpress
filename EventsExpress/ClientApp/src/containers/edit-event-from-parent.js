@@ -21,7 +21,7 @@ class EditFromParentEventWraper extends Component {
     componentWillMount = () => {
         this.props.get_countries();
         this.props.get_categories();
-        this.props.get_cities(this.props.initialValues.country.id);
+        this.props.get_cities(this.props.event.country.id);
     }
 
     componentDidUpdate = () => {
@@ -47,12 +47,14 @@ class EditFromParentEventWraper extends Component {
     }
 
     render() {
-        let data = {
-            ...this.props.initialValues,
+        let initialValues = {
+            ...this.props.event,
             dateFrom: this.props.eventSchedule.nextRun,
-            dateTo: new moment(this.props.initialValues.dateTo)
-                .add(new moment(this.props.eventSchedule.nextRun)
-                    .diff(new moment(this.props.initialValues.dateFrom), 'days'), 'days')
+            dateTo: new moment(this.props.event.dateTo)
+                .add(new moment(this.props.event.nextRun)
+                    .diff(new moment(this.props.event.dateFrom), 'days'), 'days'),
+            cityId: this.props.event.city.id, 
+            countryId: this.props.event.country.id        
         }
 
         return <>
@@ -62,7 +64,7 @@ class EditFromParentEventWraper extends Component {
                 onChangeCountry={this.onChangeCountry}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
-                initialValues={data}
+                initialValues={initialValues}
                 haveReccurentCheckBox={false}
                 disabledDate={true}
                 isCreated={true} />
@@ -77,7 +79,7 @@ const mapStateToProps = (state) => ({
     cities: state.cities,
     all_categories: state.categories.data,
     eventSchedule: state.eventSchedule.data,
-    initialValues: state.event.data,
+    event: state.event.data,
 });
 
 const mapDispatchToProps = (dispatch) => {

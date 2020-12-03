@@ -216,16 +216,16 @@ class EventForm extends Component {
                     </div>
                     <div className="mt-2">
                         <Field onChange={this.props.onChangeCountry}
-                            name='country.id'
+                            name='countryId'
                             data={countries}
                             text='Country'
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values && values.country.id  &&
+                    {values && values.countryId  &&
                         <div className="mt-2">
                             <Field
-                                name='city.id'
+                                name='cityId'
                                 data={this.props.cities}
                                 text='City'
                                 component={renderSelectLocationField}
