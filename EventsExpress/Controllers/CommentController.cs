@@ -52,7 +52,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete comment proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [AllowAnonymous]
-        [HttpPost("[action]/{id}")]
+        [HttpPost("{id}/[action]")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _commentService.Delete(id);

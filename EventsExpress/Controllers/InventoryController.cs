@@ -31,11 +31,11 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to add inventar to event..
         /// </summary>
-        /// <param name="model">Required.</param>
         /// <param name="eventId">Required.</param>
+        /// <param name="model">Required.</param>
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
-        [HttpPost("[action]")]
+        [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> AddInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
@@ -52,10 +52,11 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit inventar.
         /// </summary>
+        /// <param name="eventId">Required.</param>
         /// <param name="model">Required.</param>
         /// <response code="200">Edit inventar proces success.</response>
         /// <response code="400">If Edit process failed.</response>
-        [HttpPost("[action]")]
+        [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> EditInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
@@ -72,10 +73,11 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete inventar.
         /// </summary>
-        /// <param name="itemId)">Required.</param>
+        /// <param name="eventId">Required.</param>
+        /// <param name="itemId">Required.</param>
         /// <response code="200">Delete inventar proces success.</response>
         /// <response code="400">If id param is empty.</response>
-        [HttpPost("[action]")]
+        [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> DeleteInventar(Guid eventId, Guid itemId)
         {
@@ -95,7 +97,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <returns>All inventories from event.</returns>
         /// <response code="200">Return IEnumerable InventoryDto.</response>
-        [HttpGet("[action]")]
+        [HttpGet("{eventId:Guid}/[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
             if (eventId == Guid.Empty)

@@ -34,6 +34,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit event from event schedule and create it.
         /// </summary>
+        /// <param name="eventId">Required.</param>
         /// <param name="model">Required.</param>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
@@ -200,8 +201,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to denied participation in event.
         /// </summary>
+        /// <param name="eventId">Required.</param>
         /// <param name="userId">Required.</param>
-        /// <param name="eventId">EventId.</param>
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]

@@ -5,7 +5,7 @@ const baseService = new EventsExpressService();
 export default class CommentService {
 
     setCommentDelete = async (data) => {
-        const res = await baseService.setResource(`comment/delete/${data.id}`);
+        const res = await baseService.setResource(`comment/${data.id}/delete`);
         return !res.ok
             ? { error: await res.text() }
             : res;

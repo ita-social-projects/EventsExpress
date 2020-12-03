@@ -5,7 +5,7 @@ const baseService = new EventsExpressService();
 export default class InventoryService {
 
     getInventoriesByEventId = async (eventId) => {
-        const res = await baseService.getResource(`inventory/GetInventar?eventId=${eventId}`);
+        const res = await baseService.getResource(`inventory/${eventId}/GetInventar`);
         return res;
     }
 
@@ -16,7 +16,7 @@ export default class InventoryService {
             needQuantity: Number(item.needQuantity),
             unitOfMeasuring: {id: item.unitOfMeasuring}
         }
-        const res = await baseService.setResource(`inventory/EditInventar/?eventId=${eventId}`, value);
+        const res = await baseService.setResource(`inventory/${eventId}/EditInventar`, value);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -28,14 +28,14 @@ export default class InventoryService {
             needQuantity: Number(item.needQuantity),
             unitOfMeasuring: {id: item.unitOfMeasuring}
         }
-        const res = await baseService.setResource(`inventory/AddInventar/?eventId=${eventId}`, value);
+        const res = await baseService.setResource(`inventory/${eventId}/AddInventar`, value);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
     setItemDelete = async (itemId, eventId) => {
-        const res = await baseService.setResource(`inventory/DeleteInventar/?itemId=${itemId}&eventId=${eventId}`);
+        const res = await baseService.setResource(`inventory/${eventId}/DeleteInventar/?itemId=${itemId}`);
         return !res.ok
             ? { error: await res.text() }
             : res;

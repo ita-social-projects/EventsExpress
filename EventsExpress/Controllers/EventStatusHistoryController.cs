@@ -26,7 +26,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <response code="200">Cancelation succesful.</response>
         /// <response code="400">Cancelation failed.</response>
-        [HttpPost("[action]")]
+        [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
         public async Task<IActionResult> Cancel(Guid eventId, [FromBody]EventStatusHistoryViewModel eventStatus)
         {
