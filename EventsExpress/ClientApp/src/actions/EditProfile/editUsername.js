@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { UserService } from '../../services';
 import { setAlert} from '../alert';
 
 export const editUsername = {
@@ -9,7 +9,7 @@ export const editUsername = {
 
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export default function edit_Username(data) {
    

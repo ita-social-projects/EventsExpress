@@ -1,5 +1,5 @@
 
-import EventsExpressService from '../services/EventsExpressService';
+import { UserService } from '../services';
 
 export const GET_USERS_PENDING = "GET_USERS_PENDING";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
@@ -7,7 +7,7 @@ export const GET_USERS_ERROR = "GET_USERS_ERROR";
 export const RESET_USERS = "RESET_USERS";
 export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export function get_users(filters) {
     return dispatch => {

@@ -1,11 +1,11 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventScheduleService } from '../services';
 
 export const SET_EVENTS_SCHEDULE_PENDING = "SET_EVENTS_SCHEDULE_PENDING";
 export const GET_EVENTS_SCHEDULE_SUCCESS = "GET_EVENTS_SCHEDULE_SUCCESS";
 export const SET_EVENTS_SCHEDULE_ERROR = "SET_EVENTS_SCHEDULE_ERROR";
 export const RESET_EVENTS_SCHEDULE = "RESET_EVENTS_SCHEDULE";
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventScheduleService();
 
 export function getEventSchedules() {
     return dispatch => {

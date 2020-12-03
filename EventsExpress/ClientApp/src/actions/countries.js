@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { LocationService } from '../services';
 
 
 export const SET_COUNTRY_PENDING = "SET_COUNTRY_PENDING";
@@ -6,7 +6,7 @@ export const SET_COUNTRY_SUCCESS = "SET_COUNTRY_SUCCESS";
 export const SET_COUNTRY_ERROR = "SET_COUNTRY_ERROR";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new LocationService();
 
 export default function get_countries() {
 

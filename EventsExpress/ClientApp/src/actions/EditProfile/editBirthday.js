@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { UserService } from '../../services';
 import { setAlert } from '../alert';
 
 export const editBirthday = {
@@ -8,7 +8,7 @@ export const editBirthday = {
     UPDATE: "UPDATE_BIRTHDAY"
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export default function edit_Birthday(data) {
     return dispatch => {

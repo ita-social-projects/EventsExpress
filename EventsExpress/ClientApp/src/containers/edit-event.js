@@ -15,7 +15,7 @@ class EditEventWrapper extends Component {
     componentWillMount = () => {
         this.props.get_countries();
         this.props.get_categories();
-        this.props.get_cities(this.props.initialValues.countryId);
+        this.props.get_cities(this.props.event.country.id);
     }
     
     componentDidUpdate = () => {
@@ -29,7 +29,7 @@ class EditEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
-        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.initialValues.id });
+        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
     onChangeCountry = (e) => {
@@ -38,6 +38,12 @@ class EditEventWrapper extends Component {
 
 
     render() {
+        let initialValues = {
+            ...this.props.event, 
+            cityId: this.props.event.city.id, 
+            countryId: this.props.event.country.id
+        }
+
         return <>
             <EventForm
                 all_categories={this.props.all_categories}
@@ -45,9 +51,9 @@ class EditEventWrapper extends Component {
                 onChangeCountry={this.onChangeCountry}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
-                initialValues={this.props.initialValues}
+                initialValues={initialValues}
                 form_values={this.props.form_values}
-                checked={this.props.initialValues.isReccurent}
+                checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
                 disabledDate={false}
                 isCreated={true} />
@@ -62,7 +68,7 @@ const mapStateToProps = (state) => ({
     cities: state.cities,
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),
-    initialValues: state.event.data,
+    event: state.event.data,
 });
 
 const mapDispatchToProps = (dispatch) => {

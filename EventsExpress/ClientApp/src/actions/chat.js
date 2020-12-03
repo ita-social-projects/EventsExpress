@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { ChatService } from '../services';
 import * as SignalR from '@aspnet/signalr';
 import { setAlert } from './alert';
 
@@ -17,7 +17,7 @@ export const DELETE_OLD_NOTIFICATION = "DELETE_OLD_NOTIFICATION";
 export const DELETE_SEEN_MSG_NOTIFICATION = "DELETE_SEEN_MSG_NOTIFICATION";
 export const RECEIVED_NEW_EVENT = "RECEIVED_NEW_EVENT";
 
-const api_serv = new EventsExpressService();
+const api_serv = new ChatService();
 
 export default function get_chat(chatId) {
 

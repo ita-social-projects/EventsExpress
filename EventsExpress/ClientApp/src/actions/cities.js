@@ -1,10 +1,10 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { LocationService } from '../services';
 export const GET_CITY_PENDING = "GET_CITY_PENDING";
 export const GET_CITY_SUCCESS = "GET_CITY_SUCCESS";
 export const GET_CITY_ERROR = "GET_CITY_ERROR";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new LocationService();
 
 export default function get_cities(country) {
 

@@ -1,9 +1,9 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { AuthenticationService } from '../services';
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
 export const SET_REGISTER_ERROR = "SET_REGISTER_ERROR";
 
-const api_serv = new EventsExpressService();
+const api_serv = new AuthenticationService();
 
 export default function register(email, password) {
   return dispatch => {

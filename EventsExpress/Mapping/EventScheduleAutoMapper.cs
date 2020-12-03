@@ -4,7 +4,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
 {
@@ -28,21 +28,21 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
 
-            CreateMap<EventScheduleDTO, EventScheduleDto>()
-                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventPreviewDto
+            CreateMap<EventScheduleDTO, EventScheduleViewModel>()
+                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventPreviewViewModel
                 {
                     Id = src.Event.Id,
                     Title = src.Event.Title,
                     DateTo = src.Event.DateTo,
                     DateFrom = src.Event.DateFrom,
-                    Owners = src.Event.Owners.Select(x => new UserPreviewDto
+                    Owners = src.Event.Owners.Select(x => new UserPreviewViewModel
                     {
                         Id = x.Id,
                     }),
                     PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
                 }));
 
-            CreateMap<EventScheduleDto, EventScheduleDTO>()
+            CreateMap<EventScheduleViewModel, EventScheduleDTO>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
 
             CreateMap<EventDTO, EventScheduleDTO>()

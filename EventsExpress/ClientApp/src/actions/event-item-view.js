@@ -1,5 +1,5 @@
 
-import EventsExpressService from '../services/EventsExpressService';
+import { EventService } from '../services';
 
 
 export const GET_EVENT_PENDING = "GET_EVENT_PENDING";
@@ -30,7 +30,7 @@ export const cancelEvent = {
     SET_EVENT_CANCELATION_MODAL_STATUS: "TOGLE_EVENT_CANCELATION_MODAL_STATUS"
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventService();
 
 export default function get_event(id) {
 

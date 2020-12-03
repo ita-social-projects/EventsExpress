@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.Filters;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,19 +31,20 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to add inventar to event..
         /// </summary>
-        /// <param name="model">Required.</param>
         /// <param name="eventId">Required.</param>
+        /// <param name="model">Required.</param>
         /// <response code="200">Adding inventar from event proces success.</response>
         /// <response code="400">If adding inventar from event process failed.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> AddInventar([FromBody] InventoryDto model, Guid eventId)
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> AddInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryDto, InventoryDTO>(model));
+            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryViewModel, InventoryDTO>(model));
 
             return Ok(result);
         }
@@ -50,18 +52,20 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit inventar.
         /// </summary>
+        /// <param name="eventId">Required.</param>
         /// <param name="model">Required.</param>
         /// <response code="200">Edit inventar proces success.</response>
         /// <response code="400">If Edit process failed.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> EditInventar([FromBody] InventoryDto model)
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> EditInventar(Guid eventId, [FromBody] InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryDto, InventoryDTO>(model));
+            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryViewModel, InventoryDTO>(model));
 
             return Ok(result);
         }
@@ -69,18 +73,20 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete inventar.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="eventId">Required.</param>
+        /// <param name="itemId">Required.</param>
         /// <response code="200">Delete inventar proces success.</response>
         /// <response code="400">If id param is empty.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteInventar(Guid id)
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> DeleteInventar(Guid eventId, Guid itemId)
         {
-            if (id == Guid.Empty)
+            if (itemId == Guid.Empty)
             {
                 return BadRequest("id is empty");
             }
 
-            var result = await _inventoryService.DeleteInventar(id);
+            var result = await _inventoryService.DeleteInventar(itemId);
 
             return Ok(result);
         }
@@ -91,7 +97,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required.</param>
         /// <returns>All inventories from event.</returns>
         /// <response code="200">Return IEnumerable InventoryDto.</response>
-        [HttpGet("[action]")]
+        [HttpGet("{eventId:Guid}/[action]")]
         public IActionResult GetInventar(Guid eventId)
         {
             if (eventId == Guid.Empty)
@@ -100,7 +106,7 @@ namespace EventsExpress.Controllers
             }
             else
             {
-                return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryDto>>(_inventoryService.GetInventar(eventId).ToList()));
+                return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
             }
         }
 
@@ -119,7 +125,7 @@ namespace EventsExpress.Controllers
             }
             else
             {
-                return Ok(_mapper.Map<InventoryDTO, InventoryDto>(_inventoryService.GetInventarById(inventoryId)));
+                return Ok(_mapper.Map<InventoryDTO, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
             }
         }
     }
