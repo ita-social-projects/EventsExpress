@@ -1,4 +1,4 @@
-import EventExpressService from "../services/EventsExpressService";
+import { UserService } from "../services";
 import {setAlert} from './alert';
 import { reset} from 'redux-form';
 
@@ -8,7 +8,7 @@ export const contactUs={
     ERROR : "SET_CONTACTUS_ERROR",
 }
 
-const api_serv=new EventExpressService();
+const api_serv = new UserService();
 
 export default function contact_Us(data){
     return dispatch=>{

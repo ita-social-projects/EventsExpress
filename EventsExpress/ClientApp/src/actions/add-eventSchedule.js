@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventScheduleService } from '../services';
 import getEventSchedule from './eventSchedule-item-view';
 
 export const SET_EVENT_SCHEDULE_SUCCESS = "SET_EVENT_SCHEDULE_SUCCESS";
@@ -6,7 +6,7 @@ export const SET_EVENT_SCHEDULE_PENDING = "SET_EVENT_SCHEDULE_PENDING";
 export const SET_EVENT_SCHEDULE_ERROR = "SET_EVENT_SCHEDULE_ERROR";
 export const EVENT_SCHEDULE_WAS_CREATED = "EVENT_SCHEDULE_WAS_CREATED";
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventScheduleService();
 
 export default function add_eventSchedule(data) {
 

@@ -1,6 +1,6 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventService } from '../services';
 import { setEventError, setEventPending, getEvents } from './event-list';
-const api_serv = new EventsExpressService();
+const api_serv = new EventService();
 
 export default function get_events(eventIds,page=1) {
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +38,7 @@ namespace EventsExpress.Controllers
         public IActionResult GetAllChats()
         {
             var currentUser = _authService.GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<IEnumerable<UserChatDto>>(_messageService.GetUserChats(currentUser.Id));
+            var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
             return Ok(res);
         }
 
@@ -49,7 +49,7 @@ namespace EventsExpress.Controllers
         /// <returns>Chat.</returns>
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
-        [HttpGet("[action]")]
+        [HttpGet("{chatId}/[action]")]
         public async Task<IActionResult> GetChat([FromQuery] Guid chatId)
         {
             var sender = _authService.GetCurrentUser(HttpContext.User);
@@ -59,7 +59,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            return Ok(_mapper.Map<ChatDto>(chat));
+            return Ok(_mapper.Map<ChatViewModel>(chat));
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace EventsExpress.Controllers
         /// <returns>UnreadMessages.</returns>
         /// <response code="200">MessageDto model.</response>
         /// <response code="200">If proccess is failed.</response>
-        [HttpGet("[action]")]
+        [HttpGet("{userId}/[action]")]
         public IActionResult GetUnreadMessages([FromQuery] Guid userId)
         {
-            var res = _mapper.Map<IEnumerable<MessageDto>>(_messageService.GetUnreadMessages(userId));
+            var res = _mapper.Map<IEnumerable<MessageViewModel>>(_messageService.GetUnreadMessages(userId));
             return Ok(res);
         }
     }

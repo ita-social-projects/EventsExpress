@@ -1,5 +1,5 @@
 ﻿
-import EventsExpressService from '../services/EventsExpressService';
+import { UserService } from '../services';
 import get_future_events  from './events-for-profile';
 
 
@@ -9,7 +9,7 @@ export const GET_PROFILE_ERROR = "GET_PROFILE_ERROR";
 export const RESET_USER = "RESET_USER";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export default function get_user(id) {
 

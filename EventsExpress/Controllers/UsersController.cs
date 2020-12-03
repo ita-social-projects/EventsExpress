@@ -8,8 +8,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.DTO;
-using EventsExpress.ViewModel;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -53,9 +52,9 @@ namespace EventsExpress.Controllers
             try
             {
                 var user = GetCurrentUser(HttpContext.User);
-                var viewModel = new IndexViewModel<UserManageDto>
+                var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -86,9 +85,9 @@ namespace EventsExpress.Controllers
             try
             {
                 var user = GetCurrentUser(HttpContext.User);
-                var viewModel = new IndexViewModel<UserManageDto>
+                var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageDto>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -153,7 +152,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditUsername(EditUserNameDto userName)
+        public async Task<IActionResult> EditUsername(EditUserNameViewModel userName)
         {
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
@@ -174,7 +173,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditBirthday(EditUserBirthDto userBirthday)
+        public async Task<IActionResult> EditBirthday(EditUserBirthViewModel userBirthday)
         {
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
@@ -195,7 +194,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditGender(EditUserGenderDto userGender)
+        public async Task<IActionResult> EditGender(EditUserGenderViewModel userGender)
         {
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
@@ -216,7 +215,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditUserCategory(EditUserCategoriesDto model)
+        public async Task<IActionResult> EditUserCategory(EditUserCategoriesViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -266,7 +265,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> ContactAdmins(ContactUsDto model)
+        public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
 
@@ -305,7 +304,7 @@ namespace EventsExpress.Controllers
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<ProfileDto>(_userService.GetProfileById(id, user.Id));
+            var res = _mapper.Map<ProfileViewModel>(_userService.GetProfileById(id, user.Id));
 
             return Ok(res);
         }
@@ -316,7 +315,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Attitude set success.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> SetAttitude(AttitudeDto attitude)
+        public async Task<IActionResult> SetAttitude(AttitudeViewModel attitude)
         {
             if (!ModelState.IsValid)
             {

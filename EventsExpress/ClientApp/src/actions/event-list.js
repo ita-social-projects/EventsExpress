@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventService } from '../services';
 
 export const SET_EVENTS_PENDING = "SET_EVENTS_PENDING";
 export const GET_EVENTS_SUCCESS = "GET_EVENTS_SUCCESS";
@@ -6,7 +6,7 @@ export const SET_EVENTS_ERROR = "SET_EVENTS_ERROR";
 export const RESET_EVENTS = "RESET_EVENTS";
 export const UPDATE_EVENTS_FILTERS = "UPDATE_EVENTS_FILTERS";
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventService();
 
 export function get_events(filters) {
     return dispatch => {

@@ -39,6 +39,13 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
+                         <Route
+                            exact
+                            path="/home"
+                            render={() => (
+                                <Redirect to="/home/events" />
+                            )}
+                        />
                         <Route path="/profile/" component={Profile} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
