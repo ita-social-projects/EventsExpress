@@ -1,9 +1,9 @@
-﻿using EventsExpress.DTO;
+﻿using EventsExpress.ViewModels;
 using FluentValidation;
 
 namespace EventsExpress.Validation
 {
-    public class CategoryDtoValidator : AbstractValidator<CategoryDto>
+    public class CategoryDtoValidator : AbstractValidator<CategoryViewModel>
     {
         public CategoryDtoValidator()
         {

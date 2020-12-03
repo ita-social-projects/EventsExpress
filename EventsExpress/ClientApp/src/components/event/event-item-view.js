@@ -310,7 +310,7 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <span>{country} {city}</span>
+                                <span>{country.name} {city.name}</span>
                                 <br />
                                 {categories_list}
                             </div>

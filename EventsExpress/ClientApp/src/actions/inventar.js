@@ -21,7 +21,7 @@ export function add_item(item, eventId) {
 
 export function delete_item(itemId, eventId) {
     return dispatch => {
-        const res = api_serv.setItemDelete(itemId);
+        const res = api_serv.setItemDelete(itemId, eventId);
         res.then(response => {
             dispatch(get_inventories_by_event_id(eventId));
             if (response.error) {
@@ -35,7 +35,7 @@ export function delete_item(itemId, eventId) {
 
 export function edit_item(item, eventId) {
     return dispatch => {
-        const res = api_serv.setItem(item);
+        const res = api_serv.setItem(item, eventId);
         res.then(response => {
             dispatch(get_inventories_by_event_id(eventId));
             if (response.error) {

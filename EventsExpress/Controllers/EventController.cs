@@ -5,8 +5,8 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
-using EventsExpress.DTO;
-using EventsExpress.ViewModel;
+using EventsExpress.Filters;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +38,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditEventFromParent([FromForm] EventDto model)
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> EditEventFromParent(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +48,7 @@ namespace EventsExpress.Controllers
 
             var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
 
-            return Ok(result);
+            return Ok(new { id = result });
         }
 
         /// <summary>
@@ -73,19 +74,37 @@ namespace EventsExpress.Controllers
         /// This method is for edit and create events.
         /// </summary>
         /// <param name="model">Required.</param>
-        /// <response code="200">Edit/Create event proces success.</response>
-        /// <response code="400">If Edit/Create process failed.</response>
+        /// <response code="200">Create event proces success.</response>
+        /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromForm] EventDto model)
+        public async Task<IActionResult> Create([FromForm] EventCreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = model.Id == Guid.Empty
-                ? await _eventService.Create(_mapper.Map<EventDTO>(model))
-                : await _eventService.Edit(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Create(_mapper.Map<EventDTO>(model));
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("[action]")]
+        [UserAccessTypeFilter]
+        public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.Edit(_mapper.Map<EventDTO>(model));
 
             return Ok(result);
         }
@@ -99,7 +118,7 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("[action]")]
         public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<EventDto>(_eventService.EventById(id)));
+            Ok(_mapper.Map<EventViewModel>(_eventService.EventById(id)));
 
         /// <summary>
         /// This method have to return all events.
@@ -133,9 +152,9 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
                         _eventService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
@@ -155,7 +174,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Adding user from event proces success.</response>
         /// <response code="400">If adding user from event process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddUserToEvent(Guid userId, Guid eventId)
+        public async Task<IActionResult> AddUserToEvent(Guid eventId, Guid userId)
         {
             await _eventService.AddUserToEvent(userId, eventId);
 
@@ -170,7 +189,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
         [HttpPost("[action]")]
-        public async Task<ActionResult> ApproveVisitor(Guid userId, Guid eventId)
+        [UserAccessTypeFilter]
+        public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
 
@@ -185,7 +205,8 @@ namespace EventsExpress.Controllers
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("[action]")]
-        public async Task<ActionResult> DenyVisitor(Guid userId, Guid eventId)
+        [UserAccessTypeFilter]
+        public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
 
@@ -200,7 +221,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteUserFromEvent(Guid userId, Guid eventId)
+        public async Task<IActionResult> DeleteUserFromEvent(Guid eventId, Guid userId)
         {
             await _eventService.DeleteUserFromEvent(userId, eventId);
 
@@ -230,6 +251,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process is failed.</response>
         [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid eventId)
         {
             await _eventService.UnblockEvent(eventId);
@@ -244,7 +266,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Rating is setted successfully.</response>
         /// <response code="400">Setting rating is failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> SetRate(RateDto model)
+        public async Task<IActionResult> SetRate(RateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -262,7 +284,7 @@ namespace EventsExpress.Controllers
         /// <param name="eventId">Required (type: Guid).</param>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet("[action]/{eventId}")]
+        [HttpGet("[action]")]
         public IActionResult GetCurrentRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -282,7 +304,7 @@ namespace EventsExpress.Controllers
         /// <returns>RateOfEvent.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
-        [HttpGet("[action]/{eventId}")]
+        [HttpGet("[action]")]
         public IActionResult GetAverageRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -310,9 +332,9 @@ namespace EventsExpress.Controllers
             };
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.FutureEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.FutureEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -340,9 +362,9 @@ namespace EventsExpress.Controllers
             };
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.PastEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.PastEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -371,9 +393,9 @@ namespace EventsExpress.Controllers
             };
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.EventsToGoByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.EventsToGoByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -402,9 +424,9 @@ namespace EventsExpress.Controllers
             };
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(_eventService.VisitedEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.VisitedEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -434,9 +456,9 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var viewModel = new IndexViewModel<EventPreviewDto>
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewDto>>(
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
                         _eventService.GetEvents(eventIds, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
