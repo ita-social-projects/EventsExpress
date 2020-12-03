@@ -5,6 +5,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,19 +23,19 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public IEnumerable<UserEventInventoryDTO> GetAllMarksByItemId(Guid itemId)
+        public IEnumerable<UserEventInventoryDTO> GetAllMarkItemsByEventId(Guid eventId)
         {
             return _mapper.Map<IEnumerable<UserEventInventoryDTO>>(
                 _context.UserEventInventories
                     .Include(i => i.UserEvent.User)
-                    .Where(i => i.InventoryId == itemId));
+                    .Where(i => i.EventId == eventId));
         }
 
         public async Task<OperationResult> MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
         {
             try
             {
-                var res = _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
+                _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
                 await _context.SaveChangesAsync();
                 return new OperationResult(true, "Good", string.Empty);
             }
@@ -43,7 +44,5 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, ex.Message, string.Empty);
             }
         }
-
-        
     }
 }

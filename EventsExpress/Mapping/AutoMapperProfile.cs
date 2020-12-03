@@ -299,8 +299,20 @@ namespace EventsExpress.Mapping
             #endregion
 
             #region USEREVENTINVENTORY MAPPING
-            CreateMap<UserEventInventory, UserEventInventoryDTO>().ReverseMap();
-            CreateMap<UserEventInventoryDTO, UserEventInventoryDto>().ReverseMap();
+            CreateMap<UserEventInventory, UserEventInventoryDTO>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDTO
+                {
+                    Id = src.UserId,
+                    Name = src.UserEvent.User.Name,
+                }))
+                .ReverseMap();
+            CreateMap<UserEventInventoryDTO, UserEventInventoryDto>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserPreviewDto
+                {
+                    Id = src.User.Id,
+                    Username = src.User.Name,
+                }))
+                .ReverseMap();
             #endregion
         }
     }

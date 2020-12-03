@@ -368,6 +368,20 @@ export default class EventsExpressService {
             : res;
     }
 
+    setWantToTake = async (data) => {
+        const res = await this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    getUsersInventories = async (eventId) => {
+        const res = await this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+        console.log('service', res);
+
+        return res;
+    }
+
     //#region Event Schedule
     setEventSchedule = async (data) => {
         let file = new FormData();

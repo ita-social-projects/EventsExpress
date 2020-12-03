@@ -58,12 +58,7 @@ namespace EventsExpress.Core.Services
                 return new OperationResult(false, "User not found!", "userID");
             }
 
-            if (ev.Visitors == null)
-            {
-                ev.Visitors = new List<UserEvent>();
-            }
-
-            ev.Visitors.Add(new UserEvent
+            _context.UserEvent.Add(new UserEvent
             {
                 EventId = eventId,
                 UserId = userId,

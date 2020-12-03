@@ -10,6 +10,6 @@ namespace EventsExpress.Core.IServices
     {
         Task<OperationResult> MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO);
 
-        IEnumerable<UserEventInventoryDTO> GetAllMarksByItemId(Guid itemId);
+        IEnumerable<UserEventInventoryDTO> GetAllMarkItemsByEventId(Guid eventId);
     }
 }

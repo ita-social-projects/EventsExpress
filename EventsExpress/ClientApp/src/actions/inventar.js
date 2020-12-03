@@ -47,6 +47,10 @@ export function edit_item(item, eventId) {
     }
 }
 
+export function want_to_take(data) {
+    return api_serv.setWantToTake(data);
+}
+
 export function setInvertarError(data) {
     return {
         type: SET_INVENTAR_ERROR,

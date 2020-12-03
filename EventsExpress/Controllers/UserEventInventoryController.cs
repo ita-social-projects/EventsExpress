@@ -25,14 +25,14 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("[action]")]
-        public IActionResult GetAllMarksByItemId(Guid itemId)
+        [HttpGet("[action]")]
+        public IActionResult GetAllMarkItemsByEventId(Guid eventId)
         {
-            return Ok(_userEventInventoryService.GetAllMarksByItemId(itemId));
+            return Ok(_userEventInventoryService.GetAllMarkItemsByEventId(eventId));
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> MarkItemAsTakenByUser(UserEventInventoryDto model)
+        public async Task<IActionResult> MarkItemAsTakenByUser([FromBody] UserEventInventoryDto model)
         {
             if (!ModelState.IsValid)
             {
