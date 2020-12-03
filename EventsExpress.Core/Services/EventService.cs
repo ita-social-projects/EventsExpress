@@ -202,10 +202,12 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> CreateNextEvent(Guid eventId)
         {
             var eventDTO = EventById(eventId);
+            eventDTO.Inventories = null;
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
 
             var ticksDiff = eventDTO.DateTo.Ticks - eventDTO.DateFrom.Ticks;
             eventDTO.Id = Guid.Empty;
+            eventDTO.Owners = null;
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);

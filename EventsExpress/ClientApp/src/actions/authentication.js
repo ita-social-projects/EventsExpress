@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { AuthenticationService } from '../services';
 
 export const authenticate = {
     PENDING: "SET_AUTHENTICATE_PENDING",
@@ -7,7 +7,7 @@ export const authenticate = {
     SET_AUTHENTICATE: "SET_AUTHENTICATE",
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new AuthenticationService();
 
 export default function _authenticate(data) {
     return dispatch => {

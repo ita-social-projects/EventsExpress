@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventService } from '../services';
 
 export const getRate = {
     PENDING: 'GET_RATE_PENDING',
@@ -18,7 +18,7 @@ export const setRate = {
     ERROR: 'SET_RATE_ERROR',
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventService();
 
 
 export function set_rating(data) {
