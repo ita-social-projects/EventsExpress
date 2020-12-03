@@ -1,9 +1,9 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { InventoryService } from '../services';
 import {get_inventories_by_event_id} from './inventory-list';
 
 export const SET_INVENTAR_ERROR = "SET_INVENTAR_ERROR";
 
-const api_serv = new EventsExpressService();
+const api_serv = new InventoryService();
 
 export function add_item(item, eventId) {
     return dispatch => {
