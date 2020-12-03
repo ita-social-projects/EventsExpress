@@ -1,5 +1,5 @@
 ﻿
-import EventsExpressService from '../services/EventsExpressService';
+import { CommentService } from '../services';
 
 
 export const SET_COMMENTS_PENDING = "SET_COMMENTS_PENDING";
@@ -7,7 +7,7 @@ export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 export const SET_COMMENTS_ERROR = "SET_COMMENTS_ERROR";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new CommentService();
 
 export default function get_comments(data, page) {
     return dispatch => {

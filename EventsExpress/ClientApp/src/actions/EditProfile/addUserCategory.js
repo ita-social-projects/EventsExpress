@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { UserService } from '../../services';
 import { setAlert } from '../alert';
 
 export const addUserCategory = {
@@ -8,7 +8,7 @@ export const addUserCategory = {
     UPDATE: "UPDATE_CATEGORIES",
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export default function setUserCategory(data) {
     return dispatch => {

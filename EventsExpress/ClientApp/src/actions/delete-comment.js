@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../services/EventsExpressService';
+﻿import { CommentService } from '../services';
 import get_comments from './comment-list';
 
 export const SET_COMMENT_DELETE_PENDING = "SET_COMMENT_DELETE_PENDING";
@@ -7,7 +7,7 @@ export const SET_COMMENT_DELETE_ERROR = "SET_COMMENT_DELETE_ERROR";
 
 export default function delete_comment(data) {
 
-    const api_serv = new EventsExpressService();
+    const api_serv = new CommentService();
 
     return dispatch => {
         dispatch(setCommentPending(true));
