@@ -6,6 +6,7 @@ import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
 import { get_users_inventories_by_event_id }  from '../../actions/usersInventories';
 import { add_item, delete_item, edit_item, want_to_take } from '../../actions/inventar';
+import WantToTakeModal from './wantToTakeModal';
 import IconButton from "@material-ui/core/IconButton";
 
 class InventoryList extends Component {
@@ -14,10 +15,12 @@ class InventoryList extends Component {
         super();
         this.state = {
             isOpen: true,
-            disabledEdit: false
+            disabledEdit: false,
+            isWantToTake: false
         };
 
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
+        this.handleOnClickWantToTake = this.handleOnClickWantToTake.bind(this);
         this.markItemAsWantToTake = this.markItemAsWantToTake.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
@@ -79,6 +82,12 @@ class InventoryList extends Component {
         }));
     }
 
+    handleOnClickWantToTake = () => {
+        this.setState(state => ({
+            isWantToTake: !state.isWantToTake
+        }));
+    }
+
     onSubmit = values => {
         if (values.isNew) {
             this.props.add_item(values, this.props.eventId);
@@ -109,7 +118,6 @@ class InventoryList extends Component {
     }
 
     onWillTake = inventar => {
-        console.log(inventar)
         const data = {
             eventId: this.props.eventId,
             userId: this.props.user.id,
@@ -117,12 +125,12 @@ class InventoryList extends Component {
             quantity: 0
         }
 
-        want_to_take(data);
+        this.props.want_to_take(data);
     }
 
     render() {
         const { inventories, event, user } = this.props;
-        console.log('render', this.props);
+        console.log(this.props);
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -131,46 +139,41 @@ class InventoryList extends Component {
                 
                 { this.state.isOpen &&
                 <div>
-                    {event.user.id === user.id 
-                    ?  <IconButton
+                    {event.user.id === user.id &&
+                        <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
                             <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
                         </IconButton>
-                    :   null
                     }
                         <div className="container">
-                            <div className="row">
+                            <div className="row p-1">
                                 <div className="col col-md-5"><b>Item name</b></div>
-                                <div className="col"><b>Count</b></div>
+                                <div className="col"><b>Already get/Count</b></div>
                                 <div className="col"><b>Measuring unit</b></div>
                                 {event.user.id === user.id
                                 ? <div className="col"><b>Action</b></div>
                                 : null
                                 }
-                                
                             </div>
                             {inventories.items.map(item => {
                                 return (
                                     item.isEdit 
-                                    ? <div className="row">
+                                    ? <div className="row p-1">
                                         <ItemFrom 
                                             onSubmit={this.onSubmit} 
                                             onCancel={this.onCancel}
                                             unitOfMeasuringState={this.props.unitOfMeasuringState}
                                             initialValues={item}/>
                                     </div>
-                                    : <div className="row">
+                                    : <div className="row p-1">
                                         <div className="col col-md-5">
                                             <span className="item" onClick={() => this.markItemAsWantToTake(item)}>{item.itemName}</span>
                                             <div>
                                                 {item.isWantToTake
                                                 ? 
                                                 <>  
-                                                    <button className="btn" onClick={() => this.onWillTake(item)}>
-                                                        Will take
-                                                    </button>
                                                     {this.props.usersInventories.data.map(data => {
                                                         return (
                                                             data.inventoryId === item.id 
@@ -183,10 +186,10 @@ class InventoryList extends Component {
                                                 }
                                             </div>
                                         </div>
-                                        <div className="col">{item.needQuantity}</div>
+                                        <div className="col">0/{item.needQuantity}</div>
                                         <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        {event.user.id === user.id
-                                        ? <div className="col">
+                                        {event.user.id === user.id &&
+                                            <div className="col">
                                                 <IconButton 
                                                     disabled={this.state.disabledEdit} 
                                                     onClick={this.markItemAsEdit.bind(this, item)}>
@@ -198,12 +201,18 @@ class InventoryList extends Component {
                                                     <i className="fa-sm fas fa-trash text-danger"></i>
                                                 </IconButton>
                                             </div>
-                                        : null
                                         }   
                                     </div>
                                 )
                             })}                    
                         </div>
+                        {/* <button className="btn" onClick={() => this.handleOnClickWantToTake()}>
+                            Want to take
+                        </button>
+                        <WantToTakeModal
+                            show={this.state.isWantToTake}
+                            onCancel={() => this.handleOnClickWantToTake()}
+                            inventories={inventories}/> */}
                 </div>
                 }
             </>
@@ -227,7 +236,8 @@ const mapDispatchToProps = (dispatch) => {
         edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
         get_inventories: (inventories) => dispatch(update_inventories(inventories)),
         get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
-        get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId))
+        get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
+        want_to_take: (data) => dispatch(want_to_take(data))
     }
 };
 

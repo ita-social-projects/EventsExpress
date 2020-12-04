@@ -14,8 +14,6 @@ namespace EventsExpress.DTO
 
         public UserPreviewDto User { get; set; }
 
-        //public UserEvent UserEvent { get; set; }
-
         public Guid InventoryId { get; set; }
 
         public double Quantity { get; set; }

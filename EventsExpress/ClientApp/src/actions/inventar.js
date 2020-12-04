@@ -1,5 +1,6 @@
 import EventsExpressService from '../services/EventsExpressService';
-import {get_inventories_by_event_id} from './inventory-list';
+import { get_inventories_by_event_id } from './inventory-list';
+import { get_users_inventories_by_event_id } from './usersInventories';
 
 export const SET_INVENTAR_ERROR = "SET_INVENTAR_ERROR";
 
@@ -48,7 +49,11 @@ export function edit_item(item, eventId) {
 }
 
 export function want_to_take(data) {
-    return api_serv.setWantToTake(data);
+    return dispatch => {
+        api_serv.setWantToTake(data).then(respose => {
+            dispatch(get_users_inventories_by_event_id(data.eventId));
+        });
+    }
 }
 
 export function setInvertarError(data) {

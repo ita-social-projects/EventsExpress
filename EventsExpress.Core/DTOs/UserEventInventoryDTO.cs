@@ -13,8 +13,6 @@ namespace EventsExpress.Core.DTOs
 
         public UserDTO User { get; set; }
 
-        //public UserEvent UserEvent { get; set; }
-
         public Guid InventoryId { get; set; }
 
         public double Quantity { get; set; }
