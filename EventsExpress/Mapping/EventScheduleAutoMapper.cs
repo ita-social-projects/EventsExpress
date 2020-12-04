@@ -28,21 +28,17 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
 
-            CreateMap<EventScheduleDTO, EventScheduleViewModel>()
-                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventPreviewViewModel
+            CreateMap<EventScheduleDTO, PreviewEventScheduleViewModel>()
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Event.Owners.Select(x => new UserPreviewViewModel
                 {
-                    Id = src.Event.Id,
-                    Title = src.Event.Title,
-                    DateTo = src.Event.DateTo,
-                    DateFrom = src.Event.DateFrom,
-                    Owners = src.Event.Owners.Select(x => new UserPreviewViewModel
-                    {
-                        Id = x.Id,
-                    }),
-                    PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
-                }));
+                    Id = x.Id,
+                    Username = x.Name,
+                })));
 
-            CreateMap<EventScheduleViewModel, EventScheduleDTO>()
+            CreateMap<PreviewEventScheduleViewModel, EventScheduleDTO>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
 
             CreateMap<EventDTO, EventScheduleDTO>()

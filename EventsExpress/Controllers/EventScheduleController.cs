@@ -39,9 +39,9 @@ namespace EventsExpress.Controllers
         {
             try
             {
-                var viewModel = new IndexViewModel<EventScheduleViewModel>
+                var viewModel = new IndexViewModel<PreviewEventScheduleViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventScheduleViewModel>>(
+                    Items = _mapper.Map<IEnumerable<PreviewEventScheduleViewModel>>(
                         _eventScheduleService.GetAll()),
                 };
                 return Ok(viewModel);
@@ -61,7 +61,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
-        public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventScheduleViewModel model)
+        public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
             var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
 
@@ -117,6 +117,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{id:Guid}")]
         public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(id)));
+            Ok(_mapper.Map<PreviewEventScheduleViewModel>(_eventScheduleService.EventScheduleById(id)));
     }
 }

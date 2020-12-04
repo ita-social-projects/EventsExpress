@@ -1,10 +1,10 @@
 ﻿using System;
-using EventsExpress.Core.DTOs;
+using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels
 {
-    public class EventScheduleViewModel
+    public class PreviewEventScheduleViewModel
     {
         public Guid Id { get; set; }
 
@@ -18,7 +18,11 @@ namespace EventsExpress.ViewModels
 
         public bool IsActive { get; set; }
 
-        public EventPreviewViewModel Event { get; set; }
+        public string Title { get; set; }
+
+        public string PhotoUrl { get; set; }
+
+        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
 
         public Guid EventId { get; set; }
     }

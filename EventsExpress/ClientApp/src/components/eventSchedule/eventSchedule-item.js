@@ -17,6 +17,8 @@ export default class EventSchedule extends Component {
 
     render() {
 
+        console.log(this.props);
+
         const classes = useStyles;
         const {
             id,
@@ -25,7 +27,9 @@ export default class EventSchedule extends Component {
             periodicity,
             lastRun,
             nextRun,
-            event } = this.props.item;
+            title,
+            photoUrl,
+            eventId} = this.props.item;
         const period = renderPeriod(periodicity, frequency);
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -33,15 +37,15 @@ export default class EventSchedule extends Component {
                     className={classes.card}
                 >
                     <CardHeader
-                        title={event.title}
+                        title={title}
                         subheader={<Moment format="D MMM YYYY" withTitle>{lastRun}</Moment>}
                     />
                     <CardMedia
                         className={classes.media}
-                        title={event.title}
+                        title={title}
                     >
                         <Link to={`/eventSchedule/${id}`}>
-                            <img src={event.photoUrl} className="w-100" />
+                            <img src={photoUrl} className="w-100" />
                         </Link>
                     </CardMedia>
                     <CardContent>
@@ -53,7 +57,7 @@ export default class EventSchedule extends Component {
                             {period}
                         </Typography>
                         <Moment format="D MMM YYYY" withTitle>{nextRun}</Moment>
-                        <Link to={`/event/${event.id}/1`}>
+                        <Link to={`/event/${eventId}/1`}>
                             <Button
                                 className="ml-2"
                                 style={{ background: '#3f51b50a' }}
