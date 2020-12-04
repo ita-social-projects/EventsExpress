@@ -17,8 +17,6 @@ export default class EventSchedule extends Component {
 
     render() {
 
-        console.log(this.props);
-
         const classes = useStyles;
         const {
             id,
