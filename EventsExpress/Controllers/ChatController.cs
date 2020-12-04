@@ -35,7 +35,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
-        public IActionResult GetAllChats()
+        public IActionResult All()
         {
             var currentUser = _authService.GetCurrentUser(HttpContext.User);
             var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
@@ -49,8 +49,8 @@ namespace EventsExpress.Controllers
         /// <returns>Chat.</returns>
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetChat([FromQuery] Guid chatId)
+        [HttpGet("{chatId}")]
+        public async Task<IActionResult> GetChat(Guid chatId)
         {
             var sender = _authService.GetCurrentUser(HttpContext.User);
             var chat = await _messageService.GetChat(chatId, sender.Id);
