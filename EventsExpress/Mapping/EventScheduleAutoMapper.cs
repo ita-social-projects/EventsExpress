@@ -31,6 +31,11 @@ namespace EventsExpress.Mapping
             CreateMap<EventScheduleDTO, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()));
+
+            CreateMap<EventScheduleDTO, EventScheduleViewModel>()
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Event.Owners.Select(x => new UserPreviewViewModel
                 {

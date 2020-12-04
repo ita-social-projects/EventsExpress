@@ -111,12 +111,12 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return event.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="eventScheduleId">Required.</param>
         /// <returns>Event.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
-        [HttpGet("{id:Guid}")]
-        public IActionResult Get(Guid id) =>
-            Ok(_mapper.Map<PreviewEventScheduleViewModel>(_eventScheduleService.EventScheduleById(id)));
+        [HttpGet("{eventScheduleId:Guid}")]
+        public IActionResult Get(Guid eventScheduleId) =>
+            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId)));
     }
 }

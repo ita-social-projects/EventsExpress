@@ -12,7 +12,6 @@ namespace EventsExpress.Validation
             RuleFor(x => x.NextRun).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.Periodicity).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.Frequency).NotEmpty().WithMessage("Field is required!");
-            RuleFor(x => x.Owners).NotEmpty().WithMessage("List of owners is empty!");
             RuleFor(x => x.EventId).NotEqual(Guid.Empty).WithMessage("Field is required!");
         }
     }
