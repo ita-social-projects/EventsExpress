@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
 {
@@ -7,20 +8,26 @@ namespace EventsExpress.Db.Entities
     {
         public bool IsBlocked { get; set; }
 
+        [Track]
         public string Title { get; set; }
 
+        [Track]
         public string Description { get; set; }
 
+        [Track]
         public DateTime DateFrom { get; set; }
 
+        [Track]
         public DateTime DateTo { get; set; }
 
+        [Track]
         public bool IsPublic { get; set; }
 
         public Guid CityId { get; set; }
 
         public virtual City City { get; set; }
 
+        [Track]
         public int MaxParticipants { get; set; }
 
         public Guid? PhotoId { get; set; }

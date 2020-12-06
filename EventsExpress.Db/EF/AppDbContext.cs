@@ -1,8 +1,9 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Db.EF
@@ -12,7 +13,6 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -58,6 +58,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Inventory> Inventories { get; set; }
 
         public DbSet<UnitOfMeasuring> UnitOfMeasurings { get; set; }
+
+        public DbSet<ChangeInfo> ChangeInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -166,9 +168,6 @@ namespace EventsExpress.Db.EF
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
 
-            
-
-
             // inventory config
             builder.Entity<Inventory>()
                 .HasOne(i => i.Event)
@@ -204,6 +203,64 @@ namespace EventsExpress.Db.EF
                     new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m"},
                     new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm"},
                 });
+        }
+
+        public void SaveTracks()
+        {
+            var list = new List<PropertyChangeInfo>();
+
+            var changeInfo = new ChangeInfo();
+
+            var modifiedEntities = ChangeTracker.Entries()
+                .Where(p => p.State == EntityState.Modified).ToList();
+            var now = DateTime.UtcNow;
+
+            foreach (var change in modifiedEntities)
+            {
+                var entityName = change.Entity.GetType().Name;
+                foreach (var prop in change.OriginalValues.Properties.Where(x => x.PropertyInfo.CustomAttributes.Any()))
+                {
+                    var oldValue = change.OriginalValues[prop].ToString();
+
+                    var newValue = change.CurrentValues[prop].ToString();
+
+                    if (oldValue != newValue)
+                    {
+                        list.Add(new PropertyChangeInfo { Name = entityName, Value = newValue });
+                        var text = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+                        changeInfo.PropertyChangesText = text;
+                        changeInfo.EntityName = entityName;
+
+                        // changeInfo.UserId =
+                    }
+                }
+            }
+        }
+
+        public override int SaveChanges()
+        {
+            SaveTracks();
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            SaveTracks();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            SaveTracks();
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SaveTracks();
+
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }
