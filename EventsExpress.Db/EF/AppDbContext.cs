@@ -1,8 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Db.EF
@@ -12,7 +9,6 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -167,9 +163,6 @@ namespace EventsExpress.Db.EF
             // event config
             builder.Entity<Event>()
                 .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
-
-            
-
 
             // inventory config
             builder.Entity<Inventory>()

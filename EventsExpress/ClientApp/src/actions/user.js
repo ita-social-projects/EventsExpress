@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../services/EventsExpressService';
+﻿import { UserService } from '../services';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',
@@ -21,7 +21,7 @@ export const changeUserRole = {
     ERROR: 'ERROR_CHANGE_ROLE',
     UPDATE: 'UPDATE_CHANGE_ROLE'
 }
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 // ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {

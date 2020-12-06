@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { ChatService } from '../services';
 
 export const GET_CHATS_PENDING = "GET_CHATS_PENDING";
 export const GET_CHATS_SUCCESS = "GET_CHATS_SUCCESS";
@@ -6,7 +6,7 @@ export const GET_CHATS_ERROR = "GET_CHATS_ERROR";
 export const GET_UNREAD_MESSAGES = "GET_UNREAD_MESSAGES";
 export const RESET_NOTIFICATION = "RESET_NOTIFICATION";
 
-const api_serv = new EventsExpressService();
+const api_serv = new ChatService();
 
 export default function get_chats() {
 

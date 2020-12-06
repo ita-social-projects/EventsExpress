@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.BaseService;
@@ -30,12 +29,12 @@ namespace EventsExpress.Core.Services
             _authService = authService;
         }
 
-        public async Task<OperationResult> CancelEvent(Guid eventId, string reason)
+        public async Task CancelEvent(Guid eventId, string reason)
         {
             var uEvent = _context.Events.Find(eventId);
             if (uEvent == null)
             {
-                return new OperationResult(false, "Invalid event id", "eventId");
+                throw new EventsExpressException("Invalid event id");
             }
 
             var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
@@ -43,17 +42,17 @@ namespace EventsExpress.Core.Services
 
             await _context.SaveChangesAsync();
             await _mediator.Publish(new CancelEventMessage(eventId));
-
-            return new OperationResult(true);
         }
 
         private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
         {
-            var record = new EventStatusHistory();
-            record.EventId = e.Id;
-            record.EventStatus = status;
-            record.Reason = reason;
-            record.UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id;
+            var record = new EventStatusHistory
+            {
+                EventId = e.Id,
+                UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id,
+                EventStatus = status,
+                Reason = reason,
+            };
 
             return record;
         }

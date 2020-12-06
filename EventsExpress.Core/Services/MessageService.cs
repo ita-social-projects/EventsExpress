@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -57,6 +57,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Photo)
                 .Include(c => c.Messages)
                 .FirstOrDefault(x => x.Id == chat.Id);
+
             return res;
         }
 
@@ -71,6 +72,7 @@ namespace EventsExpress.Core.Services
 
             var msg = Insert(new Message { ChatRoomId = chat.Id, SenderId = sender, Text = text });
             await _context.SaveChangesAsync();
+
             return msg;
         }
 
@@ -81,26 +83,27 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
         }
 
-        public async Task<OperationResult> MsgSeen(List<Guid> messageIds)
+        public async Task<Guid> MsgSeen(List<Guid> messageIds)
         {
             foreach (var x in messageIds)
             {
                 var msg = _context.Message.Find(x);
                 if (msg == null)
                 {
-                    return new OperationResult(false, "Msg not found", string.Empty);
+                    throw new EventsExpressException("Msg not found");
                 }
 
                 msg.Seen = true;
                 await _context.SaveChangesAsync();
             }
 
-            return new OperationResult(true, string.Empty, _context.Message.Find(messageIds[0]).ChatRoomId.ToString());
+            return _context.Message.Find(messageIds[0]).ChatRoomId;
         }
 
         public List<Message> GetUnreadMessages(Guid userId)
         {
             var chats = GetUserChats(userId).Select(y => y.Id).ToList();
+
             return _context.Message
                 .Where(x => chats
                     .Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen)

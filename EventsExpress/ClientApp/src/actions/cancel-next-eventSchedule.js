@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { EventScheduleService } from '../services';
 import { setAlert } from './alert';
 import {createBrowserHistory} from 'history';
 
@@ -7,7 +7,7 @@ export const SET_CANCEL_NEXT_EVENT_PENDING = "SET_CANCEL_NEXT_EVENT_PENDING";
 export const SET_CANCEL_NEXT_EVENT_ERROR = "SET_CANCEL_NEXT_EVENT_ERROR";
 export const EVENT_CANCEL_NEXT_WAS_CREATED = "EVENT_CANCEL_NEXT_WAS_CREATED";
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventScheduleService();
 const history = createBrowserHistory({forceRefresh:true});
 
 export default function cancel_next_eventSchedule(eventId) {

@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { RoleService } from '../services';
 
 export const getRoles = {
     PENDING: 'ROLES_PENDING',
@@ -7,7 +7,7 @@ export const getRoles = {
 }
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new RoleService();
 
 
 export default function get_roles() {

@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using NUnit.Framework;
@@ -41,40 +42,31 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_ExistingId_Success()
         {
-            var res = service.Delete(category.Id);
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Delete(category.Id));
         }
 
         [Test]
         public void Create_newCategory_Success()
         {
-            var res = service.Create("CorrectName");
-
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Create("CorrectName"));
         }
 
         [Test]
         public void Delete_NotExistingId_ReturnFalse()
         {
-            var res = service.Delete(Guid.NewGuid());
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Delete(Guid.NewGuid()));
         }
 
         [Test]
         public void Delete_NullId_ReturnFalse()
         {
-            var res = service.Delete(default);
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Delete(default));
         }
 
         [Test]
         public void Edit_EmprtyCategory_ReturnFalse()
         {
-            var res = service.Edit(new CategoryDTO());
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new CategoryDTO()));
         }
 
         [Test]
@@ -82,9 +74,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             Category newCategory = new Category() { Name = "RandomName" };
 
-            var result = service.Create(newCategory.Name);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newCategory.Name));
         }
 
         [Test]
@@ -96,8 +86,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
             };
 
-            var result = service.Edit(newCategory);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(newCategory));
         }
 
         [Test]
@@ -109,8 +98,7 @@ namespace EventsExpress.Test.ServiceTests
                 Name = "RandomName3",
             };
 
-            var result = service.Edit(categoryDTO);
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Edit(categoryDTO));
         }
 
         [Test]
@@ -122,8 +110,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = category.Id,
             };
 
-            var result = service.Edit(newCategoryDto);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(newCategoryDto));
         }
     }
 }
