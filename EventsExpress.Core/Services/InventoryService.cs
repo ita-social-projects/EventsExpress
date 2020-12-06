@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
@@ -22,68 +22,50 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<OperationResult> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
+        public async Task<Guid> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
         {
             var ev = _context.Events.FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
             {
-                return new OperationResult(false, "Event not found!", eventId.ToString());
+                throw new EventsExpressException("Event not found!");
             }
 
-            try
-            {
-                var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
-                entity.EventId = eventId;
-                var result = Insert(entity);
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Invertar was added", result.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, ex.Message, string.Empty);
-            }
+            var entity = _mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
+            entity.EventId = eventId;
+            var result = Insert(entity);
+            await _context.SaveChangesAsync();
+
+            return result.Id;
         }
 
-        public async Task<OperationResult> DeleteInventar(Guid id)
+        public async Task<Guid> DeleteInventar(Guid id)
         {
             var inventar = _context.Inventories.Find(id);
             if (inventar == null)
             {
-                return new OperationResult(false, "Not found", string.Empty);
+                throw new EventsExpressException("Not found");
             }
 
-            try
-            {
-                var result = _context.Inventories.Remove(inventar);
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Inventar was deleted", inventar.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
-            }
+            var result = _context.Inventories.Remove(inventar);
+            await _context.SaveChangesAsync();
+
+            return inventar.Id;
         }
 
-        public async Task<OperationResult> EditInventar(InventoryDTO inventoryDTO)
+        public async Task<Guid> EditInventar(InventoryDTO inventoryDTO)
         {
             var entity = _context.Inventories.Find(inventoryDTO.Id);
             if (entity == null)
             {
-                return new OperationResult(false, "Object not found", inventoryDTO.Id.ToString());
+                throw new EventsExpressException("Object not found");
             }
 
-            try
-            {
-                entity.ItemName = inventoryDTO.ItemName;
-                entity.NeedQuantity = inventoryDTO.NeedQuantity;
-                entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Edit inventory", entity.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, "Something went wrong " + ex.Message, string.Empty);
-            }
+            entity.ItemName = inventoryDTO.ItemName;
+            entity.NeedQuantity = inventoryDTO.NeedQuantity;
+            entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
+            await _context.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public IEnumerable<InventoryDTO> GetInventar(Guid eventId)

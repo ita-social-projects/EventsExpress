@@ -17,7 +17,7 @@
       }
     },
     "EventsExpress": {
-      "commandName": "IISExpress",
+      "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:44344",
       "environmentVariables": {

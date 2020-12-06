@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +34,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         [AllowAnonymous]
         public IActionResult All() =>
-            Ok(_mapper.Map<IEnumerable<CategoryDto>>(_categoryService.GetAllCategories()));
+            Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(_categoryService.GetAllCategories()));
 
         /// <summary>
         /// This method is for edit and create categories.
@@ -43,21 +43,23 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create category proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit(CategoryDto model)
+        public async Task<IActionResult> Edit(CategoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var res = model.Id == Guid.Empty ? await _categoryService.Create(model.Name)
-                                       : await _categoryService.Edit(_mapper.Map<CategoryDto, CategoryDTO>(model));
-            if (res.Successed)
+            if (model.Id == Guid.Empty)
             {
-                return Ok();
+                await _categoryService.Create(model.Name);
+            }
+            else
+            {
+                await _categoryService.Edit(_mapper.Map<CategoryViewModel, CategoryDTO>(model));
             }
 
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -74,13 +76,9 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            var res = await _categoryService.Delete(id);
-            if (res.Successed)
-            {
-                return Ok();
-            }
+            await _categoryService.Delete(id);
 
-            return BadRequest(res.Message);
+            return Ok();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-import EventsExpressService from '../services/EventsExpressService';
+import { CategoryService } from '../services';
 
 
 export const SET_CATEGORIES_PENDING = "SET_CATEGORIES_PENDING";
@@ -7,7 +7,7 @@ export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
 export const SET_CATEGORIES_ERROR = "SET_CATEGORIES_ERROR";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new CategoryService();
 
 export default function get_categories() {
 

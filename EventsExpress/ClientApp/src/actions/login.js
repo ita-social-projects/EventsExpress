@@ -1,4 +1,4 @@
-import EventsExpressService from '../services/EventsExpressService';
+import { AuthenticationService } from '../services';
 import eventHelper from '../components/helpers/eventHelper';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
@@ -9,7 +9,7 @@ export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
 export const SET_LOGIN_ERROR = "SET_LOGIN_ERROR";
 export const SET_USER = "SET_USER";
 
-const api_serv = new EventsExpressService();
+const api_serv = new AuthenticationService();
 
 export default function login(email, password) {
   return dispatch => {

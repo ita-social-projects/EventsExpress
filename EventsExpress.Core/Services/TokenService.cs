@@ -68,23 +68,23 @@ namespace EventsExpress.Core.Services
                 signingCredentials: new SigningCredentials(
                         _signingEncodingKey.GetKey(),
                         _signingEncodingKey.SigningAlgorithm));
+
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
 
         public RefreshToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+
+            return new RefreshToken
             {
-                rng.GetBytes(randomNumber);
-                return new RefreshToken
-                {
-                    Token = Convert.ToBase64String(randomNumber),
-                    Expires = DateTime.Now.AddDays(7),
-                    Created = DateTime.Now,
-                    CreatedByIp = IpAddress,
-                };
-            }
+                Token = Convert.ToBase64String(randomNumber),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now,
+                CreatedByIp = IpAddress,
+            };
         }
 
         public ClaimsPrincipal GetPrincipalFromJwt(string token)
@@ -140,6 +140,7 @@ namespace EventsExpress.Core.Services
 
             // generate new jwt
             var jwtToken = GenerateAccessToken(user);
+
             return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
         }
 
@@ -165,6 +166,7 @@ namespace EventsExpress.Core.Services
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+
             return true;
         }
 

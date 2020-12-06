@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { AuthenticationService } from '../../services';
 import { reset } from 'redux-form';
 import { setAlert } from '../alert';
 
@@ -9,7 +9,7 @@ export const changePassword = {
     UPDATE: "UPDATE_PASSWORD"
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new AuthenticationService();
 
 export default function change_Password(data) {
     return dispatch => {

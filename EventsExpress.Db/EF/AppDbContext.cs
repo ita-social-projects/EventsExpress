@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -195,13 +191,13 @@ namespace EventsExpress.Db.EF
                 .HasData(
                 new UnitOfMeasuring[]
                 {
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Units", ShortName = "u"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Kilograms", ShortName = "kg"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Grams", ShortName = "g"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Liters", ShortName = "l"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Miliiters", ShortName = "ml"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm"},
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Units", ShortName = "u" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Kilograms", ShortName = "kg" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Grams", ShortName = "g" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Liters", ShortName = "l" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Miliiters", ShortName = "ml" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m" },
+                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm" },
                 });
         }
 
