@@ -9,16 +9,24 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        public EventScheduleService(AppDbContext context, IMapper mapper)
+        private IAuthService _authService;
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService, IHttpContextAccessor httpContextAccessor)
             : base(context, mapper)
         {
+            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
         public IEnumerable<EventScheduleDTO> GetAll()
         {
@@ -28,8 +36,11 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(e => e.City)
                             .ThenInclude(c => c.Country)
                     .Include(es => es.Event)
+                        .ThenInclude(e => e.Owners)
+                    .Include(es => es.Event)
                         .ThenInclude(e => e.Photo)
-                    .Where(opt => opt.IsActive)
+                    .Where(opt => opt.IsActive &&
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUser.Id))
                     .ToList());
         }
 

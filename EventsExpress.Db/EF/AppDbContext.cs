@@ -88,6 +88,8 @@ namespace EventsExpress.Db.EF
                 .HasOne(ue => ue.Event)
                 .WithMany(e => e.Owners)
                 .HasForeignKey(ue => ue.EventId);
+            builder.Entity<EventOwner>()
+                .HasIndex(p => new { p.UserId, p.EventId });
 
             // user as owner
             builder.Entity<Event>()
@@ -186,19 +188,6 @@ namespace EventsExpress.Db.EF
                 .WithMany(i => i.UserEventInventories)
                 .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
 
-            // unitOfMeasuring config
-            builder.Entity<UnitOfMeasuring>()
-                .HasData(
-                new UnitOfMeasuring[]
-                {
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Units", ShortName = "u" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Kilograms", ShortName = "kg" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Grams", ShortName = "g" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Liters", ShortName = "l" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Miliiters", ShortName = "ml" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m" },
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm" },
-                });
         }
 
         public void SaveTracks()
