@@ -341,7 +341,7 @@ export default class EventItemView extends Component {
                                         eventId={id}/>
                                 </div>
                                 
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
                             </>
