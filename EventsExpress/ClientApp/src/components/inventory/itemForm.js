@@ -13,7 +13,7 @@ class ItemForm extends Component {
 
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
-                <div className="col col-md-5">
+                <div className="col col-md-4">
                     <Field
                         name={`itemName`}
                         type="text"
@@ -21,6 +21,7 @@ class ItemForm extends Component {
                         label="Item name"
                         component={renderTextField}/>
                 </div>
+                <div className="col">0</div>
                 <div className="col">
                     <Field
                         name={`needQuantity`}
@@ -40,7 +41,7 @@ class ItemForm extends Component {
                         )} 
                     </Field>
                 </div>
-                <div className="col">
+                <div className="col col-md-2">
                 <IconButton type="submit">
                     <i className = "fa-sm fas fa-check text-success"></i>
                 </IconButton>

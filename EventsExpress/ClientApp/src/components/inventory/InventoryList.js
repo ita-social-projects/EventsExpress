@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import ItemFrom from './itemForm';
+import WillTakeItemForm from './willTakeItemForm';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
@@ -8,6 +9,7 @@ import { get_users_inventories_by_event_id }  from '../../actions/usersInventori
 import { add_item, delete_item, edit_item, want_to_take } from '../../actions/inventar';
 import WantToTakeModal from './wantToTakeModal';
 import IconButton from "@material-ui/core/IconButton";
+import Tooltip from '@material-ui/core/Tooltip';
 
 class InventoryList extends Component {
 
@@ -26,7 +28,7 @@ class InventoryList extends Component {
         this.onCancel = this.onCancel.bind(this);
         this.onWillTake = this.onWillTake.bind(this);
     }
-    
+
     componentDidMount() {
         this.props.get_unitsOfMeasuring();
         this.props.get_inventories_by_event_id(this.props.eventId);
@@ -54,6 +56,7 @@ class InventoryList extends Component {
     }
 
     markItemAsEdit = inventar => {
+        console.log('edit');
         let updateList = this.props.inventories.items;
         updateList.map(item => {
             if (inventar.id === item.id)
@@ -71,6 +74,19 @@ class InventoryList extends Component {
         updateList.map(item => {
             if (inventar.id === item.id)
                 item.isWantToTake = !item.isWantToTake;
+        });
+
+        this.props.get_inventories(updateList);
+    }
+
+    initialState = () => {
+        console.log('initial state')
+        let updateList = this.props.invetnories.items;
+        updateList.map(item => {
+            this.props.usersInventories.map(data => {
+                if (this.props.user.id === data.userId && item.id === data.inventoryId)
+                    item.isTaken = true;
+            });
         });
 
         this.props.get_inventories(updateList);
@@ -130,6 +146,10 @@ class InventoryList extends Component {
 
     render() {
         const { inventories, event, user } = this.props;
+        const reducer = (accumulator, currentValue) => accumulator.quantity + currentValue.quantity;
+        // if (this.props.inventories.items) {
+            // this.initialState();
+        // }
         console.log(this.props);
         return (
             <>
@@ -137,7 +157,7 @@ class InventoryList extends Component {
                     <InventoryHeaderButton isOpen={this.state.isOpen} handleOnClickCaret={this.handleOnClickCaret}/>
                 </div>
                 
-                { this.state.isOpen &&
+                {this.state.isOpen &&
                 <div>
                     {event.user.id === user.id &&
                         <IconButton
@@ -149,47 +169,61 @@ class InventoryList extends Component {
                     }
                         <div className="container">
                             <div className="row p-1">
-                                <div className="col col-md-5"><b>Item name</b></div>
-                                <div className="col"><b>Already get/Count</b></div>
-                                <div className="col"><b>Measuring unit</b></div>
-                                {event.user.id === user.id
-                                ? <div className="col"><b>Action</b></div>
-                                : null
+                                <div className="col col-md-4"><b>Item name</b></div>
+                                <div className="col"><b>Already get</b></div>
+                                {event.user.id !== user.id &&
+                                <div className="col"><b>Will take</b></div>
                                 }
+                                <div className="col"><b>Count</b></div>
+                                <div className="col"><b>Measuring unit</b></div>
+                                <div className="col col-md-2"><b>Action</b></div>
                             </div>
                             {inventories.items.map(item => {
                                 return (
                                     item.isEdit 
                                     ? <div className="row p-1">
-                                        <ItemFrom 
-                                            onSubmit={this.onSubmit} 
-                                            onCancel={this.onCancel}
-                                            unitOfMeasuringState={this.props.unitOfMeasuringState}
-                                            initialValues={item}/>
+                                        {event.user.id === user.id
+                                         ?   <ItemFrom 
+                                                onSubmit={this.onSubmit} 
+                                                onCancel={this.onCancel}
+                                                unitOfMeasuringState={this.props.unitOfMeasuringState}
+                                                initialValues={item}/>
+                                        :   <WillTakeItemForm
+                                                onSubmit={this.onWillTake}
+                                                onCancel={this.onCancel}
+                                                initialValues={item}
+                                            />
+                                        }
                                     </div>
                                     : <div className="row p-1">
-                                        <div className="col col-md-5">
+                                        <div className="col col-md-4">
                                             <span className="item" onClick={() => this.markItemAsWantToTake(item)}>{item.itemName}</span>
-                                            <div>
+                                        </div>
+                                        <div className="col">
                                                 {item.isWantToTake
                                                 ? 
                                                 <>  
                                                     {this.props.usersInventories.data.map(data => {
                                                         return (
                                                             data.inventoryId === item.id 
-                                                            ? <span>{data.user.name},</span>
-                                                            : null
-                                                            );
+                                                            ?   <span>{data.user.name}: {data.quantity}</span>
+                                                            :   null
+                                                        );
                                                     })}
                                                 </>
-                                                : null
+                                                : 
+                                                  <>
+                                                    {this.props.usersInventories.data.length === 0 ? 0 : this.props.usersInventories.data.reduce(reducer)}
+                                                  </> 
                                                 }
-                                            </div>
                                         </div>
-                                        <div className="col">0/{item.needQuantity}</div>
+                                        {event.user.id !== user.id &&
+                                        <div className="col">0</div>
+                                        }
+                                        <div className="col">{item.needQuantity}</div>
                                         <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        {event.user.id === user.id &&
-                                            <div className="col">
+                                        {event.user.id === user.id
+                                        ?    <div className="col">
                                                 <IconButton 
                                                     disabled={this.state.disabledEdit} 
                                                     onClick={this.markItemAsEdit.bind(this, item)}>
@@ -200,6 +234,22 @@ class InventoryList extends Component {
                                                     onClick={this.deleteItemFromList.bind(this, item)}>
                                                     <i className="fa-sm fas fa-trash text-danger"></i>
                                                 </IconButton>
+                                            </div>
+                                        :   <div className='col col-md-2'>
+                                            {item.isTaken 
+                                            ? <Tooltip title="Will take" placement="right-start">
+                                                    <IconButton
+                                                        onClick={this.markItemAsEdit.bind(this, item)}>
+                                                        <i className="fa-sm fas fa-plus text-success"></i>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            : <Tooltip title="Will not take" placement="right-start">
+                                                <IconButton
+                                                    onClick={this.markItemAsEdit.bind(this, item)}>
+                                                    <i className="fa-sm fas fa-minus text-danger"></i>
+                                                </IconButton>
+                                            </Tooltip>
+                                            } 
                                             </div>
                                         }   
                                     </div>
