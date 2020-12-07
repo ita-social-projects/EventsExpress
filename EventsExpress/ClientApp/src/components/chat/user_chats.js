@@ -29,7 +29,11 @@ class UserChats extends Component {
                                 }
                             </ButtonBase>
                             <div className="my-auto ml-5"><h5>{user.username}</h5>
-                                {new_msg.length > 0
+                                {new_msg.length == 1
+                                    ? <span className="text-info">You have 1 unread message</span>
+                                    : <span className="text-info">{x.lastMessage}</span>
+                                }
+                                {new_msg.length > 1
                                     ? <span className="text-info">You have {new_msg.length} unread messages</span>
                                     : <span className="text-info">{x.lastMessage}</span>
                                 }
