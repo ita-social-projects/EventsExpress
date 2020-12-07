@@ -97,7 +97,7 @@ const Profile = (props) => {
                     aria-controls="panel3bh-content"
                     id="panel3bh-header"
                 >
-                    <Typography className={classes.heading}>Date of birth</Typography>
+                    <Typography className={classes.heading}>Date of Birth</Typography>
                     <Typography className={classes.secondaryHeading}>
                         <Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment>
                     </Typography>

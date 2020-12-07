@@ -59,7 +59,7 @@ const ChangePassword = (props) => {
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
             >
-                <Typography className={classes.heading}>ChangePassword</Typography>
+                <Typography className={classes.heading}>Change Password</Typography>
 
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -102,7 +102,7 @@ const ChangePassword = (props) => {
 
                             </div>
 
-                            <div className='mt-2'>
+                            <div className='mt-5'>
                                 <Button type="submit" color="primary" disabled={pristine || submitting}>
                                     Submit
                                 </Button>
