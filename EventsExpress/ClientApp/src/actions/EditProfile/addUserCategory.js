@@ -18,7 +18,7 @@ export default function setUserCategory(data) {
             if (!response.error) {
                 dispatch(setAddUserCategorySuccess(true));
                 dispatch(updateCategories(data));
-                dispatch(setAlert({ variant: 'success', message: 'Favarote categoris is updated' }));
+                dispatch(setAlert({ variant: 'success', message: 'Favorite categories are updated' }));
             } else {
                 dispatch(setAddUserCategoryError(response.error));
                 dispatch(setAlert({ variant: 'error', message: 'Failed' }));
