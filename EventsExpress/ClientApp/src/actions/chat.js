@@ -45,7 +45,7 @@ export function initialConnection() {
                 hubConnection.on('ReceiveMessage', (data) => {
                     dispatch(ReceiveMsg(data));
                     if (data.senderId != localStorage.getItem('id')) {
-                        dispatch(setAlert({ variant: 'info', message: "You have received new message", autoHideDuration: 5000 }));
+                        dispatch(setAlert({ variant: 'info', message: "You have a new message", autoHideDuration: 5000 }));
                     }
                 });
                 hubConnection.on('wasSeen', (data) => {
