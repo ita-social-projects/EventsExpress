@@ -145,7 +145,7 @@ class EventForm extends Component {
                             <br />
                             <Field
                                 type="checkbox"
-                                label="Reccurent Event"
+                                label="Recurrent Event"
                                 name='isReccurent'
                                 component={renderCheckbox}
                                 checked={this.state.checked}
