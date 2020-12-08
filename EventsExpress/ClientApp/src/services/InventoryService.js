@@ -44,4 +44,16 @@ export default class InventoryService {
     getUnitsOfMeasuring = async () => {
         return await baseService.getResource('unitofmeasuring/getall');
     }
+
+    setWantToTake = async (data) => {
+    const res = await baseService.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    getUsersInventories = async (eventId) => {
+        const res = await baseService.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+        return res;
+    }
 }

@@ -7,7 +7,6 @@ import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
 import { get_users_inventories_by_event_id }  from '../../actions/usersInventories';
 import { add_item, delete_item, edit_item, want_to_take } from '../../actions/inventar';
-import WantToTakeModal from './wantToTakeModal';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -56,7 +55,6 @@ class InventoryList extends Component {
     }
 
     markItemAsEdit = inventar => {
-        console.log('edit');
         let updateList = this.props.inventories.items;
         updateList.map(item => {
             if (inventar.id === item.id)
@@ -79,18 +77,18 @@ class InventoryList extends Component {
         this.props.get_inventories(updateList);
     }
 
-    initialState = () => {
-        console.log('initial state')
-        let updateList = this.props.invetnories.items;
-        updateList.map(item => {
-            this.props.usersInventories.map(data => {
-                if (this.props.user.id === data.userId && item.id === data.inventoryId)
-                    item.isTaken = true;
-            });
-        });
+    // initialState = () => {
+    //     console.log('initial state')
+    //     let updateList = this.props.invetnories.items;
+    //     updateList.map(item => {
+    //         this.props.usersInventories.map(data => {
+    //             if (this.props.user.id === data.userId && item.id === data.inventoryId)
+    //                 item.isTaken = true;
+    //         });
+    //     });
 
-        this.props.get_inventories(updateList);
-    }
+    //     this.props.get_inventories(updateList);
+    // }
 
     handleOnClickCaret = () => {
         this.setState(state => ({
@@ -138,30 +136,45 @@ class InventoryList extends Component {
             eventId: this.props.eventId,
             userId: this.props.user.id,
             inventoryId: inventar.id,
-            quantity: 0
+            quantity: inventar.quantity
         }
 
         this.props.want_to_take(data);
+
+        this.setState({
+            disabledEdit: false
+        });
     }
 
     render() {
         const { inventories, event, user } = this.props;
-        const reducer = (accumulator, currentValue) => accumulator.quantity + currentValue.quantity;
-        // if (this.props.inventories.items) {
-            // this.initialState();
-        // }
-        console.log(this.props);
         let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
+        const reducer = (accumulator, currentValue) => accumulator + currentValue.quantity;
+        let updateList = [];
+        if (inventories.items) {
+            updateList = inventories.items.map(item => {
+                return { 
+                    ...item,
+                    isTaken: this.props.usersInventories.data
+                        .filter(dataItem => 
+                            this.props.user.id === dataItem.userId && 
+                            item.id === dataItem.inventoryId)
+                        .length > 0
+                }                
+            });
+            console.log("step 1", updateList);
+        }
+        console.log(this.props);
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
                     <InventoryHeaderButton isOpen={this.state.isOpen} handleOnClickCaret={this.handleOnClickCaret}/>
                 </div>
                 
-                {this.state.isOpen &&
+                { this.state.isOpen &&
                 <div>
-                    {isMyEvent
-                    ?  <IconButton
+                    {isMyEvent &&
+                        <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
@@ -172,18 +185,18 @@ class InventoryList extends Component {
                             <div className="row p-1">
                                 <div className="col col-md-4"><b>Item name</b></div>
                                 <div className="col"><b>Already get</b></div>
-                                {event.user.id !== user.id &&
+                                {!isMyEvent &&
                                 <div className="col"><b>Will take</b></div>
                                 }
                                 <div className="col"><b>Count</b></div>
                                 <div className="col"><b>Measuring unit</b></div>
                                 <div className="col col-md-2"><b>Action</b></div>
                             </div>
-                            {inventories.items.map(item => {
+                            {updateList.map(item => {
                                 return (
                                     item.isEdit 
-                                    ? <div className="row p-1">
-                                        {event.user.id === user.id
+                                    ? <div className="row p-1" key={item.id}>
+                                        {isMyEvent
                                          ?   <ItemFrom 
                                                 onSubmit={this.onSubmit} 
                                                 onCancel={this.onCancel}
@@ -196,11 +209,11 @@ class InventoryList extends Component {
                                             />
                                         }
                                     </div>
-                                    : <div className="row p-1">
+                                    : <div className="row p-1" key={item.id}>
                                         <div className="col col-md-4">
                                             <span className="item" onClick={() => this.markItemAsWantToTake(item)}>{item.itemName}</span>
                                         </div>
-                                        <div className="col">
+                                        <div className="col" key={item.id}>
                                                 {item.isWantToTake
                                                 ? 
                                                 <>  
@@ -214,11 +227,17 @@ class InventoryList extends Component {
                                                 </>
                                                 : 
                                                   <>
-                                                    {this.props.usersInventories.data.length === 0 ? 0 : this.props.usersInventories.data.reduce(reducer)}
+                                                    {
+                                                        this.props.usersInventories.data.length === 0 ? 
+                                                            0 
+                                                            : this.props.usersInventories.data.reduce((acc, cur) => {
+                                                                return acc + cur.quantity
+                                                            }, 0)
+                                                    }
                                                   </> 
                                                 }
                                         </div>
-                                        {event.user.id !== user.id &&
+                                        {!isMyEvent &&
                                         <div className="col">0</div>
                                         }
                                         <div className="col">{item.needQuantity}</div>
@@ -237,33 +256,45 @@ class InventoryList extends Component {
                                                 </IconButton>
                                             </div>
                                         :   <div className='col col-md-2'>
-                                            {item.isTaken 
+                                            {/* {item.isTaken 
                                             ? <Tooltip title="Will take" placement="right-start">
-                                                    <IconButton
-                                                        onClick={this.markItemAsEdit.bind(this, item)}>
-                                                        <i className="fa-sm fas fa-plus text-success"></i>
-                                                    </IconButton>
-                                                </Tooltip>
-                                            : <Tooltip title="Will not take" placement="right-start">
+                                                <IconButton
+                                                    onClick={this.markItemAsEdit.bind(this, item)}>
+                                                    <i className="fa-sm fas fa-plus text-success"></i>
+                                                    ?
+                                                </IconButton>
+                                            </Tooltip>
+                                            :  <Tooltip title="Will not take" placement="right-start">
+                                                <IconButton
+                                                    onClick={this.markItemAsEdit.bind(this, item)}>
+                                                    <i className="fa-sm fas fa-minus text-danger"></i>
+                                                    !
+                                                </IconButton>
+                                            </Tooltip>
+                                            }  */}
+                                            {item.isTaken && 
+                                            <Tooltip title="Will not take" placement="right-start">
                                                 <IconButton
                                                     onClick={this.markItemAsEdit.bind(this, item)}>
                                                     <i className="fa-sm fas fa-minus text-danger"></i>
                                                 </IconButton>
                                             </Tooltip>
-                                            } 
+                                            }
+
+                                            {!item.isTaken && 
+                                            <Tooltip title="Will take" placement="right-start">
+                                                <IconButton
+                                                    onClick={this.markItemAsEdit.bind(this, item)}>
+                                                    <i className="fa-sm fas fa-plus text-success"></i>
+                                                </IconButton>
+                                            </Tooltip>
+                                            }
                                             </div>
                                         }   
                                     </div>
                                 )
                             })}                    
                         </div>
-                        {/* <button className="btn" onClick={() => this.handleOnClickWantToTake()}>
-                            Want to take
-                        </button>
-                        <WantToTakeModal
-                            show={this.state.isWantToTake}
-                            onCancel={() => this.handleOnClickWantToTake()}
-                            inventories={inventories}/> */}
                 </div>
                 }
             </>
