@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +28,7 @@ namespace EventsExpress.Controllers
         [HttpGet]
         public IActionResult All()
         {
-            var res = _mapper.Map<IEnumerable<RoleDto>>(_roleService.All());
+            var res = _mapper.Map<IEnumerable<RoleViewModel>>(_roleService.All());
 
             return Ok(res);
         }

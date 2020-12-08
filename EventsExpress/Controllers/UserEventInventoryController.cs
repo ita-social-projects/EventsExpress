@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,20 +32,16 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> MarkItemAsTakenByUser([FromBody] UserEventInventoryDto model)
+        public async Task<IActionResult> MarkItemAsTakenByUser([FromBody] UserEventInventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _userEventInventoryService.MarkItemAsTakenByUser(_mapper.Map<UserEventInventoryDto, UserEventInventoryDTO>(model));
-            if (result.Successed)
-            {
-                return Ok(result.Property);
-            }
+            await _userEventInventoryService.MarkItemAsTakenByUser(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
 
-            return BadRequest(result.Message);
+            return Ok();
         }
     }
 }

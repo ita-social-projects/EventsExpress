@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
@@ -31,18 +32,30 @@ namespace EventsExpress.Core.Services
                     .Where(i => i.EventId == eventId));
         }
 
-        public async Task<OperationResult> MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
         {
-            try
+            if (!_context.Events.Any(e => e.Id == userEventInventoryDTO.EventId))
             {
-                _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
-                await _context.SaveChangesAsync();
-                return new OperationResult(true, "Good", string.Empty);
+                throw new EventsExpressException("Event not found!");
             }
-            catch (Exception ex)
+
+            if (!_context.Users.Any(e => e.Id == userEventInventoryDTO.UserId))
             {
-                return new OperationResult(false, ex.Message, string.Empty);
+                throw new EventsExpressException("User not found!");
             }
+
+            if (!_context.UserEvent.Any(ue => ue.UserId == userEventInventoryDTO.UserId))
+            {
+                throw new EventsExpressException("Don't have permision");
+            }
+
+            if (!_context.Inventories.Any(e => e.Id == userEventInventoryDTO.InventoryId))
+            {
+                throw new EventsExpressException("Inventory not found!");
+            }
+
+            _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
+            await _context.SaveChangesAsync();
         }
     }
 }

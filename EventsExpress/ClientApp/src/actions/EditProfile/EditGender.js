@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { UserService } from '../../services';
 import { setAlert} from '../alert';
 
 export const editGender = {
@@ -8,7 +8,7 @@ export const editGender = {
     UPDATE: "UPDATE_GENDER"
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 
 export default function edit_Gender(data) {

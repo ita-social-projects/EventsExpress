@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.ActionFilters;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
@@ -14,7 +15,9 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
+using EventsExpress.Filters;
+using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
 using FluentValidation;
@@ -115,7 +118,6 @@ namespace EventsExpress
                     .GetConnectionString("DefaultConnection")));
 
             #region Configure our services...
-
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventScheduleService, EventScheduleService>();
@@ -130,6 +132,7 @@ namespace EventsExpress
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
+            services.AddScoped<IEventOwnersService, EventOwnersService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -140,6 +143,7 @@ namespace EventsExpress
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSingleton<UserAccessTypeFilter>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();
@@ -160,6 +164,11 @@ namespace EventsExpress
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(EventsExpressExceptionFilter));
+            });
 
             services.AddSwaggerGen(c =>
             {

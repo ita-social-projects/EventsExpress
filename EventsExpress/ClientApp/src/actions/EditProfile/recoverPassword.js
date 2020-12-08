@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { AuthenticationService } from '../../services';
 
 export const recoverPassword = {
     PENDING: "SET_RECOVERPASSWORD_PENDING",
@@ -7,7 +7,7 @@ export const recoverPassword = {
 
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new AuthenticationService();
 
 export default function recover_Password(data) {
     return dispatch => {

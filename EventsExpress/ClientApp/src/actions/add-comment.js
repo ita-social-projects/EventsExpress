@@ -1,10 +1,10 @@
-﻿import EventsExpressService from '../services/EventsExpressService';
+﻿import { CommentService } from '../services';
 import get_comments from './comment-list';
 export const SET_COMMENT_PENDING = "SET_COMMENT_PENDING";
 export const SET_COMMENT_SUCCESS = "SET_COMMENT_SUCCESS";
 export const SET_COMMENT_ERROR = "SET_COMMENT_ERROR";
 
-const api_serv = new EventsExpressService();
+const api_serv = new CommentService();
 
 export default function add_comment(data) {
 

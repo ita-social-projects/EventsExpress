@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 
@@ -16,6 +18,9 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
+        private static Mock<IAuthService> mockAuthService;
+        private static Mock<IHttpContextAccessor> httpContextAccessor;
+
         private EventService service;
         private List<Event> events;
 
@@ -30,14 +35,18 @@ namespace EventsExpress.Test.ServiceTests
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(new Mock<HttpContext>().Object);
+            mockAuthService = new Mock<IAuthService>();
 
             service = new EventService(
                 Context,
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
+                mockAuthService.Object,
+                httpContextAccessor.Object,
                 mockEventScheduleService.Object);
-
 
             List<User> users = new List<User>()
             {
@@ -57,10 +66,16 @@ namespace EventsExpress.Test.ServiceTests
                     CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
-                    Description = "...",
-                    OwnerId = Guid.NewGuid(),
-                    PhotoId = Guid.NewGuid(),
-                    Title = "Title",
+                    Description = "sjsdnl sdmkskdl dsnlndsl",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
+                    PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                    Title = "SLdndsndj",
                     IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
@@ -73,9 +88,15 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    OwnerId = Guid.NewGuid(),
-                    PhotoId = Guid.NewGuid(),
-                    Title = "Title",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        },
+                    },
+                    PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                    Title = "SLdndstrhndj",
                     IsBlocked = false,
                     IsPublic = false,
                     Categories = null,
@@ -84,11 +105,11 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new UserEvent
                         {
-                                    UserStatusEvent = UserStatusEvent.Pending,
-                                    Status = Status.WillGo,
-                                    UserId = userId,
-                                    User = users[0],
-                                    EventId = eventId,
+                            UserStatusEvent = UserStatusEvent.Pending,
+                            Status = Status.WillGo,
+                            UserId = userId,
+                            User = users[0],
+                            EventId = eventId,
                         },
                     },
                 },
@@ -101,62 +122,46 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddUserToEvent_ReturnTrue()
         {
-            var result = service.AddUserToEvent(userId, firstEventId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, firstEventId));
         }
 
         [Test]
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
-            var result = service.AddUserToEvent(Guid.NewGuid(), eventId);
-
-            StringAssert.Contains("User not found!", result.Result.Message);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
-            var result = service.AddUserToEvent(userId, Guid.NewGuid());
-
-            StringAssert.Contains("Event not found!", result.Result.Message);
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
         public void DeleteUserFromEvent_ReturnTrue()
         {
-            var result = service.DeleteUserFromEvent(userId, eventId);
-
-            Assert.IsTrue(result.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.DeleteUserFromEvent(userId, eventId));
         }
 
         [Test]
         public void DeleteUserFromEvent_UserNotFound_ReturnFalse()
         {
-            var result = service.DeleteUserFromEvent(Guid.NewGuid(), eventId);
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
         public void DeleteUserFromEvent_EventNotFound_ReturnFalse()
         {
-            var result = service.DeleteUserFromEvent(userId, Guid.NewGuid());
-
-            Assert.IsFalse(result.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
         public void ChangeVisitorStatus_ReturnTrue()
         {
-            var test = service.ChangeVisitorStatus(
+            Assert.DoesNotThrowAsync(async () => await service.ChangeVisitorStatus(
                 userId,
                 eventId,
-                UserStatusEvent.Approved);
-
-            Assert.IsTrue(test.Result.Successed);
+                UserStatusEvent.Approved));
         }
     }
 }

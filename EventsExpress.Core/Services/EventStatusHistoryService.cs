@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.BaseService;
@@ -9,27 +8,33 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Services
 {
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
         private readonly IMediator _mediator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthService _authService;
 
         public EventStatusHistoryService(
-            AppDbContext context,
-            IMediator mediator)
+            IMediator mediator,
+            IHttpContextAccessor httpContextAccessor,
+            IAuthService authService,
+            AppDbContext context)
              : base(context)
         {
-            _mediator = mediator;
+            _httpContextAccessor = httpContextAccessor;
+            _authService = authService;
         }
 
-        public async Task<OperationResult> CancelEvent(Guid eventId, string reason)
+        public async Task CancelEvent(Guid eventId, string reason)
         {
             var uEvent = _context.Events.Find(eventId);
             if (uEvent == null)
             {
-                return new OperationResult(false, "Invalid event id", "eventId");
+                throw new EventsExpressException("Invalid event id");
             }
 
             var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
@@ -37,17 +42,17 @@ namespace EventsExpress.Core.Services
 
             await _context.SaveChangesAsync();
             await _mediator.Publish(new CancelEventMessage(eventId));
-
-            return new OperationResult(true);
         }
 
         private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
         {
-            var record = new EventStatusHistory();
-            record.EventId = e.Id;
-            record.UserId = e.OwnerId;
-            record.EventStatus = status;
-            record.Reason = reason;
+            var record = new EventStatusHistory
+            {
+                EventId = e.Id,
+                UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id,
+                EventStatus = status,
+                Reason = reason,
+            };
 
             return record;
         }

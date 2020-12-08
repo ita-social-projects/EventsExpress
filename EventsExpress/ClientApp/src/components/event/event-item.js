@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import { Button, Menu, MenuItem } from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -45,13 +46,26 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default class Event extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            anchorEl: null
+        }
+    }
+
     renderCategories = (arr) => {
         return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
         );
     }
+  
+    handleClick = (event) => {
+        this.setState({ anchorEl: event.currentTarget });
+    }
 
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    }
     
-
     render() {
         const classes = useStyles;
         const {
@@ -63,12 +77,33 @@ export default class Event extends Component {
             maxParticipants,
             photoUrl,
             categories,
-            user,
             countVisitor,
-            isBlocked
+            isBlocked,
+            owners
         } = this.props.item;
         const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
+        const { anchorEl } = this.state;
+
+        const PrintMenuItems = owners.map(x => (
+            <MenuItem onClick={this.handleClose}>
+                <div className="d-flex align-items-center border-bottom">
+                    <div className="flex-grow-1">
+                        <Link to={'/user/' + x.id} className="btn-custom">
+                            <div className="d-flex align-items-center border-bottom">
+                                <CustomAvatar 
+                                    photoUrl={x.photoUrl}
+                                    name={x.username} 
+                                />
+                                <div>
+                                    <h5 className="pl-2">{x.username}</h5>
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+            </MenuItem>
+        ))
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -76,17 +111,34 @@ export default class Event extends Component {
                     className={classes.card}
                     style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
                 >
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        anchorOrigin ={{
+                            vertical: "bottom",
+                            horisontal: "left"
+                        }}
+                        open={Boolean(anchorEl)}
+                        onClose={this.handleClose}
+                        >
+
+                        {
+                            PrintMenuItems
+                        }
+                    </Menu>
                     <CardHeader
                         avatar={
-                            <Tooltip title={user.username}>
-                                <Link to={`/user/${user.id}`} className="btn-custom">
-                                    <CustomAvatar
-                                        className={classes.avatar}
-                                        photoUrl={user.photoUrl}
-                                        name={user.username}
-                                    />
-                                </Link>
-                            </Tooltip>
+                            <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
+                                    <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
+                                        <CustomAvatar
+                                            className={classes.avatar}
+                                            photoUrl={owners[0].photoUrl}
+                                            name={owners[0].username}
+                                        />
+                                    </Badge>
+                            </Button>
+                            
                         }
 
                         action={
@@ -128,7 +180,7 @@ export default class Event extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             <div className='mb-2'>
-                                {`${city}, ${country}`}
+                                {`${city.name}, ${country.name}`}
                             </div>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}

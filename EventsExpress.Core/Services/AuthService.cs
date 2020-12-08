@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Helpers;
@@ -22,18 +22,18 @@ namespace EventsExpress.Core.Services
             _tokenService = tokenService;
         }
 
-        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> AuthenticateUserFromExternalProvider(string email)
+        public async Task<AuthenticateResponseModel> AuthenticateUserFromExternalProvider(string email)
         {
             UserDTO user = _userService.GetByEmail(email);
 
             if (user == null)
             {
-                return (new OperationResult(false, $"User with email: {email} not found", "email"), null);
+                throw new EventsExpressException($"User with email: {email} not found");
             }
 
             if (user.IsBlocked)
             {
-                return (new OperationResult(false, $"{email}, your account was blocked.", "email"), null);
+                throw new EventsExpressException($"{email}, your account was blocked.");
             }
 
             var jwtToken = _tokenService.GenerateAccessToken(user);
@@ -42,30 +42,30 @@ namespace EventsExpress.Core.Services
             // save refresh token
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
-            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> Authenticate(string email, string password)
+        public async Task<AuthenticateResponseModel> Authenticate(string email, string password)
         {
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                return (new OperationResult(false, "User not found", "email"), null);
+                throw new EventsExpressException("User not found");
             }
 
             if (user.IsBlocked)
             {
-                return (new OperationResult(false, $"{email}, your account was blocked.", "email"), null);
+                throw new EventsExpressException($"{email}, your account was blocked.");
             }
 
             if (!user.EmailConfirmed)
             {
-                return (new OperationResult(false, $"{email} is not confirmed, please confirm", string.Empty), null);
+                throw new EventsExpressException($"{email} is not confirmed, please confirm");
             }
 
             if (!VerifyPassword(user, password))
             {
-                return (new OperationResult(false, "Invalid password", "Password"), null);
+                throw new EventsExpressException("Invalid password");
             }
 
             // authentication successful so generate jwt and refresh tokens
@@ -76,14 +76,14 @@ namespace EventsExpress.Core.Services
             user.RefreshTokens = new List<RefreshToken> { refreshToken };
             await _userService.Update(user);
 
-            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<(OperationResult opResult, AuthenticateResponseModel authResponseModel)> FirstAuthenticate(UserDTO userDto)
+        public async Task<AuthenticateResponseModel> FirstAuthenticate(UserDTO userDto)
         {
             if (userDto == null)
             {
-                return (new OperationResult(false, $"User with email: {userDto.Email} not found", "email"), null);
+                throw new EventsExpressException("User not found");
             }
 
             var jwtToken = _tokenService.GenerateAccessToken(userDto);
@@ -94,19 +94,17 @@ namespace EventsExpress.Core.Services
 
             await _userService.Update(userDto);
 
-            return (new OperationResult(true), new AuthenticateResponseModel(jwtToken, refreshToken.Token));
+            return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<OperationResult> ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        public Task ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
             {
                 userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword);
-
-                return await _userService.Update(userDto);
             }
 
-            return new OperationResult(false, "Invalid password", string.Empty);
+            throw new EventsExpressException("Invalid password");
         }
 
         public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)

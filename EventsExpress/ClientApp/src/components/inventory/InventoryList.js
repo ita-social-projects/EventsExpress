@@ -151,6 +151,7 @@ class InventoryList extends Component {
             // this.initialState();
         // }
         console.log(this.props);
+        let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
         return (
             <>
                 <div className="d-flex justify-content-start align-items-center">
@@ -159,8 +160,8 @@ class InventoryList extends Component {
                 
                 {this.state.isOpen &&
                 <div>
-                    {event.user.id === user.id &&
-                        <IconButton
+                    {isMyEvent
+                    ?  <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
@@ -222,7 +223,7 @@ class InventoryList extends Component {
                                         }
                                         <div className="col">{item.needQuantity}</div>
                                         <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        {event.user.id === user.id
+                                        {isMyEvent
                                         ?    <div className="col">
                                                 <IconButton 
                                                     disabled={this.state.disabledEdit} 

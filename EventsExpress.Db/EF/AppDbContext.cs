@@ -1,6 +1,5 @@
 ﻿using System;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Db.EF
@@ -10,7 +9,6 @@ namespace EventsExpress.Db.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -26,6 +24,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Relationship> Relationships { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<EventOwner> EventOwners { get; set; }
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 
@@ -76,13 +76,20 @@ namespace EventsExpress.Db.EF
                 .WithMany(e => e.Visitors)
                 .HasForeignKey(ue => ue.EventId);
 
-            // user-event configs
-            // user as owner
-            builder.Entity<Event>()
-                .HasOne(e => e.Owner)
+            builder.Entity<EventOwner>()
+                .HasKey(c => new { c.UserId, c.EventId });
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.User)
                 .WithMany(u => u.Events)
-                .HasForeignKey(e => e.OwnerId).OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(ue => ue.UserId);
+            builder.Entity<EventOwner>()
+                .HasOne(ue => ue.Event)
+                .WithMany(e => e.Owners)
+                .HasForeignKey(ue => ue.EventId);
+            builder.Entity<EventOwner>()
+                .HasIndex(p => new { p.UserId, p.EventId });
 
+            // user as owner
             builder.Entity<Event>()
                 .Property(u => u.DateFrom).HasColumnType("date");
             builder.Entity<Event>()
@@ -179,19 +186,6 @@ namespace EventsExpress.Db.EF
                 .WithMany(i => i.UserEventInventories)
                 .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
 
-            // unitOfMeasuring config
-            builder.Entity<UnitOfMeasuring>()
-                .HasData(
-                new UnitOfMeasuring[]
-                {
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Units", ShortName = "u"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Kilograms", ShortName = "kg"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Grams", ShortName = "g"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Liters", ShortName = "l"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Miliiters", ShortName = "ml"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Meters", ShortName = "m"},
-                    new UnitOfMeasuring { Id = Guid.NewGuid(), UnitName = "Centimeters", ShortName = "cm"},
-                });
         }
     }
 }

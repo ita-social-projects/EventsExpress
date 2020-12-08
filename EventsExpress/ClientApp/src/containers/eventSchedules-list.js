@@ -15,6 +15,7 @@ class EventSchedulesListWrapper extends Component {
     }
 
     render() {
+        
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};

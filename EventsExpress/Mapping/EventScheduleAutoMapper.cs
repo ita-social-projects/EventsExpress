@@ -4,7 +4,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
-using EventsExpress.DTO;
+using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
 {
@@ -19,41 +19,38 @@ namespace EventsExpress.Mapping
                Title = src.Event.Title,
                DateTo = src.Event.DateTo,
                DateFrom = src.Event.DateFrom,
-               OwnerId = src.Event.OwnerId,
+               Owners = src.Event.Owners.Select(x => new User
+               {
+                   Id = x.UserId,
+               }),
                PhotoBytes = src.Event.Photo,
            }));
 
             CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
 
-            CreateMap<EventScheduleDTO, EventScheduleDto>()
-                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
-                {
-                    Id = src.Event.Id,
-                    Title = src.Event.Title,
-                    DateTo = src.Event.DateTo,
-                    DateFrom = src.Event.DateFrom,
-                    OwnerId = src.Event.OwnerId,
-                    PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
-                }));
+            CreateMap<EventScheduleDTO, PreviewEventScheduleViewModel>()
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()));
 
-            CreateMap<EventScheduleDto, EventScheduleDTO>()
-                .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
+            CreateMap<EventScheduleDTO, EventScheduleViewModel>()
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Event.Owners.Select(x => new UserPreviewViewModel
                 {
-                    Id = src.Event.Id,
-                    Title = src.Event.Title,
-                    DateTo = src.Event.DateTo,
-                    DateFrom = src.Event.DateFrom,
-                    OwnerId = src.Event.OwnerId,
-                    PhotoUrl = src.Event.PhotoBytes.Img.ToRenderablePictureString(),
-                }));
+                    Id = x.Id,
+                    Username = x.Name,
+                })));
+
+            CreateMap<PreviewEventScheduleViewModel, EventScheduleDTO>()
+                .ForMember(dest => dest.Event, opts => opts.Ignore());
 
             CreateMap<EventDTO, EventScheduleDTO>()
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))
-                .ForMember(dest => dest.CreatedBy, opts => opts.MapFrom(src => src.OwnerId))
                 .ForMember(dest => dest.CreatedDateTime, opts => opts.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.ModifiedBy, opts => opts.MapFrom(src => src.OwnerId))
                 .ForMember(dest => dest.ModifiedDateTime, opts => opts.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true));

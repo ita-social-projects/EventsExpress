@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using NUnit.Framework;
@@ -42,16 +43,13 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Delete_ExistingId_Success()
         {
-            var res = cityService.DeleteCityAsync(cityId);
-
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await cityService.DeleteCityAsync(cityId));
         }
 
         [Test]
         public void Delete_NotExistId_ReturnFalse()
         {
-            var res = cityService.DeleteCityAsync(default);
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await cityService.DeleteCityAsync(default));
         }
 
         [Test]
@@ -64,59 +62,47 @@ namespace EventsExpress.Test.ServiceTests
                 Country = country,
             };
 
-            var res = cityService.CreateCityAsync(city);
-
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await cityService.CreateCityAsync(city));
         }
 
         [Test]
         public void Insert_EmptyObject_ReturnsFalse()
         {
-            var res = cityService.CreateCityAsync(new City());
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await cityService.CreateCityAsync(new City()));
         }
 
         [Test]
         public void InsertExisting_Object_ReturnsFalse()
         {
-            var res = cityService.CreateCityAsync(city);
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await cityService.CreateCityAsync(city));
         }
 
         [Test]
         public void Update_EmptyCity_True()
         {
-            var res = cityService.EditCityAsync(new City()
+            Assert.DoesNotThrowAsync(async () => await cityService.EditCityAsync(new City()
             {
                 Id = cityId,
                 Name = "City1",
                 CountryId = countryId,
-            });
-
-            Assert.IsTrue(res.Result.Successed);
+            }));
         }
 
         [Test]
         public void Update_OldCityIdNull_false()
         {
-            var res = cityService.EditCityAsync(new City()
+            Assert.ThrowsAsync<EventsExpressException>(async () => await cityService.EditCityAsync(new City()
             {
                 Id = Guid.Empty,
                 Name = "City",
                 CountryId = countryId,
-            });
-
-            Assert.IsFalse(res.Result.Successed);
+            }));
         }
 
         [Test]
         public void Update_CityCountryIdNull_false()
         {
-            var res = cityService.EditCityAsync(new City() { Id = default });
-
-            Assert.IsFalse(res.Result.Successed);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await cityService.EditCityAsync(new City() { Id = default }));
         }
     }
 }

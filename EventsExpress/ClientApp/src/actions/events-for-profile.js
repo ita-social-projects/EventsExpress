@@ -1,5 +1,5 @@
 ﻿
-import EventsExpressService from '../services/EventsExpressService';
+import { EventService } from '../services';
 
 
 export const SET_EVENTS_PROFILE_PENDING = "SET_EVENTS_PROFILE_PENDING";
@@ -7,7 +7,7 @@ export const GET_EVENTS_PROFILE_SUCCESS = "GET_EVENTS_PROFILE_SUCCESS";
 export const SET_EVENTS_PROFILE_ERROR = "SET_EVENTS_PROFILE_ERROR";
 
 
-const api_serv = new EventsExpressService();
+const api_serv = new EventService();
 
 export default function get_future_events(id, page=1) {
 

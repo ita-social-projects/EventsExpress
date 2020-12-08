@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 
@@ -13,6 +15,8 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventScheduleServiceTests : TestInitializer
     {
         private static Mock<IMediator> mockMediator;
+        private static Mock<IHttpContextAccessor> httpContextAccessor;
+        private static Mock<IAuthService> authService;
         private EventScheduleService service;
         private List<EventSchedule> eventSchedules;
         private EventScheduleDTO esDTO;
@@ -34,10 +38,14 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
+            httpContextAccessor = new Mock<IHttpContextAccessor>();
+            authService = new Mock<IAuthService>();
 
             service = new EventScheduleService(
                 Context,
-                MockMapper.Object);
+                MockMapper.Object,
+                authService.Object,
+                httpContextAccessor.Object);
 
             country = new Country()
             {
@@ -207,10 +215,8 @@ namespace EventsExpress.Test.ServiceTests
             esDTO.Id = Guid.NewGuid();
 
             // Act
-            var res = service.Create(esDTO);
-
             // Assert
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Create(esDTO));
         }
 
         [Test]
@@ -219,10 +225,8 @@ namespace EventsExpress.Test.ServiceTests
             // Arrange
 
             // Act
-            var res = service.Edit(esDTO);
-
             // Assert
-            Assert.IsTrue(res.Result.Successed);
+            Assert.DoesNotThrowAsync(async () => await service.Edit(esDTO));
         }
     }
 }

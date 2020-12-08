@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.DTO;
-using EventsExpress.ViewModel;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,21 +33,16 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit/Create process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit(CommentDto model)
+        public async Task<IActionResult> Edit(CommentViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var res = await _commentService.Create(_mapper.Map<CommentDto, CommentDTO>(model));
+            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDTO>(model));
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -58,17 +52,12 @@ namespace EventsExpress.Controllers
         /// <response code="200">Delete comment proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [AllowAnonymous]
-        [HttpPost("[action]/{id}")]
+        [HttpPost("{id}/[action]")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var res = await _commentService.Delete(id);
+            await _commentService.Delete(id);
 
-            if (res.Successed)
-            {
-                return Ok();
-            }
-
-            return BadRequest(res.Message);
+            return Ok();
         }
 
         /// <summary>
@@ -83,20 +72,21 @@ namespace EventsExpress.Controllers
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            var res = _mapper.Map<IEnumerable<CommentDto>>(
+            var res = _mapper.Map<IEnumerable<CommentViewModel>>(
                 _commentService
                     .GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {
-                com.Children = _mapper.Map<IEnumerable<CommentDto>>(com.Children);
+                com.Children = _mapper.Map<IEnumerable<CommentViewModel>>(com.Children);
             }
 
-            var viewModel = new IndexViewModel<CommentDto>
+            var viewModel = new IndexViewModel<CommentViewModel>
             {
                 PageViewModel = new PageViewModel(count, page, pageSize),
                 Items = res,
             };
+
             return Ok(viewModel);
         }
     }

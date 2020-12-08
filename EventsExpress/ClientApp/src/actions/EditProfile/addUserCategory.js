@@ -1,4 +1,4 @@
-﻿import EventsExpressService from '../../services/EventsExpressService';
+﻿import { UserService } from '../../services';
 import { setAlert } from '../alert';
 
 export const addUserCategory = {
@@ -8,7 +8,7 @@ export const addUserCategory = {
     UPDATE: "UPDATE_CATEGORIES",
 }
 
-const api_serv = new EventsExpressService();
+const api_serv = new UserService();
 
 export default function setUserCategory(data) {
     return dispatch => {
@@ -18,7 +18,7 @@ export default function setUserCategory(data) {
             if (!response.error) {
                 dispatch(setAddUserCategorySuccess(true));
                 dispatch(updateCategories(data));
-                dispatch(setAlert({ variant: 'success', message: 'Favarote categoris is updated' }));
+                dispatch(setAlert({ variant: 'success', message: 'Favorite categories are updated' }));
             } else {
                 dispatch(setAddUserCategoryError(response.error));
                 dispatch(setAlert({ variant: 'error', message: 'Failed' }));

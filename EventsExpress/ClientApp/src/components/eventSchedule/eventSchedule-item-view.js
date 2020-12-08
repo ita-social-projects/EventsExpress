@@ -63,10 +63,13 @@ class EventScheduleItemView extends Component {
             periodicity,
             lastRun,
             nextRun,
-            event,
-            eventId } = this.props.eventSchedule.data;
+            title,
+            photoUrl,
+            eventId,
+            owners
+        } = this.props.eventSchedule.data;
         const period = renderPeriod(periodicity, frequency);
-
+        let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
         return <>
             <div className="container-fluid mt-1">
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
@@ -78,13 +81,13 @@ class EventScheduleItemView extends Component {
                         />
                         <CardMedia
                             className={classes.media}
-                            title={event.title}
+                            title={title}
                         >
-                            <img src={event.photoUrl} className="w-100" />
+                            <img src={photoUrl} className="w-100" />
                         </CardMedia>
                         <div className="text-block">
                             <CardContent>
-                                <div className="title"> {event.title} </div>
+                                <div className="title"> {title} </div>
                                 <div>Last Run
                                     <Moment className="ml-2" format="D MMM YYYY" withTitle>{lastRun}</Moment>
                                 </div>
@@ -96,7 +99,7 @@ class EventScheduleItemView extends Component {
                     </Card>
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                    {current_user.id == event.ownerId &&
+                    {isMyEvent &&                        
                         <SelectiveForm eventId={eventId} event={this.props.event} />
                     }
                 </div>

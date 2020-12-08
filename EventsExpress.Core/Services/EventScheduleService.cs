@@ -5,57 +5,86 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        public EventScheduleService(AppDbContext context, IMapper mapper)
+        private IAuthService _authService;
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService, IHttpContextAccessor httpContextAccessor)
             : base(context, mapper)
         {
+            _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<OperationResult> CancelEvents(Guid eventId)
+        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
+
+        public IEnumerable<EventScheduleDTO> GetAll()
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.IsActive = false;
-            return await Edit(eventScheduleDTO);
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
+                _context.EventSchedules
+                    .Include(es => es.Event)
+                        .ThenInclude(e => e.City)
+                            .ThenInclude(c => c.Country)
+                    .Include(es => es.Event)
+                        .ThenInclude(e => e.Owners)
+                    .Include(es => es.Event)
+                        .ThenInclude(e => e.Photo)
+                    .Where(opt => opt.IsActive &&
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUser.Id))
+                    .ToList());
         }
 
-        public async Task<OperationResult> CancelNextEvent(Guid eventId)
+        public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
         {
-            var eventScheduleDTO = EventScheduleByEventId(eventId);
-            eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
-            eventScheduleDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
-            return await Edit(eventScheduleDTO);
+            var res = _context.EventSchedules
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.City)
+                        .ThenInclude(c => c.Country)
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.Photo)
+                .Include(es => es.Event)
+                    .ThenInclude(e => e.Owners)
+                        .ThenInclude(d => d.User)
+                .FirstOrDefault(x => x.Id == eventScheduleId);
+
+            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
         }
 
-        public async Task<OperationResult> Create(EventScheduleDTO eventScheduleDTO)
+        public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
+            _mapper.Map<EventSchedule, EventScheduleDTO>(
+                 _context.EventSchedules
+                .FirstOrDefault(x => x.EventId == eventId));
+
+        public IEnumerable<EventScheduleDTO> GetUrgentEventSchedules()
+        {
+            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
+                 _context.EventSchedules
+                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
+                .ToList());
+        }
+
+        public async Task<Guid> Create(EventScheduleDTO eventScheduleDTO)
         {
             var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
             eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
 
-            try
-            {
-                var result = Insert(eventScheduleEntity);
-                await _context.SaveChangesAsync();
+            var result = Insert(eventScheduleEntity);
+            await _context.SaveChangesAsync();
 
-                return new OperationResult(true, "Create new EventSchedule", result.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return new OperationResult(false, ex.Message, string.Empty);
-            }
+            return result.Id;
         }
 
-        public async Task<OperationResult> Edit(EventScheduleDTO eventScheduleDTO)
+        public async Task<Guid> Edit(EventScheduleDTO eventScheduleDTO)
         {
             var ev = _context.EventSchedules.Find(eventScheduleDTO.Id);
             ev.Frequency = eventScheduleDTO.Frequency;
@@ -68,45 +97,26 @@ namespace EventsExpress.Core.Services
             ev.ModifiedDateTime = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return new OperationResult(true, "Edit event schedule", eventScheduleDTO.Id.ToString());
+
+            return eventScheduleDTO.Id;
         }
 
-        public EventScheduleDTO EventScheduleById(Guid id)
+        public async Task<Guid> CancelEvents(Guid eventId)
         {
-            var res = _context.EventSchedules
-                .Include(es => es.Event)
-                    .ThenInclude(e => e.City)
-                        .ThenInclude(c => c.Country)
-                .Include(es => es.Event)
-                    .ThenInclude(e => e.Photo)
-                .FirstOrDefault(x => x.Id == id);
-            return _mapper.Map<EventSchedule, EventScheduleDTO>(res);
+            var eventScheduleDTO = EventScheduleByEventId(eventId);
+            eventScheduleDTO.IsActive = false;
+
+            return await Edit(eventScheduleDTO);
         }
 
-        public IEnumerable<EventScheduleDTO> GetAll()
+        public async Task<Guid> CancelNextEvent(Guid eventId)
         {
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
-                _context.EventSchedules
-                    .Include(es => es.Event)
-                        .ThenInclude(e => e.City)
-                            .ThenInclude(c => c.Country)
-                    .Include(es => es.Event)
-                        .ThenInclude(e => e.Photo)
-                    .Where(opt => opt.IsActive)
-                    .ToList());
-        }
+            var eventScheduleDTO = EventScheduleByEventId(eventId);
+            eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
+            eventScheduleDTO.NextRun = DateTimeExtensions
+                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
 
-        public IEnumerable<EventScheduleDTO> GetUrgentEventSchedules()
-        {
-            return _mapper.Map<IEnumerable<EventScheduleDTO>>(
-                 _context.EventSchedules
-                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
-                .ToList());
+            return await Edit(eventScheduleDTO);
         }
-
-        public EventScheduleDTO EventScheduleByEventId(Guid eventId) =>
-            _mapper.Map<EventSchedule, EventScheduleDTO>(
-                 _context.EventSchedules
-                .FirstOrDefault(x => x.EventId == eventId));
     }
 }
