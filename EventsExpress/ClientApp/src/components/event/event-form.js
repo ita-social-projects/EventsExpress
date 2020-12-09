@@ -130,7 +130,7 @@ class EventForm extends Component {
                             component={renderTextField}
                             type="input"
                             label="Title"
-                            inputProps={{ maxLength: 20 }}
+                            inputProps={{ maxLength: 60 }}
                         />
                     </div>
                     <div className="mt-2">
