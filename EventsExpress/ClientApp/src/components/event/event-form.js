@@ -20,7 +20,6 @@ import {
 import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
-
 const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
@@ -102,7 +101,7 @@ class EventForm extends Component {
 
         const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
-        
+
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
@@ -176,7 +175,7 @@ class EventForm extends Component {
                             type="checkbox"
                             label="Public"
                         />
-                    </div>                    
+                    </div>
                     <div className="meta-wrap m-2">
                         <span>From
                             <Field
@@ -222,7 +221,7 @@ class EventForm extends Component {
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values && values.countryId  &&
+                    {values && values.countryId &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'
@@ -234,15 +233,28 @@ class EventForm extends Component {
                     }
                     {isCreated ? null : <Inventory />}
                 </div>
-                <Button
-                    fullWidth={true}
-                    type="submit"
-                    color="primary"
-                    onClick={this.disableSaveButton}
-                    disabled={this.isSaveButtonDisabled}
-                >
-                    Save
-                </Button>
+                <div className="row pl-md-4">
+                    <div className="col">
+                        <Button 
+                            className="border"
+                            fullWidth={true}
+                            type="submit"
+                            color="primary"
+                            onClick={this.disableSaveButton}
+                            disabled={this.isSaveButtonDisabled}>
+                            Save
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.onCancel}>
+                            Cancel
+                        </Button>
+                    </div>
+                </div>
             </form>
         );
     }
