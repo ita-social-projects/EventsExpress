@@ -286,6 +286,7 @@ export const renderTextField = ({
     label,
     defaultValue,
     input,
+    inputProps,
     rows,
     fullWidth,
     meta: { touched, invalid, error },
@@ -299,6 +300,7 @@ export const renderTextField = ({
             error={touched && invalid}
             defaultValue={defaultValue}
             value={defaultValue}
+            inputProps={inputProps}
             helperText={touched && error}
             {...input}
             {...custom}
