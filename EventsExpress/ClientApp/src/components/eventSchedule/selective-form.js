@@ -64,7 +64,7 @@ class SelectiveForm extends Component {
                     show={this.state.show}
                     submitHandler={this.submitHandler} />
                 {this.state.submit &&
-                    <EditFromParentEventWrapper />}
+                    <EditFromParentEventWrapper onCancelEditing={() => this.setState({submit:false})}/>}
             </div>
         </>
     }

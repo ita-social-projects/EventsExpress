@@ -321,7 +321,9 @@ export default class EventItemView extends Component {
                         </div>
                         {this.state.edit
                             ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                                <EditEventWrapper />
+                                <EditEventWrapper 
+                                    onCancelEditing={() => this.setState({edit:false})}
+                                />
                             </div>
                             : <>
                                 {!isFutureEvent &&
