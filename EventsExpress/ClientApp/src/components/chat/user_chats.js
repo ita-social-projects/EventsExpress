@@ -49,7 +49,7 @@ class UserChats extends Component {
         });
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
-            ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+            ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded limit-width">
                 {this.renderChats(data)}
             </div>
             : null;
