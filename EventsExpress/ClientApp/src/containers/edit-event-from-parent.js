@@ -62,6 +62,7 @@ class EditFromParentEventWraper extends Component {
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
+                onCancel={this.props.onCancelEditing}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 initialValues={initialValues}
