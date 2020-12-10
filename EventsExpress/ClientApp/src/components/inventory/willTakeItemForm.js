@@ -6,7 +6,15 @@ import Module from '../helpers';
 
 const { validate } = Module;
 
+
 class WillTakeItemForm extends Component {
+    maxValue = max => value =>
+        value && value > max ? `Must be less or equal than ${max}` : undefined
+    maxValueLimitor = this.maxValue(this.props.initialValues.needQuantity - this.props.alreadyGet)
+
+    minValue = min => value =>
+        value && value < min ? `Must be at least ${min}` : undefined
+    minValueLimitor = this.minValue(1)
 
     render() {
         const { initialValues } = this.props;
@@ -16,18 +24,19 @@ class WillTakeItemForm extends Component {
                     {initialValues.itemName}
                 </div>
                 <div className="col">0</div>
-                <div className="col">
+                <div className="col col-md-2">
                     <Field
                         name="willTake"
                         type="number"
                         fullWidth={false}
+                        validate={[this.maxValueLimitor, this.minValueLimitor]}
                         label="Will take"
                         component={renderTextField}/>
                 </div>
-                <div className="col">
+                <div className="col col-md-1">
                     {initialValues.needQuantity}
                 </div>
-                <div className="col">
+                <div className="col col-md-1">
                     {initialValues.unitOfMeasuring.shortName}
                 </div>
                 <div className="col col-md-2">
@@ -45,6 +54,6 @@ class WillTakeItemForm extends Component {
 
 export default reduxForm({
     form: 'will-take-item-form',
-    // validate: validate,
+    validate: validate,
     enableReinitialize: true
 })(WillTakeItemForm);

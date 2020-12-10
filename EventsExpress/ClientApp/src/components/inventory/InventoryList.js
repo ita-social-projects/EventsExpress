@@ -77,19 +77,6 @@ class InventoryList extends Component {
         this.props.get_inventories(updateList);
     }
 
-    // initialState = () => {
-    //     console.log('initial state')
-    //     let updateList = this.props.invetnories.items;
-    //     updateList.map(item => {
-    //         this.props.usersInventories.map(data => {
-    //             if (this.props.user.id === data.userId && item.id === data.inventoryId)
-    //                 item.isTaken = true;
-    //         });
-    //     });
-
-    //     this.props.get_inventories(updateList);
-    // }
-
     handleOnClickCaret = () => {
         this.setState(state => ({
             isOpen: !state.isOpen
@@ -132,11 +119,12 @@ class InventoryList extends Component {
     }
 
     onWillTake = inventar => {
+        console.log('will take', inventar);
         const data = {
             eventId: this.props.eventId,
             userId: this.props.user.id,
             inventoryId: inventar.id,
-            quantity: inventar.quantity
+            quantity: Number(inventar.willTake)
         }
 
         this.props.want_to_take(data);
@@ -147,9 +135,8 @@ class InventoryList extends Component {
     }
 
     render() {
-        const { inventories, event, user } = this.props;
+        const { inventories, event, user, usersInventories } = this.props;
         let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
-        const reducer = (accumulator, currentValue) => accumulator + currentValue.quantity;
         let updateList = [];
         if (inventories.items) {
             updateList = inventories.items.map(item => {
@@ -186,11 +173,11 @@ class InventoryList extends Component {
                                 <div className="col col-md-4"><b>Item name</b></div>
                                 <div className="col"><b>Already get</b></div>
                                 {!isMyEvent &&
-                                <div className="col"><b>Will take</b></div>
+                                <div className="col col-md-2"><b>Will take</b></div>
                                 }
-                                <div className="col"><b>Count</b></div>
-                                <div className="col"><b>Measuring unit</b></div>
-                                <div className="col col-md-2"><b>Action</b></div>
+                                <div className="col col-md-1"><b>Count</b></div>
+                                <div className="col col-md-1"><b></b></div>
+                                <div className="col col-md-2"><b></b></div>
                             </div>
                             {updateList.map(item => {
                                 return (
@@ -205,6 +192,9 @@ class InventoryList extends Component {
                                         :   <WillTakeItemForm
                                                 onSubmit={this.onWillTake}
                                                 onCancel={this.onCancel}
+                                                alreadyGet={this.props.usersInventories.data.reduce((acc, cur) => {
+                                                    return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
+                                                }, 0)}
                                                 initialValues={item}
                                             />
                                         }
@@ -216,34 +206,36 @@ class InventoryList extends Component {
                                         <div className="col" key={item.id}>
                                                 {item.isWantToTake
                                                 ? 
-                                                <>  
+                                                <div>  
                                                     {this.props.usersInventories.data.map(data => {
                                                         return (
                                                             data.inventoryId === item.id 
-                                                            ?   <span>{data.user.name}: {data.quantity}</span>
+                                                            ?   <div>{data.user.name}: {data.quantity}</div>
                                                             :   null
                                                         );
                                                     })}
-                                                </>
+                                                </div>
                                                 : 
                                                   <>
                                                     {
                                                         this.props.usersInventories.data.length === 0 ? 
                                                             0 
                                                             : this.props.usersInventories.data.reduce((acc, cur) => {
-                                                                return acc + cur.quantity
+                                                                return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
                                                             }, 0)
                                                     }
                                                   </> 
                                                 }
                                         </div>
                                         {!isMyEvent &&
-                                        <div className="col">0</div>
+                                        <div className="col col-md-2">
+                                            {usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id)?.quantity || 0}
+                                        </div>
                                         }
-                                        <div className="col">{item.needQuantity}</div>
-                                        <div className="col">{item.unitOfMeasuring.shortName}</div>
+                                        <div className="col col-md-1">{item.needQuantity}</div>
+                                        <div className="col col-md-1">{item.unitOfMeasuring.shortName}</div>
                                         {isMyEvent
-                                        ?    <div className="col">
+                                        ?    <div className="col col-md-2">
                                                 <IconButton 
                                                     disabled={this.state.disabledEdit} 
                                                     onClick={this.markItemAsEdit.bind(this, item)}>
@@ -256,22 +248,6 @@ class InventoryList extends Component {
                                                 </IconButton>
                                             </div>
                                         :   <div className='col col-md-2'>
-                                            {/* {item.isTaken 
-                                            ? <Tooltip title="Will take" placement="right-start">
-                                                <IconButton
-                                                    onClick={this.markItemAsEdit.bind(this, item)}>
-                                                    <i className="fa-sm fas fa-plus text-success"></i>
-                                                    ?
-                                                </IconButton>
-                                            </Tooltip>
-                                            :  <Tooltip title="Will not take" placement="right-start">
-                                                <IconButton
-                                                    onClick={this.markItemAsEdit.bind(this, item)}>
-                                                    <i className="fa-sm fas fa-minus text-danger"></i>
-                                                    !
-                                                </IconButton>
-                                            </Tooltip>
-                                            }  */}
                                             {item.isTaken && 
                                             <Tooltip title="Will not take" placement="right-start">
                                                 <IconButton

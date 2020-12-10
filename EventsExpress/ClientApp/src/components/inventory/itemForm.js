@@ -22,7 +22,7 @@ class ItemForm extends Component {
                         component={renderTextField}/>
                 </div>
                 <div className="col">0</div>
-                <div className="col">
+                <div className="col col-md-1">
                     <Field
                         name={`needQuantity`}
                         type="number"
@@ -30,7 +30,7 @@ class ItemForm extends Component {
                         label="Item count"
                         component={renderTextField}/>
                 </div>
-                <div className="col">
+                <div className="col col-md-1">
                     <Field
                         className="selectpicker"
                         name={`unitOfMeasuring`}
