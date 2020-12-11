@@ -1,4 +1,7 @@
 # EventsExpress
+
+[![GitHub license](https://img.shields.io/github/license/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/blob/development/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/stargazers) [![GitHub issues](https://img.shields.io/github/issues/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/issues)  
+
 > Start as Friends, Go Anywhere! Real Relationships for Singles Worldwide
 
 Want to hang out with company but don't know who whith? Then this application for you! 
