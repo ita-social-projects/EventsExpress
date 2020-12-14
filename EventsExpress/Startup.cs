@@ -15,8 +15,6 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
-using EventsExpress.ViewModels;
-using EventsExpress.Filters;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;
@@ -148,6 +146,11 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
 
             services.AddMvc().AddFluentValidation(options =>
             {

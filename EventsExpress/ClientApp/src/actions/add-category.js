@@ -13,8 +13,13 @@ export function add_category(data) {
     return dispatch => {
         dispatch(setCategoryPending(true));
 
-        const res = api_serv.setCategory(data);
-        
+        let res;
+        if  (data.Id) {
+            res = api_serv.editCategory(data);
+        } else {
+            res = api_serv.setCategory(data);
+        }
+
         res.then(response => {
             if (response.error == null) {
                 dispatch(setCategorySuccess(true));
