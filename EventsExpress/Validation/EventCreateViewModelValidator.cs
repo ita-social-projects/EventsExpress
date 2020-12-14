@@ -8,6 +8,7 @@ namespace EventsExpress.ViewModels
         public EventCreateViewModelValidator()
         {
             RuleFor(x => x.Title).NotEmpty().WithMessage("Field is required!");
+            RuleFor(x => x.Title).MaximumLength(60).WithMessage("Title length exceeded the recommended length of 60 character!");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateFrom).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateFrom).GreaterThanOrEqualTo(DateTime.Today).WithMessage("date from must be older than date now!");

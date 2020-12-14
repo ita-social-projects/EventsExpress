@@ -658,3 +658,11 @@
   #frame .content .message-input .wrap button:focus {
     outline: none;
   }
+
+.limit-width{
+    max-width: 100%;
+}
+
+.wrap-text {
+    overflow-wrap: anywhere;
+}

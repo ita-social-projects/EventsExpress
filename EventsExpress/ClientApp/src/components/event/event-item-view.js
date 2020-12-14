@@ -321,7 +321,9 @@ export default class EventItemView extends Component {
                         </div>
                         {this.state.edit
                             ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                                <EditEventWrapper />
+                                <EditEventWrapper 
+                                    onCancelEditing={() => this.setState({edit:false})}
+                                />
                             </div>
                             : <>
                                 {!isFutureEvent &&
@@ -341,7 +343,7 @@ export default class EventItemView extends Component {
                                         eventId={id}/>
                                 </div>
                                 
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
                             </>

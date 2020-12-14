@@ -28,11 +28,10 @@ class UserChats extends Component {
                                     : <Avatar className='SmallAvatar' >{user.username.charAt(0).toUpperCase()}</Avatar>
                                 }
                             </ButtonBase>
-                            <div className="my-auto ml-5"><h5>{user.username}</h5>
-                                {new_msg.length > 0
-                                    ? <span className="text-info">You have {new_msg.length} unread messages</span>
-                                    : <span className="text-info">{x.lastMessage}</span>
-                                }
+                            <div className="my-auto ml-5 wrap-text"><h5>{user.username}</h5>
+                                {new_msg.length == 0 && <span className="text-info">{x.lastMessage}</span>}
+                                {new_msg.length == 1 && <span className="text-info">You have 1 unread message</span>}
+                                {new_msg.length > 1 && <span className="text-info">You have {new_msg.length} unread messages</span>}
                             </div>
                         </div>
                         <p> </p>
@@ -50,7 +49,7 @@ class UserChats extends Component {
         });
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
-            ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
+            ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded limit-width">
                 {this.renderChats(data)}
             </div>
             : null;

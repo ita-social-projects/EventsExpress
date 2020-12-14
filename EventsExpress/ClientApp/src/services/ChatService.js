@@ -15,7 +15,7 @@ export default class ChatService {
     }
 
     getUnreadMessages = async (userId) => {
-        const res = await baseService.getResource(`chat/GetUnreadMessage/?userId=${userId}`);
+        const res = await baseService.getResource(`chat/GetUnreadMessages/?userId=${userId}`);
         return res;
     }
 }

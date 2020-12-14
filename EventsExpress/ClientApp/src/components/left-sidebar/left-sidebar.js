@@ -67,7 +67,7 @@ class LeftSidebar extends Component {
                                     <NavItem
                                         to={'/eventSchedules'}
                                         my_icon={<i className="fa fa-clone"></i>}
-                                        text={"Reccurent Events"}
+                                        text={"Recurrent Events"}
                                     />
                                     <NavItem
                                         to={'/user_chats'}
