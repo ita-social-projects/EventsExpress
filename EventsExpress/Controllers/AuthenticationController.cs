@@ -107,28 +107,35 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> GoogleLogin([FromBody] UserViewModel userView)
         {
-            var payload = await GoogleJsonWebSignature.ValidateAsync(
-                userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
-            UserDTO userExisting = _userService.GetByEmail(payload.Email);
-
-            if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
+            try
             {
-                var user = _mapper.Map<UserViewModel, UserDTO>(userView);
-                user.Email = payload.Email;
-                user.EmailConfirmed = true;
-                user.Name = payload.Name;
-                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
-                user.PhotoId = user.Photo.Id;
-                await _userService.Create(user);
+                var payload = await GoogleJsonWebSignature.ValidateAsync(
+                    userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
+                UserDTO userExisting = _userService.GetByEmail(payload.Email);
+
+                if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
+                {
+                    var user = _mapper.Map<UserViewModel, UserDTO>(userView);
+                    user.Email = payload.Email;
+                    user.EmailConfirmed = true;
+                    user.Name = payload.Name;
+                    user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
+                    user.PhotoId = user.Photo.Id;
+                    await _userService.Create(user);
+                }
+
+                await SetPhoto(userExisting, userView.PhotoUrl);
+                var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
+                var userInfo = _mapper.Map<UserInfoViewModel>(_userService.GetByEmail(payload.Email));
+                userInfo.Token = authResponseModel.JwtToken;
+                _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
+                return Ok(userInfo);
             }
-
-            await SetPhoto(userExisting, userView.PhotoUrl);
-            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
-            var userInfo = _mapper.Map<UserInfoViewModel>(_userService.GetByEmail(payload.Email));
-            userInfo.Token = authResponseModel.JwtToken;
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
-
-            return Ok(userInfo);
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
         /// <summary>

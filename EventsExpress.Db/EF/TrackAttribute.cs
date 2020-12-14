@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EventsExpress.Db.EF
 {
-    class TrackAttribute : Attribute
+    public class TrackAttribute : Attribute
     {
+        
     }
 }

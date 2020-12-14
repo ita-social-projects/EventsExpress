@@ -1,13 +1,13 @@
 ﻿namespace EventsExpress.Db.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class PropertyChangeInfo
     {
         public string Name { get; set; }
 
-        public string Value { get; set; }
+        public string OldValue { get; set; }
+
+        public string NewValue { get; set; }
+
+        public string EntityId { get; set; }
     }
 }

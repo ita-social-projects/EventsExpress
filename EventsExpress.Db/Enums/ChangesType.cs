@@ -2,9 +2,9 @@
 {
     public enum ChangesType
     {
+        Undefined,
         Edit,
         Create,
         Delete,
-        Hide,
     }
 }

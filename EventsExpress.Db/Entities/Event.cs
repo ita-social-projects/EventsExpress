@@ -4,8 +4,10 @@ using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
 {
+    [Track]
     public class Event : ManageableEntity
     {
+        [Track]
         public bool IsBlocked { get; set; }
 
         [Track]
@@ -23,6 +25,7 @@ namespace EventsExpress.Db.Entities
         [Track]
         public bool IsPublic { get; set; }
 
+        [Track]
         public Guid CityId { get; set; }
 
         public virtual City City { get; set; }
@@ -30,6 +33,7 @@ namespace EventsExpress.Db.Entities
         [Track]
         public int MaxParticipants { get; set; }
 
+        [Track]
         public Guid? PhotoId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
