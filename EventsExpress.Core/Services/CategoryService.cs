@@ -41,11 +41,13 @@ namespace EventsExpress.Core.Services
 
         public async Task Create(string title)
         {
-            if (!ExistsByName(title))
+            if (ExistsByName(title))
             {
-                Insert(new Category { Name = title });
-                await _context.SaveChangesAsync();
+                throw new EventsExpressException("The same category is already exist in database");
             }
+
+            Insert(new Category { Name = title });
+            await _context.SaveChangesAsync();
         }
 
         public async Task Edit(CategoryDTO category)

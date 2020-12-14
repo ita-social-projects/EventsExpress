@@ -40,6 +40,22 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Get_ExistingName_ReturnTrue()
+        {
+            var res = service.ExistsByName(category.Name);
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void Get_NotExistingName_ReturnFalse()
+        {
+            var res = service.ExistsByName("Category");
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
         public void Delete_ExistingId_Success()
         {
             Assert.DoesNotThrowAsync(async () => await service.Delete(category.Id));
