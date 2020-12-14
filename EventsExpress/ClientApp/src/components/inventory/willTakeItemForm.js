@@ -29,7 +29,7 @@ class WillTakeItemForm extends Component {
                         name="willTake"
                         type="number"
                         fullWidth={false}
-                        validate={[this.maxValueLimitor, this.minValueLimitor]}
+                        validate={initialValues.isWillTake ? [this.maxValueLimitor, this.minValueLimitor] : []}
                         label="Will take"
                         component={renderTextField}/>
                 </div>

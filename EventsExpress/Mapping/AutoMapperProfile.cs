@@ -331,15 +331,18 @@ namespace EventsExpress.Mapping
                 {
                     Id = src.UserId,
                     Name = src.UserEvent.User.Name,
-                }))
-                .ReverseMap();
+                }));
             CreateMap<UserEventInventoryDTO, UserEventInventoryViewModel>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserPreviewViewModel
                 {
                     Id = src.User.Id,
                     Username = src.User.Name,
-                }))
-                .ReverseMap();
+                }));
+            CreateMap<UserEventInventoryViewModel, UserEventInventoryDTO>()
+                .ForMember(dest => dest.User, opt => opt.Ignore());
+            CreateMap<UserEventInventoryDTO, UserEventInventory>()
+                .ForMember(dest => dest.UserEvent, opt => opt.Ignore())
+                .ForMember(dest => dest.Inventory, opt => opt.Ignore());
             #endregion
         }
     }

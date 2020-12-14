@@ -1,6 +1,6 @@
-import EventsExpressService from '../services/EventsExpressService';
+import InventoryService from '../services/InventoryService';
 
-const api_serv = new EventsExpressService();
+const api_serv = new InventoryService();
 
 export function get_users_inventories_by_event_id(eventId) {
     return dispatch => {
@@ -14,6 +14,32 @@ export function get_users_inventories_by_event_id(eventId) {
     }
 }
 
+export function delete_users_inventory(data) {
+    return dispatch => {
+        api_serv.setUsersInventoryDelete(data)
+        .then(response => {
+            if (response.error == null) {
+                dispatch(get_users_inventories_by_event_id(data.eventId));
+            } else {
+
+            }
+        });
+    }
+}
+
+export function edit_users_inventory(data) {
+    return dispatch => {
+        api_serv.setUsersInventory(data)
+        .then(response => {
+            console.log('action', response);
+            if (response.error == null) {
+                dispatch(get_users_inventories_by_event_id(data.eventId));
+            } else {
+
+            }
+        });
+    }
+}
 
 export function getUsersInventoriesSuccess(data) {
     return {

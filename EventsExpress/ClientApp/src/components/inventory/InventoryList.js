@@ -5,7 +5,7 @@ import WillTakeItemForm from './willTakeItemForm';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
-import { get_users_inventories_by_event_id }  from '../../actions/usersInventories';
+import { get_users_inventories_by_event_id, delete_users_inventory, edit_users_inventory }  from '../../actions/usersInventories';
 import { add_item, delete_item, edit_item, want_to_take } from '../../actions/inventar';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -56,10 +56,22 @@ class InventoryList extends Component {
 
     markItemAsEdit = inventar => {
         let updateList = this.props.inventories.items;
-        updateList.map(item => {
-            if (inventar.id === item.id)
-                item.isEdit = true;
+        updateList.find(e => e.id === inventar.id).isEdit = true;
+        // updateList.map(item => {
+        //     if (inventar.id === item.id)
+        //         item.isEdit = true;
+        // });
+
+        this.props.get_inventories(updateList);
+        this.setState({
+            disabledEdit: true
         });
+    }
+
+    markItemAsWillTake = inventar => {
+        let updateList = this.props.inventories.items;
+        updateList.find(e => e.id === inventar.id).isWillTake = true;
+        updateList.find(e => e.id === inventar.id).isEdit = true;
 
         this.props.get_inventories(updateList);
         this.setState({
@@ -119,7 +131,7 @@ class InventoryList extends Component {
     }
 
     onWillTake = inventar => {
-        console.log('will take', inventar);
+        console.log('onWillTake', inventar);
         const data = {
             eventId: this.props.eventId,
             userId: this.props.user.id,
@@ -127,11 +139,25 @@ class InventoryList extends Component {
             quantity: Number(inventar.willTake)
         }
 
-        this.props.want_to_take(data);
+        if (inventar.isWillTake) {
+            this.props.want_to_take(data);
+        } else {
+            this.props.edit_users_inventory(data);
+        }
 
         this.setState({
             disabledEdit: false
         });
+    }
+
+    onWillNotTake = inventar => {
+        const data = {
+            eventId: this.props.eventId,
+            userId: this.props.user.id,
+            inventoryId: inventar.id
+        }
+
+        this.props.delete_users_inventory(data);
     }
 
     render() {
@@ -149,7 +175,6 @@ class InventoryList extends Component {
                         .length > 0
                 }                
             });
-            console.log("step 1", updateList);
         }
         console.log(this.props);
         return (
@@ -210,7 +235,7 @@ class InventoryList extends Component {
                                                     {this.props.usersInventories.data.map(data => {
                                                         return (
                                                             data.inventoryId === item.id 
-                                                            ?   <div>{data.user.name}: {data.quantity}</div>
+                                                            ?   <div>{data.user.name}: {data.quantity};</div>
                                                             :   null
                                                         );
                                                     })}
@@ -249,18 +274,27 @@ class InventoryList extends Component {
                                             </div>
                                         :   <div className='col col-md-2'>
                                             {item.isTaken && 
-                                            <Tooltip title="Will not take" placement="right-start">
-                                                <IconButton
+                                            <>
+                                                <IconButton 
+                                                    disabled={this.state.disabledEdit} 
                                                     onClick={this.markItemAsEdit.bind(this, item)}>
-                                                    <i className="fa-sm fas fa-minus text-danger"></i>
+                                                    <i className="fa-sm fas fa-pencil-alt text-warning"></i>
                                                 </IconButton>
-                                            </Tooltip>
+                                                <Tooltip title="Will not take" placement="right-start">
+                                                    <IconButton
+                                                        onClick={this.onWillNotTake.bind(this, item)}>
+                                                        <i className="fa-sm fas fa-minus text-danger"></i>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </>
                                             }
 
-                                            {!item.isTaken && 
+                                            {!item.isTaken && item.needQuantity - this.props.usersInventories.data.reduce((acc, cur) => {
+                                                                return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
+                                                            }, 0) > 0 &&
                                             <Tooltip title="Will take" placement="right-start">
                                                 <IconButton
-                                                    onClick={this.markItemAsEdit.bind(this, item)}>
+                                                    onClick={this.markItemAsWillTake.bind(this, item)}>
                                                     <i className="fa-sm fas fa-plus text-success"></i>
                                                 </IconButton>
                                             </Tooltip>
@@ -295,6 +329,8 @@ const mapDispatchToProps = (dispatch) => {
         get_inventories: (inventories) => dispatch(update_inventories(inventories)),
         get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
         get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
+        delete_users_inventory: (data) => dispatch(delete_users_inventory(data)),
+        edit_users_inventory: (data) => dispatch(edit_users_inventory(data)),
         want_to_take: (data) => dispatch(want_to_take(data))
     }
 };

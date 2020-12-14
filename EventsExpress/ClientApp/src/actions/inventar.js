@@ -52,6 +52,7 @@ export function want_to_take(data) {
     return dispatch => {
         api_serv.setWantToTake(data).then(respose => {
             dispatch(get_users_inventories_by_event_id(data.eventId));
+            dispatch(get_inventories_by_event_id(data.eventId));
         });
     }
 }

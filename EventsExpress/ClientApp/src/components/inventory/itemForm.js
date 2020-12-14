@@ -24,7 +24,7 @@ class ItemForm extends Component {
                 <div className="col">0</div>
                 <div className="col col-md-1">
                     <Field
-                        name={`needQuantity`}
+                        name="needQuantity"
                         type="number"
                         fullWidth={false}
                         label="Item count"
@@ -33,7 +33,7 @@ class ItemForm extends Component {
                 <div className="col col-md-1">
                     <Field
                         className="selectpicker"
-                        name={`unitOfMeasuring`}
+                        name="unitOfMeasuring"
                         component={renderSelectField}>
                         <option></option>
                         {unitOfMeasuringState.units.map((unit, key) => 

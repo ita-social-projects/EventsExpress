@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class UserEventInventoryController : Controller
     {
@@ -41,6 +41,20 @@ namespace EventsExpress.Controllers
 
             await _userEventInventoryService.MarkItemAsTakenByUser(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
 
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Delete([FromBody] UserEventInventoryViewModel model)
+        {
+            await _userEventInventoryService.Delete(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Edit([FromBody] UserEventInventoryViewModel model)
+        {
+            await _userEventInventoryService.Edit(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
             return Ok();
         }
     }

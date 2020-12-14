@@ -57,5 +57,26 @@ namespace EventsExpress.Core.Services
             _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
             await _context.SaveChangesAsync();
         }
+
+        public async Task Delete(UserEventInventoryDTO userEventInventoryDTO)
+        {
+            _context.Remove(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Edit(UserEventInventoryDTO userEventInventoryDTO)
+        {
+            var entity = _context.UserEventInventories//.Find(userEventInventoryDTO.EventId, userEventInventoryDTO.UserId, userEventInventoryDTO.InventoryId);
+                .Where(e => e.EventId == userEventInventoryDTO.EventId)
+                .Where(e => e.UserId == userEventInventoryDTO.UserId)
+                .Where(e => e.InventoryId == userEventInventoryDTO.InventoryId).SingleOrDefault();
+            if (entity == null)
+            {
+                throw new EventsExpressException("Object not found");
+            }
+
+            entity.Quantity = userEventInventoryDTO.Quantity;
+            await _context.SaveChangesAsync();
+        }
     }
 }

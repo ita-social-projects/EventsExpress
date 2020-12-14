@@ -1,8 +1,8 @@
-﻿using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Infrastructure;
 
 namespace EventsExpress.Core.IServices
 {
@@ -11,5 +11,9 @@ namespace EventsExpress.Core.IServices
         Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO);
 
         IEnumerable<UserEventInventoryDTO> GetAllMarkItemsByEventId(Guid eventId);
+
+        Task Delete(UserEventInventoryDTO userEventInventoryDTO);
+
+        Task Edit(UserEventInventoryDTO userEventInventoryDTO);
     }
 }
