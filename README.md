@@ -1,6 +1,6 @@
 # EventsExpress
 
-[![GitHub license](https://img.shields.io/github/license/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/blob/development/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/stargazers) [![GitHub issues](https://img.shields.io/github/issues/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/issues)  
+[![GitHub license](https://img.shields.io/github/license/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/blob/development/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/stargazers) [![GitHub issues](https://img.shields.io/github/issues/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/issues) ![Azure DevOps releases](https://img.shields.io/azure-devops/release/eventsexpress/46233450-fa01-4466-a42e-edc2a4290086/4/4)
 
 > Start as Friends, Go Anywhere! Real Relationships for Singles Worldwide
 
