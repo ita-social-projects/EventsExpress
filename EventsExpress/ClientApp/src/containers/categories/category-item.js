@@ -6,10 +6,8 @@ import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
 
 import { add_category } from "../../actions/add-category";
-import { 
-    delete_category, 
-    set_edited_category 
-} from "../../actions/delete-category";
+import { delete_category } from "../../actions/delete-category";
+import { set_edited_category } from "../../actions/add-category";
 
 
 class CategoryItemWrapper extends Component {

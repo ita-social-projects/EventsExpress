@@ -16,6 +16,7 @@ export const reducer = (state = initialState.add_category, action) => {
         case SET_CATEGORY_PENDING:
             return {
                 ...state,
+                categoryError: null,
                 isCategoryPending: action.payload
             };
         case SET_CATEGORY_SUCCESS:

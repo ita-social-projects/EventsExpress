@@ -5,6 +5,7 @@ import get_categories from './category-list';
 export const SET_CATEGORY_PENDING = "SET_CATEGORY_PENDING";
 export const SET_CATEGORY_SUCCESS = "SET_CATEGORY_SUCCESS";
 export const SET_CATEGORY_ERROR = "SET_CATEGORY_ERROR";
+export const SET_CATEGORY_EDITED = "SET_CATEGORY_EDITED";
 
 const api_serv = new CategoryService();
 
@@ -31,6 +32,20 @@ export function add_category(data) {
     }
 }
 
+
+export function set_edited_category(id) {
+    return dispatch => {
+        dispatch(setCategoryError(null));
+        dispatch(setCategoryEdited(id));     
+    }
+}
+
+function setCategoryEdited(data) {
+    return {
+        type: SET_CATEGORY_EDITED,
+        payload: data
+    };
+}
 
 export function setCategoryPending(data) {
     return {
