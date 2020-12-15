@@ -101,6 +101,13 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Event not found!");
             }
 
+            var uei = _context.UserEventInventories.Where(ue => ue.UserId == userId).ToArray();
+
+            if (uei != null)
+            {
+                _context.UserEventInventories.RemoveRange(uei);
+            }
+
             var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);
 
             if (v != null)

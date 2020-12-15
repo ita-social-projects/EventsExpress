@@ -46,6 +46,13 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Not found");
             }
 
+            var uei = _context.UserEventInventories.Where(ue => ue.InventoryId == id).ToArray();
+
+            if (uei != null)
+            {
+                _context.UserEventInventories.RemoveRange(uei);
+            }
+
             var result = _context.Inventories.Remove(inventar);
             await _context.SaveChangesAsync();
 

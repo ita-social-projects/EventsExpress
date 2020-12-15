@@ -22,7 +22,7 @@ class InventoryList extends Component {
 
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
         this.handleOnClickWantToTake = this.handleOnClickWantToTake.bind(this);
-        this.markItemAsWantToTake = this.markItemAsWantToTake.bind(this);
+        this.onAlreadyGet = this.onAlreadyGet.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.onWillTake = this.onWillTake.bind(this);
@@ -57,10 +57,6 @@ class InventoryList extends Component {
     markItemAsEdit = inventar => {
         let updateList = this.props.inventories.items;
         updateList.find(e => e.id === inventar.id).isEdit = true;
-        // updateList.map(item => {
-        //     if (inventar.id === item.id)
-        //         item.isEdit = true;
-        // });
 
         this.props.get_inventories(updateList);
         this.setState({
@@ -79,7 +75,7 @@ class InventoryList extends Component {
         });
     }
 
-    markItemAsWantToTake = inventar => {
+    onAlreadyGet = inventar => {
         let updateList = this.props.inventories.items;
         updateList.map(item => {
             if (inventar.id === item.id)
@@ -106,6 +102,7 @@ class InventoryList extends Component {
             this.props.add_item(values, this.props.eventId);
         }
         else {
+            console.log('submit', values);
             this.props.edit_item(values, this.props.eventId);
         }
 
@@ -131,7 +128,6 @@ class InventoryList extends Component {
     }
 
     onWillTake = inventar => {
-        console.log('onWillTake', inventar);
         const data = {
             eventId: this.props.eventId,
             userId: this.props.user.id,
@@ -168,7 +164,7 @@ class InventoryList extends Component {
             updateList = inventories.items.map(item => {
                 return { 
                     ...item,
-                    isTaken: this.props.usersInventories.data
+                    isTaken: usersInventories.data
                         .filter(dataItem => 
                             this.props.user.id === dataItem.userId && 
                             item.id === dataItem.inventoryId)
@@ -219,14 +215,14 @@ class InventoryList extends Component {
                                                 onCancel={this.onCancel}
                                                 alreadyGet={this.props.usersInventories.data.reduce((acc, cur) => {
                                                     return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
-                                                }, 0)}
+                                                }, 0) - (item.isWillTake ? 0 : this.props.usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
                                                 initialValues={item}
                                             />
                                         }
                                     </div>
                                     : <div className="row p-1" key={item.id}>
                                         <div className="col col-md-4">
-                                            <span className="item" onClick={() => this.markItemAsWantToTake(item)}>{item.itemName}</span>
+                                            <span className="item" onClick={() => this.onAlreadyGet(item)}>{item.itemName}</span>
                                         </div>
                                         <div className="col" key={item.id}>
                                                 {item.isWantToTake
@@ -282,6 +278,7 @@ class InventoryList extends Component {
                                                 </IconButton>
                                                 <Tooltip title="Will not take" placement="right-start">
                                                     <IconButton
+                                                        disabled={this.state.disabledEdit} 
                                                         onClick={this.onWillNotTake.bind(this, item)}>
                                                         <i className="fa-sm fas fa-minus text-danger"></i>
                                                     </IconButton>

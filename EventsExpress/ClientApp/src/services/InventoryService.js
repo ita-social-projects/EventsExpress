@@ -14,7 +14,7 @@ export default class InventoryService {
             id: item.id,
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
-            unitOfMeasuring: item.unitOfMeasuring
+            unitOfMeasuring: {id: item.unitOfMeasuring}
         }
         const res = await baseService.setResource(`inventory/${eventId}/EditInventar`, data);
         return !res.ok

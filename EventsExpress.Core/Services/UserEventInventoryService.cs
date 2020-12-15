@@ -66,10 +66,10 @@ namespace EventsExpress.Core.Services
 
         public async Task Edit(UserEventInventoryDTO userEventInventoryDTO)
         {
-            var entity = _context.UserEventInventories//.Find(userEventInventoryDTO.EventId, userEventInventoryDTO.UserId, userEventInventoryDTO.InventoryId);
-                .Where(e => e.EventId == userEventInventoryDTO.EventId)
-                .Where(e => e.UserId == userEventInventoryDTO.UserId)
-                .Where(e => e.InventoryId == userEventInventoryDTO.InventoryId).SingleOrDefault();
+            var entity = _context.UserEventInventories.FirstOrDefault(e => e.EventId == userEventInventoryDTO.EventId
+                                                                        && e.UserId == userEventInventoryDTO.UserId
+                                                                        && e.InventoryId == userEventInventoryDTO.InventoryId);
+
             if (entity == null)
             {
                 throw new EventsExpressException("Object not found");

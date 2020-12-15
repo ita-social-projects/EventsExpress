@@ -17,19 +17,19 @@ class WillTakeItemForm extends Component {
     minValueLimitor = this.minValue(1)
 
     render() {
-        const { initialValues } = this.props;
+        const { initialValues, alreadyGet } = this.props;
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
                 <div className="col col-md-4">
                     {initialValues.itemName}
                 </div>
-                <div className="col">0</div>
+                <div className="col">{alreadyGet}</div>
                 <div className="col col-md-2">
                     <Field
                         name="willTake"
                         type="number"
                         fullWidth={false}
-                        validate={initialValues.isWillTake ? [this.maxValueLimitor, this.minValueLimitor] : []}
+                        validate={[this.maxValueLimitor, this.minValueLimitor]}
                         label="Will take"
                         component={renderTextField}/>
                 </div>
