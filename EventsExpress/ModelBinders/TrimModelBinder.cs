@@ -1,45 +1,37 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json.Linq;
 
 namespace EventsExpress.ModelBinders
 {
     public class TrimModelBinder : IModelBinder
     {
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelType == typeof(CategoryCreateViewModel))
+            var request = bindingContext.HttpContext.Request;
+
+            using var reader = new StreamReader(request.Body, Encoding.UTF8);
+            var bodyString = reader.ReadToEnd();
+            var ob = JsonSerializer.Deserialize(bodyString, bindingContext.ModelType);
+
+            foreach (var prop in bindingContext.ModelType.GetProperties())
             {
-                var request = bindingContext.HttpContext.Request;
-
-                using (var reader = new StreamReader(request.Body, Encoding.UTF8))
+                if (prop.PropertyType == typeof(string))
                 {
-                    var bodyString = reader.ReadToEnd();
-                    var model = JsonSerializer.Deserialize<CategoryCreateViewModel>(bodyString);
-                    model.Name = model.Name.Trim();
-
-                    bindingContext.Result = ModelBindingResult.Success(model);
+                    var propValue = prop.GetValue(ob) as string;
+                    prop.SetValue(ob, propValue.Trim());
                 }
             }
 
-            if (bindingContext.ModelType == typeof(CategoryEditViewModel))
-            {
-                var request = bindingContext.HttpContext.Request;
-
-                using (var reader = new StreamReader(request.Body, Encoding.UTF8))
-                {
-                    var bodyString = reader.ReadToEnd();
-                    var model = JsonSerializer.Deserialize<CategoryEditViewModel>(bodyString);
-                    model.Name = model.Name.Trim();
-
-                    bindingContext.Result = ModelBindingResult.Success(model);
-                }
-            }
-
-            return Task.CompletedTask;
+            bindingContext.Result = ModelBindingResult.Success(ob);
+            await Task.CompletedTask;
         }
     }
 }
