@@ -14,7 +14,7 @@ import {
     from '../actions/edit-event-from-parent';
 import * as moment from 'moment';
 import { validateEventForm } from '../components/helpers/helpers'
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 
 class EditFromParentEventWraper extends Component {
 

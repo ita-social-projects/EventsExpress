@@ -41,7 +41,7 @@ namespace EventsExpress.Core.Services
 
         public async Task Create(string title)
         {
-            if (_context.Categories.Any(c => c.Name == title))
+            if (ExistsByName(title))
             {
                 throw new EventsExpressException("The same category is already exist in database");
             }
@@ -58,7 +58,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Not found");
             }
 
-            if (_context.Categories.Any(c => c.Name == category.Name))
+            if (ExistsByName(category.Name))
             {
                 throw new EventsExpressException("The same category is already exist in database");
             }
@@ -85,7 +85,10 @@ namespace EventsExpress.Core.Services
         }
 
         public bool Exists(Guid id) =>
-            _context.Categories.Count(x => x.Id == id) > 0;
+            _context.Categories.Any(x => x.Id == id);
+
+        public bool ExistsByName(string categoryName) =>
+            _context.Categories.Any(x => x.Name == categoryName);
 
         public bool ExistsAll(IEnumerable<Guid> ids) =>
             _context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();

@@ -10,7 +10,16 @@ export default class CategoryService {
     }
 
     setCategory = async (data) => {
-        const res = await baseService.setResource('category/edit', {
+        const res = await baseService.setResource(`category/create`, {
+            Name: data.Name
+        });
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    editCategory = async (data) => {
+        const res = await baseService.setResource(`category/edit`, {
             Id: data.Id,
             Name: data.Name
         });
