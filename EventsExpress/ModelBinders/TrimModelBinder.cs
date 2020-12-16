@@ -18,8 +18,11 @@ namespace EventsExpress.ModelBinders
             var request = bindingContext.HttpContext.Request;
 
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
-            var bodyString = reader.ReadToEnd();
-            var ob = JsonSerializer.Deserialize(bodyString, bindingContext.ModelType);
+            var bodyString = await reader.ReadToEndAsync();
+            var ob = JsonSerializer.Deserialize(
+                bodyString, 
+                bindingContext.ModelType,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             foreach (var prop in bindingContext.ModelType.GetProperties())
             {

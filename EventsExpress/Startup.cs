@@ -147,11 +147,6 @@ namespace EventsExpress
             services.AddControllers();
             services.AddHttpClient();
 
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
-
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
