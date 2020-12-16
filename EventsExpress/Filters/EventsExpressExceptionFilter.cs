@@ -8,7 +8,7 @@ namespace EventsExpress.Filters
     {
         public override void OnException(ExceptionContext context)
         {
-            if (context.Result is EventsExpressException eventsExpressException)
+            if (context.Exception is EventsExpressException eventsExpressException)
             {
                 context.ModelState.AddModelError(string.Empty, eventsExpressException.Message);
                 var result = new ObjectResult(context.ModelState) { StatusCode = 400 };

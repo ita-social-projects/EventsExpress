@@ -133,9 +133,9 @@ export default class EventService {
 
     setRate = async (data) => {
         const res = await baseService.setResource('event/setrate', {
-            Rate: data.rate,
-            UserId: data.userId,
-            EventId: data.eventId
+            rate: data.rate,
+            userId: data.userId,
+            eventId: data.eventId
         });
         return !res.ok
             ? { error: await res.text() }

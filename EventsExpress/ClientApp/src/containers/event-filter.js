@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
 import { updateEventsFilters } from '../actions/event-list';
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 import eventHelper from '../components/helpers/eventHelper';
 
 class EventFilterWrapper extends Component {
