@@ -4,7 +4,8 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
-    public class EventSchedule : ManageableEntity
+    [Track]
+    public class EventSchedule : BaseEntity
     {
         public int Frequency { get; set; }
 

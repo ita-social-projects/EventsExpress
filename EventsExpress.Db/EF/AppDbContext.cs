@@ -5,8 +5,10 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EventsExpress.Db.EF
 {
@@ -199,6 +201,47 @@ namespace EventsExpress.Db.EF
                 .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
         }
 
+        private List<PropertyChangeInfo> LogPropertChanges(EntityEntry change, ref ChangesType changesType)
+        {
+            var propChangeInfos = new List<PropertyChangeInfo>();
+            var trackedProps = change.Entity.GetType().GetProperties().Where(x => x.CustomAttributes.Any(z => z.AttributeType == typeof(TrackAttribute))).ToList();
+            if (change.State == EntityState.Added)
+            {
+                changesType = ChangesType.Create;
+                foreach (var prop in trackedProps)
+                {
+                    var newValue = change.CurrentValues[prop.Name]?.ToString();
+                    propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, NewValue = newValue });
+                }
+            }
+            else if (change.State == EntityState.Modified)
+            {
+                changesType = ChangesType.Edit;
+                foreach (var prop in trackedProps)
+                {
+                    var newValue = change.CurrentValues[prop.Name].ToString();
+                    var oldValue = change.OriginalValues[prop.Name].ToString();
+
+                    if (oldValue != newValue)
+                    {
+                        propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, NewValue = newValue, OldValue = oldValue });
+                    }
+                }
+            }
+            else if (change.State == EntityState.Deleted)
+            {
+                changesType = ChangesType.Delete;
+                foreach (var prop in trackedProps)
+                {
+                    var oldValue = change.OriginalValues[prop.Name].ToString();
+
+                    propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, OldValue = oldValue });
+                }
+            }
+
+            return propChangeInfos;
+        }
+
         public void SaveTracks()
         {
             var trackEntities = ChangeTracker.Entries()
@@ -206,67 +249,29 @@ namespace EventsExpress.Db.EF
                      (p.State == EntityState.Modified || p.State == EntityState.Added || p.State == EntityState.Deleted)
                      && p.Entity.GetType().CustomAttributes.Any(x => x.AttributeType == typeof(TrackAttribute))).ToList();
             var now = DateTime.UtcNow;
-
+            var changesType = Enums.ChangesType.Undefined;
             foreach (var change in trackEntities)
             {
-                var entitKeyDictionary = new Dictionary<string, string>();
-                var changeInfo = new ChangeInfo();
-                var propChangeInfos = new List<PropertyChangeInfo>();
-                var entityType = change.Entity.GetType();
-                var keyNames = this.Model.FindEntityType(entityType).FindPrimaryKey().Properties.Select(x => x.Name);
+                var entityKeyDictionary = new Dictionary<string, string>();
+                var keyNames = this.Model.FindEntityType(change.Entity.GetType()).FindPrimaryKey().Properties.Select(x => x.Name);
 
                 foreach (var k in keyNames)
                 {
-                    entitKeyDictionary.Add(k, change.CurrentValues[k].ToString());
+                    entityKeyDictionary.Add(k, change.CurrentValues[k].ToString());
                 }
 
-                var entityKeys = Newtonsoft.Json.JsonConvert.SerializeObject(entitKeyDictionary);
-                var trackedProps = entityType.GetProperties().Where(x => x.CustomAttributes.Any(z => z.AttributeType == typeof(TrackAttribute))).ToList();
+                var entityKeys = Newtonsoft.Json.JsonConvert.SerializeObject(entityKeyDictionary);
 
-                var changesType = Enums.ChangesType.Undefined;
-
-                if (change.State == EntityState.Added)
+                var changeInfo = new ChangeInfo
                 {
-                    changesType = Enums.ChangesType.Create;
-                    foreach (var prop in trackedProps)
-                    {
-                        var newValue = change.CurrentValues[prop.Name]?.ToString();
-                        propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, NewValue = newValue });
-                    }
+                    PropertyChangesText = Newtonsoft.Json.JsonConvert.SerializeObject(LogPropertChanges(change, ref changesType)),
+                    EntityName = change.Entity.GetType().Name,
+                    Time = now,
+                    ChangesType = changesType,
+                    UserId = _httpContextAccessor.HttpContext != null ? new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) : Guid.Empty,
+                    EntityKeys = entityKeys,
+                };
 
-                }
-                else if (change.State == EntityState.Modified)
-                {
-                    changesType = Enums.ChangesType.Edit;
-                    foreach (var prop in trackedProps)
-                    {
-                        var newValue = change.CurrentValues[prop.Name].ToString();
-                        var oldValue = change.OriginalValues[prop.Name].ToString();
-
-                        if (oldValue != newValue)
-                        {
-                            propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, NewValue = newValue, OldValue = oldValue });
-                        }
-                    }
-                }
-                else if (change.State == EntityState.Deleted)
-                {
-                    changesType = Enums.ChangesType.Delete;
-                    foreach (var prop in trackedProps)
-                    {
-                        var oldValue = change.OriginalValues[prop.Name].ToString();
-
-                        propChangeInfos.Add(new PropertyChangeInfo { Name = prop.Name, OldValue = oldValue });
-                    }
-                }
-
-                var text = Newtonsoft.Json.JsonConvert.SerializeObject(propChangeInfos);
-                changeInfo.PropertyChangesText = text;
-                changeInfo.EntityName = entityType.Name;
-                changeInfo.Time = now;
-                changeInfo.ChangesType = changesType;
-                changeInfo.UserId = _httpContextAccessor.HttpContext != null ? new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) : Guid.Empty;
-                changeInfo.EntityKeys = entityKeys;
                 ChangeInfos.Add(changeInfo);
             }
         }

@@ -129,7 +129,7 @@ namespace EventsExpress
             services.AddScoped<IPhotoService, PhotoService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

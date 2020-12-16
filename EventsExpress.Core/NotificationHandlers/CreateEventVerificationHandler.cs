@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.EF;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EventsExpress.Core.NotificationHandlers
@@ -17,25 +17,31 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ILogger<CreateEventVerificationHandler> _logger;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
+        protected readonly AppDbContext _context;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
-            IUserService userService)
+            IUserService userService,
+            AppDbContext context)
         {
             _logger = logger;
             _sender = sender;
             _userService = userService;
+            _context = context;
         }
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            if (!notification.EventSchedule.CreatedBy.HasValue)
+            var changeInfos = await _context.ChangeInfos
+              .FromSqlRaw(@"SELECT * FROM ChangeInfos WHERE EntityName = 'EventSchedule' AND JSON_VALUE(EntityKeys, '$.Id') = '" + notification.EventSchedule.Id + "' AND ChangesType = 2").FirstOrDefaultAsync();
+
+            if (changeInfos.UserId == Guid.Empty)
             {
                 return;
             }
 
-            var user = _userService.GetById(notification.EventSchedule.CreatedBy.Value);
+            var user = _userService.GetById(changeInfos.UserId);
 
             try
             {

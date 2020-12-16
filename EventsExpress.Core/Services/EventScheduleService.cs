@@ -76,7 +76,6 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Create(EventScheduleDTO eventScheduleDTO)
         {
             var eventScheduleEntity = _mapper.Map<EventScheduleDTO, EventSchedule>(eventScheduleDTO);
-            eventScheduleEntity.CreatedBy = eventScheduleDTO.CreatedBy;
 
             var result = Insert(eventScheduleEntity);
             await _context.SaveChangesAsync();
@@ -93,8 +92,6 @@ namespace EventsExpress.Core.Services
             ev.NextRun = eventScheduleDTO.NextRun;
             ev.IsActive = eventScheduleDTO.IsActive;
             ev.EventId = eventScheduleDTO.EventId;
-            ev.ModifiedBy = eventScheduleDTO.ModifiedBy;
-            ev.ModifiedDateTime = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 

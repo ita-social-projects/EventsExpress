@@ -4,6 +4,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
+    [Track]
     public class EventStatusHistory : BaseEntity
     {
         [Track]

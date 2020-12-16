@@ -3,6 +3,7 @@ using System;
 
 namespace EventsExpress.Db.Entities
 {
+    [Track]
     public class Rate : BaseEntity
     {
         [Track]

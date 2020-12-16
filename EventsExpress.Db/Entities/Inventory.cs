@@ -5,6 +5,7 @@ using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
 {
+    [Track]
     public class Inventory : BaseEntity
     {
         [Track]

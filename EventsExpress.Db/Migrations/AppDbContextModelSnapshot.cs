@@ -156,12 +156,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
@@ -181,12 +175,6 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
@@ -241,12 +229,6 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
@@ -257,12 +239,6 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("NextRun")

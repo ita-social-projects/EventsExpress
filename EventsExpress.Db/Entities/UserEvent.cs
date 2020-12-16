@@ -5,6 +5,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
+    [Track]
     public class UserEvent
     {
         [Track]

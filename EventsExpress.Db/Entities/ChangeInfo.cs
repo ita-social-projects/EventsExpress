@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EventsExpress.Db.EF;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities

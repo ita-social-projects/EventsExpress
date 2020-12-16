@@ -5,7 +5,7 @@ using EventsExpress.Db.EF;
 namespace EventsExpress.Db.Entities
 {
     [Track]
-    public class Event : ManageableEntity
+    public class Event : BaseEntity
     {
         [Track]
         public bool IsBlocked { get; set; }
