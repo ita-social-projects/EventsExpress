@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat';
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
-import { renderTextField } from '../helpers/helpers';
+import { renderTextArea } from '../helpers/helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
@@ -102,7 +102,7 @@ class Chat extends Component {
                         </div>
                         <div className="card-footer">
                             <form className="w-100 d-flex" autocomplete="off" onSubmit={this.Send}>
-                                <Field name='msg' component={renderTextField} type="input" autocomplete="off" label="Send message..." />
+                                <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Send message..." />
                                 <Button fullWidth={true} type="submit" color="primary" className="w-25">
                                     Send
                         </Button>
