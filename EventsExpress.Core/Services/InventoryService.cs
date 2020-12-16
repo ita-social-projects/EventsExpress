@@ -68,6 +68,16 @@ namespace EventsExpress.Core.Services
             }
 
             entity.ItemName = inventoryDTO.ItemName;
+            if (entity.NeedQuantity > inventoryDTO.NeedQuantity)
+            {
+                var uei = _context.UserEventInventories.Where(ue => ue.InventoryId == inventoryDTO.Id).ToArray();
+
+                if (uei != null)
+                {
+                    _context.UserEventInventories.RemoveRange(uei);
+                }
+            }
+
             entity.NeedQuantity = inventoryDTO.NeedQuantity;
             entity.UnitOfMeasuringId = inventoryDTO.UnitOfMeasuring.Id;
             await _context.SaveChangesAsync();

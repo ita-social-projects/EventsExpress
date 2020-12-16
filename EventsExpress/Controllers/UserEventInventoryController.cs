@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize]
+    [Authorize]
     [ApiController]
     public class UserEventInventoryController : Controller
     {

@@ -39,6 +39,7 @@ export function edit_item(item, eventId) {
         const res = api_serv.setItem(item, eventId);
         res.then(response => {
             dispatch(get_inventories_by_event_id(eventId));
+            dispatch(get_users_inventories_by_event_id(eventId));
             if (response.error) {
                 dispatch(setInvertarError(response));
             } else {

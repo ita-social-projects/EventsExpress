@@ -7,7 +7,7 @@ import Module from '../helpers';
 const { validate } = Module;
 
 
-class WillTakeItemForm extends Component {
+class VisitorEditItemForm extends Component {
     maxValue = max => value =>
         value && value > max ? `Must be less or equal than ${max}` : undefined
     maxValueLimitor = this.maxValue(this.props.initialValues.needQuantity - this.props.alreadyGet)
@@ -24,7 +24,7 @@ class WillTakeItemForm extends Component {
                     {initialValues.itemName}
                 </div>
                 <div className="col">{alreadyGet}</div>
-                <div className="col col-md-2">
+                <div className="col col-md-2 d-flex align-items-center">
                     <Field
                         name="willTake"
                         type="number"
@@ -56,4 +56,4 @@ export default reduxForm({
     form: 'will-take-item-form',
     validate: validate,
     enableReinitialize: true
-})(WillTakeItemForm);
+})(VisitorEditItemForm);

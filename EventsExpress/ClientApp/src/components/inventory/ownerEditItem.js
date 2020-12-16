@@ -6,14 +6,14 @@ import Module from '../helpers';
 
 const { validate } = Module;
 
-class ItemForm extends Component {
+class OwnerEditItemForm extends Component {
 
     render() {
-        const { initialValues, unitOfMeasuringState } = this.props;
+        const { initialValues, unitOfMeasuringState, alreadyGet } = this.props;
 
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
-                <div className="col col-md-4">
+                <div className="col col-md-4 d-flex align-items-center">
                     <Field
                         name={`itemName`}
                         type="text"
@@ -21,8 +21,8 @@ class ItemForm extends Component {
                         label="Item name"
                         component={renderTextField}/>
                 </div>
-                <div className="col">0</div>
-                <div className="col col-md-1">
+                <div className="col">{alreadyGet}</div>
+                <div className="col col-md-1 d-flex align-items-center">
                     <Field
                         name="needQuantity"
                         type="number"
@@ -30,7 +30,7 @@ class ItemForm extends Component {
                         label="Item count"
                         component={renderTextField}/>
                 </div>
-                <div className="col col-md-1">
+                <div className="col col-md-1 d-flex align-items-center">
                     <Field
                         className="selectpicker"
                         name="unitOfMeasuring"
@@ -58,4 +58,4 @@ export default reduxForm({
     form: 'item-form',
     validate: validate,
     enableReinitialize: true
-})(ItemForm);
+})(OwnerEditItemForm);

@@ -58,6 +58,7 @@ export default class InventoryService {
     }
 
     setUsersInventoryDelete = async (data) => {
+        data.quantity = 1;
         const res = await baseService.setResource(`UserEventInventory/Delete`, data);
         return !res.ok
             ? { error: await res.text() }

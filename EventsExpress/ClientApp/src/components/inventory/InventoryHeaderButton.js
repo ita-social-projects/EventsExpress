@@ -4,7 +4,7 @@ class InventoryHeaderButton extends Component {
     render() {
         const { isOpen, handleOnClickCaret } = this.props;
         return (
-            <>
+            <div className="d-flex justify-content-start align-items-center">
             <h4>List of inventories</h4>
             {isOpen
                 ? <button type="button" title="Caret" className="btn clear-backgroud d-flex justify-content-start align-items-center" onClick={handleOnClickCaret}>
@@ -18,7 +18,7 @@ class InventoryHeaderButton extends Component {
                     </svg>
                 </button>
             }
-            </>
+            </div>
         );
     }
 }
