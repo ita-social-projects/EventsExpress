@@ -8,9 +8,9 @@ import {
     add_category, 
     setCategoryError, 
     setCategoryPending, 
-    setCategorySuccess } from '../../actions/add-category';
+    setCategorySuccess } from '../../actions/category/add-category';
 import { 
-    set_edited_category } from "../../actions/add-category";
+    set_edited_category } from "../../actions/category/add-category";
 
 import CategoryEdit from "../../components/category/category-edit";
 

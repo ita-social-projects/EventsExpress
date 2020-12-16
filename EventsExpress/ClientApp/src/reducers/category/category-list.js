@@ -1,9 +1,9 @@
 ﻿
-import initialState from '../store/initialState';
+import initialState from '../../store/initialState';
 import {
     SET_CATEGORIES_ERROR, SET_CATEGORIES_PENDING, GET_CATEGORIES_SUCCESS
-} from '../actions/category-list';
-import { SET_CATEGORY_EDITED } from '../actions/add-category'
+} from '../../actions/category/category-list';
+import { SET_CATEGORY_EDITED } from '../../actions/category/add-category'
 
 export const reducer = (state = initialState.categories, action) => {
     switch (action.type) {

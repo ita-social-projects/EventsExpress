@@ -1,4 +1,4 @@
-﻿import { CategoryService } from '../services';
+﻿import { CategoryService } from '../../services';
 import get_categories from './category-list';
 
 export const SET_CATEGORY_DELETE_PENDING = "SET_CATEGORY_DELETE_PENDING";
