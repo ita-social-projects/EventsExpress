@@ -50,8 +50,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))
-                .ForMember(dest => dest.CreatedDateTime, opts => opts.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.ModifiedDateTime, opts => opts.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true));
         }
