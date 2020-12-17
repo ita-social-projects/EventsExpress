@@ -8,7 +8,7 @@ import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 
 class EditEventWrapper extends Component {
 

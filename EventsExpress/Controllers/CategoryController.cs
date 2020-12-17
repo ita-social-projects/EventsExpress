@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Filters;
+using EventsExpress.ModelBinders;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,28 +39,28 @@ namespace EventsExpress.Controllers
             Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(_categoryService.GetAllCategories()));
 
         /// <summary>
-        /// This method is for edit and create categories.
+        /// This method is for create categories.
         /// </summary>
         /// <param name="model">Required.</param>
-        /// <response code="200">Edit/Create category proces success.</response>
-        /// <response code="400">If Edit/Create process failed.</response>
+        /// <response code="200">Create category proces success.</response>
+        /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit(CategoryViewModel model)
+        public async Task<IActionResult> Create([ModelBinder(typeof(TrimModelBinder))] CategoryCreateViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            await _categoryService.Create(model.Name);
+            return Ok();
+        }
 
-            if (model.Id == Guid.Empty)
-            {
-                await _categoryService.Create(model.Name);
-            }
-            else
-            {
-                await _categoryService.Edit(_mapper.Map<CategoryViewModel, CategoryDTO>(model));
-            }
-
+        /// <summary>
+        /// This method is for edit categories.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit category proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Edit([ModelBinder(typeof(TrimModelBinder))] CategoryEditViewModel model)
+        {
+            await _categoryService.Edit(_mapper.Map<CategoryEditViewModel, CategoryDTO>(model));
             return Ok();
         }
 

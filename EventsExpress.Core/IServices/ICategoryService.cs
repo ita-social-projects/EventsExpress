@@ -20,6 +20,8 @@ namespace EventsExpress.Core.IServices
 
         bool Exists(Guid id);
 
+        bool ExistsByName(string categoryName);
+
         bool ExistsAll(IEnumerable<Guid> ids);
     }
 }

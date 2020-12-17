@@ -13,11 +13,11 @@ export default class CommentService {
 
     setComment = async (data) => {
         const res = await baseService.setResource('comment/edit', {
-            Id: data.id,
-            Text: data.comment,
-            UserId: data.userId,
-            EventId: data.eventId,
-            CommentsId: data.commentsId
+            id: data.id,
+            text: data.comment,
+            userId: data.userId,
+            eventId: data.eventId,
+            commentsId: data.commentsId
         });
         return !res.ok
             ? { error: await res.text() }

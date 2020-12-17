@@ -40,6 +40,22 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Get_ExistingName_ReturnTrue()
+        {
+            var res = service.ExistsByName(category.Name);
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void Get_NotExistingName_ReturnFalse()
+        {
+            var res = service.ExistsByName("Category");
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
         public void Delete_ExistingId_Success()
         {
             Assert.DoesNotThrowAsync(async () => await service.Delete(category.Id));
@@ -70,11 +86,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Create_RepeatTitle_ReturnFalse()
+        public void Create_RepeatTitle_ReturnFalseAsync()
         {
             Category newCategory = new Category() { Name = "RandomName" };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newCategory.Name));
+            Assert.DoesNotThrowAsync(async () => await service.Create(newCategory.Name));
         }
 
         [Test]
@@ -110,7 +125,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = category.Id,
             };
 
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(newCategoryDto));
+            Assert.DoesNotThrowAsync(async () => await service.Edit(newCategoryDto));
         }
     }
 }
