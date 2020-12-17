@@ -4,7 +4,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class EventScheduleDTO : ManageableEntity
+    public class EventScheduleDTO : BaseEntity
     {
         public int Frequency { get; set; }
 

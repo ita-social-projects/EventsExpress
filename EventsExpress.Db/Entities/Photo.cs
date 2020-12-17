@@ -1,4 +1,6 @@
-﻿namespace EventsExpress.Db.Entities
+﻿using EventsExpress.Db.EF;
+
+namespace EventsExpress.Db.Entities
 {
     public class Photo : BaseEntity
     {

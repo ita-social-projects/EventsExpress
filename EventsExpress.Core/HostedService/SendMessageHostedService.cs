@@ -18,18 +18,15 @@ namespace EventsExpress.Core.HostedService
     public class SendMessageHostedService : BackgroundService
     {
         private readonly ILogger<SendMessageHostedService> _logger;
-        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
         public SendMessageHostedService(
             IServiceProvider services,
             ILogger<SendMessageHostedService> logger,
-            IMediator mediator,
             IMapper mapper)
         {
             Services = services;
             _logger = logger;
-            _mediator = mediator;
             _mapper = mapper;
         }
 
@@ -43,6 +40,9 @@ namespace EventsExpress.Core.HostedService
                     scope.ServiceProvider
                         .GetRequiredService<IEventScheduleService>();
 
+                var mediator =
+                    scope.ServiceProvider
+                        .GetRequiredService<IMediator>();
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     var events = scopedProcessingService.GetUrgentEventSchedules();
@@ -50,7 +50,7 @@ namespace EventsExpress.Core.HostedService
                     {
                         foreach (var ev in events)
                         {
-                            await _mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDTO>(ev)));
+                            await mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDTO>(ev)));
                         }
                     }
                     catch (Exception ex)
