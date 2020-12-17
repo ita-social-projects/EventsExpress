@@ -85,8 +85,6 @@ namespace EventsExpress.Test.ServiceTests
                 new EventSchedule
                 {
                     Id = validEventScheduleId,
-                    CreatedBy = validUserId,
-                    CreatedDateTime = new DateTime(2020, 11, 20),
                     Frequency = 2,
                     Periodicity = Db.Enums.Periodicity.Daily,
                     LastRun = new DateTime(2020, 12, 08),
@@ -99,8 +97,6 @@ namespace EventsExpress.Test.ServiceTests
                 new EventSchedule
                 {
                     Id = todayEventScheduleId,
-                    CreatedBy = validUserId,
-                    CreatedDateTime = new DateTime(2020, 11, 20),
                     Frequency = 2,
                     Periodicity = Db.Enums.Periodicity.Daily,
                     LastRun = DateTime.Today,
@@ -113,10 +109,6 @@ namespace EventsExpress.Test.ServiceTests
             esDTO = new EventScheduleDTO
             {
                     Id = validEventScheduleId,
-                    CreatedBy = Guid.NewGuid(),
-                    CreatedDateTime = new DateTime(2020, 10, 12),
-                    ModifiedBy = Guid.NewGuid(),
-                    ModifiedDateTime = new DateTime(2020, 10, 12),
                     Frequency = 1,
                     Periodicity = Db.Enums.Periodicity.Yearly,
                     LastRun = new DateTime(2020, 11, 25),
@@ -200,10 +192,6 @@ namespace EventsExpress.Test.ServiceTests
                 new EventSchedule
                 {
                     Id = e.Id,
-                    CreatedBy = e.CreatedBy,
-                    CreatedDateTime = e.CreatedDateTime,
-                    ModifiedBy = e.ModifiedBy,
-                    ModifiedDateTime = e.ModifiedDateTime,
                     Frequency = e.Frequency,
                     Periodicity = e.Periodicity,
                     LastRun = e.LastRun,
