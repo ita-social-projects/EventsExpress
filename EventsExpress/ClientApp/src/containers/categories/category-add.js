@@ -8,9 +8,9 @@ import {
     add_category, 
     setCategoryError, 
     setCategoryPending, 
-    setCategorySuccess } from '../../actions/add-category';
+    setCategorySuccess } from '../../actions/category/add-category';
 import { 
-    set_edited_category } from "../../actions/delete-category";
+    set_edited_category } from "../../actions/category/add-category";
 
 import CategoryEdit from "../../components/category/category-edit";
 
@@ -70,7 +70,10 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_category(data)),
         set_category_edited: () => dispatch(set_edited_category(props.item.id)),
-        edit_cansel: () => dispatch(set_edited_category(null)),
+        edit_cansel: () => {
+            dispatch(set_edited_category(null));
+            dispatch(setCategoryError(null));
+        },
         reset: () => {
             dispatch(reset('add-form'));
             dispatch(setCategoryPending(false));

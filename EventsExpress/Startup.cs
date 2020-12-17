@@ -15,8 +15,6 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
-using EventsExpress.ViewModels;
-using EventsExpress.Filters;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using EventsExpress.Validation;

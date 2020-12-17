@@ -92,9 +92,9 @@ export default class UserService {
 
     setAttitude = async (data) => {
         const res = await baseService.setResource('users/SetAttitude', {
-            UserFromId: data.userFromId,
-            UserToId: data.userToId,
-            Attitude: data.attitude
+            userFromId: data.userFromId,
+            userToId: data.userToId,
+            attitude: data.attitude
         });
         return !res.ok
             ? { error: await res.text() }

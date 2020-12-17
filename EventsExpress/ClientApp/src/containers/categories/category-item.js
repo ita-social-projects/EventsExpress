@@ -5,20 +5,18 @@ import IconButton from "@material-ui/core/IconButton";
 import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
 
-import { add_category } from "../../actions/add-category";
-import { 
-    delete_category, 
-    set_edited_category 
-} from "../../actions/delete-category";
+import { add_category } from "../../actions/category/add-category";
+import { delete_category } from "../../actions/category/delete-category";
+import { set_edited_category } from "../../actions/category/add-category";
 
 
 class CategoryItemWrapper extends Component {
 
     save = values => {
-        if (values.Name === this.props.item.name) {
+        if (values.name === this.props.item.name) {
             this.props.edit_cansel();
         } else {
-            this.props.save_category({ ...values, Id: this.props.item.id });
+            this.props.save_category({ ...values, id: this.props.item.id });
         }
     };
 
