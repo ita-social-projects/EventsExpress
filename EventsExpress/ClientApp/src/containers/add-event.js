@@ -7,7 +7,7 @@ import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 import { setAlert } from '../actions/alert';
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 import { validateEventForm } from '../components/helpers/helpers'
 
 class AddEventWrapper extends Component {

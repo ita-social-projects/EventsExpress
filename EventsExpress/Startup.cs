@@ -12,6 +12,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
+using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
 using FluentValidation.AspNetCore;
