@@ -15,7 +15,7 @@ export function add_category(data) {
         dispatch(setCategoryPending(true));
 
         let res;
-        if  (data.Id) {
+        if  (data.id) {
             res = api_serv.editCategory(data);
         } else {
             res = api_serv.setCategory(data);

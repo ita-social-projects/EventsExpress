@@ -20,7 +20,7 @@ namespace EventsExpress.ModelBinders
             using var reader = new StreamReader(request.Body, Encoding.UTF8);
             var bodyString = await reader.ReadToEndAsync();
             var ob = JsonSerializer.Deserialize(
-                bodyString, 
+                bodyString,
                 bindingContext.ModelType,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 

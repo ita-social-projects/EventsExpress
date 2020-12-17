@@ -41,11 +41,6 @@ namespace EventsExpress.Core.Services
 
         public async Task Create(string title)
         {
-            if (ExistsByName(title))
-            {
-                throw new EventsExpressException("The same category is already exist in database");
-            }
-
             Insert(new Category { Name = title });
             await _context.SaveChangesAsync();
         }
@@ -56,11 +51,6 @@ namespace EventsExpress.Core.Services
             if (oldCategory == null)
             {
                 throw new EventsExpressException("Not found");
-            }
-
-            if (ExistsByName(category.Name))
-            {
-                throw new EventsExpressException("The same category is already exist in database");
             }
 
             oldCategory.Name = category.Name;

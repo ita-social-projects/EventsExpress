@@ -13,10 +13,10 @@ import { set_edited_category } from "../../actions/category/add-category";
 class CategoryItemWrapper extends Component {
 
     save = values => {
-        if (values.Name === this.props.item.name) {
+        if (values.name === this.props.item.name) {
             this.props.edit_cansel();
         } else {
-            this.props.save_category({ ...values, Id: this.props.item.id });
+            this.props.save_category({ ...values, id: this.props.item.id });
         }
     };
 

@@ -86,11 +86,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Create_RepeatTitle_ReturnFalse()
+        public void Create_RepeatTitle_ReturnFalseAsync()
         {
             Category newCategory = new Category() { Name = "RandomName" };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newCategory.Name));
+            Assert.DoesNotThrowAsync(async () => await service.Create(newCategory.Name));
         }
 
         [Test]
@@ -126,7 +125,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = category.Id,
             };
 
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(newCategoryDto));
+            Assert.DoesNotThrowAsync(async () => await service.Edit(newCategoryDto));
         }
     }
 }
