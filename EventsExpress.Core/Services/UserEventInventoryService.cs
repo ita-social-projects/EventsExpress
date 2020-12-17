@@ -1,17 +1,15 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventsExpress.Core.Services
 {
@@ -60,6 +58,13 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(UserEventInventoryDTO userEventInventoryDTO)
         {
+            if (!_context.UserEventInventories.Any(e => e.EventId == userEventInventoryDTO.EventId
+                                                    && e.UserId == userEventInventoryDTO.UserId
+                                                    && e.InventoryId == userEventInventoryDTO.InventoryId))
+            {
+                throw new EventsExpressException("Object not found!");
+            }
+
             _context.Remove(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
             await _context.SaveChangesAsync();
         }
