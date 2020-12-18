@@ -25,12 +25,24 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// This method have to return all the items of event's inventory that taken by user.
+        /// </summary>
+        /// <param name="eventId">Required.</param>
+        /// <returns>All the items of event's inventory.</returns>
+        /// <response code="200">Return IEnumerable UserEventInventoryViewModel.</response>
         [HttpGet("[action]")]
         public IActionResult GetAllMarkItemsByEventId(Guid eventId)
         {
             return Ok(_userEventInventoryService.GetAllMarkItemsByEventId(eventId));
         }
 
+        /// <summary>
+        /// This method have to mark item as taken by user.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Marking item from inventar proces success.</response>
+        /// <response code="400">If Marking item from inventar process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> MarkItemAsTakenByUser([FromBody] UserEventInventoryViewModel model)
         {
@@ -44,6 +56,12 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method is for cancel mark item as taken by user.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Cancel mark item as taken by user proces success.</response>
+        /// <response code="400">If model param did not pass validation.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Delete([FromBody] UserEventInventoryViewModel model)
         {
@@ -51,6 +69,12 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This method is for edit quantity of item that takan by user.
+        /// </summary>
+        /// <param name="model">Required.</param>
+        /// <response code="200">Edit proces success.</response>
+        /// <response code="400">If model param did not pass validation.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UserEventInventoryViewModel model)
         {
