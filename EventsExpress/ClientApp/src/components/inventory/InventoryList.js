@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
-import ItemFrom from './itemForm';
+import OwnerEditItemForm from './ownerEditItem';
+import VisitorEditItemForm from './visitorTakeItem';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
 import { update_inventories, get_inventories_by_event_id }  from '../../actions/inventory-list';
-import { add_item, delete_item, edit_item } from '../../actions/inventar';
+import { get_users_inventories_by_event_id, delete_users_inventory, edit_users_inventory }  from '../../actions/usersInventories';
+import { add_item, delete_item, edit_item, want_to_take } from '../../actions/inventar';
 import IconButton from "@material-ui/core/IconButton";
+import OwnerSeeItem from './ownerSeeItem';
+import VisitorSeeItem from './VisitorSeeItem';
 
 class InventoryList extends Component {
 
@@ -13,17 +17,22 @@ class InventoryList extends Component {
         super();
         this.state = {
             isOpen: true,
-            disabledEdit: false
+            disabledEdit: false,
+            showAlreadyGetDetailed: false
         };
 
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
+        this.handleOnClickWantToTake = this.handleOnClickWantToTake.bind(this);
+        this.onAlreadyGet = this.onAlreadyGet.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
+        this.onWillTake = this.onWillTake.bind(this);
     }
-    
+
     componentDidMount() {
         this.props.get_unitsOfMeasuring();
         this.props.get_inventories_by_event_id(this.props.eventId);
+        this.props.get_users_inventories_by_event_id(this.props.eventId);
     }
  
     addItemToList = () => {
@@ -48,15 +57,33 @@ class InventoryList extends Component {
 
     markItemAsEdit = inventar => {
         let updateList = this.props.inventories.items;
-        updateList.map(item => {
-            if (inventar.id === item.id)
-                item.isEdit = true;
-        });
+        updateList.find(e => e.id === inventar.id).isEdit = true;
 
         this.props.get_inventories(updateList);
         this.setState({
             disabledEdit: true
         });
+    }
+
+    markItemAsWillTake = inventar => {
+        let updateList = this.props.inventories.items;
+        updateList.find(e => e.id === inventar.id).isWillTake = true;
+        updateList.find(e => e.id === inventar.id).isEdit = true;
+
+        this.props.get_inventories(updateList);
+        this.setState({
+            disabledEdit: true
+        });
+    }
+
+    onAlreadyGet = inventar => {
+        let updateList = this.props.inventories.items;
+        updateList.map(item => {
+            if (inventar.id === item.id)
+                item.showAlreadyGetDetailed = !item.showAlreadyGetDetailed;
+        });
+
+        this.props.get_inventories(updateList);
     }
 
     handleOnClickCaret = () => {
@@ -65,11 +92,18 @@ class InventoryList extends Component {
         }));
     }
 
+    handleOnClickWantToTake = () => {
+        this.setState(state => ({
+            showAlreadyGetDetailed: !state.showAlreadyGetDetailed
+        }));
+    }
+
     onSubmit = values => {
         if (values.isNew) {
             this.props.add_item(values, this.props.eventId);
         }
         else {
+            values.unitOfMeasuring = values.unitOfMeasuring.id;
             this.props.edit_item(values, this.props.eventId);
         }
 
@@ -94,69 +128,134 @@ class InventoryList extends Component {
         });
     }
 
+    onWillTake = inventar => {
+        const data = {
+            eventId: this.props.eventId,
+            userId: this.props.user.id,
+            inventoryId: inventar.id,
+            quantity: Number(inventar.willTake)
+        }
+
+        if (inventar.isWillTake) {
+            this.props.want_to_take(data);
+        } else {
+            this.props.edit_users_inventory(data);
+        }
+
+        this.setState({
+            disabledEdit: false
+        });
+    }
+
+    onWillNotTake = inventar => {
+        const data = {
+            eventId: this.props.eventId,
+            userId: this.props.user.id,
+            inventoryId: inventar.id
+        }
+
+        this.props.delete_users_inventory(data);
+    }
+
+    renderInventoryItem = item => {
+        const { user, usersInventories } = this.props;
+        let isMyEvent = this.props.event.owners.find(x => x.id === user.id) != undefined;
+        return (
+            <div className="row p-1 d-flex align-items-center" key={item.id}>
+                {item.isEdit && isMyEvent && 
+                    <OwnerEditItemForm
+                        onSubmit={this.onSubmit} 
+                        onCancel={this.onCancel}
+                        unitOfMeasuringState={this.props.unitOfMeasuringState}
+                        alreadyGet={usersInventories.data.reduce((acc, cur) => {
+                            return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
+                        }, 0)}
+                        initialValues={item}/>
+                }
+
+                {item.isEdit && !isMyEvent &&
+                    <VisitorEditItemForm
+                        onSubmit={this.onWillTake}
+                        onCancel={this.onCancel}
+                        alreadyGet={usersInventories.data.reduce((acc, cur) => {
+                            return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
+                        }, 0) - (item.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
+                        initialValues={item}
+                    />
+                }
+
+                {!item.isEdit && isMyEvent &&
+                    <OwnerSeeItem
+                        item={item}
+                        disabledEdit={this.state.disabledEdit}
+                        onAlreadyGet={this.onAlreadyGet}
+                        markItemAsEdit={this.markItemAsEdit}
+                        deleteItemFromList={this.deleteItemFromList}
+                        usersInventories={this.props.usersInventories}/>
+                }
+
+                {!item.isEdit && !isMyEvent && 
+                    <VisitorSeeItem 
+                        item={item}
+                        disabledEdit={this.state.disabledEdit}
+                        onWillNotTake={this.onWillNotTake}
+                        markItemAsEdit={this.markItemAsEdit}
+                        markItemAsWillTake={this.markItemAsWillTake}
+                        usersInventories={this.props.usersInventories}
+                        user={this.props.user}/>
+                }
+            </div>
+        )
+}
+
+
     render() {
-        const { inventories, event, user } = this.props;
+        const { inventories, event, user, usersInventories } = this.props;
         let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
+        let updateList = [];
+        if (inventories.items) {
+            updateList = inventories.items.map(item => {
+                return { 
+                    ...item,
+                    isTaken: usersInventories.data
+                        .filter(dataItem => 
+                            this.props.user.id === dataItem.userId && 
+                            item.id === dataItem.inventoryId)
+                        .length > 0
+                }                
+            });
+        }
         return (
             <>
-                <div className="d-flex justify-content-start align-items-center">
-                    <InventoryHeaderButton isOpen={this.state.isOpen} handleOnClickCaret={this.handleOnClickCaret}/>
-                </div>
+                
+                <InventoryHeaderButton 
+                    isOpen={this.state.isOpen} 
+                    handleOnClickCaret={this.handleOnClickCaret}
+                />
+                
                 
                 { this.state.isOpen &&
                 <div>
-                    {isMyEvent
-                    ?  <IconButton
+                    {isMyEvent &&
+                        <IconButton
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
                             <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
                         </IconButton>
-                    :   null
                     }
                         <div className="container">
-                            <div className="row">
-                                <div className="col col-md-5"><b>Item name</b></div>
-                                <div className="col"><b>Count</b></div>
-                                <div className="col"><b>Measuring unit</b></div>
-                                {isMyEvent
-                                ? <div className="col"><b>Action</b></div>
-                                : null
+                            <div className="row p-1">
+                                <div className="col col-md-4"><b>Item name</b></div>
+                                <div className="col"><b>Already get</b></div>
+                                {!isMyEvent &&
+                                <div className="col col-md-2"><b>Will take</b></div>
                                 }
-                                
+                                <div className="col col-md-1"><b>Count</b></div>
+                                <div className="col col-md-1"></div>
+                                <div className="col col-md-2"></div>
                             </div>
-                            {inventories.items.map(item => {
-                                return (
-                                    item.isEdit 
-                                    ? <div className="row">
-                                        <ItemFrom 
-                                            onSubmit={this.onSubmit} 
-                                            onCancel={this.onCancel}
-                                            unitOfMeasuringState={this.props.unitOfMeasuringState}
-                                            initialValues={item}/>
-                                    </div>
-                                    : <div className="row">
-                                        <div className="col col-md-5">{item.itemName}</div>
-                                        <div className="col">{item.needQuantity}</div>
-                                        <div className="col">{item.unitOfMeasuring.shortName}</div>
-                                        {isMyEvent
-                                        ? <div className="col">
-                                                <IconButton 
-                                                    disabled = {this.state.disabledEdit} 
-                                                    onClick = {this.markItemAsEdit.bind(this, item)}>
-                                                    <i class = "fa-sm fas fa-pencil-alt text-warning"></i>
-                                                </IconButton>
-                                                <IconButton
-                                                    disabled = {this.state.disabledEdit} 
-                                                    onClick = {this.deleteItemFromList.bind(this, item)}>
-                                                    <i className = "fa-sm fas fa-trash text-danger"></i>
-                                                </IconButton>
-                                            </div>
-                                        : null
-                                        }   
-                                    </div>
-                                )
-                            })}                    
+                            {updateList.map(item => this.renderInventoryItem(item))}                    
                         </div>
                 </div>
                 }
@@ -169,7 +268,8 @@ const mapStateToProps = (state) => ({
     unitOfMeasuringState: state.unitsOfMeasuring,
     event: state.event.data,
     user: state.user,
-    inventories: state.inventories
+    inventories: state.inventories,
+    usersInventories: state.usersInventories
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -179,7 +279,11 @@ const mapDispatchToProps = (dispatch) => {
         delete_item: (itemId, eventId) => dispatch(delete_item(itemId, eventId)),
         edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
         get_inventories: (inventories) => dispatch(update_inventories(inventories)),
-        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId))
+        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
+        get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
+        delete_users_inventory: (data) => dispatch(delete_users_inventory(data)),
+        edit_users_inventory: (data) => dispatch(edit_users_inventory(data)),
+        want_to_take: (data) => dispatch(want_to_take(data))
     }
 };
 

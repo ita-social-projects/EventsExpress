@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EventsExpress.ViewModels
 {
@@ -14,5 +12,7 @@ namespace EventsExpress.ViewModels
         public string ItemName { get; set; }
 
         public UnitOfMeasuringViewModel UnitOfMeasuring { get; set; }
+
+        public IEnumerable<UserEventInventoryViewModel> UserEventInventories { get; set; }
     }
 }
