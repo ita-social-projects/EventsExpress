@@ -103,7 +103,6 @@ class InventoryList extends Component {
             this.props.add_item(values, this.props.eventId);
         }
         else {
-            console.log('submit', values);
             values.unitOfMeasuring = values.unitOfMeasuring.id;
             this.props.edit_item(values, this.props.eventId);
         }
@@ -226,7 +225,6 @@ class InventoryList extends Component {
                 }                
             });
         }
-        console.log(this.props);
         return (
             <>
                 
