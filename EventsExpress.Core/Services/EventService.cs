@@ -67,12 +67,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found!");
             }
 
-            if (ev.Visitors == null)
-            {
-                ev.Visitors = new List<UserEvent>();
-            }
-
-            ev.Visitors.Add(new UserEvent
+            _context.UserEvent.Add(new UserEvent
             {
                 EventId = eventId,
                 UserId = userId,
@@ -104,6 +99,13 @@ namespace EventsExpress.Core.Services
             if (ev == null)
             {
                 throw new EventsExpressException("Event not found!");
+            }
+
+            var uei = _context.UserEventInventories.Where(ue => ue.UserId == userId).ToArray();
+
+            if (uei != null)
+            {
+                _context.UserEventInventories.RemoveRange(uei);
             }
 
             var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);

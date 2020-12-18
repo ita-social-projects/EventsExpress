@@ -44,7 +44,8 @@ export const validate = values => {
         'UserName',
         'itemName',
         'needQuantity',
-        'unitOfMeasuring'
+        'unitOfMeasuring',
+        'willTake'
     ];
 
     requiredFields.forEach(field => {
