@@ -36,7 +36,7 @@ namespace EventsExpress.Core.NotificationHandlers
             var changeInfos = await _context.ChangeInfos
               .FromSqlRaw(@"SELECT * FROM ChangeInfos WHERE EntityName = 'EventSchedule' AND JSON_VALUE(EntityKeys, '$.Id') = '" + notification.EventSchedule.Id + "' AND ChangesType = 2").FirstOrDefaultAsync();
 
-            if (changeInfos.UserId == Guid.Empty)
+            if (changeInfos == null)
             {
                 return;
             }
