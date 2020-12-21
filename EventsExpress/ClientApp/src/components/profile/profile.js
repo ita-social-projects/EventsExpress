@@ -12,7 +12,7 @@ import EditUsernameContainer from '../../containers/editProfileContainers/editUs
 import EditGenderContainer from '../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../containers/editProfileContainers/editBirthdayContainer';
 import ChangePasswordContainer from '../../containers/editProfileContainers/changePasswordContainer';
-import SelectCategoriesWrapper from '../../containers/SelectCategories';
+import SelectCategoriesWrapper from '../../containers/categories/SelectCategories';
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 import './profile.css';

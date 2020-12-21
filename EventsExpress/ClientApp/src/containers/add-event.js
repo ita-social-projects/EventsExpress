@@ -7,7 +7,7 @@ import { getFormValues, reset } from 'redux-form';
 import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 import { setAlert } from '../actions/alert';
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 import { validateEventForm } from '../components/helpers/helpers'
 
 class AddEventWrapper extends Component {
@@ -51,11 +51,12 @@ class AddEventWrapper extends Component {
             this.setState({ open: true });
         }
 
-        return <div className="w-50 m-auto">
+        return <div className="w-50 m-auto p-4">
             <EventForm data={{}}
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
+                onCancel={this.props.onCreateCanceling}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 form_values={this.props.form_values}

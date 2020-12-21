@@ -1,5 +1,5 @@
 ﻿
-import { CategoryService } from '../services';
+import { CategoryService } from '../../services';
 
 
 export const SET_CATEGORIES_PENDING = "SET_CATEGORIES_PENDING";

@@ -237,7 +237,8 @@ namespace EventsExpress.Mapping
             #region CATEGORY MAPPING
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CategoryDTO, CategoryViewModel>().ReverseMap();
-            CreateMap<CategoryViewModel, Category>();
+            CreateMap<CategoryCreateViewModel, CategoryDTO>();
+            CreateMap<CategoryEditViewModel, CategoryDTO>();
             #endregion
 
             #region COMMENT MAPPING

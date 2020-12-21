@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from "redux-form";
 
-import { renderTextField } from '../helpers/helpers';
+import { renderErrorMessage, renderTextField } from '../helpers/helpers';
 
 import IconButton from "@material-ui/core/IconButton";
 
@@ -16,7 +16,14 @@ class CategoryEdit extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.callback({Name: this.props.newName});
+        this.props.callback({name: this.props.newName});
+    }
+
+    renderError() {
+        if(!this.props.message){
+            return null;
+        }
+        return renderErrorMessage(this.props.message, "Name");
     }
 
     render() {
@@ -33,13 +40,7 @@ class CategoryEdit extends Component {
                             defaultValue={this.props.item.name}
                             component={renderTextField}
                         />
-
-                        {(this.props.message) 
-                            ? <div className="text-danger">
-                                {this.props.message}
-                            </div> 
-                            : null
-                        }    
+                        {this.renderError()}    
                     </div>
                 </form>
                 

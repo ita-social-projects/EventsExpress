@@ -10,10 +10,6 @@ namespace EventsExpress.Db.Migrations
                 name: "PK_EventOwners",
                 table: "EventOwners");
 
-            migrationBuilder.DropIndex(
-                name: "IX_EventOwners_UserId",
-                table: "EventOwners");
-
             migrationBuilder.AddPrimaryKey(
                 name: "PK_EventOwners",
                 table: "EventOwners",

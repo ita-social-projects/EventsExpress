@@ -1,9 +1,9 @@
-﻿import initialState from '../store/initialState';
+﻿import initialState from '../../store/initialState';
 import {
     SET_CATEGORY_DELETE_PENDING,
     SET_CATEGORY_DELETE_SUCCESS,
     SET_CATEGORY_DELETE_ERROR
-} from "../actions/delete-category";
+} from "../../actions/category/delete-category";
 
 export const reducer = (state = initialState.add_category, action) => {
 

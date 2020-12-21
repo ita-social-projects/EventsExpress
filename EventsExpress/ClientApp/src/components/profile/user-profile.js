@@ -234,7 +234,7 @@ export default class UserItemView extends Component {
                 </TabPanel>
                 {this.props.add_event_flag ?
                     <div className="shadow mb-5 bg-white rounded">
-                        <AddEventWrapper />
+                        <AddEventWrapper onCreateCanceling={() => this.handleChange(null, 0)} />
                     </div>
                     :
                     <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">

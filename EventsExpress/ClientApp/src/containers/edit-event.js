@@ -8,7 +8,7 @@ import get_cities from '../actions/cities';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 
 class EditEventWrapper extends Component {
 
@@ -49,6 +49,7 @@ class EditEventWrapper extends Component {
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
+                onCancel={this.props.onCancelEditing}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 initialValues={initialValues}

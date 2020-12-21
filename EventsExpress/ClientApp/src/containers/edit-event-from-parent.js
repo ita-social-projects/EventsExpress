@@ -14,7 +14,7 @@ import {
     from '../actions/edit-event-from-parent';
 import * as moment from 'moment';
 import { validateEventForm } from '../components/helpers/helpers'
-import get_categories from '../actions/category-list';
+import get_categories from '../actions/category/category-list';
 
 class EditFromParentEventWraper extends Component {
 
@@ -62,6 +62,7 @@ class EditFromParentEventWraper extends Component {
                 all_categories={this.props.all_categories}
                 cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
+                onCancel={this.props.onCancelEditing}
                 onSubmit={this.onSubmit}
                 countries={this.props.countries.data}
                 initialValues={initialValues}

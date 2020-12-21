@@ -181,9 +181,6 @@ namespace EventsExpress.Core.Services
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
-            ev.CreatedBy = CurrentUser.Id;
-            ev.ModifiedBy = CurrentUser.Id;
-            ev.ModifiedDateTime = DateTime.UtcNow;
 
             var result = Insert(ev);
 
@@ -213,8 +210,6 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.AddTicks(ticksDiff);
-            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
-            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);
@@ -239,8 +234,6 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.CityId = e.CityId;
-            ev.ModifiedBy = CurrentUser.Id;
-            ev.ModifiedDateTime = DateTime.UtcNow;
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -269,8 +262,6 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> EditNextEvent(EventDTO eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-            eventScheduleDTO.ModifiedBy = CurrentUser.Id;
-            eventScheduleDTO.ModifiedDateTime = DateTime.UtcNow;
             eventScheduleDTO.LastRun = eventDTO.DateTo;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo);

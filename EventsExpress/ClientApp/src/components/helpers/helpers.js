@@ -287,6 +287,7 @@ export const renderTextField = ({
     label,
     defaultValue,
     input,
+    inputProps,
     rows,
     fullWidth,
     meta: { touched, invalid, error },
@@ -300,6 +301,7 @@ export const renderTextField = ({
             error={touched && invalid}
             defaultValue={defaultValue}
             value={defaultValue}
+            inputProps={inputProps}
             helperText={touched && error}
             {...input}
             {...custom}
@@ -355,15 +357,20 @@ export const renderCheckbox = ({ input, label }) => (
     </div>
 )
 
-export const renderErrorMessage = (responseData, key) => (
-    <div className="text-danger">
-        {JSON.parse(responseData)["errors"][key].map(item =>
-            <div>
-                {item}
+export const renderErrorMessage = (responseData, key) => {
+    let response;
+    response = JSON.parse(responseData)["errors"];
+        if(response[key]){
+            return (<div className="text-danger">
+                {response[key].map(item =>
+                <div>
+                    {item}
+                </div>
+                )}
             </div>
-        )}
-    </div>
-)
+            )
+        }
+    }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
