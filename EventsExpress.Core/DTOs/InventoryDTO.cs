@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -13,5 +12,7 @@ namespace EventsExpress.Core.DTOs
         public string ItemName { get; set; }
 
         public UnitOfMeasuringDTO UnitOfMeasuring { get; set; }
+
+        public IEnumerable<UserEventInventoryDTO> UserEventInventories { get; set; }
     }
 }
