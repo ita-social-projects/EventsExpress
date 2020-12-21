@@ -4,7 +4,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
-import { setEventCanelationModalStatus } from '../../actions/event-item-view';
 
 export default class SimpleModal extends Component {
     constructor(props) {
@@ -22,6 +21,11 @@ export default class SimpleModal extends Component {
 
     onClose = () => {
         this.setState({isOpen: false, id: null});
+    }
+
+    onConfirm = () => {
+        this.props.action(this.props.id)
+        this.setState({ isOpen: false });
     }
 
     render() {
@@ -52,7 +56,7 @@ export default class SimpleModal extends Component {
                                 type="button"
                                 value="Login"
                                 color="primary"
-                                onClick={() => this.props.action(this.props.id)}
+                                onClick={this.onConfirm}
                             >
                                 confirm
                             </Button>
