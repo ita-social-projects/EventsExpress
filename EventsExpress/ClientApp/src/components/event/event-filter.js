@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
 import {
     renderTextField,
     renderDatePicker,
-    renderMultiselect,
-    radioButton
+    renderMultiselect
 } from '../helpers/helpers';
 import eventHelper from '../helpers/eventHelper';
 import './event-filter.css';
+import EventFilterStatus from './event-filter-status';
+import StatusHistory from '../helpers/EventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {
         super(props);
+        let { x } = this.props.initialFormValues.statuses;
         this.state = {
             viewMore: false,
             needInitializeValues: true,
+            all: x[StatusHistory.Active].checked &&
+                this.props.initialFormValues.statuses[StatusHistory.Blocked].checked &&
+                this.props.initialFormValues.statuses[StatusHistory.Canceled].checked,
+            active: this.props.initialFormValues.statuses[StatusHistory.Active].checked,
+            blocked: this.props.initialFormValues.statuses[StatusHistory.Blocked].checked,
+            canceled: this.props.initialFormValues.statuses[StatusHistory.Canceled].checked,
         };
     }
 
@@ -30,12 +37,26 @@ class EventFilter extends Component {
                 dateFrom: initialValues.dateFrom,
                 dateTo: initialValues.dateTo,
                 categories: initialValues.categories,
-                status: initialValues.status,
+                statuses: initialValues.statuses,
             });
             this.setState({
                 ['needInitializeValues']: false
             });
         }
+    }
+
+    handleChange = (event) => {
+        this.setState({ [event.target.name]: event.target.checked });
+        /*if (event.target.name !== 'all') {
+            this.setState({ [event.target.name]: event.target.checked });
+            this.setState({ ['all']: false });
+        }
+        else if (event.target.name === 'all') {
+            this.setState({ [event.target.name]: event.target.checked });
+            this.setState({ ['active']: !event.target.checked });
+            this.setState({ ['blocked']: false });
+            this.setState({ ['canceled']: false });
+        }*/
     }
 
     render() {
@@ -82,15 +103,13 @@ class EventFilter extends Component {
                                     placeholder='#hashtags'
                                 />
                             </div>
-                            {current_user.role === "Admin" && (
-                                <div className="form-group">
-                                    <Field name="status" component={radioButton}>
-                                        <Radio value="true" label="All" />
-                                        <Radio value="true" label="Active" />
-                                        <Radio value="true" label="Blocked" />
-                                    </Field>
-                                </div>
-                            )}
+                            {current_user.role === "Admin" && 
+                                <Field name="statuses" 
+                                    component={EventFilterStatus}
+                                    status={this.state}
+                                    onChange={this.handleChange}
+                                />
+                            }
                         </>
                     }
                     <div>

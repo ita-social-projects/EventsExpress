@@ -176,17 +176,18 @@ export function block_event(id) {
 }
 
 // ACTION CREATOR FOR EVENT CANCELATION:
-export function cancel_event(eventId, reason) {
+export function cancel_event(eventId, reason, eventStatus) {
     return dispatch => {
         dispatch(setCancelEventPending(true));
 
-        const res = api_serv.setEventCancel({EventId: eventId, Reason: reason});
+        const res = api_serv.setEventCancel({EventId: eventId, Reason: reason, EventStatus: eventStatus});
 
         res.then(response => {
             if (response.error == null) {
                 dispatch(setCancelEventSuccess());
                 dispatch(updateCancelEvent(eventId));
                 dispatch(setEventCanelationModalStatus(false));
+                dispatch(get_event(response.eventId));
             } else {
                 dispatch(setCancelEventError(response.error));
             }

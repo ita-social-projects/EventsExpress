@@ -6,6 +6,7 @@ import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
 import { renderErrorMessage } from '../helpers/helpers';
 import { setEventCanelationModalStatus } from '../../actions/event-item-view';
+import StatusHistory from '../helpers/EventStatusEnum';
 
 class EventCancelModal extends Component {
     constructor(props) {
@@ -30,22 +31,31 @@ class EventCancelModal extends Component {
     }
 
     submit = () => {
-        this.props.submitCallback(this.state.cancelationReason);
+        this.props.submitCallback(this.state.cancelationReason, this.props.eventStatus);
     }
 
     render() {
+        const text = this.props.eventStatus === StatusHistory.Canceled ? "Cancel" : "Undo cancel";
+
         return (
             <>
-                <button onClick={this.handleClickOpen} className="btn btn-edit">Cancel</button>
+                <button onClick={this.handleClickOpen} className="btn btn-edit">{text}</button>
                 <Dialog
                     open={this.props.status}
                     onClose={this.handleClose}
                 >
                     <div className="eventCancel">
                         <DialogContent>
-                            <div>
-                                <h4>Enter the reason of cancelation</h4>
-                            </div>
+                            {this.props.eventStatus === StatusHistory.Canceled && 
+                                <div>
+                                    <h4>Enter the reason of cancelation</h4>
+                                </div>
+                            }
+                            {this.props.eventStatus !== StatusHistory.Canceled && 
+                                <div>
+                                    <h4>Enter the reason of undo cancelation</h4>
+                                </div>
+                            }
                             <div>
                                 <input size="50" type='text' onChange={this.handleChange} />
                             </div>
@@ -60,7 +70,7 @@ class EventCancelModal extends Component {
                                 color="primary"
                                 onClick={this.handleClose}
                             >
-                                discard
+                                Discard
                             </Button>
                             <Button
                                 fullWidth={true}
@@ -69,7 +79,7 @@ class EventCancelModal extends Component {
                                 color="primary"
                                 onClick={this.submit}
                             >
-                                confirm cancelation
+                                Confirm action
                             </Button>
                         </DialogActions>
                     </div>

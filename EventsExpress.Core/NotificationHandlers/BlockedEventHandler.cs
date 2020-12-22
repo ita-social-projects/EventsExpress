@@ -6,7 +6,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
 using MediatR;
 
 namespace EventsExpress.Core.NotificationHandlers

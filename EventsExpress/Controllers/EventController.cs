@@ -148,7 +148,7 @@ namespace EventsExpress.Controllers
                     filter.DateFrom = DateTime.Today;
                 }
 
-                if (filter.Status != EventStatus.Active)
+                if (filter.Statuses.Count != 0)
                 {
                     return Forbid();
                 }

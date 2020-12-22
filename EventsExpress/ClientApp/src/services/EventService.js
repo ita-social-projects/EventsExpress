@@ -10,6 +10,7 @@ export default class EventService {
     }
 
     getAllEvents = async (filters) => {
+        debugger;
         const res = await baseService.getResource(`event/all${filters}`);
         return res;
     }
@@ -92,7 +93,7 @@ export default class EventService {
     }
 
     setEventCancel = async (data) => {
-        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/Cancel`, data);
+        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
         return !res.ok
             ? { error: await res.text() }
             : await res.json();

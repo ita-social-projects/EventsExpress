@@ -18,12 +18,9 @@ import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
 import Tooltip from '@material-ui/core/Tooltip';
+import userStatus from '../helpers/UserStatusEnum';
+import StatusHistory from '../helpers/EventStatusEnum';
 
-const userStatus = {
-    APPROVED: 0,
-    DENIED: 1,
-    PENDING: 2
-};
 
 export default class EventItemView extends Component {
     constructor() {
@@ -254,10 +251,12 @@ export default class EventItemView extends Component {
             dateTo,
             description,
             isPublic,
+            eventStatus,
             maxParticipants,
             visitors,
             owners
         } = this.props.event.data;
+        
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
@@ -265,20 +264,16 @@ export default class EventItemView extends Component {
             deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
             pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
         };
-        const userStatus = {
-            APPROVED: 0,
-            DENIED: 1,
-            PENDING: 2
-        };
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
-        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
-        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
-        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === StatusHistory.Active;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null && eventStatus === StatusHistory.Active;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== StatusHistory.Canceled;
+        let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === StatusHistory.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
 
         return <>
@@ -327,10 +322,16 @@ export default class EventItemView extends Component {
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel &&
-                                    <EventCancelModal
-                                        submitCallback={this.props.onCancel}
-                                        cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel && <EventCancelModal 
+                                    submitCallback={this.props.onCancel}
+                                    cancelationStatus={this.props.event.cancelation}
+                                    eventStatus={StatusHistory.Canceled}
+                                />}
+                                {(canUncancel) && <EventCancelModal
+                                    submitCallback={this.props.onCancel}
+                                    cancelationStatus={this.props.event.cancelation}
+                                    eventStatus={StatusHistory.Active}
+                                />}
                             </div>
                         </div>
                         {this.state.edit
@@ -350,6 +351,14 @@ export default class EventItemView extends Component {
                                     </div>
                                 }
                                 <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    {(eventStatus === StatusHistory.Canceled) &&
+                                        <div className="text-center text-uppercase cancel-text">
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <span> This event is canceled </span>
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <br />
+                                        </div>
+                                    }
                                     {description}
                                 </div>
                                 <div className="shadow p-3 mb-5 mt-2 bg-white rounded">

@@ -12,6 +12,12 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
+        public bool IsPublic { get; set; }
+
+        public EventStatus EventStatus { get; set; }
+
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
+
         public IEnumerable<UserPreviewViewModel> Visitors { get; set; }
 
         public IEnumerable<InventoryViewModel> Inventories { get; set; }

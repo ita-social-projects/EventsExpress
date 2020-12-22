@@ -31,8 +31,8 @@ class EventItemViewWrapper extends Component{
         this.props.leave(this.props.current_user.id, this.props.event.data.id);
     }
 
-    onCancel = (reason) => {
-        this.props.cancel(this.props.event.data.id, reason);
+    onCancel = (reason, eventStatus) => {
+        this.props.cancel(this.props.event.data.id, reason, eventStatus);
     }
 
     onApprove = (userId, buttonAction) => {
@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
-    cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),
+    cancel: (eventId, reason, eventStatus) => dispatch(cancel_event(eventId, reason, eventStatus)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
     promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),

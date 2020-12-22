@@ -24,6 +24,6 @@ namespace EventsExpress.Core.DTOs
 
         public SortBy SortBy { get; set; }
 
-        public EventStatus Status { get; set; } = EventStatus.Active;
+        public List<EventStatusViewModel> Statuses { get; set; } // (new EventStatusViewModel(EventStatus.Active, true)); // { EventStatus.Active, true};
     }
 }

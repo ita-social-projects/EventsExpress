@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.ViewModels.Base;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels
 {
@@ -12,5 +13,11 @@ namespace EventsExpress.ViewModels
         public bool IsBlocked { get; set; }
 
         public int CountVisitor { get; set; }
+
+        public bool IsPublic { get; set; }
+
+        public EventStatus EventStatus { get; set; }
+
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

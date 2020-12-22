@@ -19,31 +19,23 @@ import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import './event-item.css';
+import StatusHistory from '../helpers/EventStatusEnum';
+
 
 const useStyles = makeStyles(theme => ({
     card: {
         maxWidth: 345,
         maxHeight: 200,
-        backgroundColor: theme.palette.primary.dark
     },
     media: {
         height: 0,
         paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
     },
     expandOpen: {
         transform: 'rotate(180deg)',
     },
     avatar: {
         backgroundColor: red[500],
-    },
-    button: {
     }
 }));
 
@@ -78,6 +70,7 @@ export default class Event extends Component {
             description,
             isPublic,
             maxParticipants,
+            eventStatus,
             photoUrl,
             categories,
             countVisitor,
@@ -110,8 +103,12 @@ export default class Event extends Component {
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Card
-                    className={classes.card}
-                    style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
+                    className={classes.cardCanceled}
+                    style={{
+                        backgroundColor: (isBlocked) ? "gold" : "",
+                        opacity: (eventStatus === StatusHistory.Canceled) ? 0.5 : 1
+
+                    }}
                 >
                     <Menu
                         id="simple-menu"
@@ -132,13 +129,13 @@ export default class Event extends Component {
                     <CardHeader
                         avatar={
                             <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
-                                <Badge overlap="circle" badgeContent={owners.length} color="primary">
-                                    <CustomAvatar
-                                        className={classes.avatar}
-                                        photoUrl={owners[0].photoUrl}
-                                        name={owners[0].username}
-                                    />
-                                </Badge>
+                                    <Badge overlap="circle" badgeContent={owners.length} color="primary">
+                                        <CustomAvatar
+                                            className={classes.avatar}
+                                            photoUrl={owners[0].photoUrl}
+                                            name={owners[0].username}
+                                        />
+                                    </Badge>
                             </Button>
 
                         }
@@ -202,7 +199,7 @@ export default class Event extends Component {
                                     </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
-                                    <IconButton className={classes.button} aria-label="view">
+                                    <IconButton aria-label="view">
                                         <i className="fa fa-eye"></i>
                                     </IconButton>
                                 </Link>
