@@ -6,14 +6,14 @@ import Module from '../helpers';
 
 const { validate } = Module;
 
-class ItemForm extends Component {
+class OwnerEditItemForm extends Component {
 
     render() {
-        const { initialValues, unitOfMeasuringState } = this.props;
-
+        const { initialValues, unitOfMeasuringState, alreadyGet } = this.props;
+        console.log('oeif', this.props);
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
-                <div className="col col-md-5">
+                <div className="col col-md-4 d-flex align-items-center">
                     <Field
                         name={`itemName`}
                         type="text"
@@ -21,18 +21,19 @@ class ItemForm extends Component {
                         label="Item name"
                         component={renderTextField}/>
                 </div>
-                <div className="col">
+                <div className="col">{alreadyGet}</div>
+                <div className="col col-md-1 d-flex align-items-center">
                     <Field
-                        name={`needQuantity`}
+                        name="needQuantity"
                         type="number"
                         fullWidth={false}
                         label="Item count"
                         component={renderTextField}/>
                 </div>
-                <div className="col">
+                <div className="col col-md-1 d-flex align-items-center">
                     <Field
                         className="selectpicker"
-                        name={`unitOfMeasuring`}
+                        name="unitOfMeasuring"
                         component={renderSelectField}>
                         <option></option>
                         {unitOfMeasuringState.units.map((unit, key) => 
@@ -40,7 +41,7 @@ class ItemForm extends Component {
                         )} 
                     </Field>
                 </div>
-                <div className="col">
+                <div className="col col-md-2">
                 <IconButton type="submit">
                     <i className = "fa-sm fas fa-check text-success"></i>
                 </IconButton>
@@ -57,4 +58,4 @@ export default reduxForm({
     form: 'item-form',
     validate: validate,
     enableReinitialize: true
-})(ItemForm);
+})(OwnerEditItemForm);
