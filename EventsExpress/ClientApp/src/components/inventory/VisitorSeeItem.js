@@ -3,6 +3,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 
 export default class VisitorSeeItem extends Component {
+
+    constructor() {
+        super()
+    }
+
     render() {
         const { item, disabledEdit, onWillNotTake, markItemAsEdit, markItemAsWillTake, usersInventories, user } = this.props;
         return (
@@ -14,10 +19,10 @@ export default class VisitorSeeItem extends Component {
                         </div>
                         <div className="col d-flex align-items-center" key={item.id}>
                                 {item.showAlreadyGetDetailed &&
-                                    usersInventories.data.map(data => {
+                                    usersInventories.data.map((data, key) => {
                                         return (
                                             data.inventoryId === item.id 
-                                            ?   <div>{data.user.name}: {data.quantity};</div>
+                                            ?   <div key={key}>{data.user.name}: {data.quantity};</div>
                                             :   null
                                         );
                                     })

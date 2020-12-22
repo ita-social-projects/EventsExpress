@@ -13,10 +13,10 @@ export default class OwnerSeeItem extends Component {
                         </div>
                         <div className="col d-flex align-items-center" key={item.id}>
                                 {item.showAlreadyGetDetailed &&
-                                    usersInventories.data.map(data => {
+                                    usersInventories.data.map((data, key) => {
                                         return (
                                             data.inventoryId === item.id 
-                                            ?   <div>{data.user.name}: {data.quantity};</div>
+                                            ?   <div key={key}>{data.user.name}: {data.quantity};</div>
                                             :   null
                                         );
                                     })

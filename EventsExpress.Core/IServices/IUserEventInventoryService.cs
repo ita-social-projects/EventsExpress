@@ -10,7 +10,7 @@ namespace EventsExpress.Core.IServices
     {
         Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO);
 
-        IEnumerable<UserEventInventoryDTO> GetAllMarkItemsByEventId(Guid eventId);
+        Task<IEnumerable<UserEventInventoryDTO>> GetAllMarkItemsByEventId(Guid eventId);
 
         Task Delete(UserEventInventoryDTO userEventInventoryDTO);
 

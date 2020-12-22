@@ -10,7 +10,7 @@ class OwnerEditItemForm extends Component {
 
     render() {
         const { initialValues, unitOfMeasuringState, alreadyGet } = this.props;
-
+        console.log('oeif', this.props);
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
                 <div className="col col-md-4 d-flex align-items-center">

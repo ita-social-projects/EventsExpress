@@ -22,12 +22,12 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public IEnumerable<UserEventInventoryDTO> GetAllMarkItemsByEventId(Guid eventId)
+        public async Task<IEnumerable<UserEventInventoryDTO>> GetAllMarkItemsByEventId(Guid eventId)
         {
             return _mapper.Map<IEnumerable<UserEventInventoryDTO>>(
-                _context.UserEventInventories
+                 await _context.UserEventInventories
                     .Include(i => i.UserEvent.User)
-                    .Where(i => i.EventId == eventId));
+                    .Where(i => i.EventId == eventId).ToListAsync());
         }
 
         public async Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
