@@ -10,7 +10,6 @@ class OwnerEditItemForm extends Component {
 
     render() {
         const { initialValues, unitOfMeasuringState, alreadyGet } = this.props;
-        console.log('oeif', this.props);
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
                 <div className="col col-md-4 d-flex align-items-center">
@@ -33,7 +32,7 @@ class OwnerEditItemForm extends Component {
                 <div className="col col-md-1 d-flex align-items-center">
                     <Field
                         className="selectpicker"
-                        name="unitOfMeasuring"
+                        name={"unitOfMeasuring.id"}
                         component={renderSelectField}>
                         <option></option>
                         {unitOfMeasuringState.units.map((unit, key) => 

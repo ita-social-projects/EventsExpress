@@ -12,7 +12,5 @@ namespace EventsExpress.Core.DTOs
         public string ItemName { get; set; }
 
         public UnitOfMeasuringDTO UnitOfMeasuring { get; set; }
-
-        public IEnumerable<UserEventInventoryDTO> UserEventInventories { get; set; }
     }
 }

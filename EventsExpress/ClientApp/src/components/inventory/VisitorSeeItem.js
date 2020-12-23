@@ -4,21 +4,17 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 export default class VisitorSeeItem extends Component {
 
-    constructor() {
-        super()
-    }
-
     render() {
-        const { item, disabledEdit, onWillNotTake, markItemAsEdit, markItemAsWillTake, usersInventories, user } = this.props;
+        const { item, disabledEdit, onWillNotTake, markItemAsEdit, markItemAsWillTake, usersInventories, user, showAlreadyGetDetailed, onAlreadyGet, alreadyGet } = this.props;
         return (
             <>
                 {!item.isEdit &&
                     <>
                         <div className="col col-md-4 d-flex align-items-center">
-                            <span className="item" onClick={() => this.onAlreadyGet(item)}>{item.itemName}</span>
+                            <span className="item" onClick={() => onAlreadyGet(item)}>{item.itemName}</span>
                         </div>
-                        <div className="col d-flex align-items-center" key={item.id}>
-                                {item.showAlreadyGetDetailed &&
+                        <div className="col align-items-center" key={item.id}>
+                                {showAlreadyGetDetailed &&
                                     usersInventories.data.map((data, key) => {
                                         return (
                                             data.inventoryId === item.id 
@@ -28,13 +24,11 @@ export default class VisitorSeeItem extends Component {
                                     })
                                 }
 
-                                {!item.showAlreadyGetDetailed && 
+                                {!showAlreadyGetDetailed && 
                                     <>
-                                        {usersInventories.data.length === 0 ? 
-                                                0 
-                                                : usersInventories.data.reduce((acc, cur) => {
-                                                    return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
-                                                }, 0)
+                                        {usersInventories.data.length === 0 
+                                                ? 0 
+                                                : alreadyGet
                                         }
                                     </>
                                 }
@@ -63,9 +57,7 @@ export default class VisitorSeeItem extends Component {
                                 </>
                             }
 
-                            {!item.isTaken && item.needQuantity - usersInventories.data.reduce((acc, cur) => {
-                                                return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
-                                            }, 0) > 0 &&
+                            {!item.isTaken && item.needQuantity - alreadyGet > 0 &&
                                 <Tooltip title="Will take" placement="right-start">
                                     <IconButton
                                         onClick={markItemAsWillTake.bind(this, item)}>

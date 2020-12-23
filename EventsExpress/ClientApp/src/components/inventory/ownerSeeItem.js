@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 
 export default class OwnerSeeItem extends Component {
     render() {
-        const { item, disabledEdit, onAlreadyGet, markItemAsEdit, deleteItemFromList, usersInventories } = this.props;
+        const { item, disabledEdit, onAlreadyGet, markItemAsEdit, deleteItemFromList, usersInventories, showAlreadyGetDetailed } = this.props;
         return (
             <>
                 {!item.isEdit &&
@@ -11,8 +11,8 @@ export default class OwnerSeeItem extends Component {
                         <div className="col col-md-4 d-flex align-items-center">
                             <span className="item" onClick={() => onAlreadyGet(item)}>{item.itemName}</span>
                         </div>
-                        <div className="col d-flex align-items-center" key={item.id}>
-                                {item.showAlreadyGetDetailed &&
+                        <div className="col align-items-center" key={item.id}>
+                                {showAlreadyGetDetailed &&
                                     usersInventories.data.map((data, key) => {
                                         return (
                                             data.inventoryId === item.id 
@@ -22,7 +22,7 @@ export default class OwnerSeeItem extends Component {
                                     })
                                 }
 
-                                {!item.showAlreadyGetDetailed && 
+                                {!showAlreadyGetDetailed && 
                                     <>
                                         {usersInventories.data.length === 0 ? 
                                                 0 

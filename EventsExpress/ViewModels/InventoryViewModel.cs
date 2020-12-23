@@ -12,7 +12,5 @@ namespace EventsExpress.ViewModels
         public string ItemName { get; set; }
 
         public UnitOfMeasuringViewModel UnitOfMeasuring { get; set; }
-
-        public IEnumerable<UserEventInventoryViewModel> UserEventInventories { get; set; }
     }
 }

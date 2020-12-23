@@ -32,9 +32,9 @@ namespace EventsExpress.Controllers
         /// <returns>All the items of event's inventory.</returns>
         /// <response code="200">Return IEnumerable UserEventInventoryViewModel.</response>
         [HttpGet("[action]")]
-        public IActionResult GetAllMarkItemsByEventId(Guid eventId)
+        public async Task<IActionResult> GetAllMarkItemsByEventId(Guid eventId)
         {
-            return Ok(_userEventInventoryService.GetAllMarkItemsByEventId(eventId));
+            return Ok(await _userEventInventoryService.GetAllMarkItemsByEventId(eventId));
         }
 
         /// <summary>

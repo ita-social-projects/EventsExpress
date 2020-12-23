@@ -6,7 +6,7 @@ import VisitorSeeItem from '../components/inventory/visitorSeeItem';
 import VisitorEditItemForm from '../components/inventory/visitorTakeItem';
 import { get_inventories_by_event_id }  from '../actions/inventory-list';
 import { delete_users_inventory, edit_users_inventory }  from '../actions/usersInventories';
-import { delete_item, edit_item, want_to_take } from '../actions/inventar';
+import { delete_item, edit_item, add_item, want_to_take } from '../actions/inventar';
 
 class InventoryItemWrapper extends Component {
 
@@ -17,7 +17,7 @@ class InventoryItemWrapper extends Component {
         };
 
         this.onAlreadyGet = this.onAlreadyGet.bind(this);
-        // this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.onWillTake = this.onWillTake.bind(this);
     }
@@ -39,9 +39,6 @@ class InventoryItemWrapper extends Component {
 
         this.props.get_inventories(updateList);
         this.props.changeDisableEdit(true);
-        // this.setState({
-        //     disabledEdit: true
-        // });
     }
 
     markItemAsWillTake = inventar => {
@@ -51,42 +48,31 @@ class InventoryItemWrapper extends Component {
 
         this.props.get_inventories(updateList);
         this.props.changeDisableEdit(true);
-        // this.setState({
-        //     disabledEdit: true
-        // });
     }
     
-    // onSubmit = values => {
-    //     if (values.isNew) {
-    //         this.props.add_item(values, this.props.eventId);
-    //     }
-    //     else {
-    //         values.unitOfMeasuring = values.unitOfMeasuring.id;
-    //         this.props.edit_item(values, this.props.eventId);
-    //     }
+    onSubmit = values => {
+        if (values.isNew) {
+            this.props.add_item(values, this.props.eventId);
+        }
+        else {
+            values.unitOfMeasuring = {
+                id: values.unitOfMeasuring.id
+            };
+            this.props.edit_item(values, this.props.eventId);
+        }
 
-    //     this.setState({
-    //         disabledEdit: false
-    //     });
-    // }
+        this.props.changeDisableEdit(false);
+    }
 
     onCancel = inventar => {
         if (inventar.isNew) {
             this.deleteItemFromList(inventar);
             this.props.changeDisableEdit(false);
-            console.log('here');
-            // this.setState({
-            //     disabledEdit: false
-            // })
             return;
         }
-        console.log('or here');
 
         this.props.get_inventories_by_event_id(this.props.eventId);
         this.props.changeDisableEdit(false);
-        // this.setState({
-        //     disabledEdit: false
-        // });
     }
 
     onWillTake = inventar => {
@@ -104,9 +90,6 @@ class InventoryItemWrapper extends Component {
         }
 
         this.props.changeDisableEdit(false);
-        // this.setState({
-        //     disabledEdit: false
-        // });
     }
 
     onWillNotTake = inventar => {
@@ -121,16 +104,17 @@ class InventoryItemWrapper extends Component {
 
     render() {
         const { item, user, usersInventories, isMyEvent, disabledEdit } = this.props;
+        const alreadyGet = usersInventories.data.reduce((acc, cur) => {
+            return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
+        }, 0);
         return(
             <div className="row p-1 d-flex align-items-center" key={item.id}>
             {item.isEdit && isMyEvent && 
                 <OwnerEditItemForm
-                    onSubmit={this.props.onSubmit} 
+                    onSubmit={this.onSubmit} 
                     onCancel={this.onCancel}
                     unitOfMeasuringState={this.props.unitOfMeasuringState}
-                    alreadyGet={usersInventories.data.reduce((acc, cur) => {
-                        return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
-                    }, 0)}
+                    alreadyGet={alreadyGet}
                     initialValues={item}/>
             }
 
@@ -138,9 +122,7 @@ class InventoryItemWrapper extends Component {
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={usersInventories.data.reduce((acc, cur) => {
-                        return cur.inventoryId === item.id ? acc + cur.quantity : acc + 0
-                    }, 0) - (item.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
+                    alreadyGet={alreadyGet - (item.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
                     initialValues={item}
                 />
             }
@@ -149,6 +131,7 @@ class InventoryItemWrapper extends Component {
                 <OwnerSeeItem
                     item={item}
                     disabledEdit={disabledEdit}
+                    showAlreadyGetDetailed={this.state.showAlreadyGetDetailed}
                     onAlreadyGet={this.onAlreadyGet}
                     markItemAsEdit={this.markItemAsEdit}
                     deleteItemFromList={this.deleteItemFromList}
@@ -159,6 +142,8 @@ class InventoryItemWrapper extends Component {
                 <VisitorSeeItem 
                     item={item}
                     disabledEdit={disabledEdit}
+                    showAlreadyGetDetailed={this.state.showAlreadyGetDetailed}
+                    alreadyGet={alreadyGet}
                     onAlreadyGet={this.onAlreadyGet}
                     onWillNotTake={this.onWillNotTake}
                     markItemAsEdit={this.markItemAsEdit}
@@ -178,7 +163,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         delete_item: (itemId, eventId) => dispatch(delete_item(itemId, eventId)),
-        // edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
+        edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
+        add_item: (item, eventId) => dispatch(add_item(item, eventId)),
         get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
         delete_users_inventory: (data) => dispatch(delete_users_inventory(data)),
         edit_users_inventory: (data) => dispatch(edit_users_inventory(data)),

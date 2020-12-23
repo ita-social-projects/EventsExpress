@@ -7,7 +7,6 @@ import { get_inventories_by_event_id }  from '../../actions/inventory-list';
 import InventoryItemWrapper from '../../containers/inventory-item';
 import { update_inventories }  from '../../actions/inventory-list';
 import { get_users_inventories_by_event_id, edit_users_inventory }  from '../../actions/usersInventories';
-import { add_item, edit_item } from '../../actions/inventar';
 
 class InventoryList extends Component {
 
@@ -19,7 +18,6 @@ class InventoryList extends Component {
             showAlreadyGetDetailed: false
         };
 
-        this.onSubmit = this.onSubmit.bind(this);
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
     }
 
@@ -57,22 +55,6 @@ class InventoryList extends Component {
         });
     }
 
-    onSubmit = values => {
-        console.log('submit', values);
-
-        if (values.isNew) {
-            this.props.add_item(values, this.props.eventId);
-        }
-        else {
-            values.unitOfMeasuring = values.unitOfMeasuring.id;
-            this.props.edit_item(values, this.props.eventId);
-        }
-
-        this.setState({
-            disabledEdit: false
-        });
-    }
-
     render() {
         const { inventories, event, user, usersInventories } = this.props;
         let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
@@ -105,7 +87,7 @@ class InventoryList extends Component {
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
-                            <span class="icon"><i class="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
+                            <span className="icon"><i className="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
                         </IconButton>
                     }
                         <div className="container">
@@ -128,7 +110,6 @@ class InventoryList extends Component {
                                         inventories={inventories}
                                         isMyEvent={isMyEvent}
                                         disabledEdit={this.state.disabledEdit}
-                                        onSubmit={this.onSubmit}
                                         changeDisableEdit={this.changeDisableEdit}
                                         get_inventories={this.props.get_inventories}
                                         event={event}
@@ -155,8 +136,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
-        add_item: (item, eventId) => dispatch(add_item(item, eventId)),
-        edit_item: (item, eventId) => dispatch(edit_item(item, eventId)),
         get_inventories: (inventories) => dispatch(update_inventories(inventories)),
         get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
         get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
