@@ -10,10 +10,12 @@ import { delete_item, edit_item, add_item, want_to_take } from '../actions/inven
 
 class InventoryItemWrapper extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            showAlreadyGetDetailed: false
+            showAlreadyGetDetailed: false,
+            isEdit: props.isNew,
+            isWillTake: false
         };
 
         this.onAlreadyGet = this.onAlreadyGet.bind(this);
@@ -33,25 +35,23 @@ class InventoryItemWrapper extends Component {
         this.props.delete_item(inventar.id, this.props.eventId);
     }
 
-    markItemAsEdit = inventar => {
-        let updateList = this.props.inventories.items;
-        updateList.find(e => e.id === inventar.id).isEdit = true;
-
-        this.props.get_inventories(updateList);
+    markItemAsEdit = () => {
+        this.setState({
+            isEdit: true
+        });
         this.props.changeDisableEdit(true);
     }
 
-    markItemAsWillTake = inventar => {
-        let updateList = this.props.inventories.items;
-        updateList.find(e => e.id === inventar.id).isWillTake = true;
-        updateList.find(e => e.id === inventar.id).isEdit = true;
-
-        this.props.get_inventories(updateList);
+    markItemAsWillTake = () => {
+        this.setState({
+            isEdit: true,
+            isWillTake: true
+        });
         this.props.changeDisableEdit(true);
     }
     
     onSubmit = values => {
-        if (values.isNew) {
+        if (!values.id) {
             this.props.add_item(values, this.props.eventId);
         }
         else {
@@ -61,17 +61,16 @@ class InventoryItemWrapper extends Component {
             this.props.edit_item(values, this.props.eventId);
         }
 
+        this.setState({
+            isEdit: false
+        })
         this.props.changeDisableEdit(false);
     }
 
     onCancel = inventar => {
-        if (inventar.isNew) {
-            this.deleteItemFromList(inventar);
-            this.props.changeDisableEdit(false);
-            return;
-        }
-
-        this.props.get_inventories_by_event_id(this.props.eventId);
+        this.setState({
+            isEdit: false
+        })
         this.props.changeDisableEdit(false);
     }
 
@@ -83,12 +82,15 @@ class InventoryItemWrapper extends Component {
             quantity: Number(inventar.willTake)
         }
 
-        if (inventar.isWillTake) {
+        if (this.state.isWillTake) {
             this.props.want_to_take(data);
         } else {
             this.props.edit_users_inventory(data);
         }
 
+        this.setState({
+            isEdit: false
+        })
         this.props.changeDisableEdit(false);
     }
 
@@ -109,7 +111,7 @@ class InventoryItemWrapper extends Component {
         }, 0);
         return(
             <div className="row p-1 d-flex align-items-center" key={item.id}>
-            {item.isEdit && isMyEvent && 
+            {this.state.isEdit && isMyEvent && 
                 <OwnerEditItemForm
                     onSubmit={this.onSubmit} 
                     onCancel={this.onCancel}
@@ -118,16 +120,16 @@ class InventoryItemWrapper extends Component {
                     initialValues={item}/>
             }
 
-            {item.isEdit && !isMyEvent &&
+            {this.state.isEdit && !isMyEvent &&
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={alreadyGet - (item.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
+                    alreadyGet={alreadyGet - (this.state.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
                     initialValues={item}
                 />
             }
 
-            {!item.isEdit && isMyEvent &&
+            {!this.state.isEdit && isMyEvent &&
                 <OwnerSeeItem
                     item={item}
                     disabledEdit={disabledEdit}
@@ -138,7 +140,7 @@ class InventoryItemWrapper extends Component {
                     usersInventories={this.props.usersInventories}/>
             }
 
-            {!item.isEdit && !isMyEvent && 
+            {!this.state.isEdit && !isMyEvent && 
                 <VisitorSeeItem 
                     item={item}
                     disabledEdit={disabledEdit}

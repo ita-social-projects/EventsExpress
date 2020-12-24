@@ -15,7 +15,7 @@ class VisitorEditItemForm extends Component {
     minValue = min => value =>
         value && value < min ? `Must be at least ${min}` : undefined
     minValueLimitor = this.minValue(1)
-
+    
     render() {
         const { initialValues, alreadyGet } = this.props;
         return (

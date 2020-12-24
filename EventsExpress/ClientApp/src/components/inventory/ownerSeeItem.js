@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import IconButton from "@material-ui/core/IconButton";
 
 export default class OwnerSeeItem extends Component {
+
     render() {
         const { item, disabledEdit, onAlreadyGet, markItemAsEdit, deleteItemFromList, usersInventories, showAlreadyGetDetailed } = this.props;
         return (
@@ -38,7 +39,7 @@ export default class OwnerSeeItem extends Component {
                         <div className="col col-md-2">
                             <IconButton 
                                 disabled={disabledEdit} 
-                                onClick={markItemAsEdit.bind(this, item)}>
+                                onClick={markItemAsEdit}>
                                 <i className="fa-sm fas fa-pencil-alt text-warning"></i>
                             </IconButton>
                             <IconButton

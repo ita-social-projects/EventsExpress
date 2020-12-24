@@ -15,7 +15,7 @@ class InventoryList extends Component {
         this.state = {
             isOpen: true,
             disabledEdit: false,
-            showAlreadyGetDetailed: false
+            isNew: false
         };
 
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
@@ -32,14 +32,12 @@ class InventoryList extends Component {
             id: '',
             itemName: '',
             needQuantity: 0,
-            unitOfMeasuring: {},
-            isEdit: true,
-            isNew: true
+            unitOfMeasuring: {}
         }];
         
-        this.props.get_inventories(updateList);
         this.setState({
-            disabledEdit: true
+            disabledEdit: true,
+            isNew: true
         });
     }
 
@@ -50,6 +48,12 @@ class InventoryList extends Component {
     }
 
     changeDisableEdit = (value) => {
+        if (!value) {
+            this.setState({
+                isNew: false
+            });
+        }
+
         this.setState({
             disabledEdit: value
         });
@@ -101,6 +105,24 @@ class InventoryList extends Component {
                                 <div className="col col-md-1"></div>
                                 <div className="col col-md-2"></div>
                             </div>
+                            {this.state.isNew &&
+                                <InventoryItemWrapper
+                                    item={{
+                                        itemName: '',
+                                        needQuantity: 0,
+                                        unitOfMeasuring: {}
+                                    }}
+                                    user={user}
+                                    usersInventories={usersInventories}
+                                    inventories={inventories}
+                                    isMyEvent={isMyEvent}
+                                    disabledEdit={this.state.disabledEdit}
+                                    changeDisableEdit={this.changeDisableEdit}
+                                    get_inventories={this.props.get_inventories}
+                                    eventId={this.props.eventId}
+                                    isNew
+                                />
+                            }
                             {updateList.map((item, key) => {
                                 return (
                                     <InventoryItemWrapper
@@ -112,7 +134,6 @@ class InventoryList extends Component {
                                         disabledEdit={this.state.disabledEdit}
                                         changeDisableEdit={this.changeDisableEdit}
                                         get_inventories={this.props.get_inventories}
-                                        event={event}
                                         eventId={this.props.eventId}
                                         key={key}
                                     />

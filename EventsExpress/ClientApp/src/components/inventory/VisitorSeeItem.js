@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 export default class VisitorSeeItem extends Component {
 
     render() {
-        const { item, disabledEdit, onWillNotTake, markItemAsEdit, markItemAsWillTake, usersInventories, user, showAlreadyGetDetailed, onAlreadyGet, alreadyGet } = this.props;
+        const { item, disabledEdit, onWillNotTake, markItemAsEdit, usersInventories, user, showAlreadyGetDetailed, onAlreadyGet, alreadyGet } = this.props;
         return (
             <>
                 {!item.isEdit &&
@@ -44,7 +44,7 @@ export default class VisitorSeeItem extends Component {
                                 <>
                                     <IconButton 
                                         disabled={disabledEdit} 
-                                        onClick={markItemAsEdit.bind(this, item)}>
+                                        onClick={markItemAsEdit}>
                                         <i className="fa-sm fas fa-pencil-alt text-warning"></i>
                                     </IconButton>
                                     <Tooltip title="Will not take" placement="right-start">
@@ -60,7 +60,8 @@ export default class VisitorSeeItem extends Component {
                             {!item.isTaken && item.needQuantity - alreadyGet > 0 &&
                                 <Tooltip title="Will take" placement="right-start">
                                     <IconButton
-                                        onClick={markItemAsWillTake.bind(this, item)}>
+                                        disabled={disabledEdit}
+                                        onClick={this.props.markItemAsWillTake}>
                                         <i className="fa-sm fas fa-plus text-success"></i>
                                     </IconButton>
                                 </Tooltip>
