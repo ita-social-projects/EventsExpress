@@ -7,6 +7,9 @@ import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
+import { RadioGroup } from '@material-ui/core';
+import { Radio } from '@material-ui/core';
+import { FormControlLabel } from '@material-ui/core';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
@@ -18,13 +21,37 @@ import {
     renderDatePicker
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
+import LocationMap from './location-map';
+import Geolocation from 'react-native-geolocation-service';
+import Geocoder from 'react-native-geocoding'; 
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [], checked: false };
+    state = { 
+        imagefile: [],
+        checked: false,
+        radioValue: "",
+        position: [50.4547, 30.5238]
+    };
+
+    getUserGeolocation = () => {
+        Geolocation.getCurrentPosition((position) => {
+            this.setState
+            ({
+                position: [position.coords.latitude, position.coords.longitude]
+            });
+        }, (error) => {
+            console.log(error.code, error.message);
+        }, 
+        {
+            enableHighAccuracy: false,
+            timeout: 10000,
+            maximumAge: 100000
+        });
+    }
 
     handleFile(fieldName, event) {
         event.preventDefault();
@@ -44,6 +71,7 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
+        this.getUserGeolocation();
         let values = this.props.initialValues || this.props.data;
 
         if (this.props.isCreated) {
@@ -80,6 +108,12 @@ class EventForm extends Component {
         this.setState(state => ({
             checked: !state.checked,
         }));
+    }
+
+    handleRadioChange = (event) => {
+        this.setState({
+            radioValue: event.target.value,
+        });
     }
 
     resetForm = () => {
@@ -215,6 +249,18 @@ class EventForm extends Component {
                             placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
+                        <RadioGroup aria-label="quiz" name="quiz" onChange={this.handleRadioChange}>
+                            <FormControlLabel value="Maps" control={<Radio />} label="Maps" />
+                            <FormControlLabel value="Locations" control={<Radio />} label="Locations" />
+                        </RadioGroup>
+                    </div>
+                    {this.state.radioValue == "Maps" && 
+                    <div className="mt-2">
+                        <LocationMap position={this.state.position}/>
+                    </div>
+                    }
+                    {this.state.radioValue == "Locations" && 
+                    <div className="mt-2">
                         <Field onChange={this.props.onChangeCountry}
                             name='countryId'
                             data={countries}
@@ -222,7 +268,8 @@ class EventForm extends Component {
                             component={renderSelectLocationField}
                         />
                     </div>
-                    {values && values.countryId &&
+                    }
+                    {this.state.radioValue == "Locations" && values && values.countryId &&
                         <div className="mt-2">
                             <Field
                                 name='cityId'
