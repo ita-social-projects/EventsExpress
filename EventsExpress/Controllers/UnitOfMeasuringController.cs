@@ -71,7 +71,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable UnitOfMeasuringDto.</response>
         /// <response code="400">If return failed.</response>
         [HttpGet("[action]")]
-        public IActionResult GetAll()
+        public IActionResult All()
         {
             return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
         }
@@ -86,6 +86,25 @@ namespace EventsExpress.Controllers
         public IActionResult GetById(Guid id)
         {
             return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(_unitOfMeasuringService.GetById(id)));
+        }
+
+        /// <summary>
+        /// This method is for delete unit of measuring.
+        /// </summary>
+        /// <param name="id">Required.</param>
+        /// <response code="200">Delete unit of measuring proces success.</response>
+        /// <response code="400">If delete process failed.</response>
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            await _unitOfMeasuringService.Delete(id);
+
+            return Ok();
         }
     }
 }

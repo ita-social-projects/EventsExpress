@@ -57,5 +57,22 @@ namespace EventsExpress.Core.Services
 
             return _mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
         }
+
+        public async Task Delete(Guid id)
+        {
+            var unitOfMeasuring = _context.UnitOfMeasurings.Find(id);
+            if (unitOfMeasuring == null)
+            {
+                throw new EventsExpressException("Not found");
+            }
+
+            var result = Delete(unitOfMeasuring);
+            if (result.Id != id)
+            {
+                throw new EventsExpressException(string.Empty);
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
