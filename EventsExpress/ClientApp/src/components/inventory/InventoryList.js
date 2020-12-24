@@ -27,14 +27,7 @@ class InventoryList extends Component {
         this.props.get_users_inventories_by_event_id(this.props.eventId);
     }
  
-    addItemToList = () => {
-        const updateList = [...this.props.inventories.items, {
-            id: '',
-            itemName: '',
-            needQuantity: 0,
-            unitOfMeasuring: {}
-        }];
-        
+    addItemToList = () => {        
         this.setState({
             disabledEdit: true,
             isNew: true
