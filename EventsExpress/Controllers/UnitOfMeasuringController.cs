@@ -38,11 +38,6 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-
             var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
 
             return Ok(result);
@@ -53,6 +48,8 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="model">Required.</param>
         /// <response code="200">Edit unit of measuring proces success.</response>
+        /// <response code="401">If user isn't authorized.</response>
+        /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
@@ -71,7 +68,10 @@ namespace EventsExpress.Controllers
         /// This method have to return all units of measuring.
         /// </summary>
         /// <returns>All units of measuring.</returns>
-        /// <response code="200" cref="UnitOfMeasuringViewModel">Return all units of measuring.</response>
+        /// <response code="200">Return all units of measuring.</response>
+        /// <response code="401">If user isn't authorized.</response>
+        /// <response code="403">If user's role isn't admin.</response>
+        /// <response code="400">If Return process failed.</response>
         [HttpGet("[action]")]
         public IActionResult All()
         {
@@ -83,7 +83,10 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="id">Required.</param>
         /// <returns>Unit of measuring.</returns>
-        /// <response code="200">Return UnitOfMeasuringDto model.</response>
+        /// <response code="200">Return Unit of measuring by id.</response>
+        /// <response code="401">If user isn't authorized.</response>
+        /// <response code="403">If user's role isn't admin.</response>
+        /// <response code="400">If Return process  failed.</response>
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
@@ -95,6 +98,8 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="id">Required.</param>
         /// <response code="200">Delete unit of measuring proces success.</response>
+        /// <response code="401">If user isn't authorized.</response>
+        /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
