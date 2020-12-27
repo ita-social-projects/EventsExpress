@@ -7,6 +7,7 @@ import {
 export const reducer = (state = initialState.add_category, action) => {
 
     switch (action.type) {
+        
 
         case SET_CATEGORY_ERROR:
             return {

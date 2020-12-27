@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class UnitOfMeasuringController : Controller
     {
@@ -31,14 +31,17 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="model">Required.</param>
         /// <response code="200">Create unit of measuring proces success.</response>
+        /// <response code="401">If user isn't authorized.</response>
+        /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Create process failed.</response>
+
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
 
@@ -68,8 +71,7 @@ namespace EventsExpress.Controllers
         /// This method have to return all units of measuring.
         /// </summary>
         /// <returns>All units of measuring.</returns>
-        /// <response code="200">Return IEnumerable UnitOfMeasuringDto.</response>
-        /// <response code="400">If return failed.</response>
+        /// <response code="200" cref="UnitOfMeasuringViewModel">Return all units of measuring.</response>
         [HttpGet("[action]")]
         public IActionResult All()
         {
@@ -77,7 +79,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to return unit of measuring.
+        /// This method have to return unit of measuring by id.
         /// </summary>
         /// <param name="id">Required.</param>
         /// <returns>Unit of measuring.</returns>

@@ -2,31 +2,52 @@
 //import CategoryAddWrapper from '../../containers/categories/category-add';
 //import CategoryListWrapper from '../../containers/categories/category-list';
 import Spinner from '../spinner';
-
-//import get_categories from '../../actions/category/category-list';
-
+import UnitOfMeasuringListWrapper  from '../../containers/unitsOfMeasuring/unitOfMeasuring-list';
 import { connect } from 'react-redux';
-import { getAllUnitsOfMeasuring } from '../../services/unitOfMeasuringService';
+import get_unitsOfMeasuring from '../../actions/unitsOfMeasuring';
 
-export default class UnitsOfMeasuring extends Component {
+class UnitsOfMeasuring extends Component {
 
-
-    //componentWillMount = () => this.props.get_categories();
+    componentWillMount = () => this.props.get_unitsOfMeasuring();
 
     render() {
-        //const { isPending, data } = this.props.categories;
+        console.log('unit of measuring', this.props)
+        const { unitsOfMeasuring } = this.props;
         return (
+            <>
             <div>
-                <p>
-                    {getAllUnitsOfMeasuring()}
-                    OK
-                </p>
+                <table className="table w-75 m-auto">
+                    <tbody>                        
+                        {/* {!unitsOfMeasuring.isPending ? <UnitOfMeasuringListWrapper data={unitsOfMeasuring.units} /> : null } */}
+                        {<UnitOfMeasuringListWrapper data={unitsOfMeasuring.units}/>}
+                    </tbody>
+                </table> 
+                {/* {unitsOfMeasuring.isPending ? <Spinner/> : null} */}
             </div>
-        )
+                
+            </>
+        );
 
     }
 }
 
-//const mapStateToProps = (state) => ({ categories: state.categories });
+const mapStateToProps = (state) => ({
+    unitsOfMeasuring: state.unitsOfMeasuring
+});
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring())
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UnitsOfMeasuring);
 //
+
+
+
+
+

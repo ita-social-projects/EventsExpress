@@ -42,6 +42,6 @@ export default class InventoryService {
     }
 
     getUnitsOfMeasuring = async () => {
-        return await baseService.getResource('unitofmeasuring/getall');
+        return await baseService.getResource('unitofmeasuring/all');
     }
 }
