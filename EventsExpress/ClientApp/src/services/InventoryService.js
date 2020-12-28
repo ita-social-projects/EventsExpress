@@ -10,25 +10,25 @@ export default class InventoryService {
     }
 
     setItem = async (item, eventId) => {
-        const value = {
+        const data = {
             id: item.id,
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
-            unitOfMeasuring: {id: item.unitOfMeasuring}
+            unitOfMeasuring: item.unitOfMeasuring
         }
-        const res = await baseService.setResource(`inventory/${eventId}/EditInventar`, value);
+        const res = await baseService.setResource(`inventory/${eventId}/EditInventar`, data);
         return !res.ok
             ? { error: await res.text() }
             : res;
     }
 
     setItemToInventory = async (item, eventId) => {
-        const value = {
+        const data = {
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
-            unitOfMeasuring: {id: item.unitOfMeasuring}
+            unitOfMeasuring: item.unitOfMeasuring
         }
-        const res = await baseService.setResource(`inventory/${eventId}/AddInventar`, value);
+        const res = await baseService.setResource(`inventory/${eventId}/AddInventar`, data);
         return !res.ok
             ? { error: await res.text() }
             : res;
@@ -43,5 +43,32 @@ export default class InventoryService {
 
     getUnitsOfMeasuring = async () => {
         return await baseService.getResource('unitofmeasuring/getall');
+    }
+
+    setWantToTake = async (data) => {
+    const res = await baseService.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    getUsersInventories = async (eventId) => {
+        const res = await baseService.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+        return res;
+    }
+
+    setUsersInventoryDelete = async (data) => {
+        data.quantity = 1;
+        const res = await baseService.setResource(`UserEventInventory/Delete`, data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+
+    setUsersInventory = async (data) => {
+        const res = await baseService.setResource(`UserEventInventory/Edit`, data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res; 
     }
 }

@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 
