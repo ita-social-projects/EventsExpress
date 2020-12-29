@@ -1,6 +1,6 @@
 # EventsExpress
 
-[![GitHub license](https://img.shields.io/github/license/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/blob/development/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/stargazers) [![GitHub issues](https://img.shields.io/github/issues/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/issues) ![Azure DevOps releases](https://img.shields.io/azure-devops/release/eventsexpress/46233450-fa01-4466-a42e-edc2a4290086/4/4)
+[![GitHub license](https://img.shields.io/github/license/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/blob/development/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/stargazers) [![GitHub issues](https://img.shields.io/github/issues/EventsExpress/EventsExpress)](https://github.com/EventsExpress/EventsExpress/issues) ![Azure DevOps releases](https://img.shields.io/azure-devops/release/eventsexpress/46233450-fa01-4466-a42e-edc2a4290086/4/4)  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sand0_EventsExpress&metric=alert_status)](https://sonarcloud.io/dashboard?id=sand0_EventsExpress)
 
 > Start as Friends, Go Anywhere! Real Relationships for Singles Worldwide
 
