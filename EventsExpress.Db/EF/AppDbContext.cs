@@ -1,15 +1,15 @@
-﻿using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 
 namespace EventsExpress.Db.EF
 {
@@ -43,6 +43,8 @@ namespace EventsExpress.Db.EF
         public DbSet<Event> Events { get; set; }
 
         public DbSet<EventOwner> EventOwners { get; set; }
+
+        public DbSet<EventLocation> EventLocations { get; set; }
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 

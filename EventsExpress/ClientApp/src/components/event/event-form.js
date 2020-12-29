@@ -21,7 +21,7 @@ import {
     renderDatePicker
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
-import LocationMap from './location-map';
+import LocationMap from './map/location-map';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding'; 
 

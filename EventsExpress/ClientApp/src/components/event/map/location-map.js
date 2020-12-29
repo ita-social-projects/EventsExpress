@@ -6,10 +6,9 @@ import {
     Popup,
     MapConsumer
 } from 'react-leaflet';
+import GeoSearch from "./geosearch";
 import * as Geocoding from 'esri-leaflet-geocoder';
 import {countries} from 'country-data';
-import Geolocation from 'react-native-geolocation-service';
-import Geocoder from 'react-native-geocoding'; 
 
 const mapStyles = {
     width: "100%",
@@ -63,6 +62,7 @@ class LocationMap extends Component {
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
                     />
+                    <GeoSearch />
                     {marker &&
                         <Marker position={marker} 
                             draggable={true}>
