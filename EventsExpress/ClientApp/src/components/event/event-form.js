@@ -18,6 +18,7 @@ import {
     renderDatePicker
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
+import ImageResizer from '../event/image-resizer'
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
@@ -97,6 +98,75 @@ class EventForm extends Component {
         this.resetForm();
     }
 
+    createImage = url => {
+        const image = new Image()
+        image.src = url
+        console.log(image.src)
+        return image;
+    }        
+
+    getRadianAngle(degreeValue) {
+        return (degreeValue * Math.PI) / 180
+    }
+
+    getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
+        const image = this.createImage(imageSrc)        
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+
+        const maxSize = Math.max(image.width, image.height)
+        const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2))
+
+
+        // set each dimensions to double largest dimension to allow for a safe area for the
+        // image to rotate in without being clipped by canvas context
+        canvas.width = safeArea
+        canvas.height = safeArea
+
+        // translate canvas context to a central location on image to allow rotating around the center.
+        ctx.translate(safeArea / 2, safeArea / 2)
+        ctx.rotate(this.getRadianAngle(rotation))
+        ctx.translate(-safeArea / 2, -safeArea / 2)
+
+        // draw rotated image and store data.
+        ctx.drawImage(
+            image,
+            safeArea / 2 - image.width * 0.5,
+            safeArea / 2 - image.height * 0.5
+        )
+        const data = ctx.getImageData(0, 0, safeArea, safeArea)
+
+        // set canvas width to final desired crop size - this will clear existing context
+        canvas.width = pixelCrop.width
+        canvas.height = pixelCrop.height
+
+        // paste generated rotate image with correct offsets for x,y crop values.
+        ctx.putImageData(
+            data,
+            Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
+            Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
+        )
+
+        // As Base64 string
+         return canvas.toDataURL('image/jpeg');
+
+        // As a blob
+        //return new Promise(resolve => {
+        //    canvas.toBlob(file => {
+        //        resolve(URL.createObjectURL(file))
+        //    }, 'image/jpeg')
+        //})
+    }
+
+    cropImage() {
+        const croppedImage = this.getCroppedImg(
+            this.state.imagefile[0].preview,
+            { width: 100, height: 100, x:100, y:100 },
+            0
+        )
+        console.log('donee', { croppedImage })
+    }
+
     render() {
 
         const { countries, form_values, all_categories, data, isCreated } = this.props;
@@ -105,16 +175,31 @@ class EventForm extends Component {
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
-                    <Field
-                        ref={(x) => { this.image = x; }}
-                        id="image-field"
-                        name="image"
-                        component={DropZoneField}
-                        type="file"
-                        imagefile={this.state.imagefile}
-                        handleOnDrop={this.handleOnDrop}
-                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-                    />
+                    {this.state.imagefile.length ? (
+                        <div>
+                            <ImageResizer image={this.state.imagefile[0]} />
+                            <Button
+                                type="button"
+                                color="primary"
+                                disabled={this.props.submitting}
+                                onClick={this.cropImage.bind(this)}
+                                style={{ float: "right" }}
+                            >
+                                Crop
+                            </Button>
+                        </div>
+                    ) : (
+                            <Field
+                                ref={(x) => { this.image = x; }}
+                                id="image-field"
+                                name="image"
+                                component={DropZoneField}
+                                type="file"
+                                imagefile={this.state.imagefile}
+                                handleOnDrop={this.handleOnDrop}
+                                validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
+                            />
+                        )}
                     <Button
                         type="button"
                         color="primary"
