@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {
-    MapContainer,
+    Map,
     TileLayer,
     Marker,
-    Popup,
-    MapConsumer
+    Popup
 } from 'react-leaflet';
-import GeoSearch from "./geosearch";
 import * as Geocoding from 'esri-leaflet-geocoder';
 import {countries} from 'country-data';
+import Search from 'react-leaflet-search';
+import './map.css'
 
 const mapStyles = {
     width: "100%",
@@ -19,8 +19,8 @@ class LocationMap extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPos: null,
-            selectedCoords: null,
+            selectedPos: null,
+            coords: null,
         }
     }
 
@@ -28,7 +28,7 @@ class LocationMap extends Component {
         if (error) {
             return;
         }
-        this.setState({ selectedCoords: result.address });
+        this.setState({ coords: result.address });
     }
 
     geocodeCoords(latlng) {
@@ -39,22 +39,25 @@ class LocationMap extends Component {
     }
 
     handleClick = (e) => {
-        this.setState({ currentPos: e.latlng });
-        this.geocodeCoords(this.state.currentPos);
+        this.setState({ selectedPos: e.latlng });
+        this.geocodeCoords(this.state.selectedPos);
+    }
+
+    handleSearch = (e) => {
+        this.setState({ selectedPos: e.latLng });
     }
 
     render() {
 
-        const marker = this.state.currentPos ? this.state.currentPos : this.props.position;
-        const selectedLocationInfo = this.state.selectedCoords ? countries[this.state.selectedCoords.CountryCode].name : null
-        const userLocationInfo = selectedLocationInfo ? selectedLocationInfo : this.geocodeCoords(this.props.position);
-        const inf = selectedLocationInfo ? selectedLocationInfo : userLocationInfo;
+        const marker = this.state.selectedPos ? this.state.selectedPos : this.props.position;
+        console.log("pos", this.state.selectedPos);
 
         return (
             <div
                 style={{ position: "relative", width: "100%", height: "40vh" }}
                 id="my-map">
-                <MapContainer
+                <Map
+                    id="map"
                     style={mapStyles}
                     center={marker}
                     zoom={10}
@@ -62,25 +65,26 @@ class LocationMap extends Component {
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
                     />
-                    <GeoSearch />
+                    <Search
+                        position="topright"
+                        inputPlaceholder="Enter location"
+                        showMarker={true}
+                        zoom={7}
+                        closeResultsOnClick={false}
+                        openSearchOnLoad={false}
+                        onChange={this.handleSearch}
+                    />
                     {marker &&
                         <Marker position={marker} 
                             draggable={true}>
-                            <Popup position={marker}>
-                                Current location: 
-                                <pre>
-                                    {JSON.stringify(inf, null, 2)}
+                            <Popup position={marker}> 
+                            <pre>
+                                {JSON.stringify(marker, null, 2)}
                                 </pre>
                             </Popup>
                         </Marker>
                     }
-                    <MapConsumer>
-                        {(map) => {
-                            map.on("click", this.handleClick);
-                            return null;
-                        }}
-                    </MapConsumer>
-                </MapContainer>
+                </Map>
             </div>
         );
     }
