@@ -56,7 +56,6 @@ class LocationMap extends Component {
     render() {
 
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.position;
-        console.log("pos", this.state.selectedPos);
 
         return (
             <div

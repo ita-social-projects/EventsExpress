@@ -7,13 +7,9 @@ import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
 import Module from '../helpers';
-import { RadioGroup } from '@material-ui/core';
-import { Radio } from '@material-ui/core';
-import { FormControlLabel } from '@material-ui/core';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
-    renderSelectLocationField,
     renderTextArea,
     renderSelectPeriodicityField,
     renderCheckbox,
@@ -24,6 +20,7 @@ import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding'; 
+import L from 'leaflet'
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
@@ -35,9 +32,8 @@ class EventForm extends Component {
         this.state = { 
             imagefile: [],
             checked: false,
-            radioValue: "",
             position: [50.4547, 30.5238],
-            selectedPos: []
+            selectedPos: null
         };
         this.callbackFunction = this.callbackFunction.bind(this);
     }
@@ -115,21 +111,9 @@ class EventForm extends Component {
         }));
     }
 
-    handleRadioChange = (event) => {
-        this.setState({
-            radioValue: event.target.value,
-        });
-    }
-
     resetForm = () => {
         this.isSaveButtonDisabled = false;
         this.setState({ imagefile: [] });
-    }
-
-    renderLocations = (arr) => {
-        return arr.map((item) => {
-            return <option value={item.id}>{item.name}</option>;
-        });
     }
 
     componentWillMount() {
@@ -138,8 +122,11 @@ class EventForm extends Component {
 
     render() {
 
-        const { countries, form_values, all_categories, data, isCreated } = this.props;
+        const { form_values, all_categories, isCreated } = this.props;
+        var position = L.latLng(this.state.position);
+        var selectedPos = this.state.selectedPos || position;
         let values = form_values || this.props.initialValues;
+        console.log("form", selectedPos.lat);
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
@@ -254,38 +241,18 @@ class EventForm extends Component {
                             placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
-                        <RadioGroup aria-label="quiz" name="quiz" onChange={this.handleRadioChange}>
-                            <FormControlLabel value="Maps" control={<Radio />} label="Maps" />
-                            <FormControlLabel value="Locations" control={<Radio />} label="Locations" />
-                        </RadioGroup>
-                    </div>
-                    {this.state.radioValue == "Maps" && 
-                    <div className="mt-2">
                         <LocationMap 
                             position={this.state.position} 
                             parentCallback = {this.callbackFunction}/>
                     </div>
-                    }
-                    {this.state.radioValue == "Locations" && 
                     <div className="mt-2">
-                        <Field onChange={this.props.onChangeCountry}
-                            name='countryId'
-                            data={countries}
-                            text='Country'
-                            component={renderSelectLocationField}
-                        />
+                        <Field
+                            name="selectedPos"
+                            component={renderTextField}
+                            placeholder={selectedPos}
+                            defaultValue={selectedPos}
+                            hidden={true}/>
                     </div>
-                    }
-                    {this.state.radioValue == "Locations" && values && values.countryId &&
-                        <div className="mt-2">
-                            <Field
-                                name='cityId'
-                                data={this.props.cities}
-                                text='City'
-                                component={renderSelectLocationField}
-                            />
-                        </div>
-                    }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">

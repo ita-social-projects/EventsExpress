@@ -35,6 +35,10 @@ namespace EventsExpress.ViewModels
 
         public bool IsPublic { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public IEnumerable<UserPreviewViewModel> Owners { get; set; }
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }

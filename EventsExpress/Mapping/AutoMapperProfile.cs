@@ -271,6 +271,12 @@ namespace EventsExpress.Mapping
 
             #endregion
 
+            #region LOCATION MAPPING
+            CreateMap<LocationDTO, EventLocation>().ReverseMap();
+            CreateMap<EventDTO, LocationDTO>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            #endregion
+
             #region MESSAGE MAPPING
 
             CreateMap<ChatRoom, UserChatViewModel>()

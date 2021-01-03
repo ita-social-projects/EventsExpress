@@ -46,6 +46,10 @@ namespace EventsExpress.Core.DTOs
 
         public bool IsPublic { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public IEnumerable<CategoryDTO> Categories { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
