@@ -41,10 +41,16 @@ class LocationMap extends Component {
     handleClick = (e) => {
         this.setState({ selectedPos: e.latlng });
         this.geocodeCoords(this.state.selectedPos);
+        this.sendData(e.latlng);
     }
 
     handleSearch = (e) => {
         this.setState({ selectedPos: e.latLng });
+        this.sendData(e.latLng);
+    }
+
+    sendData = (selectedPos) => {
+        this.props.parentCallback(selectedPos);
     }
 
     render() {

@@ -30,12 +30,17 @@ const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { 
-        imagefile: [],
-        checked: false,
-        radioValue: "",
-        position: [50.4547, 30.5238]
-    };
+    constructor(props) {
+        super(props);
+        this.state = { 
+            imagefile: [],
+            checked: false,
+            radioValue: "",
+            position: [50.4547, 30.5238],
+            selectedPos: []
+        };
+        this.callbackFunction = this.callbackFunction.bind(this);
+    }
 
     getUserGeolocation = () => {
         Geolocation.getCurrentPosition((position) => {
@@ -53,11 +58,6 @@ class EventForm extends Component {
         });
     }
 
-    handleFile(fieldName, event) {
-        event.preventDefault();
-        const files = [...event.target.files];
-    }
-
     handleOnDrop = (newImageFile, onChange) => {
         if (newImageFile.length > 0) {
             const imagefile = {
@@ -69,6 +69,11 @@ class EventForm extends Component {
             this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
         }
     };
+
+    callbackFunction = (childData) => {
+        console.log("childData", childData);
+        this.setState({selectedPos: childData})
+    }
 
     componentDidMount = () => {
         this.getUserGeolocation();
@@ -256,7 +261,9 @@ class EventForm extends Component {
                     </div>
                     {this.state.radioValue == "Maps" && 
                     <div className="mt-2">
-                        <LocationMap position={this.state.position}/>
+                        <LocationMap 
+                            position={this.state.position} 
+                            parentCallback = {this.callbackFunction}/>
                     </div>
                     }
                     {this.state.radioValue == "Locations" && 
