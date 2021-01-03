@@ -32,14 +32,14 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoService,
-            //ILocationService locationService,
+            ILocationService locationService,
             IAuthService authService,
             IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService)
             : base(context, mapper)
         {
             _photoService = photoService;
-            //_locationService = locationService;
+            _locationService = locationService;
             _mediator = mediator;
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
@@ -159,11 +159,11 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            //var locationDTO = _mapper.Map<EventDTO, LocationDTO>(eventDTO);
-            //var locationId = await _locationService.Create(locationDTO);
+            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(eventDTO);
+            var locationId = await _locationService.Create(locationDTO);
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-            //ev.EventLocationId = locationId;
+            ev.EventLocationId = locationId;
             ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)

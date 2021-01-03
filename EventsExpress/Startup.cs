@@ -123,6 +123,7 @@ namespace EventsExpress
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
 
