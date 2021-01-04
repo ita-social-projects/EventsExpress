@@ -26,13 +26,13 @@ jobs:
         dotnet-version: 3.1.301
     - name: Restore dependencies
       run: dotnet restore --interactive
-      working-directory: EventExpress
+      working-directory: EventsExpress
     - name: Build
       run: dotnet build --configuration Release
-      working-directory: EventExpress/EventExpress
+      working-directory: EventsExpress/EventsExpress
     - name: Test
       run: dotnet test --verbosity normal 
-      working-directory: EventExpress/EventExpress.Tests
+      working-directory: EventsExpress/EventsExpress.Tests
   sonarscan:
     needs: [build]
     runs-on: windows-latest
@@ -54,6 +54,6 @@ jobs:
         sonarProjectName:  EventsExpress
         # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
         sonarOrganization: ita-social-projects
-        dotnetBuildArguments: ./EventExpress 
-        dotnetTestArguments: ./EventExpress/EventExpress.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+        dotnetBuildArguments: ./EventsExpress 
+        dotnetTestArguments: ./EventsExpress/EventsExpress.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
         sonarBeginArguments:: begin /o:events-express /k:ita-social-projects-events-express /d:sonar.cs.opencover.reportsPaths="src/ApplicationTest/coverage.opencover.xml" /d:sonar.host.url=https://sonarcloud.io 
