@@ -32,7 +32,7 @@ class EventForm extends Component {
         const files = [...event.target.files];
     }
 
-    handleOnDrop = (newImageFile, onChange) => {
+    handleOnDrop = (newImageFile, onChange) => {        
         if (newImageFile.length > 0) {
             const imagefile = {
                 file: newImageFile[0],
@@ -41,7 +41,7 @@ class EventForm extends Component {
                 size: 1
             };
             this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
-        }
+        }        
     };
 
     componentDidMount = () => {
@@ -65,6 +65,13 @@ class EventForm extends Component {
         }
     }
 
+    setCroppedImage = (image) => {        
+        this.setState({ cropped: true });                        
+        let file = new File([image], "fileName");                       
+        this.setState({ imagefile: [{ file: file, name: "image.jpg", preview: image, size: 1 }] });        
+        console.log(this.state.imagefile[0]);        
+    }
+
     componentWillUnmount() {
         this.resetForm();
     }
@@ -85,7 +92,7 @@ class EventForm extends Component {
 
     resetForm = () => {
         this.isSaveButtonDisabled = false;
-        this.setState({ imagefile: [] });
+        this.setState({ imagefile: [], cropped: false });
     }
 
     renderLocations = (arr) => {
@@ -103,12 +110,15 @@ class EventForm extends Component {
         const { countries, form_values, all_categories, data, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
 
-        return (
+        return (            
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     {this.state.imagefile.length && !this.state.cropped ? (
                         <div>
-                            <ImageResizer image={this.state.imagefile[0]} />                            
+                            <ImageResizer
+                                image={this.state.imagefile[0]}
+                                parentCallback={this.setCroppedImage.bind(this)}
+                            />                            
                         </div>
                     ) : (
                             <Field
@@ -130,7 +140,7 @@ class EventForm extends Component {
                         style={{ float: "right" }}
                     >
                         Clear
-                    </Button>
+                    </Button>                    
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}

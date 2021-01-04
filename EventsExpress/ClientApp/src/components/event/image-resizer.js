@@ -16,8 +16,8 @@ class ImageResizer extends Component {
         this.setState({ crop })
     }
 
-    onCropComplete = (croppedArea, croppedAreaPixels) => {        
-        this.state.croppedAreaPixels = croppedAreaPixels
+    onCropComplete = (croppedArea, croppedAreaPixels) => {
+        this.setState({ croppedAreaPixels: croppedAreaPixels })
     }
 
     onZoomChange = zoom => {
@@ -71,7 +71,7 @@ class ImageResizer extends Component {
 
         // As Base64 string
         //return canvas.toDataURL('image/jpeg');
-
+        
         // As a blob
         return new Promise(resolve => {
             canvas.toBlob(file => {
@@ -84,9 +84,12 @@ class ImageResizer extends Component {
         const croppedImage = await this.getCroppedImg(
             this.props.image.preview,
             this.state.croppedAreaPixels
-        )
-        console.log('donee', { croppedImage })
-        this.state.croppedImage = croppedImage
+        )                
+        this.sendData(croppedImage);        
+    }
+
+    sendData = (image) => {
+        this.props.parentCallback(image);
     }
 
     render() {        
@@ -123,8 +126,7 @@ class ImageResizer extends Component {
                             Crop
                         </Button>
                     </div>
-                </div>                
-                <img src={this.state.croppedImage} />
+                </div>                                
             </div>
         )
     }
