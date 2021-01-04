@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+s# This is a basic workflow to help you get started with Actions
 
 name: CI
 on:
@@ -51,7 +51,7 @@ jobs:
         # The key of the SonarQube project
         sonarProjectKey: ita-social-projects-events-express
         # The name of the SonarQube project
-        sonarProjectName:  events-express
+        sonarProjectName:  EventsExpress
         # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
         sonarOrganization: ita-social-projects
         dotnetBuildArguments: ./EventExpress 
