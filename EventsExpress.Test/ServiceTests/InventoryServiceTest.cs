@@ -73,7 +73,6 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = Guid.NewGuid(),
-                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "...",
@@ -87,7 +86,6 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = eventId,
-                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
