@@ -131,21 +131,12 @@ namespace EventsExpress.Mapping
                             UnitOfMeasuringId = x.UnitOfMeasuring.Id,
                         })));
 
+            //TODO Location to EventPreviewViewModel
             CreateMap<EventDTO, EventPreviewViewModel>()
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
-                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
-                {
-                    Id = src.City.Country.Id,
-                    Name = src.City.Country.Name,
-                }))
-                .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
-                {
-                    Id = src.City.Id,
-                    Name = src.City.Name,
-                }))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                    new UserPreviewViewModel
@@ -156,6 +147,7 @@ namespace EventsExpress.Mapping
                        Username = x.Name ?? x.Email.Substring(0, x.Email.IndexOf("@", StringComparison.Ordinal)),
                    })));
 
+            //TODO Location to EventViewModel
             CreateMap<EventDTO, EventViewModel>()
                 .ForMember(
                     dest => dest.PhotoUrl,
@@ -169,16 +161,6 @@ namespace EventsExpress.Mapping
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
                         UserStatusEvent = x.UserStatusEvent,
                     })))
-                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
-                {
-                    Id = src.City.Country.Id,
-                    Name = src.City.Country.Name,
-                }))
-                .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
-                {
-                    Id = src.City.Id,
-                    Name = src.City.Name,
-                }))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                  new UserPreviewViewModel
                  {
@@ -213,8 +195,8 @@ namespace EventsExpress.Mapping
                             },
                         })));
 
+            //TODO Location to EventDTO
             CreateMap<EventViewModel, EventDTO>()
-                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))

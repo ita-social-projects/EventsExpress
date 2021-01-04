@@ -26,11 +26,6 @@ namespace EventsExpress.Db.Entities
         public bool IsPublic { get; set; }
 
         [Track]
-        public Guid CityId { get; set; }
-
-        public virtual City City { get; set; }
-
-        [Track]
         public int MaxParticipants { get; set; }
 
         [Track]

@@ -12,7 +12,7 @@ namespace EventsExpress.Controllers
     [Route("api/[controller]")]
     public class LocationsController : ControllerBase
     {
-        private readonly ICountryService _countryService;
+        /*private readonly ICountryService _countryService;
         private readonly ICityService _cityService;
 
         public LocationsController(
@@ -134,6 +134,6 @@ namespace EventsExpress.Controllers
             }
 
             return BadRequest();
-        }
+        }*/
     }
 }

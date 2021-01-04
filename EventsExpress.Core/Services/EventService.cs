@@ -238,7 +238,7 @@ namespace EventsExpress.Core.Services
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
-            ev.CityId = e.CityId;
+            //TODO Edit EventLocation
             ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
@@ -287,8 +287,6 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
                         .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(o => o.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
@@ -305,8 +303,6 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
                         .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
@@ -315,9 +311,7 @@ namespace EventsExpress.Core.Services
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
-                    || x.Description.Contains(model.KeyWord)
-                    || x.City.Name.Contains(model.KeyWord)
-                    || x.City.Country.Name.Contains(model.KeyWord))
+                    || x.Description.Contains(model.KeyWord))
                 : events;
 
             events = (model.DateFrom != DateTime.MinValue)
@@ -443,8 +437,6 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
                         .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)

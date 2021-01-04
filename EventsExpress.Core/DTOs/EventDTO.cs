@@ -40,10 +40,6 @@ namespace EventsExpress.Core.DTOs
 
         public IEnumerable<User> Owners { get; set; }
 
-        public Guid CityId { get; set; }
-
-        public City City { get; set; }
-
         public bool IsPublic { get; set; }
 
         public double Latitude { get; set; }

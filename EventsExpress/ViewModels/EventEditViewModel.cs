@@ -31,10 +31,6 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public Guid CityId { get; set; }
-
-        public Guid CountryId { get; set; }
-
         public bool IsPublic { get; set; }
 
         public double Latitude { get; set; }
