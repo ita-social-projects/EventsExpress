@@ -3,9 +3,9 @@ s# This is a basic workflow to help you get started with Actions
 name: CI
 on:
   push:
-    branches: [ development]
+    branches: [ development ]
   pull_request:
-    branches: [ development]
+    branches: [ development ]
 env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
