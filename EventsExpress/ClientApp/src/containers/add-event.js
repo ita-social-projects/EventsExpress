@@ -41,7 +41,6 @@ class AddEventWrapper extends Component {
     }
 
     render() {
-        console.log("state", this.props);
         if (this.props.add_event_status.isEventSuccess) {
             this.setState({ open: true });
         }

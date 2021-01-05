@@ -107,8 +107,9 @@ namespace EventsExpress
             #endregion
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration
-                    .GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    x => x.UseNetTopologySuite()));
 
             #region Configure our services...
             services.AddScoped<IAuthService, AuthService>();

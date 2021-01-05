@@ -35,7 +35,7 @@ class EventForm extends Component {
             position: [50.4547, 30.5238],
             selectedPos: null
         };
-        this.callbackFunction = this.callbackFunction.bind(this);
+        this.setSelectedPosition = this.setSelectedPosition.bind(this);
     }
 
     getUserGeolocation = () => {
@@ -66,7 +66,7 @@ class EventForm extends Component {
         }
     };
 
-    callbackFunction = (childData) => {
+    setSelectedPosition = (childData) => {
         console.log("childData", childData);
         this.setState({selectedPos: childData})
     }
@@ -126,7 +126,6 @@ class EventForm extends Component {
         var position = L.latLng(this.state.position);
         var selectedPos = this.state.selectedPos || position;
         let values = form_values || this.props.initialValues;
-        console.log("form", selectedPos.lat);
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
@@ -243,7 +242,7 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <LocationMap 
                             position={this.state.position} 
-                            parentCallback = {this.callbackFunction}/>
+                            parentCallback = {this.setSelectedPosition}/>
                     </div>
                     <div className="mt-2">
                         <Field

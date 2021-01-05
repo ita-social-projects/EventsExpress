@@ -1,6 +1,7 @@
 ﻿using System;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Enums;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Entities
 {
@@ -8,10 +9,7 @@ namespace EventsExpress.Db.Entities
     public class EventLocation : BaseEntity
     {
         [Track]
-        public double Latitude { get; set; }
-
-        [Track]
-        public double Longitude { get; set; }
+        public Point Point { get; set; }
 
         [Track]
         public string Desc { get; set; }

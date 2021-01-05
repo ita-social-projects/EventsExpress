@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class DeleteCityCountry : Migration
+    public partial class ImplementEventLocation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,10 +25,56 @@ namespace EventsExpress.Db.Migrations
             migrationBuilder.DropColumn(
                 name: "CityId",
                 table: "Events");
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "EventLocationId",
+                table: "Events",
+                nullable: true);
+
+            migrationBuilder.CreateTable(
+                name: "EventLocations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Point = table.Column<Point>(nullable: true),
+                    Desc = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventLocations", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_EventLocationId",
+                table: "Events",
+                column: "EventLocationId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Events_EventLocations_EventLocationId",
+                table: "Events",
+                column: "EventLocationId",
+                principalTable: "EventLocations",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Events_EventLocations_EventLocationId",
+                table: "Events");
+
+            migrationBuilder.DropTable(
+                name: "EventLocations");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Events_EventLocationId",
+                table: "Events");
+
+            migrationBuilder.DropColumn(
+                name: "EventLocationId",
+                table: "Events");
+
             migrationBuilder.AddColumn<Guid>(
                 name: "CityId",
                 table: "Events",
