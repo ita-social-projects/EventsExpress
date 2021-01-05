@@ -66,10 +66,10 @@ namespace EventsExpress.Core.Services
             }
 
             var result = Delete(category);
-            if (result.Id != id)
-            {
-                throw new EventsExpressException(string.Empty);
-            }
+            //if (result.Id != id)
+            //{
+            //    throw new EventsExpressException(string.Empty);
+            //}
 
             await _context.SaveChangesAsync();
         }

@@ -1,0 +1,94 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.left-sidebar {
+    height: 100%; 
+    position: fixed;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    background-color: rgb(255, 255, 255);
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.left-sidebar-opened{
+    width: 15em;
+}
+
+.left-sidebar-closed{
+    width: 0;
+}
+
+#open-close-zone{
+    position: fixed;
+    height: 100%;
+    z-index: 100;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+    #open-close-zone.left-sidebar-opened {
+        width: 100%;
+        padding-left: 15em;
+        background-color: rgba(0, 0, 0, 0.75)
+    }
+
+    #open-close-zone.left-sidebar-closed {
+        width: auto;
+    }
+
+.open-close-btn {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 5px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+    .open-close-btn:hover{
+        color: white;
+    }
+ 
+
+    .left-sidebar ul li .link {
+        padding: 10px;
+        font-size: 1.1em;
+        color: rgba(0, 0, 0, 0.75);;
+        display: block;
+    }
+
+    .left-sidebar ul li .link:hover {
+        color: rgb(0, 0, 0);
+        background: #fff;
+        font-weight: 550;
+        border-bottom: 3px solid rgb(63, 81, 181);
+        transition: 0.1s;
+    }
+
+
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    
+}
+
+@media (min-width: 768px) {
+    #open-close-zone {
+        display: none !important;
+    }
+
+    .left-sidebar {
+        width: 15em !important;
+    }
+
+    #main {
+        padding-left: 17em !important;
+    }
+}

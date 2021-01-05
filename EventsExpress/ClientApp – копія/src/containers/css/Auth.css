@@ -1,0 +1,50 @@
+﻿.btnFacebook {
+    max-width: 118px;
+    min-width: 118px;
+    height: 48px;
+    border: 0px transparent;
+    border-radius: 50px;
+    background: #3b5998;
+    color: white;
+    text-align: center;
+    margin: 0px 5px;
+    padding: 0px 18px;
+    display: inline-block;
+}
+
+.btnGoogle {
+    background: white;
+    border: 0px transparent;
+    border-radius: 25px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.6);
+    color: grey;
+    display: inline-block;
+    height: 48px;
+    font-weight: 600;
+    margin: 0px 5px;
+    max-width: 118px;
+    min-width: 118px;
+    padding: 0px 5px;
+    text-align: center;
+}
+
+.btnFacebook:hover {
+    background: #3b5998;
+    opacity: 0.6;
+}
+
+.btnGoogle:hover {
+    opacity: 0.6;
+}
+
+.fa-google {
+    color: #3b5998;
+    margin-right: 8px;
+}
+
+@media only screen and (max-width: 399px) {
+    .btnFacebook,
+    .btnGoogle {
+        width: 100%;
+    }
+}

@@ -1,0 +1,141 @@
+.custom-input {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+.custom-input:active, :hover, :focus {
+    outline: 0;
+    outline-offset: 0;
+}
+
+.MuiCheckbox-colorSecondary.Mui-checked {
+    color: grey !important;
+}
+
+.pic-container {
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.pic {
+    max-width: 400px;
+    max-height: 300px;
+    display: block;
+}
+
+.pic-container.pic-xs {
+    width: 50px;
+    height: 50px;
+}
+
+.pic-container.pic-small {
+    width: 70px;
+    height: 70px;
+}
+
+.pic-container.pic-medium {
+    width: 150px;
+    height: 150px;
+}
+
+.pic-container.pic-large {
+    width: 250px;
+    height: 250px;
+}
+
+
+.pic-container.pic-xl {
+    width: 350px;
+    height: 350px;
+}
+
+.pic-container.pic-circle {
+    border-radius: 50%;
+}
+
+.pic-overlay {
+    background-color: #ccc;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pic-container:hover .pic-overlay {
+    top: -100%;
+}
+
+.pic-overlay a {
+    display: block;
+    padding: 10px;
+}
+
+.pic-xs .pic-overlay a {
+    padding: 5px;
+}
+
+.pic-overlay .fa-window-close-o {
+    color: red;
+}
+
+.pic-overlay .fa-pencil-square-o {
+    color: blue;
+    font-size: 40px;
+}
+
+.pic-medium .pic-overlay a i {
+    font-size: 20px;
+}
+
+.pic-large .pic-overlay a i {
+    font-size: 35px;
+}
+
+.pic-xl .pic-overlay a i {
+    font-size: 45px;
+}
+
+
+.profile-page{
+    background: #fff;
+    opacity: 0.9;
+    border-radius: 25px;
+    padding: 10px;
+    font-size: 18px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#imgupload{
+    display: none;
+}
+#OpenImgUpload{
+    border: none;
+    font-size: 25px;
+}
+
+.select-style {
+    border: 1px solid #ccc;
+    width: 120px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}

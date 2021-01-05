@@ -81,6 +81,17 @@ namespace EventsExpress.Db.EF
             // user config
             builder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
+            //
+            builder.Entity<UnitOfMeasuring>()
+                .Property(u => u.IsDeleted).HasDefaultValue(false);
+
+            builder.Entity<UnitOfMeasuring>()
+                .HasIndex(u => new { u.UnitName, u.ShortName}).IsUnique();
+
+            builder.Entity<UnitOfMeasuring>().HasQueryFilter(p => !p.IsDeleted);
+            //modelBuilder.Entity<Book>().HasQueryFilter(b => !b.IsDeleted);
+            //builder.Entity<UnitOfMeasuring>()
+            //    .HasIndex(u => new { u.UnitName, u.ShortName }).IsUnique().HasFilter(u =>)
 
             // user-event many-to-many configs
             // user as visitor

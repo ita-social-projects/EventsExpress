@@ -19,7 +19,7 @@ class CategoryEdit extends Component {
         this.props.callback({name: this.props.newName});
     }
 
-    renderError() {
+    renderError() {        
         if(!this.props.message){
             return null;
         }

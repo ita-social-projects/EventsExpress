@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.ModelBinders;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,11 @@ namespace EventsExpress.Controllers
 
             return Ok(result);
         }
-
+        //public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
+        //{
+        //    await _unitOfMeasuringService.Create(model.UnitName, model.ShortName);
+        //    return Ok();
+        //}
         /// <summary>
         /// This method is for edit unit of measuring.
         /// </summary>
