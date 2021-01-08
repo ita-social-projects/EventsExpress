@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210104135616_AddIsDeletedColumnUnitOfMeasuring")]
-    partial class AddIsDeletedColumnUnitOfMeasuring
+    [Migration("20210106132938_SoftDeleteForUnitOfMeasuring")]
+    partial class SoftDeleteForUnitOfMeasuring
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -513,17 +513,19 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UnitName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UnitName", "ShortName")
+                        .IsUnique()
+                        .HasFilter("IsDeleted = 0");
 
                     b.ToTable("UnitOfMeasurings");
                 });

@@ -5,11 +5,15 @@ import { Field, reduxForm, formValueSelector } from "redux-form";
 import { renderErrorMessage, renderTextField } from '../helpers/helpers';
 //import AwesomeAlert from 'react-native-awesome-alerts';
 import IconButton from "@material-ui/core/IconButton";
-import { Alert } from '@material-ui/lab';
+// import { Alert } from '@material-ui/lab';
 
 const divStyle = {
     width:"90wh"
   };
+const dSt={
+    // padding:"-20px",
+    marginLeft:"0"
+} 
 
 const ShowError=(props)=>{
     return(
@@ -164,9 +168,10 @@ export default class UnitOfMeasuringEdit extends Component {
         return <>
         {/* className="align-middle align-items-stretch" width="20%" */}
             {/* <td colSpan="3" className="align-middle" width="75%"> */}
-            <td colSpan="3" className="align-middle" width="43%">
+            <td colSpan="3"  className="align-middle">
                 <form className="w-100" id="save-form" onSubmit={this.handleSubmit}>
-                    <div style={divStyle} className="d-flex flex justify-content-around ">                       
+                    <div style={divStyle} className="d-flex flex justify-content-around ">  
+                                     
                         <Field
                             className="form-control"
                             autoFocus
@@ -178,14 +183,14 @@ export default class UnitOfMeasuringEdit extends Component {
                         />
                         {this.state.unitError?
                         <ShowError error={this.state.unitError}/>:
-                                            null}
+                                            <div></div>}
                         
                            
                         {/* <input aria-invalid="false" 
                         class="MuiInputBase-input MuiInput-input" 
                         name="unitName" placeholder="Unit name" 
                         type="text" value={this.props.item.unitName}></input> */}
-
+                        
                          <Field                            
                             className="form-control"
                             // autoFocus
@@ -202,8 +207,9 @@ export default class UnitOfMeasuringEdit extends Component {
                         {/* {this.state.shortError}     */}
                         {this.state.shortError?
                         <ShowError error={this.state.shortError}/>:
-                                            null}
+                        <div></div>}
                         
+                       
                     </div>
                 </form>
                 
@@ -225,7 +231,7 @@ export default class UnitOfMeasuringEdit extends Component {
                     </IconButton>
             </div>
             </td>
-            <Alert severity="error">This is an error alert — check it out!</Alert>
+            {/* <Alert severity="error">This is an error alert — check it out!</Alert> */}
                 {/* </div>  */}
                 
                 {/* <Alert iconMapping={{ success: <CheckCircleOutlineIcon fontSize="inherit" /> }}>

@@ -91,8 +91,12 @@ class UnitOfMeasuringItemWrapper extends Component {
         //     this.props.delete_unitOfMeasuring(id);
         // }
         confirmAlert({
-            title: 'Deleting Unit',
-            message: `Do you really want to remove this Unit Of Measuring: Unit name is ${unitName} Short name is ${shortName}`,
+            title: 'Do you really want to remove this Unit Of Measuring?',
+            // message: `Unit name is ${unitName} ${<br/>} Short name is ${shortName}`,
+            message:<div>
+            Unit name is {unitName}<br/>
+            Short name is {shortName}
+            </div>,
             buttons: [
               {
                 label: 'Yes',
