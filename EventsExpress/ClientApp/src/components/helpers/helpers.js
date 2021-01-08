@@ -371,6 +371,24 @@ export const renderErrorMessage = (responseData, key) => {
         }
     }
 
+export const buildValidationState = (responseData) => {
+    let response;
+    response = JSON.parse(responseData)["errors"];
+    let result = {};
+    for (const [key, value] of Object.entries(response)) {
+        if(key == "")
+        {
+            result = {...result, _error: value}
+        }
+        else
+        {
+            result = {...result, [key]: value}
+        }
+    }
+    return result;
+}
+    
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const asyncValidate = (values) => {

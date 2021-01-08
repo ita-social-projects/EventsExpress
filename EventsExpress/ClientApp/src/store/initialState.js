@@ -27,7 +27,6 @@ const initialState = {
         data: []
     },
     login: {
-        isLoginPending: false,
         isLoginSuccess: false,
         loginError: null
     },
