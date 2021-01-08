@@ -15,7 +15,6 @@ export const reducer = (state = initialState.add_category, action) => {
             });
 
         case SET_CATEGORY_DELETE_SUCCESS:
-            console.log("delete");
             return Object.assign({}, state, {
                 isCategoryDeleteSuccess: action.isCategoryDeleteSuccess
             });

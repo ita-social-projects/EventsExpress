@@ -7,12 +7,6 @@ export const GET_UNITS_OF_MEASURING_SUCCESS="GET_UNITS_OF_MEASURING_SUCCESS";
 export const SET_UNITS_OF_MEASURING_ERROR="SET_UNITS_OF_MEASURING_ERROR";
 
 export default function get_unitsOfMeasuring() {
-    // return dispatch => {
-    //     const res = api_serv.getUnitsOfMeasuring();
-    //     res.then(response => {
-    //         dispatch(getUnitsOfMeasuring(response))
-    //     });
-    // }
     return dispatch => {
         dispatch(setUnitOfMeasuringPending(true));
   

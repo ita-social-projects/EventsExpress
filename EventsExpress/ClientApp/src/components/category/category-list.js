@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import CategoryItemWrapper from '../../containers/categories/category-item';
 
-
 export default class CategoryList extends Component {
     
     renderItems = arr => arr.map(item => <CategoryItemWrapper

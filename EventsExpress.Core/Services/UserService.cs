@@ -247,6 +247,7 @@ namespace EventsExpress.Core.Services
             var user = _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.RefreshTokens)
+                .AsNoTracking()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
 
             return _mapper.Map<UserDTO>(user);
