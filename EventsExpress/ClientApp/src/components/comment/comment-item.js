@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import './Comment.css';
 import { getTimeDifferenceFromNull } from '../helpers/TimeHelper';
+import CustomAvatar from '../avatar/custom-avatar';
 
 export default class commentItem extends Component {
 
@@ -35,9 +36,9 @@ export default class commentItem extends Component {
                         </div>
                         {(user === userId) &&
                             <div className="photo-container">
-                                <Avatar
-                                    alt="Avatar"
-                                    src={userPhoto}
+                                <CustomAvatar
+                                    photoUrl={userPhoto}
+                                    name={userName}
                                 />
                                 <h1 className="text-secondary comment-text"> {getTimeDifferenceFromNull(date)}</h1>
                             </div>
