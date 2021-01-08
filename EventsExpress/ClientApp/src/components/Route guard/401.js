@@ -15,7 +15,6 @@ import { setCountryError } from '../../actions/countries'
 import { setCategoryError } from '../../actions/category/add-category'
 import { getUsersError } from '../../actions/users'
 import { getEventError } from '../../actions/event-item-view'
-import { set2CommentError } from '../../actions/add-comment'
 import { set1CommentError } from '../../actions/comment-list'
 import { set3CommentError } from '../../actions/delete-comment'
 import { setRolesError } from '../../actions/roles'
@@ -60,7 +59,6 @@ const mapDispatchToProps = (dispatch) => {
            dispatch(getUsersError(false));
            dispatch(getEventError(false));
            dispatch(setAvatarError(false));
-           dispatch(set2CommentError(null));
            dispatch(set1CommentError(false));
            dispatch(set3CommentError(null));
            dispatch(setRolesError(false));

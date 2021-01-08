@@ -12,6 +12,7 @@ import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
+import Modalwind2 from '../recoverPassword/modalwind2';
 
 function TabContainer(props) {
   return (
@@ -77,6 +78,9 @@ function ModalWind(props) {
             </TabContainer>
           )}
 
+          <div className="text-center">
+            <Modalwind2 />
+          </div>
           <Button fullWidth onClick={handleClose} color="primary">
             Cancel
           </Button>
