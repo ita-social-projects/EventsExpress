@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.Services
 {
@@ -35,8 +36,7 @@ namespace EventsExpress.Core.Services
             var location = _context.EventLocations
                 .Find(locationDTO.Id);
 
-            location.Latitude = locationDTO.Latitude;
-            location.Longitude = locationDTO.Longitude;
+            location.Point = locationDTO.Point;
 
             await _context.SaveChangesAsync();
 
@@ -45,5 +45,15 @@ namespace EventsExpress.Core.Services
 
         public LocationDTO LocationById(Guid locationId) =>
             _mapper.Map<LocationDTO>(_context.EventLocations.Find(locationId));
+
+        public LocationDTO LocationByPoint(Point point)
+        {
+            var locationDTO = _mapper.Map<LocationDTO>(_context.EventLocations
+                .Where(e =>
+                    e.Point.X == point.X &&
+                    e.Point.Y == point.Y)
+                .FirstOrDefault());
+            return locationDTO;
+        }
     }
 }

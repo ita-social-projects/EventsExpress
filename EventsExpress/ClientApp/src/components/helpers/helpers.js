@@ -44,7 +44,7 @@ export const validate = values => {
         'UserName',
         'itemName',
         'needQuantity',
-        'unitOfMeasuring'
+        'unitOfMeasuring',
     ];
 
     requiredFields.forEach(field => {
@@ -88,6 +88,10 @@ export const validate = values => {
             errors.inventories = inventoriesArrayErrors;
         }
     }  
+
+    if (!values.selectedPos || values.selectedPos == ""){
+        errors.selectedPos = "Required";
+    }
 
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;

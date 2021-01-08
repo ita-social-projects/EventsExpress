@@ -249,10 +249,10 @@ export default class EventItemView extends Component {
             dateTo,
             description,
             isPublic,
+            latitude,
+            longitude,
             maxParticipants,
             visitors,
-            country,
-            city,
             owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
@@ -310,7 +310,7 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <span>{country.name} {city.name}</span>
+                                <span>{latitude} {longitude}</span>
                                 <br />
                                 {categories_list}
                             </div>

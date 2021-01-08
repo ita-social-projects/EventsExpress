@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.IServices
 {
@@ -13,5 +14,7 @@ namespace EventsExpress.Core.IServices
         Task<Guid> Edit(LocationDTO locationDTO);
 
         LocationDTO LocationById(Guid locationId);
+
+        LocationDTO LocationByPoint(Point point);
     }
 }

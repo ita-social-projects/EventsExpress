@@ -41,21 +41,18 @@ class LocationMap extends Component {
     handleClick = (e) => {
         this.setState({ selectedPos: e.latlng });
         this.geocodeCoords(this.state.selectedPos);
-        this.sendData(e.latlng);
+        this.props.input.onChange(e.latlng);
     }
 
     handleSearch = (e) => {
         this.setState({ selectedPos: e.latLng });
-        this.sendData(e.latLng);
-    }
-
-    sendData = (selectedPos) => {
-        this.props.parentCallback(selectedPos);
+        this.props.input.onChange(e.latLng);
     }
 
     render() {
 
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.position;
+        console.log(this.props);
 
         return (
             <div
@@ -83,8 +80,8 @@ class LocationMap extends Component {
                         <Marker position={marker} 
                             draggable={true}>
                             <Popup position={marker}> 
-                            <pre>
-                                {JSON.stringify(marker, null, 2)}
+                                <pre>
+                                    {JSON.stringify(marker, null, 2)}
                                 </pre>
                             </Popup>
                         </Marker>

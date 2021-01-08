@@ -79,9 +79,10 @@ export default class Event extends Component {
             categories,
             countVisitor,
             isBlocked,
+            latitude,
+            longitude,
             owners
         } = this.props.item;
-        const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
         const { anchorEl } = this.state;
 
@@ -180,7 +181,7 @@ export default class Event extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             <div className='mb-2'>
-                                {`${city.name}, ${country.name}`}
+                                {`${latitude}, ${longitude}`}
                             </div>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}

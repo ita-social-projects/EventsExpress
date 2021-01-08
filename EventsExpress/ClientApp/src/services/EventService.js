@@ -41,7 +41,7 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
-        if(data.selectedPos) {
+        if (data.selectedPos) {
             file.append('Latitude', data.selectedPos.lat);
             file.append('Longitude', data.selectedPos.lng);
         }

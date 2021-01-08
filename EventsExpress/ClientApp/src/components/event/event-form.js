@@ -18,6 +18,7 @@ import {
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
+import RenderLocation from './map/render-location';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding'; 
 import L from 'leaflet'
@@ -32,10 +33,8 @@ class EventForm extends Component {
         this.state = { 
             imagefile: [],
             checked: false,
-            position: [50.4547, 30.5238],
-            selectedPos: null
+            position: [50.4547, 30.5238]
         };
-        this.setSelectedPosition = this.setSelectedPosition.bind(this);
     }
 
     getUserGeolocation = () => {
@@ -65,11 +64,6 @@ class EventForm extends Component {
             this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
         }
     };
-
-    setSelectedPosition = (childData) => {
-        console.log("childData", childData);
-        this.setState({selectedPos: childData})
-    }
 
     componentDidMount = () => {
         this.getUserGeolocation();
@@ -123,9 +117,8 @@ class EventForm extends Component {
     render() {
 
         const { form_values, all_categories, isCreated } = this.props;
-        var position = L.latLng(this.state.position);
-        var selectedPos = this.state.selectedPos || position;
         let values = form_values || this.props.initialValues;
+        console.log("event-form", this.props);
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
@@ -240,17 +233,10 @@ class EventForm extends Component {
                             placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
-                        <LocationMap 
-                            position={this.state.position} 
-                            parentCallback = {this.setSelectedPosition}/>
-                    </div>
-                    <div className="mt-2">
                         <Field
-                            name="selectedPos"
-                            component={renderTextField}
-                            placeholder={selectedPos}
-                            defaultValue={selectedPos}
-                            hidden={true}/>
+                            name='selectedPos'
+                            component={LocationMap}
+                            position={this.state.position}/>
                     </div>
                     {isCreated ? null : <Inventory />}
                 </div>
