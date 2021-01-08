@@ -7,6 +7,7 @@ import Modalwind2 from '../recoverPassword/modalwind2';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
+import ErrorMessages from '../shared/errorMessage';
 
 const { validate, renderTextField, asyncValidate } = Module;
 
@@ -14,11 +15,11 @@ class Login extends Component {
   openModal = () => (<Modalwind2 />)
 
   render() {
-    const { pristine, reset, submitting, loginError } = this.props;
+    const { pristine, reset, submitting } = this.props;
 
     return (
       <div className="auth">
-        <form onSubmit={this.props.handleSubmit} autoComplete="off">
+        <form onSubmit={this.props.handleSubmit(this.props.onSubmit)} autoComplete="off">
           <div>
             <Field
               name="email"
@@ -50,12 +51,9 @@ class Login extends Component {
           <LoginFacebook />
           <GoogleLogin />
         </div>
-        <div className="text-center">
-          {loginError &&
-            <p className="text-danger text-center">{loginError}</p>
-          }
-          <Modalwind2 />
-        </div>
+        {this.props.error &&
+          <ErrorMessages error = {this.props.error} />
+        }
       </div>
     );
   }
@@ -64,8 +62,7 @@ class Login extends Component {
 Login = reduxForm({
   // a unique name for the form
   form: "login-form",
-  validate,
-  asyncValidate
+  validate
 })(Login);
 
 export default Login;

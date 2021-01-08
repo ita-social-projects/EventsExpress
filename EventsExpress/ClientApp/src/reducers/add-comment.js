@@ -7,13 +7,6 @@ import {
 export const reducer = (state = initialState.add_comment, action) => {
 
     switch (action.type) {
-
-        case SET_COMMENT_ERROR:
-            return {
-                ...state,
-                isCommentPending: false,
-                commentError: action.payload
-            };
         case SET_COMMENT_PENDING:
             return {
                 ...state,
