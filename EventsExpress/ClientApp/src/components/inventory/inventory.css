@@ -20,6 +20,11 @@
   color: red;
 }
 
+.item:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .orange {
   color: orange;
 }
