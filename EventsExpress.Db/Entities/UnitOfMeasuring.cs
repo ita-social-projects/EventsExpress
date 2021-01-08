@@ -11,5 +11,7 @@ namespace EventsExpress.Db.Entities
         public string ShortName { get; set; }
 
         public ICollection<Inventory> Inventories { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
