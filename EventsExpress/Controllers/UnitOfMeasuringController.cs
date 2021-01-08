@@ -35,7 +35,6 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Create process failed.</response>
-
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
@@ -43,11 +42,7 @@ namespace EventsExpress.Controllers
 
             return Ok(result);
         }
-        //public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
-        //{
-        //    await _unitOfMeasuringService.Create(model.UnitName, model.ShortName);
-        //    return Ok();
-        //}
+
         /// <summary>
         /// This method is for edit unit of measuring.
         /// </summary>
