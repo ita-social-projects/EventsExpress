@@ -332,15 +332,26 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <span>
                                     {this.state.address && 
-                                    this.state.address.PlaceName}
-                                </span>
-                                <br />
-                                <span>
+                                     this.state.address.PlaceName != "" &&
+                                        <span>
+                                            {this.state.address.PlaceName}
+                                        </span>
+                                    }
+                                    {this.state.address &&
+                                     this.state.address.City != "" &&
+                                     this.state.address.City != this.state.address.PlaceName &&
+                                        <span>
+                                            <br/>
+                                            {this.state.address.City}
+                                        </span>
+                                    }
+                                <br/>
                                     {this.state.address && 
-                                    countries[this.state.address.CountryCode].name}                      
-                                </span>
+                                        <span>
+                                            {countries[this.state.address.CountryCode].name}                  
+                                        </span>
+                                    }
                                 <br />
                                 {categories_list}
                             </div>

@@ -232,6 +232,10 @@ class EventForm extends Component {
                     <div className="mt-2">
                         <Field
                             name='selectedPos'
+                            initialData={
+                                this.props.initialValues &&
+                                this.props.initialValues.selectedPos
+                            }
                             component={LocationMap}
                             position={this.state.position}/>
                     </div>

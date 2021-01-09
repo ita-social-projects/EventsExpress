@@ -48,6 +48,19 @@ namespace EventsExpress.Core.Services
 
         private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
+        private async Task<Guid> AddLocationToEvent(EventDTO eventDTO)
+        {
+            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(eventDTO);
+            var locationId = Guid.Empty;
+            var locationDTOByLatLng = _locationService.LocationByPoint(locationDTO.Point);
+
+            locationId = locationDTOByLatLng != null
+                ? locationDTOByLatLng.Id
+                : await _locationService.Create(locationDTO);
+
+            return locationId;
+        }
+
         public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!_context.Events.Any(e => e.Id == eventId))
@@ -159,16 +172,10 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(eventDTO);
-            var locationId = Guid.Empty;
-            var locationDTOByLatLng = _locationService.LocationByPoint(locationDTO.Point);
-
-            locationId = locationDTOByLatLng != null
-                ? locationDTOByLatLng.Id
-                : await _locationService.Create(locationDTO);
+            var locationId = AddLocationToEvent(eventDTO);
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-            ev.EventLocationId = locationId;
+            ev.EventLocationId = await locationId;
             ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)
@@ -239,14 +246,17 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
 
+            var locationId = AddLocationToEvent(e);
+
             ev.Title = e.Title;
             ev.MaxParticipants = e.MaxParticipants;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
-            //TODO Edit EventLocation
             ev.IsPublic = e.IsPublic;
+            ev.EventLocationId = await locationId;
 
+            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(e);
             if (e.Photo != null && ev.Photo != null)
             {
                 await _photoService.Delete(ev.Photo.Id);

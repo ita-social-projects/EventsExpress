@@ -23,21 +23,6 @@ class LocationMap extends Component {
         }
     }
 
-    defineAddress = (error, result) => {
-        if (error) {
-            return;
-        }
-        this.setState({ coords: result.address });
-    }
-
-    geocodeCoords(latlng) {
-        var geocodeService = Geocoding.geocodeService();
-        geocodeService.reverse()
-        .latlng(latlng)
-        .language("en")
-        .run(this.defineAddress);
-    }
-
     setSelectedPos = (latlng) => {
         this.setState({ selectedPos: latlng });
         this.props.input.onChange(latlng);
@@ -52,8 +37,8 @@ class LocationMap extends Component {
     }
 
     render() {
-
-        const marker = this.state.selectedPos ? this.state.selectedPos : this.props.position;
+        const center = this.props.initialData || this.props.position;
+        const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
         console.log(this.props);
 
         return (
@@ -63,7 +48,7 @@ class LocationMap extends Component {
                 <Map
                     id="map"
                     style={mapStyles}
-                    center={marker}
+                    center={center}
                     zoom={10}
                     onClick={this.handleClick}>
                     <TileLayer

@@ -7,6 +7,7 @@ import { setEventError, setEventPending, setEventSuccess } from '../actions/add-
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import get_categories from '../actions/category/category-list';
+import L from 'leaflet';
 
 class EditEventWrapper extends Component {
 
@@ -30,7 +31,10 @@ class EditEventWrapper extends Component {
 
     render() {
         let initialValues = {
-            ...this.props.event
+            ...this.props.event,
+            selectedPos: L.latLng(
+                this.props.event.latitude, 
+                this.props.event.longitude)
         }
 
         return <>
