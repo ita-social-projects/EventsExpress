@@ -6,7 +6,6 @@ import {
     Popup
 } from 'react-leaflet';
 import * as Geocoding from 'esri-leaflet-geocoder';
-import {countries} from 'country-data';
 import Search from 'react-leaflet-search';
 import './map.css'
 
@@ -35,18 +34,21 @@ class LocationMap extends Component {
         var geocodeService = Geocoding.geocodeService();
         geocodeService.reverse()
         .latlng(latlng)
+        .language("en")
         .run(this.defineAddress);
     }
 
+    setSelectedPos = (latlng) => {
+        this.setState({ selectedPos: latlng });
+        this.props.input.onChange(latlng);
+    }
+
     handleClick = (e) => {
-        this.setState({ selectedPos: e.latlng });
-        this.geocodeCoords(this.state.selectedPos);
-        this.props.input.onChange(e.latlng);
+        this.setSelectedPos(e.latlng);
     }
 
     handleSearch = (e) => {
-        this.setState({ selectedPos: e.latLng });
-        this.props.input.onChange(e.latLng);
+        this.setSelectedPos(e.latLng);
     }
 
     render() {

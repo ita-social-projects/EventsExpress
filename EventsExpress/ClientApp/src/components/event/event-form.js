@@ -18,10 +18,7 @@ import {
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
-import RenderLocation from './map/render-location';
 import Geolocation from 'react-native-geolocation-service';
-import Geocoder from 'react-native-geocoding'; 
-import L from 'leaflet'
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);

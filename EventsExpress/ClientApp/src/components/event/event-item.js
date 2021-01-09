@@ -17,6 +17,9 @@ import Badge from '@material-ui/core/Badge';
 import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
+import {countries} from 'country-data';
+import geocodeCoords from './map/geocode';
+import L from 'leaflet';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -49,8 +52,23 @@ export default class Event extends Component {
     constructor(props){
         super(props);
         this.state = {
-            anchorEl: null
+            anchorEl: null,
+            address: null
         }
+    }
+
+    componentWillMount() {
+        geocodeCoords(L.latLng(
+            this.props.item.latitude,
+            this.props.item.longitude), 
+            this.defineAddress);
+    }
+
+    defineAddress = (error, result) => {
+        if (error) {
+            return;
+        }
+        this.setState({address: result.address});
     }
 
     renderCategories = (arr) => {
@@ -79,8 +97,6 @@ export default class Event extends Component {
             categories,
             countVisitor,
             isBlocked,
-            latitude,
-            longitude,
             owners
         } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
@@ -180,9 +196,14 @@ export default class Event extends Component {
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
-                            <div className='mb-2'>
-                                {`${latitude}, ${longitude}`}
-                            </div>
+                            {this.state.address &&
+                                <div className='mb-2'>
+                                    {this.state.address.PlaceName} 
+                                    <br/>
+                                    {countries[this.state.address.CountryCode].name}
+                                </div>
+                                
+                            }
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
