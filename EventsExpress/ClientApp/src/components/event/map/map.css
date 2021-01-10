@@ -2,3 +2,15 @@
     height: 33px !important;
     width: 33px !important;
 }
+
+.error-text{
+    color: #f44336;
+    font-size: 0.75rem;
+    margin-top: 8px;
+    min-height: 1em;
+    text-align: left;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1em;
+    letter-spacing: 0.03333em;
+}

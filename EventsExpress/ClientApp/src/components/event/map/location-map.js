@@ -39,10 +39,12 @@ class LocationMap extends Component {
     render() {
         const center = this.props.initialData || this.props.position;
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
+        const {error, touched, invalid} = this.props.meta
         console.log(this.props);
 
         return (
             <div
+                className="mb-4"
                 style={{ position: "relative", width: "100%", height: "40vh" }}
                 id="my-map">
                 <Map
@@ -74,6 +76,9 @@ class LocationMap extends Component {
                         </Marker>
                     }
                 </Map>
+                <span className="error-text">
+                    {touched && invalid && error}
+                </span>
             </div>
         );
     }
