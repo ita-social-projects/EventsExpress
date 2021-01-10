@@ -331,10 +331,10 @@ export default class EventItemView extends Component {
                                         </>
                                     }
                                 </span>
-                                <br />
                                     {this.state.address && 
                                      this.state.address.PlaceName != "" &&
                                         <span>
+                                            <br />
                                             {this.state.address.PlaceName}
                                         </span>
                                     }
@@ -346,9 +346,9 @@ export default class EventItemView extends Component {
                                             {this.state.address.City}
                                         </span>
                                     }
-                                <br/>
-                                    {this.state.address && 
+                                    {this.state.address && this.state.address.PlaceName != countries[this.state.address.CountryCode].name &&
                                         <span>
+                                            <br/>
                                             {countries[this.state.address.CountryCode].name}                  
                                         </span>
                                     }

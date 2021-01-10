@@ -9,11 +9,9 @@ namespace EventsExpress.Core.IServices
 {
     public interface ILocationService
     {
+        Task<Guid> AddLocationToEvent(LocationDTO locationDTO);
+
         Task<Guid> Create(LocationDTO locationDTO);
-
-        Task<Guid> Edit(LocationDTO locationDTO);
-
-        LocationDTO LocationById(Guid locationId);
 
         LocationDTO LocationByPoint(Point point);
     }

@@ -20,6 +20,22 @@ namespace EventsExpress.Core.Services
         {
         }
 
+        public async Task<Guid> AddLocationToEvent(LocationDTO locationDTO)
+        {
+            var locationDTOByLatLng = LocationByPoint(locationDTO.Point);
+            var locationId = Guid.Empty;
+            if (locationDTOByLatLng != null)
+            {
+                locationId = locationDTOByLatLng.Id;
+            }
+            else
+            {
+                locationId = await Create(locationDTO);
+            }
+
+            return locationId;
+        }
+
         public async Task<Guid> Create(LocationDTO locationDTO)
         {
             var location = _mapper.Map<LocationDTO, EventLocation>(locationDTO);
@@ -30,21 +46,6 @@ namespace EventsExpress.Core.Services
 
             return result.Id;
         }
-
-        public async Task<Guid> Edit(LocationDTO locationDTO)
-        {
-            var location = _context.EventLocations
-                .Find(locationDTO.Id);
-
-            location.Point = locationDTO.Point;
-
-            await _context.SaveChangesAsync();
-
-            return location.Id;
-        }
-
-        public LocationDTO LocationById(Guid locationId) =>
-            _mapper.Map<LocationDTO>(_context.EventLocations.Find(locationId));
 
         public LocationDTO LocationByPoint(Point point)
         {
