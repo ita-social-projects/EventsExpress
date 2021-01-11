@@ -14,14 +14,19 @@ export class DisplayLocation extends Component {
             <>
                 {PlaceName != "" &&
                     <span>
-                        <br />
                         {PlaceName}
                     </span>
                 }
-                {City != "" &&
+                {PlaceName != "" && City != "" &&
                     City != PlaceName &&
                     <span>
                         <br />
+                        {City}
+                    </span>
+                }
+                {City != "" &&
+                    PlaceName == "" &&
+                    <span>
                         {City}
                     </span>
                 }

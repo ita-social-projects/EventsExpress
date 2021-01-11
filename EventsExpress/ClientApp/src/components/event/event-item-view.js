@@ -315,7 +315,7 @@ export default class EventItemView extends Component {
                                         </span>
                                     : <span className="maxParticipants">
                                         {visitorsEnum.approvedUsers.length}
-                                        Participants
+                                        <span className="pl-2">Participants</span>
                                       </span>
                                 }
                                 <br />
@@ -331,6 +331,7 @@ export default class EventItemView extends Component {
                                         </>
                                     }
                                 </span>
+                                <br/>
                                     {this.state.address && 
                                     <DisplayLocation address={this.state.address}/>}
                                 <br />

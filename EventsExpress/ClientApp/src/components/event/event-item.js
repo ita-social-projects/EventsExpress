@@ -197,10 +197,9 @@ export default class Event extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.state.address &&
-                                <div className='mb-2'>
-                                    <DisplayLocation address={this.state.address}/>
-                                </div>
+                                <DisplayLocation address={this.state.address}/>
                             }
+                            <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
