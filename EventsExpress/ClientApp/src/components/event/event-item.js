@@ -198,11 +198,16 @@ export default class Event extends Component {
                         <div className='w-100'>
                             {this.state.address &&
                                 <div className='mb-2'>
-                                    {this.state.address.City != "" ? 
-                                     this.state.address.City :
-                                     this.state.address.PlaceName},
+                                    {this.state.address.PlaceName != "" && 
+                                     this.state.address.PlaceName}
+                                    {this.state.address.City != "" &&
+                                     this.state.address.City != 
+                                     this.state.address.PlaceName && 
+                                     this.state.address.City}
                                     <br/>
-                                    {countries[this.state.address.CountryCode].name}
+                                    {this.state.address.PlaceName != 
+                                     countries[this.state.address.CountryCode].name &&
+                                     countries[this.state.address.CountryCode].name}
                                 </div>
                                 
                             }

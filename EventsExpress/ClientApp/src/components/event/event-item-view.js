@@ -256,7 +256,6 @@ export default class EventItemView extends Component {
     }
 
     render() {
-        console.log(this.state.address);
         const { current_user } = this.props;
         const {
             id,
@@ -311,7 +310,7 @@ export default class EventItemView extends Component {
                                 {(maxParticipants < INT32_MAX_VALUE)
                                     ? <span className="maxParticipants">
                                             {visitorsEnum.approvedUsers.length}/{maxParticipants}
-                                            Participants
+                                            <span className="pl-2">Participants</span>
                                         </span>
                                     : <span className="maxParticipants">
                                         {visitorsEnum.approvedUsers.length}
