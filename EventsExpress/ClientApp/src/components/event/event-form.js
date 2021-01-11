@@ -18,7 +18,6 @@ import {
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
-import Geolocation from 'react-native-geolocation-service';
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
@@ -29,25 +28,8 @@ class EventForm extends Component {
         super(props);
         this.state = { 
             imagefile: [],
-            checked: false,
-            position: [50.4547, 30.5238]
+            checked: false
         };
-    }
-
-    getUserGeolocation = () => {
-        Geolocation.getCurrentPosition((position) => {
-            this.setState
-            ({
-                position: [position.coords.latitude, position.coords.longitude]
-            });
-        }, (error) => {
-            console.log(error.code, error.message);
-        }, 
-        {
-            enableHighAccuracy: false,
-            timeout: 10000,
-            maximumAge: 100000
-        });
     }
 
     handleOnDrop = (newImageFile, onChange) => {
@@ -63,7 +45,6 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
-        this.getUserGeolocation();
         let values = this.props.initialValues || this.props.data;
 
         if (this.props.isCreated) {
@@ -236,8 +217,7 @@ class EventForm extends Component {
                                 this.props.initialValues &&
                                 this.props.initialValues.selectedPos
                             }
-                            component={LocationMap}
-                            position={this.state.position}/>
+                            component={LocationMap}/>
                     </div>
                     {isCreated ? null : <Inventory />}
                 </div>

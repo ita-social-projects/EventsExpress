@@ -17,9 +17,9 @@ import Badge from '@material-ui/core/Badge';
 import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
-import {countries} from 'country-data';
 import geocodeCoords from './map/geocode';
 import L from 'leaflet';
+import DisplayLocation from './map/display-location';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -198,18 +198,8 @@ export default class Event extends Component {
                         <div className='w-100'>
                             {this.state.address &&
                                 <div className='mb-2'>
-                                    {this.state.address.PlaceName != "" && 
-                                     this.state.address.PlaceName}
-                                    {this.state.address.City != "" &&
-                                     this.state.address.City != 
-                                     this.state.address.PlaceName && 
-                                     this.state.address.City}
-                                    <br/>
-                                    {this.state.address.PlaceName != 
-                                     countries[this.state.address.CountryCode].name &&
-                                     countries[this.state.address.CountryCode].name}
+                                    <DisplayLocation address={this.state.address}/>
                                 </div>
-                                
                             }
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}

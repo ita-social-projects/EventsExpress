@@ -16,9 +16,9 @@ import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
-import {countries} from 'country-data';
 import geocodeCoords from './map/geocode';
 import L from 'leaflet';
+import DisplayLocation from './map/display-location';
 
 const userStatus = {
     APPROVED: 0,
@@ -256,6 +256,7 @@ export default class EventItemView extends Component {
     }
 
     render() {
+        console.log(this.props);
         const { current_user } = this.props;
         const {
             id,
@@ -331,26 +332,7 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                     {this.state.address && 
-                                     this.state.address.PlaceName != "" &&
-                                        <span>
-                                            <br />
-                                            {this.state.address.PlaceName}
-                                        </span>
-                                    }
-                                    {this.state.address &&
-                                     this.state.address.City != "" &&
-                                     this.state.address.City != this.state.address.PlaceName &&
-                                        <span>
-                                            <br/>
-                                            {this.state.address.City}
-                                        </span>
-                                    }
-                                    {this.state.address && this.state.address.PlaceName != countries[this.state.address.CountryCode].name &&
-                                        <span>
-                                            <br/>
-                                            {countries[this.state.address.CountryCode].name}                  
-                                        </span>
-                                    }
+                                    <DisplayLocation address={this.state.address}/>}
                                 <br />
                                 {categories_list}
                             </div>

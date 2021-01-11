@@ -198,33 +198,6 @@ export const maxLength15 = maxLength(15);
 export const minLength2 = minLength(6);
 export const minLength3 = minLength(4);
 
-export const renderSelectLocationField = ({
-    input,
-    label,
-    text,
-    data,
-    meta: { touched, invalid, error },
-    children,
-    ...custom
-}) =>
-    <FormControl error={touched && error}>
-        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-        <Select
-            native
-            {...input}
-            onBlur={() => input.onBlur()}
-            {...custom}
-            inputProps={{
-                name: text.toLowerCase() + 'Id',
-                id: 'age-native-simple'
-            }}
-        >
-            <option value=""></option>
-            {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
-        </Select>
-        {renderFromHelper({ touched, error })}
-    </FormControl>
-
 export const renderSelectPeriodicityField = ({
     input,
     label,
