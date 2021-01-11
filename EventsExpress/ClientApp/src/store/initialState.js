@@ -160,6 +160,11 @@ const initialState = {
         setItemErrorMessage: null,
         items: []
     },
+    usersInventories: {
+        isPending: true,
+        isError: false,
+        data: []
+    },
     eventSchedules: {
         isPending: true,
         isError: false,

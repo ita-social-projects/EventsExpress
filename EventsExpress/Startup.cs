@@ -126,6 +126,7 @@ namespace EventsExpress
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();

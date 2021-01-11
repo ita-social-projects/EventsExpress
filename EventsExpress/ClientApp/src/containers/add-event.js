@@ -45,7 +45,7 @@ class AddEventWrapper extends Component {
             this.setState({ open: true });
         }
 
-        return <div className="w-50 m-auto p-4">
+        return <div className="w-50 m-auto pb-4 pt-4">
             <EventForm data={{}}
                 all_categories={this.props.all_categories}
                 onCancel={this.props.onCreateCanceling}

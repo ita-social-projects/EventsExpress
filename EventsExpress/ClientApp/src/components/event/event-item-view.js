@@ -55,8 +55,8 @@ export default class EventItemView extends Component {
     }
 
     renderOwners = (arr, isMyEvent, current_user_id) => {
-        return arr.map(x => (
-            <div>
+        return arr.map((x, key) => (
+            <div key={key}>
                 <div className="d-flex align-items-center border-bottom">
                     <div className="flex-grow-1">
                         <Link to={'/user/' + x.id} className="btn-custom">
