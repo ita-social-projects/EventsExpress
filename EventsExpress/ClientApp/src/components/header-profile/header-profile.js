@@ -25,7 +25,7 @@ export default class HeaderProfile extends Component {
                     {id && (
                         <div className="d-flex flex-column align-items-center">
                             <CustomAvatar size="big" photoUrl={photoUrl} name={this.props.user.name} />
-                            <h4>{name}</h4>
+                            <h4 className="user-name">{name}</h4>
                             <RatingAverage value={rating} direction='row' />
                             <div>
                                 <Link to={'/profile'}>
