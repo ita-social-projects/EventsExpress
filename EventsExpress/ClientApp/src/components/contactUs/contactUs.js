@@ -17,8 +17,8 @@ class ContactUs extends Component{
                 
             <form className="notfound-404" onSubmit={this.props.handleSubmit}>
                 <div className="box text text-2 pl-md-4 " >
+                    <div className="text-left mb-2">Problem Type</div>
                     <Field name='type' className="form-control" component="select">
-                        <option value="" >Problem type</option>;
                         <option value="newCategory">New Category</option>;
                         <option value="bugReport">Bug Report</option>;
                         <option value="badEvent">Bad Event</option>;
