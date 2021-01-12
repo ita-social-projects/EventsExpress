@@ -256,7 +256,7 @@ export default class EventItemView extends Component {
     }
 
     render() {
-        console.log(this.props);
+        console.log(this.state);
         const { current_user } = this.props;
         const {
             id,
@@ -334,6 +334,8 @@ export default class EventItemView extends Component {
                                 <br/>
                                     {this.state.address && 
                                     <DisplayLocation address={this.state.address}/>}
+                                    {!this.state.address && 
+                                    <span>Location is not identified</span>}
                                 <br />
                                 {categories_list}
                             </div>

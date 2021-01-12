@@ -14,3 +14,7 @@
     line-height: 1em;
     letter-spacing: 0.03333em;
 }
+
+button.search-control-close-button{
+    display: none;
+}

@@ -18,8 +18,7 @@ class LocationMap extends Component {
         super(props);
         this.state = {
             startPosition: [50.4547, 30.5238],
-            selectedPos: null,
-            coords: null
+            selectedPos: null
         }
     }
 
@@ -39,7 +38,7 @@ class LocationMap extends Component {
     render() {
         const center = this.props.initialData || this.state.startPosition;
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
-        const {error, touched, invalid} = this.props.meta
+        const {error, touched, invalid} = this.props.meta;
         console.log(this.props);
 
         return (

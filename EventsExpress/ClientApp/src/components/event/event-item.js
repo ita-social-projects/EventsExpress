@@ -199,6 +199,9 @@ export default class Event extends Component {
                             {this.state.address &&
                                 <DisplayLocation address={this.state.address}/>
                             }
+                            {!this.state.address && 
+                                <span>Location is not identified</span>
+                            }
                             <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
