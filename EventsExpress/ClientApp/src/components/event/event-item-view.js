@@ -256,7 +256,6 @@ export default class EventItemView extends Component {
     }
 
     render() {
-        console.log(this.state);
         const { current_user } = this.props;
         const {
             id,

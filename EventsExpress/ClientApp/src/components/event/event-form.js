@@ -96,7 +96,6 @@ class EventForm extends Component {
 
         const { form_values, all_categories, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
-        console.log("event-form", this.props);
 
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
