@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.ViewModels
 {
@@ -19,11 +20,9 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
+        public double Latitude { get; set; }
 
-        public CountryViewModel Country { get; set; }
-
-        public CityViewModel City { get; set; }
+        public double Longitude { get; set; }
 
         public bool IsBlocked { get; set; }
 
@@ -32,5 +31,7 @@ namespace EventsExpress.ViewModels
         public bool IsPublic { get; set; }
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }
+
+        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
     }
 }
