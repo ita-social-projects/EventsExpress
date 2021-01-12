@@ -1,4 +1,5 @@
 import { EventService } from '../services';
+import { setAlert } from './alert'
 
 export const getRate = {
     PENDING: 'GET_RATE_PENDING',
@@ -26,13 +27,16 @@ export function set_rating(data) {
         dispatch(setRatingPending(true));
 
         const res = api_serv.setRate(data);      
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setRatingSuccess(response));
+        return res.then(responce => {
+            if (responce.error == null) {
+                dispatch(setRatingSuccess(responce));
                 dispatch(getRatingSuccess(data.rate));
-                
+                return Promise.resolve();
             } else {
-                dispatch(setRatingError(response.error));
+                dispatch(setAlert({
+                    variant: 'error',
+                    message: responce.error
+                }));
             }
         });
     }
@@ -45,11 +49,14 @@ export function get_currrent_rating(data) {
 
         const res = api_serv.getCurrentRate(data);
         
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(getRatingSuccess(response));
+        res.then(responce => {
+            if (responce.error == null) {
+                dispatch(getRatingSuccess(responce));
             } else {
-                dispatch(getRatingError(response.error));
+                dispatch(setAlert({
+                    variant: 'error',
+                    message: responce.error
+                }));
             }
         });
     }
@@ -62,11 +69,14 @@ export function get_average_rating(data) {
 
         const res = api_serv.getAverageRate(data);
         
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(getAverageRatingSuccess(response));
+        res.then(responce => {
+            if (responce.error == null) {
+                dispatch(getAverageRatingSuccess(responce));
             } else {
-                dispatch(getAverageRatingError(response.error));
+                dispatch(setAlert({
+                    variant: 'error',
+                    message: responce.error
+                }));
             }
         });
     }
