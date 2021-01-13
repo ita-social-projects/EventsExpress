@@ -16,6 +16,9 @@ import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
+import geocodeCoords from './map/geocode';
+import L from 'leaflet';
+import DisplayLocation from './map/display-location';
 
 const userStatus = {
     APPROVED: 0,
@@ -24,13 +27,27 @@ const userStatus = {
 };
 
 export default class EventItemView extends Component {
-
     constructor() {
         super();
 
         this.state = {
-            edit: false
+            edit: false,
+            address: null
         };
+    }
+
+    componentWillMount() {
+        geocodeCoords(L.latLng(
+            this.props.event.data.latitude,
+            this.props.event.data.longitude), 
+            this.defineAddress);
+    }
+
+    defineAddress = (error, result) => {
+        if (error) {
+            return;
+        }
+        this.setState({address: result.address});
     }
 
     renderCategories = arr => {
@@ -251,8 +268,6 @@ export default class EventItemView extends Component {
             isPublic,
             maxParticipants,
             visitors,
-            country,
-            city,
             owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
@@ -293,8 +308,14 @@ export default class EventItemView extends Component {
                                 }
                                 <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
-                                    ? <span className="maxParticipants">{visitorsEnum.approvedUsers.length}/{maxParticipants} Participants</span>
-                                    : <span className="maxParticipants">{visitorsEnum.approvedUsers.length} Participants</span>
+                                    ? <span className="maxParticipants">
+                                            {visitorsEnum.approvedUsers.length}/{maxParticipants}
+                                            <span className="pl-2">Participants</span>
+                                        </span>
+                                    : <span className="maxParticipants">
+                                        {visitorsEnum.approvedUsers.length}
+                                        <span className="pl-2">Participants</span>
+                                      </span>
                                 }
                                 <br />
                                 <span>
@@ -309,14 +330,20 @@ export default class EventItemView extends Component {
                                         </>
                                     }
                                 </span>
-                                <br />
-                                <span>{country.name} {city.name}</span>
+                                <br/>
+                                    {this.state.address && 
+                                    <DisplayLocation address={this.state.address}/>}
+                                    {!this.state.address && 
+                                    <span>Location is not identified</span>}
                                 <br />
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel && 
+                                <EventCancelModal 
+                                    submitCallback={this.props.onCancel} 
+                                    cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit

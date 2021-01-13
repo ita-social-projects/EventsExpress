@@ -10,7 +10,6 @@ import Module from '../helpers';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
-    renderSelectLocationField,
     renderTextArea,
     renderSelectPeriodicityField,
     renderCheckbox,
@@ -18,17 +17,19 @@ import {
     renderDatePicker
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
+import LocationMap from './map/location-map';
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [], checked: false };
-
-    handleFile(fieldName, event) {
-        event.preventDefault();
-        const files = [...event.target.files];
+    constructor(props) {
+        super(props);
+        this.state = { 
+            imagefile: [],
+            checked: false
+        };
     }
 
     handleOnDrop = (newImageFile, onChange) => {
@@ -87,19 +88,13 @@ class EventForm extends Component {
         this.setState({ imagefile: [] });
     }
 
-    renderLocations = (arr) => {
-        return arr.map((item) => {
-            return <option value={item.id}>{item.name}</option>;
-        });
-    }
-
     componentWillMount() {
         this.resetForm();
     }
 
     render() {
 
-        const { countries, form_values, all_categories, data, isCreated } = this.props;
+        const { form_values, all_categories, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
 
         return (
@@ -215,23 +210,14 @@ class EventForm extends Component {
                             placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
-                        <Field onChange={this.props.onChangeCountry}
-                            name='countryId'
-                            data={countries}
-                            text='Country'
-                            component={renderSelectLocationField}
-                        />
+                        <Field
+                            name='selectedPos'
+                            initialData={
+                                this.props.initialValues &&
+                                this.props.initialValues.selectedPos
+                            }
+                            component={LocationMap}/>
                     </div>
-                    {values && values.countryId &&
-                        <div className="mt-2">
-                            <Field
-                                name='cityId'
-                                data={this.props.cities}
-                                text='City'
-                                component={renderSelectLocationField}
-                            />
-                        </div>
-                    }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">
