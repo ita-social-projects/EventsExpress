@@ -13,6 +13,8 @@ namespace EventsExpress.Validation
             RuleFor(x => x.DateFrom).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateFrom).GreaterThanOrEqualTo(DateTime.Today).WithMessage("date from must be older than date now!");
             RuleFor(x => x.DateTo).NotEmpty().WithMessage("Field is required!");
+            RuleFor(x => x.Latitude).NotEmpty().WithMessage("Field is required!");
+            RuleFor(x => x.Longitude).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Input correct quantity of participants!");
         }
     }
