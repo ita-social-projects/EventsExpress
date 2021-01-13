@@ -14,9 +14,7 @@ class RatingWrapper extends Component{
 
     onRateChange = event => {
         let rate = event.currentTarget.value;
-        
-        this.props.setRate(rate); 
-        setTimeout(this.props.getAverageRate, 125);
+        this.props.setRate(rate).then(this.props.getAverageRate);
     }
 
     render() {        
