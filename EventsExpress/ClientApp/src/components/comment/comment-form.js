@@ -4,7 +4,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { renderTextField } from '../helpers/helpers';
 import './Comment.css';
-import ErrorMessages from '../shared/errorMessage';
 
 let Comment = (props) => {
     return <> 
@@ -14,9 +13,6 @@ let Comment = (props) => {
                     component={renderTextField}
                     label="Comment:"
                 />
-                {props.error &&
-                    <ErrorMessages error = {props.error} />
-                }
                 <DialogActions>
                     <Button type="submit" value="Add" color="primary"> Add </Button>
                 </DialogActions>                    

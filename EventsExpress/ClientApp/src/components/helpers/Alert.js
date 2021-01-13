@@ -56,6 +56,12 @@ export default function MySnackbar(props) {
   const { onClose, ...other } = props;
   const { message, open, variant, autoHideDuration } = props.alert;
   const Icon = variantIcon[variant];
+  let timeToShow;
+
+  if(variant !== 'error' && autoHideDuration)
+  {
+    timeToShow = 5000;
+  }
 
   return (
     <Snackbar
@@ -64,7 +70,7 @@ export default function MySnackbar(props) {
         horizontal: "left"
       }}
       open={open}
-      autoHideDuration={autoHideDuration == null ? 5000 : autoHideDuration}
+      autoHideDuration={timeToShow}
       onClose={onClose}
     >
       <SnackbarContent

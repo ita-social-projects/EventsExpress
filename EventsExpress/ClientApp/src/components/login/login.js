@@ -3,16 +3,14 @@ import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
-import Modalwind2 from '../recoverPassword/modalwind2';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 
-const { validate, renderTextField, asyncValidate } = Module;
+const { validate, renderTextField } = Module;
 
 class Login extends Component {
-  openModal = () => (<Modalwind2 />)
 
   render() {
     const { pristine, reset, submitting } = this.props;
@@ -52,7 +50,7 @@ class Login extends Component {
           <GoogleLogin />
         </div>
         {this.props.error &&
-          <ErrorMessages error = {this.props.error} />
+          <ErrorMessages error = {this.props.error} className = "text-center" />
         }
       </div>
     );

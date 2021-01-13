@@ -6,7 +6,7 @@ export default class ErrorMessages extends Component {
     render() {
         return (
             <>
-                {this.props.error.map(x => <div className="text-danger text-center">{x}</div>)}
+                {this.props.error.map(x => <div className={"text-danger " + this.props.className}> {x}</div>)}
             </>
         );
     }

@@ -13,12 +13,11 @@ namespace EventsExpress.Filters
         {
             if (context.Exception is EventsExpressException eventsExpressException)
             {
-                context.ModelState.AddModelError(string.Empty, eventsExpressException.Message);
                 var errorTexts = new
                 {
                     Errors = new Dictionary<string, Array>()
                     {
-                        { string.Empty, context.ModelState[string.Empty].Errors.Select(x => x.ErrorMessage).ToArray() },
+                        { string.Empty, new [] { eventsExpressException.Message } },
                     },
                 };
                 var result = new ObjectResult(errorTexts) { StatusCode = 400 };
