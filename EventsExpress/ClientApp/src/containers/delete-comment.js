@@ -6,9 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import '../components/comment/Comment.css';
 import CommentList from '../components/comment/comment-list';
 import AddComment from './add-comment';
-
-
-
+import { setAlert } from '../actions/alert';
 
 class commentItemWrapper extends React.Component {
 
@@ -19,10 +17,16 @@ class commentItemWrapper extends React.Component {
     changeInfo = () => {
         this.setState({
             info: !this.state.info
-        }); 
-            
+        });  
     };
 
+    componentDidUpdate = () => {
+        if(this.props.errorInfo.isError)
+        {
+            this.props.alert({ variant: 'error', message: this.props.errorInfo.data.message });
+            this.props.errorInfo.isError = false;
+        }
+    }
     submit = () => {
         let value = this.props.item;
         this.props.deleteComm({ id: value.id, eventId: this.props.eventId });
@@ -78,12 +82,14 @@ class commentItemWrapper extends React.Component {
 };
 const mapStateToProps = state => ({
     userId: state.user.id,
-    eventId: state.event.data.id
+    eventId: state.event.data.id,
+    errorInfo: state.errorMessages
 });
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteComm: (value) => dispatch(deleteComm(value))
+        deleteComm: (value) => dispatch(deleteComm(value)),
+        alert: (data) => dispatch(setAlert(data))
     };
 };
 export default connect(

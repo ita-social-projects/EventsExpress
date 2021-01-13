@@ -23,13 +23,6 @@ export const reducer = (
         isLoginPending: false,
       });
 
-    case SET_LOGIN_ERROR:
-      return Object.assign({}, state, {
-        loginError: action.loginError,
-        isLoginSuccess: false,
-        isLoginPending: false
-      });
-
     case SET_LOGOUT:
       return Object.assign({}, state, {
         isLoginSuccess: !action.isLoginSuccess

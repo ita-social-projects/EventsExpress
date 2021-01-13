@@ -23,7 +23,7 @@ class CategoryEdit extends Component {
         if(!this.props.message){
             return null;
         }
-        return renderErrorMessage(this.props.message, "Name");
+        return renderErrorMessage(this.props.message, "name");
     }
 
     render() {
