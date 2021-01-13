@@ -25,9 +25,8 @@ const api_serv = new EventService();
 export function set_rating(data) {
     return dispatch => {
         dispatch(setRatingPending(true));
-
-        const res = api_serv.setRate(data);      
-        return res.then(responce => {
+    
+        return api_serv.setRate(data).then(responce => {
             if (responce.error == null) {
                 dispatch(setRatingSuccess(responce));
                 dispatch(getRatingSuccess(data.rate));
@@ -47,9 +46,7 @@ export function get_currrent_rating(data) {
     return dispatch => {
         dispatch(getRatingPending(true));
 
-        const res = api_serv.getCurrentRate(data);
-        
-        res.then(responce => {
+        api_serv.getCurrentRate(data).then(responce => {
             if (responce.error == null) {
                 dispatch(getRatingSuccess(responce));
             } else {
@@ -67,9 +64,7 @@ export function get_average_rating(data) {
     return dispatch => {
         dispatch(getAverageRatingPending(true));
 
-        const res = api_serv.getAverageRate(data);
-        
-        res.then(responce => {
+        api_serv.getAverageRate(data).then(responce => {
             if (responce.error == null) {
                 dispatch(getAverageRatingSuccess(responce));
             } else {
