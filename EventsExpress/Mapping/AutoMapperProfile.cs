@@ -7,6 +7,7 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Mapping
 {
@@ -88,6 +89,7 @@ namespace EventsExpress.Mapping
             #region EVENT MAPPING
             CreateMap<Event, EventDTO>()
                 .ForMember(dest => dest.Photo, opt => opt.Ignore())
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
                 .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                 .ForMember(
                     dest => dest.Categories,
@@ -135,17 +137,9 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
+                .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
-                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
-                {
-                    Id = src.City.Country.Id,
-                    Name = src.City.Country.Name,
-                }))
-                .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
-                {
-                    Id = src.City.Id,
-                    Name = src.City.Name,
-                }))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                    new UserPreviewViewModel
@@ -157,9 +151,11 @@ namespace EventsExpress.Mapping
                    })));
 
             CreateMap<EventDTO, EventViewModel>()
-                .ForMember(
+                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Img.ToRenderablePictureString()))
+                .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
+                .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x =>
                     new UserPreviewViewModel
                     {
@@ -169,16 +165,6 @@ namespace EventsExpress.Mapping
                         PhotoUrl = x.User.Photo != null ? x.User.Photo.Thumb.ToRenderablePictureString() : null,
                         UserStatusEvent = x.UserStatusEvent,
                     })))
-                .ForMember(dest => dest.Country, opts => opts.MapFrom(src => new CountryViewModel
-                {
-                    Id = src.City.Country.Id,
-                    Name = src.City.Country.Name,
-                }))
-                .ForMember(dest => dest.City, opts => opts.MapFrom(src => new CityViewModel
-                {
-                    Id = src.City.Id,
-                    Name = src.City.Name,
-                }))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                  new UserPreviewViewModel
                  {
@@ -193,10 +179,12 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
 
             CreateMap<EventEditViewModel, EventDTO>()
-                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewViewModel { Id = x.Id })));
+                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewViewModel { Id = x.Id })))
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }));
 
             CreateMap<EventCreateViewModel, EventDTO>()
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => new UserPreviewViewModel { Id = x.Id })))
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -214,7 +202,6 @@ namespace EventsExpress.Mapping
                         })));
 
             CreateMap<EventViewModel, EventDTO>()
-                .ForMember(dest => dest.CityId, opts => opts.MapFrom(src => src.City.Id))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
@@ -269,6 +256,12 @@ namespace EventsExpress.Mapping
             CreateMap<AttitudeDTO, Relationship>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => (Attitude)src.Attitude));
 
+            #endregion
+
+            #region LOCATION MAPPING
+            CreateMap<LocationDTO, EventLocation>().ReverseMap();
+            CreateMap<EventDTO, LocationDTO>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
             #endregion
 
             #region MESSAGE MAPPING

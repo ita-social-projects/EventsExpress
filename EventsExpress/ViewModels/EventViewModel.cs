@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EventsExpress.Db.Enums;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.ViewModels
 {
@@ -28,9 +29,9 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public CityViewModel City { get; set; }
+        public double Latitude { get; set; }
 
-        public CountryViewModel Country { get; set; }
+        public double Longitude { get; set; }
 
         public bool IsPublic { get; set; }
 
