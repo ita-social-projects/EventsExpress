@@ -21,6 +21,7 @@ import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
+//const imageIsNotCropped = value => ();
 const { validate } = Module;
 
 class EventForm extends Component {
@@ -31,8 +32,7 @@ class EventForm extends Component {
         const files = [...event.target.files];
     }
 
-    handleOnDrop = (newImageFile, onChange) => {
-        console.log(newImageFile);
+    handleOnDrop = (newImageFile, onChange) => {        
         if (newImageFile.length > 0) {
             const imagefile = {
                 file: newImageFile[0],
@@ -65,8 +65,7 @@ class EventForm extends Component {
         }
     }
 
-    setCroppedImage = (croppedImage, onChange) => {
-        console.log("CROPPED IMAGE", croppedImage);
+    setCroppedImage = (croppedImage, onChange) => {        
         const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
         const imagefile = {
             file: file,
@@ -113,13 +112,12 @@ class EventForm extends Component {
     render() {
 
         const { countries, form_values, all_categories, data, isCreated } = this.props;
-        let values = form_values || this.props.initialValues;
+        let values = form_values || this.props.initialValues;        
 
-        return (            
+        return (                       
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">                    
-                            <Field
-                                ref={(x) => { this.image = x; }}
+                            <Field                                
                                 id="image-field"
                                 name="image"
                                 component={DropZoneField}
@@ -128,17 +126,10 @@ class EventForm extends Component {
                                 handleOnDrop={this.handleOnDrop}
                                 handleOnCrop={this.setCroppedImage}                        
                                 crop={true}
+                                cropShape='rect'
+                                handleOnClear={this.resetForm}
                                 validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-                            />                        
-                    <Button
-                        type="button"
-                        color="primary"
-                        disabled={this.props.submitting}
-                        onClick={this.resetForm}
-                        style={{ float: "right" }}
-                    >
-                        Clear
-                    </Button>                    
+                            />                                         
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}

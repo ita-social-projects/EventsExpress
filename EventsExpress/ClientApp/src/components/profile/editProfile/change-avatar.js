@@ -45,6 +45,18 @@ class ChangeAvatar extends React.Component {
       this.resetForm();
     }
 
+    setCroppedImage = (croppedImage, onChange) => {
+        console.log("CROPPED IMAGE", croppedImage);
+        const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
+        const imagefile = {
+            file: file,
+            name: "image.jpg",
+            preview: croppedImage,
+            size: 1
+        };
+        this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
+    }
+
     render(){
 
     const { handleSubmit, pristine, submitting } = this.props;
@@ -53,22 +65,16 @@ class ChangeAvatar extends React.Component {
         <form onSubmit={handleSubmit}>
                     <Field
           name="image"
-          component={DropZoneField}
+          component={DropZoneField}          
           type="file"
           imagefile={this.state.imagefile}
           handleOnDrop={this.handleOnDrop}
+          handleOnCrop={this.setCroppedImage}      
+          crop={true}
+          cropShape='round'
+          handleOnClear={this.resetForm}
           validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-        />        
-        <Button
-        type="button"
-        className="uk-button uk-button-default uk-button-large clear"
-        disabled={this.props.submitting}
-        onClick={this.resetForm}
-        style={{ float: "right" }}
-      >
-        Clear
-      </Button>
-
+        />                
             <div>
                 <Button  color="primary" type="submit" disabled={pristine || submitting}>
                     Submit

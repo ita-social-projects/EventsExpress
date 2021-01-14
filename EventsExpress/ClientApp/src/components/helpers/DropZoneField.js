@@ -5,6 +5,7 @@ import ImagePreview from "./ImagePreview";
 import Placeholder from "./Placeholder";
 import ShowError from "./ShowError";
 import ImageResizer from '../event/image-resizer';
+import Button from "@material-ui/core/Button";
 
 export default class DropZoneField extends Component {
 
@@ -16,12 +17,19 @@ export default class DropZoneField extends Component {
         this.setState({ cropped: true });
     };
 
+    clearImage = () => {
+        this.setState({ cropped: false });
+        this.props.handleOnClear();
+    };
+
     render() {
         const {
             handleOnDrop,
-            handleOnCrop,
+            handleOnCrop,            
+            submitting,
             imagefile,
             crop,
+            cropShape,
             meta: { error, touched },
             input: { onChange }
         } = this.props;
@@ -32,10 +40,10 @@ export default class DropZoneField extends Component {
                     <div>
                         <ImageResizer
                             image={imagefile[0]}
-                            onChange={onChange}
-                            handleOnDrop={handleOnDrop}
+                            onChange={onChange}                            
                             handleOnCrop={handleOnCrop}
                             onImageCrop={this.imageCrop}
+                            cropShape={cropShape}
                         />
                     </div>
                 ) : (
@@ -57,6 +65,16 @@ export default class DropZoneField extends Component {
                             <ShowError error={error} touched={touched} />
                         </div>
                     )}
+                <Button
+                    className="mt-3"
+                    type="button"
+                    color="primary"
+                    disabled={submitting}
+                    onClick={this.clearImage}
+                    style={{ float: "right" }}
+                >
+                    Clear
+                </Button>   
             </div>
         )
     };
