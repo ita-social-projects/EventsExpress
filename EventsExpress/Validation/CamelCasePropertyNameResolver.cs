@@ -1,8 +1,8 @@
-﻿using FluentValidation.Internal;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
+using FluentValidation.Internal;
 
 namespace EventsExpress.Validation
 {
@@ -18,7 +18,10 @@ namespace EventsExpress.Validation
             if (expression != null)
             {
                 var chain = PropertyChain.FromExpression(expression);
-                if (chain.Count > 0) return chain.ToString();
+                if (chain.Count > 0)
+                {
+                    return chain.ToString();
+                }
             }
 
             if (memberInfo != null)
@@ -45,7 +48,7 @@ namespace EventsExpress.Validation
                     break;
                 }
 
-                var hasNext = (i + 1 < chars.Length);
+                var hasNext = i + 1 < chars.Length;
                 if (i > 0 && hasNext && !char.IsUpper(chars[i + 1]))
                 {
                     break;

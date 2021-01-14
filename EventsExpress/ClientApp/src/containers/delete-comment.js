@@ -17,16 +17,9 @@ class commentItemWrapper extends React.Component {
     changeInfo = () => {
         this.setState({
             info: !this.state.info
-        });  
+        });
     };
-
-    componentDidUpdate = () => {
-        if(this.props.errorInfo.isError)
-        {
-            this.props.alert({ variant: 'error', message: this.props.errorInfo.data.message });
-            this.props.errorInfo.isError = false;
-        }
-    }
+    
     submit = () => {
         let value = this.props.item;
         this.props.deleteComm({ id: value.id, eventId: this.props.eventId });

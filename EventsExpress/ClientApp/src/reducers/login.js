@@ -1,7 +1,6 @@
 import {
   SET_LOGIN_PENDING,
-  SET_LOGIN_SUCCESS,
-  SET_LOGIN_ERROR
+  SET_LOGIN_SUCCESS
 } from "../actions/login";
 import { SET_LOGOUT } from '../actions/logout';
 import initialState from '../store/initialState';

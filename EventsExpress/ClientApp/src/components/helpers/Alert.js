@@ -58,11 +58,18 @@ export default function MySnackbar(props) {
   const Icon = variantIcon[variant];
   let timeToShow;
 
-  if(variant !== 'error' && autoHideDuration)
+  if(variant !== 'error')
   {
-    timeToShow = 5000;
+    if(autoHideDuration)
+    {
+      timeToShow = autoHideDuration;
+    }
+    else
+    {
+      timeToShow = 5000;
+    }
   }
-
+  
   return (
     <Snackbar
       anchorOrigin={{
