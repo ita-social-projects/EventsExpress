@@ -1,0 +1,59 @@
+s# This is a basic workflow to help you get started with Actions
+
+name: CI
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
+      
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+    - name: Restore dependencies
+      run: dotnet restore --interactive
+      working-directory: EventsExpress
+    - name: Build
+      run: dotnet build --configuration Release
+      working-directory: EventsExpress/EventsExpress
+    - name: Test
+      run: dotnet test --verbosity normal 
+      working-directory: EventsExpress/EventsExpress.Tests
+  sonarscan:
+    needs: [build]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+     #SonarScan
+    - name: SonarScanner for .NET Core with pull request decoration support
+      uses: highbyte/sonarscan-dotnet@1.0.2
+      with:
+        # The key of the SonarQube project
+        sonarProjectKey: ita-social-projects-events-express
+        # The name of the SonarQube project
+        sonarProjectName:  EventsExpress
+        # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
+        sonarOrganization: ita-social-projects
+        dotnetBuildArguments: ./EventsExpress 
+        dotnetTestArguments: ./EventsExpress/EventsExpress.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+        sonarBeginArguments:: begin /o:events-express /k:ita-social-projects-events-express /d:sonar.cs.opencover.reportsPaths="src/ApplicationTest/coverage.opencover.xml" /d:sonar.host.url=https://sonarcloud.io 
