@@ -29,11 +29,11 @@ namespace EventsExpress.ViewModels
 
         public Guid PhotoId { get; set; }
 
-        public Guid CityId { get; set; }
-
-        public Guid CountryId { get; set; }
-
         public bool IsPublic { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
 
         public IEnumerable<UserPreviewViewModel> Owners { get; set; }
 

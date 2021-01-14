@@ -33,9 +33,6 @@ namespace EventsExpress.Core.Services
             return _mapper.Map<IEnumerable<EventScheduleDTO>>(
                 _context.EventSchedules
                     .Include(es => es.Event)
-                        .ThenInclude(e => e.City)
-                            .ThenInclude(c => c.Country)
-                    .Include(es => es.Event)
                         .ThenInclude(e => e.Owners)
                     .Include(es => es.Event)
                         .ThenInclude(e => e.Photo)
@@ -47,9 +44,6 @@ namespace EventsExpress.Core.Services
         public EventScheduleDTO EventScheduleById(Guid eventScheduleId)
         {
             var res = _context.EventSchedules
-                .Include(es => es.Event)
-                    .ThenInclude(e => e.City)
-                        .ThenInclude(c => c.Country)
                 .Include(es => es.Event)
                     .ThenInclude(e => e.Photo)
                 .Include(es => es.Event)

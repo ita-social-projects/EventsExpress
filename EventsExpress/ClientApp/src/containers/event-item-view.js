@@ -3,7 +3,15 @@ import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import Spinner from '../components/spinner';
 import get_event from '../actions/event-item-view';
-import { join, leave, resetEvent, cancel_event, approveUser, deleteFromOwners, promoteToOwner } from '../actions/event-item-view';
+import { 
+    join, 
+    leave, 
+    resetEvent, 
+    cancel_event, 
+    approveUser, 
+    deleteFromOwners, 
+    promoteToOwner } 
+from '../actions/event-item-view';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    
