@@ -161,7 +161,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(eventDTO);
+            var locationDTO = _mapper.Map<EventDTO, LocationDto>(eventDTO);
             var locationId = _locationService.AddLocationToEvent(locationDTO);
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
@@ -236,7 +236,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
 
-            var locationDTO = _mapper.Map<EventDTO, LocationDTO>(e);
+            var locationDTO = _mapper.Map<EventDTO, LocationDto>(e);
             var locationId = _locationService.AddLocationToEvent(locationDTO);
 
             ev.Title = e.Title;

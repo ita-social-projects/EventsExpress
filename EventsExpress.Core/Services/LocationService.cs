@@ -20,7 +20,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> AddLocationToEvent(LocationDTO locationDTO)
+        public async Task<Guid> AddLocationToEvent(LocationDto locationDTO)
         {
             var locationDTOByLatLng = LocationByPoint(locationDTO.Point);
             Guid locationId;
@@ -36,9 +36,9 @@ namespace EventsExpress.Core.Services
             return locationId;
         }
 
-        public async Task<Guid> Create(LocationDTO locationDTO)
+        public async Task<Guid> Create(LocationDto locationDTO)
         {
-            var location = _mapper.Map<LocationDTO, EventLocation>(locationDTO);
+            var location = _mapper.Map<LocationDto, EventLocation>(locationDTO);
 
             var result = Insert(location);
 
@@ -47,9 +47,9 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public LocationDTO LocationByPoint(Point point)
+        public LocationDto LocationByPoint(Point point)
         {
-            var locationDTO = _mapper.Map<LocationDTO>(_context.EventLocations
+            var locationDTO = _mapper.Map<LocationDto>(_context.EventLocations
                 .Where(e =>
                     e.Point.X == point.X &&
                     e.Point.Y == point.Y)

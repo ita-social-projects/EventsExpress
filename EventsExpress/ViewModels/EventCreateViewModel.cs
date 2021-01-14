@@ -7,8 +7,6 @@ namespace EventsExpress.ViewModels
 {
     public class EventCreateViewModel
     {
-        public Guid Id { get; set; }
-
         public string Title { get; set; }
 
         public string Description { get; set; }

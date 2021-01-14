@@ -15,7 +15,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private LocationService service;
         private EventLocation location;
-        private LocationDTO locationDTO;
+        private LocationDto locationDTO;
 
         private Guid locationId = Guid.NewGuid();
 
@@ -30,7 +30,7 @@ namespace EventsExpress.Test.ServiceTests
                 Point = new Point(12.45, 24.6),
             };
 
-            locationDTO = new LocationDTO
+            locationDTO = new LocationDto
             {
                 Id = locationId,
                 Point = new Point(12.45, 24.6),
@@ -39,17 +39,17 @@ namespace EventsExpress.Test.ServiceTests
             Context.EventLocations.Add(location);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<LocationDTO>(It.IsAny<EventLocation>()))
+            MockMapper.Setup(u => u.Map<LocationDto>(It.IsAny<EventLocation>()))
                 .Returns((EventLocation el) => el == null ?
                 null :
-                new LocationDTO
+                new LocationDto
                 {
                     Id = el.Id,
                     Point = el.Point,
                 });
 
-            MockMapper.Setup(u => u.Map<LocationDTO, EventLocation>(It.IsAny<LocationDTO>()))
-                .Returns((LocationDTO el) => el == null ?
+            MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
+                .Returns((LocationDto el) => el == null ?
                 null :
                 new EventLocation
                 {
@@ -123,7 +123,7 @@ namespace EventsExpress.Test.ServiceTests
         public void AddLocationToEvent_NotExistingLocation_CreateNewLocation()
         {
             // Arrange
-            var locationDTO = new LocationDTO { Point = new Point(10.23, 2.3) };
+            var locationDTO = new LocationDto { Point = new Point(10.23, 2.3) };
 
             // Act
 

@@ -259,8 +259,8 @@ namespace EventsExpress.Mapping
             #endregion
 
             #region LOCATION MAPPING
-            CreateMap<LocationDTO, EventLocation>().ReverseMap();
-            CreateMap<EventDTO, LocationDTO>()
+            CreateMap<LocationDto, EventLocation>().ReverseMap();
+            CreateMap<EventDTO, LocationDto>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
             #endregion
 
