@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class ImplementEventLocation : Migration
+    public partial class AddEventLocation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,8 +36,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Point = table.Column<Point>(nullable: true),
-                    Desc = table.Column<string>(nullable: true)
+                    Point = table.Column<Point>(nullable: true)
                 },
                 constraints: table =>
                 {

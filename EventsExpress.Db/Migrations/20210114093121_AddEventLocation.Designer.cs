@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210105074613_ImplementEventLocation")]
-    partial class ImplementEventLocation
+    [Migration("20210114093121_AddEventLocation")]
+    partial class AddEventLocation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,9 +176,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Desc")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Point>("Point")
                         .HasColumnType("geography");

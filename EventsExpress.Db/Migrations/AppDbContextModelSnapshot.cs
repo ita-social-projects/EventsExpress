@@ -175,9 +175,6 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Desc")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Point>("Point")
                         .HasColumnType("geography");
 

@@ -10,8 +10,5 @@ namespace EventsExpress.Db.Entities
     {
         [Track]
         public Point Point { get; set; }
-
-        [Track]
-        public string Desc { get; set; }
     }
 }
