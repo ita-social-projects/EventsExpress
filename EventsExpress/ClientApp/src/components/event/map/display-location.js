@@ -51,16 +51,16 @@ class DisplayLocation extends Component {
                 }
                 {PlaceName != "" && City != "" &&
                     City != PlaceName &&
-                    <span>
-                        <br />
-                        {City}
-                    </span>
+                        <span>
+                            <br />
+                            {City}
+                        </span>
                 }
                 {City != "" &&
                     PlaceName == "" &&
-                    <span>
-                        {City}
-                    </span>
+                        <span>
+                            {City}
+                        </span>
                 }
                 {CountryCode !="" && 
                     PlaceName != countries[CountryCode].name &&
@@ -79,6 +79,6 @@ class DisplayLocation extends Component {
             </>
         );
     }
-};
+}
 
 export default DisplayLocation;

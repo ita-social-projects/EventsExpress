@@ -80,6 +80,6 @@ class LocationMap extends Component {
             </div>
         );
     }
-};
+}
 
 export default LocationMap;

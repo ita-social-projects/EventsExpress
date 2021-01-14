@@ -23,7 +23,7 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> AddLocationToEvent(LocationDTO locationDTO)
         {
             var locationDTOByLatLng = LocationByPoint(locationDTO.Point);
-            var locationId = Guid.Empty;
+            Guid locationId;
             if (locationDTOByLatLng != null)
             {
                 locationId = locationDTOByLatLng.Id;
