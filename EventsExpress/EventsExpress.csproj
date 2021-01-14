@@ -44,36 +44,17 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\build\**" />
-    <Compile Remove="ClientApp\src\components\container-list-item\**" />
-    <Compile Remove="ClientApp\src\components\container-list\**" />
     <Content Remove="$(SpaRoot)**" />
-    <Content Remove="ClientApp\build\**" />
-    <Content Remove="ClientApp\src\components\container-list-item\**" />
-    <Content Remove="ClientApp\src\components\container-list\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="ClientApp\build\**" />
-    <EmbeddedResource Remove="ClientApp\src\components\container-list-item\**" />
-    <EmbeddedResource Remove="ClientApp\src\components\container-list\**" />
     <None Remove="ClientApp\build\**" />
-    <None Remove="ClientApp\src\components\container-list-item\**" />
-    <None Remove="ClientApp\src\components\container-list\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventsExpress.Core\EventsExpress.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\public\dima\" />
-    <Folder Include="ClientApp\src\components\avatar\" />
-    <Folder Include="ClientApp\src\components\chat\" />
-    <Folder Include="ClientApp\src\components\contactUs\" />
-    <Folder Include="ClientApp\src\components\event\share\" />
-    <Folder Include="ClientApp\src\components\rating\" />
-    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

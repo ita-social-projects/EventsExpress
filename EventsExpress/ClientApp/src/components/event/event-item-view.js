@@ -16,8 +16,6 @@ import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
-import geocodeCoords from './map/geocode';
-import L from 'leaflet';
 import DisplayLocation from './map/display-location';
 
 const userStatus = {
@@ -31,23 +29,8 @@ export default class EventItemView extends Component {
         super();
 
         this.state = {
-            edit: false,
-            address: null
+            edit: false
         };
-    }
-
-    componentWillMount() {
-        geocodeCoords(L.latLng(
-            this.props.event.data.latitude,
-            this.props.event.data.longitude), 
-            this.defineAddress);
-    }
-
-    defineAddress = (error, result) => {
-        if (error) {
-            return;
-        }
-        this.setState({address: result.address});
     }
 
     renderCategories = arr => {
@@ -331,10 +314,10 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br/>
-                                    {this.state.address && 
-                                    <DisplayLocation address={this.state.address}/>}
-                                    {!this.state.address && 
-                                    <span>Location is not identified</span>}
+                                    <DisplayLocation 
+                                        latitude={this.props.event.data.latitude}
+                                        longitude={this.props.event.data.longitude}
+                                    />
                                 <br />
                                 {categories_list}
                             </div>
