@@ -4,7 +4,6 @@ import { TogleOpenWind } from '../../actions/modalWind';
 import logout from '../../actions/logout';
 import { isOpen } from '../../actions/modalWind'
 import { setRegisterError } from '../../actions/register'
-import { setLoginError } from '../../actions/login'
 import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
 import { setEditGenderError } from '../../actions/EditProfile/EditGender'
 import { setEditBirthdayError } from '../../actions/EditProfile/editBirthday'
@@ -15,9 +14,6 @@ import { setCountryError } from '../../actions/countries'
 import { setCategoryError } from '../../actions/category/add-category'
 import { getUsersError } from '../../actions/users'
 import { getEventError } from '../../actions/event-item-view'
-import { set2CommentError } from '../../actions/add-comment'
-import { set1CommentError } from '../../actions/comment-list'
-import { set3CommentError } from '../../actions/delete-comment'
 import { setRolesError } from '../../actions/roles'
 
 
@@ -49,7 +45,6 @@ const mapDispatchToProps = (dispatch) => {
         resetError: () => {
             dispatch(isOpen(false));
             dispatch(setRegisterError(null));
-           dispatch(setLoginError(null));
            dispatch(setEditUsernameError(null));
            dispatch(setEditGenderError(null));
            dispatch(setEditBirthdayError(null));
@@ -60,9 +55,6 @@ const mapDispatchToProps = (dispatch) => {
            dispatch(getUsersError(false));
            dispatch(getEventError(false));
            dispatch(setAvatarError(false));
-           dispatch(set2CommentError(null));
-           dispatch(set1CommentError(false));
-           dispatch(set3CommentError(null));
            dispatch(setRolesError(false));
         }
     };
