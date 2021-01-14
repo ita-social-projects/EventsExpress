@@ -18,30 +18,30 @@ import {
     renderDatePicker
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
-import ImageResizer from '../event/image-resizer'
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [], checked: false, cropped: false };
+    state = { imagefile: [], checked: false};
 
     handleFile(fieldName, event) {
         event.preventDefault();
         const files = [...event.target.files];
     }
 
-    handleOnDrop = (newImageFile, onChange) => {        
+    handleOnDrop = (newImageFile, onChange) => {
+        console.log(newImageFile);
         if (newImageFile.length > 0) {
             const imagefile = {
                 file: newImageFile[0],
                 name: newImageFile[0].name,
                 preview: URL.createObjectURL(newImageFile[0]),
                 size: 1
-            };
+            };            
             this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
-        }        
+        }
     };
 
     componentDidMount = () => {
@@ -65,11 +65,16 @@ class EventForm extends Component {
         }
     }
 
-    setCroppedImage = (image) => {        
-        this.setState({ cropped: true });                        
-        let file = new File([image], "fileName");                       
-        this.setState({ imagefile: [{ file: file, name: "image.jpg", preview: image, size: 1 }] });        
-        console.log(this.state.imagefile[0]);        
+    setCroppedImage = (croppedImage, onChange) => {
+        console.log("CROPPED IMAGE", croppedImage);
+        const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
+        const imagefile = {
+            file: file,
+            name: "image.jpg",
+            preview: croppedImage,
+            size: 1
+        };
+        this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
     }
 
     componentWillUnmount() {
@@ -92,7 +97,7 @@ class EventForm extends Component {
 
     resetForm = () => {
         this.isSaveButtonDisabled = false;
-        this.setState({ imagefile: [], cropped: false });
+        this.setState({ imagefile: [] });
     }
 
     renderLocations = (arr) => {
@@ -112,15 +117,7 @@ class EventForm extends Component {
 
         return (            
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
-                <div className="text text-2 pl-md-4">
-                    {this.state.imagefile.length && !this.state.cropped ? (
-                        <div>
-                            <ImageResizer
-                                image={this.state.imagefile[0]}
-                                parentCallback={this.setCroppedImage.bind(this)}
-                            />                            
-                        </div>
-                    ) : (
+                <div className="text text-2 pl-md-4">                    
                             <Field
                                 ref={(x) => { this.image = x; }}
                                 id="image-field"
@@ -129,9 +126,10 @@ class EventForm extends Component {
                                 type="file"
                                 imagefile={this.state.imagefile}
                                 handleOnDrop={this.handleOnDrop}
+                                handleOnCrop={this.setCroppedImage}                        
+                                crop={true}
                                 validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-                            />
-                        )}
+                            />                        
                     <Button
                         type="button"
                         color="primary"

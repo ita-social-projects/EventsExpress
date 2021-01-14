@@ -1,34 +1,66 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DropZone from "react-dropzone";
 import ImagePreview from "./ImagePreview";
 import Placeholder from "./Placeholder";
 import ShowError from "./ShowError";
+import ImageResizer from '../event/image-resizer';
 
-const DropZoneField = ({
-  handleOnDrop,
-  input: { onChange },
-  imagefile,
-  meta: { error, touched }
-}) => { return <div className="preview-container">
-    <DropZone
-      accept="image/jpeg, image/png, image/gif, image/bmp"
-      className="upload-container"
-      onDrop={file => handleOnDrop(file, onChange)}
-      multiple={false}
-    >
-      {props =>
-        imagefile && imagefile.length > 0 ? (
-          <ImagePreview imagefile={imagefile} />
-        ) : (
-          <Placeholder {...props} error={error} touched={touched} />
+export default class DropZoneField extends Component {
+
+    state = {
+        cropped: false
+    };
+
+    imageCrop = () => {
+        this.setState({ cropped: true });
+    };
+
+    render() {
+        const {
+            handleOnDrop,
+            handleOnCrop,
+            imagefile,
+            crop,
+            meta: { error, touched },
+            input: { onChange }
+        } = this.props;
+
+        return (
+            <div className="preview-container">
+                {imagefile.length && crop && !this.state.cropped ? (
+                    <div>
+                        <ImageResizer
+                            image={imagefile[0]}
+                            onChange={onChange}
+                            handleOnDrop={handleOnDrop}
+                            handleOnCrop={handleOnCrop}
+                            onImageCrop={this.imageCrop}
+                        />
+                    </div>
+                ) : (
+                        <div>
+                            <DropZone
+                                accept="image/jpeg, image/png, image/gif, image/bmp"
+                                className="upload-container"
+                                onDrop={file => handleOnDrop(file, onChange)}
+                                multiple={false}
+                            >
+                                {props =>
+                                    imagefile && imagefile.length > 0 ? (
+                                        <ImagePreview imagefile={imagefile} />
+                                    ) : (
+                                            <Placeholder {...props} error={error} touched={touched} />
+                                        )
+                                }
+                            </DropZone>
+                            <ShowError error={error} touched={touched} />
+                        </div>
+                    )}
+            </div>
         )
-      }
-    </DropZone>
-    <ShowError error={error} touched={touched} />
-  </div>
-}
-    
+    };
+};
 
 DropZoneField.propTypes = {
   error: PropTypes.string,
@@ -44,5 +76,3 @@ DropZoneField.propTypes = {
   onChange: PropTypes.func,
   touched: PropTypes.bool
 };
-
-export default DropZoneField;

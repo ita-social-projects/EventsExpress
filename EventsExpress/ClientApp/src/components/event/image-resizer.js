@@ -24,7 +24,7 @@ class ImageResizer extends Component {
         this.setState({ zoom })
     }    
 
-    createImage = (url) =>
+    createImage = url =>
         new Promise((resolve, reject) => {
             const image = new Image()
             image.addEventListener('load', () => resolve(image))
@@ -70,26 +70,23 @@ class ImageResizer extends Component {
         )
 
         // As Base64 string
-        //return canvas.toDataURL('image/jpeg');
+        return canvas.toDataURL('image/jpeg');
         
         // As a blob
-        return new Promise(resolve => {
-            canvas.toBlob(file => {
-                resolve(URL.createObjectURL(file))
-            }, 'image/jpeg')
-        })
+        //return new Promise(resolve => {
+        //    canvas.toBlob(file => {
+        //        resolve(URL.createObjectURL(file))
+        //    }, 'image/jpeg')
+        //})
     }
 
     async cropImage() {        
         const croppedImage = await this.getCroppedImg(
             this.props.image.preview,
             this.state.croppedAreaPixels
-        )                
-        this.sendData(croppedImage);        
-    }
-
-    sendData = (image) => {
-        this.props.parentCallback(image);
+        )
+        this.props.handleOnCrop([croppedImage], this.props.onChange);
+        this.props.onImageCrop();        
     }
 
     render() {        
@@ -132,4 +129,4 @@ class ImageResizer extends Component {
     }
 }
 
-export default ImageResizer
+export default ImageResizer;
