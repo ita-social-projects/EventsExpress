@@ -50,7 +50,7 @@ class EventCancelModal extends Component {
                                 <input size="50" type='text' onChange={this.handleChange} />
                             </div>
                             {this.props.cancelationStatus.errorMessage &&
-                                renderErrorMessage(this.props.cancelationStatus.errorMessage, 'Reason')
+                                renderErrorMessage(this.props.cancelationStatus.errorMessage, 'reason')
                             }
                         </DialogContent>
                         <DialogActions>
