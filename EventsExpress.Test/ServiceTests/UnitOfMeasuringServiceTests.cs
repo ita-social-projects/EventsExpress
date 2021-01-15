@@ -1,107 +1,97 @@
-﻿namespace EventsExpress.Test.ServiceTests
-{
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.Exceptions;
-    using EventsExpress.Core.Services;
-    using EventsExpress.Db.Entities;
-    using Moq;
-    using NUnit.Framework;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.Services;
+using EventsExpress.Db.Entities;
+using EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring;
+using Moq;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
+namespace EventsExpress.Test.ServiceTests
+{
     internal class UnitOfMeasuringServiceTests : TestInitializer
     {
         private UnitOfMeasuringService service;
-        private UnitOfMeasuring unitOfMeasuring;
-        private UnitOfMeasuringDTO unitOfMeasuringDTO;
-        private Guid unitOfMeasuringId = Guid.NewGuid();
-        private List<UnitOfMeasuring> unitsOfMeasuring;
+        private UnitOfMeasuring correctUnitOfMeasuring;
+        private UnitOfMeasuring deletedUnitOfMeasuring;
+        private UnitOfMeasuringDTO correctUnitOfMeasuringDTO;
+        private UnitOfMeasuringDTO deletedUnitOfMeasuringDTO;
+        private UnitOfMeasuringDTO unitOfMeasuringDTONotExId;
+        private UnitOfMeasuringDTO unitOfMeasuringDTOCreate;
+        private Guid correctUnitOfMeasuringId = Guid.NewGuid();
+        private Guid deletedUnitOfMeasuringId = new Guid("a1d2dc99-0d30-49e2-b2ee-12411dc461ff");
+        private Guid createdId = Guid.NewGuid();
+        private Guid notExistedId = new Guid( "e815d623-6b0c-4c85-a847-26a6f5a878b6");
+        public string createUnitName = "create Unit Name";
+        public string createShortName = "create Unit Name";
+        public string correctUnitName =  "CorrectUnitName";
+        public string correctShortName = "CSN";
+        public string deletedUnitName = "DeletedUnitName";
+        public string deletedShortName = "DSN";
+        public string randomStringName = "Rnd";
+        public string inCorrectUnitName = "78789878Unitk";
 
-        public string RandomString(int size, bool lowerCase = false)
-        {
-            var builder = new StringBuilder(size);
-            Random _random = new Random();
-            char offset = lowerCase ? 'a' : 'A';
-            const int lettersOffset = 26;
-
-            for (var i = 0; i < size; i++)
-            {
-                var @char = (char)_random.Next(offset, offset + lettersOffset);
-                builder.Append(@char);
-            }
-
-            return lowerCase ? builder.ToString().ToLower() : builder.ToString();
-        }
-        public UnitOfMeasuring CreateRandomUnit()
+        
+        public UnitOfMeasuring FromDTOToUnit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
             return new UnitOfMeasuring
             {
-                Id = new Guid(),
-                UnitName = RandomString(8),
-                ShortName = RandomString(2),
+                Id = unitOfMeasuringDTO.Id,
+                UnitName = unitOfMeasuringDTO.UnitName,
+                ShortName = unitOfMeasuringDTO.ShortName,
+                IsDeleted = unitOfMeasuringDTO.IsDeleted,
             };
         }
 
-        public UnitOfMeasuring SaveRandomUnit(UnitOfMeasuring rndUnit)
+        public void CreateDTO()
         {
-            Context.UnitOfMeasurings.Add(rndUnit);
-            Context.SaveChanges();
-            return rndUnit;
-        }
-
-        public UnitOfMeasuringDTO CreateRandomDTO()
-        {
-            return new UnitOfMeasuringDTO
+            correctUnitOfMeasuringDTO = new UnitOfMeasuringDTO
             {
-                UnitName = RandomString(8),
-                ShortName = RandomString(2),
+                Id = correctUnitOfMeasuringId,
+                UnitName = correctUnitName,
+                ShortName = correctShortName,
+                IsDeleted = false,
             };
-        }
-
-        public UnitOfMeasuringDTO FromUnitToDTO(UnitOfMeasuring unitOfMeasuring)
-        {
-            return new UnitOfMeasuringDTO
+            unitOfMeasuringDTONotExId = new UnitOfMeasuringDTO
             {
-                Id = unitOfMeasuring.Id,
-                UnitName = unitOfMeasuring.UnitName,
-                ShortName = unitOfMeasuring.ShortName,
-                IsDeleted = unitOfMeasuring.IsDeleted
+                Id = notExistedId,
+                UnitName = correctUnitName,
+                ShortName = correctShortName,
+                IsDeleted = false,
             };
-        }
-        public bool EqualsUnits(UnitOfMeasuringDTO unitOfMeasuringDTO, UnitOfMeasuring unitOfMeasuring)
-        {
-            if (unitOfMeasuring.Id == unitOfMeasuringDTO.Id)
+            deletedUnitOfMeasuringDTO = new UnitOfMeasuringDTO
             {
-                return true;
-            }
-            return false;
+                Id = deletedUnitOfMeasuringId,
+                UnitName = deletedUnitName,
+                ShortName = deletedShortName,
+                IsDeleted = true,
+            };
+            unitOfMeasuringDTOCreate = new UnitOfMeasuringDTO
+            {
+                Id = createdId,
+                UnitName = createUnitName,
+                ShortName = createShortName,
+                IsDeleted = false,
+            };
+
         }
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
+            CreateDTO();
+            correctUnitOfMeasuring = FromDTOToUnit(correctUnitOfMeasuringDTO);
+            Context.UnitOfMeasurings.Add(correctUnitOfMeasuring);
+            Context.SaveChanges();
+            deletedUnitOfMeasuring = FromDTOToUnit(deletedUnitOfMeasuringDTO);
+            Context.UnitOfMeasurings.Add(deletedUnitOfMeasuring);
+            Context.SaveChanges();
             service = new UnitOfMeasuringService(Context, MockMapper.Object);
-            unitOfMeasuring = new UnitOfMeasuring
-            {
-                Id = unitOfMeasuringId,
-                UnitName = "RandomUnitName",
-                ShortName = "RndSN",
-                IsDeleted = false
-
-            };
-            Context.UnitOfMeasurings.Add(unitOfMeasuring);
-            Context.SaveChanges();
-            unitsOfMeasuring = new List<UnitOfMeasuring>
-            {
-                  CreateRandomUnit(),
-                  CreateRandomUnit(),
-                  CreateRandomUnit(),
-            };
-            Context.UnitOfMeasurings.AddRange(unitsOfMeasuring);
-            Context.SaveChanges();
             MockMapper.Setup(u => u.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(It.IsAny<UnitOfMeasuringDTO>()))
               .Returns((UnitOfMeasuringDTO e) => e == null ?
               null :
@@ -112,140 +102,81 @@
                   ShortName = e.ShortName,
                   IsDeleted = e.IsDeleted,
               });
+
+            MockMapper.Setup(u => u.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(It.IsAny<IEnumerable<UnitOfMeasuring>>()))
+             .Returns((IEnumerable<UnitOfMeasuring> e) => e?.Select(item => new UnitOfMeasuringDTO { Id = item.Id }));
         }
-        
+
         [Test]
-        public void Create_NULLUnitOfMeasuring_Exception()
+        [Category("Get All")]
+        public void Get_ALL_CorrectData()
+        {
+            int expectedCount = 1;
+            var res = service.GetAll();
+            Assert.That(res.Any(item => item.Id == correctUnitOfMeasuringDTO.Id), Is.True);
+            Assert.That(res.Count(), Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        [Category("Create")]
+        public void Create_NuLLDTO_Exception()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(null));
         }
 
         [Test]
+        [Category("Create")]
         public async System.Threading.Tasks.Task Create_CorrectDTO_IdUnit()
         {
-            UnitOfMeasuringDTO newUnitOfMeasuring = CreateRandomDTO();
-            Guid unitId = await service.Create(newUnitOfMeasuring);
+            Guid unitId = await service.Create(unitOfMeasuringDTOCreate);
             Assert.That(unitId, Is.Not.Null);
         }
 
-        [Test]
-        public void Edit_NotExistingId_Exception()
+        [TestCaseSource(typeof(EditingUnit))]
+        [Category("Edit")]
+        public void Edit_NotExistingIdORDeletedUnit_Exception(UnitOfMeasuringDTO unitType)
         {
-            UnitOfMeasuringDTO expectedDTO = CreateRandomDTO();
-            expectedDTO.Id = new Guid();
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(expectedDTO));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(unitType));
         }
 
         [Test]
-        public void Edit_IsDeletedUnit_ReturnFalse()
-        {
-            UnitOfMeasuring rndUnitOfMeasuring = CreateRandomUnit();
-            UnitOfMeasuring savedUnit = SaveRandomUnit(rndUnitOfMeasuring);
-            savedUnit.IsDeleted = true;
-            Context.SaveChanges();
-            UnitOfMeasuringDTO expectedDTO = FromUnitToDTO(savedUnit);
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(expectedDTO));
-        }
-
-        [Test]
+        [Category("Edit")]
         public async System.Threading.Tasks.Task Edit_ValidDTO_IdUnitOfMeasuring()
         {
-            UnitOfMeasuring rndUnitOfMeasuring = CreateRandomUnit();
-            UnitOfMeasuring savedUnit = SaveRandomUnit(rndUnitOfMeasuring);
-            UnitOfMeasuringDTO expectedDTO = FromUnitToDTO(savedUnit);
-            expectedDTO.ShortName = RandomString(5);
-            expectedDTO.UnitName = RandomString(5);
-            Guid expectedId = rndUnitOfMeasuring.Id;
-            Guid actualId = await service.Edit(expectedDTO);
+            Guid expectedId = correctUnitOfMeasuringDTO.Id;
+            Guid actualId = await service.Edit(correctUnitOfMeasuringDTO);
             Assert.That(actualId, Is.EqualTo(expectedId));
         }
 
         [Test]
-        public void Get_NotExistingId_Exception()
-        {
-            Guid Id = new Guid();
-            Assert.Throws<EventsExpressException>(() => service.GetById(Id));
-        }
-
-        [Test]
-        public void Get_IsDeletedUnit_Exception()
-        {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            savedUnitOfMeasuring.IsDeleted = true;
-            Context.SaveChanges();
-            Assert.Throws<EventsExpressException>(() => service.GetById(savedUnitOfMeasuring.Id));
-        }
-
-        [Test]
+        [Category("Get")]
         public void Get_ExistedUnit_Unit()
         {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            UnitOfMeasuringDTO assert = service.GetById(savedUnitOfMeasuring.Id);
-            Assert.That(assert.Id, Is.EqualTo(savedUnitOfMeasuring.Id));
+            UnitOfMeasuringDTO assert = service.GetById(correctUnitOfMeasuring.Id);
+            Assert.That(assert.Id, Is.EqualTo(correctUnitOfMeasuring.Id));
+        }
+
+        [TestCaseSource(typeof(GettingOkDeletingUnits))]
+        [Category("Get")]
+
+        public void Get_NotExistingIdORDeletedUnit_Exception(Guid id)
+        {
+            Assert.Throws<EventsExpressException>(() => service.GetById(id));
         }
 
         [Test]
+        [Category("Delete")]
         public void Delete_ExistedUnit_NotThrow()
         {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            Assert.DoesNotThrowAsync(() => service.Delete(savedUnitOfMeasuring.Id));
+            Assert.DoesNotThrowAsync(() => service.Delete(correctUnitOfMeasuringId));
+            Assert.Throws<EventsExpressException>(() => service.GetById(correctUnitOfMeasuringId));
         }
 
-        [Test]
-        public void Delete_NotExistedId_Throw()
-        {
-            Guid expectedId = new Guid();
-            Assert.ThrowsAsync<EventsExpressException>(() => service.Delete(expectedId));
-        }
-
-        [Test]
-        public void Delete_DeletedUnit_Throw()
-        {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            savedUnitOfMeasuring.IsDeleted = true;
-            Context.SaveChanges();
-            Assert.ThrowsAsync<EventsExpressException>(() => service.Delete(savedUnitOfMeasuring.Id));
-        }
-
-        [Test]
-
-        public void ExistsByName_ExistedUnit_True()
-        {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            string expectedUnitName = savedUnitOfMeasuring.UnitName;
-            string expectedShortName = savedUnitOfMeasuring.ShortName;
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), Is.True);
-        }
-
-        [Test]
-        public void ExistsByName_NotExistUnitName_False()
-        {
-            UnitOfMeasuring expected = CreateRandomUnit();
-            Assert.That(service.ExistsByName(RandomString(8), expected.ShortName), Is.False);
-        }
-
-        [Test]
-        public void ExistsByName_NotExistShortName_False()
-        {
-            UnitOfMeasuring expected = CreateRandomUnit();
-            Assert.That(service.ExistsByName(expected.UnitName, RandomString(3)), Is.False);
-        }
-
-        [Test]
-        public void ExistsByName_DeletedUnit_False()
-        {
-            UnitOfMeasuring unitOfMeasuringRandom = CreateRandomUnit();
-            UnitOfMeasuring savedUnitOfMeasuring = SaveRandomUnit(unitOfMeasuringRandom);
-            savedUnitOfMeasuring.IsDeleted = true;
-            Context.SaveChanges();
-            string expectedUnitName = savedUnitOfMeasuring.UnitName;
-            string expectedShortName = savedUnitOfMeasuring.ShortName;
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), Is.False);
+        [TestCaseSource(typeof(ExistingUnitByName))]
+        [Category("Exist By Name")]
+        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, IResolveConstraint constraint)
+        { 
+            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), constraint);
         }
     }
 }

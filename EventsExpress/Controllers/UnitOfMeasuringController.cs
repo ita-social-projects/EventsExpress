@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.ModelBinders;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+
     [ApiController]
     public class UnitOfMeasuringController : Controller
     {
@@ -35,12 +35,21 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Create process failed.</response>
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-            var result = await _unitOfMeasuringService.Create(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
+            if (model == null)
+            {
+                throw new EventsExpressException("Null object");
+            }
+            else
+            {
+                UnitOfMeasuringDTO dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model);
+                var result = await _unitOfMeasuringService.Create(dTO);
 
-            return Ok(result);
+                return Ok(result);
+            }
         }
 
         /// <summary>
@@ -51,12 +60,13 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Edit process failed.</response>
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (model == null)
             {
-                return BadRequest(ModelState);
+                throw new EventsExpressException("Null object");
             }
 
             var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
@@ -72,10 +82,11 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Return process failed.</response>
+        [Authorize]
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>((IEnumerable<UnitOfMeasuringDTO>)_unitOfMeasuringService.GetAll()));
         }
 
         /// <summary>
@@ -87,10 +98,17 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Return process  failed.</response>
+        [Authorize(Roles = "Admin")]
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
-            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(_unitOfMeasuringService.GetById(id)));
+            var item = _unitOfMeasuringService.GetById(id);
+            if (item == null)
+            {
+                throw new EventsExpressException("Null object");
+            }
+
+            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(item));
         }
 
         /// <summary>
@@ -101,12 +119,14 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If delete process failed.</response>
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == Guid.Empty)
+            var existingItem = _unitOfMeasuringService.GetById(id);
+            if (existingItem == null)
             {
-                return BadRequest();
+                throw new EventsExpressException("Null object");
             }
 
             await _unitOfMeasuringService.Delete(id);

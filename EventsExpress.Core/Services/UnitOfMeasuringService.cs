@@ -20,7 +20,7 @@ namespace EventsExpress.Core.Services
             : base(context, mapper)
         {
         }
-       
+
         public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
             if (unitOfMeasuringDTO == null)
@@ -29,7 +29,7 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                var result =  Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
                 await _context.SaveChangesAsync();
                 return result.Id;
             }
@@ -52,9 +52,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = _context.UnitOfMeasurings.Where(item => !item.IsDeleted).ToList();
-
-            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
+            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(_context.UnitOfMeasurings.Where(item => !item.IsDeleted));
         }
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
@@ -64,12 +62,13 @@ namespace EventsExpress.Core.Services
             {
                 throw new EventsExpressException("Not found");
             }
+
             return new UnitOfMeasuringDTO
             {
                 Id = unitOfMeasuring.Id,
                 UnitName = unitOfMeasuring.UnitName,
                 ShortName = unitOfMeasuring.ShortName,
-                IsDeleted = unitOfMeasuring.IsDeleted
+                IsDeleted = unitOfMeasuring.IsDeleted,
             };
         }
 
@@ -78,7 +77,7 @@ namespace EventsExpress.Core.Services
             var unitOfMeasuring = _context.UnitOfMeasurings.Find(id);
             if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
             {
-                throw new EventsExpressException("Not found");
+                return;
             }
 
             unitOfMeasuring.IsDeleted = true;

@@ -31,7 +31,6 @@ class CategoryAddWrapper extends React.Component {
     }
 
     render() {
-        console.log(this.props.item.id)
         return (this.props.item.id !== this.props.editedCategory) 
             ? <tr>
                 <td className="align-middle align-items-stretch" width="20%">

@@ -19,9 +19,7 @@ export function add_unitOfMeasuring(data) {
             res = api_serv.editUnitOfMeasuring(data);
         } else {
             res = api_serv.setUnitOfMeasuring(data);
-        }
-        //res = api_serv.setUnitOfMeasuring(data);
-
+        }        
         res.then(response => {
             if (response.error == null) {
                 dispatch(setUnitOfMeasuringSuccess(true));
