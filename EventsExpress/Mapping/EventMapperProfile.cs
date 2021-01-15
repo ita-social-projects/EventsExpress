@@ -72,7 +72,7 @@ namespace EventsExpress.Mapping
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
                 .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
-                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Where(x => x.UserStatusEvent == 0).Count()))
+                .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
                    new UserPreviewViewModel
