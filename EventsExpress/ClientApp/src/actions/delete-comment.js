@@ -9,7 +9,6 @@ const api_serv = new CommentService();
 export default function delete_comment(data) {
     return dispatch => {
         dispatch(setCommentPending(true));
-        data.id = '08a7cd52-475f-4505-55a3-08d8b0fd6aad';
         const res = api_serv.setCommentDelete(data);
         return res.then(response => {
             if (response.error == null) {
