@@ -21,25 +21,24 @@ import Inventory from '../inventory/inventory';
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
-//const imageIsNotCropped = value => ();
 const { validate } = Module;
 
 class EventForm extends Component {
-    state = { imagefile: [], checked: false};
+    state = { imagefile: [], checked: false, photoCropped: false };
 
     handleFile(fieldName, event) {
         event.preventDefault();
         const files = [...event.target.files];
     }
 
-    handleOnDrop = (newImageFile, onChange) => {        
+    handleOnDrop = (newImageFile, onChange) => {
         if (newImageFile.length > 0) {
             const imagefile = {
                 file: newImageFile[0],
                 name: newImageFile[0].name,
                 preview: URL.createObjectURL(newImageFile[0]),
                 size: 1
-            };            
+            };
             this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
         }
     };
@@ -65,7 +64,7 @@ class EventForm extends Component {
         }
     }
 
-    setCroppedImage = (croppedImage, onChange) => {        
+    setCroppedImage = (croppedImage, onChange) => {
         const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
         const imagefile = {
             file: file,
@@ -73,20 +72,12 @@ class EventForm extends Component {
             preview: croppedImage,
             size: 1
         };
-        this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
+        this.setState({ imagefile: [imagefile], photoCropped: true }, () => onChange(imagefile));
     }
 
     componentWillUnmount() {
         this.resetForm();
-    }
-
-    isSaveButtonDisabled = false;
-
-    disableSaveButton = () => {
-        if (this.props.valid) {
-            this.isSaveButtonDisabled = true;
-        }
-    }
+    }    
 
     handleChange = () => {
         this.setState(state => ({
@@ -95,7 +86,7 @@ class EventForm extends Component {
     }
 
     resetForm = () => {
-        this.isSaveButtonDisabled = false;
+        this.setState({ photoCropped: false });
         this.setState({ imagefile: [] });
     }
 
@@ -107,29 +98,30 @@ class EventForm extends Component {
 
     componentWillMount() {
         this.resetForm();
-    }    
+    }
 
     render() {
 
-        const { countries, form_values, all_categories, data, isCreated } = this.props;
-        let values = form_values || this.props.initialValues;        
+        const { countries, form_values, all_categories, data, isCreated, pristine, invalid, submitting } = this.props;
+        const { photoCropped } = this.state;
+        let values = form_values || this.props.initialValues;
 
-        return (                       
+        return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
-                <div className="text text-2 pl-md-4">                    
-                            <Field                                
-                                id="image-field"
-                                name="image"
-                                component={DropZoneField}
-                                type="file"
-                                imagefile={this.state.imagefile}
-                                handleOnDrop={this.handleOnDrop}
-                                handleOnCrop={this.setCroppedImage}                        
-                                crop={true}
-                                cropShape='rect'
-                                handleOnClear={this.resetForm}
-                                validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
-                            />                                         
+                <div className="text text-2 pl-md-4">
+                    <Field
+                        id="image-field"
+                        name="image"
+                        component={DropZoneField}
+                        type="file"
+                        imagefile={this.state.imagefile}
+                        handleOnDrop={this.handleOnDrop}
+                        handleOnCrop={this.setCroppedImage}
+                        crop={true}
+                        cropShape='rect'
+                        handleOnClear={this.resetForm}
+                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
+                    />
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}
@@ -242,13 +234,12 @@ class EventForm extends Component {
                 </div>
                 <div className="row pl-md-4">
                     <div className="col">
-                        <Button 
+                        <Button
                             className="border"
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            onClick={this.disableSaveButton}
-                            disabled={this.isSaveButtonDisabled}>
+                            disabled={!photoCropped || pristine || submitting}>
                             Save
                         </Button>
                     </div>

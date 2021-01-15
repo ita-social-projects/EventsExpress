@@ -25,7 +25,7 @@ export default class DropZoneField extends Component {
     render() {
         const {
             handleOnDrop,
-            handleOnCrop,            
+            handleOnCrop,
             submitting,
             imagefile,
             crop,
@@ -40,7 +40,7 @@ export default class DropZoneField extends Component {
                     <div>
                         <ImageResizer
                             image={imagefile[0]}
-                            onChange={onChange}                            
+                            onChange={onChange}
                             handleOnCrop={handleOnCrop}
                             onImageCrop={this.imageCrop}
                             cropShape={cropShape}
@@ -74,23 +74,23 @@ export default class DropZoneField extends Component {
                     style={{ float: "right" }}
                 >
                     Clear
-                </Button>   
+                </Button>
             </div>
         )
     };
 };
 
 DropZoneField.propTypes = {
-  error: PropTypes.string,
-  handleOnDrop: PropTypes.func.isRequired,
-  imagefile: PropTypes.arrayOf(
-    PropTypes.shape({
-      file: PropTypes.file,
-      name: PropTypes.string,
-      preview: PropTypes.string,
-      size: PropTypes.number
-    })
-  ),
-  onChange: PropTypes.func,
-  touched: PropTypes.bool
+    error: PropTypes.string,
+    handleOnDrop: PropTypes.func.isRequired,
+    imagefile: PropTypes.arrayOf(
+        PropTypes.shape({
+            file: PropTypes.file,
+            name: PropTypes.string,
+            preview: PropTypes.string,
+            size: PropTypes.number
+        })
+    ),
+    onChange: PropTypes.func,
+    touched: PropTypes.bool
 };

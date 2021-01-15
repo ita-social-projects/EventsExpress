@@ -6,20 +6,20 @@ import './image-resizer.css';
 import Button from "@material-ui/core/Button";
 
 class ImageResizer extends Component {
-    state = {        
+    state = {
         crop: { x: 0, y: 0 },
         zoom: 1
-    }    
+    }
 
     componentWillMount = () => {
         const isRound = this.props.cropShape === 'round';
         this.setState({
             aspect: isRound ? 1 : (16 / 9),
             showGrid: isRound ? false : true
-        });        
+        });
     }
 
-    onCropChange = crop => {        
+    onCropChange = crop => {
         this.setState({ crop })
     }
 
@@ -29,7 +29,7 @@ class ImageResizer extends Component {
 
     onZoomChange = zoom => {
         this.setState({ zoom })
-    }    
+    }
 
     createImage = url =>
         new Promise((resolve, reject) => {
@@ -49,36 +49,36 @@ class ImageResizer extends Component {
 
         canvas.width = safeArea
         canvas.height = safeArea
-        
+
         ctx.translate(safeArea / 2, safeArea / 2)
         ctx.translate(-safeArea / 2, -safeArea / 2)
-        
+
         ctx.drawImage(
             image,
             safeArea / 2 - image.width * 0.5,
             safeArea / 2 - image.height * 0.5
         )
         const data = ctx.getImageData(0, 0, safeArea, safeArea)
-        
+
         canvas.width = pixelCrop.width
         canvas.height = pixelCrop.height
-        
+
         ctx.putImageData(
             data,
             Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
             Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
         )
-        
-        return canvas.toDataURL('image/jpeg');                
+
+        return canvas.toDataURL('image/jpeg');
     }
 
-    cropImage = async () => {        
+    cropImage = async () => {
         const croppedImage = await this.getCroppedImg(
             this.props.image.preview,
             this.state.croppedAreaPixels
         )
         this.props.handleOnCrop([croppedImage], this.props.onChange);
-        this.props.onImageCrop();        
+        this.props.onImageCrop();
     }
 
     render() {
@@ -108,8 +108,8 @@ class ImageResizer extends Component {
                             max={3}
                             step={0.1}
                             aria-labelledby="Zoom"
-                            onChange={(e, zoom) => this.onZoomChange(zoom)}                        
-                        />                                    
+                            onChange={(e, zoom) => this.onZoomChange(zoom)}
+                        />
                         <Button
                             type="button"
                             color="primary"
@@ -120,7 +120,7 @@ class ImageResizer extends Component {
                             Crop
                         </Button>
                     </div>
-                </div>                                
+                </div>
             </div>
         )
     }
