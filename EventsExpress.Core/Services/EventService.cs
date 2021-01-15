@@ -236,17 +236,6 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
 
-            var locationDTO = _mapper.Map<EventDTO, LocationDto>(e);
-            var locationId = _locationService.AddLocationToEvent(locationDTO);
-
-            ev.Title = e.Title;
-            ev.MaxParticipants = e.MaxParticipants;
-            ev.Description = e.Description;
-            ev.DateFrom = e.DateFrom;
-            ev.DateTo = e.DateTo;
-            ev.IsPublic = e.IsPublic;
-            ev.EventLocationId = await locationId;
-
             if (e.Photo != null && ev.Photo != null)
             {
                 await _photoService.Delete(ev.Photo.Id);
@@ -259,6 +248,17 @@ namespace EventsExpress.Core.Services
                     throw new EventsExpressException("Invalid file");
                 }
             }
+
+            var locationDTO = _mapper.Map<EventDTO, LocationDto>(e);
+            var locationId = _locationService.AddLocationToEvent(locationDTO);
+
+            ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
+            ev.Description = e.Description;
+            ev.DateFrom = e.DateFrom;
+            ev.DateTo = e.DateTo;
+            ev.IsPublic = e.IsPublic;
+            ev.EventLocationId = await locationId;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();

@@ -50,7 +50,7 @@ namespace EventsExpress.Core.Services
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                throw new EventsExpressException("User not found");
+                throw new EventsExpressException("Incorrect login or password");
             }
 
             if (user.IsBlocked)
@@ -65,7 +65,7 @@ namespace EventsExpress.Core.Services
 
             if (!VerifyPassword(user, password))
             {
-                throw new EventsExpressException("Invalid password");
+                throw new EventsExpressException("Incorrect login or password");
             }
 
             // authentication successful so generate jwt and refresh tokens

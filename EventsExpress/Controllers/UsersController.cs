@@ -121,7 +121,7 @@ namespace EventsExpress.Controllers
         /// <param name="userId">Required.</param>
         /// <response code="200">Block is succesful.</response>
         /// <response code="400">Block process failed.</response>
-        [HttpPost("[action]")]
+        [HttpPost("{userId}/[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid userId)
         {

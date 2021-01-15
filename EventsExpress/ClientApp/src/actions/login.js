@@ -3,10 +3,11 @@ import eventHelper from '../components/helpers/eventHelper';
 import { initialConnection } from './chat';
 import { getUnreadMessages } from './chats';
 import { updateEventsFilters } from './event-list';
+import { SubmissionError } from 'redux-form'
+import { buildValidationState } from '../components/helpers/helpers.js'
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
-export const SET_LOGIN_ERROR = "SET_LOGIN_ERROR";
 export const SET_USER = "SET_USER";
 
 const api_serv = new AuthenticationService();
@@ -15,7 +16,7 @@ export default function login(email, password) {
   return dispatch => {
     dispatch(setLoginPending(true));
     const res = api_serv.setLogin({ Email: email, Password: password });
-    loginResponseHandler(res, dispatch);
+    return loginResponseHandler(res, dispatch); 
   }
 }
 
@@ -66,7 +67,7 @@ export function loginTwitter(data) {
 }
 
 const loginResponseHandler = (res, dispatch) => {
-  res.then(response => {
+  return res.then(response => {
     if (!response.error) {
       const eventFilter = {
         ...eventHelper.getDefaultEventFilter(),
@@ -82,9 +83,10 @@ const loginResponseHandler = (res, dispatch) => {
 
       dispatch(initialConnection());
       dispatch(getUnreadMessages(response.id));
+      return Promise.resolve('success')
     } else {
       localStorage.clear();
-      dispatch(setLoginError(response.error));
+        throw new SubmissionError(buildValidationState(response.error));
     }
   });
 };
@@ -107,12 +109,5 @@ export function setLoginSuccess(isLoginSuccess) {
   return {
     type: SET_LOGIN_SUCCESS,
     isLoginSuccess
-  };
-}
-
-export function setLoginError(loginError) {
-  return {
-    type: SET_LOGIN_ERROR,
-    loginError
   };
 }
