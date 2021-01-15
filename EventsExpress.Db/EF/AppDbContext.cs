@@ -44,6 +44,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<EventOwner> EventOwners { get; set; }
 
+        public DbSet<EventLocation> EventLocations { get; set; }
+
         public DbSet<EventSchedule> EventSchedules { get; set; }
 
         public DbSet<Report> Reports { get; set; }
@@ -55,10 +57,6 @@ namespace EventsExpress.Db.EF
         public DbSet<ChatRoom> ChatRoom { get; set; }
 
         public DbSet<Photo> Photos { get; set; }
-
-        public DbSet<City> Cities { get; set; }
-
-        public DbSet<Country> Countries { get; set; }
 
         public DbSet<Message> Message { get; set; }
 
@@ -163,16 +161,6 @@ namespace EventsExpress.Db.EF
 
             // category config
             builder.Entity<Category>()
-                .Property(c => c.Name).IsRequired();
-
-            // country config
-            builder.Entity<Country>()
-                .Property(c => c.Name).IsRequired();
-            builder.Entity<Country>()
-                .HasIndex(c => c.Name).IsUnique();
-
-            // city config
-            builder.Entity<City>()
                 .Property(c => c.Name).IsRequired();
 
             // comment config
