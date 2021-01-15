@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
@@ -8,9 +7,9 @@ using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
 {
-    public class EventScheduleAutoMapper : Profile
+    public class EventScheduleMapperProfile : Profile
     {
-        public EventScheduleAutoMapper()
+        public EventScheduleMapperProfile()
         {
             CreateMap<EventSchedule, EventScheduleDTO>()
            .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
@@ -26,7 +25,8 @@ namespace EventsExpress.Mapping
                PhotoBytes = src.Event.Photo,
            }));
 
-            CreateMap<EventScheduleDTO, EventSchedule>().ReverseMap();
+            CreateMap<EventScheduleDTO, EventSchedule>()
+                .ForMember(dest => dest.Event, opts => opts.Ignore());
 
             CreateMap<EventScheduleDTO, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
@@ -51,7 +51,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
-                .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true));
+                .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true))
+                .ForMember(dest => dest.Event, opts => opts.Ignore());
         }
     }
 }

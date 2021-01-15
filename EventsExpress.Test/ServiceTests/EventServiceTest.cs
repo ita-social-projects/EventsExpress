@@ -16,6 +16,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTest : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
@@ -34,6 +35,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
+            mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             httpContextAccessor = new Mock<IHttpContextAccessor>();
             httpContextAccessor.Setup(x => x.HttpContext).Returns(new Mock<HttpContext>().Object);
@@ -44,6 +46,7 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
+                mockLocationService.Object,
                 mockAuthService.Object,
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
@@ -63,7 +66,6 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = firstEventId,
-                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
@@ -84,7 +86,6 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = eventId,
-                    CityId = Guid.NewGuid(),
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",

@@ -13,6 +13,10 @@
     color: grey !important;
 }
 
+.MuiRadio-colorSecondary.Mui-checked {
+    color: grey !important;
+}
+
 .pic-container {
     cursor: pointer;
     overflow: hidden;
