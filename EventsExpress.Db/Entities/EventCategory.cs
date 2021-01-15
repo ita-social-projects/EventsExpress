@@ -1,5 +1,5 @@
-﻿using EventsExpress.Db.EF;
-using System;
+﻿using System;
+using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
 {

@@ -4,18 +4,12 @@ import Login from '../components/login';
 import login from '../actions/login';
 
 class LoginWrapper extends Component {
-  submit = values => {
-    this.props.login(values.email, values.password);
+  submit = async values => {
+      return await this.props.login(values.email, values.password)
   };
 
   render() {
-    let { loginError } = this.props.loginStatus;
-
-    return <>
-      <div>
-        <Login onSubmit={this.submit} loginError={loginError} />
-      </div>
-    </>
+    return <Login onSubmit={this.submit}/>
   }
 }
 
