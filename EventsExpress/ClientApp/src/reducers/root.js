@@ -32,7 +32,8 @@ import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as authReducer from './authReducer';
-import * as UnitsOfMeasuring from './unitsOfMeasuring';
+import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
+import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring'
 import * as Inventory from './inventory-list';
 import * as Inventar from './inventar';
 import * as UsersInventories from './usersInventories';
@@ -67,6 +68,7 @@ const rootReducers = {
     inventories: Inventory.reducer,
     usersInventories: UsersInventories.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
+    add_unitOfMeasuring:AddUnitOfMeasuring.reducer,
     countries: Countries.reducer,
     cities: Cities.reducer,
     add_category: AddCategories.reducer,
@@ -90,7 +92,8 @@ const rootReducers = {
     alert: Alert.reducer,
     dialog: Dialog.reducer,
     contactUs: ContactUs.reducer,
-    notification: Notification.reducer
+    notification: Notification.reducer,
+
 };
 
 export default rootReducers;

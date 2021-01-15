@@ -16,10 +16,9 @@ class CategoryEdit extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.callback({name: this.props.newName});
     }
 
-    renderError() {
+    renderError(){      
         if(!this.props.message){
             return null;
         }

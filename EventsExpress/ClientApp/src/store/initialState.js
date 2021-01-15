@@ -39,7 +39,15 @@ const initialState = {
     unitsOfMeasuring: {
         isPending: true,
         isError: false,
-        units: []
+        units: [],       
+        editedUnitOfMeasuring: null,
+        isAdded:false,
+        
+    },
+    add_unitOfMeasuring: {
+        isUnitOfMeasuringPending: false,
+        isUnitOfMeasuringSuccess: false,
+        unitOfMeasuringError: null
     },
     change_avatar: {
         isPending: false,
