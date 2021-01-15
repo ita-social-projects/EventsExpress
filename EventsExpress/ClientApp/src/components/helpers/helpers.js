@@ -372,14 +372,19 @@ export const renderErrorMessage = (responseData, key) => {
         }
     }
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-const asyncValidate = (values) => {
-    return sleep(1000).then(() => {
-        if (['foo@foo.com', 'bar@bar.com'].includes(values.email)) {
-            throw { email: 'Email already Exists' };
+export const buildValidationState = (responseData) => {
+    let response;
+    response = JSON.parse(responseData)["errors"];
+    let result = {};
+    for (const [key, value] of Object.entries(response)) {
+        if(key == "")
+        {
+            result = {...result, _error: value}
         }
-    })
+        else
+        {
+            result = {...result, [key]: value}
+        }
+    }
+    return result;
 }
-
-export default asyncValidate;
