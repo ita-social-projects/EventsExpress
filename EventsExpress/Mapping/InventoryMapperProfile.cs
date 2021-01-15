@@ -10,7 +10,7 @@ namespace EventsExpress.Mapping
         public InventoryMapperProfile()
         {
             CreateMap<Inventory, InventoryDTO>()
-                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => new UnitOfMeasuringDTO 
+                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => new UnitOfMeasuringDTO
                 {
                     Id = src.UnitOfMeasuring.Id,
                     ShortName = src.UnitOfMeasuring.ShortName,

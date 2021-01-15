@@ -70,6 +70,11 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })))
                 .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
                 .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
@@ -87,6 +92,24 @@ namespace EventsExpress.Mapping
                  .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.PhotoBytes.Img.ToRenderablePictureString()))
+                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryViewModel
+                 {
+                     Id = x.Id,
+                     Name = x.Name,
+                 })))
+                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryViewModel
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringViewModel
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })))
                 .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
                 .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x =>
@@ -112,6 +135,24 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
 
             CreateMap<EventEditViewModel, EventDTO>()
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })))
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                        src.Inventories.Select(x => new InventoryDTO
+                        {
+                            Id = x.Id,
+                            ItemName = x.ItemName,
+                            NeedQuantity = x.NeedQuantity,
+                            UnitOfMeasuring = new UnitOfMeasuringDTO
+                            {
+                                Id = x.UnitOfMeasuring.Id,
+                                UnitName = x.UnitOfMeasuring.UnitName,
+                                ShortName = x.UnitOfMeasuring.ShortName,
+                            },
+                        })))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }))
@@ -120,6 +161,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
             CreateMap<EventCreateViewModel, EventDTO>()
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => new CategoryDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }))
@@ -142,31 +188,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
-                .ForMember(dest => dest.Visitors, opts => opts.Ignore());
-
-            CreateMap<EventViewModel, EventDTO>()
-                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
-                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
-                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => new InventoryDTO
-                        {
-                            Id = x.Id,
-                            ItemName = x.ItemName,
-                            NeedQuantity = x.NeedQuantity,
-                            UnitOfMeasuring = new UnitOfMeasuringDTO
-                            {
-                                Id = x.UnitOfMeasuring.Id,
-                                UnitName = x.UnitOfMeasuring.UnitName,
-                                ShortName = x.UnitOfMeasuring.ShortName,
-                            },
-                        })))
-                .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
-                .ForMember(dest => dest.Photo, opts => opts.Ignore())
-                .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
-                .ForMember(dest => dest.Point, opts => opts.Ignore())
-                .ForMember(dest => dest.OwnerIds, opts => opts.Ignore())
-                .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
         }
     }
