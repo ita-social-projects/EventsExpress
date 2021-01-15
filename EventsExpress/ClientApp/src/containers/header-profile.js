@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
-import { setLoginPending, setLoginSuccess, setLoginError } from '../actions/login';
+import { setLoginPending, setLoginSuccess } from '../actions/login';
 
 class HeaderProfileWrapper extends Component {
   logout_reset = () => {
@@ -41,7 +41,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(setRegisterError(null));
       dispatch(setLoginPending(true));
       dispatch(setLoginSuccess(false));
-      dispatch(setLoginError(null));
     }
   };
 };
