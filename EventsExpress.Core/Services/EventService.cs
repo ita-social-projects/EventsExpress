@@ -230,7 +230,6 @@ namespace EventsExpress.Core.Services
 
             if (e.Photo != null && ev.Photo != null)
             {
-
                 await _photoService.Delete(ev.Photo.Id);
                 try
                 {
