@@ -228,16 +228,9 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
 
-            ev.Title = e.Title;
-            ev.MaxParticipants = e.MaxParticipants;
-            ev.Description = e.Description;
-            ev.DateFrom = e.DateFrom;
-            ev.DateTo = e.DateTo;
-            ev.CityId = e.CityId;
-            ev.IsPublic = e.IsPublic;
-
             if (e.Photo != null && ev.Photo != null)
             {
+
                 await _photoService.Delete(ev.Photo.Id);
                 try
                 {
@@ -248,6 +241,14 @@ namespace EventsExpress.Core.Services
                     throw new EventsExpressException("Invalid file");
                 }
             }
+
+            ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
+            ev.Description = e.Description;
+            ev.DateFrom = e.DateFrom;
+            ev.DateTo = e.DateTo;
+            ev.CityId = e.CityId;
+            ev.IsPublic = e.IsPublic;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();

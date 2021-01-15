@@ -9,12 +9,6 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case SET_COMMENTS_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case SET_COMMENTS_PENDING:
             return {
                 ...state,

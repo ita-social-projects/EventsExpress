@@ -4,8 +4,6 @@ import { setAlert } from './alert';
 
 export const SET_COMMENTS_PENDING = "SET_COMMENTS_PENDING";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
-export const SET_COMMENTS_ERROR = "SET_COMMENTS_ERROR";
-export const SET_COMMENT_DELETE_ERROR = "SET_COMMENT_DELETE_ERROR";
 
 const api_serv = new CommentService();
 

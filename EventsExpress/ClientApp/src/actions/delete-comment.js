@@ -3,7 +3,6 @@ import get_comments from './comment-list';
 import { setAlert } from './alert';
 export const SET_COMMENT_DELETE_PENDING = "SET_COMMENT_DELETE_PENDING";
 export const SET_COMMENT_DELETE_SUCCESS = "SET_COMMENT_DELETE_SUCCESS";
-export const SET_COMMENT_DELETE_ERROR = "SET_COMMENT_DELETE_ERROR";
 
 const api_serv = new CommentService();
 
