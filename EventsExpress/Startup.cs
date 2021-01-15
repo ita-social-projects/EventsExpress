@@ -158,7 +158,7 @@ namespace EventsExpress
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
-            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 
             services.AddControllersWithViews(options =>
             {

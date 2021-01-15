@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EventsExpress.Db.Enums;
-using NetTopologySuite.Geometries;
+using EventsExpress.ViewModels.Base;
 
 namespace EventsExpress.ViewModels
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
-namespace EventsExpress.ViewModels
+namespace EventsExpress.ViewModels.Base
 {
     public class EventViewModelBase
     {

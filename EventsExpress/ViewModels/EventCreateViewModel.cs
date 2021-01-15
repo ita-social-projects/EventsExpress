@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EventsExpress.Db.Enums;
+using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.ViewModels
