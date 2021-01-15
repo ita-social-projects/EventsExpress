@@ -14,6 +14,10 @@ using EventsExpress.ViewModels;
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
+                .ForMember(dest => dest.Rating, opts => opts.Ignore())
+                .ForMember(dest => dest.Attitude, opts => opts.Ignore())
+                .ForMember(dest => dest.CanChangePassword, opts => opts.Ignore())
+                .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
 
             CreateMap<UserDTO, User>()
@@ -42,7 +46,9 @@ using EventsExpress.ViewModels;
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Token, opts => opts.Ignore())
+                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
 
             CreateMap<UserDTO, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -62,7 +68,8 @@ using EventsExpress.ViewModels;
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(
                     dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
+                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
 
             CreateMap<UserDTO, ProfileDTO>()
                 .ForMember(
@@ -72,12 +79,23 @@ using EventsExpress.ViewModels;
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryViewModel { Id = x.Category.Id, Name = x.Category.Name })));
+                        src.Categories.Select(x => new CategoryDTO { Id = x.Category.Id, Name = x.Category.Name })));
 
-            CreateMap<ProfileDTO, ProfileViewModel>().ReverseMap();
+            CreateMap<ProfileDTO, ProfileViewModel>()
+                .ForMember(
+                    dest => dest.Categories,
+                    opts => opts.MapFrom(src =>
+                        src.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name })));
 
-            CreateMap<LoginViewModel, UserDTO>();
-            CreateMap<UserViewModel, UserDTO>();
+            CreateMap<LoginViewModel, UserDTO>()
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForAllOtherMembers(x => x.Ignore());
+
+            CreateMap<UserViewModel, UserDTO>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }
