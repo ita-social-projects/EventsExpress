@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using EventsExpress.Db.Enums;
 using EventsExpress.Validation.Base;
 using EventsExpress.ViewModels.Base;
 using FluentValidation.TestHelper;
@@ -26,6 +25,9 @@ namespace EventsExpress.Test.ValidatorTests
                 DateTo = DateTime.Now,
                 Latitude = 28.489335,
                 Longitude = 56.498438,
+                IsReccurent = true,
+                Frequency = 1,
+                Periodicity = Periodicity.Daily,
                 MaxParticipants = 20,
             };
         }
@@ -221,6 +223,62 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
+        }
+
+        [Test]
+        public void SetFrequencyForEvent_ValidFrequency_ValidationErrorIsNotReturn()
+        {
+            // Arrange
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.Frequency);
+        }
+
+        [TestCase(-1)]
+        [TestCase(0)]
+        public void SetFrequencyForEvent_InvalidFrequency_ReturnValidationError(int frequency)
+        {
+            // Arrange
+            eventViewModel.Frequency = frequency;
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Frequency);
+        }
+
+        [TestCase(Periodicity.Daily)]
+        [TestCase(Periodicity.Weekly)]
+        [TestCase(Periodicity.Monthly)]
+        [TestCase(Periodicity.Weekly)]
+        public void SetPeriodicityForEvent_ValidPeriodicity_ValidationErrorIsNotReturn(Periodicity periodicity)
+        {
+            // Arrange
+            eventViewModel.Periodicity = periodicity;
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.Periodicity);
+        }
+
+        [TestCase(-1)]
+        [TestCase(4)]
+        public void SetPeriodicityForEvent_InvalidPeriodicity_ReturnValidationError(int periodicity)
+        {
+            // Arrange
+            eventViewModel.Periodicity = (Periodicity)periodicity;
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Periodicity);
         }
     }
 }

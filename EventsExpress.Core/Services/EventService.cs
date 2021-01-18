@@ -166,6 +166,12 @@ namespace EventsExpress.Core.Services
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
             ev.EventLocationId = await locationId;
+
+            if (ev.Owners == null)
+            {
+                ev.Owners = new List<EventOwner>();
+            }
+
             ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)

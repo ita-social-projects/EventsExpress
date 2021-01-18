@@ -18,6 +18,11 @@ namespace EventsExpress.Validation.Base
             RuleFor(x => x.Latitude).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.Longitude).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Input correct quantity of participants!");
+            When(x => x.IsReccurent, () =>
+            {
+                RuleFor(x => x.Frequency).GreaterThan(0).WithMessage("Frequency must be greater then 0!");
+                RuleFor(x => x.Periodicity).IsInEnum().WithMessage("Field is required!");
+            });
         }
     }
 }

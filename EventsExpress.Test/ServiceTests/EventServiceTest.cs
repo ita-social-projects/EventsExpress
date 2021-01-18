@@ -42,8 +42,11 @@ namespace EventsExpress.Test.ServiceTests
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             httpContextAccessor = new Mock<IHttpContextAccessor>();
-            httpContextAccessor.Setup(x => x.HttpContext).Returns(new Mock<HttpContext>().Object);
+            httpContextAccessor.SetupGet(x => x.HttpContext)
+                .Returns(new Mock<HttpContext>().Object);
             mockAuthService = new Mock<IAuthService>();
+            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
+                .Returns(new UserDTO { Id = userId });
 
             service = new EventService(
                 Context,
@@ -204,6 +207,14 @@ namespace EventsExpress.Test.ServiceTests
             var result = service.EventById(Guid.NewGuid());
 
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void CreateEvent_ValidEvent_Success()
+        {
+            eventDTO.Id = Guid.Empty;
+
+            Assert.DoesNotThrowAsync(async () => await service.Create(eventDTO));
         }
 
         [Test]
