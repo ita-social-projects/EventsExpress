@@ -52,8 +52,6 @@ namespace EventsExpress.Test.ServiceTests
                 Description = "...",
                 PhotoId = Guid.NewGuid(),
                 Photo = new Photo(),
-                CityId = Guid.NewGuid(),
-                City = new City(),
             };
 
             user = new User
