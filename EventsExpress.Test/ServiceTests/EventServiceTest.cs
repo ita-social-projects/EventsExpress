@@ -207,12 +207,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void EditEvent_ValidEvent_Success()
-        {
-            Assert.DoesNotThrowAsync(async () => await service.Edit(eventDTO));
-        }
-
-        [Test]
         public void EditEvent_InvalidEvent_Failed()
         {
             Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
