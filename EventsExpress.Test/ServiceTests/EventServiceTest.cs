@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -8,6 +10,7 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
@@ -24,6 +27,7 @@ namespace EventsExpress.Test.ServiceTests
 
         private EventService service;
         private List<Event> events;
+        private EventDTO eventDTO;
 
         private Guid userId = Guid.NewGuid();
         private Guid firstEventId = Guid.NewGuid();
@@ -50,6 +54,28 @@ namespace EventsExpress.Test.ServiceTests
                 mockAuthService.Object,
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
+
+            eventDTO = new EventDTO
+            {
+                Id = firstEventId,
+                DateFrom = DateTime.Today,
+                DateTo = DateTime.Today,
+                Description = "sjsdnl sdmkskdl dsnlndsl",
+                Owners = new List<User>()
+                {
+                    new User
+                    {
+                        Id = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                    },
+                },
+                PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                Title = "SLdndsndj",
+                IsBlocked = false,
+                IsPublic = true,
+                Categories = null,
+                Point = new Point(10.45, 12.34),
+                MaxParticipants = 2147483647,
+            };
 
             List<User> users = new List<User>()
             {
@@ -101,7 +127,7 @@ namespace EventsExpress.Test.ServiceTests
                     IsBlocked = false,
                     IsPublic = false,
                     Categories = null,
-                    MaxParticipants = 2147483647,
+                    MaxParticipants = 1,
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent
@@ -118,6 +144,78 @@ namespace EventsExpress.Test.ServiceTests
 
             Context.Events.AddRange(events);
             Context.SaveChanges();
+
+            MockMapper.Setup(u => u.Map<EventDTO, LocationDto>(It.IsAny<EventDTO>()))
+                .Returns((EventDTO e) => e == null ?
+                null :
+                new LocationDto
+                {
+                    Id = Guid.NewGuid(),
+                    Point = e.Point,
+                });
+
+            MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
+                .Returns((LocationDto e) => e == null ?
+                null :
+                new EventLocation
+                {
+                    Point = e.Point,
+                    Id = e.Id,
+                });
+
+            MockMapper.Setup(u => u.Map<EventDTO, Event>(It.IsAny<EventDTO>()))
+                .Returns((EventDTO e) => e == null ?
+                null :
+                new Event
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    PhotoId = e.PhotoId,
+                    DateFrom = e.DateFrom,
+                    DateTo = e.DateTo,
+                    MaxParticipants = e.MaxParticipants,
+                });
+
+            MockMapper.Setup(u => u.Map<EventDTO>(It.IsAny<Event>()))
+                .Returns((Event e) => e == null ?
+                null :
+                new EventDTO
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Description = e.Description,
+                    PhotoId = (Guid)e.PhotoId,
+                    DateFrom = e.DateFrom,
+                    DateTo = e.DateTo,
+                    MaxParticipants = e.MaxParticipants,
+                });
+        }
+
+        [Test]
+        public void GetEvent_ExistingId_Success()
+        {
+            Assert.DoesNotThrow(() => service.EventById(firstEventId));
+        }
+
+        [Test]
+        public void GetEvent_NotExistingId_Failed()
+        {
+            var result = service.EventById(Guid.NewGuid());
+
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void EditEvent_ValidEvent_Success()
+        {
+            Assert.DoesNotThrowAsync(async () => await service.Edit(eventDTO));
+        }
+
+        [Test]
+        public void EditEvent_InvalidEvent_Failed()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
         }
 
         [Test]
@@ -130,6 +228,12 @@ namespace EventsExpress.Test.ServiceTests
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), eventId));
+        }
+
+        [Test]
+        public void AddUserToEvent_ToMuchParticipants_ReturnFalse()
+        {
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, eventId));
         }
 
         [Test]
