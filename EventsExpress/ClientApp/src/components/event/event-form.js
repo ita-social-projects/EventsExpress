@@ -77,7 +77,7 @@ class EventForm extends Component {
 
     componentWillUnmount() {
         this.resetForm();
-    }    
+    }
 
     handleChange = () => {
         this.setState(state => ({

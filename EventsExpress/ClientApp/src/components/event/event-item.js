@@ -17,6 +17,7 @@ import Badge from '@material-ui/core/Badge';
 import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
+import './event-item.css';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default class Event extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             anchorEl: null
@@ -57,7 +58,7 @@ export default class Event extends Component {
         return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
         );
     }
-  
+
     handleClick = (event) => {
         this.setState({ anchorEl: event.currentTarget });
     }
@@ -65,7 +66,7 @@ export default class Event extends Component {
     handleClose = () => {
         this.setState({ anchorEl: null });
     }
-    
+
     render() {
         const classes = useStyles;
         const {
@@ -91,9 +92,9 @@ export default class Event extends Component {
                     <div className="flex-grow-1">
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar 
+                                <CustomAvatar
                                     photoUrl={x.photoUrl}
-                                    name={x.username} 
+                                    name={x.username}
                                 />
                                 <div>
                                     <h5 className="pl-2">{x.username}</h5>
@@ -115,13 +116,13 @@ export default class Event extends Component {
                         id="simple-menu"
                         anchorEl={anchorEl}
                         keepMounted
-                        anchorOrigin ={{
+                        anchorOrigin={{
                             vertical: "bottom",
                             horisontal: "left"
                         }}
                         open={Boolean(anchorEl)}
                         onClose={this.handleClose}
-                        >
+                    >
 
                         {
                             PrintMenuItems
@@ -130,15 +131,15 @@ export default class Event extends Component {
                     <CardHeader
                         avatar={
                             <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
-                                    <Badge overlap="circle" badgeContent={owners.length} color="primary"> 
-                                        <CustomAvatar
-                                            className={classes.avatar}
-                                            photoUrl={owners[0].photoUrl}
-                                            name={owners[0].username}
-                                        />
-                                    </Badge>
+                                <Badge overlap="circle" badgeContent={owners.length} color="primary">
+                                    <CustomAvatar
+                                        className={classes.avatar}
+                                        photoUrl={owners[0].photoUrl}
+                                        name={owners[0].username}
+                                    />
+                                </Badge>
                             </Button>
-                            
+
                         }
 
                         action={
@@ -152,6 +153,7 @@ export default class Event extends Component {
                         }
                         title={title}
                         subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
+                        classes={{ title: 'title' }}
                     />
                     <CardMedia
                         className={classes.media}
@@ -173,9 +175,11 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {description.substr(0, 128) + '...'}
-                        </Typography>
+                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                            <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                {description.substr(0, 128)}
+                            </Typography>
+                        </Tooltip>
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
@@ -186,15 +190,15 @@ export default class Event extends Component {
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                                {!isPublic && 
+                                {!isPublic &&
                                     <Tooltip title="Private event">
                                         <IconButton>
                                             <Badge color="primary">
                                                 <i className="fa fa-key"></i>
                                             </Badge>
                                         </IconButton>
-                                </Tooltip>
-        	                    }
+                                    </Tooltip>
+                                }
                                 <Link to={`/event/${id}/1`}>
                                     <IconButton className={classes.button} aria-label="view">
                                         <i className="fa fa-eye"></i>

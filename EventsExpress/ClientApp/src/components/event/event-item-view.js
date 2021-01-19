@@ -46,8 +46,8 @@ export default class EventItemView extends Component {
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                                 <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
+                                    <h5>{x.username}</h5>
+                                    {'Age: ' + this.getAge(x.birthday)}
                                 </div>
                             </div>
                         </Link>
@@ -55,10 +55,10 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                id = {x.id} 
-                                action = {this.props.onDeleteFromOwners}
-                                data = {'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
-                                button = {
+                                id={x.id}
+                                action={this.props.onDeleteFromOwners}
+                                data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
+                                button={
                                     <IconButton aria-label="delete">
                                         <i className="far fa-trash-alt"></i>
                                     </IconButton>
@@ -80,8 +80,8 @@ export default class EventItemView extends Component {
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                                 <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
+                                    <h5>{x.username}</h5>
+                                    {'Age: ' + this.getAge(x.birthday)}
                                 </div>
                             </div>
                         </Link>
@@ -89,10 +89,10 @@ export default class EventItemView extends Component {
                     {(isMyEvent) &&
                         <div>
                             <SimpleModal
-                                id = {x.id} 
-                                action = {this.props.onPromoteToOwner}
-                                data = {'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                                button = {
+                                id={x.id}
+                                action={this.props.onPromoteToOwner}
+                                data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
+                                button={
                                     <IconButton aria-label="delete">
                                         <i className="fas fa-plus-circle"></i>
                                     </IconButton>
@@ -102,14 +102,14 @@ export default class EventItemView extends Component {
                     }
                 </div>
                 {isMyPrivateEvent &&
-                        <Button
-                            onClick={() => this.props.onApprove(x.id, false)}
-                            variant="outlined"
-                            color="success"
-                            >
-                                Delete from event
+                    <Button
+                        onClick={() => this.props.onApprove(x.id, false)}
+                        variant="outlined"
+                        color="success"
+                    >
+                        Delete from event
                         </Button>
-                    }
+                }
             </div>
         ));
     }
@@ -122,31 +122,31 @@ export default class EventItemView extends Component {
                         <div className="d-flex align-items-center border-bottom">
                             <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                             <div>
-                            <h5>{x.username}</h5>
-                            {'Age: ' + this.getAge(x.birthday)}
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
                             </div>
                         </div>
                     </Link>
                 </div>
                 {(isMyEvent) &&
                     <div>
-                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
                 }
                 <div>
                     <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={() => this.props.onApprove(x.id, true)}
+                        variant="outlined"
+                        color="success"
+                        onClick={() => this.props.onApprove(x.id, true)}
                     >
                         Approve
                         </Button>
                     <Button
-                    onClick={() => this.props.onApprove(x.id, false)}
-                    variant="outlined"
-                    color="danger"
+                        onClick={() => this.props.onApprove(x.id, false)}
+                        variant="outlined"
+                        color="danger"
                     >
                         Deny
                         </Button>
@@ -163,15 +163,15 @@ export default class EventItemView extends Component {
                         <div className="d-flex align-items-center border-bottom">
                             <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                             <div>
-                            <h5>{x.username}</h5>
-                            {'Age: ' + this.getAge(x.birthday)}
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
                             </div>
                         </div>
                     </Link>
                 </div>
                 {(isMyEvent) &&
                     <div>
-                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
@@ -180,8 +180,8 @@ export default class EventItemView extends Component {
                     onClick={() => this.props.onApprove(x.id, true)}
                     variant="outlined"
                     color="success"
-                    >
-                        Add to event
+                >
+                    Add to event
                 </Button>
             </div>)
         );
@@ -211,27 +211,27 @@ export default class EventItemView extends Component {
                     return (
                         <span className="alert alert-success shadow" role="alert">
                             You are gonna visit.
-                            </span>
-                            );
+                        </span>
+                    );
                 case userStatus.DENIED:
                     return (
                         <span className="alert alert-danger shadow" role="alert">
                             Denied participation.
-                            </span>
-                            );
+                        </span>
+                    );
                 case userStatus.PENDING:
                     return (
                         <span className="alert alert-warning shadow" role="alert">
                             Wait until admin approve your request.
-                            </span>
-                            );
+                        </span>
+                    );
             }
         }
         return (
             <span className="alert alert-secondary shadow" role="alert">
                 You are not in event yet.
-                </span>
-                );
+            </span>
+        );
     }
 
     onEdit = () => {
@@ -258,7 +258,7 @@ export default class EventItemView extends Component {
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
-            approvedUsers: visitors.filter(x => x.userStatusEvent == 0), 
+            approvedUsers: visitors.filter(x => x.userStatusEvent == 0),
             deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
             pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
         };
@@ -321,8 +321,8 @@ export default class EventItemView extends Component {
                         </div>
                         {this.state.edit
                             ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                                <EditEventWrapper 
-                                    onCancelEditing={() => this.setState({edit:false})}
+                                <EditEventWrapper
+                                    onCancelEditing={() => this.setState({ edit: false })}
                                 />
                             </div>
                             : <>
@@ -335,14 +335,14 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
                                 <div className="shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <InventoryList 
-                                        eventId={id}/>
+                                    <InventoryList
+                                        eventId={id} />
                                 </div>
-                                
+
                                 <div className="overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
@@ -351,13 +351,13 @@ export default class EventItemView extends Component {
                     </div>
 
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        {(!isMyEvent) && 
+                        {(!isMyEvent) &&
                             <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                 <div className="d-flex justify-content-center">
                                     {this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}
                                 </div>
                                 <br />
-                                {canJoin && 
+                                {canJoin &&
                                     <button onClick={this.props.onJoin}
                                         type="button"
                                         className="btn btn-success join-leave"
@@ -365,22 +365,22 @@ export default class EventItemView extends Component {
                                     >
                                         Join
                                     </button>}
-                                {canLeave && 
+                                {canLeave &&
                                     <EventLeaveModal data={{}}
-                                        submitLeave={this.props.onLeave} 
-                                        status={false}/>}
+                                        submitLeave={this.props.onLeave}
+                                        status={false} />}
                             </div>
                         }
                         <EventVisitors data={{}}
-                            admins = {owners}
-                            renderOwners = {this.renderOwners}
-                            visitors = {visitorsEnum}
-                            renderApprovedUsers = {this.renderApprovedUsers}
-                            isMyPrivateEvent = {isMyPrivateEvent}
-                            isMyEvent = {isMyEvent}
-                            current_user_id = {current_user.id}
-                            renderPendingUsers = {this.renderPendingUsers}
-                            renderDeniedUsers = {this.renderDeniedUsers}
+                            admins={owners}
+                            renderOwners={this.renderOwners}
+                            visitors={visitorsEnum}
+                            renderApprovedUsers={this.renderApprovedUsers}
+                            isMyPrivateEvent={isMyPrivateEvent}
+                            isMyEvent={isMyEvent}
+                            current_user_id={current_user.id}
+                            renderPendingUsers={this.renderPendingUsers}
+                            renderDeniedUsers={this.renderDeniedUsers}
                         />
                     </div>
                 </div>
