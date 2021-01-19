@@ -65,16 +65,6 @@ const initialState = {
         editedCategory: null,
         data: []
     },
-    countries: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
-    cities: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
     users: {
         isPending: true,
         isError: false,
