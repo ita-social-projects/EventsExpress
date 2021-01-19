@@ -5,7 +5,8 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
-namespace EventsExpress.Mapping
+
+namespace EventsExpress.Mapping
 {
     public class UserMapperProfile : Profile
     {
