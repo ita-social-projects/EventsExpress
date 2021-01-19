@@ -1,5 +1,5 @@
 
-import UnitOfMeasuringService from '../../services/UnitOfMeasuringService';
+import UnitOfMeasuringService from '../../services/unitOfMeasuringService';
 const api_serv = new UnitOfMeasuringService();
 
 export const SET_UNITS_OF_MEASURING_PENDING="SET_UNITS_OF_MEASURING_PENDING";

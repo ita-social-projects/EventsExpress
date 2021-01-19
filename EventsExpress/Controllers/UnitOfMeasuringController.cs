@@ -39,17 +39,10 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-            if (model == null)
-            {
-                throw new EventsExpressException("Null object");
-            }
-            else
-            {
                 UnitOfMeasuringDTO dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model);
                 var result = await _unitOfMeasuringService.Create(dTO);
 
                 return Ok(result);
-            }
         }
 
         /// <summary>
@@ -80,7 +73,6 @@ namespace EventsExpress.Controllers
         /// <returns>All units of measuring.</returns>
         /// <response code="200">Return all units of measuring.</response>
         /// <response code="401">If user isn't authorized.</response>
-        /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Return process failed.</response>
         [Authorize]
         [HttpGet("[action]")]
@@ -103,11 +95,6 @@ namespace EventsExpress.Controllers
         public IActionResult GetById(Guid id)
         {
             var item = _unitOfMeasuringService.GetById(id);
-            if (item == null)
-            {
-                throw new EventsExpressException("Null object");
-            }
-
             return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(item));
         }
 
@@ -123,12 +110,6 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var existingItem = _unitOfMeasuringService.GetById(id);
-            if (existingItem == null)
-            {
-                throw new EventsExpressException("Null object");
-            }
-
             await _unitOfMeasuringService.Delete(id);
 
             return Ok();

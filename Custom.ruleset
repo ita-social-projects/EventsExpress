@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="New Rule Set" Description=" " ToolsVersion="16.0">
-  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="CS1591" Action="Warning" />
-    <Rule Id="SA1305" Action="Warning" />
-    <Rule Id="SA1412" Action="Warning" />
-    <Rule Id="SA1609" Action="Warning" />
-    <Rule Id="SA1639" Action="Warning" />
-    <Rule Id="SX1101" Action="Warning" />
-    <Rule Id="SX1309" Action="Warning" />
-    <Rule Id="SX1309S" Action="Warning" />
-  </Rules>
+	<Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+		<Rule Id="SA1101" Action="None" />
+		<Rule Id="SA1633" Action="None" />
+		<Rule Id="SA1202" Action="None" />
+		<Rule Id="SA1309" Action="None" />
+		<Rule Id="SA1123" Action="None" />
+		<Rule Id="CS1591" Action="None" />
+		<Rule Id="SA1402" Action="None" />
+		<Rule Id="SA1200" Action="None" />
+	</Rules>
 </RuleSet>

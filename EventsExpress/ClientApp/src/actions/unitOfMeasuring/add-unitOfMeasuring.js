@@ -1,4 +1,4 @@
-import UnitOfMeasuringService from '../../services/UnitOfMeasuringService';
+import UnitOfMeasuringService from '../../services/unitOfMeasuringService';
 import get_unitsOfMeasuring from './unitsOfMeasuring-list';
 
 

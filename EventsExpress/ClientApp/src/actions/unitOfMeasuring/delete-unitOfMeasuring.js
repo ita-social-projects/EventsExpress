@@ -1,4 +1,4 @@
-import UnitOfMeasuringService from '../../services/UnitOfMeasuringService';
+import UnitOfMeasuringService from '../../services/unitOfMeasuringService';
 import get_unitsOfMeasuring from './unitsOfMeasuring-list';
 
 export const SET_UNIT_OF_MEASURING_DELETE_PENDING = "SET_UNIT_OF_MEASURING_DELETE_PENDING";

@@ -13,7 +13,7 @@ class UnitOfMeasuringItemWrapper extends Component {
     save = values => {
         if (values.unitName === this.props.item.unitName &&
             values.shortName === this.props.item.shortName) {
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         } else {
             this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
         }
@@ -23,7 +23,7 @@ class UnitOfMeasuringItemWrapper extends Component {
         const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
 
         if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         }
     }
 
@@ -48,7 +48,7 @@ class UnitOfMeasuringItemWrapper extends Component {
 
     }
     render() {
-        const { set_unitOfMeasuring_edited, edit_cansel } = this.props;
+        const { set_unitOfMeasuring_edited, edit_cancel } = this.props;
 
         return <tr>
             {(this.props.item.id === this.props.editedUnitOfMeasuring)
@@ -56,7 +56,7 @@ class UnitOfMeasuringItemWrapper extends Component {
                     key={this.props.item.id + this.props.editedUnitOfMeasuring}
                     item={this.props.item}
                     callback={this.save}
-                    cancel={edit_cansel}
+                    cancel={edit_cancel}
                     message={this.props.status.unitOfMeasuringError}
                 />
                 : <UnitOfMeasuringItem
@@ -89,7 +89,7 @@ const mapDispatchToProps = (dispatch, props) => {
         delete_unitOfMeasuring: () => dispatch(delete_unitOfMeasuring(props.item.id)),
         save_unitOfMeasuring: (data) => dispatch(add_unitOfMeasuring(data)),
         set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
-        edit_cansel: () => dispatch(set_edited_unitOfMeasuring(null))
+        edit_cancel: () => dispatch(set_edited_unitOfMeasuring(null))
     };
 };
 
