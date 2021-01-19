@@ -68,10 +68,10 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     new User
                     {
-                        Id = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                        Id = Guid.NewGuid(),
                     },
                 },
-                PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                PhotoId = Guid.NewGuid(),
                 Title = "SLdndsndj",
                 IsBlocked = false,
                 IsPublic = true,
@@ -102,10 +102,10 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new EventOwner
                         {
-                            UserId = new Guid("62FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                            UserId = Guid.NewGuid(),
                         },
                     },
-                    PhotoId = new Guid("62FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                    PhotoId = Guid.NewGuid(),
                     Title = "SLdndsndj",
                     IsBlocked = false,
                     IsPublic = true,
@@ -122,10 +122,10 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new EventOwner
                         {
-                            UserId = new Guid("34FA647C-AD54-2BCC-A860-E5A2664B013D"),
+                            UserId = Guid.NewGuid(),
                         },
                     },
-                    PhotoId = new Guid("11FA647C-AD54-4BCC-A860-E5A2261B019D"),
+                    PhotoId = Guid.NewGuid(),
                     Title = "SLdndstrhndj",
                     IsBlocked = false,
                     IsPublic = false,

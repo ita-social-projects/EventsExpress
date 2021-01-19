@@ -7,23 +7,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.MapperTests
 {
     [TestFixture]
-    internal class UserMapperProfileTests : MapperTestInitializer
+    internal class UserMapperProfileTests : MapperTestInitializer<UserMapperProfile>
     {
         [OneTimeSetUp]
-        [Obsolete]
-        protected override void Initialize()
+        protected virtual void Init()
         {
-            base.Initialize();
-            Mapper.Initialize(src =>
-            {
-                src.AddProfile<UserMapperProfile>();
-            });
+            Initialize();
         }
 
         [Test]
         public void UserMapperProfile_Should_HaveValidConfig()
         {
-            Mapper.AssertConfigurationIsValid();
+            Configuration.AssertConfigurationIsValid();
         }
     }
 }

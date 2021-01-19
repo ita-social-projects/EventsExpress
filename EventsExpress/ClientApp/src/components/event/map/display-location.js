@@ -27,8 +27,7 @@ class DisplayLocation extends Component {
         if (error) {
             return;
         }
-        
-        console.log(result.address);
+    
         this.setState(() => ({address: result.address}));
     }
 
@@ -38,40 +37,40 @@ class DisplayLocation extends Component {
 
     render() {
 
-        const PlaceName = this.state.address ? this.state.address.PlaceName : "";
-        const City = this.state.address ? this.state.address.City : "";
-        const CountryCode = this.state.address ? this.state.address.CountryCode : "";
+        const placeName = this.state.address ? this.state.address.PlaceName : "";
+        const city = this.state.address ? this.state.address.City : "";
+        const countryCode = this.state.address ? this.state.address.CountryCode : "";
 
         return (
             <>
-                {PlaceName != "" &&
+                {placeName != "" &&
                     <span>
-                        {PlaceName}
+                        {placeName}
                     </span>
                 }
-                {PlaceName != "" && City != "" &&
-                    City != PlaceName &&
+                {placeName != "" && city != "" &&
+                    city != placeName &&
                         <span>
                             <br />
-                            {City}
+                            {city}
                         </span>
                 }
-                {City != "" &&
-                    PlaceName == "" &&
+                {city != "" &&
+                    placeName == "" &&
                         <span>
-                            {City}
+                            {city}
                         </span>
                 }
-                {CountryCode !="" && 
-                    PlaceName != countries[CountryCode].name &&
+                {countryCode !="" && 
+                    placeName != countries[countryCode].name &&
                         <span>
                             <br />
-                            {countries[CountryCode].name}
+                            {countries[countryCode].name}
                         </span>
                 }
-                {PlaceName == "" && 
-                    City =="" && 
-                    CountryCode =="" &&
+                {placeName == "" && 
+                    city =="" && 
+                    countryCode =="" &&
                         <span>
                             Location is not defined
                         </span>    

@@ -6,13 +6,21 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.MapperTests.BaseMapperTestInitializer
 {
-    public abstract class MapperTestInitializer
+    public abstract class MapperTestInitializer<T>
+        where T : Profile, new()
     {
-        [OneTimeSetUp]
-        [Obsolete]
+        protected IMapper Mapper { get; set; }
+
+        protected MapperConfiguration Configuration { get; set; }
+
         protected virtual void Initialize()
         {
-            Mapper.Reset();
+            Configuration = new MapperConfiguration(src =>
+            {
+                src.AddProfile<T>();
+            });
+
+            Mapper = Configuration.CreateMapper();
         }
     }
 }

@@ -9,23 +9,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.MapperTests
 {
     [TestFixture]
-    internal class UserEventInventoryMapperProfileTests : MapperTestInitializer
+    internal class UserEventInventoryMapperProfileTests : MapperTestInitializer<UserEventInventoryMapperProfile>
     {
         [OneTimeSetUp]
-        [Obsolete]
-        protected override void Initialize()
+        protected virtual void Init()
         {
-            base.Initialize();
-            Mapper.Initialize(src =>
-            {
-                src.AddProfile<UserEventInventoryMapperProfile>();
-            });
+            Initialize();
         }
 
         [Test]
         public void UserEventInventoryMapperProfile_Should_HaveValidConfig()
         {
-            Mapper.AssertConfigurationIsValid();
+            Configuration.AssertConfigurationIsValid();
         }
     }
 }

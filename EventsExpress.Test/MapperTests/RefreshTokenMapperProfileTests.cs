@@ -7,23 +7,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.MapperTests
 {
     [TestFixture]
-    internal class RefreshTokenMapperProfileTests : MapperTestInitializer
+    internal class RefreshTokenMapperProfileTests : MapperTestInitializer<RefreshTokenMapperProfile>
     {
         [OneTimeSetUp]
-        [Obsolete]
-        protected override void Initialize()
+        protected virtual void Init()
         {
-            base.Initialize();
-            Mapper.Initialize(src =>
-            {
-                src.AddProfile<RefreshTokenMapperProfile>();
-            });
+            Initialize();
         }
 
         [Test]
         public void RefreshTokenMapperProfile_Should_HaveValidConfig()
         {
-            Mapper.AssertConfigurationIsValid();
+            Configuration.AssertConfigurationIsValid();
         }
     }
 }

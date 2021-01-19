@@ -7,23 +7,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.MapperTests
 {
     [TestFixture]
-    internal class EventScheduleMapperProfileTests : MapperTestInitializer
+    internal class EventScheduleMapperProfileTests : MapperTestInitializer<EventScheduleMapperProfile>
     {
         [OneTimeSetUp]
-        [Obsolete]
-        protected override void Initialize()
+        protected virtual void Init()
         {
-            base.Initialize();
-            Mapper.Initialize(src =>
-            {
-                src.AddProfile<EventScheduleMapperProfile>();
-            });
+            Initialize();
         }
 
         [Test]
         public void EventScheduleAutoMapperProfile_Should_HaveValidConfig()
         {
-            Mapper.AssertConfigurationIsValid();
+            Configuration.AssertConfigurationIsValid();
         }
     }
 }
