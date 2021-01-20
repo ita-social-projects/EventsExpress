@@ -27,7 +27,6 @@ const initialState = {
         data: []
     },
     login: {
-        isLoginPending: false,
         isLoginSuccess: false,
         loginError: null
     },
@@ -72,16 +71,6 @@ const initialState = {
         isPending: false,
         isError: false,
         editedCategory: null,
-        data: []
-    },
-    countries: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
-    cities: {
-        isPending: false,
-        isError: false,
         data: []
     },
     users: {

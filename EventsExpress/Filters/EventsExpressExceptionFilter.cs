@@ -1,4 +1,6 @@
-﻿using EventsExpress.Core.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using EventsExpress.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,8 +12,14 @@ namespace EventsExpress.Filters
         {
             if (context.Exception is EventsExpressException eventsExpressException)
             {
-                context.ModelState.AddModelError(string.Empty, eventsExpressException.Message);
-                var result = new ObjectResult(context.ModelState) { StatusCode = 400 };
+                var errorTexts = new
+                {
+                    Errors = new Dictionary<string, Array>()
+                    {
+                        { string.Empty, new [] { eventsExpressException.Message } },
+                    },
+                };
+                var result = new ObjectResult(errorTexts) { StatusCode = 400 };
                 context.Result = result;
                 context.ExceptionHandled = true;
             }

@@ -21,6 +21,7 @@ namespace EventsExpress.Core.Services
     public class EventService : BaseService<Event>, IEventService
     {
         private readonly IPhotoService _photoService;
+        private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -30,13 +31,15 @@ namespace EventsExpress.Core.Services
             AppDbContext context,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv,
+            IPhotoService photoService,
+            ILocationService locationService,
             IAuthService authService,
             IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService)
             : base(context, mapper)
         {
-            _photoService = photoSrv;
+            _photoService = photoService;
+            _locationService = locationService;
             _mediator = mediator;
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
@@ -158,7 +161,17 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
+            var locationDTO = _mapper.Map<EventDTO, LocationDto>(eventDTO);
+            var locationId = await _locationService.AddLocationToEvent(locationDTO);
+
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
+            ev.EventLocationId = locationId;
+
+            if (ev.Owners == null)
+            {
+                ev.Owners = new List<EventOwner>();
+            }
+
             ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)
@@ -224,17 +237,10 @@ namespace EventsExpress.Core.Services
         {
             var ev = _context.Events
                 .Include(e => e.Photo)
+                .Include(e => e.EventLocation)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
-
-            ev.Title = e.Title;
-            ev.MaxParticipants = e.MaxParticipants;
-            ev.Description = e.Description;
-            ev.DateFrom = e.DateFrom;
-            ev.DateTo = e.DateTo;
-            ev.CityId = e.CityId;
-            ev.IsPublic = e.IsPublic;
 
             if (e.Photo != null && ev.Photo != null)
             {
@@ -248,6 +254,17 @@ namespace EventsExpress.Core.Services
                     throw new EventsExpressException("Invalid file");
                 }
             }
+
+            var locationDTO = _mapper.Map<EventDTO, LocationDto>(e);
+            var locationId = await _locationService.AddLocationToEvent(locationDTO);
+
+            ev.Title = e.Title;
+            ev.MaxParticipants = e.MaxParticipants;
+            ev.Description = e.Description;
+            ev.DateFrom = e.DateFrom;
+            ev.DateTo = e.DateTo;
+            ev.IsPublic = e.IsPublic;
+            ev.EventLocationId = locationId;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
@@ -275,33 +292,35 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        public EventDTO EventById(Guid eventId) =>
-            _mapper.Map<EventDTO>(
+        public EventDTO EventById(Guid eventId)
+        {
+            var res = _mapper.Map<EventDTO>(
                 _context.Events
                 .Include(e => e.Photo)
+                .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
-                    .ThenInclude(o => o.User)
-                        .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(o => o.Country)
+                .ThenInclude(o => o.User)
+                .ThenInclude(c => c.Photo)
                 .Include(e => e.Categories)
-                    .ThenInclude(c => c.Category)
+                .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
-                    .ThenInclude(i => i.UnitOfMeasuring)
+                .ThenInclude(i => i.UnitOfMeasuring)
                 .Include(e => e.Visitors)
-                    .ThenInclude(v => v.User)
-                        .ThenInclude(u => u.Photo)
+                .ThenInclude(v => v.User)
+                .ThenInclude(u => u.Photo)
                 .FirstOrDefault(x => x.Id == eventId));
+
+            return res;
+        }
 
         public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
         {
             var events = _context.Events
                 .Include(e => e.Photo)
+                .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
                         .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
@@ -310,9 +329,7 @@ namespace EventsExpress.Core.Services
 
             events = !string.IsNullOrEmpty(model.KeyWord)
                 ? events.Where(x => x.Title.Contains(model.KeyWord)
-                    || x.Description.Contains(model.KeyWord)
-                    || x.City.Name.Contains(model.KeyWord)
-                    || x.City.Country.Name.Contains(model.KeyWord))
+                    || x.Description.Contains(model.KeyWord))
                 : events;
 
             events = (model.DateFrom != DateTime.MinValue)
@@ -435,11 +452,10 @@ namespace EventsExpress.Core.Services
         {
             var events = _context.Events
                 .Include(e => e.Photo)
+                .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
                         .ThenInclude(c => c.Photo)
-                .Include(e => e.City)
-                    .ThenInclude(c => c.Country)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)

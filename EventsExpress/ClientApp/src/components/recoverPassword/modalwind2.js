@@ -15,8 +15,8 @@ function Modalwind2(props) {
     }
 
     return (
-        <div>
-            <Button color="primary" onClick={handleClickOpen}>
+        <>
+            <Button fullWidth color="primary" onClick={handleClickOpen}>
                 Forgot password
             </Button>
             <Dialog
@@ -30,7 +30,7 @@ function Modalwind2(props) {
                     Close
                 </Button>
             </Dialog>
-        </div>
+        </>
     )
 }
 

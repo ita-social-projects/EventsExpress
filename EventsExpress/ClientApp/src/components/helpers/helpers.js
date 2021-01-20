@@ -90,6 +90,10 @@ export const validate = values => {
         }
     }  
 
+    if (!values.selectedPos || values.selectedPos == ""){
+        errors.selectedPos = "Required";
+    }
+
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;
     }
@@ -193,33 +197,6 @@ export const minLength = min => value =>
 export const maxLength15 = maxLength(15);
 export const minLength2 = minLength(6);
 export const minLength3 = minLength(4);
-
-export const renderSelectLocationField = ({
-    input,
-    label,
-    text,
-    data,
-    meta: { touched, invalid, error },
-    children,
-    ...custom
-}) =>
-    <FormControl error={touched && error}>
-        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-        <Select
-            native
-            {...input}
-            onBlur={() => input.onBlur()}
-            {...custom}
-            inputProps={{
-                name: text.toLowerCase() + 'Id',
-                id: 'age-native-simple'
-            }}
-        >
-            <option value=""></option>
-            {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
-        </Select>
-        {renderFromHelper({ touched, error })}
-    </FormControl>
 
 export const renderSelectPeriodicityField = ({
     input,
@@ -372,14 +349,19 @@ export const renderErrorMessage = (responseData, key) => {
         }
     }
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-const asyncValidate = (values) => {
-    return sleep(1000).then(() => {
-        if (['foo@foo.com', 'bar@bar.com'].includes(values.email)) {
-            throw { email: 'Email already Exists' };
+export const buildValidationState = (responseData) => {
+    let response;
+    response = JSON.parse(responseData)["errors"];
+    let result = {};
+    for (const [key, value] of Object.entries(response)) {
+        if(key == "")
+        {
+            result = {...result, _error: value}
         }
-    })
+        else
+        {
+            result = {...result, [key]: value}
+        }
+    }
+    return result;
 }
-
-export default asyncValidate;

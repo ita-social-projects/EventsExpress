@@ -4,7 +4,7 @@ import Module  from '../helpers';
 import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
 import { minLength2, maxLength15 } from '../helpers/helpers'
-const { validate, renderTextField, asyncValidate } = Module;
+const { validate, renderTextField } = Module;
 
 
  class Register extends Component {
@@ -58,8 +58,7 @@ const { validate, renderTextField, asyncValidate } = Module;
 Register = reduxForm({
   // a unique name for the form
   form: "register-form",
-  validate,
-  asyncValidate
+  validate
 })(Register);
 
 export default Register;

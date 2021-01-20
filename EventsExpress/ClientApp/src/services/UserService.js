@@ -84,7 +84,7 @@ export default class UserService {
     }
 
     setUserUnblock = async (id) => {
-        const res = await baseService.setResource(`Users/Unblock/?userId=${id}`);
+        const res = await baseService.setResource(`Users/${id}/Unblock`);
         return !res.ok
             ? { error: await res.text() }
             : res;
