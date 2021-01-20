@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import UnitOfMeasuringAddWrapper from '../../containers/unitsOfMeasuring/unitOfMeasuring-add';
 import Spinner from '../spinner';
-import UnitOfMeasuringListWrapper from '../../containers/unitsOfMeasuring/unitOfMeasuring-list';
+import UnitOfMeasuringListWrapper from '../../containers/unitsOfMeasuring/UnitOfMeasuringListWrapper';
 import { connect } from 'react-redux';
 import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list';
 

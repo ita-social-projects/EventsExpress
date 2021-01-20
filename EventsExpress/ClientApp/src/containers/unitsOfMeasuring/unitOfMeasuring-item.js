@@ -73,7 +73,7 @@ class UnitOfMeasuringItemWrapper extends Component {
             </td>
 
         </tr>
-    };
+    }
 }
 
 const mapStateToProps = state => {

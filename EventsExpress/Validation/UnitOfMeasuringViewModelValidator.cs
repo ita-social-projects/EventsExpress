@@ -1,7 +1,6 @@
 ﻿using EventsExpress.Core.IServices;
 using EventsExpress.ViewModels;
 using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace EventsExpress.Validation
 {
