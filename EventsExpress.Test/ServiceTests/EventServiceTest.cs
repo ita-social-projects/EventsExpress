@@ -28,10 +28,12 @@ namespace EventsExpress.Test.ServiceTests
         private EventService service;
         private List<Event> events;
         private EventDTO eventDTO;
+        private EventLocation eventLocation;
 
         private Guid userId = Guid.NewGuid();
         private Guid firstEventId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
+        private Guid eventLocationId = Guid.NewGuid();
 
         [SetUp]
         protected override void Initialize()
@@ -80,6 +82,12 @@ namespace EventsExpress.Test.ServiceTests
                 MaxParticipants = 2147483647,
             };
 
+            eventLocation = new EventLocation
+            {
+                Id = eventLocationId,
+                Point = new Point(10.45, 12.34),
+            };
+
             List<User> users = new List<User>()
             {
                 new User
@@ -106,6 +114,7 @@ namespace EventsExpress.Test.ServiceTests
                         },
                     },
                     PhotoId = Guid.NewGuid(),
+                    EventLocationId = eventLocationId,
                     Title = "SLdndsndj",
                     IsBlocked = false,
                     IsPublic = true,
@@ -145,6 +154,7 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
+            Context.EventLocations.Add(eventLocation);
             Context.Events.AddRange(events);
             Context.SaveChanges();
 
