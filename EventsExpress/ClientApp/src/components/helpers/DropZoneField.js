@@ -77,8 +77,8 @@ export default class DropZoneField extends Component {
                 </Button>
             </div>
         )
-    };
-};
+    }
+}
 
 DropZoneField.propTypes = {
     error: PropTypes.string,

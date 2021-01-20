@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
 import Slider from '@material-ui/core/Slider'
 import Cropper from 'react-easy-crop'
 import './image-resizer.css';

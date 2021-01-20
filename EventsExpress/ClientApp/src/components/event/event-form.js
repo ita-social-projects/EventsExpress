@@ -92,7 +92,7 @@ class EventForm extends Component {
     render() {
 
         const { form_values, all_categories, isCreated, pristine,
-            invalid, submitting, disabledDate, onChangeCountry, onCancel  } = this.props;
+            submitting, disabledDate, onCancel  } = this.props;
         const { photoCropped, imagefile, checked } = this.state;
         let values = form_values || this.props.initialValues;
 
