@@ -177,12 +177,14 @@ namespace EventsExpress.Test.ServiceTests
         public void Delete_NotExistedUnit_Throw()
         {
             Guid id = Guid.NewGuid();
+            service.Setup(x => x.Delete(It.IsAny<Guid>())).Throws<EventsExpressException>();
             Assert.ThrowsAsync<EventsExpressException>(async () => await unitController.Delete(id));
         }
 
         [Test]
         public void Delete_DeletedUnit_Throw()
         {
+            service.Setup(x => x.Delete(It.IsAny<Guid>())).Throws<EventsExpressException>();
             Assert.ThrowsAsync<EventsExpressException>(async () => await unitController.Delete(deletedDTO.Id));
         }
 
