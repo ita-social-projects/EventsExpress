@@ -125,7 +125,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventLocationId")
+                    b.Property<Guid>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsBlocked")
@@ -644,7 +644,9 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
-                        .HasForeignKey("EventLocationId");
+                        .HasForeignKey("EventLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()

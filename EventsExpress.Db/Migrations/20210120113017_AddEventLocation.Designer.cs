@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210114093121_AddEventLocation")]
+    [Migration("20210120113017_AddEventLocation")]
     partial class AddEventLocation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,7 +127,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventLocationId")
+                    b.Property<Guid>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsBlocked")
@@ -646,7 +646,9 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
-                        .HasForeignKey("EventLocationId");
+                        .HasForeignKey("EventLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()

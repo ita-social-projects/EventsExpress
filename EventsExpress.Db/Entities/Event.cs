@@ -32,7 +32,7 @@ namespace EventsExpress.Db.Entities
         public Guid? PhotoId { get; set; }
 
         [Track]
-        public Guid? EventLocationId { get; set; }
+        public Guid EventLocationId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
 

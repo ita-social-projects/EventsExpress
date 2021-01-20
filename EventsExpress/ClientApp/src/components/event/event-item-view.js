@@ -318,7 +318,6 @@ export default class EventItemView extends Component {
                                         latitude={this.props.event.data.latitude}
                                         longitude={this.props.event.data.longitude}
                                     />
-                                <br />
                                 {categories_list}
                             </div>
                             <div className="button-block">

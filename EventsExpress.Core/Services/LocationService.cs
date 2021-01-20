@@ -20,21 +20,8 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> AddLocationToEvent(LocationDto locationDTO)
-        {
-            var locationDTOByLatLng = LocationByPoint(locationDTO.Point);
-            Guid locationId;
-            if (locationDTOByLatLng != null)
-            {
-                locationId = locationDTOByLatLng.Id;
-            }
-            else
-            {
-                locationId = await Create(locationDTO);
-            }
-
-            return locationId;
-        }
+        public async Task<Guid> AddLocationToEvent(LocationDto locationDTO) =>
+            LocationByPoint(locationDTO.Point)?.Id ?? await Create(locationDTO);
 
         public async Task<Guid> Create(LocationDto locationDTO)
         {

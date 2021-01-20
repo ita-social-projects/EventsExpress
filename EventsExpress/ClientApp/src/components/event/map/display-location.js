@@ -8,9 +8,11 @@ class DisplayLocation extends Component {
         super(props);
 
         this.state = {
-            address: null
+            address: {}
         };
+        
         this.defineAddress = this.defineAddress.bind(this);
+        this.geocodeCoords();
     }
 
     geocodeCoords = () => {
@@ -25,55 +27,30 @@ class DisplayLocation extends Component {
 
     defineAddress (error, result) {
         if (error) {
+            this.setState(() => ({address: {PlaceName: "Location is not defined"}}));
             return;
         }
     
         this.setState(() => ({address: result.address}));
     }
 
-    componentWillMount() {
-        this.geocodeCoords();
-    }
-
     render() {
-
-        const placeName = this.state.address ? this.state.address.PlaceName : "";
-        const city = this.state.address ? this.state.address.City : "";
-        const countryCode = this.state.address ? this.state.address.CountryCode : "";
+        const { PlaceName, City, CountryCode} = this.state.address;
 
         return (
             <>
-                {placeName != "" &&
-                    <span>
-                        {placeName}
-                    </span>
+                <div>
+                    {PlaceName}
+                </div>
+                {City && City != "" &&
+                    <div>
+                        {City}
+                    </div>
                 }
-                {placeName != "" && city != "" &&
-                    city != placeName &&
-                        <span>
-                            <br />
-                            {city}
-                        </span>
-                }
-                {city != "" &&
-                    placeName == "" &&
-                        <span>
-                            {city}
-                        </span>
-                }
-                {countryCode !="" && 
-                    placeName != countries[countryCode].name &&
-                        <span>
-                            <br />
-                            {countries[countryCode].name}
-                        </span>
-                }
-                {placeName == "" && 
-                    city =="" && 
-                    countryCode =="" &&
-                        <span>
-                            Location is not defined
-                        </span>    
+                {CountryCode && CountryCode !="" && PlaceName != countries[CountryCode].name &&
+                    <div>
+                        {countries[CountryCode].name}
+                    </div>
                 }
             </>
         );

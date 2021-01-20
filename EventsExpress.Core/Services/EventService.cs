@@ -162,10 +162,10 @@ namespace EventsExpress.Core.Services
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
             var locationDTO = _mapper.Map<EventDTO, LocationDto>(eventDTO);
-            var locationId = _locationService.AddLocationToEvent(locationDTO);
+            var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             var ev = _mapper.Map<EventDTO, Event>(eventDTO);
-            ev.EventLocationId = await locationId;
+            ev.EventLocationId = locationId;
 
             if (ev.Owners == null)
             {
@@ -256,7 +256,7 @@ namespace EventsExpress.Core.Services
             }
 
             var locationDTO = _mapper.Map<EventDTO, LocationDto>(e);
-            var locationId = _locationService.AddLocationToEvent(locationDTO);
+            var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             ev.Title = e.Title;
             ev.MaxParticipants = e.MaxParticipants;
@@ -264,7 +264,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
-            ev.EventLocationId = await locationId;
+            ev.EventLocationId = locationId;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
