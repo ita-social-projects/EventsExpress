@@ -17,6 +17,7 @@ import Badge from '@material-ui/core/Badge';
 import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
+import DisplayLocation from './map/display-location';
 import './event-item.css';
 
 const useStyles = makeStyles(theme => ({
@@ -49,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 export default class Event extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             anchorEl: null
         }
@@ -82,7 +84,6 @@ export default class Event extends Component {
             isBlocked,
             owners
         } = this.props.item;
-        const { city, country } = this.props.item;
         const INT32_MAX_VALUE = 2147483647;
         const { anchorEl } = this.state;
 
@@ -183,9 +184,10 @@ export default class Event extends Component {
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
-                            <div className='mb-2'>
-                                {`${city.name}, ${country.name}`}
-                            </div>
+                            <DisplayLocation 
+                                latitude={this.props.item.latitude}
+                                longitude={this.props.item.longitude}/>
+                        <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
