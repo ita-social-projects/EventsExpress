@@ -3,16 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20210104135616_AddIsDeletedColumnUnitOfMeasuring.cs" />
-    <Compile Remove="Migrations\20210104135616_AddIsDeletedColumnUnitOfMeasuring.Designer.cs" />
-    <Compile Remove="Migrations\20210106115048_AddIndex.cs" />
-    <Compile Remove="Migrations\20210106115048_AddIndex.Designer.cs" />
-    <Compile Remove="Migrations\20210106131149_AddFilterUnit.cs" />
-    <Compile Remove="Migrations\20210106131149_AddFilterUnit.Designer.cs" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
