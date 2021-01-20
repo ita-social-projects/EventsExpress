@@ -16,6 +16,7 @@ import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
+import DisplayLocation from './map/display-location';
 
 const userStatus = {
     APPROVED: 0,
@@ -24,7 +25,6 @@ const userStatus = {
 };
 
 export default class EventItemView extends Component {
-
     constructor() {
         super();
 
@@ -251,8 +251,6 @@ export default class EventItemView extends Component {
             isPublic,
             maxParticipants,
             visitors,
-            country,
-            city,
             owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
@@ -293,8 +291,14 @@ export default class EventItemView extends Component {
                                 }
                                 <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
-                                    ? <span className="maxParticipants">{visitorsEnum.approvedUsers.length}/{maxParticipants} Participants</span>
-                                    : <span className="maxParticipants">{visitorsEnum.approvedUsers.length} Participants</span>
+                                    ? <span className="maxParticipants">
+                                            {visitorsEnum.approvedUsers.length}/{maxParticipants}
+                                            <span className="pl-2">Participants</span>
+                                        </span>
+                                    : <span className="maxParticipants">
+                                        {visitorsEnum.approvedUsers.length}
+                                        <span className="pl-2">Participants</span>
+                                      </span>
                                 }
                                 <br />
                                 <span>
@@ -309,14 +313,19 @@ export default class EventItemView extends Component {
                                         </>
                                     }
                                 </span>
-                                <br />
-                                <span>{country.name} {city.name}</span>
-                                <br />
+                                <br/>
+                                    <DisplayLocation 
+                                        latitude={this.props.event.data.latitude}
+                                        longitude={this.props.event.data.longitude}
+                                    />
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel && 
+                                <EventCancelModal 
+                                    submitCallback={this.props.onCancel} 
+                                    cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit

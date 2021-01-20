@@ -27,14 +27,13 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CategoryDTO> GetAllCategories()
         {
-            var categories = _mapper.Map<List<CategoryDTO>>(
-                _context.Categories.Include(c => c.Users).Include(c => c.Events).Select(x => new CategoryDTO
+            var categories = _context.Categories.Include(c => c.Users).Include(c => c.Events).Select(x => new CategoryDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
                     CountOfEvents = x.Events.Count(),
                     CountOfUser = x.Users.Count(),
-                }));
+                });
 
             return categories;
         }
