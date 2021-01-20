@@ -17,14 +17,14 @@ namespace EventsExpress.Test.ServiceTests
     {
         private UnitOfMeasuringService service;
         private UnitOfMeasuringDTO correctUnitOfMeasuringDTO;
-        public string createUnitName = "create Unit Name";
-        public string createShortName = "create Unit Name";
-        public string correctUnitName = "CorrectUnitName";
-        public string correctShortName = "CSN";
-        public string deletedUnitName = "DeletedUnitName";
-        public string deletedShortName = "DSN";
-        public string randomStringName = "Rnd";
-        public string inCorrectUnitName = "78789878Unitk";
+        public const string CreateUnitName = "create Unit Name";
+        public const string CreateShortName = "create Unit Name";
+        public const string CorrectUnitName = "CorrectUnitName";
+        public const string CorrectShortName = "CSN";
+        public const string DeletedUnitName = "DeletedUnitName";
+        public const string DeletedShortName = "DSN";
+        public const string RandomStringName = "Rnd";
+        public const string InCorrectUnitName = "78789878Unitk";
 
         public UnitOfMeasuring FromDTOToUnit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
@@ -42,8 +42,8 @@ namespace EventsExpress.Test.ServiceTests
             correctUnitOfMeasuringDTO = new UnitOfMeasuringDTO
             {
                 Id = Guid.NewGuid(),
-                UnitName = correctUnitName,
-                ShortName = correctShortName,
+                UnitName = CorrectUnitName,
+                ShortName = CorrectShortName,
                 IsDeleted = false,
             };
         }
@@ -99,8 +99,8 @@ namespace EventsExpress.Test.ServiceTests
            UnitOfMeasuringDTO unitOfMeasuringDTOCreate = new UnitOfMeasuringDTO
             {
                 Id = Guid.NewGuid(),
-                UnitName = createUnitName,
-                ShortName = createShortName,
+                UnitName = CreateUnitName,
+                ShortName = CreateShortName,
                 IsDeleted = false,
             };
            Guid unitId = await service.Create(unitOfMeasuringDTOCreate);
