@@ -88,6 +88,11 @@ class LeftSidebar extends Component {
                                         text={"Categories"}
                                     />
                                     <NavItem
+                                        to={'/admin/unitsOfMeasuring/'}
+                                        icon={'fa fa-plus'}
+                                        text={"UnitsOfMeasuring"}
+                                    />
+                                    <NavItem
                                         to={'/admin/users?page=1'}
                                         icon={'fa fa-users'}
                                         text={"Users"}

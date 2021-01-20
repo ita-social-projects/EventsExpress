@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import { connect } from 'react-redux';
-import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
+import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list';
 import IconButton from "@material-ui/core/IconButton";
 import { get_inventories_by_event_id }  from '../../actions/inventory-list';
 import InventoryItemWrapper from '../../containers/inventory-item';
