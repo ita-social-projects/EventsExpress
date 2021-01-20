@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, FieldArray, getFormSyncErrors } from 'redux-form';
 import { renderTextField, renderSelectField } from '../helpers/helpers';
 import { connect } from 'react-redux';
-import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
+import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import './inventory.css';
 
