@@ -102,8 +102,9 @@ class EventForm extends Component {
 
     render() {
 
-        const { countries, form_values, all_categories, data, isCreated, pristine, invalid, submitting } = this.props;
-        const { photoCropped } = this.state;
+        const { countries, form_values, all_categories, data, isCreated, pristine,
+            invalid, submitting, disabledDate, onChangeCountry, onCancel } = this.props;
+        const { photoCropped, imagefile, checked } = this.state;
         let values = form_values || this.props.initialValues;
 
         return (
@@ -114,13 +115,13 @@ class EventForm extends Component {
                         name="image"
                         component={DropZoneField}
                         type="file"
-                        imagefile={this.state.imagefile}
+                        imagefile={imagefile}
                         handleOnDrop={this.handleOnDrop}
                         handleOnCrop={this.setCroppedImage}
                         crop={true}
                         cropShape='rect'
                         handleOnClear={this.resetForm}
-                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
+                        validate={(imagefile[0] == null) ? [imageIsRequired] : null}
                     />
                     <div className="mt-2">
                         <Field name='title'
@@ -146,7 +147,7 @@ class EventForm extends Component {
                                 label="Recurrent Event"
                                 name='isReccurent'
                                 component={renderCheckbox}
-                                checked={this.state.checked}
+                                checked={checked}
                                 onChange={this.handleChange} />
                         </div>
                     }
@@ -180,7 +181,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 component={renderDatePicker}
-                                disabled={this.props.disabledDate ? true : false}
+                                disabled={disabledDate ? true : false}
                             />
                         </span>
                         {values && values.dateFrom &&
@@ -189,7 +190,7 @@ class EventForm extends Component {
                                     name='dateTo'
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
-                                    disabled={this.props.disabledDate ? true : false}
+                                    disabled={disabledDate ? true : false}
                                 />
                             </span>
                         }
@@ -213,7 +214,7 @@ class EventForm extends Component {
                             placeholder='#hashtags' />
                     </div>
                     <div className="mt-2">
-                        <Field onChange={this.props.onChangeCountry}
+                        <Field onChange={onChangeCountry}
                             name='countryId'
                             data={countries}
                             text='Country'
@@ -248,7 +249,7 @@ class EventForm extends Component {
                             className="border"
                             fullWidth={true}
                             color="primary"
-                            onClick={this.props.onCancel}>
+                            onClick={onCancel}>
                             Cancel
                         </Button>
                     </div>
