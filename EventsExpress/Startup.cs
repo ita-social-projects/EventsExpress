@@ -234,10 +234,6 @@ namespace EventsExpress
             var supportedCultures = new[]
             {
                 new CultureInfo("en-US"),
-                new CultureInfo("en-GB"),
-                new CultureInfo("en"),
-                new CultureInfo("ru-RU"),
-                new CultureInfo("ru"),
             };
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
