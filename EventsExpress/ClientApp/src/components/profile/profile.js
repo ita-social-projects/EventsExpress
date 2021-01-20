@@ -51,7 +51,7 @@ const Profile = (props) => {
                     <Typography className={classes.heading}>Change Avatar</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography className="w-100">
                         <MuiThemeProvider>
                             <ChangeAvatarWrapper />
                         </MuiThemeProvider>
