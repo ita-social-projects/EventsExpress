@@ -27,6 +27,7 @@ namespace EventsExpress.Core.Services
         {
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
+            _mediator = mediator;
         }
 
         public async Task CancelEvent(Guid eventId, string reason)
