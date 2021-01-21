@@ -17,14 +17,14 @@ namespace EventsExpress.Db.EF
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private Guid CurrentUserId {
+        private Guid CurrentUserId
+        {
             get => _httpContextAccessor.HttpContext != null ? new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) : Guid.Empty;
         }
 
