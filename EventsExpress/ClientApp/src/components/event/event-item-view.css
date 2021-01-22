@@ -42,3 +42,8 @@
 .clear-backgroud:hover {
   background-color: #ebebeb;
 }
+
+.text-box-big {
+    overflow-wrap: anywhere;    
+    scroll-behavior: auto;
+}
