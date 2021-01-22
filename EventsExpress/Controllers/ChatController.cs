@@ -46,7 +46,7 @@ namespace EventsExpress.Controllers
         /// This method have to return chat.
         /// </summary>
         /// <param name="chatId">Param chatId defines the chat identifier.</param>
-        /// <returns>The method returns a Chat by identifier</returns>
+        /// <returns>The method returns a Chat by identifier.</returns>
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
         [HttpGet("{chatId}")]

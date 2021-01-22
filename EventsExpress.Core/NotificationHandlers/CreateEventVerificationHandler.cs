@@ -17,7 +17,7 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ILogger<CreateEventVerificationHandler> _logger;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        protected readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,

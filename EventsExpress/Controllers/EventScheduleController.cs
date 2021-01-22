@@ -30,7 +30,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all event schedules.
         /// </summary>
-        /// <returns>The method returns event schedules</returns>
+        /// <returns>The method returns event schedules.</returns>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]

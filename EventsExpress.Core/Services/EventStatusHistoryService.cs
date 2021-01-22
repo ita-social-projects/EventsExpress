@@ -32,7 +32,7 @@ namespace EventsExpress.Core.Services
 
         public async Task CancelEvent(Guid eventId, string reason)
         {
-            var uEvent = _context.Events.Find(eventId);
+            var uEvent = Context.Events.Find(eventId);
             if (uEvent == null)
             {
                 throw new EventsExpressException("Invalid event id");
@@ -41,7 +41,7 @@ namespace EventsExpress.Core.Services
             var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
             Insert(record);
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             await _mediator.Publish(new CancelEventMessage(eventId));
         }
 

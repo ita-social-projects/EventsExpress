@@ -23,15 +23,15 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-            await _context.SaveChangesAsync();
+            var result = Insert(Mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+            await Context.SaveChangesAsync();
 
             return result.Id;
         }
 
         public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
+            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null)
             {
                 throw new EventsExpressException("Object not found");
@@ -39,23 +39,23 @@ namespace EventsExpress.Core.Services
 
             entity.ShortName = unitOfMeasuringDTO.ShortName;
             entity.UnitName = unitOfMeasuringDTO.UnitName;
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return entity.Id;
         }
 
         public IEnumerable<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = _context.UnitOfMeasurings.AsEnumerable();
+            var entities = Context.UnitOfMeasurings.AsEnumerable();
 
-            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
+            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
         }
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
         {
-            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
 
-            return _mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
+            return Mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
         }
     }
 }

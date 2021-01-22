@@ -119,7 +119,7 @@ namespace EventsExpress.Controllers
         /// This method have to return event.
         /// </summary>
         /// <param name="eventId">Param eventId defines the event identifier.</param>
-        /// <<returns>The method returns an event by identifier.</returns>
+        /// <returns>The method returns an event by identifier.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
         [HttpGet("{eventId:Guid}")]
@@ -215,11 +215,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilter]
-        public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
+        public async Task DenyVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
-
-            return Ok();
         }
 
         /// <summary>
