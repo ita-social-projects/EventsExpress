@@ -5,17 +5,19 @@ import change_avatar from '../../actions/EditProfile/change-avatar';
 
 class ChangeAvatarWrapper extends Component {
     submit = values => {
-
         this.props.change_avatar(values);
     };
 
     render() {
-        return <ChangeAvatar onSubmit={this.submit} />;
+        return <ChangeAvatar
+            initialValues={{ image: this.props.current_photo }}
+            onSubmit={this.submit}/>;
     }
 }
 
 const mapStateToProps = (state) => ({
- })
+    current_photo: state.user.photoUrl
+})
 
 const mapDispatchToProps = dispatch => {
     return {

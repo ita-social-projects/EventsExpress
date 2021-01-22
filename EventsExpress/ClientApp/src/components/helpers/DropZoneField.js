@@ -14,7 +14,8 @@ export default class DropZoneField extends Component {
         cropped: false
     };
 
-    componentWillMount = () => {
+    componentWillMount = () => {          
+        console.log(this.props.photoUrl);
         if (this.props.photoUrl) {
             const imagefile = {
                 file: '',

@@ -44,7 +44,7 @@ class EventForm extends Component {
 
         const photoUrl = this.props.initialValues ?
             this.props.initialValues.photoUrl : null;
-
+                    
         return (
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >

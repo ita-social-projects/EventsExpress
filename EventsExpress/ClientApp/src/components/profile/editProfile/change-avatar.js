@@ -17,6 +17,7 @@ let ChangeAvatar = props => {
         type="file"
         crop={true}
         cropShape='round'
+        photoUrl={props.initialValues.image}
         validate={[required]}
       />
       <div>
@@ -27,20 +28,6 @@ let ChangeAvatar = props => {
     </form>
   );
 }
-
-const mapStateToProps = (state) => ({
-  current_photo: state.user.photoUrl
-})
-
-const mapDispatchToProps = dispatch => {
-  return {
-  };
-}
-
-ChangeAvatar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangeAvatar);
 
 export default reduxForm({
   form: "change-avatar"
