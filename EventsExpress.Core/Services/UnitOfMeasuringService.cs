@@ -23,16 +23,22 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
-            var result = Insert(Mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-            await Context.SaveChangesAsync();
-
-            return result.Id;
+            if (unitOfMeasuringDTO == null)
+            {
+                throw new EventsExpressException("Null object");
+            }
+            else
+            {
+                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+                await _context.SaveChangesAsync();
+                return result.Id;
+            }
         }
 
         public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
         {
             var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
-            if (entity == null)
+            if (entity == null || entity.IsDeleted)
             {
                 throw new EventsExpressException("Object not found");
             }
@@ -46,16 +52,42 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UnitOfMeasuringDTO> GetAll()
         {
-            var entities = Context.UnitOfMeasurings.AsEnumerable();
-
-            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
+            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(_context.UnitOfMeasurings.Where(item => !item.IsDeleted));
         }
 
         public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
         {
-            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            var unitOfMeasuring = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
+            {
+                throw new EventsExpressException("Not found");
+            }
 
-            return Mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
+            return new UnitOfMeasuringDTO
+            {
+                Id = unitOfMeasuring.Id,
+                UnitName = unitOfMeasuring.UnitName,
+                ShortName = unitOfMeasuring.ShortName,
+                IsDeleted = unitOfMeasuring.IsDeleted,
+            };
+        }
+
+        public async Task Delete(Guid id)
+        {
+            var unitOfMeasuring = _context.UnitOfMeasurings.Find(id);
+            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
+            {
+                return;
+            }
+
+            unitOfMeasuring.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public bool ExistsByName(string unitName, string shortName)
+        {
+          return _context.UnitOfMeasurings.Any(x => ((!x.IsDeleted) && (x.UnitName == unitName) && (x.ShortName == shortName)));
         }
     }
 }
