@@ -31,7 +31,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all chats.
         /// </summary>
-        /// <returns>UserChatDto.</returns>
+        /// <returns>The method returns a list of user's chats.</returns>
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
@@ -45,8 +45,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return chat.
         /// </summary>
-        /// <param name="chatId">Required.</param>
-        /// <returns>Chat.</returns>
+        /// <param name="chatId">Param chatId defines the chat identifier.</param>
+        /// <returns>The method returns a Chat by identifier</returns>
         /// <response code="200">UserChatDto model.</response>
         /// <response code="200">If proccess is failed.</response>
         [HttpGet("{chatId}")]
@@ -65,7 +65,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to get mesagees which are unread.
         /// </summary>
-        /// <returns>UnreadMessages.</returns>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns unread messages for user.</returns>
         /// <response code="200">MessageDto model.</response>
         /// <response code="200">If proccess is failed.</response>
         [HttpGet("[action]")]
