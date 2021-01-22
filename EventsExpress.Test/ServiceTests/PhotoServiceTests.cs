@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.Infrastructure;
@@ -79,16 +80,18 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddPhoto_ValidFormFile_DoesNotThrows()
         {
-            using (var stream = File.OpenRead(@"./Images/valid-image.jpg"))
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
-                var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(@"./Images/valid-image.jpg"))
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(Path.GetFileName(@"./Images/valid-image.jpg")),
-                };
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
 
-                Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhoto(file));
-            }
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhoto(file));
         }
 
         [Test]
@@ -97,17 +100,17 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase(@"./Images/tooSmallImage.jpg")]
         public void AddPhoto_InValidFormFile_WillThrows(string testFilePath)
         {
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
             string fileName = Path.GetFileName(testFilePath);
-
-            using (var stream = File.OpenRead(testFilePath))
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
-                var file = new FormFile(stream, 0, stream.Length, null, fileName)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(fileName),
-                };
-                Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhoto(file));
-            }
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhoto(file));
         }
 
         [Test]
