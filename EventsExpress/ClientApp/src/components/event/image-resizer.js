@@ -82,7 +82,7 @@ class ImageResizer extends Component {
 
     render() {
         const { cropShape } = this.props;
-        const { showGrid, crop, zoom, aspect } = this.state;
+        const { showGrid, crop, aspect } = this.state;
         const { onCropChange, onCropComplete, onZoomChange, cropImage } = this;
 
         return (
@@ -92,7 +92,7 @@ class ImageResizer extends Component {
                         <Cropper
                             image={this.props.image.preview}
                             crop={crop}
-                            zoom={zoom}
+                            zoom={this.state.zoom}
                             aspect={aspect}
                             onCropChange={onCropChange}
                             onCropComplete={onCropComplete}
@@ -103,7 +103,7 @@ class ImageResizer extends Component {
                     </div>
                     <div className="controls">
                         <Slider
-                            value={zoom}
+                            value={this.state.zoom}
                             min={1}
                             max={3}
                             step={0.1}
