@@ -269,7 +269,7 @@ __pycache__/
 !/EventsExpress/ClientApp/.vscode/extensions.json
 /EventsExpress/ClientApp/.vscode/*
 *.code-workspace
-
+.eslintcache
 # Local History for Visual Studio Code
 /EventsExpress/ClientApp/.history/
 
