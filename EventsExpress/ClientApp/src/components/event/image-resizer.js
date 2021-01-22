@@ -5,6 +5,7 @@ import './image-resizer.css';
 import Button from "@material-ui/core/Button";
 
 class ImageResizer extends Component {
+
     state = {
         crop: { x: 0, y: 0 },
         zoom: 1
@@ -77,12 +78,12 @@ class ImageResizer extends Component {
             this.state.croppedAreaPixels
         )
         this.props.handleOnCrop([croppedImage], this.props.onChange);
-        this.props.onImageCrop();
     }
 
     render() {
         const { cropShape } = this.props;
-        const { showGrid } = this.state;
+        const { showGrid, crop, zoom, aspect } = this.state;
+        const { onCropChange, onCropComplete, onZoomChange, cropImage } = this;
 
         return (
             <div>
@@ -90,30 +91,30 @@ class ImageResizer extends Component {
                     <div className="crop-container">
                         <Cropper
                             image={this.props.image.preview}
-                            crop={this.state.crop}
-                            zoom={this.state.zoom}
-                            aspect={this.state.aspect}
-                            onCropChange={this.onCropChange}
-                            onCropComplete={this.onCropComplete}
-                            onZoomChange={this.onZoomChange}
+                            crop={crop}
+                            zoom={zoom}
+                            aspect={aspect}
+                            onCropChange={onCropChange}
+                            onCropComplete={onCropComplete}
+                            onZoomChange={onZoomChange}
                             cropShape={cropShape}
                             showGrid={showGrid}
                         />
                     </div>
                     <div className="controls">
                         <Slider
-                            value={this.state.zoom}
+                            value={zoom}
                             min={1}
                             max={3}
                             step={0.1}
                             aria-labelledby="Zoom"
-                            onChange={(e, zoom) => this.onZoomChange(zoom)}
+                            onChange={(e, zoom) => onZoomChange(zoom)}
                         />
                         <Button
                             type="button"
                             color="primary"
                             disabled={this.props.submitting}
-                            onClick={this.cropImage}
+                            onClick={cropImage}
                             style={{ float: "right" }}
                         >
                             Crop

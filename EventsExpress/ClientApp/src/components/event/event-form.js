@@ -20,59 +20,13 @@ import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 
 momentLocaliser(moment);
-const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
+const required = value => value ? undefined : "Required";
+
 class EventForm extends Component {
-    state = { imagefile: [], checked: false, photoCropped: false };
 
-    handleOnDrop = (newImageFile, onChange) => {
-        if (newImageFile.length > 0) {
-            const imagefile = {
-                file: newImageFile[0],
-                name: newImageFile[0].name,
-                preview: URL.createObjectURL(newImageFile[0]),
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
-        }
-    };
-
-    componentDidMount = () => {
-        let values = this.props.initialValues || this.props.data;
-
-        if (this.props.isCreated) {
-            const imagefile = {
-                file: '',
-                name: '',
-                preview: values.photoUrl,
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] });
-        }
-    }
-
-    componentDidUpdate = () => {
-        let status = this.props.addEventStatus;
-        if (status && status.isEventSuccess) {
-            this.resetForm();
-        }
-    }
-
-    setCroppedImage = (croppedImage, onChange) => {
-        const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
-        const imagefile = {
-            file: file,
-            name: "image.jpg",
-            preview: croppedImage,
-            size: 1
-        };
-        this.setState({ imagefile: [imagefile], photoCropped: true }, () => onChange(imagefile));
-    }
-
-    componentWillUnmount() {
-        this.resetForm();
-    }
+    state = { checked: false };
 
     handleChange = () => {
         this.setState(state => ({
@@ -80,37 +34,30 @@ class EventForm extends Component {
         }));
     }
 
-    resetForm = () => {
-        this.setState({ photoCropped: false });
-        this.setState({ imagefile: [] });
-    }
-
-    componentWillMount() {
-        this.resetForm();
-    }
-
     render() {
-
         const { form_values, all_categories, isCreated, pristine,
-            submitting, disabledDate, onCancel  } = this.props;
-        const { photoCropped, imagefile, checked } = this.state;
+            submitting, disabledDate, onCancel } = this.props;
+        const { checked } = this.state;
+        const { handleChange } = this;
+
         let values = form_values || this.props.initialValues;
 
+        const photoUrl = this.props.initialValues ?
+            this.props.initialValues.photoUrl : null;
+
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
+            <form onSubmit={this.props.handleSubmit}
+                encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
                         id="image-field"
                         name="image"
                         component={DropZoneField}
                         type="file"
-                        imagefile={imagefile}
-                        handleOnDrop={this.handleOnDrop}
-                        handleOnCrop={this.setCroppedImage}
                         crop={true}
                         cropShape='rect'
-                        handleOnClear={this.resetForm}
-                        validate={(imagefile[0] == null) ? [imageIsRequired] : null}
+                        photoUrl={photoUrl}
+                        validate={[required]}
                     />
                     <div className="mt-2">
                         <Field name='title'
@@ -137,10 +84,10 @@ class EventForm extends Component {
                                 name='isReccurent'
                                 component={renderCheckbox}
                                 checked={checked}
-                                onChange={this.handleChange} />
+                                onChange={handleChange} />
                         </div>
                     }
-                    {this.state.checked &&
+                    {checked &&
                         <div>
                             <div className="mt-2">
                                 <Field
@@ -209,7 +156,7 @@ class EventForm extends Component {
                                 this.props.initialValues &&
                                 this.props.initialValues.selectedPos
                             }
-                            component={LocationMap}/>
+                            component={LocationMap} />
                     </div>
                     {isCreated ? null : <Inventory />}
                 </div>
@@ -220,7 +167,7 @@ class EventForm extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            disabled={!photoCropped || pristine || submitting}>
+                            disabled={pristine || submitting}>
                             Save
                         </Button>
                     </div>

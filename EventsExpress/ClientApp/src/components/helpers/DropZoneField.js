@@ -10,39 +10,70 @@ import Button from "@material-ui/core/Button";
 export default class DropZoneField extends Component {
 
     state = {
+        imagefile: [],
         cropped: false
     };
 
-    imageCrop = () => {
-        this.setState({ cropped: true });
-    };
+    componentWillMount = () => {
+        if (this.props.photoUrl) {
+            const imagefile = {
+                file: '',
+                name: '',
+                preview: this.props.photoUrl,
+                size: 1
+            };
+            this.setState({ imagefile: [imagefile] });
+        }
+    }
 
-    clearImage = () => {
-        this.setState({ cropped: false });
-        this.props.handleOnClear();
-    };
+    handleOnClear = () => {
+        this.setState({ cropped: false, imagefile: [] });
+        this.props.input.onChange(null);
+    }
+
+    handleOnDrop = (file) => {
+        if (file.length > 0) {
+            const imagefile = {
+                file: file[0],
+                name: file[0].name,
+                preview: URL.createObjectURL(file[0]),
+                size: 1
+            };
+            this.setState({ imagefile: [imagefile] });
+        }
+    }
+
+    handleOnCrop = (croppedImage) => {
+        const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
+        const imagefile = {
+            file: file,
+            name: "image.jpg",
+            preview: croppedImage,
+            size: 1
+        };
+        this.setState({ imagefile: [imagefile], cropped: true },
+            () => this.props.input.onChange(imagefile));
+    }
 
     render() {
         const {
-            handleOnDrop,
-            handleOnCrop,
             submitting,
-            imagefile,
             crop,
             cropShape,
             meta: { error, touched },
             input: { onChange }
         } = this.props;
+        const { imagefile, cropped } = this.state;
+        const { handleOnCrop, handleOnDrop, handleOnClear } = this;
 
         return (
             <div className="preview-container">
-                {imagefile.length && crop && !this.state.cropped ? (
+                {imagefile.length && crop && !cropped ? (
                     <div>
                         <ImageResizer
                             image={imagefile[0]}
                             onChange={onChange}
                             handleOnCrop={handleOnCrop}
-                            onImageCrop={this.imageCrop}
                             cropShape={cropShape}
                         />
                     </div>
@@ -51,7 +82,7 @@ export default class DropZoneField extends Component {
                             <DropZone
                                 accept="image/jpeg, image/png, image/gif, image/bmp"
                                 className="upload-container"
-                                onDrop={file => handleOnDrop(file, onChange)}
+                                onDrop={file => handleOnDrop(file)}
                                 multiple={false}
                             >
                                 {props =>
@@ -70,7 +101,7 @@ export default class DropZoneField extends Component {
                     type="button"
                     color="primary"
                     disabled={submitting}
-                    onClick={this.clearImage}
+                    onClick={handleOnClear}
                     style={{ float: "right" }}
                 >
                     Clear
