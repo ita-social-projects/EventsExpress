@@ -1,0 +1,13 @@
+.description {
+    white-space: nowrap; 
+    overflow: hidden;     
+    text-overflow: ellipsis; 
+}
+
+.title {
+    overflow-wrap: anywhere;
+}
+
+.description-tooltip{
+    overflow-wrap: anywhere;
+}

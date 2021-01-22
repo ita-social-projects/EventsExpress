@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
@@ -105,7 +106,7 @@ namespace EventsExpress.Core.Services
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
-            using var memoryStream = file.OpenReadStream();
+            using var memoryStream = file.ToMemoryStream();
             var oldBitMap = new Bitmap(memoryStream);
             var newSize = new Size
             {

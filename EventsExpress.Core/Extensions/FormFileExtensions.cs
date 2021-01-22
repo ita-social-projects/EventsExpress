@@ -74,8 +74,11 @@ namespace EventsExpress.Core.Extensions
             //-------------------------------------------
             try
             {
-                using (var bitmap = new Bitmap(postedFile.OpenReadStream()))
+                using (var memoryStream = postedFile.ToMemoryStream())
                 {
+                    using (var bitmap = new Bitmap(memoryStream))
+                    {
+                    }
                 }
             }
             catch (Exception)
@@ -88,6 +91,20 @@ namespace EventsExpress.Core.Extensions
             }
 
             return true;
+        }
+
+        public static MemoryStream ToMemoryStream(this IFormFile file)
+        {
+            long length = file.OpenReadStream().Length;
+            byte[] buffer = new byte[length];
+            file.OpenReadStream().Read(buffer, 0, (int)length);
+            string content = Encoding.UTF8.GetString(buffer);
+            content = content.Replace("data:image/jpeg;base64,", string.Empty);
+            var bytes = Convert.FromBase64String(content);
+
+            var memoryStream = new MemoryStream(bytes);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }
