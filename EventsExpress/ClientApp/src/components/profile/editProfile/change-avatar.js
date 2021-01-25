@@ -2,7 +2,6 @@ import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { connect } from 'react-redux';
 
 const required = value => value ? undefined : "Required";
 
