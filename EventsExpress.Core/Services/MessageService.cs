@@ -20,7 +20,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<ChatRoom> GetUserChats(Guid userId)
         {
-            var res = _context.ChatRoom
+            var res = Context.ChatRoom
                 .Include(c => c.Users)
                     .ThenInclude(u => u.User)
                         .ThenInclude(u => u.Photo)
@@ -31,9 +31,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<ChatRoom> GetChat(Guid chatId, Guid sender)
         {
-            var chat = _context.ChatRoom
+            var chat = Context.ChatRoom
                 .FirstOrDefault(x => x.Id == chatId) ??
-                _context.ChatRoom
+                Context.ChatRoom
                 .FirstOrDefault(x =>
                     x.Users.Count == 2 &&
                     x.Users.Any(y => y.UserId == chatId) &&
@@ -47,11 +47,11 @@ namespace EventsExpress.Core.Services
                     new UserChat { Chat = chat, UserId = sender },
                     new UserChat { Chat = chat, UserId = chatId },
                 };
-                _context.ChatRoom.Add(chat);
-                await _context.SaveChangesAsync();
+                Context.ChatRoom.Add(chat);
+                await Context.SaveChangesAsync();
             }
 
-            var res = _context.ChatRoom
+            var res = Context.ChatRoom
                 .Include(c => c.Users)
                     .ThenInclude(u => u.User)
                         .ThenInclude(u => u.Photo)
@@ -63,22 +63,22 @@ namespace EventsExpress.Core.Services
 
         public async Task<Message> Send(Guid chatId, Guid sender, string text)
         {
-            var chat = _context.ChatRoom.Find(chatId);
+            var chat = Context.ChatRoom.Find(chatId);
             if (chat == null)
             {
-                chat = _context.ChatRoom
+                chat = Context.ChatRoom
                     .FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
             }
 
             var msg = Insert(new Message { ChatRoomId = chat.Id, SenderId = sender, Text = text });
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return msg;
         }
 
         public List<string> GetChatUserIds(Guid chatId)
         {
-            return _context.ChatRoom
+            return Context.ChatRoom
                 .Include(c => c.Users)
                 .FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
         }
@@ -87,24 +87,24 @@ namespace EventsExpress.Core.Services
         {
             foreach (var x in messageIds)
             {
-                var msg = _context.Message.Find(x);
+                var msg = Context.Message.Find(x);
                 if (msg == null)
                 {
                     throw new EventsExpressException("Msg not found");
                 }
 
                 msg.Seen = true;
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
 
-            return _context.Message.Find(messageIds[0]).ChatRoomId;
+            return Context.Message.Find(messageIds[0]).ChatRoomId;
         }
 
         public List<Message> GetUnreadMessages(Guid userId)
         {
             var chats = GetUserChats(userId).Select(y => y.Id).ToList();
 
-            return _context.Message
+            return Context.Message
                 .Where(x => chats
                     .Contains(x.ChatRoomId) && x.SenderId != userId && !x.Seen)
                 .ToList();

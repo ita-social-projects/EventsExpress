@@ -23,6 +23,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all roles.
         /// </summary>
+        /// <returns>The method returns all roles.</returns>
         /// <response code="200">Return IEnumerable RoleDto model.</response>
         [AllowAnonymous]
         [HttpGet]

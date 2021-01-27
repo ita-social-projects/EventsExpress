@@ -22,9 +22,9 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
-            count = _context.Comments.Count(x => x.EventId == id && x.CommentsId == null);
+            count = Context.Comments.Count(x => x.EventId == id && x.CommentsId == null);
 
-            var comments = _context.Comments
+            var comments = Context.Comments
                 .Include(c => c.Children)
                     .ThenInclude(c => c.User)
                         .ThenInclude(u => u.Photo)
@@ -35,10 +35,10 @@ namespace EventsExpress.Core.Services
                 .Take(pageSize)
                 .AsEnumerable();
 
-            var com = _mapper.Map<IEnumerable<CommentDTO>>(comments);
+            var com = Mapper.Map<IEnumerable<CommentDTO>>(comments);
             foreach (var c in com)
             {
-                c.Children = _mapper.Map<IEnumerable<CommentDTO>>(c.Children);
+                c.Children = Mapper.Map<IEnumerable<CommentDTO>>(c.Children);
                 foreach (var child in c.Children)
                 {
                     child.User = c.User;
@@ -50,12 +50,12 @@ namespace EventsExpress.Core.Services
 
         public async Task Create(CommentDTO comment)
         {
-            if (_context.Users.Find(comment.UserId) == null)
+            if (Context.Users.Find(comment.UserId) == null)
             {
                 throw new EventsExpressException("Current user does not exist!");
             }
 
-            if (_context.Events.Find(comment.EventId) == null)
+            if (Context.Events.Find(comment.EventId) == null)
             {
                 throw new EventsExpressException("Wrong event id!");
             }
@@ -69,7 +69,7 @@ namespace EventsExpress.Core.Services
                 CommentsId = comment.CommentsId,
             });
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
@@ -79,7 +79,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Id field is null");
             }
 
-            var comment = _context.Comments
+            var comment = Context.Comments
                 .Include(c => c.Children)
                 .FirstOrDefault(x => x.Id == id);
 
@@ -92,12 +92,12 @@ namespace EventsExpress.Core.Services
             {
                 foreach (var com in comment.Children)
                 {
-                    var res = Delete(_context.Comments.Find(com.Id));
+                    var res = Delete(Context.Comments.Find(com.Id));
                 }
             }
 
             var result = Delete(comment);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
     }
 }

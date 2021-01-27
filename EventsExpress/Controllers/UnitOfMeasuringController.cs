@@ -30,7 +30,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for create unit of measuring.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UnitOfMeasuringViewModel model.</param>
+        /// <returns>The method returns created unit of meashuring.</returns>
         /// <response code="200">Create unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -48,7 +49,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit unit of measuring.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UnitOfMeasuringViewModel model.</param>
+        /// <returns>The method returns edited unit of meashuring.</returns>
         /// <response code="200">Edit unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -84,8 +86,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return unit of measuring by id.
         /// </summary>
-        /// <param name="id">Required.</param>
-        /// <returns>Unit of measuring.</returns>
+        /// <param name="id">Param id defines the unit of measuring identifier.</param>
+        /// <returns>The method returns unit of measuring by identifier.</returns>
         /// <response code="200">Return Unit of measuring by id.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -101,7 +103,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete unit of measuring.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="id">Param id defines the unit of measuring identifier.</param>
+        /// <returns>The method returns deleted unit of meashuring.</returns>
         /// <response code="200">Delete unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
