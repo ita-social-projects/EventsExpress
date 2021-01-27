@@ -31,7 +31,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all categories.
         /// </summary>
-        /// <returns>CategoryDto model.</returns>
+        /// <returns>The method returns all categories.</returns>
         /// <response code="200">Return IEnumerable CategoryDto model.</response>
         [HttpGet("[action]")]
         [AllowAnonymous]
@@ -41,7 +41,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for create categories.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines CategoryCreateViewModel model.</param>
+        /// <returns>The method returns created category.</returns>
         /// <response code="200">Create category proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
@@ -54,7 +55,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit categories.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines CategoryEditViewModel model.</param>
+        /// <returns>The method returns editedcategory.</returns>
         /// <response code="200">Edit category proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
@@ -67,7 +69,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete category.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="id">Param id defines category identifier.</param>
+        /// <returns>The method returns editedcategory.</returns>
         /// <response code="200">Delete category proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("[action]/{id}")]

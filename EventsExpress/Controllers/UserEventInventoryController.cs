@@ -28,7 +28,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all the items of event's inventory that taken by user.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
         /// <returns>All the items of event's inventory.</returns>
         /// <response code="200">Return IEnumerable UserEventInventoryViewModel.</response>
         [HttpGet("[action]")]
@@ -40,7 +40,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to mark item as taken by user.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UserEventInventoryViewModel model.</param>
+        /// <returns>The method returns marked items as taken.</returns>
         /// <response code="200">Marking item from inventar proces success.</response>
         /// <response code="400">If Marking item from inventar process failed.</response>
         [HttpPost("[action]")]
@@ -59,7 +60,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for cancel mark item as taken by user.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UserEventInventoryViewModel model.</param>
+        /// <returns>The method returns deleted inventory item.</returns>
         /// <response code="200">Cancel mark item as taken by user proces success.</response>
         /// <response code="400">If model param did not pass validation.</response>
         [HttpPost("[action]")]
@@ -72,7 +74,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit quantity of item that takan by user.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UserEventInventoryViewModel model.</param>
+        /// <returns>The method returns edited inventory item.</returns>
         /// <response code="200">Edit proces success.</response>
         /// <response code="400">If model param did not pass validation.</response>
         [HttpPost("[action]")]
