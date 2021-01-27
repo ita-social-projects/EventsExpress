@@ -46,7 +46,7 @@ namespace EventsExpress.Core.NotificationHandlers
             try
             {
                 string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
-                await _sender.SendEmailAsync(new EmailDTO
+                await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = "Aprove your reccurent event!",
                     RecepientEmail = user.Email,

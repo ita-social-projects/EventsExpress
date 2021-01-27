@@ -48,7 +48,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.EditNextEvent(_mapper.Map<EventDto>(model));
 
             return Ok(new { id = result });
         }
@@ -88,7 +88,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.Create(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Create(_mapper.Map<EventDto>(model));
 
             return Ok(result);
         }
@@ -110,7 +110,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.Edit(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Edit(_mapper.Map<EventDto>(model));
 
             return Ok(result);
         }

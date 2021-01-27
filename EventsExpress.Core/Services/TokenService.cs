@@ -53,7 +53,7 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public string GenerateAccessToken(UserDTO user)
+        public string GenerateAccessToken(UserDto user)
         {
             var lifeTime = _jwtOptions.Value.LifeTime;
             var claims = new[]
@@ -124,7 +124,7 @@ namespace EventsExpress.Core.Services
             var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
 
             // return null if token is no longer active
-            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive)
+            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
             {
                 return null;
             }
@@ -155,7 +155,7 @@ namespace EventsExpress.Core.Services
             var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == token);
 
             // return false if token is not active
-            if (!_mapper.Map<RefreshTokenDTO>(refreshToken).IsActive || refreshToken == null)
+            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive || refreshToken == null)
             {
                 return false;
             }

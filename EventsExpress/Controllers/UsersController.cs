@@ -286,7 +286,7 @@ namespace EventsExpress.Controllers
             {
                 foreach (var admin in admins)
                 {
-                    await _emailService.SendEmailAsync(new EmailDTO
+                    await _emailService.SendEmailAsync(new EmailDto
                     {
                         Subject = model.Type,
                         RecepientEmail = admin.Email,
@@ -333,7 +333,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
+            await _userService.SetAttitude(_mapper.Map<AttitudeDto>(attitude));
 
             return Ok();
         }
@@ -345,6 +345,6 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <returns>The method returns current user.</returns>
         [NonAction]
-        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
     }
 }

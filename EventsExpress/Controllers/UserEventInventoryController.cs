@@ -52,7 +52,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userEventInventoryService.MarkItemAsTakenByUser(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
+            await _userEventInventoryService.MarkItemAsTakenByUser(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDto>(model));
 
             return Ok();
         }
@@ -67,7 +67,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Delete([FromBody] UserEventInventoryViewModel model)
         {
-            await _userEventInventoryService.Delete(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
+            await _userEventInventoryService.Delete(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDto>(model));
             return Ok();
         }
 
@@ -81,7 +81,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UserEventInventoryViewModel model)
         {
-            await _userEventInventoryService.Edit(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDTO>(model));
+            await _userEventInventoryService.Edit(_mapper.Map<UserEventInventoryViewModel, UserEventInventoryDto>(model));
             return Ok();
         }
     }

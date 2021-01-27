@@ -25,9 +25,9 @@ namespace EventsExpress.Core.Services
             return Context.Categories.Find(id);
         }
 
-        public IEnumerable<CategoryDTO> GetAllCategories()
+        public IEnumerable<CategoryDto> GetAllCategories()
         {
-            var categories = Context.Categories.Include(c => c.Users).Include(c => c.Events).Select(x => new CategoryDTO
+            var categories = Context.Categories.Include(c => c.Users).Include(c => c.Events).Select(x => new CategoryDto
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -44,7 +44,7 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public async Task Edit(CategoryDTO category)
+        public async Task Edit(CategoryDto category)
         {
             var oldCategory = Context.Categories.Find(category.Id);
             if (oldCategory == null)

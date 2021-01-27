@@ -6,7 +6,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 {
     public class EditingUnit : IEnumerable
     {
-        private static UnitOfMeasuringDTO unitOfMeasuringDTONotExId = new UnitOfMeasuringDTO
+        private static UnitOfMeasuringDto unitOfMeasuringDTONotExId = new UnitOfMeasuringDto
         {
             Id = Guid.NewGuid(),
             UnitName = "CorrectUnitName",
@@ -14,7 +14,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
             IsDeleted = false,
         };
 
-        private static UnitOfMeasuringDTO deletedUnitOfMeasuringDTO = new UnitOfMeasuringDTO
+        private static UnitOfMeasuringDto deletedUnitOfMeasuringDTO = new UnitOfMeasuringDto
         {
             Id = Guid.NewGuid(),
             UnitName = "DeletedUnitName",
@@ -22,7 +22,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
             IsDeleted = true,
         };
 
-        public static UnitOfMeasuringDTO DeletedUnitOfMeasuringDTO
+        public static UnitOfMeasuringDto DeletedUnitOfMeasuringDTO
         {
             get
             {
@@ -35,7 +35,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
             }
         }
 
-        public static UnitOfMeasuringDTO UnitOfMeasuringDTONotExId
+        public static UnitOfMeasuringDto UnitOfMeasuringDTONotExId
         {
             get
             {

@@ -41,7 +41,7 @@ namespace EventsExpress.Core.Services
             _emailService = emailService;
         }
 
-        public async Task Create(UserDTO userDto)
+        public async Task Create(UserDto userDto)
         {
             if (Context.Users.Any(u => u.Email == userDto.Email))
             {
@@ -66,7 +66,7 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task ConfirmEmail(CacheDTO cacheDto)
+        public async Task ConfirmEmail(CacheDto cacheDto)
         {
             var user = Context.Users.Find(cacheDto.UserId);
             if (user == null)
@@ -89,7 +89,7 @@ namespace EventsExpress.Core.Services
             _cacheHelper.Delete(cacheDto.UserId);
         }
 
-        public async Task PasswordRecover(UserDTO userDto)
+        public async Task PasswordRecover(UserDto userDto)
         {
             var user = Context.Users.Find(userDto.Id);
             if (user == null)
@@ -101,7 +101,7 @@ namespace EventsExpress.Core.Services
             user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
 
             await Context.SaveChangesAsync();
-            await _emailService.SendEmailAsync(new EmailDTO
+            await _emailService.SendEmailAsync(new EmailDto
             {
                 Subject = "EventsExpress password recovery",
                 RecepientEmail = user.Email,
@@ -109,7 +109,7 @@ namespace EventsExpress.Core.Services
             });
         }
 
-        public async Task Update(UserDTO userDTO)
+        public async Task Update(UserDto userDTO)
         {
             if (string.IsNullOrEmpty(userDTO.Email))
             {
@@ -121,15 +121,15 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Not found");
             }
 
-            var result = Mapper.Map<UserDTO, User>(userDTO);
+            var result = Mapper.Map<UserDto, User>(userDTO);
 
             Update(result);
             await Context.SaveChangesAsync();
         }
 
-        public UserDTO GetById(Guid id)
+        public UserDto GetById(Guid id)
         {
-            var user = Mapper.Map<UserDTO>(
+            var user = Mapper.Map<UserDto>(
                 Context.Users
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
@@ -143,9 +143,9 @@ namespace EventsExpress.Core.Services
             return user;
         }
 
-        public UserDTO GetByEmail(string email)
+        public UserDto GetByEmail(string email)
         {
-            var user = Mapper.Map<UserDTO>(
+            var user = Mapper.Map<UserDto>(
                  Context.Users
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
@@ -164,7 +164,7 @@ namespace EventsExpress.Core.Services
             return user;
         }
 
-        public IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id)
+        public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id)
         {
             var users = Context.Users
                 .Include(u => u.Photo)
@@ -198,7 +198,7 @@ namespace EventsExpress.Core.Services
             users = users.Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
 
-            var result = Mapper.Map<IEnumerable<UserDTO>>(users);
+            var result = Mapper.Map<IEnumerable<UserDto>>(users);
 
             foreach (var u in result)
             {
@@ -213,7 +213,7 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
-        public IEnumerable<UserDTO> GetUsersByRole(string role)
+        public IEnumerable<UserDto> GetUsersByRole(string role)
         {
             var users = Context.Users
                .Include(u => u.Role)
@@ -222,10 +222,10 @@ namespace EventsExpress.Core.Services
                .AsNoTracking()
                .AsEnumerable();
 
-            return Mapper.Map<IEnumerable<UserDTO>>(users);
+            return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories)
+        public IEnumerable<UserDto> GetUsersByCategories(IEnumerable<CategoryDto> categories)
         {
             var categoryIds = categories.Select(x => x.Id).ToList();
 
@@ -239,10 +239,10 @@ namespace EventsExpress.Core.Services
                 .Distinct()
                 .AsEnumerable();
 
-            return Mapper.Map<IEnumerable<UserDTO>>(users);
+            return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public UserDTO GetUserByRefreshToken(string token)
+        public UserDto GetUserByRefreshToken(string token)
         {
             var user = Context.Users
                 .Include(u => u.Role)
@@ -250,7 +250,7 @@ namespace EventsExpress.Core.Services
                 .AsNoTracking()
                 .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
 
-            return Mapper.Map<UserDTO>(user);
+            return Mapper.Map<UserDto>(user);
         }
 
         public async Task ChangeRole(Guid uId, Guid rId)
@@ -325,7 +325,7 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new BlockedUserMessage(user.Email));
         }
 
-        public async Task EditFavoriteCategories(UserDTO userDTO, IEnumerable<Category> categories)
+        public async Task EditFavoriteCategories(UserDto userDTO, IEnumerable<Category> categories)
         {
             var u = Context.Users
                 .Include(u => u.Categories)
@@ -341,13 +341,13 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public async Task SetAttitude(AttitudeDTO attitude)
+        public async Task SetAttitude(AttitudeDto attitude)
         {
             var currentAttitude = Context.Relationships
                 .FirstOrDefault(x => x.UserFromId == attitude.UserFromId && x.UserToId == attitude.UserToId);
             if (currentAttitude == null)
             {
-                var rel = Mapper.Map<AttitudeDTO, Relationship>(attitude);
+                var rel = Mapper.Map<AttitudeDto, Relationship>(attitude);
 
                 Context.Relationships.Add(rel);
                 await Context.SaveChangesAsync();
@@ -359,15 +359,15 @@ namespace EventsExpress.Core.Services
             return;
         }
 
-        public AttitudeDTO GetAttitude(AttitudeDTO attitude) =>
-            Mapper.Map<Relationship, AttitudeDTO>(Context.Relationships
+        public AttitudeDto GetAttitude(AttitudeDto attitude) =>
+            Mapper.Map<Relationship, AttitudeDto>(Context.Relationships
                 .FirstOrDefault(x =>
                     x.UserFromId == attitude.UserFromId &&
                     x.UserToId == attitude.UserToId));
 
-        public ProfileDTO GetProfileById(Guid id, Guid fromId)
+        public ProfileDto GetProfileById(Guid id, Guid fromId)
         {
-            var user = Mapper.Map<UserDTO, ProfileDTO>(GetById(id));
+            var user = Mapper.Map<UserDto, ProfileDto>(GetById(id));
 
             var rel = Context.Relationships
                 .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == id);

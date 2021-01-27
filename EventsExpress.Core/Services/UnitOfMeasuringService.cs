@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
             if (unitOfMeasuringDTO == null)
             {
@@ -29,13 +29,13 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                var result = Insert(Mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
+                var result = Insert(Mapper.Map<UnitOfMeasuringDto, UnitOfMeasuring>(unitOfMeasuringDTO));
                 await Context.SaveChangesAsync();
                 return result.Id;
             }
         }
 
-        public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Edit(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
             var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null || entity.IsDeleted)
@@ -50,12 +50,12 @@ namespace EventsExpress.Core.Services
             return entity.Id;
         }
 
-        public IEnumerable<UnitOfMeasuringDTO> GetAll()
+        public IEnumerable<UnitOfMeasuringDto> GetAll()
         {
-            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(Context.UnitOfMeasurings.Where(item => !item.IsDeleted));
+            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(Context.UnitOfMeasurings.Where(item => !item.IsDeleted));
         }
 
-        public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
+        public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
         {
             var unitOfMeasuring = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
             if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
@@ -63,7 +63,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Not found");
             }
 
-            return new UnitOfMeasuringDTO
+            return new UnitOfMeasuringDto
             {
                 Id = unitOfMeasuring.Id,
                 UnitName = unitOfMeasuring.UnitName,

@@ -45,7 +45,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryViewModel, InventoryDTO>(model));
+            var result = await _inventoryService.AddInventar(eventId, _mapper.Map<InventoryViewModel, InventoryDto>(model));
 
             return Ok(result);
         }
@@ -67,7 +67,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryViewModel, InventoryDTO>(model));
+            var result = await _inventoryService.EditInventar(_mapper.Map<InventoryViewModel, InventoryDto>(model));
 
             return Ok(result);
         }
@@ -109,7 +109,7 @@ namespace EventsExpress.Controllers
             }
             else
             {
-                return Ok(_mapper.Map<ICollection<InventoryDTO>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
+                return Ok(_mapper.Map<ICollection<InventoryDto>, ICollection<InventoryViewModel>>(_inventoryService.GetInventar(eventId).ToList()));
             }
         }
 
@@ -128,7 +128,7 @@ namespace EventsExpress.Controllers
             }
             else
             {
-                return Ok(_mapper.Map<InventoryDTO, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
+                return Ok(_mapper.Map<InventoryDto, InventoryViewModel>(_inventoryService.GetInventarById(inventoryId)));
             }
         }
     }

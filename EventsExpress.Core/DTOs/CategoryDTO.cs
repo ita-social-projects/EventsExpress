@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.DTOs
 {
-    public class CategoryDTO
+    public class CategoryDto
     {
         public Guid Id { get; set; }
 

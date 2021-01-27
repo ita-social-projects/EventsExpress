@@ -76,11 +76,11 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> FacebookLogin(UserViewModel userView)
         {
-            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+            UserDto userExisting = _userService.GetByEmail(userView.Email);
 
             if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
             {
-                var user = _mapper.Map<UserDTO>(userView);
+                var user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
                 user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
                 user.PhotoId = user.Photo.Id;
@@ -109,11 +109,11 @@ namespace EventsExpress.Controllers
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
-            UserDTO userExisting = _userService.GetByEmail(payload.Email);
+            UserDto userExisting = _userService.GetByEmail(payload.Email);
 
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
-                var user = _mapper.Map<UserViewModel, UserDTO>(userView);
+                var user = _mapper.Map<UserViewModel, UserDto>(userView);
                 user.Email = payload.Email;
                 user.EmailConfirmed = true;
                 user.Name = payload.Name;
@@ -142,11 +142,11 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> TwitterLogin([FromBody] UserViewModel userView)
         {
-            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+            UserDto userExisting = _userService.GetByEmail(userView.Email);
 
             if (!(userExisting is null) && !string.IsNullOrEmpty(userView.Email))
             {
-                UserDTO user = _mapper.Map<UserDTO>(userView);
+                UserDto user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
                 user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
                 user.PhotoId = user.Photo.Id;
@@ -162,7 +162,7 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-        private async Task<bool> SetPhoto(UserDTO userExisting, string urlPhoto)
+        private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
         {
             if (userExisting != null)
             {
@@ -212,7 +212,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _mapper.Map<LoginViewModel, UserDTO>(authRequest);
+            var user = _mapper.Map<LoginViewModel, UserDto>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
             await _userService.Create(user);
 
@@ -254,7 +254,7 @@ namespace EventsExpress.Controllers
         [HttpPost("verify/{userid}/{token}")]
         public async Task<IActionResult> EmailConfirm(string userid, string token)
         {
-            var cache = new CacheDTO { Token = token };
+            var cache = new CacheDto { Token = token };
             if (!Guid.TryParse(userid, out Guid userId))
             {
                 return BadRequest();
@@ -265,7 +265,7 @@ namespace EventsExpress.Controllers
             await _userService.ConfirmEmail(cache);
 
             var user = _userService.GetById(cache.UserId);
-            var userInfo = _mapper.Map<UserDTO, UserInfoViewModel>(user);
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
             var authResponseModel = await _authService.FirstAuthenticate(user);
             userInfo.Token = authResponseModel.JwtToken;
             await _userService.Update(user);

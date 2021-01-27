@@ -64,7 +64,7 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilter]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
-            var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
+            var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDto>(model));
 
             return Ok(result);
         }

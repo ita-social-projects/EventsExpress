@@ -41,7 +41,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDTO>(model));
+            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDto>(model));
 
             return Ok();
         }

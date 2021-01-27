@@ -20,7 +20,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public IEnumerable<CommentDTO> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
+        public IEnumerable<CommentDto> GetCommentByEventId(Guid id, int page, int pageSize, out int count)
         {
             count = Context.Comments.Count(x => x.EventId == id && x.CommentsId == null);
 
@@ -35,10 +35,10 @@ namespace EventsExpress.Core.Services
                 .Take(pageSize)
                 .AsEnumerable();
 
-            var com = Mapper.Map<IEnumerable<CommentDTO>>(comments);
+            var com = Mapper.Map<IEnumerable<CommentDto>>(comments);
             foreach (var c in com)
             {
-                c.Children = Mapper.Map<IEnumerable<CommentDTO>>(c.Children);
+                c.Children = Mapper.Map<IEnumerable<CommentDto>>(c.Children);
                 foreach (var child in c.Children)
                 {
                     child.User = c.User;
@@ -48,7 +48,7 @@ namespace EventsExpress.Core.Services
             return com;
         }
 
-        public async Task Create(CommentDTO comment)
+        public async Task Create(CommentDto comment)
         {
             if (Context.Users.Find(comment.UserId) == null)
             {

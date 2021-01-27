@@ -46,7 +46,7 @@ namespace EventsExpress.Core.Services
             _eventScheduleService = eventScheduleService;
         }
 
-        private UserDTO CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
+        private UserDto CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
 
         public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
@@ -156,15 +156,15 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
         }
 
-        public async Task<Guid> Create(EventDTO eventDTO)
+        public async Task<Guid> Create(EventDto eventDTO)
         {
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = Mapper.Map<EventDTO, LocationDto>(eventDTO);
+            var locationDTO = Mapper.Map<EventDto, LocationDto>(eventDTO);
             var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
-            var ev = Mapper.Map<EventDTO, Event>(eventDTO);
+            var ev = Mapper.Map<EventDto, Event>(eventDTO);
             ev.EventLocationId = locationId;
 
             if (ev.Owners == null)
@@ -203,7 +203,7 @@ namespace EventsExpress.Core.Services
 
             if (eventDTO.IsReccurent)
             {
-                await _eventScheduleService.Create(Mapper.Map<EventScheduleDTO>(eventDTO));
+                await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(eventDTO));
             }
 
             await _mediator.Publish(new EventCreatedMessage(eventDTO));
@@ -233,7 +233,7 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        public async Task<Guid> Edit(EventDTO e)
+        public async Task<Guid> Edit(EventDto e)
         {
             var ev = Context.Events
                 .Include(e => e.Photo)
@@ -255,7 +255,7 @@ namespace EventsExpress.Core.Services
                 }
             }
 
-            var locationDTO = Mapper.Map<EventDTO, LocationDto>(e);
+            var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
             var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             ev.Title = e.Title;
@@ -276,7 +276,7 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
-        public async Task<Guid> EditNextEvent(EventDTO eventDTO)
+        public async Task<Guid> EditNextEvent(EventDto eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
             eventScheduleDTO.LastRun = eventDTO.DateTo;
@@ -292,9 +292,9 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        public EventDTO EventById(Guid eventId)
+        public EventDto EventById(Guid eventId)
         {
-            var res = Mapper.Map<EventDTO>(
+            var res = Mapper.Map<EventDto>(
                 Context.Events
                 .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
@@ -313,7 +313,7 @@ namespace EventsExpress.Core.Services
             return res;
         }
 
-        public IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count)
+        public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
         {
             var events = Context.Events
                 .Include(e => e.Photo)
@@ -377,10 +377,10 @@ namespace EventsExpress.Core.Services
                 .Take(model.PageSize)
                 .ToList();
 
-            return Mapper.Map<IEnumerable<EventDTO>>(result);
+            return Mapper.Map<IEnumerable<EventDto>>(result);
         }
 
-        public IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
+        public IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
             var filter = new EventFilterViewModel
             {
@@ -397,7 +397,7 @@ namespace EventsExpress.Core.Services
             return evnts;
         }
 
-        public IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
+        public IEnumerable<EventDto> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
             var filter = new EventFilterViewModel
             {
@@ -414,7 +414,7 @@ namespace EventsExpress.Core.Services
             return evnts;
         }
 
-        public IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
+        public IEnumerable<EventDto> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
             var filter = new EventFilterViewModel
             {
@@ -431,7 +431,7 @@ namespace EventsExpress.Core.Services
             return evnts;
         }
 
-        public IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel)
+        public IEnumerable<EventDto> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel)
         {
             var filter = new EventFilterViewModel
             {
@@ -448,7 +448,7 @@ namespace EventsExpress.Core.Services
             return evnts;
         }
 
-        public IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
+        public IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = Context.Events
                 .Include(e => e.Photo)
@@ -468,7 +468,7 @@ namespace EventsExpress.Core.Services
             events = events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize)
                 .Take(paginationViewModel.PageSize);
 
-            return Mapper.Map<IEnumerable<EventDTO>>(events);
+            return Mapper.Map<IEnumerable<EventDto>>(events);
         }
 
         public async Task SetRate(Guid userId, Guid eventId, byte rate)

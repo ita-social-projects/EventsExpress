@@ -56,13 +56,13 @@ namespace EventsExpress.Controllers
         /// This method is for edit categories.
         /// </summary>
         /// <param name="model">Param model defines CategoryEditViewModel model.</param>
-        /// <returns>The method returns editedcategory.</returns>
+        /// <returns>The method returns edited category.</returns>
         /// <response code="200">Edit category proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([ModelBinder(typeof(TrimModelBinder))] CategoryEditViewModel model)
         {
-            await _categoryService.Edit(_mapper.Map<CategoryEditViewModel, CategoryDTO>(model));
+            await _categoryService.Edit(_mapper.Map<CategoryEditViewModel, CategoryDto>(model));
             return Ok();
         }
 
@@ -70,7 +70,7 @@ namespace EventsExpress.Controllers
         /// This method is for delete category.
         /// </summary>
         /// <param name="id">Param id defines category identifier.</param>
-        /// <returns>The method returns editedcategory.</returns>
+        /// <returns>The method returns deleted category.</returns>
         /// <response code="200">Delete category proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [HttpPost("[action]/{id}")]

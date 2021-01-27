@@ -22,15 +22,15 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<IEnumerable<UserEventInventoryDTO>> GetAllMarkItemsByEventId(Guid eventId)
+        public async Task<IEnumerable<UserEventInventoryDto>> GetAllMarkItemsByEventId(Guid eventId)
         {
-            return Mapper.Map<IEnumerable<UserEventInventoryDTO>>(
+            return Mapper.Map<IEnumerable<UserEventInventoryDto>>(
                  await Context.UserEventInventories
                     .Include(i => i.UserEvent.User)
                     .Where(i => i.EventId == eventId).ToListAsync());
         }
 
-        public async Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task MarkItemAsTakenByUser(UserEventInventoryDto userEventInventoryDTO)
         {
             if (!Context.Events.Any(e => e.Id == userEventInventoryDTO.EventId))
             {
@@ -52,11 +52,11 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Inventory not found!");
             }
 
-            Context.UserEventInventories.Add(Mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
+            Context.UserEventInventories.Add(Mapper.Map<UserEventInventoryDto, UserEventInventory>(userEventInventoryDTO));
             await Context.SaveChangesAsync();
         }
 
-        public async Task Delete(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task Delete(UserEventInventoryDto userEventInventoryDTO)
         {
             if (!Context.UserEventInventories.Any(e => e.EventId == userEventInventoryDTO.EventId
                                                     && e.UserId == userEventInventoryDTO.UserId
@@ -65,11 +65,11 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Object not found!");
             }
 
-            Context.Remove(Mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
+            Context.Remove(Mapper.Map<UserEventInventoryDto, UserEventInventory>(userEventInventoryDTO));
             await Context.SaveChangesAsync();
         }
 
-        public async Task Edit(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task Edit(UserEventInventoryDto userEventInventoryDTO)
         {
             var entity = Context.UserEventInventories.FirstOrDefault(e => e.EventId == userEventInventoryDTO.EventId
                                                                         && e.UserId == userEventInventoryDTO.UserId

@@ -15,7 +15,7 @@ namespace EventsExpress.Test.ServiceTests
         private List<Event> events;
         private List<UnitOfMeasuring> unitOfMeasurings;
 
-        private InventoryDTO inventoryDTO;
+        private InventoryDto inventoryDTO;
         private Inventory inventory;
 
         private Guid eventId = Guid.NewGuid();
@@ -41,12 +41,12 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            inventoryDTO = new InventoryDTO
+            inventoryDTO = new InventoryDto
             {
                 Id = inventoryId,
                 ItemName = "Happy",
                 NeedQuantity = 5,
-                UnitOfMeasuring = new UnitOfMeasuringDTO
+                UnitOfMeasuring = new UnitOfMeasuringDto
                 {
                     Id = unitOfMeasuringId,
                     ShortName = "Kg",
@@ -93,8 +93,8 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            MockMapper.Setup(u => u.Map<InventoryDTO, Inventory>(It.IsAny<InventoryDTO>()))
-               .Returns((InventoryDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<InventoryDto, Inventory>(It.IsAny<InventoryDto>()))
+               .Returns((InventoryDto e) => e == null ?
                null :
                new Inventory()
                {
@@ -143,7 +143,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             var result = service.GetInventarById(Guid.NewGuid());
 
-            InventoryDTO expected = new InventoryDTO();
+            InventoryDto expected = new InventoryDto();
 
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.ItemName, result.ItemName);

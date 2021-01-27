@@ -22,7 +22,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> AddInventar(Guid eventId, InventoryDTO inventoryDTO)
+        public async Task<Guid> AddInventar(Guid eventId, InventoryDto inventoryDTO)
         {
             var ev = Context.Events.FirstOrDefault(e => e.Id == eventId);
             if (ev == null)
@@ -30,7 +30,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Event not found!");
             }
 
-            var entity = Mapper.Map<InventoryDTO, Inventory>(inventoryDTO);
+            var entity = Mapper.Map<InventoryDto, Inventory>(inventoryDTO);
             entity.EventId = eventId;
             var result = Insert(entity);
             await Context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace EventsExpress.Core.Services
             return inventar.Id;
         }
 
-        public async Task<Guid> EditInventar(InventoryDTO inventoryDTO)
+        public async Task<Guid> EditInventar(InventoryDto inventoryDTO)
         {
             var entity = Context.Inventories.Find(inventoryDTO.Id);
             if (entity == null)
@@ -85,29 +85,29 @@ namespace EventsExpress.Core.Services
             return entity.Id;
         }
 
-        public IEnumerable<InventoryDTO> GetInventar(Guid eventId)
+        public IEnumerable<InventoryDto> GetInventar(Guid eventId)
         {
             if (!Context.Events.Any(x => x.Id == eventId))
             {
-                return new List<InventoryDTO>();
+                return new List<InventoryDto>();
             }
 
-            return Mapper.Map<IEnumerable<InventoryDTO>>(
+            return Mapper.Map<IEnumerable<InventoryDto>>(
                 Context.Inventories
                     .Include(i => i.UnitOfMeasuring)
                     .Where(i => i.EventId == eventId));
         }
 
-        public InventoryDTO GetInventarById(Guid inventoryId)
+        public InventoryDto GetInventarById(Guid inventoryId)
         {
             var entity = Context.Inventories.Find(inventoryId);
 
             if (entity == null)
             {
-                return new InventoryDTO();
+                return new InventoryDto();
             }
 
-            return Mapper.Map<Inventory, InventoryDTO>(entity);
+            return Mapper.Map<Inventory, InventoryDto>(entity);
         }
     }
 }

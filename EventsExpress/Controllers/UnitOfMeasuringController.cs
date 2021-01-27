@@ -40,7 +40,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-                UnitOfMeasuringDTO dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model);
+                UnitOfMeasuringDto dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model);
                 var result = await _unitOfMeasuringService.Create(dTO);
 
                 return Ok(result);
@@ -64,7 +64,7 @@ namespace EventsExpress.Controllers
                 throw new EventsExpressException("Null object");
             }
 
-            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
+            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model));
 
             return Ok(result);
         }
@@ -80,7 +80,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDto>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace EventsExpress.Controllers
         public IActionResult GetById(Guid id)
         {
             var item = _unitOfMeasuringService.GetById(id);
-            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(item));
+            return Ok(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringViewModel>(item));
         }
 
         /// <summary>
