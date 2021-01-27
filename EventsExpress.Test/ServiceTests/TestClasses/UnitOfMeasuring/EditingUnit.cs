@@ -6,7 +6,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 {
     public class EditingUnit : IEnumerable
     {
-        public static UnitOfMeasuringDTO UnitOfMeasuringDTONotExId = new UnitOfMeasuringDTO
+        private static UnitOfMeasuringDTO unitOfMeasuringDTONotExId = new UnitOfMeasuringDTO
         {
             Id = Guid.NewGuid(),
             UnitName = "CorrectUnitName",
@@ -14,7 +14,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
             IsDeleted = false,
         };
 
-        public static UnitOfMeasuringDTO DeletedUnitOfMeasuringDTO = new UnitOfMeasuringDTO
+        private static UnitOfMeasuringDTO deletedUnitOfMeasuringDTO = new UnitOfMeasuringDTO
         {
             Id = Guid.NewGuid(),
             UnitName = "DeletedUnitName",
@@ -22,10 +22,36 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
             IsDeleted = true,
         };
 
+        public static UnitOfMeasuringDTO DeletedUnitOfMeasuringDTO
+        {
+            get
+            {
+                return deletedUnitOfMeasuringDTO;
+            }
+
+            set
+            {
+                deletedUnitOfMeasuringDTO = value;
+            }
+        }
+
+        public static UnitOfMeasuringDTO UnitOfMeasuringDTONotExId
+        {
+            get
+            {
+                return unitOfMeasuringDTONotExId;
+            }
+
+            set
+            {
+                unitOfMeasuringDTONotExId = value;
+            }
+        }
+
         public IEnumerator GetEnumerator()
         {
-            yield return new object[] { UnitOfMeasuringDTONotExId };
-            yield return new object[] { DeletedUnitOfMeasuringDTO };
+            yield return new object[] { unitOfMeasuringDTONotExId };
+            yield return new object[] { deletedUnitOfMeasuringDTO };
         }
     }
 }

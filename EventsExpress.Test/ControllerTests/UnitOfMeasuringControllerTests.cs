@@ -18,15 +18,13 @@ namespace EventsExpress.Test.ServiceTests
     internal class UnitOfMeasuringControllerTests
     {
         private Mock<IUnitOfMeasuringService> service;
+        private UnitOfMeasuringController unitController;
+        private UnitOfMeasuringDTO constDTO;
+        private UnitOfMeasuringDTO newDTO;
+        private UnitOfMeasuringDTO deletedDTO;
+        private UnitOfMeasuringDTO otherDTO;
 
         private Mock<IMapper> MockMapper { get; set; }
-
-        private UnitOfMeasuringController unitController;
-
-        UnitOfMeasuringDTO constDTO;
-        UnitOfMeasuringDTO newDTO;
-        UnitOfMeasuringDTO deletedDTO;
-        UnitOfMeasuringDTO otherDTO;
 
         private IEnumerable<UnitOfMeasuringDTO> GetUnitsOfMeasuring()
         {
