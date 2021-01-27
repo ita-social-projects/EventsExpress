@@ -50,7 +50,7 @@ namespace EventsExpress.Core.HostedService
                     {
                         foreach (var ev in events)
                         {
-                            await mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDTO>(ev)));
+                            await mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDto>(ev)));
                         }
                     }
                     catch (Exception ex)

@@ -38,7 +38,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 foreach (var visitor in visitors)
                 {
                     var email = visitor.User.Email;
-                    await _sender.SendEmailAsync(new EmailDTO
+                    await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = $"The event you have been joined was canceled",
                         RecepientEmail = email,

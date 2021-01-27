@@ -12,17 +12,17 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     public class UnitOfMeasuringViewModelValidatorTests : TestInitializer
     {
-        private UnitOfMeasuringViewModelValidator unitOfMeasuringViewModelValidator;
+        private const string ExistedUnitOfMeasuring = "The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!";
+        private const string CountOfCharactersUnitName = "Unit Name needs to consist of from 5 to 20 characters";
+        private const string OnlyCharactersUnitName = "Unit name needs to consist only letters or whitespaces";
+        private const string CountOfCharactersShortName = "Short Name needs to consist of from 1 to 5 characters";
+        private const string OnlyCharactersShortName = "Short name needs to consist only letters or letter(s)/letter(s)";
 
+        private UnitOfMeasuringViewModelValidator unitOfMeasuringViewModelValidator;
         private string existedUnitName = "Existed Unit Name";
         private string existedShortName = "Ex/SN";
         private string notExistedUnitName = "Not Existed Unit Name";
         private string notExistedShortName = "N/SN";
-        private const string existedUnitOfMeasuring = "The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!";
-        private const string countOfCharactersUnitName = "Unit Name needs to consist of from 5 to 20 characters";
-        private const string onlyCharactersUnitName = "Unit name needs to consist only letters or whitespaces";
-        private const string countOfCharactersShortName = "Short Name needs to consist of from 1 to 5 characters";
-        private const string onlyCharactersShortName = "Short name needs to consist only letters or letter(s)/letter(s)";
 
         [SetUp]
         protected override void Initialize()
@@ -42,7 +42,7 @@ namespace EventsExpress.Test.ServiceTests
             UnitOfMeasuringViewModel existedModel = new UnitOfMeasuringViewModel
             { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName };
             var result = unitOfMeasuringViewModelValidator.TestValidate(existedModel);
-            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(existedUnitOfMeasuring);
+            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(ExistedUnitOfMeasuring);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ShoudHaveError_InCorrectLengthUnitName(UnitOfMeasuringViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(countOfCharactersUnitName);
+            result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(CountOfCharactersUnitName);
         }
 
         [TestCaseSource(typeof(LetterAndCharactershUnitName))]
@@ -84,7 +84,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ShoudHaveError_LetterAndCharactersUnitName(UnitOfMeasuringViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(onlyCharactersUnitName);
+            result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(OnlyCharactersUnitName);
         }
 
         [TestCaseSource(typeof(LittleAndBigCharactershUnitName))]
@@ -93,8 +93,8 @@ namespace EventsExpress.Test.ServiceTests
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.UnitName)
-                  .WithErrorMessage(countOfCharactersUnitName)
-                  .WithErrorMessage(onlyCharactersUnitName);
+                  .WithErrorMessage(CountOfCharactersUnitName)
+                  .WithErrorMessage(OnlyCharactersUnitName);
         }
 
         [TestCaseSource(typeof(EmptyORManyLettersShortName))]
@@ -103,7 +103,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
-                  .WithErrorMessage(countOfCharactersShortName);
+                  .WithErrorMessage(CountOfCharactersShortName);
         }
 
         [TestCaseSource(typeof(DifferentCharactersSlashShortName))]
@@ -112,7 +112,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
-                  .WithErrorMessage(onlyCharactersShortName);
+                  .WithErrorMessage(OnlyCharactersShortName);
         }
 
         [TestCaseSource(typeof(DifferentCharactersSlashLengthShortName))]
@@ -121,8 +121,8 @@ namespace EventsExpress.Test.ServiceTests
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
-                  .WithErrorMessage(onlyCharactersShortName)
-                  .WithErrorMessage(countOfCharactersShortName);
+                  .WithErrorMessage(OnlyCharactersShortName)
+                  .WithErrorMessage(CountOfCharactersShortName);
         }
     }
 }

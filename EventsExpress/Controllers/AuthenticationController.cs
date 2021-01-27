@@ -42,8 +42,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allows to log in to the API and generate an authentication token.
         /// </summary>
-        /// <param name="authRequest">Required.</param>
-        /// <returns>UserInfo model.</returns>
+        /// <param name="authRequest">Param authRequest defines LoginViewModel.</param>
+        /// <returns>The method performs Login operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
@@ -68,19 +68,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with facebook account.
         /// </summary>
-        /// <param name="userView">Requireed.</param>
-        /// <returns>UserInfo model.</returns>
+        /// <param name="userView">Param userView defines UserViewModel.</param>
+        /// <returns>The method performs Facebook Login operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> FacebookLogin(UserViewModel userView)
         {
-            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+            UserDto userExisting = _userService.GetByEmail(userView.Email);
 
             if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
             {
-                var user = _mapper.Map<UserDTO>(userView);
+                var user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
                 user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
                 user.PhotoId = user.Photo.Id;
@@ -99,8 +99,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with google account.
         /// </summary>
-        /// <param name="userView">Requireed.</param>
-        /// <returns>UserInfo model.</returns>
+        /// <param name="userView">Param userView defines UserViewModel.</param>
+        /// <returns>The method performs Google Login operation.</returns>
         /// /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
@@ -109,11 +109,11 @@ namespace EventsExpress.Controllers
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
-            UserDTO userExisting = _userService.GetByEmail(payload.Email);
+            UserDto userExisting = _userService.GetByEmail(payload.Email);
 
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
-                var user = _mapper.Map<UserViewModel, UserDTO>(userView);
+                var user = _mapper.Map<UserViewModel, UserDto>(userView);
                 user.Email = payload.Email;
                 user.EmailConfirmed = true;
                 user.Name = payload.Name;
@@ -134,18 +134,19 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with twitter account.
         /// </summary>
-        /// <param name="userView">Required.</param>
+        /// <param name="userView">Param userView defines UserViewModel.</param>
+        /// <returns>The method performs Twitter Login operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> TwitterLogin([FromBody] UserViewModel userView)
         {
-            UserDTO userExisting = _userService.GetByEmail(userView.Email);
+            UserDto userExisting = _userService.GetByEmail(userView.Email);
 
             if (!(userExisting is null) && !string.IsNullOrEmpty(userView.Email))
             {
-                UserDTO user = _mapper.Map<UserDTO>(userView);
+                UserDto user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
                 user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
                 user.PhotoId = user.Photo.Id;
@@ -161,7 +162,7 @@ namespace EventsExpress.Controllers
             return Ok(userInfo);
         }
 
-        private async Task<bool> SetPhoto(UserDTO userExisting, string urlPhoto)
+        private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
         {
             if (userExisting != null)
             {
@@ -181,7 +182,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method to refresh user status using only jwt access token.
         /// </summary>
-        /// <returns>UserInfo model.</returns>
+        /// <returns>The method performs Login operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="401">If token is invalid.</response>
         [Authorize]
@@ -198,7 +199,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allows register user.
         /// </summary>
-        /// <param name="authRequest">Required.</param>
+        /// <param name="authRequest">Param authRequest defines LoginViewModel.</param>
+        /// <returns>The method performs Register operation.</returns>
         /// <response code="200">Register valid.</response>
         /// <response code="400">If register process failed.</response>
         [AllowAnonymous]
@@ -210,7 +212,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _mapper.Map<LoginViewModel, UserDTO>(authRequest);
+            var user = _mapper.Map<LoginViewModel, UserDto>(authRequest);
             user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
             await _userService.Create(user);
 
@@ -220,7 +222,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for password recovery.
         /// </summary>
-        /// <param name="email">Required.</param>
+        /// <param name="email">Param email defines user email.</param>
+        /// <returns>The method performs password recovery operation.</returns>
         /// <response code="200">Password recovery succesful.</response>
         /// <response code="400">If password recover process failed.</response>
         [AllowAnonymous]
@@ -242,16 +245,16 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for email confirmation.
         /// </summary>
-        /// <param name="userid">Required.</param>
-        /// <param name="token">access token.</param>
-        /// <returns>UserInfo model.</returns>
+        /// <param name="userid">Param userid defines user identifier.</param>
+        /// <param name="token">Param token defines access token.</param>
+        /// <returns>The method performs mail confirmation operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If emeil confirm process failed.</response>
         [AllowAnonymous]
         [HttpPost("verify/{userid}/{token}")]
         public async Task<IActionResult> EmailConfirm(string userid, string token)
         {
-            var cache = new CacheDTO { Token = token };
+            var cache = new CacheDto { Token = token };
             if (!Guid.TryParse(userid, out Guid userId))
             {
                 return BadRequest();
@@ -262,7 +265,7 @@ namespace EventsExpress.Controllers
             await _userService.ConfirmEmail(cache);
 
             var user = _userService.GetById(cache.UserId);
-            var userInfo = _mapper.Map<UserDTO, UserInfoViewModel>(user);
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
             var authResponseModel = await _authService.FirstAuthenticate(user);
             userInfo.Token = authResponseModel.JwtToken;
             await _userService.Update(user);
@@ -274,7 +277,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for change password.
         /// </summary>
-        /// <param name="changePasswordDto">Required.</param>
+        /// <param name="changePasswordDto">Param changePasswordDto ChangeViewModel.</param>
+        /// <returns>The method performs password change operation.</returns>
         /// <response code="200">Password change succesful.</response>
         /// <response code="400">If assword change process failed.</response>
         [HttpPost("[action]")]

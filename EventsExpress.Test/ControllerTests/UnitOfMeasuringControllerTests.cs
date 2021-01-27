@@ -18,20 +18,18 @@ namespace EventsExpress.Test.ServiceTests
     internal class UnitOfMeasuringControllerTests
     {
         private Mock<IUnitOfMeasuringService> service;
+        private UnitOfMeasuringController unitController;
+        private UnitOfMeasuringDto constDTO;
+        private UnitOfMeasuringDto newDTO;
+        private UnitOfMeasuringDto deletedDTO;
+        private UnitOfMeasuringDto otherDTO;
 
         private Mock<IMapper> MockMapper { get; set; }
 
-        private UnitOfMeasuringController unitController;
-
-        UnitOfMeasuringDTO constDTO;
-        UnitOfMeasuringDTO newDTO;
-        UnitOfMeasuringDTO deletedDTO;
-        UnitOfMeasuringDTO otherDTO;
-
-        private IEnumerable<UnitOfMeasuringDTO> GetUnitsOfMeasuring()
+        private IEnumerable<UnitOfMeasuringDto> GetUnitsOfMeasuring()
         {
-            List<UnitOfMeasuringDTO> list = new List<UnitOfMeasuringDTO>();
-            list.AddRange(new List<UnitOfMeasuringDTO>()
+            List<UnitOfMeasuringDto> list = new List<UnitOfMeasuringDto>();
+            list.AddRange(new List<UnitOfMeasuringDto>()
             {
                 deletedDTO,
                 otherDTO,
@@ -45,28 +43,28 @@ namespace EventsExpress.Test.ServiceTests
             MockMapper = new Mock<IMapper>();
             service = new Mock<IUnitOfMeasuringService>();
             unitController = new UnitOfMeasuringController(service.Object, MockMapper.Object);
-            deletedDTO = new UnitOfMeasuringDTO()
+            deletedDTO = new UnitOfMeasuringDto()
             {
                 Id = Guid.NewGuid(),
                 UnitName = "First Unit Name",
                 ShortName = "FS/N",
                 IsDeleted = false,
             };
-            otherDTO = new UnitOfMeasuringDTO()
+            otherDTO = new UnitOfMeasuringDto()
             {
                 Id = Guid.NewGuid(),
                 UnitName = "Other Unit Name",
                 ShortName = "OS/N",
                 IsDeleted = true,
             };
-            constDTO = new UnitOfMeasuringDTO
+            constDTO = new UnitOfMeasuringDto
                         {
                             Id = Guid.NewGuid(),
                             UnitName = "Const Unit name",
                             ShortName = "SN",
                             IsDeleted = false,
                         };
-            newDTO = new UnitOfMeasuringDTO
+            newDTO = new UnitOfMeasuringDto
                         {
                             Id = Guid.NewGuid(),
                             UnitName = "New Unit Name",
@@ -74,18 +72,18 @@ namespace EventsExpress.Test.ServiceTests
                             IsDeleted = false,
                         };
 
-            MockMapper.Setup(u => u.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(It.IsAny<UnitOfMeasuringViewModel>()))
+            MockMapper.Setup(u => u.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(It.IsAny<UnitOfMeasuringViewModel>()))
              .Returns((UnitOfMeasuringViewModel e) => e == null ?
              null :
-             new UnitOfMeasuringDTO
+             new UnitOfMeasuringDto
              {
                  Id = e.Id,
                  UnitName = e.UnitName,
                  ShortName = e.ShortName,
                  IsDeleted = false,
              });
-            MockMapper.Setup(u => u.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(It.IsAny<UnitOfMeasuringDTO>()))
-            .Returns((UnitOfMeasuringDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<UnitOfMeasuringDto, UnitOfMeasuringViewModel>(It.IsAny<UnitOfMeasuringDto>()))
+            .Returns((UnitOfMeasuringDto e) => e == null ?
             null :
             new UnitOfMeasuringViewModel
             {
@@ -98,8 +96,8 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GetAll_OkResult()
         {
-            MockMapper.Setup(u => u.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(It.IsAny<IEnumerable<UnitOfMeasuringDTO>>()))
-            .Returns((IEnumerable<UnitOfMeasuringDTO> e) => e.Select(item => new UnitOfMeasuringViewModel { Id = item.Id, UnitName = item.UnitName, ShortName = item.ShortName }));
+            MockMapper.Setup(u => u.Map<IEnumerable<UnitOfMeasuringDto>, IEnumerable<UnitOfMeasuringViewModel>>(It.IsAny<IEnumerable<UnitOfMeasuringDto>>()))
+            .Returns((IEnumerable<UnitOfMeasuringDto> e) => e.Select(item => new UnitOfMeasuringViewModel { Id = item.Id, UnitName = item.UnitName, ShortName = item.ShortName }));
             service.Setup(item => item.GetAll()).Returns(GetUnitsOfMeasuring());
             var expected = unitController.All();
             Assert.IsInstanceOf<OkObjectResult>(expected);
@@ -117,7 +115,7 @@ namespace EventsExpress.Test.ServiceTests
         public void GetById_ExistingGuidPassed_ReturnsOkResult()
         {
             service.Setup(x => x.GetById(It.IsAny<Guid>()))
-                         .Returns(new UnitOfMeasuringDTO());
+                         .Returns(new UnitOfMeasuringDto());
             var testGuid = constDTO.Id;
             var okResult = unitController.GetById(testGuid);
             Assert.IsInstanceOf<OkObjectResult>(okResult);
@@ -127,7 +125,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Get_RorrectId_ReturnsOkResult()
         {
             service.Setup(x => x.GetById(It.IsAny<Guid>()))
-                         .Returns(new UnitOfMeasuringDTO
+                         .Returns(new UnitOfMeasuringDto
                          {
                              Id = constDTO.Id,
                              UnitName = constDTO.UnitName,
@@ -147,15 +145,15 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Greate_NULL_Throw()
         {
-            service.Setup(x => x.Create(It.IsAny<UnitOfMeasuringDTO>())).Throws<EventsExpressException>();
+            service.Setup(x => x.Create(It.IsAny<UnitOfMeasuringDto>())).Throws<EventsExpressException>();
             Assert.ThrowsAsync<EventsExpressException>(async () => await unitController.Create(null));
         }
 
         [Test]
         public void Create_CorrectDTO_IdUnit()
         {
-            service.Setup(x => x.Create(It.IsAny<UnitOfMeasuringDTO>()))
-                        .Returns((UnitOfMeasuringDTO e) => Task.FromResult(newDTO.Id));
+            service.Setup(x => x.Create(It.IsAny<UnitOfMeasuringDto>()))
+                        .Returns((UnitOfMeasuringDto e) => Task.FromResult(newDTO.Id));
 
             UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
             {
@@ -208,7 +206,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Edit_NotExistedUnit_Throw()
         {
             Guid testId = constDTO.Id;
-            service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDTO>())).Throws<EventsExpressException>();
+            service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDto>())).Throws<EventsExpressException>();
             UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
                             {
                                 Id = Guid.NewGuid(),
@@ -222,7 +220,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Edit_CorrectView_Id()
         {
             Guid testId = constDTO.Id;
-            service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDTO>()))
+            service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDto>()))
                        .Returns(Task.FromResult(testId));
             UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
                         {

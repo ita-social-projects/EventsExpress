@@ -31,7 +31,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 foreach (var u in users)
                 {
                     string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Event.Id}/1";
-                    await _sender.SendEmailAsync(new EmailDTO
+                    await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = "New event for you!",
                         RecepientEmail = u.Email,
