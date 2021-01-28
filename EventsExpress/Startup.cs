@@ -46,6 +46,7 @@ namespace EventsExpress
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
+        /// <param name="configuration">Param configuration defines application configuration properties.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -59,6 +60,7 @@ namespace EventsExpress
         /// <summary>
         ///  This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
+        /// <param name="services">Param services defines application services in DI container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             #region Authorization and Autontification configuring...
@@ -219,6 +221,8 @@ namespace EventsExpress
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
+        /// <param name="app">Param app defines IApplicationBuilder object.</param>
+        /// <param name="env">Param env defines IWebHostEnvironment object.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

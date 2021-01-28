@@ -17,6 +17,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenController"/> class.
         /// </summary>
+        /// <param name="tokenService">Param tokenService define ITokenService interfae.</param>
         public TokenController(ITokenService tokenService)
         {
             _tokenService = tokenService;

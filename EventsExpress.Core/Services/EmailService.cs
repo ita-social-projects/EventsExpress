@@ -17,7 +17,7 @@ namespace EventsExpress.Core.Services
             _senderOptions = opt;
         }
 
-        public Task SendEmailAsync(EmailDTO emailDto)
+        public Task SendEmailAsync(EmailDto emailDto)
         {
             var from = _senderOptions.Value.Account;
             var pass = _senderOptions.Value.Password;

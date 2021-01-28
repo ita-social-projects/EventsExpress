@@ -9,8 +9,8 @@ namespace EventsExpress.Mapping
     {
         public UnitOfMeasuringMapperProfile()
         {
-            CreateMap<UnitOfMeasuring, UnitOfMeasuringDTO>().ReverseMap();
-            CreateMap<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>().ReverseMap();
+            CreateMap<UnitOfMeasuring, UnitOfMeasuringDto>().ReverseMap();
+            CreateMap<UnitOfMeasuringDto, UnitOfMeasuringViewModel>().ReverseMap();
         }
     }
 }

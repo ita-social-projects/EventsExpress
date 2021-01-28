@@ -11,8 +11,8 @@ namespace EventsExpress.Mapping
     {
         public EventScheduleMapperProfile()
         {
-            CreateMap<EventSchedule, EventScheduleDTO>()
-           .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDTO
+            CreateMap<EventSchedule, EventScheduleDto>()
+           .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDto
            {
                Id = src.Event.Id,
                Title = src.Event.Title,
@@ -25,15 +25,15 @@ namespace EventsExpress.Mapping
                PhotoBytes = src.Event.Photo,
            }));
 
-            CreateMap<EventScheduleDTO, EventSchedule>()
+            CreateMap<EventScheduleDto, EventSchedule>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
 
-            CreateMap<EventScheduleDTO, PreviewEventScheduleViewModel>()
+            CreateMap<EventScheduleDto, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()));
 
-            CreateMap<EventScheduleDTO, EventScheduleViewModel>()
+            CreateMap<EventScheduleDto, EventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()))
@@ -43,10 +43,10 @@ namespace EventsExpress.Mapping
                     Username = x.Name,
                 })));
 
-            CreateMap<PreviewEventScheduleViewModel, EventScheduleDTO>()
+            CreateMap<PreviewEventScheduleViewModel, EventScheduleDto>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
 
-            CreateMap<EventDTO, EventScheduleDTO>()
+            CreateMap<EventDto, EventScheduleDto>()
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.LastRun, opts => opts.MapFrom(src => src.DateTo))
                 .ForMember(dest => dest.NextRun, opts => opts.MapFrom(src => DateTimeExtensions.AddDateUnit(src.Periodicity, src.Frequency, src.DateTo)))

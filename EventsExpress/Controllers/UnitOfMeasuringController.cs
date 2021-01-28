@@ -30,7 +30,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for create unit of measuring.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UnitOfMeasuringViewModel model.</param>
+        /// <returns>The method returns created unit of meashuring.</returns>
         /// <response code="200">Create unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -39,7 +40,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
-                UnitOfMeasuringDTO dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model);
+                UnitOfMeasuringDto dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model);
                 var result = await _unitOfMeasuringService.Create(dTO);
 
                 return Ok(result);
@@ -48,7 +49,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit unit of measuring.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines UnitOfMeasuringViewModel model.</param>
+        /// <returns>The method returns edited unit of meashuring.</returns>
         /// <response code="200">Edit unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -62,7 +64,7 @@ namespace EventsExpress.Controllers
                 throw new EventsExpressException("Null object");
             }
 
-            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDTO>(model));
+            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model));
 
             return Ok(result);
         }
@@ -78,14 +80,14 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDTO>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
+            return Ok(_mapper.Map<IEnumerable<UnitOfMeasuringDto>, IEnumerable<UnitOfMeasuringViewModel>>(_unitOfMeasuringService.GetAll()));
         }
 
         /// <summary>
         /// This method have to return unit of measuring by id.
         /// </summary>
-        /// <param name="id">Required.</param>
-        /// <returns>Unit of measuring.</returns>
+        /// <param name="id">Param id defines the unit of measuring identifier.</param>
+        /// <returns>The method returns unit of measuring by identifier.</returns>
         /// <response code="200">Return Unit of measuring by id.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
@@ -95,13 +97,14 @@ namespace EventsExpress.Controllers
         public IActionResult GetById(Guid id)
         {
             var item = _unitOfMeasuringService.GetById(id);
-            return Ok(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuringViewModel>(item));
+            return Ok(_mapper.Map<UnitOfMeasuringDto, UnitOfMeasuringViewModel>(item));
         }
 
         /// <summary>
         /// This method is for delete unit of measuring.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="id">Param id defines the unit of measuring identifier.</param>
+        /// <returns>The method returns deleted unit of meashuring.</returns>
         /// <response code="200">Delete unit of measuring proces success.</response>
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
