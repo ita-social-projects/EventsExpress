@@ -124,9 +124,9 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task BlockEvent(Guid id)
+        public async Task BlockEvent(Guid eventId)
         {
-            var evnt = Context.Events.Find(id);
+            var evnt = Context.Events.Find(eventId);
             if (evnt == null)
             {
                 throw new EventsExpressException("Invalid event id");
@@ -136,12 +136,12 @@ namespace EventsExpress.Core.Services
 
             await Context.SaveChangesAsync();
 
-            var userIds = Context.EventOwners.Where(x => x.EventId == id).Select(x => x.UserId);
+            Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
         }
 
-        public async Task UnblockEvent(Guid eId)
+        public async Task UnblockEvent(Guid eventId)
         {
-            var evnt = Context.Events.Find(eId);
+            var evnt = Context.Events.Find(eventId);
             if (evnt == null)
             {
                 throw new EventsExpressException("Invalid event Id");
@@ -151,7 +151,7 @@ namespace EventsExpress.Core.Services
 
             await Context.SaveChangesAsync();
 
-            var userIds = Context.EventOwners.Where(x => x.EventId == eId).Select(x => x.UserId);
+            var userIds = Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
 
             await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
         }
@@ -520,6 +520,6 @@ namespace EventsExpress.Core.Services
                     .FirstOrDefault(e => e.Id == eventId)?.Visitors
                     ?.FirstOrDefault(v => v.UserId == userId) != null;
 
-        public bool Exists(Guid id) => Context.Events.Find(id) != null;
+        public bool Exists(Guid eventId) => Context.Events.Find(eventId) != null;
     }
 }

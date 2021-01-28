@@ -24,28 +24,12 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 
         public static UnitOfMeasuringDto DeletedUnitOfMeasuringDTO
         {
-            get
-            {
-                return deletedUnitOfMeasuringDTO;
-            }
-
-            set
-            {
-                deletedUnitOfMeasuringDTO = value;
-            }
+            get => deletedUnitOfMeasuringDTO;
         }
 
         public static UnitOfMeasuringDto UnitOfMeasuringDTONotExId
         {
-            get
-            {
-                return unitOfMeasuringDTONotExId;
-            }
-
-            set
-            {
-                unitOfMeasuringDTONotExId = value;
-            }
+            get => unitOfMeasuringDTONotExId;
         }
 
         public IEnumerator GetEnumerator()

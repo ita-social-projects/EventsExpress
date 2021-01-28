@@ -109,25 +109,25 @@ namespace EventsExpress.Core.Services
             });
         }
 
-        public async Task Update(UserDto userDTO)
+        public async Task Update(UserDto userDto)
         {
-            if (string.IsNullOrEmpty(userDTO.Email))
+            if (string.IsNullOrEmpty(userDto.Email))
             {
                 throw new EventsExpressException("EMAIL cannot be empty");
             }
 
-            if (!Context.Users.Any(u => u.Id == userDTO.Id))
+            if (!Context.Users.Any(u => u.Id == userDto.Id))
             {
                 throw new EventsExpressException("Not found");
             }
 
-            var result = Mapper.Map<UserDto, User>(userDTO);
+            var result = Mapper.Map<UserDto, User>(userDto);
 
             Update(result);
             await Context.SaveChangesAsync();
         }
 
-        public UserDto GetById(Guid id)
+        public UserDto GetById(Guid userId)
         {
             var user = Mapper.Map<UserDto>(
                 Context.Users
@@ -136,7 +136,7 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
-                .FirstOrDefault(x => x.Id == id));
+                .FirstOrDefault(x => x.Id == userId));
 
             user.Rating = GetRating(user.Id);
 
@@ -253,21 +253,16 @@ namespace EventsExpress.Core.Services
             return Mapper.Map<UserDto>(user);
         }
 
-        public async Task ChangeRole(Guid uId, Guid rId)
+        public async Task ChangeRole(Guid userId, Guid roleId)
         {
-            var newRole = Context.Roles.Find(rId);
-            if (newRole == null)
-            {
-                throw new EventsExpressException("Invalid role Id");
-            }
-
-            var user = Context.Users.Find(uId);
+            var newRole = Context.Roles.Find(roleId);
+            var user = Context.Users.Find(userId);
             if (user == null)
             {
                 throw new EventsExpressException("Invalid user Id");
             }
 
-            user.Role = newRole;
+            user.Role = newRole ?? throw new EventsExpressException("Invalid role Id");
             await Context.SaveChangesAsync();
         }
 
@@ -312,9 +307,9 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new UnblockedUserMessage(user.Email));
         }
 
-        public async Task Block(Guid uId)
+        public async Task Block(Guid userId)
         {
-            var user = Context.Users.Find(uId);
+            var user = Context.Users.Find(userId);
             if (user == null)
             {
                 throw new EventsExpressException("Invalid user Id");
@@ -325,11 +320,11 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new BlockedUserMessage(user.Email));
         }
 
-        public async Task EditFavoriteCategories(UserDto userDTO, IEnumerable<Category> categories)
+        public async Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories)
         {
             var u = Context.Users
                 .Include(u => u.Categories)
-                .Single(user => user.Id == userDTO.Id);
+                .Single(user => user.Id == userDto.Id);
 
             var newCategories = categories
                 .Select(x => new UserCategory { UserId = u.Id, CategoryId = x.Id })
@@ -365,12 +360,12 @@ namespace EventsExpress.Core.Services
                     x.UserFromId == attitude.UserFromId &&
                     x.UserToId == attitude.UserToId));
 
-        public ProfileDto GetProfileById(Guid id, Guid fromId)
+        public ProfileDto GetProfileById(Guid userId, Guid fromId)
         {
-            var user = Mapper.Map<UserDto, ProfileDto>(GetById(id));
+            var user = Mapper.Map<UserDto, ProfileDto>(GetById(userId));
 
             var rel = Context.Relationships
-                .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == id);
+                .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == userId);
             user.Attitude = (rel != null)
                 ? (byte)rel.Attitude
                 : (byte)Attitude.None;

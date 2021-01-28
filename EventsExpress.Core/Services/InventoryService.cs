@@ -53,7 +53,7 @@ namespace EventsExpress.Core.Services
                 Context.UserEventInventories.RemoveRange(uei);
             }
 
-            var result = Context.Inventories.Remove(inventar);
+            Context.Inventories.Remove(inventar);
             await Context.SaveChangesAsync();
 
             return inventar.Id;

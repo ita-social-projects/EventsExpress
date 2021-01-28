@@ -16,8 +16,8 @@ namespace EventsExpress.Core.Services
 {
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        private IAuthService _authService;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService, IHttpContextAccessor httpContextAccessor)
             : base(context, mapper)
@@ -63,7 +63,7 @@ namespace EventsExpress.Core.Services
         {
             return Mapper.Map<IEnumerable<EventScheduleDto>>(
                  Context.EventSchedules
-                .Where(x => x.LastRun == DateTime.Today && x.IsActive == true)
+                .Where(x => x.LastRun == DateTime.Today && x.IsActive)
                 .ToList());
         }
 

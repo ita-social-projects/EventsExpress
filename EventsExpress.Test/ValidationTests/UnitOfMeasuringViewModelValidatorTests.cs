@@ -18,11 +18,12 @@ namespace EventsExpress.Test.ServiceTests
         private const string CountOfCharactersShortName = "Short Name needs to consist of from 1 to 5 characters";
         private const string OnlyCharactersShortName = "Short name needs to consist only letters or letter(s)/letter(s)";
 
+        private readonly string existedUnitName = "Existed Unit Name";
+        private readonly string existedShortName = "Ex/SN";
+        private readonly string notExistedUnitName = "Not Existed Unit Name";
+        private readonly string notExistedShortName = "N/SN";
+
         private UnitOfMeasuringViewModelValidator unitOfMeasuringViewModelValidator;
-        private string existedUnitName = "Existed Unit Name";
-        private string existedShortName = "Ex/SN";
-        private string notExistedUnitName = "Not Existed Unit Name";
-        private string notExistedShortName = "N/SN";
 
         [SetUp]
         protected override void Initialize()

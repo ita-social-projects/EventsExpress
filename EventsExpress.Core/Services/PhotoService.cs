@@ -111,7 +111,7 @@ namespace EventsExpress.Core.Services
             var newSize = new Size
             {
                 Width = newWidth,
-                Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
+                Height = oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width,
             };
 
             var newBitmap = new Bitmap(oldBitMap, newSize);

@@ -92,11 +92,11 @@ namespace EventsExpress.Core.Services
             {
                 foreach (var com in comment.Children)
                 {
-                    var res = Delete(Context.Comments.Find(com.Id));
+                    Delete(Context.Comments.Find(com.Id));
                 }
             }
 
-            var result = Delete(comment);
+            Delete(comment);
             await Context.SaveChangesAsync();
         }
     }

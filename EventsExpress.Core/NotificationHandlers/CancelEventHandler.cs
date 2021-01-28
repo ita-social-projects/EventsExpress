@@ -13,9 +13,9 @@ namespace EventsExpress.Core.NotificationHandlers
 {
     public class CancelEventHandler : INotificationHandler<CancelEventMessage>
     {
-        private IEventService _eventService;
-        private IEmailService _sender;
-        private IEventStatusHistoryService _eventStatusHistoryService;
+        private readonly IEventService _eventService;
+        private readonly IEmailService _sender;
+        private readonly IEventStatusHistoryService _eventStatusHistoryService;
 
         public CancelEventHandler(
             IEmailService sender,

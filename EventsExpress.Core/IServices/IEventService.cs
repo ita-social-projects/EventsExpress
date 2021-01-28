@@ -16,9 +16,9 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> Edit(EventDto e);
 
-        Task BlockEvent(Guid eID);
+        Task BlockEvent(Guid eventId);
 
-        Task UnblockEvent(Guid eId);
+        Task UnblockEvent(Guid eventId);
 
         EventDto EventById(Guid eventId);
 
@@ -30,7 +30,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDto> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
-        IEnumerable<EventDto> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModelq);
+        IEnumerable<EventDto> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
         IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
 

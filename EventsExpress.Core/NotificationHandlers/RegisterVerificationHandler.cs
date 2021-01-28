@@ -47,7 +47,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     MessageText = $"For  confirm your email please follow the {theEmailLink}   ",
                 });
 
-                var x = _cacheHepler.GetValue(notification.User.Id);
+                _cacheHepler.GetValue(notification.User.Id);
             }
             catch (Exception ex)
             {
