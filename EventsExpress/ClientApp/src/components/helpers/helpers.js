@@ -316,7 +316,7 @@ const renderFromHelper = ({ touched, error }) => {
     if (!(touched && error)) {
         return;
     } else {
-        return <FormHelperText className="text-danger">{touched && error}</FormHelperText>;
+        return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
     }
 }
 

@@ -11,8 +11,8 @@ const Placeholder = ({ getInputProps, getRootProps, error, touched }) => {
 
     }
     if (error && touched) {
-        iconStyle.color = "red";
-        spanStyle.color = "red";
+        iconStyle.color = "#f44336";
+        spanStyle.color = "#f44336";
     }
 
     return (
