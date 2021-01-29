@@ -29,7 +29,7 @@ namespace EventsExpress.Core.Services
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = _senderOptions.Value.UseDefaultCredentials,
                 Credentials = (!_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
-                EnableSsl = _senderOptions.Value.EnableSsl,
+                EnableSsl = true,
             };
 
             var mail = new MailMessage(@from, emailDto.RecepientEmail)
