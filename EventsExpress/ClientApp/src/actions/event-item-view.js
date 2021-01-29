@@ -184,7 +184,7 @@ export function cancel_event(eventId, reason) {
 
         res.then(response => {
             if (response.error == null) {
-                dispatch(setCancelEventSuccess(eventId));
+                dispatch(setCancelEventSuccess());
                 dispatch(updateCancelEvent(eventId));
                 dispatch(setEventCanelationModalStatus(false));
             } else {

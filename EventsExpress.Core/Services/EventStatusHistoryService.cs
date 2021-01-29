@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -60,7 +61,9 @@ namespace EventsExpress.Core.Services
 
         public EventStatusHistory GetLastRecord(Guid eventId, EventStatus status)
         {
-            return GetLastRecord(eventId, status);
+            return Context.EventStatusHistory
+                .Where(e => e.EventId == eventId && e.EventStatus == status)
+                .LastOrDefault();
         }
     }
 }
