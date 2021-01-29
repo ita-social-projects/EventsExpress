@@ -13,9 +13,9 @@ namespace EventsExpress.Core.NotificationHandlers
 {
     public class CancelEventHandler : INotificationHandler<CancelEventMessage>
     {
-        private IEventService _eventService;
-        private IEmailService _sender;
-        private IEventStatusHistoryService _eventStatusHistoryService;
+        private readonly IEventService _eventService;
+        private readonly IEmailService _sender;
+        private readonly IEventStatusHistoryService _eventStatusHistoryService;
 
         public CancelEventHandler(
             IEmailService sender,
@@ -38,7 +38,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 foreach (var visitor in visitors)
                 {
                     var email = visitor.User.Email;
-                    await _sender.SendEmailAsync(new EmailDTO
+                    await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = $"The event you have been joined was canceled",
                         RecepientEmail = email,

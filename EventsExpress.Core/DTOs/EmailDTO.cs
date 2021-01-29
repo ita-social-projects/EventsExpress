@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Core.DTOs
 {
-    public class EmailDTO
+    public class EmailDto
     {
         public string RecepientEmail { get; set; }
 

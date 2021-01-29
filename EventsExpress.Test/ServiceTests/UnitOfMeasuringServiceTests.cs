@@ -15,7 +15,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class UnitOfMeasuringServiceTests : TestInitializer
     {
         private UnitOfMeasuringService service;
-        private UnitOfMeasuringDTO correctUnitOfMeasuringDTO;
+        private UnitOfMeasuringDto correctUnitOfMeasuringDTO;
         public const string CreateUnitName = "create Unit Name";
         public const string CreateShortName = "create Unit Name";
         public const string CorrectUnitName = "CorrectUnitName";
@@ -25,7 +25,7 @@ namespace EventsExpress.Test.ServiceTests
         public const string RandomStringName = "Rnd";
         public const string InCorrectUnitName = "78789878Unitk";
 
-        public UnitOfMeasuring FromDTOToUnit(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public UnitOfMeasuring FromDTOToUnit(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
             return new UnitOfMeasuring
             {
@@ -38,7 +38,7 @@ namespace EventsExpress.Test.ServiceTests
 
         public void InitTestData()
         {
-            correctUnitOfMeasuringDTO = new UnitOfMeasuringDTO
+            correctUnitOfMeasuringDTO = new UnitOfMeasuringDto
             {
                 Id = Guid.NewGuid(),
                 UnitName = CorrectUnitName,
@@ -59,8 +59,8 @@ namespace EventsExpress.Test.ServiceTests
             Context.UnitOfMeasurings.Add(deletedUnitOfMeasuring);
             Context.SaveChanges();
             service = new UnitOfMeasuringService(Context, MockMapper.Object);
-            MockMapper.Setup(u => u.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(It.IsAny<UnitOfMeasuringDTO>()))
-              .Returns((UnitOfMeasuringDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<UnitOfMeasuringDto, UnitOfMeasuring>(It.IsAny<UnitOfMeasuringDto>()))
+              .Returns((UnitOfMeasuringDto e) => e == null ?
               null :
               new UnitOfMeasuring
               {
@@ -70,8 +70,8 @@ namespace EventsExpress.Test.ServiceTests
                   IsDeleted = e.IsDeleted,
               });
 
-            MockMapper.Setup(u => u.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(It.IsAny<IEnumerable<UnitOfMeasuring>>()))
-             .Returns((IEnumerable<UnitOfMeasuring> e) => e?.Select(item => new UnitOfMeasuringDTO { Id = item.Id }));
+            MockMapper.Setup(u => u.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(It.IsAny<IEnumerable<UnitOfMeasuring>>()))
+             .Returns((IEnumerable<UnitOfMeasuring> e) => e?.Select(item => new UnitOfMeasuringDto { Id = item.Id }));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Create")]
         public async System.Threading.Tasks.Task Create_CorrectDTO_IdUnit()
         {
-           UnitOfMeasuringDTO unitOfMeasuringDTOCreate = new UnitOfMeasuringDTO
+           UnitOfMeasuringDto unitOfMeasuringDTOCreate = new UnitOfMeasuringDto
             {
                 Id = Guid.NewGuid(),
                 UnitName = CreateUnitName,
@@ -108,7 +108,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(EditingUnit))]
         [Category("Edit")]
-        public void Edit_NotExistingIdORDeletedUnit_Exception(UnitOfMeasuringDTO unitType)
+        public void Edit_NotExistingIdORDeletedUnit_Exception(UnitOfMeasuringDto unitType)
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(unitType));
         }
@@ -127,7 +127,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Get_ExistedUnit_Unit()
         {
             Guid expectedId = correctUnitOfMeasuringDTO.Id;
-            UnitOfMeasuringDTO assert = service.GetById(expectedId);
+            UnitOfMeasuringDto assert = service.GetById(expectedId);
             Assert.That(assert.Id, Is.EqualTo(expectedId));
         }
 

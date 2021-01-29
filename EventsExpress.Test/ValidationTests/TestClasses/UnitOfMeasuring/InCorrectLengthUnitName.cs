@@ -6,14 +6,14 @@ namespace EventsExpress.Test.ValidationTests.TestClasses.UnitOfMeasuring
 {
     public class InCorrectLengthUnitName : IEnumerable
     {
-        UnitOfMeasuringViewModel modelLitteLengthUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringViewModel modelLitteLengthUnitName = new UnitOfMeasuringViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "888",
             ShortName = "rndSN",
         };
 
-        UnitOfMeasuringViewModel modelBigLengthUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringViewModel modelBigLengthUnitName = new UnitOfMeasuringViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "888 888888888888888888888888888888888888888" +

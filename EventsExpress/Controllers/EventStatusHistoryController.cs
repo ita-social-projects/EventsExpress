@@ -24,6 +24,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for event cancelation.
         /// </summary>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="eventStatus">Param eventStatus defines the event status.</param>
+        /// <returns>The method returns canceled event.</returns>
         /// <response code="200">Cancelation succesful.</response>
         /// <response code="400">Cancelation failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]

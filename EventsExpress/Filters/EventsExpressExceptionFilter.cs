@@ -16,7 +16,7 @@ namespace EventsExpress.Filters
                 {
                     Errors = new Dictionary<string, Array>()
                     {
-                        { string.Empty, new [] { eventsExpressException.Message } },
+                        { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
                 var result = new ObjectResult(errorTexts) { StatusCode = 400 };
