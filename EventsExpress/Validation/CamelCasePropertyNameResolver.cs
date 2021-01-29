@@ -8,12 +8,12 @@ namespace EventsExpress.Validation
 {
     public class CamelCasePropertyNameResolver
     {
-        public static string ResolvePropertyName(Type type, MemberInfo memberInfo, LambdaExpression expression)
+        public static string ResolvePropertyName(MemberInfo memberInfo, LambdaExpression expression)
         {
-            return ToCamelCase(DefaultPropertyNameResolver(type, memberInfo, expression));
+            return ToCamelCase(DefaultPropertyNameResolver(memberInfo, expression));
         }
 
-        private static string DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression)
+        private static string DefaultPropertyNameResolver(MemberInfo memberInfo, LambdaExpression expression)
         {
             if (expression != null)
             {
