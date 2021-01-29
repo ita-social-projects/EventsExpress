@@ -18,7 +18,7 @@ export default function add_comment(data) {
             if (response.error == null) {
                 dispatch(setCommentSuccess(true));
                 dispatch(get_comments(data.eventId,1));
-                return Promise.resolve('success')
+                return Promise.resolve('success');
             } else {
                 throw new SubmissionError(buildValidationState(response.error));
             }
