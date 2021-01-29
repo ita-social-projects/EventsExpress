@@ -1,5 +1,7 @@
+import { SubmissionError } from 'redux-form';
 import { EventService } from '../services';
 import get_event from './event-item-view';
+import { buildValidationState } from '../components/helpers/helpers.js'
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
@@ -10,51 +12,53 @@ const api_serv = new EventService();
 
 export default function add_event(data) {
 
-    return dispatch => {
-      dispatch(setEventPending(true));
-  
-      const res = api_serv.setEvent(data);
-      res.then(response => {
-        if(response.error == null){
-            dispatch(setEventSuccess(true));
-            response.text().then(x => { dispatch(eventWasCreated(x));} );
-          }else{
-            dispatch(setEventError(response.error));
-          }
-        });
-    }
-}
-
-  
-export function edit_event(data) {
   return dispatch => {
     dispatch(setEventPending(true));
 
-    const res = api_serv.editEvent(data);
-    res.then(response => {
-      if(response.error == null){
+    return api_serv.setEvent(data).then(response => {
+      if (response.error == null) {
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
-      }else{
-        dispatch(setEventError(response.error));
+
+        return response.text().then(x => {
+          dispatch(eventWasCreated(x));
+          return Promise.resolve('success');
+        });
+      } else {
+        throw new SubmissionError(buildValidationState(response.error));
       }
     });
   }
 }
 
-function eventWasCreated(eventId){
-  return{
+export function edit_event(data) {
+  return dispatch => {
+    dispatch(setEventPending(true));
+
+    return api_serv.editEvent(data).then(response => {
+      if (response.error == null) {
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+        return Promise.resolve('success');
+      } else {
+        throw new SubmissionError(buildValidationState(response.error));
+      }
+    });
+  }
+}
+
+function eventWasCreated(eventId) {
+  return {
     type: EVENT_WAS_CREATED,
     payload: eventId
   }
 }
 
-  export function setEventSuccess(data) {
-    return {
-      type: SET_EVENT_SUCCESS,
-      payload: data
-    };
-  }
+export function setEventSuccess(data) {
+  return {
+    type: SET_EVENT_SUCCESS,
+    payload: data
+  };
+}
 
 export function setEventPending(data) {
   return {
