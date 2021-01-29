@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using EventsExpress.Db.EF;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +8,8 @@ namespace EventsExpress.Test
 {
     public class ConnectionFactory : IDisposable
     {
+        private readonly IHttpContextAccessor httpContextAccessor = new Mock<IHttpContextAccessor>().Object;
         private bool disposedValue = false;
-        IHttpContextAccessor httpContextAccessor = new Mock<IHttpContextAccessor>().Object;
 
         public AppDbContext CreateContextForInMemory()
         {

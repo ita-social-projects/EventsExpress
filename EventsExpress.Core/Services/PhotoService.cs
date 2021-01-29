@@ -19,7 +19,6 @@ namespace EventsExpress.Core.Services
     public class PhotoService : BaseService<Photo>, IPhotoService
     {
         private readonly IOptions<ImageOptionsModel> _widthOptions;
-        private readonly IHttpClientFactory _clientFactory;
         private readonly Lazy<HttpClient> _client;
 
         public PhotoService(
@@ -29,7 +28,6 @@ namespace EventsExpress.Core.Services
             : base(context)
         {
             _widthOptions = opt;
-            _clientFactory = clientFactory;
             _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
         }
 
@@ -37,13 +35,7 @@ namespace EventsExpress.Core.Services
         {
             if (!IsValidImage(uploadedFile))
             {
-                throw new ArgumentException();
-            }
-
-            byte[] imgData;
-            using (var reader = new BinaryReader(uploadedFile.OpenReadStream()))
-            {
-                imgData = reader.ReadBytes((int)uploadedFile.Length);
+                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
             }
 
             var photo = new Photo
@@ -53,7 +45,7 @@ namespace EventsExpress.Core.Services
             };
 
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -62,7 +54,7 @@ namespace EventsExpress.Core.Services
         {
             if (!await IsImageUrl(url))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("The url should be a valid image", nameof(url));
             }
 
             Uri uri = new Uri(url);
@@ -74,7 +66,7 @@ namespace EventsExpress.Core.Services
             };
 
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -94,11 +86,11 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var photo = _context.Photos.Find(id);
+            var photo = Context.Photos.Find(id);
             if (photo != null)
             {
                 Delete(photo);
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
         }
 
@@ -111,7 +103,7 @@ namespace EventsExpress.Core.Services
             var newSize = new Size
             {
                 Width = newWidth,
-                Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
+                Height = oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width,
             };
 
             var newBitmap = new Bitmap(oldBitMap, newSize);
