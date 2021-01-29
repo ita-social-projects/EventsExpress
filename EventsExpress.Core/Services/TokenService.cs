@@ -176,6 +176,7 @@ namespace EventsExpress.Core.Services
             {
                 HttpOnly = true,
                 Expires = DateTime.Now.AddDays(7),
+                Secure = true,
             };
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
             _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);

@@ -15,17 +15,14 @@ namespace EventsExpress.Db.EF
 {
     public class AppDbContext : DbContext
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Guid _currentUserId;
 
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        private Guid CurrentUserId
-        {
-            get => _httpContextAccessor.HttpContext != null ? new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) : Guid.Empty;
+            _currentUserId = httpContextAccessor.HttpContext != null ?
+                new Guid(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) :
+                Guid.Empty;
         }
 
         public DbSet<Permission> Permissions { get; set; }
@@ -220,7 +217,7 @@ namespace EventsExpress.Db.EF
                     EntityName = change.Entity.GetType().Name,
                     Time = now,
                     ChangesType = MapEntityStateToChangeType(change.State),
-                    UserId = CurrentUserId,
+                    UserId = _currentUserId,
                     EntityKeys = JsonConvert.SerializeObject(entityKeyDictionary),
                 };
 

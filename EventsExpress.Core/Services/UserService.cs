@@ -346,6 +346,7 @@ namespace EventsExpress.Core.Services
 
                 Context.Relationships.Add(rel);
                 await Context.SaveChangesAsync();
+                return;
             }
 
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
