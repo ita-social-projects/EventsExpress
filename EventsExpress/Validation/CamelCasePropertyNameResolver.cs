@@ -13,6 +13,7 @@ namespace EventsExpress.Validation
             return ToCamelCase(DefaultPropertyNameResolver(type, memberInfo, expression));
         }
 
+#pragma warning disable IDE0060
         private static string DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression)
         {
             if (expression != null)
@@ -31,6 +32,7 @@ namespace EventsExpress.Validation
 
             return null;
         }
+#pragma warning restore IDE0060
 
         private static string ToCamelCase(string s)
         {

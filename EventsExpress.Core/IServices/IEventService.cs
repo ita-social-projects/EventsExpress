@@ -8,31 +8,31 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        Task<Guid> Create(EventDTO eventDTO);
+        Task<Guid> Create(EventDto eventDTO);
 
         Task<Guid> CreateNextEvent(Guid eventId);
 
-        Task<Guid> EditNextEvent(EventDTO eventDTO);
+        Task<Guid> EditNextEvent(EventDto eventDTO);
 
-        Task<Guid> Edit(EventDTO e);
+        Task<Guid> Edit(EventDto e);
 
-        Task BlockEvent(Guid eID);
+        Task BlockEvent(Guid eventId);
 
-        Task UnblockEvent(Guid eId);
+        Task UnblockEvent(Guid eventId);
 
-        EventDTO EventById(Guid eventId);
+        EventDto EventById(Guid eventId);
 
-        IEnumerable<EventDTO> GetAll(EventFilterViewModel model, out int count);
+        IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count);
 
-        IEnumerable<EventDTO> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
-        IEnumerable<EventDTO> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDto> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
-        IEnumerable<EventDTO> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDto> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
-        IEnumerable<EventDTO> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModelq);
+        IEnumerable<EventDto> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
-        IEnumerable<EventDTO> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
+        IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel);
 
         Task AddUserToEvent(Guid userId, Guid eventId);
 

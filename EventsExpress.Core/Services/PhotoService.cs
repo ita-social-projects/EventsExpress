@@ -53,7 +53,7 @@ namespace EventsExpress.Core.Services
             };
 
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -74,7 +74,7 @@ namespace EventsExpress.Core.Services
             };
 
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -94,11 +94,11 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var photo = _context.Photos.Find(id);
+            var photo = Context.Photos.Find(id);
             if (photo != null)
             {
                 Delete(photo);
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
         }
 
@@ -111,7 +111,7 @@ namespace EventsExpress.Core.Services
             var newSize = new Size
             {
                 Width = newWidth,
-                Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
+                Height = oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width,
             };
 
             var newBitmap = new Bitmap(oldBitMap, newSize);
