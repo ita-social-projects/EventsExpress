@@ -164,7 +164,7 @@ namespace EventsExpress.Controllers
 
         private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
         {
-            if (userExisting?.Photo == null)
+            if (userExisting != null && userExisting.Photo == null)
             {
                 userExisting.Photo = await _photoService.AddPhotoByURL(urlPhoto);
                 userExisting.PhotoId = userExisting.Photo.Id;
