@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Filters
 {
-    public class UserAccessTypeFilter : TypeFilterAttribute
+    public class UserAccessTypeFilterAttribute : TypeFilterAttribute
     {
-        public UserAccessTypeFilter(string eventId = "eventId")
-            : base(typeof(UserAccessFilter))
+        public UserAccessTypeFilterAttribute(string eventId = "eventId")
+            : base(typeof(UserAccessFilterAttribute))
         {
             Arguments = new object[] { eventId };
         }

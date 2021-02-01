@@ -6,19 +6,19 @@ namespace EventsExpress.Core.Infrastructure
 {
     public class CacheHelper : ICacheHelper
     {
-        public CacheDTO GetValue(Guid userId)
+        public CacheDto GetValue(Guid userId)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Get(userId.ToString()) as CacheDTO;
+            return memoryCache.Get(userId.ToString()) as CacheDto;
         }
 
-        public bool Add(CacheDTO value)
+        public bool Add(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
             return memoryCache.Add(value.UserId.ToString(), value, DateTime.Now.AddDays(10));
         }
 
-        public void Update(CacheDTO value)
+        public void Update(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
             memoryCache.Set(value.UserId.ToString(), value, DateTime.Now.AddDays(10));

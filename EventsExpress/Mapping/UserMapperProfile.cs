@@ -12,7 +12,7 @@ namespace EventsExpress.Mapping
     {
         public UserMapperProfile()
         {
-            CreateMap<User, UserDTO>()
+            CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.Rating, opts => opts.Ignore())
@@ -21,7 +21,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
 
-            CreateMap<UserDTO, User>()
+            CreateMap<UserDto, User>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.EmailConfirmed, opts => opts.MapFrom(src => src.EmailConfirmed))
@@ -37,7 +37,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            CreateMap<UserDTO, UserInfoViewModel>()
+            CreateMap<UserDto, UserInfoViewModel>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.Name))
                 .ForMember(
@@ -51,7 +51,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Token, opts => opts.Ignore())
                 .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
 
-            CreateMap<UserDTO, UserManageViewModel>()
+            CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -63,7 +63,7 @@ namespace EventsExpress.Mapping
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
 
-            CreateMap<UserDTO, UserPreviewViewModel>()
+            CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -72,7 +72,7 @@ namespace EventsExpress.Mapping
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
 
-            CreateMap<UserDTO, ProfileDTO>()
+            CreateMap<UserDto, ProfileDto>()
                 .ForMember(
                     dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
@@ -80,19 +80,19 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryDTO { Id = x.Category.Id, Name = x.Category.Name })));
+                        src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })));
 
-            CreateMap<ProfileDTO, ProfileViewModel>()
+            CreateMap<ProfileDto, ProfileViewModel>()
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name })));
 
-            CreateMap<LoginViewModel, UserDTO>()
+            CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            CreateMap<UserViewModel, UserDTO>()
+            CreateMap<UserViewModel, UserDto>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))

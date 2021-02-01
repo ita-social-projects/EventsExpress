@@ -74,12 +74,8 @@ namespace EventsExpress.Core.Extensions
             //-------------------------------------------
             try
             {
-                using (var memoryStream = postedFile.ToMemoryStream())
-                {
-                    using (var bitmap = new Bitmap(memoryStream))
-                    {
-                    }
-                }
+                using var memoryStream = postedFile.ToMemoryStream();
+                using var bitmap = new Bitmap(memoryStream);
             }
             catch (Exception)
             {

@@ -32,7 +32,7 @@ namespace EventsExpress.Core.HostedService
 
         public IServiceProvider Services { get; }
 
-        private async Task DoWork(CancellationToken stoppingToken)
+        private async Task DoWork(CancellationToken cancellationToken)
         {
             using (var scope = Services.CreateScope())
             {
@@ -43,14 +43,14 @@ namespace EventsExpress.Core.HostedService
                 var mediator =
                     scope.ServiceProvider
                         .GetRequiredService<IMediator>();
-                while (!stoppingToken.IsCancellationRequested)
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     var events = scopedProcessingService.GetUrgentEventSchedules();
                     try
                     {
                         foreach (var ev in events)
                         {
-                            await mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDTO>(ev)));
+                            await mediator.Publish(new CreateEventVerificationMessage(_mapper.Map<EventScheduleDto>(ev)));
                         }
                     }
                     catch (Exception ex)
@@ -58,19 +58,19 @@ namespace EventsExpress.Core.HostedService
                         _logger.LogError(ex.Message);
                     }
 
-                    await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
+                    await Task.Delay(1000 * 60 * 60 * 24, cancellationToken);
 
                     _logger.LogInformation("Message Hosted Service is working.");
                 }
             }
         }
 
-        public override async Task StopAsync(CancellationToken stoppingToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation(
             "Message Service Hosted Service is stopping.");
 
-            await base.StopAsync(stoppingToken);
+            await base.StopAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
