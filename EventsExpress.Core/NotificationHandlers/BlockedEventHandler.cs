@@ -37,7 +37,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     var even = _eventService.EventById(notification.Id);
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
 
-                    await _sender.SendEmailAsync(new EmailDTO
+                    await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = "Your event was blocked",
                         RecepientEmail = email,

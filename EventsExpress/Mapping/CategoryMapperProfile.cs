@@ -9,16 +9,16 @@ namespace EventsExpress.Mapping
     {
         public CategoryMapperProfile()
         {
-            CreateMap<Category, CategoryDTO>()
+            CreateMap<Category, CategoryDto>()
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore())
                 .ReverseMap();
-            CreateMap<CategoryDTO, CategoryViewModel>().ReverseMap();
-            CreateMap<CategoryCreateViewModel, CategoryDTO>()
+            CreateMap<CategoryDto, CategoryViewModel>().ReverseMap();
+            CreateMap<CategoryCreateViewModel, CategoryDto>()
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore());
-            CreateMap<CategoryEditViewModel, CategoryDTO>()
+            CreateMap<CategoryEditViewModel, CategoryDto>()
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore());
         }

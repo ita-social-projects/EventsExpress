@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.DTOs
 {
-    public class RefreshTokenDTO
+    public class RefreshTokenDto
     {
         public string Token { get; set; }
 

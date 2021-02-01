@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.DTOs
 {
-    public class CacheDTO
+    public class CacheDto
     {
         public Guid UserId { get; set; }
 

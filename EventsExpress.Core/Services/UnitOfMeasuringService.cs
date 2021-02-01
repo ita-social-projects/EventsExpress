@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
             if (unitOfMeasuringDTO == null)
             {
@@ -29,15 +29,15 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-                await _context.SaveChangesAsync();
+                var result = Insert(Mapper.Map<UnitOfMeasuringDto, UnitOfMeasuring>(unitOfMeasuringDTO));
+                await Context.SaveChangesAsync();
                 return result.Id;
             }
         }
 
-        public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Edit(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
-            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
+            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
             if (entity == null || entity.IsDeleted)
             {
                 throw new EventsExpressException("Object not found");
@@ -45,25 +45,25 @@ namespace EventsExpress.Core.Services
 
             entity.ShortName = unitOfMeasuringDTO.ShortName;
             entity.UnitName = unitOfMeasuringDTO.UnitName;
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return entity.Id;
         }
 
-        public IEnumerable<UnitOfMeasuringDTO> GetAll()
+        public IEnumerable<UnitOfMeasuringDto> GetAll()
         {
-            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(_context.UnitOfMeasurings.Where(item => !item.IsDeleted));
+            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(Context.UnitOfMeasurings.Where(item => !item.IsDeleted));
         }
 
-        public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
+        public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
         {
-            var unitOfMeasuring = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            var unitOfMeasuring = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
             if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
             {
                 throw new EventsExpressException("Not found");
             }
 
-            return new UnitOfMeasuringDTO
+            return new UnitOfMeasuringDto
             {
                 Id = unitOfMeasuring.Id,
                 UnitName = unitOfMeasuring.UnitName,
@@ -74,7 +74,7 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var unitOfMeasuring = _context.UnitOfMeasurings.Find(id);
+            var unitOfMeasuring = Context.UnitOfMeasurings.Find(id);
             if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
             {
                 return;
@@ -82,12 +82,12 @@ namespace EventsExpress.Core.Services
 
             unitOfMeasuring.IsDeleted = true;
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         public bool ExistsByName(string unitName, string shortName)
         {
-          return _context.UnitOfMeasurings.Any(x => ((!x.IsDeleted) && (x.UnitName == unitName) && (x.ShortName == shortName)));
+          return Context.UnitOfMeasurings.Any(x => ((!x.IsDeleted) && (x.UnitName == unitName) && (x.ShortName == shortName)));
         }
     }
 }
