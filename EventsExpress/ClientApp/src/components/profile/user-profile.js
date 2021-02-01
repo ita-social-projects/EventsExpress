@@ -123,13 +123,9 @@ export default class UserItemView extends Component {
                         <div className='d-flex flex-column justify-content-center align-items-center'>
                             <div className="user-profile-avatar">
                                 <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
-                                <div className="msg-btn">
-                                    <Link to={`/chat/${id}`}>
-                                        <button className="btn btn-success mt-1">Write</button>
-                                    </Link>
-                                </div>
                             </div>
                             <RatingAverage value={rating} direction='row' />
+
                             <div className="row justify-content-center">
                                 <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
                                     <IconButton
@@ -146,6 +142,13 @@ export default class UserItemView extends Component {
                                     >
                                         <i className="fas fa-thumbs-down"></i>
                                     </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Start chat!" placement="bottom" TransitionComponent={Zoom}>
+                                    <Link to={`/chat/${id}`}>
+                                        <IconButton>
+                                            <i class="far fa-comments"></i>
+                                        </IconButton>
+                                    </Link>
                                 </Tooltip>
                             </div>
                         </div>
