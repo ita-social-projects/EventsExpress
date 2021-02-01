@@ -5,6 +5,6 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(EmailDTO emailDTO);
+        Task SendEmailAsync(EmailDto emailDto);
     }
 }

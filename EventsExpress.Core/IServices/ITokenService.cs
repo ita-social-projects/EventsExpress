@@ -7,7 +7,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(UserDTO user);
+        string GenerateAccessToken(UserDto user);
 
         RefreshToken GenerateRefreshToken();
 

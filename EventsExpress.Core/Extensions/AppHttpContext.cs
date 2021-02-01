@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.Extensions
 {
-    public class AppHttpContext
+    public static class AppHttpContext
     {
         private static IHttpContextAccessor _httpContextAccessor;
 
