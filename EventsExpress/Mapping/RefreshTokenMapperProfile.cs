@@ -8,8 +8,8 @@ namespace EventsExpress.Mapping
     {
         public RefreshTokenMapperProfile()
         {
-            CreateMap<RefreshToken, RefreshTokenDTO>();
-            CreateMap<RefreshTokenDTO, RefreshToken>()
+            CreateMap<RefreshToken, RefreshTokenDto>();
+            CreateMap<RefreshTokenDto, RefreshToken>()
                 .ForMember(dest => dest.Id, opts => opts.Ignore());
         }
     }

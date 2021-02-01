@@ -8,12 +8,12 @@ namespace EventsExpress.Core.IServices
 {
     public interface IUserEventInventoryService
     {
-        Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO);
+        Task MarkItemAsTakenByUser(UserEventInventoryDto userEventInventoryDTO);
 
-        Task<IEnumerable<UserEventInventoryDTO>> GetAllMarkItemsByEventId(Guid eventId);
+        Task<IEnumerable<UserEventInventoryDto>> GetAllMarkItemsByEventId(Guid eventId);
 
-        Task Delete(UserEventInventoryDTO userEventInventoryDTO);
+        Task Delete(UserEventInventoryDto userEventInventoryDTO);
 
-        Task Edit(UserEventInventoryDTO userEventInventoryDTO);
+        Task Edit(UserEventInventoryDto userEventInventoryDTO);
     }
 }

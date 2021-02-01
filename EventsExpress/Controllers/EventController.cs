@@ -34,12 +34,13 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit event from event schedule and create it.
         /// </summary>
-        /// <param name="eventId">Required.</param>
-        /// <param name="model">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an identifier of created event.</returns>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]/{eventId:Guid}")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CreateNextFromParentWithEdit(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -47,7 +48,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.EditNextEvent(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.EditNextEvent(_mapper.Map<EventDto>(model));
 
             return Ok(new { id = result });
         }
@@ -55,7 +56,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for create event from event schedule.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns an identifier of created event.</returns>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]/{eventId:Guid}")]
@@ -74,7 +76,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns a created event.</returns>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
@@ -85,7 +88,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.Create(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Create(_mapper.Map<EventDto>(model));
 
             return Ok(result);
         }
@@ -93,11 +96,13 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an edited event.</returns>
         /// <response code="200">Edit event proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -105,7 +110,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.Edit(_mapper.Map<EventDTO>(model));
+            var result = await _eventService.Edit(_mapper.Map<EventDto>(model));
 
             return Ok(result);
         }
@@ -113,8 +118,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return event.
         /// </summary>
-        /// <param name="eventId">Required.</param>
-        /// <returns>Event.</returns>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns an event by identifier.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
         [HttpGet("{eventId:Guid}")]
@@ -124,8 +129,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all events.
         /// </summary>
-        /// <param name="filter">Required.</param>
-        /// <returns>AllEvents.</returns>
+        /// <param name="filter">Param filter provides the ability to filter the list of events.</param>
+        /// <returns>The method returns filltered events.</returns>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]
@@ -133,8 +138,6 @@ namespace EventsExpress.Controllers
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
             filter.PageSize = 6;
-
-            // TODO : Add this functionality on UI
             filter.OwnerId = null;
             filter.VisitorId = null;
 
@@ -168,10 +171,11 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to add user to category.
+        /// This method have to add user to event.
         /// </summary>
-        /// <param name="eventId">EventId.</param>
-        /// <param name="userId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns new participant of the event.</returns>
         /// <response code="200">Adding user from event proces success.</response>
         /// <response code="400">If adding user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
@@ -185,12 +189,13 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to approved user on event.
         /// </summary>
-        /// <param name="eventId">EventId.</param>
-        /// <param name="userId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns approved participant.</returns>
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
@@ -201,24 +206,24 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to denied participation in event.
         /// </summary>
-        /// <param name="eventId">Required.</param>
-        /// <param name="userId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns denied participant.</returns>
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
-        public async Task<ActionResult> DenyVisitor(Guid eventId, Guid userId)
+        [UserAccessTypeFilterAttribute]
+        public async Task DenyVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);
-
-            return Ok();
         }
 
         /// <summary>
         /// This method have to add user to category.
         /// </summary>
-        /// <param name="eventId">EventId.</param>
-        /// <param name="userId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns deleted participant.</returns>
         /// <response code="200">Delete  user from event proces success.</response>
         /// <response code="400">If deleting user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
@@ -232,7 +237,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to block event.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns blocked event.</returns>
         /// <response code="200">Block is succesful.</response>
         /// <response code="302">If user isn't admin.</response>
         /// <response code="400">Block process failed.</response>
@@ -248,7 +254,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to unblock event.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns unblocked event.</returns>
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process is failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
@@ -263,7 +270,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method id used to set rating to user.
         /// </summary>
-        /// <param name="model">Required (type: RateDto).</param>
+        /// <param name="model">Param model provides access to rate's properties.</param>
+        /// <returns>The method returns rate of the event.</returns>
         /// <response code="200">Rating is setted successfully.</response>
         /// <response code="400">Setting rating is failed.</response>
         [HttpPost("[action]")]
@@ -282,7 +290,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets current rate for event.
         /// </summary>
-        /// <param name="eventId">Required (type: Guid).</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns current rate for event.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("{eventId:Guid}/[action]")]
@@ -301,8 +310,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets average rate for event.
         /// </summary>
-        /// <param name="eventId">Reguired (type: Guid).</param>
-        /// <returns>RateOfEvent.</returns>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns average rate for event.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("{eventId:Guid}/[action]")]
@@ -319,8 +328,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets future events for user profile.
         /// </summary>
-        /// <param name="id">Reguired.</param>
-        /// <param name="page">CountPages.</param>
+        /// <param name="id">Param id defines the user identifier.</param>
+        /// <param name="page">Param page defines page for comments.</param>
+        /// <returns>The method returns future events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("[action]")]
@@ -349,8 +359,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets finished events.
         /// </summary>
-        /// <param name="id">Reguired.</param>
-        /// <param name="page">CountPages.</param>
+        /// <param name="id">Param id defines the user identifier.</param>
+        /// <param name="page">Param page defines page for comments.</param>
+        /// <returns>The method returns past events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("[action]")]
@@ -379,9 +390,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets  events which have to visit.
         /// </summary>
-        /// <param name="id">Reguired.</param>
-        /// <param name="page">CountPages.</param>
-        /// <returns>Events.</returns>
+        /// <param name="id">Param id defines the user identifier.</param>
+        /// <param name="page">Param page defines page for comments.</param>
+        /// <returns>The method returns events to go.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("[action]")]
@@ -410,9 +421,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets  events which have visited.
         /// </summary>
-        /// <param name="id">Reguired.</param>
-        /// <param name="page">CountPages.</param>
-        /// <returns>Events.</returns>
+        /// <param name="id">Param id defines the user identifier.</param>
+        /// <param name="page">Param page defines page for comments.</param>
+        /// <returns>The method returns visited events.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("[action]")]
@@ -441,9 +452,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method gets  events. Used for notifications.
         /// </summary>
-        /// <param name="eventIds">Reguired.</param>
-        /// <param name="page">CountPages.</param>
-        /// <returns>Events.</returns>
+        /// <param name="eventIds">Param eventIds defines identifiers of the events.</param>
+        /// <param name="page">Param page defines page for comments.</param>
+        /// <returns>The method returns events by identifiers.</returns>
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpPost("[action]")]

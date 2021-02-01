@@ -9,39 +9,39 @@ namespace EventsExpress.Core.IServices
 {
     public interface IUserService
     {
-        Task Create(UserDTO userDto);
+        Task Create(UserDto userDto);
 
-        Task Update(UserDTO userDto);
+        Task Update(UserDto userDto);
 
-        Task ChangeRole(Guid uId, Guid rId);
+        Task ChangeRole(Guid userId, Guid roleId);
 
-        Task ChangeAvatar(Guid uId, IFormFile avatar);
+        Task ChangeAvatar(Guid userId, IFormFile avatar);
 
-        Task ConfirmEmail(CacheDTO cacheDto);
+        Task ConfirmEmail(CacheDto cacheDto);
 
-        Task PasswordRecover(UserDTO userDto);
+        Task PasswordRecover(UserDto userDto);
 
-        Task EditFavoriteCategories(UserDTO user, IEnumerable<Category> categories);
+        Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories);
 
-        Task SetAttitude(AttitudeDTO attitude);
+        Task SetAttitude(AttitudeDto attitude);
 
-        Task Block(Guid uId);
+        Task Block(Guid userId);
 
-        Task Unblock(Guid uId);
+        Task Unblock(Guid userId);
 
-        UserDTO GetById(Guid id);
+        UserDto GetById(Guid userId);
 
-        UserDTO GetByEmail(string email);
+        UserDto GetByEmail(string email);
 
-        UserDTO GetUserByRefreshToken(string token);
+        UserDto GetUserByRefreshToken(string token);
 
-        ProfileDTO GetProfileById(Guid id, Guid fromId);
+        ProfileDto GetProfileById(Guid userId, Guid fromId);
 
-        IEnumerable<UserDTO> Get(UsersFilterViewModel model, out int count, Guid id);
+        IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id);
 
-        IEnumerable<UserDTO> GetUsersByCategories(IEnumerable<CategoryDTO> categories);
+        IEnumerable<UserDto> GetUsersByCategories(IEnumerable<CategoryDto> categories);
 
-        IEnumerable<UserDTO> GetUsersByRole(string role);
+        IEnumerable<UserDto> GetUsersByRole(string role);
 
         double GetRating(Guid userId);
     }

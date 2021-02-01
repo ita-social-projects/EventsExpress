@@ -27,7 +27,7 @@ namespace EventsExpress.Test.ServiceTests
 
         private EventService service;
         private List<Event> events;
-        private EventDTO eventDTO;
+        private EventDto eventDTO;
         private EventLocation eventLocation;
 
         private Guid userId = Guid.NewGuid();
@@ -48,7 +48,7 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns(new Mock<HttpContext>().Object);
             mockAuthService = new Mock<IAuthService>();
             mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
-                .Returns(new UserDTO { Id = userId });
+                .Returns(new UserDto { Id = userId });
 
             service = new EventService(
                 Context,
@@ -60,7 +60,7 @@ namespace EventsExpress.Test.ServiceTests
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
 
-            eventDTO = new EventDTO
+            eventDTO = new EventDto
             {
                 Id = firstEventId,
                 DateFrom = DateTime.Today,
@@ -158,8 +158,8 @@ namespace EventsExpress.Test.ServiceTests
             Context.Events.AddRange(events);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<EventDTO, LocationDto>(It.IsAny<EventDTO>()))
-                .Returns((EventDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<EventDto, LocationDto>(It.IsAny<EventDto>()))
+                .Returns((EventDto e) => e == null ?
                 null :
                 new LocationDto
                 {
@@ -176,8 +176,8 @@ namespace EventsExpress.Test.ServiceTests
                     Id = e.Id,
                 });
 
-            MockMapper.Setup(u => u.Map<EventDTO, Event>(It.IsAny<EventDTO>()))
-                .Returns((EventDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<EventDto, Event>(It.IsAny<EventDto>()))
+                .Returns((EventDto e) => e == null ?
                 null :
                 new Event
                 {
@@ -190,10 +190,10 @@ namespace EventsExpress.Test.ServiceTests
                     MaxParticipants = e.MaxParticipants,
                 });
 
-            MockMapper.Setup(u => u.Map<EventDTO>(It.IsAny<Event>()))
+            MockMapper.Setup(u => u.Map<EventDto>(It.IsAny<Event>()))
                 .Returns((Event e) => e == null ?
                 null :
-                new EventDTO
+                new EventDto
                 {
                     Id = e.Id,
                     Title = e.Title,

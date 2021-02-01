@@ -17,7 +17,7 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ILogger<CreateEventVerificationHandler> _logger;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        protected readonly AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
@@ -46,7 +46,7 @@ namespace EventsExpress.Core.NotificationHandlers
             try
             {
                 string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
-                await _sender.SendEmailAsync(new EmailDTO
+                await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = "Aprove your reccurent event!",
                     RecepientEmail = user.Email,

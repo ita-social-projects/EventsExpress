@@ -25,18 +25,18 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Create(LocationDto locationDTO)
         {
-            var location = _mapper.Map<LocationDto, EventLocation>(locationDTO);
+            var location = Mapper.Map<LocationDto, EventLocation>(locationDTO);
 
             var result = Insert(location);
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return result.Id;
         }
 
         public LocationDto LocationByPoint(Point point)
         {
-            var locationDTO = _mapper.Map<LocationDto>(_context.EventLocations
+            var locationDTO = Mapper.Map<LocationDto>(Context.EventLocations
                 .Where(e =>
                     e.Point.X == point.X &&
                     e.Point.Y == point.Y)

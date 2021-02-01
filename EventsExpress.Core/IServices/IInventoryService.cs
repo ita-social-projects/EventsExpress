@@ -7,14 +7,14 @@ namespace EventsExpress.Core.IServices
 {
     public interface IInventoryService
     {
-        Task<Guid> AddInventar(Guid eventId, InventoryDTO inventoryDTO);
+        Task<Guid> AddInventar(Guid eventId, InventoryDto inventoryDTO);
 
-        Task<Guid> EditInventar(InventoryDTO inventoryDTO);
+        Task<Guid> EditInventar(InventoryDto inventoryDTO);
 
         Task<Guid> DeleteInventar(Guid id);
 
-        IEnumerable<InventoryDTO> GetInventar(Guid eventId);
+        IEnumerable<InventoryDto> GetInventar(Guid eventId);
 
-        InventoryDTO GetInventarById(Guid inventoryId);
+        InventoryDto GetInventarById(Guid inventoryId);
     }
 }

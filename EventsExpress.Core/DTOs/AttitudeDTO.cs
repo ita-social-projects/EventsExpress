@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.DTOs
 {
-    public class AttitudeDTO
+    public class AttitudeDto
     {
         public Guid UserFromId { get; set; }
 
