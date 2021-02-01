@@ -17,20 +17,20 @@ namespace EventsExpress.Core.Services
 
         public async Task PromoteToOwner(Guid userId, Guid eventId)
         {
-            if (!_context.EventOwners.Any(x => x.EventId == eventId && x.UserId == userId))
+            if (!Context.EventOwners.Any(x => x.EventId == eventId && x.UserId == userId))
             {
-                _context.EventOwners.Add(new EventOwner { EventId = eventId, UserId = userId });
+                Context.EventOwners.Add(new EventOwner { EventId = eventId, UserId = userId });
 
-                _context.UserEvent.Remove(new UserEvent { UserId = userId, EventId = eventId });
+                Context.UserEvent.Remove(new UserEvent { UserId = userId, EventId = eventId });
 
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
         }
 
         public async Task DeleteOwnerFromEvent(Guid userId, Guid eventId)
         {
-            _context.EventOwners.Remove(new EventOwner { UserId = userId, EventId = eventId });
-            await _context.SaveChangesAsync();
+            Context.EventOwners.Remove(new EventOwner { UserId = userId, EventId = eventId });
+            await Context.SaveChangesAsync();
         }
     }
 }

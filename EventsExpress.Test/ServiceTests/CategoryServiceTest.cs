@@ -13,7 +13,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private CategoryService service;
         private Category category;
-        private CategoryDTO categoryDTO;
+        private CategoryDto categoryDTO;
         private Guid categoryId = Guid.NewGuid();
 
         [SetUp]
@@ -82,7 +82,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_EmprtyCategory_ReturnFalse()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new CategoryDTO()));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new CategoryDto()));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_NotExistingId_ReturnFalse()
         {
-            CategoryDTO newCategory = new CategoryDTO()
+            CategoryDto newCategory = new CategoryDto()
             {
                 Name = "newName",
                 Id = Guid.NewGuid(),
@@ -107,7 +107,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_ValidDto_Success()
         {
-            categoryDTO = new CategoryDTO()
+            categoryDTO = new CategoryDto()
             {
                 Id = categoryId,
                 Name = "RandomName3",
@@ -119,7 +119,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Edit_NameExist_ReturnFalse()
         {
-            CategoryDTO newCategoryDto = new CategoryDTO()
+            CategoryDto newCategoryDto = new CategoryDto()
             {
                 Name = "RandomName",
                 Id = category.Id,

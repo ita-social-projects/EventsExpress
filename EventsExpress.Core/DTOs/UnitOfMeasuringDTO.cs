@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class UnitOfMeasuringDTO
+    public class UnitOfMeasuringDto
     {
         public Guid Id { get; set; }
 

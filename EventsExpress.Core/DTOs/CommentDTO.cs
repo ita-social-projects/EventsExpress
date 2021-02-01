@@ -4,7 +4,7 @@ using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class CommentDTO
+    public class CommentDto
     {
         public Guid Id { get; set; }
 
@@ -20,6 +20,6 @@ namespace EventsExpress.Core.DTOs
 
         public Guid? CommentsId { get; set; }
 
-        public IEnumerable<CommentDTO> Children { get; set; }
+        public IEnumerable<CommentDto> Children { get; set; }
     }
 }

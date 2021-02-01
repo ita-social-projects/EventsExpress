@@ -5,11 +5,11 @@ namespace EventsExpress.Core.Infrastructure
 {
     public interface ICacheHelper
     {
-        CacheDTO GetValue(Guid userId);
+        CacheDto GetValue(Guid userId);
 
-        bool Add(CacheDTO value);
+        bool Add(CacheDto value);
 
-        void Update(CacheDTO value);
+        void Update(CacheDto value);
 
         void Delete(Guid userId);
     }

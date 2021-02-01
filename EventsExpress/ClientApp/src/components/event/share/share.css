@@ -1,6 +1,6 @@
 ﻿body {
     margin: 5%;
-    font-family: Helvetica;
+    font-family: Helvetica, sans-serif;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
 }
