@@ -19,7 +19,6 @@ namespace EventsExpress.Core.Services
     public class PhotoService : BaseService<Photo>, IPhotoService
     {
         private readonly IOptions<ImageOptionsModel> _widthOptions;
-        private readonly IHttpClientFactory _clientFactory;
         private readonly Lazy<HttpClient> _client;
 
         public PhotoService(
@@ -29,31 +28,14 @@ namespace EventsExpress.Core.Services
             : base(context)
         {
             _widthOptions = opt;
-            _clientFactory = clientFactory;
             _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
         }
 
         public async Task<Photo> AddPhoto(IFormFile uploadedFile)
         {
-            if (!IsValidImage(uploadedFile))
-            {
-                throw new ArgumentException();
-            }
-
-            byte[] imgData;
-            using (var reader = new BinaryReader(uploadedFile.OpenReadStream()))
-            {
-                imgData = reader.ReadBytes((int)uploadedFile.Length);
-            }
-
-            var photo = new Photo
-            {
-                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
-                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
-            };
-
+            var photo = GetPhotoFromIFormFile(uploadedFile);
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -62,7 +44,7 @@ namespace EventsExpress.Core.Services
         {
             if (!await IsImageUrl(url))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("The url should be a valid image", nameof(url));
             }
 
             Uri uri = new Uri(url);
@@ -74,7 +56,7 @@ namespace EventsExpress.Core.Services
             };
 
             Insert(photo);
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return photo;
         }
@@ -94,15 +76,31 @@ namespace EventsExpress.Core.Services
 
         public async Task Delete(Guid id)
         {
-            var photo = _context.Photos.Find(id);
+            var photo = Context.Photos.Find(id);
             if (photo != null)
             {
                 Delete(photo);
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
         }
 
         private static bool IsValidImage(IFormFile file) => file != null && file.IsImage();
+
+        private Photo GetPhotoFromIFormFile(IFormFile uploadedFile)
+        {
+            if (!IsValidImage(uploadedFile))
+            {
+                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
+            }
+
+            var photo = new Photo
+            {
+                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
+                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
+            };
+
+            return photo;
+        }
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
@@ -111,7 +109,7 @@ namespace EventsExpress.Core.Services
             var newSize = new Size
             {
                 Width = newWidth,
-                Height = (int)(oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width),
+                Height = oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width,
             };
 
             var newBitmap = new Bitmap(oldBitMap, newSize);

@@ -23,7 +23,7 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                await _sender.SendEmailAsync(new EmailDTO
+                await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = "Your account was Unblocked",
                     RecepientEmail = notification.Email,

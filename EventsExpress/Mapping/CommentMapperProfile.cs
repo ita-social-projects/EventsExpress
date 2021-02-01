@@ -11,12 +11,12 @@ namespace EventsExpress.Mapping
     {
         public CommentMapperProfile()
         {
-            CreateMap<CommentDTO, Comments>()
+            CreateMap<CommentDto, Comments>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore())
                 .ForMember(dest => dest.Parent, opts => opts.Ignore())
                 .ReverseMap();
 
-            CreateMap<CommentDTO, CommentViewModel>()
+            CreateMap<CommentDto, CommentViewModel>()
                 .ForMember(
                     dest => dest.UserPhoto,
                     opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))
@@ -24,7 +24,7 @@ namespace EventsExpress.Mapping
                     dest => dest.UserName,
                     opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
 
-            CreateMap<CommentViewModel, CommentDTO>()
+            CreateMap<CommentViewModel, CommentDto>()
                 .ForMember(dest => dest.User, opts => opts.Ignore());
         }
     }

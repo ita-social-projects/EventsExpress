@@ -8,11 +8,11 @@ namespace EventsExpress.Core.IServices
     {
         Task<AuthenticateResponseModel> Authenticate(string email, string password);
 
-        Task<AuthenticateResponseModel> FirstAuthenticate(UserDTO userDto);
+        Task<AuthenticateResponseModel> FirstAuthenticate(UserDto userDto);
 
-        Task ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword);
+        Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword);
 
-        UserDTO GetCurrentUser(ClaimsPrincipal userClaims);
+        UserDto GetCurrentUser(ClaimsPrincipal userClaims);
 
         Task<AuthenticateResponseModel> AuthenticateUserFromExternalProvider(string email);
     }

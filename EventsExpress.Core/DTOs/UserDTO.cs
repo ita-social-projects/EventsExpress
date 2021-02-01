@@ -7,7 +7,7 @@ using Google.Apis;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
         public Guid Id { get; set; }
 
@@ -41,7 +41,7 @@ namespace EventsExpress.Core.DTOs
 
         public bool CanChangePassword { get; set; }
 
-        public IEnumerable<EventDTO> Events { get; set; }
+        public IEnumerable<EventDto> Events { get; set; }
 
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
 

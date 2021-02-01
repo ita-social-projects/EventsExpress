@@ -9,16 +9,17 @@ namespace EventsExpress.Db.BaseService
     public class BaseService<T> : IBaseService<T>
         where T : class
     {
-        protected readonly AppDbContext _context;
-        protected readonly IMapper _mapper;
-
         public BaseService(AppDbContext context, IMapper mapper = null)
         {
-            _context = context;
-            _mapper = mapper;
+            Context = context;
+            Mapper = mapper;
         }
 
-        protected DbSet<T> Entities { get => _context.Set<T>(); }
+        protected AppDbContext Context { get; set; }
+
+        protected IMapper Mapper { get; set; }
+
+        protected DbSet<T> Entities { get => Context.Set<T>(); }
 
         public T Delete(T entity)
         {
