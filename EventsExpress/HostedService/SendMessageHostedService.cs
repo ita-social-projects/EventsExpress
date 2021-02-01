@@ -73,12 +73,12 @@ namespace EventsExpress.Core.HostedService
             await base.StopAsync(cancellationToken);
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation(
             "Message Service Hosted Service running.");
 
-            await DoWork(cancellationToken);
+            await DoWork(stoppingToken);
         }
     }
 }
