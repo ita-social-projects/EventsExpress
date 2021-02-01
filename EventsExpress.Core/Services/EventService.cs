@@ -46,8 +46,6 @@ namespace EventsExpress.Core.Services
             _eventScheduleService = eventScheduleService;
         }
 
-        private UserDto CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
-
         public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!Context.Events.Any(e => e.Id == eventId))
@@ -172,7 +170,7 @@ namespace EventsExpress.Core.Services
                 ev.Owners = new List<EventOwner>();
             }
 
-            ev.Owners.Add(new EventOwner() { UserId = CurrentUser.Id, EventId = eventDTO.Id });
+            ev.Owners.Add(new EventOwner() { UserId = CurrentUser().Id, EventId = eventDTO.Id });
 
             if (eventDTO.Photo == null)
             {
@@ -521,5 +519,8 @@ namespace EventsExpress.Core.Services
                     ?.FirstOrDefault(v => v.UserId == userId) != null;
 
         public bool Exists(Guid eventId) => Context.Events.Find(eventId) != null;
+
+        private UserDto CurrentUser() =>
+           _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
     }
 }

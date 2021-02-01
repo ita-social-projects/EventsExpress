@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace EventsExpress.Core.Exceptions
 {
-    [Serializable]
-    public class EventsExpressException : Exception, ISerializable
+    public class EventsExpressException : Exception
     {
         public EventsExpressException()
         {
