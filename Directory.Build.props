@@ -9,4 +9,8 @@
    <!-- Common StyleCop configuration -->
    <AdditionalFiles Include="$(SolutionDir)stylecop.json" Link="stylecop.json" />
  </ItemGroup>
+ 	<PropertyGroup>
+	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	  <TreatSpecificWarningsAsErrors />
+  </PropertyGroup>
 </Project>

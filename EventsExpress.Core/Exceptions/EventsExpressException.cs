@@ -2,7 +2,6 @@
 
 namespace EventsExpress.Core.Exceptions
 {
-    [Serializable]
     public class EventsExpressException : Exception
     {
         public EventsExpressException()

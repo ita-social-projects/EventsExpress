@@ -5,11 +5,11 @@ namespace EventsExpress.Core.Notifications
 {
     public class RegisterVerificationMessage : INotification
     {
-        public RegisterVerificationMessage(UserDTO userDto)
+        public RegisterVerificationMessage(UserDto userDto)
         {
             User = userDto;
         }
 
-        public UserDTO User { get; }
+        public UserDto User { get; }
     }
 }

@@ -7,20 +7,20 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventScheduleService
     {
-        Task<Guid> Create(EventScheduleDTO eventScheduleDTO);
+        Task<Guid> Create(EventScheduleDto eventScheduleDTO);
 
         Task<Guid> CancelEvents(Guid eventId);
 
         Task<Guid> CancelNextEvent(Guid eventId);
 
-        Task<Guid> Edit(EventScheduleDTO eventScheduleDTO);
+        Task<Guid> Edit(EventScheduleDto eventScheduleDTO);
 
-        EventScheduleDTO EventScheduleById(Guid eventScheduleId);
+        EventScheduleDto EventScheduleById(Guid eventScheduleId);
 
-        EventScheduleDTO EventScheduleByEventId(Guid eventId);
+        EventScheduleDto EventScheduleByEventId(Guid eventId);
 
-        IEnumerable<EventScheduleDTO> GetAll();
+        IEnumerable<EventScheduleDto> GetAll();
 
-        IEnumerable<EventScheduleDTO> GetUrgentEventSchedules();
+        IEnumerable<EventScheduleDto> GetUrgentEventSchedules();
     }
 }
