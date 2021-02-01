@@ -6,21 +6,21 @@ namespace EventsExpress.Test.ValidationTests.TestClasses.UnitOfMeasuring
 {
    public class CorrectUnitName : IEnumerable
     {
-        UnitOfMeasuringViewModel modelCorrectUNWord = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringViewModel modelCorrectUNWord = new UnitOfMeasuringViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "UnitName",
             ShortName = "rndSN",
         };
 
-        UnitOfMeasuringViewModel modelCorrectUNBackpaceAvg = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringViewModel modelCorrectUNBackpaceAvg = new UnitOfMeasuringViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "Unit Name",
             ShortName = "rndSN",
         };
 
-        UnitOfMeasuringViewModel modelCorrectUNBackpaces = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringViewModel modelCorrectUNBackpaces = new UnitOfMeasuringViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "Unit Name Klo ",

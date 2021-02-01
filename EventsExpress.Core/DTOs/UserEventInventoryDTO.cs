@@ -7,7 +7,7 @@ using EventsExpress.Db.Entities;
 namespace EventsExpress.Core.DTOs
 {
     [Track]
-    public class UserEventInventoryDTO
+    public class UserEventInventoryDto
     {
         [Track]
         public Guid EventId { get; set; }
@@ -15,7 +15,7 @@ namespace EventsExpress.Core.DTOs
         [Track]
         public Guid UserId { get; set; }
 
-        public UserDTO User { get; set; }
+        public UserDto User { get; set; }
 
         [Track]
         public Guid InventoryId { get; set; }
