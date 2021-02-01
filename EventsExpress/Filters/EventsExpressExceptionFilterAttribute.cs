@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EventsExpress.Filters
 {
-    public class EventsExpressExceptionFilter : ExceptionFilterAttribute
+    public class EventsExpressExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)
         {
@@ -16,7 +16,7 @@ namespace EventsExpress.Filters
                 {
                     Errors = new Dictionary<string, Array>()
                     {
-                        { string.Empty, new [] { eventsExpressException.Message } },
+                        { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
                 var result = new ObjectResult(errorTexts) { StatusCode = 400 };

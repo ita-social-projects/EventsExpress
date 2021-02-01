@@ -21,7 +21,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<ICacheHelper> mockCacheHelper;
         private UserService service;
 
-        private UserDTO existingUserDTO;
+        private UserDto existingUserDTO;
         private User existingUser;
         private Role role;
 
@@ -62,7 +62,7 @@ namespace EventsExpress.Test.ServiceTests
                 Role = role,
             };
 
-            existingUserDTO = new UserDTO
+            existingUserDTO = new UserDto
             {
                 Id = userId,
                 Name = name,
@@ -77,7 +77,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_RepeatEmail_ReturnFalse()
         {
-            UserDTO newUser = new UserDTO()
+            UserDto newUser = new UserDto()
             {
                 Id = Guid.NewGuid(),
                 Email = existingUserDTO.Email,
@@ -90,7 +90,7 @@ namespace EventsExpress.Test.ServiceTests
 
         public void Create_ValidDto_ReturnTrue()
         {
-            UserDTO newUserDTO = new UserDTO() { Email = "correctemail@example.com" };
+            UserDto newUserDTO = new UserDto() { Email = "correctemail@example.com" };
             User newUser = new User() { Email = "correctemail@example.com" };
 
             MockMapper.Setup(m => m
@@ -113,7 +113,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_NotCorrectUserId_ReturnFalse()
         {
-            CacheDTO cache = new CacheDTO() { };
+            CacheDto cache = new CacheDto() { };
 
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));
         }
@@ -123,7 +123,7 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase("")]
         public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
         {
-            CacheDTO cache = new CacheDTO()
+            CacheDto cache = new CacheDto()
             {
                 UserId = existingUser.Id,
                 Token = token,
@@ -135,14 +135,14 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_ValidCacheDto_ReturnTrue()
         {
-            CacheDTO cache = new CacheDTO()
+            CacheDto cache = new CacheDto()
             {
                 UserId = existingUser.Id,
                 Token = "validToken",
             };
 
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
-                .Returns(new CacheDTO { Token = cache.Token });
+                .Returns(new CacheDto { Token = cache.Token });
 
             Assert.DoesNotThrowAsync(async () => await service.ConfirmEmail(cache));
         }
@@ -150,14 +150,14 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_CachingFailed_ReturnFalse()
         {
-            CacheDTO cache = new CacheDTO()
+            CacheDto cache = new CacheDto()
             {
                 UserId = existingUser.Id,
                 Token = "validToken,",
             };
 
             mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
-                .Returns(new CacheDTO { Token = "invalidToken" });
+                .Returns(new CacheDto { Token = "invalidToken" });
 
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));
         }
@@ -165,7 +165,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void PasswordRecovery_UserNoFoundInDb_ReturnFalse()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.PasswordRecover(new UserDTO()));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.PasswordRecover(new UserDto()));
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase("")]
         public void Update_EmailIsNull_ReturnFalse(string email)
         {
-            UserDTO newUser = new UserDTO() { Email = email };
+            UserDto newUser = new UserDto() { Email = email };
 
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(newUser));
         }
@@ -195,7 +195,7 @@ namespace EventsExpress.Test.ServiceTests
         public void Update_UserDtoIsvalid_DoesNotThrow()
         {
             MockMapper.Setup(m => m
-                .Map<UserDTO, User>(existingUserDTO))
+                .Map<UserDto, User>(existingUserDTO))
                     .Returns(existingUser);
 
             Assert.DoesNotThrowAsync(async () => await service.Update(existingUserDTO));

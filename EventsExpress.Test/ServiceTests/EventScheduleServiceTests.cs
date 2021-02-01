@@ -19,7 +19,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IAuthService> authService;
         private EventScheduleService service;
         private List<EventSchedule> eventSchedules;
-        private EventScheduleDTO esDTO;
+        private EventScheduleDto esDTO;
         private Event evnt;
         private Photo photo;
 
@@ -88,7 +88,7 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            esDTO = new EventScheduleDTO
+            esDTO = new EventScheduleDto
             {
                     Id = validEventScheduleId,
                     Frequency = 1,
@@ -104,10 +104,10 @@ namespace EventsExpress.Test.ServiceTests
             Context.EventSchedules.AddRange(eventSchedules);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<EventSchedule, EventScheduleDTO>(It.IsAny<EventSchedule>()))
+            MockMapper.Setup(u => u.Map<EventSchedule, EventScheduleDto>(It.IsAny<EventSchedule>()))
                 .Returns((EventSchedule e) => e == null ?
                 null :
-                new EventScheduleDTO
+                new EventScheduleDto
                 {
                     Id = e.Id,
                     EventId = e.EventId,
@@ -166,8 +166,8 @@ namespace EventsExpress.Test.ServiceTests
         public void Create_newEventSchedule_Success()
         {
             // Arrange
-            MockMapper.Setup(u => u.Map<EventScheduleDTO, EventSchedule>(It.IsAny<EventScheduleDTO>()))
-                .Returns((EventScheduleDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<EventScheduleDto, EventSchedule>(It.IsAny<EventScheduleDto>()))
+                .Returns((EventScheduleDto e) => e == null ?
                 null :
                 new EventSchedule
                 {

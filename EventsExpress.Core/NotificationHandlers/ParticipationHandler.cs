@@ -30,7 +30,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 ? "you have been approved to join to this event."
                 : "you have been denied to join to this event.";
 
-            await _sender.SendEmailAsync(new EmailDTO
+            await _sender.SendEmailAsync(new EmailDto
             {
                 Subject = notification.Status == UserStatusEvent.Approved
                     ? "Approving participation"
