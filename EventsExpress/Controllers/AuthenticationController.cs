@@ -40,6 +40,23 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method to refresh user status using only jwt access token.
+        /// </summary>
+        /// <returns>The method performs Login operation.</returns>
+        /// <response code="200">Return UserInfo model.</response>
+        /// <response code="401">If token is invalid.</response>
+        [Authorize]
+        [HttpPost("login_token")]
+        public IActionResult Login()
+        {
+            var user = _authService.GetCurrentUser(HttpContext.User);
+            return
+            user == null
+               ? (IActionResult)Unauthorized()
+               : Ok(_mapper.Map<UserInfoViewModel>(user));
+        }
+
+        /// <summary>
         /// This method allows to log in to the API and generate an authentication token.
         /// </summary>
         /// <param name="authRequest">Param authRequest defines LoginViewModel.</param>
@@ -174,23 +191,6 @@ namespace EventsExpress.Controllers
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// This method to refresh user status using only jwt access token.
-        /// </summary>
-        /// <returns>The method performs Login operation.</returns>
-        /// <response code="200">Return UserInfo model.</response>
-        /// <response code="401">If token is invalid.</response>
-        [Authorize]
-        [HttpPost("login_token")]
-        public IActionResult Login()
-        {
-            var user = _authService.GetCurrentUser(HttpContext.User);
-            return
-            user == null
-               ? (IActionResult)Unauthorized()
-               : Ok(_mapper.Map<UserInfoViewModel>(user));
         }
 
         /// <summary>

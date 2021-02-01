@@ -40,7 +40,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]/{eventId:Guid}")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CreateNextFromParentWithEdit(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -102,7 +102,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit event proces success.</response>
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
@@ -138,8 +138,6 @@ namespace EventsExpress.Controllers
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
             filter.PageSize = 6;
-
-            // TODO : Add this functionality on UI
             filter.OwnerId = null;
             filter.VisitorId = null;
 
@@ -197,7 +195,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Approving user from event process success.</response>
         /// <response code="400">If aproving user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<ActionResult> ApproveVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Approved);
@@ -214,7 +212,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Denying user from event process success.</response>
         /// <response code="400">If denying user from event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task DenyVisitor(Guid eventId, Guid userId)
         {
             await _eventService.ChangeVisitorStatus(userId, eventId, UserStatusEvent.Denied);

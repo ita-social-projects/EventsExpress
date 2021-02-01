@@ -6,7 +6,7 @@ using FluentValidation.Internal;
 
 namespace EventsExpress.Validation
 {
-    public class CamelCasePropertyNameResolver
+    public static class CamelCasePropertyNameResolver
     {
         public static string ResolvePropertyName(MemberInfo memberInfo, LambdaExpression expression)
         {

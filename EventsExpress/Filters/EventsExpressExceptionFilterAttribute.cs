@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EventsExpress.Filters
 {
-    public class EventsExpressExceptionFilter : ExceptionFilterAttribute
+    public class EventsExpressExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)
         {

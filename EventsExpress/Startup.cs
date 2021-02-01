@@ -143,7 +143,7 @@ namespace EventsExpress
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSingleton<UserAccessTypeFilter>();
+            services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();
@@ -173,7 +173,7 @@ namespace EventsExpress
 
             services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(typeof(EventsExpressExceptionFilter));
+                options.Filters.Add(typeof(EventsExpressExceptionFilterAttribute));
             });
 
             services.AddSwaggerGen(c =>

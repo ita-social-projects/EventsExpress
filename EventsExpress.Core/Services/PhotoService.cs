@@ -33,17 +33,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<Photo> AddPhoto(IFormFile uploadedFile)
         {
-            if (!IsValidImage(uploadedFile))
-            {
-                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
-            }
-
-            var photo = new Photo
-            {
-                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
-                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
-            };
-
+            var photo = GetPhotoFromIFormFile(uploadedFile);
             Insert(photo);
             await Context.SaveChangesAsync();
 
@@ -95,6 +85,22 @@ namespace EventsExpress.Core.Services
         }
 
         private static bool IsValidImage(IFormFile file) => file != null && file.IsImage();
+
+        private Photo GetPhotoFromIFormFile(IFormFile uploadedFile)
+        {
+            if (!IsValidImage(uploadedFile))
+            {
+                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
+            }
+
+            var photo = new Photo
+            {
+                Thumb = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail),
+                Img = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image),
+            };
+
+            return photo;
+        }
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {

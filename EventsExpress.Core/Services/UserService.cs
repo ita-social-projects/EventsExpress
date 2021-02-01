@@ -351,8 +351,6 @@ namespace EventsExpress.Core.Services
 
             currentAttitude.Attitude = (Attitude)attitude.Attitude;
             await Context.SaveChangesAsync();
-
-            return;
         }
 
         public AttitudeDto GetAttitude(AttitudeDto attitude) =>

@@ -61,7 +61,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
             var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDto>(model));
@@ -77,7 +77,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Cancel All Events proces success.</response>
         /// <response code="400">Cancel All Events process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CancelAllEvents(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -98,7 +98,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Cancel Next Event event proces success.</response>
         /// <response code="400">Cancel Next Event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CancelNextEvent(Guid eventId)
         {
             if (!ModelState.IsValid)
