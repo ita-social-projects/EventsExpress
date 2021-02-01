@@ -59,9 +59,11 @@ export default class EventItemView extends Component {
                                 action={this.props.onDeleteFromOwners}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
-                                    <IconButton aria-label="delete">
-                                        <i className="far fa-trash-alt"></i>
-                                    </IconButton>
+                                    <Tooltip title="Delete">
+                                        <IconButton aria-label="delete">
+                                             <i className="far fa-trash-alt"></i>
+                                            </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
@@ -92,10 +94,12 @@ export default class EventItemView extends Component {
                                 id={x.id}
                                 action={this.props.onPromoteToOwner}
                                 data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                                button={
+                            button={
+                                <Tooltip title="Approve as an owner">
                                     <IconButton aria-label="delete">
-                                        <i className="fas fa-plus-circle"></i>
+                                        <i className="fas fa-plus-circle" ></i>
                                     </IconButton>
+                                </Tooltip>
                                 }
                             />
                         </div>
@@ -171,10 +175,10 @@ export default class EventItemView extends Component {
                 </div>
                 {(isMyEvent) &&
                     <div>
-                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </div>
+                          <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
+                                <DeleteIcon />
+                          </IconButton>
+                     </div>
                 }
                 <Button
                     onClick={() => this.props.onApprove(x.id, true)}
