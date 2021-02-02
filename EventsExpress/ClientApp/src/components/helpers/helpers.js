@@ -45,7 +45,8 @@ export const validate = values => {
         'itemName',
         'needQuantity',
         'unitOfMeasuring',
-        'willTake'
+        'willTake',
+        'image'
     ];
 
     requiredFields.forEach(field => {
