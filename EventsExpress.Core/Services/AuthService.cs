@@ -24,7 +24,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> AuthenticateUserFromExternalProvider(string email)
         {
-            UserDTO user = _userService.GetByEmail(email);
+            UserDto user = _userService.GetByEmail(email);
 
             if (user == null)
             {
@@ -50,7 +50,7 @@ namespace EventsExpress.Core.Services
             var user = _userService.GetByEmail(email);
             if (user == null)
             {
-                throw new EventsExpressException("User not found");
+                throw new EventsExpressException("Incorrect login or password");
             }
 
             if (user.IsBlocked)
@@ -65,7 +65,7 @@ namespace EventsExpress.Core.Services
 
             if (!VerifyPassword(user, password))
             {
-                throw new EventsExpressException("Invalid password");
+                throw new EventsExpressException("Incorrect login or password");
             }
 
             // authentication successful so generate jwt and refresh tokens
@@ -79,7 +79,7 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> FirstAuthenticate(UserDTO userDto)
+        public async Task<AuthenticateResponseModel> FirstAuthenticate(UserDto userDto)
         {
             if (userDto == null)
             {
@@ -97,7 +97,7 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public Task ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        public Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
             {
@@ -107,7 +107,7 @@ namespace EventsExpress.Core.Services
             throw new EventsExpressException("Invalid password");
         }
 
-        public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
+        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
         {
             Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
 
@@ -119,7 +119,7 @@ namespace EventsExpress.Core.Services
             return _userService.GetByEmail(emailClaim.Value);
         }
 
-        private static bool VerifyPassword(UserDTO user, string actualPassword) =>
+        private static bool VerifyPassword(UserDto user, string actualPassword) =>
             user.PasswordHash == PasswordHasher.GenerateHash(actualPassword);
     }
 }

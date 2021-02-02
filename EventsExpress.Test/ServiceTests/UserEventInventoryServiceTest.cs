@@ -17,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private UserEventInventoryService service;
 
-        private UserEventInventoryDTO userEventInventoryDTO;
+        private UserEventInventoryDto userEventInventoryDTO;
 
         private Event eventEntity;
         private User user;
@@ -36,7 +36,7 @@ namespace EventsExpress.Test.ServiceTests
 
             service = new UserEventInventoryService(Context, MockMapper.Object);
 
-            userEventInventoryDTO = new UserEventInventoryDTO
+            userEventInventoryDTO = new UserEventInventoryDto
             {
                 EventId = eventId,
                 UserId = userId,
@@ -52,8 +52,6 @@ namespace EventsExpress.Test.ServiceTests
                 Description = "...",
                 PhotoId = Guid.NewGuid(),
                 Photo = new Photo(),
-                CityId = Guid.NewGuid(),
-                City = new City(),
             };
 
             user = new User
@@ -92,8 +90,8 @@ namespace EventsExpress.Test.ServiceTests
             Context.Events.Add(eventEntity);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<UserEventInventoryDTO, UserEventInventory>(It.IsAny<UserEventInventoryDTO>()))
-               .Returns((UserEventInventoryDTO e) => e == null ?
+            MockMapper.Setup(u => u.Map<UserEventInventoryDto, UserEventInventory>(It.IsAny<UserEventInventoryDto>()))
+               .Returns((UserEventInventoryDto e) => e == null ?
                null :
                new UserEventInventory()
                {

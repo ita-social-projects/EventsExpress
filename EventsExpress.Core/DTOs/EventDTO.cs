@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class EventDTO
+    public class EventDto
     {
         public Guid Id { get; set; }
 
@@ -36,20 +37,18 @@ namespace EventsExpress.Core.DTOs
 
         public Photo PhotoBytes { get; set; }
 
-        public IEnumerable<Guid> OwnerIds { get; set; }
-
-        public IEnumerable<User> Owners { get; set; }
-
-        public Guid CityId { get; set; }
-
-        public City City { get; set; }
-
         public bool IsPublic { get; set; }
 
-        public IEnumerable<CategoryDTO> Categories { get; set; }
+        public Point Point { get; set; }
+
+        public IEnumerable<CategoryDto> Categories { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
 
-        public IEnumerable<InventoryDTO> Inventories { get; set; }
+        public IEnumerable<InventoryDto> Inventories { get; set; }
+
+        public IEnumerable<Guid> OwnerIds { get; set; }
+
+        public IEnumerable<User> Owners { get; set; }
     }
 }

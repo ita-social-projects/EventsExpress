@@ -5,6 +5,6 @@ namespace EventsExpress.ViewModels
 {
     public class EditUserCategoriesViewModel
     {
-        public IEnumerable<CategoryDTO> Categories { get; set; }
+        public IEnumerable<CategoryDto> Categories { get; set; }
     }
 }

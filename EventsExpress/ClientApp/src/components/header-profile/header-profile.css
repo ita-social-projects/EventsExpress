@@ -29,3 +29,8 @@
     width: 75px !important;
     height: 75px !important;
 }
+
+ .user-name {
+    padding: 10px;
+    overflow-wrap: anywhere;
+}

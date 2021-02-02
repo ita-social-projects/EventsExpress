@@ -41,9 +41,13 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
+        if (data.selectedPos) {
+            file.append('Latitude', data.selectedPos.lat);
+            file.append('Longitude', data.selectedPos.lng);
+        }
+
         file.append('Title', data.title);
         file.append('Description', data.description);
-        file.append('CityId', data.cityId);
         file.append('User.Id', data.user_id);
         file.append('IsPublic', data.isPublic);
         file.append('MaxParticipants', data.maxParticipants);
@@ -133,7 +137,7 @@ export default class EventService {
 
     setRate = async (data) => {
         const res = await baseService.setResource('event/setrate', {
-            rate: data.rate,
+            rate: Number(data.rate),
             userId: data.userId,
             eventId: data.eventId
         });

@@ -5,9 +5,9 @@ import {
     SET_CATEGORY_DELETE_ERROR
 } from "../../actions/category/delete-category";
 
-export const reducer = (state = initialState.add_category, action) => {
-
+export const reducer = (state = initialState.add_category, action) => { 
     switch (action.type) {
+       
         case SET_CATEGORY_DELETE_PENDING:
             return Object.assign({}, state, {
                 isCategoryDeletePending: action.isCategoryDeletePending

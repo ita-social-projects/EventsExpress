@@ -27,7 +27,6 @@ const initialState = {
         data: []
     },
     login: {
-        isLoginPending: false,
         isLoginSuccess: false,
         loginError: null
     },
@@ -39,7 +38,15 @@ const initialState = {
     unitsOfMeasuring: {
         isPending: true,
         isError: false,
-        units: []
+        units: [],       
+        editedUnitOfMeasuring: null,
+        isAdded:false,
+        
+    },
+    add_unitOfMeasuring: {
+        isUnitOfMeasuringPending: false,
+        isUnitOfMeasuringSuccess: false,
+        unitOfMeasuringError: null
     },
     change_avatar: {
         isPending: false,
@@ -64,16 +71,6 @@ const initialState = {
         isPending: false,
         isError: false,
         editedCategory: null,
-        data: []
-    },
-    countries: {
-        isPending: false,
-        isError: false,
-        data: []
-    },
-    cities: {
-        isPending: false,
-        isError: false,
         data: []
     },
     users: {

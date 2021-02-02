@@ -49,7 +49,7 @@ namespace EventsExpress.Db.Migrations
                     UserId = table.Column<Guid>(nullable: false),
                     PropertyChangesText = table.Column<string>(nullable: true),
                     ChangesType = table.Column<int>(nullable: false),
-                    Time = table.Column<DateTime>(nullable: false)
+                    Time = table.Column<DateTime>(nullable: false),
                 },
                 constraints: table =>
                 {

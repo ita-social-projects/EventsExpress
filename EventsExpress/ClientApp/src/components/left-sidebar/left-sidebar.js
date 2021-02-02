@@ -73,7 +73,7 @@ class LeftSidebar extends Component {
                                         to={'/user_chats'}
                                         my_icon={
                                             <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                                <i className="fa fa-envelope"></i>
+                                                <i className="fas fa-comments"></i>
                                             </Badge>
                                         }
                                         text={"Comuna"}
@@ -86,6 +86,11 @@ class LeftSidebar extends Component {
                                         to={'/admin/categories/'}
                                         icon={'fa fa-hashtag'}
                                         text={"Categories"}
+                                    />
+                                    <NavItem
+                                        to={'/admin/unitsOfMeasuring/'}
+                                        icon={'fa fa-plus'}
+                                        text={"UnitsOfMeasuring"}
                                     />
                                     <NavItem
                                         to={'/admin/users?page=1'}

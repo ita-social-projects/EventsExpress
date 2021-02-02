@@ -16,7 +16,7 @@ export  function setAlert(data){
 export  function ResetAlert(data){
 
     return dispatch => { 
-        dispatch(resetAlert({}))
+        dispatch(resetAlert())
         dispatch(setAlertOpen(false));
     }
 }

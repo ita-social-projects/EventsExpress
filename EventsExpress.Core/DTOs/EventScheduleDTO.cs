@@ -4,7 +4,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class EventScheduleDTO : BaseEntity
+    public class EventScheduleDto : BaseEntity
     {
         public int Frequency { get; set; }
 
@@ -18,6 +18,6 @@ namespace EventsExpress.Core.DTOs
 
         public Guid EventId { get; set; }
 
-        public EventDTO Event { get; set; }
+        public EventDto Event { get; set; }
     }
 }

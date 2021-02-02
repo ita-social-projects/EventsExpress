@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.ChatHub;
@@ -15,12 +17,15 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
+using EventsExpress.Validation;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +46,7 @@ namespace EventsExpress
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
+        /// <param name="configuration">Param configuration defines application configuration properties.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -54,6 +60,7 @@ namespace EventsExpress
         /// <summary>
         ///  This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
+        /// <param name="services">Param services defines application services in DI container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             #region Authorization and Autontification configuring...
@@ -107,8 +114,9 @@ namespace EventsExpress
             #endregion
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration
-                    .GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    x => x.UseNetTopologySuite()));
 
             #region Configure our services...
             services.AddScoped<IAuthService, AuthService>();
@@ -118,11 +126,10 @@ namespace EventsExpress
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<ICountryService, CountryService>();
-            services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
@@ -136,7 +143,7 @@ namespace EventsExpress
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSingleton<UserAccessTypeFilter>();
+            services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
             services.AddCors();
@@ -146,6 +153,12 @@ namespace EventsExpress
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
+                ValidatorOptions.PropertyNameResolver = (_, memberInfo, expression) =>
+                    CamelCasePropertyNameResolver.ResolvePropertyName(memberInfo, expression);
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
             // In production, the React files will be served from this directory
@@ -156,11 +169,11 @@ namespace EventsExpress
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
-            services.AddAutoMapper(typeof(AutoMapperProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 
             services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(typeof(EventsExpressExceptionFilter));
+                options.Filters.Add(typeof(EventsExpressExceptionFilterAttribute));
             });
 
             services.AddSwaggerGen(c =>
@@ -209,6 +222,8 @@ namespace EventsExpress
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
+        /// <param name="app">Param app defines IApplicationBuilder object.</param>
+        /// <param name="env">Param env defines IWebHostEnvironment object.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -220,6 +235,17 @@ namespace EventsExpress
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en-US"),
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
+            });
 
             app.UseCors(x => x
                .AllowAnyMethod()
