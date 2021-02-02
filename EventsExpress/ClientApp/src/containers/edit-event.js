@@ -26,7 +26,7 @@ class EditEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
-        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+        return this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
     render() {

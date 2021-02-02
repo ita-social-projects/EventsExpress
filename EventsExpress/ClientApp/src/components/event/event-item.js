@@ -18,6 +18,7 @@ import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
+import './event-item.css';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -153,6 +154,7 @@ export default class Event extends Component {
                         }
                         title={title}
                         subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
+                        classes={{ title: 'title' }}
                     />
                     <CardMedia
                         className={classes.media}
@@ -174,9 +176,11 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            {description.substr(0, 128) + '...'}
-                        </Typography>
+                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                            <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                {description.substr(0, 128)}
+                            </Typography>
+                        </Tooltip>
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>

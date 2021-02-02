@@ -8,13 +8,13 @@ namespace EventsExpress.Core.IServices
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDTO> GetAllCategories();
+        IEnumerable<CategoryDto> GetAllCategories();
 
         Category GetById(Guid id);
 
         Task Create(string title);
 
-        Task Edit(CategoryDTO category);
+        Task Edit(CategoryDto category);
 
         Task Delete(Guid id);
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import OwnerSeeItem from '../components/inventory/ownerSeeItem';
 import OwnerEditItemForm from '../components/inventory/ownerEditItem';
-import VisitorSeeItem from '../components/inventory/visitorSeeItem';
+import VisitorSeeItem from '../components/inventory/VisitorSeeItem';
 import VisitorEditItemForm from '../components/inventory/visitorTakeItem';
 import { get_inventories_by_event_id }  from '../actions/inventory-list';
 import { delete_users_inventory, edit_users_inventory }  from '../actions/usersInventories';
@@ -124,7 +124,7 @@ class InventoryItemWrapper extends Component {
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={alreadyGet - (this.state.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id)?.quantity || 0)}
+                    alreadyGet={alreadyGet - (this.state.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id).quantity || 0)}
                     initialValues={item}
                 />
             }

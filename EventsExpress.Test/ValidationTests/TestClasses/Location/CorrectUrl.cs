@@ -6,7 +6,6 @@
 
     public class CorrectUrl : IEnumerable
     {
-        private LocationType type = LocationType.Online;
         private readonly string[] urlArr = new string[]
                          {
                             "https://example.com/balance.aspx?ants=board&bag=boat",
@@ -14,6 +13,8 @@
                             "http://branch.example.com/",
                             "https://bead.example.com/",
                          };
+
+        private LocationType type = LocationType.Online;
 
         public IEnumerator GetEnumerator()
         {

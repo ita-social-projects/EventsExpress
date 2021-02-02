@@ -6,7 +6,6 @@
 
     public class CorrectMap : IEnumerable
     {
-        private LocationType type = LocationType.Map;
         private readonly double[,] pointArr = new double[,]
                          {
                             { 1, 1 },
@@ -15,6 +14,8 @@
                             { -104, 10 },
                             { 10, 109 },
                          };
+
+        private LocationType type = LocationType.Map;
 
         public IEnumerator GetEnumerator()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -27,11 +28,12 @@ namespace EventsExpress.Core.Services
         {
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
+            _mediator = mediator;
         }
 
         public async Task CancelEvent(Guid eventId, string reason)
         {
-            var uEvent = _context.Events.Find(eventId);
+            var uEvent = Context.Events.Find(eventId);
             if (uEvent == null)
             {
                 throw new EventsExpressException("Invalid event id");
@@ -40,7 +42,7 @@ namespace EventsExpress.Core.Services
             var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
             Insert(record);
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             await _mediator.Publish(new CancelEventMessage(eventId));
         }
 
@@ -59,7 +61,9 @@ namespace EventsExpress.Core.Services
 
         public EventStatusHistory GetLastRecord(Guid eventId, EventStatus status)
         {
-            return GetLastRecord(eventId, status);
+            return Context.EventStatusHistory
+                .Where(e => e.EventId == eventId && e.EventStatus == status)
+                .LastOrDefault();
         }
     }
 }

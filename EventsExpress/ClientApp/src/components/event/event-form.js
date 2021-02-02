@@ -22,31 +22,13 @@ import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
 
 momentLocaliser(moment);
-const imageIsRequired = value => (!value ? "Required" : undefined);
 const { validate } = Module;
 
-class EventForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            imagefile: [],
-            checked: false,
-            mapChecked: true,
-            onlineChecked: false,
-        };
-    }
+const required = value => value ? undefined : "Required";
 
-    handleOnDrop = (newImageFile, onChange) => {
-        if (newImageFile.length > 0) {
-            const imagefile = {
-                file: newImageFile[0],
-                name: newImageFile[0].name,
-                preview: URL.createObjectURL(newImageFile[0]),
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
-        }
-    };
+class EventForm extends Component {    
+
+    state = { checked: false,  mapChecked: true, onlineChecked: false };
 
     componentDidMount = () => {
         if (this.props.initialValues != undefined) {
@@ -62,38 +44,6 @@ class EventForm extends Component {
                     onlineChecked: false,
                 }));
             }
-
-
-        }
-        let values = this.props.initialValues || this.props.data;
-
-        if (this.props.isCreated) {
-            const imagefile = {
-                file: '',
-                name: '',
-                preview: values.photoUrl,
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] });
-        }
-    }
-
-    componentDidUpdate = () => {
-        let status = this.props.addEventStatus;
-        if (status && status.isEventSuccess) {
-            this.resetForm();
-        }
-    }
-
-    componentWillUnmount() {
-        this.resetForm();
-    }
-
-    isSaveButtonDisabled = false;
-
-    disableSaveButton = () => {
-        if (this.props.valid) {
-            this.isSaveButtonDisabled = true;
         }
     }
 
@@ -116,42 +66,32 @@ class EventForm extends Component {
         }));
 
     }
-    resetForm = () => {
-        this.isSaveButtonDisabled = false;
-        this.setState({ imagefile: [] });
-    }
-
-    componentWillMount() {
-        this.resetForm();
-    }
 
     render() {
+        const { form_values, all_categories, isCreated, pristine,
+            submitting, disabledDate, onCancel } = this.props;
+        const { checked } = this.state;
+        const { handleChange } = this;
 
-        const { form_values, all_categories, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
+        const photoUrl = this.props.initialValues ?
+            this.props.initialValues.photoUrl : null;
+                    
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
+            <form onSubmit={this.props.handleSubmit}
+                encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
 
                     <Field
-                        ref={(x) => { this.image = x; }}
                         id="image-field"
                         name="image"
                         component={DropZoneField}
                         type="file"
-                        imagefile={this.state.imagefile}
-                        handleOnDrop={this.handleOnDrop}
-                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
+                        crop={true}
+                        cropShape='rect'
+                        photoUrl={photoUrl}
+                        validate={[required]}
                     />
-                    <Button
-                        type="button"
-                        color="primary"
-                        disabled={this.props.submitting}
-                        onClick={this.resetForm}
-                        style={{ float: "right" }}
-                    >
-                        Clear
-                    </Button>
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}
@@ -176,11 +116,11 @@ class EventForm extends Component {
                                 label="Recurrent Event"
                                 name='isReccurent'
                                 component={renderCheckbox}
-                                checked={this.state.checked}
-                                onChange={this.handleChange} />
+                                checked={checked}
+                                onChange={handleChange} />
                         </div>
                     }
-                    {this.state.checked &&
+                    {checked &&
                         <div>
                             <div className="mt-2">
                                 <Field
@@ -210,7 +150,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 component={renderDatePicker}
-                                disabled={this.props.disabledDate ? true : false}
+                                disabled={disabledDate ? true : false}
                             />
                         </span>
                         {values && values.dateFrom &&
@@ -219,7 +159,7 @@ class EventForm extends Component {
                                     name='dateTo'
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
-                                    disabled={this.props.disabledDate ? true : false}
+                                    disabled={disabledDate ? true : false}
                                 />
                             </span>
                         }
@@ -288,8 +228,7 @@ class EventForm extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            onClick={this.disableSaveButton}
-                            disabled={this.isSaveButtonDisabled}>
+                            disabled={pristine || submitting}>
                             Save
                         </Button>
                     </div>
@@ -298,7 +237,7 @@ class EventForm extends Component {
                             className="border"
                             fullWidth={true}
                             color="primary"
-                            onClick={this.props.onCancel}>
+                            onClick={onCancel}>
                             Cancel
                         </Button>
                     </div>

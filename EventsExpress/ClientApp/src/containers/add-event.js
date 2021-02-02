@@ -34,7 +34,7 @@ class AddEventWrapper extends Component {
     }
 
     onSubmit = (values) => {
-        this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id });
+        return this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id });
     }
 
     handleClose = () => {

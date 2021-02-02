@@ -17,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const userStatus = {
     APPROVED: 0,
@@ -59,9 +60,11 @@ export default class EventItemView extends Component {
                                 action={this.props.onDeleteFromOwners}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
-                                    <IconButton aria-label="delete">
-                                        <i className="far fa-trash-alt"></i>
-                                    </IconButton>
+                                    <Tooltip title="Delete from owners">
+                                        <IconButton aria-label="delete">
+                                            <i className="far fa-trash-alt"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
@@ -93,9 +96,11 @@ export default class EventItemView extends Component {
                                 action={this.props.onPromoteToOwner}
                                 data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
                                 button={
-                                    <IconButton aria-label="delete">
-                                        <i className="fas fa-plus-circle"></i>
-                                    </IconButton>
+                                    <Tooltip title="Approve as an owner">
+                                        <IconButton aria-label="delete">
+                                            <i className="fas fa-plus-circle" ></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
@@ -344,7 +349,7 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     {description}
                                 </div>
                                 <div className="shadow p-3 mb-5 mt-2 bg-white rounded">

@@ -22,56 +22,56 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<IEnumerable<UserEventInventoryDTO>> GetAllMarkItemsByEventId(Guid eventId)
+        public async Task<IEnumerable<UserEventInventoryDto>> GetAllMarkItemsByEventId(Guid eventId)
         {
-            return _mapper.Map<IEnumerable<UserEventInventoryDTO>>(
-                 await _context.UserEventInventories
+            return Mapper.Map<IEnumerable<UserEventInventoryDto>>(
+                 await Context.UserEventInventories
                     .Include(i => i.UserEvent.User)
                     .Where(i => i.EventId == eventId).ToListAsync());
         }
 
-        public async Task MarkItemAsTakenByUser(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task MarkItemAsTakenByUser(UserEventInventoryDto userEventInventoryDTO)
         {
-            if (!_context.Events.Any(e => e.Id == userEventInventoryDTO.EventId))
+            if (!Context.Events.Any(e => e.Id == userEventInventoryDTO.EventId))
             {
                 throw new EventsExpressException("Event not found!");
             }
 
-            if (!_context.Users.Any(e => e.Id == userEventInventoryDTO.UserId))
+            if (!Context.Users.Any(e => e.Id == userEventInventoryDTO.UserId))
             {
                 throw new EventsExpressException("User not found!");
             }
 
-            if (!_context.UserEvent.Any(ue => ue.UserId == userEventInventoryDTO.UserId))
+            if (!Context.UserEvent.Any(ue => ue.UserId == userEventInventoryDTO.UserId))
             {
                 throw new EventsExpressException("Don't have permision");
             }
 
-            if (!_context.Inventories.Any(e => e.Id == userEventInventoryDTO.InventoryId))
+            if (!Context.Inventories.Any(e => e.Id == userEventInventoryDTO.InventoryId))
             {
                 throw new EventsExpressException("Inventory not found!");
             }
 
-            _context.UserEventInventories.Add(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
-            await _context.SaveChangesAsync();
+            Context.UserEventInventories.Add(Mapper.Map<UserEventInventoryDto, UserEventInventory>(userEventInventoryDTO));
+            await Context.SaveChangesAsync();
         }
 
-        public async Task Delete(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task Delete(UserEventInventoryDto userEventInventoryDTO)
         {
-            if (!_context.UserEventInventories.Any(e => e.EventId == userEventInventoryDTO.EventId
+            if (!Context.UserEventInventories.Any(e => e.EventId == userEventInventoryDTO.EventId
                                                     && e.UserId == userEventInventoryDTO.UserId
                                                     && e.InventoryId == userEventInventoryDTO.InventoryId))
             {
                 throw new EventsExpressException("Object not found!");
             }
 
-            _context.Remove(_mapper.Map<UserEventInventoryDTO, UserEventInventory>(userEventInventoryDTO));
-            await _context.SaveChangesAsync();
+            Context.Remove(Mapper.Map<UserEventInventoryDto, UserEventInventory>(userEventInventoryDTO));
+            await Context.SaveChangesAsync();
         }
 
-        public async Task Edit(UserEventInventoryDTO userEventInventoryDTO)
+        public async Task Edit(UserEventInventoryDto userEventInventoryDTO)
         {
-            var entity = _context.UserEventInventories.FirstOrDefault(e => e.EventId == userEventInventoryDTO.EventId
+            var entity = Context.UserEventInventories.FirstOrDefault(e => e.EventId == userEventInventoryDTO.EventId
                                                                         && e.UserId == userEventInventoryDTO.UserId
                                                                         && e.InventoryId == userEventInventoryDTO.InventoryId);
 
@@ -81,7 +81,7 @@ namespace EventsExpress.Core.Services
             }
 
             entity.Quantity = userEventInventoryDTO.Quantity;
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
     }
 }

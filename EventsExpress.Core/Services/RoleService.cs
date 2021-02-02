@@ -14,6 +14,6 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public IEnumerable<Role> All() => _context.Roles.AsEnumerable();
+        public IEnumerable<Role> All() => Context.Roles.AsEnumerable();
     }
 }

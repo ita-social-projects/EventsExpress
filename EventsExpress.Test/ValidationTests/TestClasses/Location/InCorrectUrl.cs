@@ -6,7 +6,6 @@
 
     public class InCorrectUrl : IEnumerable
     {
-        private LocationType type = LocationType.Online;
         private readonly string[] urlArr = new string[]
                          {
                             "htps://example.com/balance.aspx?ants=board&bag=boat",
@@ -16,6 +15,8 @@
                             null,
                             "        ",
                          };
+
+        private LocationType type = LocationType.Online;
 
         public IEnumerator GetEnumerator()
         {

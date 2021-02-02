@@ -7,13 +7,13 @@ namespace EventsExpress.Core.IServices
 {
     public interface IUnitOfMeasuringService
     {
-        Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO);
+        Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO);
 
-        Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO);
+        Task<Guid> Edit(UnitOfMeasuringDto unitOfMeasuringDTO);
 
-        IEnumerable<UnitOfMeasuringDTO> GetAll();
+        IEnumerable<UnitOfMeasuringDto> GetAll();
 
-        UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId);
+        UnitOfMeasuringDto GetById(Guid unitOfMeasuringId);
 
         Task Delete(Guid id);
 

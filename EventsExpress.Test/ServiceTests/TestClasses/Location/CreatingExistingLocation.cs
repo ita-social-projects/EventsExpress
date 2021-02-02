@@ -8,24 +8,34 @@
 
     public class CreatingExistingLocation : IEnumerable
     {
-       public static LocationDto LocationDTOMap = new LocationDto
+        private static LocationDto locationDTOMap = new LocationDto
             {
                 Id = Guid.NewGuid(),
                 Point = new Point(12.45, 24.6),
                 Type = LocationType.Map,
             };
 
-       public static LocationDto LocationDTOOnline = new LocationDto
+        private static LocationDto locationDTOOnline = new LocationDto
             {
                 Id = Guid.NewGuid(),
                 OnlineMeeting = new Uri("http://www.example.edu/?ball=box"),
                 Type = LocationType.Online,
             };
 
-       public IEnumerator GetEnumerator()
+        public static LocationDto LocationDTOMap
         {
-            yield return new object[] { LocationDTOMap };
-            yield return new object[] { LocationDTOOnline };
+            get => locationDTOMap;
+        }
+
+        public static LocationDto LocationDTOOnline
+        {
+            get => locationDTOOnline;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            yield return new object[] { locationDTOMap };
+            yield return new object[] { locationDTOOnline };
         }
     }
 }
