@@ -10,13 +10,13 @@ namespace EventsExpress.Mapping
     {
         public AttitudeMapperProfile()
         {
-            CreateMap<AttitudeDTO, AttitudeViewModel>()
+            CreateMap<AttitudeDto, AttitudeViewModel>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
 
-            CreateMap<AttitudeViewModel, AttitudeDTO>()
+            CreateMap<AttitudeViewModel, AttitudeDto>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
 
-            CreateMap<AttitudeDTO, Relationship>()
+            CreateMap<AttitudeDto, Relationship>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => (Attitude)src.Attitude))
                 .ForMember(dest => dest.UserFrom, opts => opts.Ignore())
                 .ForMember(dest => dest.UserTo, opts => opts.Ignore())

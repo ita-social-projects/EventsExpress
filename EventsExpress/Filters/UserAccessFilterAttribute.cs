@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EventsExpress.ActionFilters
 {
-    public class UserAccessFilter : ActionFilterAttribute
+    public class UserAccessFilterAttribute : ActionFilterAttribute
     {
         private readonly IEventService _eventService;
 
-        public UserAccessFilter(IEventService eventService, string eventId)
+        public UserAccessFilterAttribute(IEventService eventService, string eventId)
         {
             _eventService = eventService;
             EventId = eventId;

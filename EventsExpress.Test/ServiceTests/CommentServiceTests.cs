@@ -70,7 +70,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_RigthData_returnTrue()
         {
-            CommentDTO comment = new CommentDTO()
+            CommentDto comment = new CommentDto()
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
@@ -85,7 +85,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_WrongUserId_returnFalse()
         {
-            CommentDTO comment = new CommentDTO()
+            CommentDto comment = new CommentDto()
             {
                 Id = commentId,
                 UserId = default,
@@ -99,7 +99,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_WrongEventId_returnFalse()
         {
-            CommentDTO comment = new CommentDTO()
+            CommentDto comment = new CommentDto()
             {
                 Id = commentId,
                 UserId = userId,

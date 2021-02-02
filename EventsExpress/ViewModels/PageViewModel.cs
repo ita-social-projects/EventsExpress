@@ -11,7 +11,7 @@ namespace EventsExpress.ViewModels
 
             if (TotalPages != 0 && PageNumber > TotalPages)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(PageNumber), "Page number couldn't be greater than total pages");
             }
         }
 
