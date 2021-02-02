@@ -21,7 +21,7 @@ class EditFromParentEventWraper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.edit_event_from_parent_status.eventFromParentError && 
+        if (!this.props.edit_event_from_parent_status.eventFromParentError &&
             this.props.edit_event_from_parent_status.isEventFromParentSuccess) {
             this.props.reset();
         }
@@ -44,7 +44,7 @@ class EditFromParentEventWraper extends Component {
             dateFrom: this.props.eventSchedule.nextRun,
             dateTo: new moment(this.props.event.dateTo)
                 .add(new moment(this.props.event.nextRun)
-                    .diff(new moment(this.props.event.dateFrom), 'days'), 'days')   
+                    .diff(new moment(this.props.event.dateFrom), 'days'), 'days')
         }
 
         return <>
@@ -57,6 +57,8 @@ class EditFromParentEventWraper extends Component {
                 countries={this.props.countries.data}
                 initialValues={initialValues}
                 haveReccurentCheckBox={false}
+                haveMapCheckBox={true}
+                haveOnlineLocationCheckBox={true}
                 disabledDate={true}
                 isCreated={true} />
         </>

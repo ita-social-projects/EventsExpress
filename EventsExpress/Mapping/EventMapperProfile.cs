@@ -4,7 +4,9 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Mapping
@@ -16,6 +18,8 @@ namespace EventsExpress.Mapping
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Photo, opt => opt.Ignore())
                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
+               .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
+               .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
                    dest => dest.Categories,
@@ -75,8 +79,22 @@ namespace EventsExpress.Mapping
                     Id = x.Id,
                     Name = x.Name,
                 })))
-                .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
-                .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
+                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.Type == LocationType.Map ?
+                  new LocationViewModel
+                  {
+                      Latitude = src.Point.X,
+                      Longitude = src.Point.Y,
+                      OnlineMeeting = null,
+                      Type = src.Type,
+                  }
+                    :
+                  new LocationViewModel
+                  {
+                      Latitude = null,
+                      Longitude = null,
+                      OnlineMeeting = src.OnlineMeeting.ToString(),
+                      Type = src.Type,
+                  }))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x =>
@@ -110,8 +128,23 @@ namespace EventsExpress.Mapping
                                 ShortName = x.UnitOfMeasuring.ShortName,
                             },
                         })))
-                .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Point.X))
-                .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Point.Y))
+                  .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.Type == LocationType.Map ?
+                  new LocationViewModel
+                  {
+                      Latitude = src.Point.X,
+                      Longitude = src.Point.Y,
+                      OnlineMeeting = null,
+                      Type = src.Type,
+                  }
+                    :
+                  new LocationViewModel
+                  {
+                      Latitude = null,
+                      Longitude = null,
+                      OnlineMeeting = src.OnlineMeeting.ToString(),
+                      Type = src.Type,
+                  }))
+
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x =>
                     new UserPreviewViewModel
                     {
@@ -155,7 +188,10 @@ namespace EventsExpress.Mapping
                         })))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
-                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }))
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.Location.Type == LocationType.Map ?
+                new Point(src.Location.Latitude.Value, src.Location.Longitude.Value) { SRID = 4326 } : null))
+                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => new Uri(src.Location.OnlineMeeting)))
+                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
                 .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
@@ -168,7 +204,10 @@ namespace EventsExpress.Mapping
                 })))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
-                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => new Point(src.Latitude, src.Longitude) { SRID = 4326 }))
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.Location.Type == LocationType.Map ?
+                new Point(src.Location.Latitude.Value, src.Location.Longitude.Value) { SRID = 4326 } : null))
+                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => new Uri(src.Location.OnlineMeeting)))
+                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
