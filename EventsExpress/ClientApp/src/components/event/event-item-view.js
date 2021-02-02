@@ -17,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const userStatus = {
     APPROVED: 0,
@@ -59,7 +60,7 @@ export default class EventItemView extends Component {
                                 action={this.props.onDeleteFromOwners}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
-                                    <Tooltip title="Delete">
+                                    <Tooltip title="Delete from owners">
                                         <IconButton aria-label="delete">
                                              <i className="far fa-trash-alt"></i>
                                             </IconButton>
