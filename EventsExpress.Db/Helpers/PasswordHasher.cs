@@ -17,21 +17,21 @@ namespace EventsExpress.Db.Helpers
 
         public static string GenerateSalt()
         {
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            byte[] salt = new byte[16];
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
             return GetStringFromBytes(salt);
         }
 
         private static string GetStringFromBytes(byte[] bytes)
         {
-            string result = null;
-            foreach (byte b in bytes)
+            var bld = new StringBuilder();
+            for (int i = 0; i < bytes.Length; ++i)
             {
-                result += b.ToString("x2");
+                bld.Append(bytes[i]);
             }
 
-            return result;
+            return bld.ToString();
         }
     }
 }
