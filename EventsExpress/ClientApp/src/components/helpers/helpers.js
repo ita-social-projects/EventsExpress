@@ -90,6 +90,10 @@ export const validate = values => {
         }
     }  
 
+    if (values.categories != null && values.categories.length == 0) {
+        errors.categories = "Required";
+    }
+
     if (!values.selectedPos || values.selectedPos == ""){
         errors.selectedPos = "Required";
     }
