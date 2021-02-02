@@ -23,11 +23,6 @@ namespace EventsExpress.Db.EF
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private Guid CurrentUserId
-        {
-            get => _httpContextAccessor.HttpContext != null ? new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) : Guid.Empty;
-        }
-
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -220,7 +215,7 @@ namespace EventsExpress.Db.EF
                     EntityName = change.Entity.GetType().Name,
                     Time = now,
                     ChangesType = MapEntityStateToChangeType(change.State),
-                    UserId = CurrentUserId,
+                    UserId = CurrentUserId(),
                     EntityKeys = JsonConvert.SerializeObject(entityKeyDictionary),
                 };
 
@@ -302,5 +297,10 @@ namespace EventsExpress.Db.EF
             SaveTracks();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
+
+        private Guid CurrentUserId() =>
+           _httpContextAccessor.HttpContext != null ?
+            new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) :
+            Guid.Empty;
     }
 }

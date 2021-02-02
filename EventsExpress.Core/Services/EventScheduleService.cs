@@ -26,8 +26,6 @@ namespace EventsExpress.Core.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private UserDto CurrentUser { get => _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User); }
-
         public IEnumerable<EventScheduleDto> GetAll()
         {
             return Mapper.Map<IEnumerable<EventScheduleDto>>(
@@ -37,7 +35,7 @@ namespace EventsExpress.Core.Services
                     .Include(es => es.Event)
                         .ThenInclude(e => e.Photo)
                     .Where(opt => opt.IsActive &&
-                        opt.Event.Owners.Any(o => o.UserId == CurrentUser.Id))
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUser().Id))
                     .ToList());
         }
 
@@ -109,5 +107,8 @@ namespace EventsExpress.Core.Services
 
             return await Edit(eventScheduleDTO);
         }
+
+        private UserDto CurrentUser() =>
+           _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
     }
 }

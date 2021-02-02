@@ -131,6 +131,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(assert.Id, Is.EqualTo(expectedId));
         }
 
+        [Test]
         [TestCaseSource(typeof(GettingOkDeletingUnits))]
         [Category("Get")]
         public void Get_NotExistingIdORDeletedUnit_Exception(Guid id)

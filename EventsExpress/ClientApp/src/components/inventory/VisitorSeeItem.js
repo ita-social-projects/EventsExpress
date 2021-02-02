@@ -34,7 +34,7 @@ export default class VisitorSeeItem extends Component {
                                 }
                         </div>
                         <div className="col col-md-2 d-flex align-items-center">
-                            {usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id)?.quantity || 0}
+                            {usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id).quantity || 0}
                         </div>
                         <div className="col col-md-1 d-flex align-items-center">{item.needQuantity}</div>
                         <div className="col col-md-1 d-flex align-items-center">{item.unitOfMeasuring.shortName}</div>
