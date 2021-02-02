@@ -97,7 +97,7 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        public async Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
             {
