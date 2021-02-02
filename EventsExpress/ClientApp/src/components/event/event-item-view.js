@@ -62,8 +62,8 @@ export default class EventItemView extends Component {
                                 button={
                                     <Tooltip title="Delete from owners">
                                         <IconButton aria-label="delete">
-                                             <i className="far fa-trash-alt"></i>
-                                            </IconButton>
+                                            <i className="far fa-trash-alt"></i>
+                                        </IconButton>
                                     </Tooltip>
                                 }
                             />
@@ -95,12 +95,12 @@ export default class EventItemView extends Component {
                                 id={x.id}
                                 action={this.props.onPromoteToOwner}
                                 data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                            button={
-                                <Tooltip title="Approve as an owner">
-                                    <IconButton aria-label="delete">
-                                        <i className="fas fa-plus-circle" ></i>
-                                    </IconButton>
-                                </Tooltip>
+                                button={
+                                    <Tooltip title="Approve as an owner">
+                                        <IconButton aria-label="delete">
+                                            <i className="fas fa-plus-circle" ></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
@@ -176,10 +176,10 @@ export default class EventItemView extends Component {
                 </div>
                 {(isMyEvent) &&
                     <div>
-                          <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
-                                <DeleteIcon />
-                          </IconButton>
-                     </div>
+                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>
                 }
                 <Button
                     onClick={() => this.props.onApprove(x.id, true)}
@@ -297,13 +297,13 @@ export default class EventItemView extends Component {
                                 <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
                                     ? <span className="maxParticipants">
-                                            {visitorsEnum.approvedUsers.length}/{maxParticipants}
-                                            <span className="pl-2">Participants</span>
-                                        </span>
+                                        {visitorsEnum.approvedUsers.length}/{maxParticipants}
+                                        <span className="pl-2">Participants</span>
+                                    </span>
                                     : <span className="maxParticipants">
                                         {visitorsEnum.approvedUsers.length}
                                         <span className="pl-2">Participants</span>
-                                      </span>
+                                    </span>
                                 }
                                 <br />
                                 <span>
@@ -318,19 +318,19 @@ export default class EventItemView extends Component {
                                         </>
                                     }
                                 </span>
-                                <br/>
-                                    <DisplayLocation 
-                                        latitude={this.props.event.data.latitude}
-                                        longitude={this.props.event.data.longitude}
-                                    />
+                                <br />
+                                <DisplayLocation
+                                    latitude={this.props.event.data.latitude}
+                                    longitude={this.props.event.data.longitude}
+                                />
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel && 
-                                <EventCancelModal 
-                                    submitCallback={this.props.onCancel} 
-                                    cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel &&
+                                    <EventCancelModal
+                                        submitCallback={this.props.onCancel}
+                                        cancelationStatus={this.props.event.cancelation} />}
                             </div>
                         </div>
                         {this.state.edit
