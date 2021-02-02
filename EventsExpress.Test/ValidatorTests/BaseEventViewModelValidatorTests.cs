@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Enums;
 using EventsExpress.Validation.Base;
 using EventsExpress.ViewModels.Base;
@@ -8,7 +9,7 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ValidatorTests
 {
     [TestFixture]
-    internal class BaseEventViewModelValidatorTests
+    internal class BaseEventViewModelValidatorTests : TestInitializer
     {
         private BaseEventViewModelValidator<EventViewModelBase> validator;
         private EventViewModelBase eventViewModel;
@@ -16,7 +17,7 @@ namespace EventsExpress.Test.ValidatorTests
         [SetUp]
         public void Setup()
         {
-            validator = new BaseEventViewModelValidator<EventViewModelBase>();
+            validator = new BaseEventViewModelValidator<EventViewModelBase>(new CategoryService(Context, MockMapper.Object));
             eventViewModel = new EventViewModelBase
             {
                 Title = "Some title",
