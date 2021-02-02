@@ -22,9 +22,7 @@ namespace EventsExpress.ViewModels.Base
 
         public Periodicity Periodicity { get; set; }
 
-        public double Latitude { get; set; }
-
-        public double Longitude { get; set; }
+        public LocationViewModel Location { get; set; }
 
         public bool IsPublic { get; set; }
 

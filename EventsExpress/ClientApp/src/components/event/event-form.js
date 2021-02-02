@@ -14,24 +14,57 @@ import {
     renderSelectPeriodicityField,
     renderCheckbox,
     renderTextField,
-    renderDatePicker
+    renderDatePicker,
+    radioLocationType
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
+import { enumLocationType } from '../../constants/EventLocationType';
 
 momentLocaliser(moment);
 const { validate } = Module;
 
 const required = value => value ? undefined : "Required";
 
-class EventForm extends Component {
+class EventForm extends Component {    
 
-    state = { checked: false };
+    state = { checked: false,  mapChecked: true, onlineChecked: false };
+
+    componentDidMount = () => {
+        if (this.props.initialValues != undefined) {
+            if (this.props.initialValues.location.onlineMeeting) {
+                this.setState(state => ({
+                    mapChecked: false,
+                    onlineChecked: true,
+                }));
+            }
+            else {
+                this.setState(state => ({
+                    mapChecked: true,
+                    onlineChecked: false,
+                }));
+            }
+        }
+    }
 
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
         }));
+    }
+    handleMapLocationChange = () => {
+        this.setState(state => ({
+            mapChecked: !state.mapChecked,
+            onlineChecked: state.mapChecked
+        }));
+
+    }
+    handleOnlineLocationChange = () => {
+        this.setState(state => ({
+            onlineChecked: !state.onlineChecked,
+            mapChecked: state.onlineChecked
+        }));
+
     }
 
     render() {
@@ -41,7 +74,6 @@ class EventForm extends Component {
         const { handleChange } = this;
 
         let values = form_values || this.props.initialValues;
-
         const photoUrl = this.props.initialValues ?
             this.props.initialValues.photoUrl : null;
                     
@@ -49,6 +81,7 @@ class EventForm extends Component {
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
+
                     <Field
                         id="image-field"
                         name="image"
@@ -149,15 +182,43 @@ class EventForm extends Component {
                             className="form-control mt-2"
                             placeholder='#hashtags' />
                     </div>
-                    <div className="mt-2">
-                        <Field
-                            name='selectedPos'
-                            initialData={
-                                this.props.initialValues &&
-                                this.props.initialValues.selectedPos
-                            }
-                            component={LocationMap} />
+                    <div>
                     </div>
+
+
+                    <Field name="location.type" component={radioLocationType} />
+                    {(this.props.form_values == undefined
+                        || (this.props.form_values.location
+                            && this.props.form_values.location.type === enumLocationType.map))
+                        &&
+
+                        <div className="mt-2">
+                            <Field
+                                name='location.selectedPos'
+                                initialData={
+                                    this.props.initialValues &&
+                                    this.props.initialValues.location.selectedPos
+                                }
+
+                                component={LocationMap}
+                            />
+                        </div>
+                    }
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type === enumLocationType.online &&
+
+                        <div className="mt-2">
+                            <label for="url">Enter an https:// URL:</label>
+                            <Field
+                                name='location.onlineMeeting'
+                                component={renderTextField}
+                                type="url"
+                                label="Url"
+
+                            />
+                        </div>
+                    }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">
