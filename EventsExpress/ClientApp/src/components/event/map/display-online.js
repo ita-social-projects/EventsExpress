@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 class DisplayOnline extends Component {
     constructor(props) {
         super(props);
-    };
+    }
     render() {
         return (
             <div><a
