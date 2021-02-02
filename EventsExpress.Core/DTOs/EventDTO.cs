@@ -33,13 +33,17 @@ namespace EventsExpress.Core.DTOs
 
         public string PhotoUrl { get; set; }
 
-        public Guid PhotoId { get; set; }
+        public Guid? PhotoId { get; set; }
 
         public Photo PhotoBytes { get; set; }
 
         public bool IsPublic { get; set; }
 
         public Point Point { get; set; }
+
+        public LocationType Type { get; set; }
+
+        public Uri OnlineMeeting { get; set; }
 
         public IEnumerable<CategoryDTO> Categories { get; set; }
 

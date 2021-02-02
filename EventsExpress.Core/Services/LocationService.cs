@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -9,6 +7,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.Services
@@ -20,8 +19,17 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> AddLocationToEvent(LocationDto locationDTO) =>
-            LocationByPoint(locationDTO.Point)?.Id ?? await Create(locationDTO);
+        public async Task<Guid> AddLocationToEvent(LocationDto locationDTO)
+        {
+            if (locationDTO.Type == LocationType.Map)
+            {
+                return LocationByPoint(locationDTO.Point)?.Id ?? await Create(new LocationDto { Id = locationDTO.Id, Point = locationDTO.Point, OnlineMeeting = null, Type = locationDTO.Type });
+            }
+            else
+            {
+                return LocationByURI(locationDTO.OnlineMeeting)?.Id ?? await Create(new LocationDto { Id = locationDTO.Id, Point = null, OnlineMeeting = locationDTO.OnlineMeeting, Type = locationDTO.Type });
+            }
+        }
 
         public async Task<Guid> Create(LocationDto locationDTO)
         {
@@ -40,6 +48,15 @@ namespace EventsExpress.Core.Services
                 .Where(e =>
                     e.Point.X == point.X &&
                     e.Point.Y == point.Y)
+                .FirstOrDefault());
+            return locationDTO;
+        }
+
+        public LocationDto LocationByURI(Uri uri)
+        {
+            var locationDTO = _mapper.Map<LocationDto>(_context.EventLocations
+                .Where(e =>
+                   e.OnlineMeeting == uri)
                 .FirstOrDefault());
             return locationDTO;
         }

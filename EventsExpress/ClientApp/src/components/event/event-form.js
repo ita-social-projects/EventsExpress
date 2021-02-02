@@ -14,10 +14,12 @@ import {
     renderSelectPeriodicityField,
     renderCheckbox,
     renderTextField,
-    renderDatePicker
+    renderDatePicker,
+    radioLocationType
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
+import { enumLocationType } from '../../constants/EventLocationType';
 
 momentLocaliser(moment);
 const imageIsRequired = value => (!value ? "Required" : undefined);
@@ -26,9 +28,11 @@ const { validate } = Module;
 class EventForm extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             imagefile: [],
-            checked: false
+            checked: false,
+            mapChecked: true,
+            onlineChecked: false,
         };
     }
 
@@ -45,6 +49,22 @@ class EventForm extends Component {
     };
 
     componentDidMount = () => {
+        if (this.props.initialValues != undefined) {
+            if (this.props.initialValues.location.onlineMeeting) {
+                this.setState(state => ({
+                    mapChecked: false,
+                    onlineChecked: true,
+                }));
+            }
+            else {
+                this.setState(state => ({
+                    mapChecked: true,
+                    onlineChecked: false,
+                }));
+            }
+
+
+        }
         let values = this.props.initialValues || this.props.data;
 
         if (this.props.isCreated) {
@@ -82,7 +102,20 @@ class EventForm extends Component {
             checked: !state.checked,
         }));
     }
+    handleMapLocationChange = () => {
+        this.setState(state => ({
+            mapChecked: !state.mapChecked,
+            onlineChecked: state.mapChecked
+        }));
 
+    }
+    handleOnlineLocationChange = () => {
+        this.setState(state => ({
+            onlineChecked: !state.onlineChecked,
+            mapChecked: state.onlineChecked
+        }));
+
+    }
     resetForm = () => {
         this.isSaveButtonDisabled = false;
         this.setState({ imagefile: [] });
@@ -96,10 +129,10 @@ class EventForm extends Component {
 
         const { form_values, all_categories, isCreated } = this.props;
         let values = form_values || this.props.initialValues;
-
         return (
             <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
+
                     <Field
                         ref={(x) => { this.image = x; }}
                         id="image-field"
@@ -209,20 +242,48 @@ class EventForm extends Component {
                             className="form-control mt-2"
                             placeholder='#hashtags' />
                     </div>
-                    <div className="mt-2">
-                        <Field
-                            name='selectedPos'
-                            initialData={
-                                this.props.initialValues &&
-                                this.props.initialValues.selectedPos
-                            }
-                            component={LocationMap}/>
+                    <div>
                     </div>
+
+
+                    <Field name="location.type" component={radioLocationType} />
+                    {(this.props.form_values == undefined
+                        || (this.props.form_values.location
+                            && this.props.form_values.location.type === enumLocationType.map))
+                        &&
+
+                        <div className="mt-2">
+                            <Field
+                                name='location.selectedPos'
+                                initialData={
+                                    this.props.initialValues &&
+                                    this.props.initialValues.location.selectedPos
+                                }
+
+                                component={LocationMap}
+                            />
+                        </div>
+                    }
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type === enumLocationType.online &&
+
+                        <div className="mt-2">
+                            <label for="url">Enter an https:// URL:</label>
+                            <Field
+                                name='location.onlineMeeting'
+                                component={renderTextField}
+                                type="url"
+                                label="Url"
+
+                            />
+                        </div>
+                    }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">
                     <div className="col">
-                        <Button 
+                        <Button
                             className="border"
                             fullWidth={true}
                             type="submit"
