@@ -98,7 +98,8 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-            user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+            user.Salt = PasswordHasher.GenerateSalt();
+            user.PasswordHash = PasswordHasher.GenerateHash(newPassword, user.Salt);
 
             await Context.SaveChangesAsync();
             await _emailService.SendEmailAsync(new EmailDto

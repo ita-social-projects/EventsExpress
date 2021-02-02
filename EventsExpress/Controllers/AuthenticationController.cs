@@ -210,7 +210,8 @@ namespace EventsExpress.Controllers
             }
 
             var user = _mapper.Map<LoginViewModel, UserDto>(authRequest);
-            user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password);
+            user.Salt = PasswordHasher.GenerateSalt();
+            user.PasswordHash = PasswordHasher.GenerateHash(authRequest.Password, user.Salt);
             await _userService.Create(user);
 
             return Ok();

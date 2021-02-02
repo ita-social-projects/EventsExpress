@@ -5,14 +5,33 @@ namespace EventsExpress.Db.Helpers
 {
     public static class PasswordHasher
     {
-        public static string GenerateHash(string password, string salt = "a192862aa3bf46dffb57b12bdcc4c199")
+        public static string GenerateHash(string password, string salt)
         {
-            var byteSalt = Encoding.UTF8.GetBytes(salt);
-            var bytePassword = Encoding.UTF8.GetBytes(password);
-            var hmacMD5 = new HMACMD5(byteSalt);
-            var saltedHash = hmacMD5.ComputeHash(bytePassword);
+            ASCIIEncoding asciiEnc = new ASCIIEncoding();
+            byte[] byteSourceText = asciiEnc.GetBytes(salt + password);
+            MD5CryptoServiceProvider md5Hash = new MD5CryptoServiceProvider();
+            byte[] byteHash = md5Hash.ComputeHash(byteSourceText);
 
-            return Encoding.UTF8.GetString(saltedHash, 0, saltedHash.Length);
+            return GetStringFromBytes(byteHash);
+        }
+
+        public static string GenerateSalt()
+        {
+            byte[] salt = new byte[16];
+            new RNGCryptoServiceProvider().GetBytes(salt);
+
+            return GetStringFromBytes(salt);
+        }
+
+        private static string GetStringFromBytes(byte[] bytes)
+        {
+            var bld = new StringBuilder();
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                bld.Append(bytes[i]);
+            }
+
+            return bld.ToString();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
+                .ForMember(dest => dest.Salt, opts => opts.MapFrom(src => src.Salt))
                 .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
