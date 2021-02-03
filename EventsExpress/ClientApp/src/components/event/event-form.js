@@ -18,9 +18,11 @@ import {
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
+import { createBrowserHistory } from 'history'; 
 
 momentLocaliser(moment);
 const { validate } = Module;
+const history = createBrowserHistory({ forceRefresh: true });
 
 class EventForm extends Component {
 
@@ -30,6 +32,10 @@ class EventForm extends Component {
         this.setState(state => ({
             checked: !state.checked,
         }));
+  
+    }
+    handleClick = () => {
+        history.push(`/`);
     }
 
     render() {
@@ -173,7 +179,7 @@ class EventForm extends Component {
                             className="border"
                             fullWidth={true}
                             color="primary"
-                            onClick={onCancel}>
+                            onClick={this.handleClick}>
                             Cancel
                         </Button>
                     </div>
