@@ -50,10 +50,10 @@ namespace EventsExpress.Core.Services
             return entity.Id;
         }
 
-        public IEnumerable<UnitOfMeasuringDto> GetAll()
-        {
-            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(Context.UnitOfMeasurings.Where(item => !item.IsDeleted));
-        }
+        public IEnumerable<UnitOfMeasuringDto> GetAll() => Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(
+                    Context.UnitOfMeasurings.Where(item => !item.IsDeleted)
+                                            .OrderBy(unit => unit.UnitName)
+                                            .ThenBy(unit => unit.ShortName));
 
         public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
         {
