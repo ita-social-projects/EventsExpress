@@ -2,11 +2,12 @@ import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
+import Module from '../../helpers';
 
-const required = value => value ? undefined : "Required";
+const { validate } = Module;
 
 let ChangeAvatar = props => {
-  const { handleSubmit, pristine, submitting } = props;
+  const { handleSubmit, submitting } = props;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -17,10 +18,9 @@ let ChangeAvatar = props => {
         crop={true}
         cropShape='round'
         photoUrl={props.initialValues.image}
-        validate={[required]}
       />
       <div>
-        <Button color="primary" type="submit" disabled={pristine || submitting}>
+        <Button color="primary" type="submit" disabled={submitting}>
           Submit
         </Button >
       </div>
@@ -29,5 +29,6 @@ let ChangeAvatar = props => {
 }
 
 export default reduxForm({
-  form: "change-avatar"
+  form: "change-avatar",
+  validate: validate
 })(ChangeAvatar);
