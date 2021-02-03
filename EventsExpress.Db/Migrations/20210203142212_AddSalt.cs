@@ -9,6 +9,7 @@ namespace EventsExpress.Db.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Salt",
                 table: "Users",
+                maxLength: 16,
                 nullable: true);
         }
 

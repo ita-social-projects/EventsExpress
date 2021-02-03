@@ -7,31 +7,20 @@ namespace EventsExpress.Db.Helpers
     {
         public static string GenerateHash(string password, string salt)
         {
-            ASCIIEncoding asciiEnc = new ASCIIEncoding();
-            byte[] byteSourceText = asciiEnc.GetBytes(salt + password);
-            MD5CryptoServiceProvider md5Hash = new MD5CryptoServiceProvider();
+            byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);
+            using var md5Hash = new MD5CryptoServiceProvider();
             byte[] byteHash = md5Hash.ComputeHash(byteSourceText);
 
-            return GetStringFromBytes(byteHash);
+            return Encoding.ASCII.GetString(byteHash);
         }
 
         public static string GenerateSalt()
         {
+            using var provider = new RNGCryptoServiceProvider();
             byte[] salt = new byte[16];
-            new RNGCryptoServiceProvider().GetBytes(salt);
+            provider.GetBytes(salt);
 
-            return GetStringFromBytes(salt);
-        }
-
-        private static string GetStringFromBytes(byte[] bytes)
-        {
-            var bld = new StringBuilder();
-            for (int i = 0; i < bytes.Length; ++i)
-            {
-                bld.Append(bytes[i]);
-            }
-
-            return bld.ToString();
+            return Encoding.ASCII.GetString(salt);
         }
     }
 }
