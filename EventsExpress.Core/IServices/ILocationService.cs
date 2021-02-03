@@ -14,5 +14,7 @@ namespace EventsExpress.Core.IServices
         Task<Guid> Create(LocationDto locationDTO);
 
         LocationDto LocationByPoint(Point point);
+
+        LocationDto LocationByURI(Uri uri);
     }
 }
