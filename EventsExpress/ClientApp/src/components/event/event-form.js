@@ -20,11 +20,11 @@ import {
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
+import { createBrowserHistory } from 'history';
 
 momentLocaliser(moment);
 const { validate } = Module;
-
-const required = value => value ? undefined : "Required";
+const history = createBrowserHistory({ forceRefresh: true });
 
 class EventForm extends Component {
 
@@ -35,6 +35,10 @@ class EventForm extends Component {
         this.setState(state => ({
             checked: !state.checked,
         }));
+  
+    }
+    handleClick = () => {
+        history.push(`/`);
     }
 
 
@@ -61,7 +65,6 @@ class EventForm extends Component {
                         crop={true}
                         cropShape='rect'
                         photoUrl={photoUrl}
-                        validate={[required]}
                     />
                     <div className="mt-2">
                         <Field name='title'
@@ -208,7 +211,7 @@ class EventForm extends Component {
                             className="border"
                             fullWidth={true}
                             color="primary"
-                            onClick={onCancel}>
+                            onClick={this.handleClick}>
                             Cancel
                         </Button>
                     </div>

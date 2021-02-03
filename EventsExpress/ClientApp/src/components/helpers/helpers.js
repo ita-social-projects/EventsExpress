@@ -54,7 +54,8 @@ export const validate = values => {
         'itemName',
         'needQuantity',
         'unitOfMeasuring',
-        'willTake'
+        'willTake',
+        'image'
     ];
 
     requiredFields.forEach(field => {
@@ -99,7 +100,11 @@ export const validate = values => {
         }
     }
 
-    if (!values.selectedPos || values.selectedPos == "") {
+    if (values.categories != null && values.categories.length == 0) {
+        errors.categories = "Required";
+    }
+
+    if (!values.selectedPos || values.selectedPos == ""){
         errors.selectedPos = "Required";
     }
 

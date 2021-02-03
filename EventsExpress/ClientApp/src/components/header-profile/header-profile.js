@@ -10,8 +10,16 @@ import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
 import './header-profile.css';
+import { createBrowserHistory } from 'history';
+
+
+const history = createBrowserHistory({ forceRefresh: true });
 
 export default class HeaderProfile extends Component {
+    handleClick = () => {
+        history.push(`/event/createEvent`);
+    }
+
     render() {
         const { id, name, photoUrl, rating } = this.props.user;
         const { onClick } = this.props;
@@ -55,7 +63,15 @@ export default class HeaderProfile extends Component {
                                             <i className="fas fa-sign-out-alt"></i>
                                         </IconButton>
                                     </Tooltip>
+
                                 </Link>
+                                <div>
+                                    <button className="btn btn-outline-secondary" onClick={this.handleClick}>
+                                        <i className="fas fa-plus mr-1"></i>
+                                    add event
+                                        
+                                    </button>   
+                                </div>
                             </div>
                         </div>
                     )}

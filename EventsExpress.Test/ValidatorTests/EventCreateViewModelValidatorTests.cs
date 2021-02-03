@@ -1,9 +1,7 @@
 ﻿using System;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
-using EventsExpress.Validation.Base;
 using EventsExpress.ViewModels;
-using EventsExpress.ViewModels.Base;
 using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
@@ -11,23 +9,25 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ValidatorTests
 {
     [TestFixture]
-    internal class BaseEventViewModelValidatorTests
+    internal class EventCreateViewModelValidatorTests
     {
-        private BaseEventViewModelValidator<EventViewModelBase> validator;
-        private EventViewModelBase eventViewModel;
+        private EventCreateViewModelValidator validator;
+        private EventCreateViewModel eventViewModel;
         private Mock<ICategoryService> mockCategoryService;
 
         [SetUp]
         public void Setup()
         {
             mockCategoryService = new Mock<ICategoryService>();
-            validator = new BaseEventViewModelValidator<EventViewModelBase>(mockCategoryService.Object);
-            eventViewModel = new EventViewModelBase
+            validator = new EventCreateViewModelValidator(mockCategoryService.Object);
+            eventViewModel = new EventCreateViewModel
             {
                 Title = "Some title",
                 Description = "Some desc",
                 DateFrom = DateTime.Now,
                 DateTo = DateTime.Now,
+                Latitude = 28.489335,
+                Longitude = 56.498438,
                 IsReccurent = true,
                 Frequency = 1,
                 Periodicity = Periodicity.Daily,
@@ -150,6 +150,56 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.DateTo);
+        }
+
+        [Test]
+        public void SetLatitudeForEvent_ValidLatitude_ValidationErrorIsNotReturn()
+        {
+            // Arrange
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.Latitude);
+        }
+
+        [Test]
+        public void SetLatitudeForEvent_InvalidLatitude_ReturnValidationError()
+        {
+            // Arrange
+            eventViewModel.Latitude = default;
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Latitude);
+        }
+
+        [Test]
+        public void SetLongitudeForEvent_ValidLongitude_ValidationErrorIsNotReturn()
+        {
+            // Arrange
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.Longitude);
+        }
+
+        [Test]
+        public void SetLongitudeForEvent_InvalidLongitude_ReturnValidationError()
+        {
+            // Arrange
+            eventViewModel.Longitude = default;
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Longitude);
         }
 
         [Test]
