@@ -22,8 +22,6 @@ import LocationMap from './map/location-map';
 momentLocaliser(moment);
 const { validate } = Module;
 
-const required = value => value ? undefined : "Required";
-
 class EventForm extends Component {
 
     state = { checked: false };
@@ -57,7 +55,6 @@ class EventForm extends Component {
                         crop={true}
                         cropShape='rect'
                         photoUrl={photoUrl}
-                        validate={[required]}
                     />
                     <div className="mt-2">
                         <Field name='title'
