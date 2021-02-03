@@ -143,3 +143,7 @@
 .select-style select:focus {
     outline: none;
 }
+
+.react-datepicker-popper {
+    z-index: 460;
+}

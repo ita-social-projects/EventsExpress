@@ -25,6 +25,7 @@ import NotificationEvents from '../notification_events';
 import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
+import AddEventWrapper from '../../containers/add-event';
 
 export default class App extends Component {
     render() {
@@ -62,7 +63,10 @@ export default class App extends Component {
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={Chat} />
                         <Route path="/contactUs" component={ContactUsWrapper} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring}/>
+                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                        <Route path='/event/createEvent' component={AddEventWrapper} />
+                        <Route path='/' component={AddEventWrapper} />
+
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>

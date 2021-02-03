@@ -75,7 +75,6 @@ export default class UserItemView extends Component {
         value === 1 && (this.props.onPast())
         value === 2 && (this.props.onVisited())
         value === 3 && (this.props.onToGo())
-        value === 4 && (this.props.onAddEvent())
     };
 
     render() {
@@ -210,19 +209,8 @@ export default class UserItemView extends Component {
                                 </IconButton>}
                             {...a11yProps(3)}
                         />
-                        {(id === this.props.current_user) &&
-                            <Tab
-                                label="Add event"
-                                icon={
-                                    <IconButton
-                                        color={this.state.value === 4 ? '' : 'primary'}
-                                    >
-                                        <i className="fas fa-plus"></i>
-                                    </IconButton>
-                                }
-                                {...a11yProps(4)}
-                            />
-                        }
+                        
+                        
                     </Tabs>
                 </AppBar>
                 <TabPanel value={this.state.value} index={0}>
@@ -232,8 +220,6 @@ export default class UserItemView extends Component {
                 <TabPanel value={this.state.value} index={2}>
                 </TabPanel>
                 <TabPanel value={this.state.value} index={3}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={4}>
                 </TabPanel>
                 {this.props.add_event_flag ?
                     <div className="shadow mb-5 bg-white rounded">
