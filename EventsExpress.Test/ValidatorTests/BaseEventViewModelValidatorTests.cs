@@ -1,8 +1,11 @@
 ﻿using System;
+using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.Validation.Base;
+using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
 using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ValidatorTests
@@ -12,11 +15,13 @@ namespace EventsExpress.Test.ValidatorTests
     {
         private BaseEventViewModelValidator<EventViewModelBase> validator;
         private EventViewModelBase eventViewModel;
+        private Mock<ICategoryService> mockCategoryService;
 
         [SetUp]
         public void Setup()
         {
-            validator = new BaseEventViewModelValidator<EventViewModelBase>();
+            mockCategoryService = new Mock<ICategoryService>();
+            validator = new BaseEventViewModelValidator<EventViewModelBase>(mockCategoryService.Object);
             eventViewModel = new EventViewModelBase
             {
                 Title = "Some title",
@@ -223,6 +228,59 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
+        }
+
+        [Test]
+        public void SetCategoriesForEvent_ValidCategories_ValidationErrorIsNotReturn()
+        {
+            // Arrange
+            Guid id = new Guid("20d71c34-f53a-4c8d-b043-7f3261e7b627");
+            eventViewModel.Categories = new CategoryViewModel[] { new CategoryViewModel { Id = id } };
+            mockCategoryService.Setup(service => service.Exists(id)).Returns(true);
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.Categories);
+        }
+
+        public void SetCategoriesForEvent_EmptyCategoriesCollection_ReturnValidationError()
+        {
+            // Arrange
+            eventViewModel.Categories = new CategoryViewModel[] { };
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Categories);
+        }
+
+        public void SetCategoriesForEvent_EmptyCategory_ReturnValidationError()
+        {
+            // Arrange
+            eventViewModel.Categories = new CategoryViewModel[] { null };
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Categories);
+        }
+
+        public void SetCategoriesForEvent_NotExistingCategory_ReturnValidationError()
+        {
+            // Arrange
+            Guid id = new Guid("20d71c34-f53a-4c8d-b043-7f3261e7b627");
+            eventViewModel.Categories = new CategoryViewModel[] { new CategoryViewModel { Id = id } };
+            mockCategoryService.Setup(service => service.Exists(id)).Returns(false);
+
+            // Act
+            var result = validator.TestValidate(eventViewModel);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Categories);
         }
 
         [Test]
