@@ -9,18 +9,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ValidatorTests
 {
     [TestFixture]
-    internal class EventEditViewModelValidatorTests
+    internal class EventCreateViewModelValidatorTests
     {
-        private EventEditViewModelValidator validator;
-        private EventEditViewModel eventViewModel;
+        private EventCreateViewModelValidator validator;
+        private EventCreateViewModel eventViewModel;
         private Mock<ICategoryService> mockCategoryService;
 
         [SetUp]
         public void Setup()
         {
             mockCategoryService = new Mock<ICategoryService>();
-            validator = new EventEditViewModelValidator(mockCategoryService.Object);
-            eventViewModel = new EventEditViewModel
+            validator = new EventCreateViewModelValidator(mockCategoryService.Object);
+            eventViewModel = new EventCreateViewModel
             {
                 Title = "Some title",
                 Description = "Some desc",
