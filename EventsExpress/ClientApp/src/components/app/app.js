@@ -65,6 +65,8 @@ export default class App extends Component {
                         <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
+                        <Route path='/' component={AddEventWrapper} />
+
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
