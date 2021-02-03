@@ -26,46 +26,17 @@ const { validate } = Module;
 
 const required = value => value ? undefined : "Required";
 
-class EventForm extends Component {    
+class EventForm extends Component {
 
-    state = { checked: false,  mapChecked: true, onlineChecked: false };
+    state = { checked: false };
 
-    componentDidMount = () => {
-        if (this.props.initialValues != undefined) {
-            if (this.props.initialValues.location.onlineMeeting) {
-                this.setState(state => ({
-                    mapChecked: false,
-                    onlineChecked: true,
-                }));
-            }
-            else {
-                this.setState(state => ({
-                    mapChecked: true,
-                    onlineChecked: false,
-                }));
-            }
-        }
-    }
 
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
         }));
     }
-    handleMapLocationChange = () => {
-        this.setState(state => ({
-            mapChecked: !state.mapChecked,
-            onlineChecked: state.mapChecked
-        }));
 
-    }
-    handleOnlineLocationChange = () => {
-        this.setState(state => ({
-            onlineChecked: !state.onlineChecked,
-            mapChecked: state.onlineChecked
-        }));
-
-    }
 
     render() {
         const { form_values, all_categories, isCreated, pristine,
@@ -76,7 +47,7 @@ class EventForm extends Component {
         let values = form_values || this.props.initialValues;
         const photoUrl = this.props.initialValues ?
             this.props.initialValues.photoUrl : null;
-                    
+
         return (
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >
