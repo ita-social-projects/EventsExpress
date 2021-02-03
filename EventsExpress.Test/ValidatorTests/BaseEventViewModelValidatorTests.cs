@@ -234,7 +234,7 @@ namespace EventsExpress.Test.ValidatorTests
         public void SetCategoriesForEvent_ValidCategories_ValidationErrorIsNotReturn()
         {
             // Arrange
-            Guid id = new Guid("20d71c34-f53a-4c8d-b043-7f3261e7b627");
+            Guid id = Guid.NewGuid();
             eventViewModel.Categories = new CategoryViewModel[] { new CategoryViewModel { Id = id } };
             mockCategoryService.Setup(service => service.Exists(id)).Returns(true);
 
@@ -272,7 +272,7 @@ namespace EventsExpress.Test.ValidatorTests
         public void SetCategoriesForEvent_NotExistingCategory_ReturnValidationError()
         {
             // Arrange
-            Guid id = new Guid("20d71c34-f53a-4c8d-b043-7f3261e7b627");
+            Guid id = Guid.NewGuid();
             eventViewModel.Categories = new CategoryViewModel[] { new CategoryViewModel { Id = id } };
             mockCategoryService.Setup(service => service.Exists(id)).Returns(false);
 
