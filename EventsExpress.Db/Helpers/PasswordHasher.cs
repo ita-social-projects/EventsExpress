@@ -8,8 +8,8 @@ namespace EventsExpress.Db.Helpers
         public static string GenerateHash(string password, string salt)
         {
             byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);
-            var md5Hash = new MD5CryptoServiceProvider();
-            byte[] byteHash = md5Hash.ComputeHash(byteSourceText);
+            using var hashProvider = new SHA256Managed();
+            byte[] byteHash = hashProvider.ComputeHash(byteSourceText);
 
             return Encoding.ASCII.GetString(byteHash);
         }
