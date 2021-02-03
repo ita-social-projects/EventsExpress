@@ -1,11 +1,10 @@
-﻿using System;
-using EventsExpress.Db.Enums;
-using EventsExpress.Core.IServices;
-using EventsExpress.ViewModels.Base;
-using FluentValidation;
-
-namespace EventsExpress.Validation.Base
+﻿namespace EventsExpress.Validation.Base
 {
+    using System;
+    using EventsExpress.Core.IServices;
+    using EventsExpress.ViewModels.Base;
+    using FluentValidation;
+
     public class BaseEventViewModelValidator<T> : AbstractValidator<T>
         where T : EventViewModelBase
     {
