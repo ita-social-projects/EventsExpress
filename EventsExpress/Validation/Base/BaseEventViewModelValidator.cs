@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using EventsExpress.Core.IServices;
 using EventsExpress.ViewModels.Base;
 using FluentValidation;

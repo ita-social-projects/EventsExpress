@@ -1,7 +1,5 @@
-﻿using System;
-using EventsExpress.Core.IServices;
+﻿using EventsExpress.Core.IServices;
 using EventsExpress.Validation.Base;
-using FluentValidation;
 
 namespace EventsExpress.ViewModels
 {
@@ -11,7 +9,6 @@ namespace EventsExpress.ViewModels
         public EventEditViewModelValidator(ICategoryService categoryService)
             : base(categoryService)
         {
-            RuleFor(x => x.Title).NotEmpty().WithMessage("Field is required!");
         }
     }
 }
