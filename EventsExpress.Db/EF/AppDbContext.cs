@@ -74,6 +74,8 @@ namespace EventsExpress.Db.EF
             // user config
             modelBuilder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
+            modelBuilder.Entity<User>()
+                .Property(u => u.Salt).HasMaxLength(16);
 
             modelBuilder.Entity<UnitOfMeasuring>()
                 .HasIndex(u => new { u.UnitName, u.ShortName }).IsUnique().HasFilter("IsDeleted = 0");
