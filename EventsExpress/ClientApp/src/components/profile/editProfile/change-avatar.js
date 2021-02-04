@@ -7,7 +7,7 @@ import Module from '../../helpers';
 const { validate } = Module;
 
 let ChangeAvatar = props => {
-  const { handleSubmit, submitting } = props;
+  const { handleSubmit, pristine, submitting } = props;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -20,7 +20,7 @@ let ChangeAvatar = props => {
         photoUrl={props.initialValues.image}
       />
       <div>
-        <Button color="primary" type="submit" disabled={submitting}>
+        <Button color="primary" type="submit" disabled={pristine || submitting}>
           Submit
         </Button >
       </div>
