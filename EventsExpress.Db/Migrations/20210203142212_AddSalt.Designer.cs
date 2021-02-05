@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210203142212_AddSalt")]
+    partial class AddSalt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,14 +177,8 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("OnlineMeeting")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Point>("Point")
                         .HasColumnType("geography");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
