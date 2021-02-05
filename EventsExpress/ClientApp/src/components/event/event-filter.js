@@ -9,7 +9,9 @@ import {
     radioButton
 } from '../helpers/helpers';
 import eventHelper from '../helpers/eventHelper';
+import MapModal from './map-modal';
 import './event-filter.css';
+
 
 class EventFilter extends Component {
     constructor(props) {
@@ -90,7 +92,10 @@ class EventFilter extends Component {
                                         <Radio value="true" label="Blocked" />
                                     </Field>
                                 </div>
-                            )}
+                        )}
+                        <div>
+                            <MapModal />
+                        </div>
                         </>
                     }
                     <div>
