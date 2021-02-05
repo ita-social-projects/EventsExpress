@@ -33,7 +33,8 @@ namespace EventsExpress.Core.Services
                     Name = x.Name,
                     CountOfEvents = x.Events.Count(),
                     CountOfUser = x.Users.Count(),
-                });
+                })
+                .OrderBy(category => category.Name);
 
             return categories;
         }
