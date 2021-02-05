@@ -22,6 +22,15 @@ export const radioButton = ({ input, ...rest }) => (
         </RadioGroup>
     </FormControl>
 )
+export const radioLocationType = ({ input, ...rest }) => (
+    <FormControl>
+
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="0" control={<Radio />} label="Map" />
+            <FormControlLabel value="1" control={<Radio />} label="Online" />
+        </RadioGroup>
+    </FormControl>
+)
 
 export const validate = values => {
     const errors = {};

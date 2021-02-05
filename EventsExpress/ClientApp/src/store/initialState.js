@@ -38,10 +38,10 @@ const initialState = {
     unitsOfMeasuring: {
         isPending: true,
         isError: false,
-        units: [],       
+        units: [],
         editedUnitOfMeasuring: null,
-        isAdded:false,
-        
+        isAdded: false,
+
     },
     add_unitOfMeasuring: {
         isUnitOfMeasuringPending: false,

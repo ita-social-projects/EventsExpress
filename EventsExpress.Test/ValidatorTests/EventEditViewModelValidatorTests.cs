@@ -26,8 +26,6 @@ namespace EventsExpress.Test.ValidatorTests
                 Description = "Some desc",
                 DateFrom = DateTime.Now,
                 DateTo = DateTime.Now,
-                Latitude = 28.489335,
-                Longitude = 56.498438,
                 IsReccurent = true,
                 Frequency = 1,
                 Periodicity = Periodicity.Daily,
@@ -150,56 +148,6 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.DateTo);
-        }
-
-        [Test]
-        public void SetLatitudeForEvent_ValidLatitude_ValidationErrorIsNotReturn()
-        {
-            // Arrange
-
-            // Act
-            var result = validator.TestValidate(eventViewModel);
-
-            // Assert
-            result.ShouldNotHaveValidationErrorFor(e => e.Latitude);
-        }
-
-        [Test]
-        public void SetLatitudeForEvent_InvalidLatitude_ReturnValidationError()
-        {
-            // Arrange
-            eventViewModel.Latitude = default;
-
-            // Act
-            var result = validator.TestValidate(eventViewModel);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(e => e.Latitude);
-        }
-
-        [Test]
-        public void SetLongitudeForEvent_ValidLongitude_ValidationErrorIsNotReturn()
-        {
-            // Arrange
-
-            // Act
-            var result = validator.TestValidate(eventViewModel);
-
-            // Assert
-            result.ShouldNotHaveValidationErrorFor(e => e.Longitude);
-        }
-
-        [Test]
-        public void SetLongitudeForEvent_InvalidLongitude_ReturnValidationError()
-        {
-            // Arrange
-            eventViewModel.Longitude = default;
-
-            // Act
-            var result = validator.TestValidate(eventViewModel);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(e => e.Longitude);
         }
 
         [Test]
