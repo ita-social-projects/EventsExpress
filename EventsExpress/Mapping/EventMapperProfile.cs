@@ -85,7 +85,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
-                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => new Uri(src.Location.OnlineMeeting)))
+                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
                 .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
@@ -96,7 +96,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullCreate(src)))
-                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => new Uri(src.Location.OnlineMeeting)))
+                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullCreate(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
@@ -129,10 +129,22 @@ namespace EventsExpress.Mapping
                     };
         }
 
+        private static Uri OnlineMeetingOrNullEdit(EventEditViewModel eventEditViewModel)
+        {
+            return eventEditViewModel.Location.Type == LocationType.Online ?
+                 new Uri(eventEditViewModel.Location.OnlineMeeting) : null;
+        }
+
         private static Point PointOrNullEdit(EventEditViewModel editViewModel)
         {
             return editViewModel.Location.Type == LocationType.Map ?
                  new Point(editViewModel.Location.Latitude.Value, editViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
+        }
+
+        private static Uri OnlineMeetingOrNullCreate(EventCreateViewModel eventCreateViewModel)
+        {
+            return eventCreateViewModel.Location.Type == LocationType.Online ?
+                 new Uri(eventCreateViewModel.Location.OnlineMeeting) : null;
         }
 
         private static Point PointOrNullCreate(EventCreateViewModel createViewModel)
