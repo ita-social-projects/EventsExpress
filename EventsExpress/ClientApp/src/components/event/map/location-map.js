@@ -3,7 +3,8 @@ import {
     Map,
     TileLayer,
     Marker,
-    Popup
+    Popup,
+    Circle 
 } from 'react-leaflet';
 import Search from 'react-leaflet-search';
 import './map.css'
@@ -29,6 +30,9 @@ class LocationMap extends Component {
 
     handleClick = (e) => {
         this.setSelectedPos(e.latlng);
+        if (this.props.onClickCallBack != null) {
+            this.props.onClickCallBack(e.latlng);
+        }
     }
 
     handleSearch = (e) => {
@@ -38,8 +42,9 @@ class LocationMap extends Component {
     render() {
         const center = this.props.initialData || this.state.startPosition;
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
-        const {error, touched, invalid} = this.props.meta;
-
+        const { error, touched, invalid } = this.props.meta;
+        const { circle, radius } = this.props;
+        const { selectedPos } = this.state
         return (
             <div
                 className="mb-4"
@@ -72,6 +77,9 @@ class LocationMap extends Component {
                                 </pre>
                             </Popup>
                         </Marker>
+                    }
+                    {circle && radius && selectedPos &&
+                        <Circle center={selectedPos} pathOptions={{ color: 'blue' }} radius={radius*1000} />
                     }
                 </Map>
                 <span className="error-text">
