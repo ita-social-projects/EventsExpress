@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels.Base;
 
 namespace EventsExpress.ViewModels
@@ -12,11 +13,7 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public bool IsPublic { get; set; }
-
         public EventStatus EventStatus { get; set; }
-
-        public IEnumerable<CategoryViewModel> Categories { get; set; }
 
         public IEnumerable<UserPreviewViewModel> Visitors { get; set; }
 

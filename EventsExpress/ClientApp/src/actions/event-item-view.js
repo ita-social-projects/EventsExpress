@@ -9,17 +9,17 @@ export const RESET_EVENT = "RESET_EVENT";
 
 
 export const blockEvent = {
-  PENDING: 'PENDING_BLOCK',
-  SUCCESS: 'SUCCESS_BLOCK',
-  ERROR: 'ERROR_BLOCK',
-  UPDATE: 'UPDATE_BLOCKED'
+    PENDING: 'PENDING_BLOCK',
+    SUCCESS: 'SUCCESS_BLOCK',
+    ERROR: 'ERROR_BLOCK',
+    UPDATE: 'UPDATE_BLOCKED'
 }
 
 export const unBlockEvent = {
-  PENDING: 'PENDING_UNBLOCK',
-  SUCCESS: 'SUCCESS_UNBLOCK',
-  ERROR: 'ERROR_UNBLOCK',
-  UPDATE: 'UPDATE_UNBLOCKED'
+    PENDING: 'PENDING_UNBLOCK',
+    SUCCESS: 'SUCCESS_UNBLOCK',
+    ERROR: 'ERROR_UNBLOCK',
+    UPDATE: 'UPDATE_UNBLOCKED'
 }
 
 export const cancelEvent = {
@@ -34,145 +34,143 @@ const api_serv = new EventService();
 
 export default function get_event(id) {
 
-  return dispatch => {
-    dispatch(getEventPending(true));
+    return dispatch => {
+        dispatch(getEventPending(true));
 
-    const res = api_serv.getEvent(id);
-    res.then(response => {
-      if (response.error == null) {
-        dispatch(getEvent(response));
+        const res = api_serv.getEvent(id);
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(getEvent(response));
 
-      } else {
-        dispatch(getEventError(response.error));
-      }
-    });
-  }
+            } else {
+                dispatch(getEventError(response.error));
+            }
+        });
+    }
 }
 
 export function leave(userId, eventId) {
-  return dispatch => {
-    api_serv.setUserFromEvent({ userId: userId, eventId: eventId }).then(response => {
-      if (response.error == null) {
-        api_serv.getEvent(eventId).then(response => {
-          if (response.error == null) {
-            dispatch(getEvent(response));
+    return dispatch => {
+        api_serv.setUserFromEvent({ userId: userId, eventId: eventId }).then(response => {
+            if (response.error == null) {
+                api_serv.getEvent(eventId).then(response => {
+                    if (response.error == null) {
+                        dispatch(getEvent(response));
 
-          } else {
-            dispatch(getEventError(response.error));
-          }
+                    } else {
+                        dispatch(getEventError(response.error));
+                    }
+                });
+            }
         });
-      }
-    });
-  }
+    }
 }
 
 
 export function join(userId, eventId) {
-  return dispatch => {
-    api_serv.setUserToEvent({ userId: userId, eventId: eventId }).then(response => {
-      if (response.error == null) {
-        api_serv.getEvent(eventId).then(response => {
-          if (response.error == null) {
-            dispatch(getEvent(response));
+    return dispatch => {
+        api_serv.setUserToEvent({ userId: userId, eventId: eventId }).then(response => {
+            if (response.error == null) {
+                api_serv.getEvent(eventId).then(response => {
+                    if (response.error == null) {
+                        dispatch(getEvent(response));
 
-          } else {
-            dispatch(getEventError(response.error));
-          }
+                    } else {
+                        dispatch(getEventError(response.error));
+                    }
+                });
+            }
         });
-      }
-    });
-  }
+    }
 }
 
 // ACTION APPROVER FOR USER
 export function approveUser(userId, eventId, buttonAction) {
-  return dispatch => {
-    const res = api_serv.setApprovedUser({ userId: userId, eventId: eventId, buttonAction: buttonAction });
-    res.then(response => {
-      if (response.error == null) {
+    return dispatch => {
+        const res = api_serv.setApprovedUser({ userId: userId, eventId: eventId, buttonAction: buttonAction });
+        res.then(response => {
+            if (response.error == null) {
 
-        const res1 = api_serv.getEvent(eventId);
-        res1.then(response => {
-          if (response.error == null) {
-            dispatch(getEvent(response));
+                const res1 = api_serv.getEvent(eventId);
+                res1.then(response => {
+                    if (response.error == null) {
+                        dispatch(getEvent(response));
 
-          } else {
-            dispatch(getEventError(response.error));
-          }
+                    } else {
+                        dispatch(getEventError(response.error));
+                    }
+                });
+            }
         });
-      }
-    });
-  }
+    }
 }
 
 export function deleteFromOwners(userId, eventId) {
-  return dispatch => {
-    api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId}).then(response =>{
-      if(response.error == null)
-      {
-        api_serv.getEvent(eventId).then(response => {
-          if(response.error == null){
-            dispatch(getEvent(response));
-          } else {
-            dispatch(getEventError(response.error));
-          }
+    return dispatch => {
+        api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId }).then(response => {
+            if (response.error == null) {
+                api_serv.getEvent(eventId).then(response => {
+                    if (response.error == null) {
+                        dispatch(getEvent(response));
+                    } else {
+                        dispatch(getEventError(response.error));
+                    }
+                })
+            }
         })
-      }
-    })
-  }
+    }
 }
 
 export function promoteToOwner(userId, eventId) {
-  return dispatch => {
-    api_serv.onPromoteToOwner({ userId: userId, eventId: eventId}).then(response =>{
-      if(response.error == null)
-      {
-        api_serv.getEvent(eventId).then(response => {
-          if(response.error == null){
-            dispatch(getEvent(response));
-          } else {
-            dispatch(getEventError(response.error));
-          }
+    return dispatch => {
+        api_serv.onPromoteToOwner({ userId: userId, eventId: eventId }).then(response => {
+            if (response.error == null) {
+                api_serv.getEvent(eventId).then(response => {
+                    if (response.error == null) {
+                        dispatch(getEvent(response));
+                    } else {
+                        dispatch(getEventError(response.error));
+                    }
+                })
+            }
         })
-      }
-    })
-  }
+    }
 }
 
 // ACTION CREATOR FOR EVENT UNBLOCK:
 export function unblock_event(id) {
-  return dispatch => {
-      dispatch(setUnBlockEventPending(true));
+    return dispatch => {
+        dispatch(setUnBlockEventPending(true));
 
-      const res = api_serv.setEventUnblock(id);
+        const res = api_serv.setEventUnblock(id);
 
-      res.then(response => {
-          if (response.error == null) {
-              dispatch(setUnBlockEventSuccess());
-              dispatch(updateUnBlockedEvent(id));
-          } else {
-              dispatch(setUnBlockEventError(response.error));
-          }
-      });
-  }
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setUnBlockEventSuccess());
+                dispatch(updateUnBlockedEvent(id));
+            } else {
+                dispatch(setUnBlockEventError(response.error));
+            }
+        });
+    }
 }
 
 // ACTION CREATOR FOR USER BLOCK:
 export function block_event(id) {
-  return dispatch => {
-      dispatch(setBlockEventPending(true));
+    return dispatch => {
+        dispatch(setBlockEventPending(true));
 
-      const res = api_serv.setEventBlock(id);
+        const res = api_serv.setEventBlock(id);
 
-      res.then(response => {
-          if (response.error == null) {
-              dispatch(setBlockEventSuccess());
-              dispatch(updateBlockedEvent(id));
-          } else {
-              dispatch(setBlockEventError(response.error));
-          }
-      });
-  }
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(setBlockEventSuccess());
+                dispatch(updateBlockedEvent(id));
+            } else {
+                dispatch(setBlockEventError(response.error));
+            }
+        });
+    }
 }
 
 // ACTION CREATOR FOR EVENT CANCELATION:
@@ -180,7 +178,7 @@ export function cancel_event(eventId, reason, eventStatus) {
     return dispatch => {
         dispatch(setCancelEventPending(true));
 
-        const res = api_serv.setEventCancel({EventId: eventId, Reason: reason, EventStatus: eventStatus});
+        const res = api_serv.setEventCancel({ EventId: eventId, Reason: reason, EventStatus: eventStatus });
 
         res.then(response => {
             if (response.error == null) {
@@ -195,95 +193,95 @@ export function cancel_event(eventId, reason, eventStatus) {
     }
 }
 
-export function resetEvent(){
-  return {
-    type: RESET_EVENT,
-    payload: {}
-  }
+export function resetEvent() {
+    return {
+        type: RESET_EVENT,
+        payload: {}
+    }
 }
 
 function getEventPending(data) {
-  return {
-    type: GET_EVENT_PENDING,
-    payload: data
-  }
+    return {
+        type: GET_EVENT_PENDING,
+        payload: data
+    }
 }
 
 function getEvent(data) {
-  return {
-    type: GET_EVENT_SUCCESS,
-    payload: data
-  }
+    return {
+        type: GET_EVENT_SUCCESS,
+        payload: data
+    }
 }
 
 export function getEventError(data) {
-  return {
-    type: GET_EVENT_ERROR,
-    payload: data
-  }
+    return {
+        type: GET_EVENT_ERROR,
+        payload: data
+    }
 }
 //block Event actions
 
 function setBlockEventPending(data) {
-  return {
-      type: blockEvent.PENDING,
-      payload: data
-  }
-}  
+    return {
+        type: blockEvent.PENDING,
+        payload: data
+    }
+}
 
 function setBlockEventSuccess() {
-  return {
-      type: blockEvent.SUCCESS
-  }
+    return {
+        type: blockEvent.SUCCESS
+    }
 }
 
 function setBlockEventError(data) {
-  return {
-      type: blockEvent.ERROR,
-      payload: data
-  }
-} 
+    return {
+        type: blockEvent.ERROR,
+        payload: data
+    }
+}
 
 function updateBlockedEvent(id) {
-  return {
-      type: blockEvent.UPDATE,
-      payload: id
-  }
-} 
+    return {
+        type: blockEvent.UPDATE,
+        payload: id
+    }
+}
 
 // unBlock User actions
 function setUnBlockEventPending(data) {
-  return {
-      type: unBlockEvent.PENDING,
-      payload: data
-  }
+    return {
+        type: unBlockEvent.PENDING,
+        payload: data
+    }
 }
 
 function setUnBlockEventSuccess() {
-  return {
-      type: unBlockEvent.SUCCESS
-  }
+    return {
+        type: unBlockEvent.SUCCESS
+    }
 }
 
 function setUnBlockEventError(data) {
-  return {
-      type: unBlockEvent.ERROR,
-      payload: data
-  }
+    return {
+        type: unBlockEvent.ERROR,
+        payload: data
+    }
 }
 
 function updateUnBlockedEvent(id) {
-  return {
-      type: unBlockEvent.UPDATE,
-      payload: id
-  }
-} 
+    return {
+        type: unBlockEvent.UPDATE,
+        payload: id
+    }
+}
 
 // cancelEvent User actions
 
 function setCancelEventSuccess() {
     return {
-        type: cancelEvent.SUCCESS        
+        type: cancelEvent.SUCCESS
     }
 }
 

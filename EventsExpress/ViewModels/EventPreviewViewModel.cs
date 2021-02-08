@@ -1,6 +1,6 @@
 ﻿using System;
-using EventsExpress.ViewModels.Base;
 using EventsExpress.Db.Enums;
+using EventsExpress.ViewModels.Base;
 
 namespace EventsExpress.ViewModels
 {
@@ -14,10 +14,6 @@ namespace EventsExpress.ViewModels
 
         public int CountVisitor { get; set; }
 
-        public bool IsPublic { get; set; }
-
         public EventStatus EventStatus { get; set; }
-
-        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

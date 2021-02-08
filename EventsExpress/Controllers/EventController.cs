@@ -137,7 +137,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
-            filter.PageSize = 6;
+            filter.PageSize = 3;
             filter.OwnerId = null;
             filter.VisitorId = null;
 

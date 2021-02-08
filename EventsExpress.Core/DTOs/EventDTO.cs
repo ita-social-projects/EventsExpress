@@ -42,9 +42,9 @@ namespace EventsExpress.Core.DTOs
         public Point Point { get; set; }
 
         public IEnumerable<CategoryDto> Categories { get; set; }
+
         public EventStatus EventStatus { get; set; }
 
-        public City City { get; set; }
         public IEnumerable<UserEvent> Visitors { get; set; }
 
         public IEnumerable<InventoryDto> Inventories { get; set; }

@@ -18,7 +18,7 @@ class EventFilter extends Component {
         this.state = {
             viewMore: false,
             needInitializeValues: true,
-            all: x[StatusHistory.Active].checked &&
+            all: this.props.initialFormValues.statuses[StatusHistory.Active].checked &&
                 this.props.initialFormValues.statuses[StatusHistory.Blocked].checked &&
                 this.props.initialFormValues.statuses[StatusHistory.Canceled].checked,
             active: this.props.initialFormValues.statuses[StatusHistory.Active].checked,

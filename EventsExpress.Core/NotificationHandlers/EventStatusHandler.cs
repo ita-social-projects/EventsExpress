@@ -40,7 +40,7 @@ namespace EventsExpress.Core.NotificationHandlers
                                 : $"Dear {email}, the event you have been joined was UNCANCELED. The reason is: {notification.Reason} " +
                                                   $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
 
-                await _sender.SendEmailAsync(new EmailDTO
+                await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = subject,
                     RecepientEmail = email,

@@ -16,6 +16,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
 import SocialShareMenu from './share/SocialShareMenu';
 import EventManagmentWrapper from '../../containers/event-managment';
+import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import './event-item.css';
@@ -129,13 +130,13 @@ export default class Event extends Component {
                     <CardHeader
                         avatar={
                             <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
-                                    <Badge overlap="circle" badgeContent={owners.length} color="primary">
-                                        <CustomAvatar
-                                            className={classes.avatar}
-                                            photoUrl={owners[0].photoUrl}
-                                            name={owners[0].username}
-                                        />
-                                    </Badge>
+                                <Badge overlap="circle" badgeContent={owners.length} color="primary">
+                                    <CustomAvatar
+                                        className={classes.avatar}
+                                        photoUrl={owners[0].photoUrl}
+                                        name={owners[0].username}
+                                    />
+                                </Badge>
                             </Button>
 
                         }
@@ -181,10 +182,10 @@ export default class Event extends Component {
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
-                            <DisplayLocation 
+                            <DisplayLocation
                                 latitude={this.props.item.latitude}
-                                longitude={this.props.item.longitude}/>
-                        <br />
+                                longitude={this.props.item.longitude} />
+                            <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
@@ -199,10 +200,17 @@ export default class Event extends Component {
                                     </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
-                                    <IconButton aria-label="view">
-                                        <i className="fa fa-eye"></i>
-                                    </IconButton>
+                                    <Tooltip title="View">
+                                        <IconButton aria-label="view">
+                                            <i className="fa fa-eye"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 </Link>
+                                {(this.props.current_user !== null
+                                    && this.props.current_user.role === "Admin")
+                                    ? <EventActiveStatus eventStatus={this.props.item.eventStatus} />
+                                    : null
+                                }
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
                                     ? <EventManagmentWrapper eventItem={this.props.item} />
