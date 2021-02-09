@@ -346,5 +346,33 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns current user.</returns>
         [NonAction]
         private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+
+        /// <summary>
+        /// This method is to edit user notificatin types.
+        /// </summary>
+        /// <param name="model">Param model defines EditUserNotificationTypesViewModel model.</param>
+        /// <returns>The method returns edited notification types for user.</returns>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditUserNotificationType(EditUserNotificationTypesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = GetCurrentUser(HttpContext.User);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var newNotificationTypes = _mapper.Map<IEnumerable<NotificationType>>(model.NotificationTypes);
+
+            await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
+
+            return Ok();
+        }
     }
 }
