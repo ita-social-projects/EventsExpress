@@ -137,6 +137,8 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
                 .FirstOrDefault(x => x.Id == userId));
 
             user.Rating = GetRating(user.Id);
@@ -153,6 +155,8 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Email == email));
 
@@ -389,6 +393,39 @@ namespace EventsExpress.Core.Services
             {
                 return 0;
             }
+        }
+
+        public IEnumerable<UserDto> GetUsersByNotificationTypes(IEnumerable<NotificationTypeDTO> notificationTypes)
+        {
+            var notificationTypesIds = notificationTypes.Select(x => x.Id).ToList();
+
+            var users = Context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Role)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(c => c.NotificationType)
+                .Where(user => user.NotificationTypes
+                    .Any(notification => notificationTypesIds.Contains(notification.NotificationType.Id)))
+                .Distinct()
+                .AsEnumerable();
+
+            return Mapper.Map<IEnumerable<UserDto>>(users);
+        }
+
+        public async Task EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
+        {
+            var u = Context.Users
+                .Include(u => u.NotificationTypes)
+                .Single(user => user.Id == userDto.Id);
+
+            var newNotificationTypes = notificationTypes
+                .Select(x => new UserNotificationType { UserId = u.Id, NotificationTypeId = x.Id })
+                .ToList();
+
+            u.NotificationTypes = newNotificationTypes;
+
+            Update(u);
+            await Context.SaveChangesAsync();
         }
     }
 }

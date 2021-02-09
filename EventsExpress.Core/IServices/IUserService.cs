@@ -44,5 +44,9 @@ namespace EventsExpress.Core.IServices
         IEnumerable<UserDto> GetUsersByRole(string role);
 
         double GetRating(Guid userId);
+
+        IEnumerable<UserDto> GetUsersByNotificationTypes(IEnumerable<NotificationTypeDTO> notificationTypes);
+
+        Task EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
     }
 }
