@@ -4,6 +4,8 @@ import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
 import { setLoginPending, setLoginSuccess } from '../actions/login';
+import { validateEventForm } from '../components/helpers/helpers'
+import add_event from '../actions/add-event';
 
 class HeaderProfileWrapper extends Component {
   logout_reset = () => {
@@ -11,13 +13,18 @@ class HeaderProfileWrapper extends Component {
     this.props.logout();
   }
 
-  render() {
+    onSubmit = (values) => {
+        return this.props.add_event({ user_id: this.props.user.id });
+    }
+
+    render() {
     return <HeaderProfile
-      user={this.props.user}
-      filter={this.props.events.filter}
-      onClick={this.logout_reset}
-      reset={this.props.reset}
-      notification={this.props.notification.events.length}
+        user={this.props.user}
+        filter={this.props.events.filter}
+        onClick={this.logout_reset}
+        reset={this.props.reset}
+        notification={this.props.notification.events.length}
+        onSubmit={this.onSubmit}
     />;
   }
 }
@@ -33,7 +40,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
+    return {
+        add_event: (data) => dispatch(add_event(data)),
     logout: () => { dispatch(logout()) },
     reset: () => {
       dispatch(setRegisterPending(true));

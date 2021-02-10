@@ -2,6 +2,7 @@ import { SubmissionError } from 'redux-form';
 import { EventService } from '../services';
 import get_event from './event-item-view';
 import { buildValidationState } from '../components/helpers/helpers.js'
+import { createBrowserHistory } from 'history';
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
@@ -9,6 +10,8 @@ export const SET_EVENT_ERROR = "SET_EVENT_ERROR";
 export const EVENT_WAS_CREATED = "EVENT_WAS_CREATED";
 
 const api_serv = new EventService();
+const history = createBrowserHistory({ forceRefresh: true });
+
 
 export default function add_event(data) {
 
@@ -19,10 +22,20 @@ export default function add_event(data) {
       if (response.error == null) {
         dispatch(setEventSuccess(true));
 
-        return response.text().then(x => {
-          dispatch(eventWasCreated(x));
-          return Promise.resolve('success');
-        });
+
+
+          //return response.json().then(x => {
+          //    response.text().then(x => {
+          //        dispatch(eventWasCreated(x));
+          //    }),
+          //    dispatch(history.push(`/editEvent/${x.id}`));
+          //    return Promise.resolve('success');
+          //});
+          return response.json().then(x => {
+              dispatch(history.push(`/editEvent/${x.id}`));
+              return Promise.resolve('success');
+          })
+          
       } else {
         throw new SubmissionError(buildValidationState(response.error));
       }

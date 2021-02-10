@@ -165,10 +165,6 @@ namespace EventsExpress.Db.EF
             modelBuilder.Entity<Comments>()
                 .HasOne(c => c.Parent).WithMany(prop => prop.Children).HasForeignKey(c => c.CommentsId);
 
-            // event config
-            modelBuilder.Entity<Event>()
-                .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
-
             // inventory config
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Event)

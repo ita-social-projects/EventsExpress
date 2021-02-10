@@ -9,7 +9,7 @@ namespace EventsExpress.ViewModels
     {
         public IFormFile Photo { get; set; }
 
-        public Guid PhotoId { get; set; }
+        public Guid? PhotoId { get; set; }
 
         public IEnumerable<InventoryViewModel> Inventories { get; set; }
     }

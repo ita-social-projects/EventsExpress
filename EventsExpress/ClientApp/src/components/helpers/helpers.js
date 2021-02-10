@@ -136,6 +136,9 @@ export const validate = values => {
 
 export const validateEventForm = values =>{
 
+    if (!values)
+        return values;
+
     if (!values.isPublic) {
         values.isPublic = false;
     }

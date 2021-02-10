@@ -1,4 +1,5 @@
-﻿import React, { Component } from 'react';
+﻿
+import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -39,6 +40,10 @@ class EventForm extends Component {
     handleClick = () => {
         history.push(`/`);
     }
+    handleDB = () => {
+
+    }
+
 
     render() {
         const { form_values, all_categories, isCreated, pristine,
@@ -171,10 +176,20 @@ class EventForm extends Component {
                         <Button
                             className="border"
                             fullWidth={true}
+                            onClick={this.props.handleDB}
+                            color="primary"
+                            >
+                            Save
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
                             type="submit"
                             color="primary"
                             disabled={pristine || submitting}>
-                            Save
+                            Publish
                         </Button>
                     </div>
                     <div className="col">

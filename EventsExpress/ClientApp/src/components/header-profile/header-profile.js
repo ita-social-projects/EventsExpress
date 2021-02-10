@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import IconButton from "@material-ui/core/IconButton";
@@ -12,12 +11,12 @@ import RatingAverage from '../rating/rating-average'
 import './header-profile.css';
 import { createBrowserHistory } from 'history';
 
-
 const history = createBrowserHistory({ forceRefresh: true });
 
 export default class HeaderProfile extends Component {
     handleClick = () => {
-        history.push(`/event/createEvent`);
+        this.props.onSubmit(null);
+        //history.push(`/event/createEvent`);
     }
 
     render() {
@@ -69,8 +68,8 @@ export default class HeaderProfile extends Component {
                                     <button className="btn btn-outline-secondary" onClick={this.handleClick}>
                                         <i className="fas fa-plus mr-1"></i>
                                     add event
-                                        
-                                    </button>   
+
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -13,6 +13,10 @@ export default class EventService {
         const res = await baseService.getResource(`event/all${filters}`);
         return res;
     }
+    getAllDrafts = async () => {
+        const res = await baseService.getResource(`event/AllDraft`);
+        return res;
+    }
 
     getEvents = async (eventIds, page) => {
         const res = await baseService.setResource(`event/getEvents?page=${page}`, eventIds);
@@ -63,9 +67,12 @@ export default class EventService {
         }
 
         let i = 0;
-        data.categories.map(x => {
-            return file.append(`Categories[${i++}].Id`, x.id);
-        });
+        if (data.categories != null) {
+            data.categories.map(x => {
+                return file.append(`Categories[${i++}].Id`, x.id);
+            });
+        }
+           
         const res = await baseService.setResourceWithData(path, file);
         return !res.ok
             ? { error: await res.text() }
@@ -87,7 +94,7 @@ export default class EventService {
         return this.setEventTemplate(data,`event/CreateNextFromParentWithEdit/${data.id}`);
     }
 
-    editEvent = async(data) => {
+    editEvent = async (data) => {
         return this.setEventTemplate(data,`event/${data.id}/edit`)
     }
 

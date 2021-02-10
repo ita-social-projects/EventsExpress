@@ -1,7 +1,7 @@
 ﻿import initialState from '../store/initialState';
 
 import {
-    SET_EVENT_ERROR, SET_EVENT_PENDING, SET_EVENT_SUCCESS
+    SET_EVENT_ERROR, SET_EVENT_PENDING, SET_EVENT_SUCCESS, EVENT_WAS_CREATED
 }from '../actions/add-event';
 
 export const reducer = (state = initialState.add_event, action) => {
@@ -24,6 +24,11 @@ export const reducer = (state = initialState.add_event, action) => {
                 ...state,
                 isEventPending: false,
                 isEventSuccess: action.payload
+            };
+        case EVENT_WAS_CREATED:
+            return {
+                ...state,
+                lastEventId: action.payload
             };
         default:
             break;

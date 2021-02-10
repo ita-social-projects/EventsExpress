@@ -10,9 +10,9 @@ namespace EventsExpress.ViewModels.Base
 
         public string Description { get; set; }
 
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
         public bool IsReccurent { get; set; }
 
@@ -26,7 +26,7 @@ namespace EventsExpress.ViewModels.Base
 
         public double Longitude { get; set; }
 
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 

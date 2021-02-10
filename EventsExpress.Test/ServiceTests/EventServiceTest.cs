@@ -224,7 +224,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             eventDTO.Id = Guid.Empty;
 
-            Assert.DoesNotThrowAsync(async () => await service.Create(eventDTO));
+            Assert.DoesNotThrowAsync(async () => await service.CreateOld(eventDTO));
         }
 
         [Test]

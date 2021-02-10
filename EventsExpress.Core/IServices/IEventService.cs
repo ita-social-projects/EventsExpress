@@ -8,7 +8,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        Task<Guid> Create(EventDto eventDTO);
+        Guid Create();
 
         Task<Guid> CreateNextEvent(Guid eventId);
 
@@ -23,6 +23,8 @@ namespace EventsExpress.Core.IServices
         EventDto EventById(Guid eventId);
 
         IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count);
+
+        IEnumerable<EventDto> GetAllDraftEvents(Guid user_id);
 
         IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
