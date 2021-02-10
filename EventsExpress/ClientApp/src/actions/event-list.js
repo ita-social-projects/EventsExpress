@@ -22,6 +22,22 @@ export function get_events(filters) {
         });
     }
 }
+export function get_drafts() {
+    return dispatch => {
+        dispatch(setEventPending(true));
+        dispatch(setEventError(false));
+        const res = api_serv.getAllDrafts();
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(getEvents(response));
+            } else {
+                dispatch(setEventError(response.error));
+            }
+        });
+    }
+}
+
+
 
 export function setEventPending(data) {
     return {

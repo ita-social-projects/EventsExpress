@@ -44,13 +44,22 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\build\**" />
+    <Compile Remove="ClientApp\src\components\Новая папка\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\components\Новая папка\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="ClientApp\build\**" />
+    <EmbeddedResource Remove="ClientApp\src\components\Новая папка\**" />
     <None Remove="ClientApp\build\**" />
+    <None Remove="ClientApp\src\components\Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\containers\event-item-draft-view.js" />
+    <None Remove="ClientApp\src\containers\event-item-draft-view.js" />
   </ItemGroup>
 
   <ItemGroup>
