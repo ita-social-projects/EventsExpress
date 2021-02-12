@@ -1,5 +1,5 @@
 ﻿import { UserService } from '../../services';
-import { setAlert } from '../alert';
+import { setAlert } from '../alert-action';
 
 export const addUserCategory = {
     PENDING: "SET_ADDUSERCATEGORY_PENDING",

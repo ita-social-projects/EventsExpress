@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
 import edit_event_from_parent from '../actions/edit-event-from-parent';
 import { connect } from 'react-redux';
-import { setAlert } from '../actions/alert';
+import { setAlert } from '../actions/alert-action';
 import { reset } from 'redux-form';
 import {
     setEventFromParentError,

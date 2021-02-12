@@ -137,11 +137,6 @@ const initialState = {
         isEventFromParentSuccess: false,
         eventFromParentError: null
     },
-    add_eventSchedule: {
-        isEventSchedulePending: false,
-        isEventScheduleSuccess: false,
-        eventScheduleError: null
-    },
     cancel_next_eventSchedule: {
         isCancelNextEventSchedulePending: false,
         isCancelNextEventScheduleSuccess: false,
@@ -229,11 +224,6 @@ const initialState = {
         variant: null,
         message: null,
         autoHideDuration: null,
-        open: false
-    },
-    dialog: {
-        title: null,
-        message: null,
         open: false
     },
     contactUs: {

@@ -1,4 +1,4 @@
-import EventsExpressService from './EventsExpressService'
+import EventsExpressService from './EventsExpressService';
 
 const baseService = new EventsExpressService();
 
@@ -25,9 +25,7 @@ export default class EventScheduleService {
         file.append('IsActive', data.isActive);
 
         const res = await baseService.setResourceWithData(`eventSchedule/${data.eventId}/edit`, file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
+        return res
     }
 
     setNextEventScheduleCancel = async (eventId) => {

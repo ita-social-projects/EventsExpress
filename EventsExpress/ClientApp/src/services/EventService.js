@@ -67,9 +67,7 @@ export default class EventService {
             return file.append(`Categories[${i++}].Id`, x.id);
         });
         const res = await baseService.setResourceWithData(path, file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
+        return res
     }
 
     setEvent = async (data) => {
@@ -78,9 +76,7 @@ export default class EventService {
 
     setCopyEvent = async (eventId) => {
         const res = await baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
+        return res
     }
 
     setEventFromParent = async (data) => {

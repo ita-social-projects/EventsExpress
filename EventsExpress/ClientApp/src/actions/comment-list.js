@@ -1,23 +1,21 @@
 ﻿import { CommentService } from '../services';
-import { setAlert } from './alert';
-
+import { setErrorAllertFromResponse } from './alert-action';
 
 export const SET_COMMENTS_PENDING = "SET_COMMENTS_PENDING";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
 const api_serv = new CommentService();
 
-export default function get_comments(data, page) {
-    return dispatch => {
+export default function getComments(data, page = 1){
+    return async dispatch => {
         dispatch(setCommentPending(true));
-        const res = api_serv.getAllComments(data, page);
-        return res.then(response => {
-            if (response.error == null) {
-                dispatch(getComments(response));
-            } else {
-                dispatch(setAlert({ variant: 'error', message: 'Some error' }));
-            }
-        });
+        let response = await api_serv.getAllComments(data, page);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(getCommentsInternal(response));
+        return Promise.resolve();
     }
 }
 
@@ -28,7 +26,7 @@ function setCommentPending(data) {
     }
 }
 
-function getComments(data) {
+function getCommentsInternal(data) {
     return {
         type: GET_COMMENTS_SUCCESS,
         payload: data

@@ -1,5 +1,5 @@
 import { EventScheduleService } from '../services';
-import { setAlert } from './alert';
+import { setAlert } from './alert-action';
 import { createBrowserHistory } from 'history';
 
 export const SET_CANCEL_ALL_EVENT_SUCCESS = "SET_CANCEL_ALL_EVENT_SUCCESS";
