@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
@@ -6,6 +8,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.EF;
+using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,6 +21,7 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly AppDbContext _context;
+        private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
@@ -41,17 +45,20 @@ namespace EventsExpress.Core.NotificationHandlers
                 return;
             }
 
-            var user = _userService.GetById(changeInfos.UserId);
-
             try
             {
-                string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
-                await _sender.SendEmailAsync(new EmailDto
+                var usersId = new[] { changeInfos.UserId };
+                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersId).Select(x => x.Email).SingleOrDefault();
+                if (userEmail != null)
                 {
-                    Subject = "Aprove your reccurent event!",
-                    RecepientEmail = user.Email,
-                    MessageText = $"Follow the <a href='{link}'>link</a> to create the reccurent event.",
-                });
+                    string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
+                    await _sender.SendEmailAsync(new EmailDto
+                    {
+                        Subject = "Aprove your reccurent event!",
+                        RecepientEmail = userEmail,
+                        MessageText = $"Follow the <a href='{link}'>link</a> to create the reccurent event.",
+                    });
+                }
             }
             catch (Exception ex)
             {
