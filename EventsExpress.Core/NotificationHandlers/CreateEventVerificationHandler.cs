@@ -22,23 +22,25 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IUserService _userService;
         private readonly AppDbContext _context;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
+        private readonly ITrackService _trackService;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
             IUserService userService,
+            ITrackService trackService,
             AppDbContext context)
         {
             _logger = logger;
             _sender = sender;
             _userService = userService;
+            _trackService = trackService;
             _context = context;
         }
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var changeInfos = await _context.ChangeInfos
-              .FromSqlRaw(@"SELECT * FROM ChangeInfos WHERE EntityName = 'EventSchedule' AND JSON_VALUE(EntityKeys, '$.Id') = '" + notification.EventSchedule.Id + "' AND ChangesType = 2").FirstOrDefaultAsync();
+            var changeInfos = await _trackService.GetChangeInfoByScheduleIdAsync(notification.EventSchedule.Id);
 
             if (changeInfos == null)
             {

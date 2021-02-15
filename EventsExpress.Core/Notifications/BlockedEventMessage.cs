@@ -12,8 +12,8 @@ namespace EventsExpress.Core.Notifications
             Id = id;
         }
 
-        public IEnumerable<Guid> UserIds { get; }
+        public IEnumerable<Guid> UserIds { get; set; }
 
-        public Guid Id { get; }
+        public Guid Id { get; set; }
     }
 }
