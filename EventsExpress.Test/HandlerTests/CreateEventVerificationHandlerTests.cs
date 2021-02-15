@@ -1,7 +1,9 @@
 ﻿namespace EventsExpress.Test.HandlerTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using EventsExpress.Core.DTOs;
     using EventsExpress.Core.Extensions;
     using EventsExpress.Core.IServices;
@@ -19,7 +21,7 @@
         private Mock<ILogger<CreateEventVerificationHandler>> _logger;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
-        private NotificationChange _nameNotification = NotificationChange.OwnEvent;
+        private Mock<ITrackService> _trackService;
         private CreateEventVerificationHandler _eventVerificationHandler;
         private CreateEventVerificationMessage _createEventVerificationMessage;
         private EventScheduleDto _eventScheduleDto;
@@ -38,7 +40,8 @@
             _logger = new Mock<ILogger<CreateEventVerificationHandler>>();
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, Context);
+            _trackService = new Mock<ITrackService>();
+            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, Context);
             _eventScheduleDto = new EventScheduleDto
             {
                 Id = _idEventSchedule,
@@ -47,7 +50,7 @@
             _changeInfo = new ChangeInfo
             {
                 EntityName = "EventSchedule",
-                EntityKeys = $"{_eventScheduleDto.Id}",
+                EntityKeys = $"{{ \"Id\":\"{_eventScheduleDto.Id}\" }}",
                 ChangesType = ChangesType.Create,
                 UserId = _idUser,
             };
@@ -64,7 +67,7 @@
                 Email = _emailUser,
             };
             _usersIds = new Guid[] { _idUser };
-            _userService.Setup(u => u.GetUsersByNotificationTypes(_nameNotification, _usersIds)).Returns(new UserDto[] { _userDto });
+            _userService.Setup(u => u.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>())).Returns(new UserDto[] { _userDto });
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);
@@ -73,8 +76,27 @@
         [Test]
         public void Handle_AllUser_AllSubscribingUsers()
         {
+            _trackService.Setup(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(_changeInfo));
+
             var result = _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
+
+            Assert.IsInstanceOf<Task>(result);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+            _trackService.Verify(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()), Times.Exactly(1));
+            _userService.Verify(u => u.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void Handle_AllUser_Nothing()
+        {
+            _trackService.Setup(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>())).Returns((Task<ChangeInfo> info) => null);
+
+            var result = _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
+
+            Assert.IsInstanceOf<Task>(result);
+            _trackService.Verify(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()), Times.Exactly(1));
+            _userService.Verify(u => u.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>()), Times.Exactly(0));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
     }
 }
