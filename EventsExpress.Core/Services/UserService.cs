@@ -135,6 +135,7 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
                 .Include(u => u.Role)
+                .Include(u => u.Email)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
@@ -309,7 +310,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = false;
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedUserMessage(user.Email));
+            await _mediator.Publish(new UnblockedUserMessage(user));
         }
 
         public async Task Block(Guid userId)
@@ -322,7 +323,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = true;
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedUserMessage(user.Email));
+            await _mediator.Publish(new BlockedUserMessage(user));
         }
 
         public async Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories)
@@ -395,28 +396,21 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public IEnumerable<UserDto> GetUsersByNotificationTypes(IEnumerable<NotificationTypeDTO> notificationTypes)
+        public IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds)
         {
-            var notificationTypesIds = notificationTypes.Select(x => x.Id).ToList();
-
-            var users = Context.Users
-                .Include(u => u.Photo)
-                .Include(u => u.Role)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(c => c.NotificationType)
-                .Where(user => user.NotificationTypes
-                    .Any(notification => notificationTypesIds.Contains(notification.NotificationType.Id)))
-                .Distinct()
-                .AsEnumerable();
-
-            return Mapper.Map<IEnumerable<UserDto>>(users);
+            var usersId = Context.UserNotificationTypes
+                                    .Where(x => x.NotificationTypeId == notificationType && userIds.Contains(x.UserId))
+                                    .Select(x => GetById(x.UserId))
+                                    .AsEnumerable();
+            return usersId;
         }
 
-        public async Task EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
+        public async Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
         {
             var u = Context.Users
                 .Include(u => u.NotificationTypes)
                 .Single(user => user.Id == userDto.Id);
+            var res = u;
 
             var newNotificationTypes = notificationTypes
                 .Select(x => new UserNotificationType { UserId = u.Id, NotificationTypeId = x.Id })
@@ -426,6 +420,7 @@ namespace EventsExpress.Core.Services
 
             Update(u);
             await Context.SaveChangesAsync();
+            return u.Id;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.IServices
@@ -45,8 +46,8 @@ namespace EventsExpress.Core.IServices
 
         double GetRating(Guid userId);
 
-        IEnumerable<UserDto> GetUsersByNotificationTypes(IEnumerable<NotificationTypeDTO> notificationTypes);
+        IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds);
 
-        Task EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
+        Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
     }
 }
