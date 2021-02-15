@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
@@ -365,14 +366,14 @@ namespace EventsExpress.Controllers
             var user = GetCurrentUser(HttpContext.User);
             if (user == null)
             {
-                return BadRequest();
+                throw new EventsExpressException("Null object");
             }
 
             var newNotificationTypes = _mapper.Map<IEnumerable<NotificationType>>(model.NotificationTypes);
 
-            await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
+            var result = await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
 
-            return Ok();
+            return Ok(result);
         }
     }
 }
