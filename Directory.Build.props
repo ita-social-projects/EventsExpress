@@ -9,7 +9,15 @@
    <!-- Common StyleCop configuration -->
    <AdditionalFiles Include="$(SolutionDir)stylecop.json" Link="stylecop.json" />
  </ItemGroup>
- 	<PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>EventsExpress.Test</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <PropertyGroup>
 	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	  <TreatSpecificWarningsAsErrors />
   </PropertyGroup>

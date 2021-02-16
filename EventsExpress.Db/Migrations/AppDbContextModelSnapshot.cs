@@ -333,6 +333,36 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Message");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Own Event Change"
+                        },
+                        new
+                        {
+                            Id = 0,
+                            Name = "Profile Change"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Visited Event Change"
+                        });
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -638,6 +668,21 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("UserEventInventories");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NotificationTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "NotificationTypeId");
+
+                    b.HasIndex("NotificationTypeId");
+
+                    b.ToTable("UserNotificationTypes");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Comments", "Parent")
@@ -881,6 +926,21 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("Inventories")
                         .HasForeignKey("UserId", "EventId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.NotificationType", "NotificationType")
+                        .WithMany("Users")
+                        .HasForeignKey("NotificationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithMany("NotificationTypes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
