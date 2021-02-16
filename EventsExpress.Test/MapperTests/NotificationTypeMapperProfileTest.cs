@@ -20,9 +20,9 @@
             };
         }
 
-       private NotificationTypeDTO GetNotificationTypeDto(NotificationChange notificationChange, int countOfUser)
+       private NotificationTypeDto GetNotificationTypeDto(NotificationChange notificationChange, int countOfUser)
         {
-            return new NotificationTypeDTO
+            return new NotificationTypeDto
             {
                 Id = notificationChange,
                 Name = notificationChange.ToString(),
@@ -59,8 +59,8 @@
        public void EventMapperProfile_NotificationTypeToNotificationTypeDTO(NotificationChange notificationChange)
         {
             NotificationType notificationType = GetNotificationType(notificationChange);
-            var e = Mapper.Map<NotificationType, NotificationTypeDTO>(notificationType);
-            Assert.That(e, Is.TypeOf<NotificationTypeDTO>());
+            var e = Mapper.Map<NotificationType, NotificationTypeDto>(notificationType);
+            Assert.That(e, Is.TypeOf<NotificationTypeDto>());
             Assert.That(e.Id, Is.EqualTo(notificationType.Id));
             Assert.That(e.Name, Is.EqualTo(notificationType.Name));
             Assert.That(e.CountOfUser, Is.EqualTo(default(int)));
@@ -72,8 +72,8 @@
        [TestCase(NotificationChange.VisitedEvent, 5)]
        public void EventMapperProfile_NotificationTypeDtoToNotificationType(NotificationChange notificationChange, int countOfUser)
         {
-            NotificationTypeDTO notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
-            var e = Mapper.Map<NotificationTypeDTO, NotificationType>(notificationTypeDTO);
+            NotificationTypeDto notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
+            var e = Mapper.Map<NotificationTypeDto, NotificationType>(notificationTypeDTO);
             Assert.That(e, Is.TypeOf<NotificationType>());
             Assert.That(e.Id, Is.EqualTo(notificationTypeDTO.Id));
             Assert.That(e.Name, Is.EqualTo(notificationTypeDTO.Name));
@@ -86,8 +86,8 @@
        [TestCase(NotificationChange.VisitedEvent, 5)]
        public void EventMapperProfile_NotificationTypeDtoToNotificationTypeViewModel(NotificationChange notificationChange, int countOfUser)
         {
-            NotificationTypeDTO notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
-            var e = Mapper.Map<NotificationTypeDTO, NotificationTypeViewModel>(notificationTypeDTO);
+            NotificationTypeDto notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
+            var e = Mapper.Map<NotificationTypeDto, NotificationTypeViewModel>(notificationTypeDTO);
             Assert.That(e, Is.TypeOf<NotificationTypeViewModel>());
             Assert.That(e.Id, Is.EqualTo(notificationTypeDTO.Id));
             Assert.That(e.Name, Is.EqualTo(notificationTypeDTO.Name));
@@ -101,8 +101,8 @@
        public void EventMapperProfile_NotificationTypeViewModelToNotificationTypeDto(NotificationChange notificationChange, int countOfUser)
         {
             NotificationTypeViewModel notificationTypeViewModel = GetNotificationTypeViewModel(notificationChange, countOfUser);
-            var e = Mapper.Map<NotificationTypeViewModel, NotificationTypeDTO>(notificationTypeViewModel);
-            Assert.That(e, Is.TypeOf<NotificationTypeDTO>());
+            var e = Mapper.Map<NotificationTypeViewModel, NotificationTypeDto>(notificationTypeViewModel);
+            Assert.That(e, Is.TypeOf<NotificationTypeDto>());
             Assert.That(e.Id, Is.EqualTo(notificationTypeViewModel.Id));
             Assert.That(e.Name, Is.EqualTo(notificationTypeViewModel.Name));
             Assert.That(e.CountOfUser, Is.EqualTo(notificationTypeViewModel.CountOfUser));

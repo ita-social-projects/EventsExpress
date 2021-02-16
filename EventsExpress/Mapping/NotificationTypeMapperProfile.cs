@@ -13,14 +13,14 @@
     {
         public NotificationTypeMapperProfile()
         {
-            CreateMap<NotificationType, NotificationTypeDTO>()
+            CreateMap<NotificationType, NotificationTypeDto>()
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ReverseMap();
-            CreateMap<NotificationTypeDTO, NotificationTypeViewModel>()
+            CreateMap<NotificationTypeDto, NotificationTypeViewModel>()
                  .ForMember(
                     dest => dest.Name,
                     opts => opts.MapFrom(src => src.Name)).ReverseMap();
-            CreateMap<NotificationTypeViewModel, NotificationTypeDTO>()
+            CreateMap<NotificationTypeViewModel, NotificationTypeDto>()
                  .ForMember(
                     dest => dest.Name,
                     opts => opts.MapFrom(src => src.Name)).ReverseMap();

@@ -18,7 +18,7 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly IEventService _eventService;
-        private NotificationChange _nameNotification = NotificationChange.OwnEvent;
+        private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
 
         public UnblockedEventHandler(
             IEmailService sender,

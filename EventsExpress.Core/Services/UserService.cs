@@ -410,7 +410,6 @@ namespace EventsExpress.Core.Services
             var u = Context.Users
                 .Include(u => u.NotificationTypes)
                 .Single(user => user.Id == userDto.Id);
-            var res = u;
 
             var newNotificationTypes = notificationTypes
                 .Select(x => new UserNotificationType { UserId = u.Id, NotificationTypeId = x.Id })

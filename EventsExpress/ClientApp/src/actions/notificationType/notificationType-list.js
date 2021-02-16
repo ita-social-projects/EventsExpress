@@ -1,6 +1,6 @@
 
 
-import NotificationTypeService from '../../services/NotificationService';
+import NotificationTypeService from '../../services/NotificationTypeService';
 export const SET_NOTIFICATION_TYPES_PENDING = "SET_NOTIFICATION_TYPES_PENDING";
 export const GET_NOTIFICATION_TYPES_SUCCESS = "GET_NOTIFICATION_TYPES_SUCCESS";
 export const SET_NOTIFICATION_TYPES_ERROR = "SET_NOTIFICATION_TYPES_ERROR";

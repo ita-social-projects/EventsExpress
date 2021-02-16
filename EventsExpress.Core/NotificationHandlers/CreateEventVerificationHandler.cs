@@ -20,7 +20,6 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ILogger<CreateEventVerificationHandler> _logger;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly AppDbContext _context;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly ITrackService _trackService;
 
@@ -28,14 +27,12 @@ namespace EventsExpress.Core.NotificationHandlers
             ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
             IUserService userService,
-            ITrackService trackService,
-            AppDbContext context)
+            ITrackService trackService)
         {
             _logger = logger;
             _sender = sender;
             _userService = userService;
             _trackService = trackService;
-            _context = context;
         }
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)

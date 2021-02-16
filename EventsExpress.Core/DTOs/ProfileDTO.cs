@@ -29,7 +29,7 @@ namespace EventsExpress.Core.DTOs
 
         public IEnumerable<CategoryDto> Categories { get; set; }
 
-        public IEnumerable<NotificationTypeDTO> NotificationTypes { get; set; }
+        public IEnumerable<NotificationTypeDto> NotificationTypes { get; set; }
 
         public IEnumerable<Rate> MyRates { get; set; }
     }

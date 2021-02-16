@@ -34,8 +34,8 @@
         private string _userEmal = "user@gmail.com";
         private EditUserNotificationTypesViewModel editUserNotificationTypesView;
         private EditUserNotificationTypesViewModel editUserNotificationTypesViewInValid;
-        private NotificationTypeDTO firstNotificationTypeDto;
-        private NotificationTypeDTO firstNotificationTypeDtoInvalid;
+        private NotificationTypeDto firstNotificationTypeDto;
+        private NotificationTypeDto firstNotificationTypeDtoInvalid;
         private AttitudeViewModel _attitudeViewModel;
         private AttitudeDto _attitudeDto;
         private EditUserCategoriesViewModel _editUserCategoriesViewModel;
@@ -66,8 +66,8 @@
                 Photo = new Photo { Id = Guid.NewGuid(), Img = new byte[8], Thumb = new byte[8] },
             };
 
-            _mapper.Setup(u => u.Map<IEnumerable<NotificationTypeDTO>, IEnumerable<NotificationType>>(It.IsAny<IEnumerable<NotificationTypeDTO>>()))
-            .Returns((IEnumerable<NotificationTypeDTO> e) => e.Select(item => new NotificationType { Id = item.Id, Name = item.Name }));
+            _mapper.Setup(u => u.Map<IEnumerable<NotificationTypeDto>, IEnumerable<NotificationType>>(It.IsAny<IEnumerable<NotificationTypeDto>>()))
+            .Returns((IEnumerable<NotificationTypeDto> e) => e.Select(item => new NotificationType { Id = item.Id, Name = item.Name }));
 
             _mapper.Setup(u => u.Map<IEnumerable<AttitudeViewModel>, IEnumerable<AttitudeDto>>(It.IsAny<IEnumerable<AttitudeViewModel>>()))
             .Returns((IEnumerable<AttitudeViewModel> e) => e.Select(item => new AttitudeDto { UserFromId = item.UserFromId, UserToId = item.UserToId, Attitude = item.Attitude }));
@@ -78,23 +78,23 @@
             _mapper.Setup(u => u.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(It.IsAny<IEnumerable<UserDto>>()))
           .Returns((IEnumerable<UserDto> e) => e.Select(item => new UserManageViewModel { Id = item.Id }));
 
-            firstNotificationTypeDto = new NotificationTypeDTO
+            firstNotificationTypeDto = new NotificationTypeDto
             {
                 Id = NotificationChange.OwnEvent,
                 Name = NotificationChange.OwnEvent.ToString(),
             };
-            firstNotificationTypeDtoInvalid = new NotificationTypeDTO
+            firstNotificationTypeDtoInvalid = new NotificationTypeDto
             {
                 Id = NotificationChange.OwnEvent,
                 Name = string.Empty,
             };
             editUserNotificationTypesView = new EditUserNotificationTypesViewModel
             {
-                NotificationTypes = new NotificationTypeDTO[] { firstNotificationTypeDto },
+                NotificationTypes = new NotificationTypeDto[] { firstNotificationTypeDto },
             };
             editUserNotificationTypesViewInValid = new EditUserNotificationTypesViewModel
             {
-                NotificationTypes = new NotificationTypeDTO[] { firstNotificationTypeDtoInvalid },
+                NotificationTypes = new NotificationTypeDto[] { firstNotificationTypeDtoInvalid },
             };
             _attitudeViewModel = new AttitudeViewModel
             {
@@ -137,7 +137,7 @@
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.EditFavoriteNotificationTypes(_userDto, It.IsAny<NotificationType[]>()), Times.Exactly(1));
 
-            // _mapper.Verify(x => x.Map<IEnumerable<NotificationType>, IEnumerable<NotificationTypeDTO>>(new NotificationType[] { new NotificationType { Id = NotificationChange.OwnEvent, Name = NotificationChange.OwnEvent.ToString() } }), Times.Once);
+            // _mapper.Verify(x => x.Map<IEnumerable<NotificationType>, IEnumerable<NotificationTypeDto>>(new NotificationType[] { new NotificationType { Id = NotificationChange.OwnEvent, Name = NotificationChange.OwnEvent.ToString() } }), Times.Once);
         }
 
         [Test]

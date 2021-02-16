@@ -6,7 +6,7 @@
     using EventsExpress.Db.Entities;
     using EventsExpress.Db.Enums;
 
-    public class NotificationTypeDTO
+    public class NotificationTypeDto
     {
         public NotificationChange Id { get; set; }
 

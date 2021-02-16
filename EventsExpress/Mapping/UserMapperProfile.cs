@@ -91,7 +91,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeDTO { Id = x.NotificationType.Id, Name = x.NotificationType.Name })));
+                        src.NotificationTypes.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name })));
 
             CreateMap<ProfileDto, ProfileViewModel>()
                 .ForMember(

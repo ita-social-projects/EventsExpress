@@ -16,7 +16,7 @@
     using Moq;
     using NUnit.Framework;
 
-    internal class CreateEventVerificationHandlerTests : TestInitializer
+    internal class CreateEventVerificationHandlerTests
     {
         private Mock<ILogger<CreateEventVerificationHandler>> _logger;
         private Mock<IEmailService> _emailService;
@@ -34,14 +34,13 @@
         private Guid[] _usersIds;
 
         [SetUp]
-        protected override void Initialize()
+        public void Initialize()
         {
-            base.Initialize();
             _logger = new Mock<ILogger<CreateEventVerificationHandler>>();
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _trackService = new Mock<ITrackService>();
-            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, Context);
+            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object);
             _eventScheduleDto = new EventScheduleDto
             {
                 Id = _idEventSchedule,
@@ -54,8 +53,6 @@
                 ChangesType = ChangesType.Create,
                 UserId = _idUser,
             };
-            Context.ChangeInfos.Add(_changeInfo);
-            Context.SaveChangesAsync();
             _user = new User
             {
                 Id = _idUser,

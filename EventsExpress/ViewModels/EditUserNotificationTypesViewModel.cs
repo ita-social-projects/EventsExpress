@@ -8,6 +8,6 @@
 
     public class EditUserNotificationTypesViewModel
     {
-        public IEnumerable<NotificationTypeDTO> NotificationTypes { get; set; }
+        public IEnumerable<NotificationTypeDto> NotificationTypes { get; set; }
     }
 }

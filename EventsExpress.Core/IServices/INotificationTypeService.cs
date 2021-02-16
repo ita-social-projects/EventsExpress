@@ -10,7 +10,7 @@
 
     public interface INotificationTypeService
     {
-        IEnumerable<NotificationTypeDTO> GetAllNotificationTypes();
+        IEnumerable<NotificationTypeDto> GetAllNotificationTypes();
 
         NotificationType GetById(NotificationChange id);
     }

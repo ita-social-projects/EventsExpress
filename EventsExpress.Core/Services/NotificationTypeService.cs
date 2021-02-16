@@ -21,9 +21,9 @@
         {
         }
 
-        public IEnumerable<NotificationTypeDTO> GetAllNotificationTypes()
+        public IEnumerable<NotificationTypeDto> GetAllNotificationTypes()
         {
-            var notificationTypes = Context.NotificationTypes.Include(c => c.Users).Select(x => new NotificationTypeDTO
+            var notificationTypes = Context.NotificationTypes.Include(c => c.Users).Select(x => new NotificationTypeDto
             {
                 Id = x.Id,
                 Name = x.Name,
