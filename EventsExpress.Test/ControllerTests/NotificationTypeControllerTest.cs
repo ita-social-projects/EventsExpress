@@ -35,19 +35,16 @@
             {
                 Id = NotificationChange.OwnEvent,
                 Name = NotificationChange.OwnEvent.ToString(),
-                CountOfUser = 8,
             };
             secondNotificationTypeDTO = new NotificationTypeDto
             {
                 Id = NotificationChange.VisitedEvent,
                 Name = NotificationChange.VisitedEvent.ToString(),
-                CountOfUser = 8,
             };
             thirdNotificationTypeDTO = new NotificationTypeDto
             {
                 Id = NotificationChange.Profile,
                 Name = NotificationChange.Profile.ToString(),
-                CountOfUser = 8,
             };
         }
 

@@ -26,7 +26,6 @@
             {
                 Id = notificationChange,
                 Name = notificationChange.ToString(),
-                CountOfUser = countOfUser,
             };
         }
 
@@ -62,7 +61,6 @@
             Assert.That(e, Is.TypeOf<NotificationTypeDto>());
             Assert.That(e.Id, Is.EqualTo(notificationType.Id));
             Assert.That(e.Name, Is.EqualTo(notificationType.Name));
-            Assert.That(e.CountOfUser, Is.EqualTo(default(int)));
         }
 
        [Test]

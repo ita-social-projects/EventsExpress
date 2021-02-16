@@ -14,7 +14,6 @@
         public NotificationTypeMapperProfile()
         {
             CreateMap<NotificationType, NotificationTypeDto>()
-                .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ReverseMap();
             CreateMap<NotificationTypeDto, NotificationTypeViewModel>()
                  .ForMember(

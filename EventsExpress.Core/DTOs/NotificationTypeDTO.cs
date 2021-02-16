@@ -11,7 +11,5 @@
         public NotificationChange Id { get; set; }
 
         public string Name { get; set; }
-
-        public int CountOfUser { get; set; }
     }
 }
