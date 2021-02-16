@@ -47,5 +47,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
+
+        public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }
 }

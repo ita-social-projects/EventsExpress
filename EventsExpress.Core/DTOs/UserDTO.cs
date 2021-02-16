@@ -52,5 +52,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
+
+        public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }
 }
