@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Db.Enums;
 using MediatR;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
     public class BlockedEventHandler : INotificationHandler<BlockedEventMessage>
     {
+        private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly IEventService _eventService;
@@ -31,21 +33,22 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                foreach (var userId in notification.UserIds)
-                {
-                    var email = _userService.GetById(userId).Email;
-                    var even = _eventService.EventById(notification.Id);
-                    string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
+                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, notification.UserIds).Select(x => x.Email);
 
-                    await _sender.SendEmailAsync(new EmailDto
+                foreach (var userEmail in usersEmails)
                     {
-                        Subject = "Your event was blocked",
-                        RecepientEmail = email,
-                        MessageText = $"Dear {email}, your event was blocked for some reason. " +
-                        $"To unblock it, edit this event, please: " +
-                        $"\"<a href='{eventLink}'>{even.Title}</>\"",
-                    });
-                }
+                        var even = _eventService.EventById(notification.Id);
+                        string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
+
+                        await _sender.SendEmailAsync(new EmailDto
+                        {
+                            Subject = "Your event was blocked",
+                            RecepientEmail = userEmail,
+                            MessageText = $"Dear {userEmail}, your event was blocked for some reason. " +
+                            $"To unblock it, edit this event, please: " +
+                            $"\"<a href='{eventLink}'>{even.Title}</>\"",
+                        });
+                    }
             }
             catch (Exception ex)
             {
