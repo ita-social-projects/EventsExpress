@@ -1,12 +1,12 @@
-﻿namespace EventsExpress.Test.ValidationTests
-{
-    using EventsExpress.Db.Enums;
-    using EventsExpress.Test.ValidationTests.TestClasses.Location;
-    using EventsExpress.Validation.Base;
-    using EventsExpress.ViewModels.Base;
-    using FluentValidation.TestHelper;
-    using NUnit.Framework;
+﻿using EventsExpress.Db.Enums;
+using EventsExpress.Test.ValidationTests.TestClasses.Location;
+using EventsExpress.Validation.Base;
+using EventsExpress.ViewModels.Base;
+using FluentValidation.TestHelper;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.ValidationTests
+{
     [TestFixture]
     public class LocationViewModelValidationTests : TestInitializer
     {

@@ -1,13 +1,13 @@
-﻿namespace EventsExpress.Test.MapperTests
-{
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using EventsExpress.Mapping;
-    using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
-    using EventsExpress.ViewModels;
-    using NUnit.Framework;
+﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using EventsExpress.Mapping;
+using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
+using EventsExpress.ViewModels;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.MapperTests
+{
     [TestFixture]
     internal class NotificationTypeMapperProfileTest : MapperTestInitializer<NotificationTypeMapperProfile>
     {

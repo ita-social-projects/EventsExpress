@@ -1,19 +1,19 @@
-﻿namespace EventsExpress.Test.HandlerTests
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.Extensions;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Core.NotificationHandlers;
-    using EventsExpress.Core.Notifications;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using Microsoft.AspNetCore.Http;
-    using Moq;
-    using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.NotificationHandlers;
+using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using Microsoft.AspNetCore.Http;
+using Moq;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.HandlerTests
+{
     internal class CancelEventHandlerTests
     {
         private Mock<IEmailService> _emailService;

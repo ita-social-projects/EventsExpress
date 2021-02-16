@@ -1,12 +1,12 @@
-﻿namespace EventsExpress.Test.ServiceTests
-{
-    using System;
-    using System.Linq;
-    using EventsExpress.Core.Services;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using EventsExpress.Core.Services;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.ServiceTests
+{
     [TestFixture]
     internal class NotificationTypeServiceTest : TestInitializer
     {

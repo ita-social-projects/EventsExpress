@@ -1,13 +1,10 @@
-﻿namespace EventsExpress.Core.IServices
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
+﻿using System.Collections.Generic;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 
+namespace EventsExpress.Core.IServices
+{
     public interface INotificationTypeService
     {
         IEnumerable<NotificationTypeDto> GetAllNotificationTypes();

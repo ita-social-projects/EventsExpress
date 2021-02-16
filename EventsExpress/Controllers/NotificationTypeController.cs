@@ -1,16 +1,12 @@
-﻿namespace EventsExpress.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.ViewModels;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using EventsExpress.Core.IServices;
+using EventsExpress.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
+namespace EventsExpress.Controllers
+{
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]

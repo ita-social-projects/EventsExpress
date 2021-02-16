@@ -1,11 +1,7 @@
-﻿namespace EventsExpress.ViewModels
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using EventsExpress.Db.Enums;
+﻿using EventsExpress.Db.Enums;
 
+namespace EventsExpress.ViewModels
+{
     public class NotificationTypeViewModel
     {
         public NotificationChange Id { get; set; }

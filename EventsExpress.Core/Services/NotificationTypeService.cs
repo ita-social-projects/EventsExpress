@@ -1,19 +1,16 @@
-﻿namespace EventsExpress.Core.Services
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.Exceptions;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Db.BaseService;
-    using EventsExpress.Db.EF;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
+using EventsExpress.Db.BaseService;
+using EventsExpress.Db.EF;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using Microsoft.EntityFrameworkCore;
 
+namespace EventsExpress.Core.Services
+{
     public class NotificationTypeService : BaseService<NotificationType>, INotificationTypeService
     {
         public NotificationTypeService(AppDbContext context, IMapper mapper)

@@ -1,9 +1,8 @@
-﻿namespace EventsExpress.Db.Entities
-{
-    using System;
-    using EventsExpress.Db.EF;
-    using EventsExpress.Db.Enums;
+﻿using System;
+using EventsExpress.Db.Enums;
 
+namespace EventsExpress.Db.Entities
+{
     public class UserNotificationType
     {
         public Guid UserId { get; set; }

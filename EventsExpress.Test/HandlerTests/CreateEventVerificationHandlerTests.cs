@@ -1,21 +1,21 @@
-﻿namespace EventsExpress.Test.HandlerTests
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.Extensions;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Core.NotificationHandlers;
-    using EventsExpress.Core.Notifications;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Logging;
-    using Moq;
-    using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.NotificationHandlers;
+using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.HandlerTests
+{
     internal class CreateEventVerificationHandlerTests
     {
         private Mock<ILogger<CreateEventVerificationHandler>> _logger;
