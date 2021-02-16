@@ -36,7 +36,6 @@
             {
                 Id = notificationChange,
                 Name = notificationChange.ToString(),
-                CountOfUser = countOfUser,
             };
         }
 
@@ -91,7 +90,6 @@
             Assert.That(e, Is.TypeOf<NotificationTypeViewModel>());
             Assert.That(e.Id, Is.EqualTo(notificationTypeDTO.Id));
             Assert.That(e.Name, Is.EqualTo(notificationTypeDTO.Name));
-            Assert.That(e.CountOfUser, Is.EqualTo(notificationTypeDTO.CountOfUser));
         }
 
        [Test]
@@ -105,7 +103,6 @@
             Assert.That(e, Is.TypeOf<NotificationTypeDto>());
             Assert.That(e.Id, Is.EqualTo(notificationTypeViewModel.Id));
             Assert.That(e.Name, Is.EqualTo(notificationTypeViewModel.Name));
-            Assert.That(e.CountOfUser, Is.EqualTo(notificationTypeViewModel.CountOfUser));
         }
     }
 }

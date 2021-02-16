@@ -27,7 +27,6 @@
             {
                 Id = x.Id,
                 Name = x.Name,
-                CountOfUser = x.Users.Count(),
             })
             .OrderBy(notification => notification.Name);
 

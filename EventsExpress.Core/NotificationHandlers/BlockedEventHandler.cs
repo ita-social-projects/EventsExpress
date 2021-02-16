@@ -1,17 +1,17 @@
-﻿namespace EventsExpress.Core.NotificationHandlers
-{
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.Extensions;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Core.Notifications;
-    using EventsExpress.Db.Enums;
-    using MediatR;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Enums;
+using MediatR;
 
+namespace EventsExpress.Core.NotificationHandlers
+{
     public class BlockedEventHandler : INotificationHandler<BlockedEventMessage>
     {
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
@@ -33,7 +33,7 @@
         {
             try
             {
-                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, notification.UserIds).Select(x => x.Email); // ids All users who doesn't want to see some event by notification type
+                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, notification.UserIds).Select(x => x.Email);
 
                 foreach (var userEmail in usersEmails)
                     {

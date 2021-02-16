@@ -4,16 +4,16 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
-    getUserById = async (id) => {
-        return await baseService.getResource(`users/GetUserProfileById?id=${id}`);
+    getUserById = (id) => {
+        return baseService.getResource(`users/GetUserProfileById?id=${id}`);
     }
 
-    getUsers = async (filter) => {
-        return await baseService.getResource(`users/get${filter}`);
+    getUsers = (filter) => {
+        return baseService.getResource(`users/get${filter}`);
     }
 
-    getSearchUsers = async (filter) => {
-        return await baseService.getResource(`users/searchUsers${filter}`);
+    getSearchUsers = (filter) => {
+        return baseService.getResource(`users/searchUsers${filter}`);
     }
 
     setContactUs = async (data) => {
@@ -29,7 +29,7 @@ export default class UserService {
         const res = await baseService.setResourceWithData('users/changeAvatar', file);
         return !res.ok
             ? { error: await res.text() }
-            : await res.text();
+            : res.text();
     }
 
     setChangeUserRole = async (userId, newRoleId) => {

@@ -398,28 +398,28 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds)
         {
-            var usersId = Context.UserNotificationTypes
+            var users = Context.UserNotificationTypes.Include(unt => unt.User)
                                     .Where(x => x.NotificationTypeId == notificationType && userIds.Contains(x.UserId))
-                                    .Select(x => GetById(x.UserId))
+                                    .Select(x => x.User)
                                     .AsEnumerable();
-            return usersId;
+            return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
         public async Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
         {
-            var u = Context.Users
+            var user = Context.Users
                 .Include(u => u.NotificationTypes)
                 .Single(user => user.Id == userDto.Id);
 
             var newNotificationTypes = notificationTypes
-                .Select(x => new UserNotificationType { UserId = u.Id, NotificationTypeId = x.Id })
+                .Select(x => new UserNotificationType { UserId = user.Id, NotificationTypeId = x.Id })
                 .ToList();
 
-            u.NotificationTypes = newNotificationTypes;
+            user.NotificationTypes = newNotificationTypes;
 
-            Update(u);
+            Update(user);
             await Context.SaveChangesAsync();
-            return u.Id;
+            return user.Id;
         }
     }
 }

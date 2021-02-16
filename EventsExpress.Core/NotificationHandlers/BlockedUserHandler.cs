@@ -1,16 +1,16 @@
-﻿namespace EventsExpress.Core.NotificationHandlers
-{
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Core.Notifications;
-    using EventsExpress.Db.Enums;
-    using MediatR;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Enums;
+using MediatR;
 
+namespace EventsExpress.Core.NotificationHandlers
+{
     public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
     {
         private readonly IEmailService _sender;

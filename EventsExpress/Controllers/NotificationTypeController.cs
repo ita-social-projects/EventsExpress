@@ -12,7 +12,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [ApiController]
     public class NotificationTypeController : Controller
     {
@@ -33,7 +33,6 @@
         /// <returns>The method returns all notifications.</returns>
         /// <response code="200">Return IEnumerable NotificationTypeDto model.</response>
         [HttpGet("[action]")]
-        [AllowAnonymous]
         public IActionResult All()
         {
             return Ok(_mapper.Map<IEnumerable<NotificationTypeViewModel>>(_notificationTypeService.GetAllNotificationTypes()));

@@ -47,7 +47,6 @@
 
             _participationMessage = new ParticipationMessage(_idUser, _idParticipationMessage, _participationStatus);
             _usersIds = new Guid[] { _idUser };
-            _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);
@@ -56,8 +55,20 @@
         [Test]
         public void Handle_AllUser_AllSubscribingUsers()
         {
+            _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
             var result = _participationHandler.Handle(_participationMessage, CancellationToken.None);
+            _userService.Verify(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds), Times.Exactly(1));
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void Handle_AllUser_Exception()
+        {
+            _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Throws<Exception>();
+
+            Assert.DoesNotThrowAsync(() => _participationHandler.Handle(_participationMessage, CancellationToken.None));
+            _userService.Verify(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds), Times.Exactly(1));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
     }
 }

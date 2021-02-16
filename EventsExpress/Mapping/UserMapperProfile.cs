@@ -14,7 +14,7 @@ namespace EventsExpress.Mapping
         {
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
-                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
+                .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.Rating, opts => opts.Ignore())
                 .ForMember(dest => dest.Attitude, opts => opts.Ignore())

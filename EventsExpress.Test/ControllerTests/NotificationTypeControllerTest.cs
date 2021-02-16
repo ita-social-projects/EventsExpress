@@ -55,7 +55,7 @@
         public void GetAll_OkResult()
         {
             MockMapper.Setup(u => u.Map<IEnumerable<NotificationTypeDto>, IEnumerable<NotificationTypeViewModel>>(It.IsAny<IEnumerable<NotificationTypeDto>>()))
-            .Returns((IEnumerable<NotificationTypeDto> e) => e.Select(item => new NotificationTypeViewModel { Id = item.Id, Name = item.Name, CountOfUser = item.CountOfUser }));
+            .Returns((IEnumerable<NotificationTypeDto> e) => e.Select(item => new NotificationTypeViewModel { Id = item.Id, Name = item.Name }));
             service.Setup(item => item.GetAllNotificationTypes()).Returns(new NotificationTypeDto[] { firstNotificationTypeDTO, secondNotificationTypeDTO, thirdNotificationTypeDTO });
 
             var expected = controller.All();

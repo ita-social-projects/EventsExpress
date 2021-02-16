@@ -3,14 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Migrations\20210205202327_AddNotificationType.cs" />
     <Compile Remove="Migrations\20210205202327_AddNotificationType.Designer.cs" />
     <Compile Remove="Migrations\20210205204712_AddUserNotificationType.cs" />
     <Compile Remove="Migrations\20210205204712_AddUserNotificationType.Designer.cs" />
-  </ItemGroup>
-  
+  </ItemGroup>  
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />

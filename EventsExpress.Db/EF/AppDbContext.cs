@@ -223,6 +223,9 @@ namespace EventsExpress.Db.EF
             modelBuilder.Entity<NotificationType>()
                 .Property(c => c.Id)
                 .ValueGeneratedNever();
+            modelBuilder.Entity<NotificationType>()
+                .Property(c => c.Name)
+                .IsRequired();
         }
 
         public void SaveTracks()

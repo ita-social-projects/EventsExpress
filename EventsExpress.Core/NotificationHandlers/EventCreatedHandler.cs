@@ -30,11 +30,9 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             try
             {
-                var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id).AsEnumerable();
-                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).AsEnumerable();
-                if (usersEmails != null)
-                {
-                    foreach (var userEmail in usersEmails)
+                var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
+                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
+                foreach (var userEmail in usersEmails)
                     {
                         string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Event.Id}/1";
                         await _sender.SendEmailAsync(new EmailDto
@@ -44,7 +42,6 @@ namespace EventsExpress.Core.NotificationHandlers
                             MessageText = $"The <a href='{link}'>event</a> was created which could interested you.",
                         });
                     }
-                }
             }
             catch (Exception ex)
             {

@@ -136,8 +136,6 @@
             Assert.That(assertId, Is.EqualTo(_userDto.Id));
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.EditFavoriteNotificationTypes(_userDto, It.IsAny<NotificationType[]>()), Times.Exactly(1));
-
-            // _mapper.Verify(x => x.Map<IEnumerable<NotificationType>, IEnumerable<NotificationTypeDto>>(new NotificationType[] { new NotificationType { Id = NotificationChange.OwnEvent, Name = NotificationChange.OwnEvent.ToString() } }), Times.Once);
         }
 
         [Test]

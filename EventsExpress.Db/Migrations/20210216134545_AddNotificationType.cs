@@ -12,7 +12,7 @@ namespace EventsExpress.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {

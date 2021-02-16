@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,10 +6,8 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Db.EF;
 using EventsExpress.Db.Enums;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace EventsExpress.Core.NotificationHandlers

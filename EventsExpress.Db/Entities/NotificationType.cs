@@ -1,10 +1,8 @@
 ﻿namespace EventsExpress.Db.Entities
 {
     using System.Collections.Generic;
-    using EventsExpress.Db.EF;
     using EventsExpress.Db.Enums;
 
-    [Track]
     public class NotificationType
     {
         public NotificationChange Id { get; set; }
