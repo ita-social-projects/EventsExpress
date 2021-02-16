@@ -100,4 +100,10 @@ export default class UserService {
             ? { error: await res.text() }
             : res;
     }
+    setUserNotificationType = async (data) => {
+        const res = await baseService.setResource('Users/EditUserNotificationType', data);
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
 }
