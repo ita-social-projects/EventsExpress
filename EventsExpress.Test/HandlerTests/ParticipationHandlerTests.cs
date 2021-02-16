@@ -10,6 +10,7 @@ using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
+
 namespace EventsExpress.Test.HandlerTests
 {
     internal class ParticipationHandlerTests
