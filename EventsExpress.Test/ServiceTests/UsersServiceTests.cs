@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -27,6 +29,11 @@ namespace EventsExpress.Test.ServiceTests
 
         private Guid roleId = Guid.NewGuid();
         private Guid userId = Guid.NewGuid();
+        private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
+        private NotificationType notificationType;
+        private UserNotificationType userNotificationType;
+        private string name = "existingName";
+        private string existingEmail = "existingEmail@gmail.com";
 
         [SetUp]
         protected override void Initialize()
@@ -44,9 +51,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockMediator.Object,
                 mockCacheHelper.Object,
                 mockEmailService.Object);
-
-            const string existingEmail = "existingEmail@gmail.com";
-            var name = "existingName";
 
             role = new Role
             {
@@ -69,9 +73,71 @@ namespace EventsExpress.Test.ServiceTests
                 Email = existingEmail,
             };
 
+            notificationType = new NotificationType
+            {
+                Id = notificationTypeId,
+                Name = notificationTypeId.ToString(),
+            };
+            userNotificationType = new UserNotificationType
+            {
+                UserId = userId,
+                User = existingUser,
+                NotificationTypeId = NotificationChange.OwnEvent,
+            };
+
             Context.Roles.Add(role);
             Context.Users.Add(existingUser);
+            Context.UserNotificationTypes.Add(userNotificationType);
             Context.SaveChanges();
+        }
+
+        [Test]
+        public void GetUserByNotificationType_NotificationChange_IEnumerable_userIds_userExisting()
+        {
+            var idsUsers = new[] { userId };
+            var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
+            var resUsers = res.Where(x => idsUsers.Contains(x.Id)).Select(x => x);
+            Assert.That(resUsers.Where(x => x.Name.Contains(name) && x.Email.Contains(existingEmail)), Is.Not.Null);
+        }
+
+        [Test]
+        public void GetUserByNotificationType_NotificationChange_IEnumerable_userIds_userNotExisting()
+        {
+            var idsUsers = new[] { Guid.NewGuid() };
+            var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
+            Assert.That(res, Is.Empty);
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_CorrectNotificationChange_CorrectUser_NotThrowAsync()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
+            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(existingUserDTO, notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_CorrectNotificationChange_InCorrectUser_ThrowAsync()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
+            var notExistingUser = existingUserDTO;
+            notExistingUser.Id = Guid.NewGuid();
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notExistingUser, notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_InCorrectNotificationChange_CorrectUser_ThrowAsync()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
+            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(existingUserDTO, notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_InCorrectNotificationChange_InCorrectUser_ThrowAsync()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
+            var notExistingUser = existingUserDTO;
+            notExistingUser.Id = Guid.NewGuid();
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notExistingUser, notificationTypes));
         }
 
         [Test]

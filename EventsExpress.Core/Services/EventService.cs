@@ -134,7 +134,8 @@ namespace EventsExpress.Core.Services
 
             await Context.SaveChangesAsync();
 
-            Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
+            var userIds = Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
+            await _mediator.Publish(new BlockedEventMessage(userIds, evnt.Id));
         }
 
         public async Task UnblockEvent(Guid eventId)

@@ -19,7 +19,8 @@ const initialState = {
         role: null,
         photoUrl: null,
         token: null,
-        categories: []
+        categories: [],
+        notificationTypes: [],
     },
     roles: {
         isPending: false,
@@ -38,10 +39,10 @@ const initialState = {
     unitsOfMeasuring: {
         isPending: true,
         isError: false,
-        units: [],       
+        units: [],
         editedUnitOfMeasuring: null,
-        isAdded:false,
-        
+        isAdded: false,
+
     },
     add_unitOfMeasuring: {
         isUnitOfMeasuringPending: false,
@@ -246,6 +247,11 @@ const initialState = {
         messages: [],
         seen_messages: [],
         events: []
+    },
+    notificationTypes: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 
