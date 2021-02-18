@@ -1,12 +1,10 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import Login from '../components/login';
-import login from '../actions/login';
+import login from '../actions/login-action';
 
 class LoginWrapper extends Component {
-  submit = async values => {
-      return await this.props.login(values.email, values.password)
-  };
+  submit = values => this.props.login(values.email, values.password)
 
   render() {
     return <Login onSubmit={this.submit}/>

@@ -28,7 +28,6 @@ import * as RecoverPassword from './editReducers/recoverPasswordReducer'
 import * as Auth from './authenticationReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
-import * as authReducer from './authReducer';
 import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
 import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring'
 import * as Inventory from './inventory-list';
@@ -43,7 +42,6 @@ import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 
 const rootReducers = {
-    auth: authReducer.authReducer,
     modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
@@ -63,7 +61,7 @@ const rootReducers = {
     inventories: Inventory.reducer,
     usersInventories: UsersInventories.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
-    add_unitOfMeasuring:AddUnitOfMeasuring.reducer,    add_category: AddCategories.reducer,
+    add_unitOfMeasuring: AddUnitOfMeasuring.reducer, add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,
     change_avatar: ChangeAvatar.reducer,

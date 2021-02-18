@@ -1,5 +1,5 @@
 ﻿import { CommentService } from '../services';
-import getComments from './comment-list';
+import getComments from './comment-list-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../components/helpers/action-helpers';
 import { reset } from 'redux-form';

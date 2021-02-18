@@ -1,7 +1,7 @@
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
-    //#region Resource Interaction Interface
+    // Obsolete
     getResource = async (url) => {
         const call = (url) => fetch(this._baseUrl + url, {
             method: "get",

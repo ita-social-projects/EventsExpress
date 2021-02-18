@@ -4,15 +4,11 @@ const baseService = new EventsExpressService();
 
 export default class EventScheduleService {
 
-    getEventSchedule = async (id) => {
-        const res = await baseService.getResource(`eventSchedule/${id}`);
-        return res;
-    }
+    getEventSchedule = id =>
+        baseService.getResourceNew(`eventSchedule/${id}`);
 
-    getAllEventSchedules = async () => {
-        const res = await baseService.getResource(`eventSchedule/all`);
-        return res;
-    }
+    getAllEventSchedules = () =>
+        baseService.getResourceNew(`eventSchedule/all`);
 
     setEventSchedule = async (data) => {
         let file = new FormData();
@@ -24,21 +20,12 @@ export default class EventScheduleService {
         file.append('Periodicity', data.periodicity);
         file.append('IsActive', data.isActive);
 
-        const res = await baseService.setResourceWithData(`eventSchedule/${data.eventId}/edit`, file);
-        return res
+        return await baseService.setResourceWithData(`eventSchedule/${data.eventId}/edit`, file);
     }
 
-    setNextEventScheduleCancel = async (eventId) => {
-        const res = await baseService.setResourceWithData(`eventSchedule/${eventId}/CancelNextEvent`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setNextEventScheduleCancel = eventId =>
+        baseService.setResourceWithData(`eventSchedule/${eventId}/CancelNextEvent`);
 
-    setEventSchedulesCancel = async (eventId) => {
-        const res = await baseService.setResourceWithData(`eventSchedule/${eventId}/CancelAllEvents`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setEventSchedulesCancel = (eventId) =>
+        baseService.setResourceWithData(`eventSchedule/${eventId}/CancelAllEvents`);
 }

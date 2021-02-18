@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import { get_events } from '../actions/event-list';
+import { get_events } from '../actions/event-list-action';
 import InternalServerError from '../components/Route guard/500';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';

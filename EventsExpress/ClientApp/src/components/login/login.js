@@ -17,7 +17,7 @@ class Login extends Component {
 
     return (
       <div className="auth">
-        <form onSubmit={this.props.handleSubmit(this.props.onSubmit)} autoComplete="off">
+        <form onSubmit={this.props.handleSubmit} autoComplete="off">
           <div>
             <Field
               name="email"

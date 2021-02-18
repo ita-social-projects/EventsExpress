@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import get_events from '../../actions/notification_events';
+import get_events from '../../actions/events-for-notification-action';
 import EventList from '../event/events-for-profile';
 import Spinner from '../spinner';
 import BadRequest from '../Route guard/400';

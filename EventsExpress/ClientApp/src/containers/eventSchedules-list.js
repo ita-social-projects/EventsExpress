@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import EventSchedulesList from '../components/eventSchedule/eventSchedule-list';
 import Spinner from '../components/spinner';
-import { getEventSchedules } from '../actions/eventSchedules-list';
+import { getEventSchedules } from '../actions/eventSchedule-list-action';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';

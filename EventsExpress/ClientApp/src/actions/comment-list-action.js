@@ -14,7 +14,8 @@ export default function getComments(data, page = 1){
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        dispatch(getCommentsInternal(response));
+        let jsonRes = await response.json();
+        dispatch(getCommentsInternal(jsonRes));
         return Promise.resolve();
     }
 }

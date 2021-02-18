@@ -6,10 +6,10 @@ import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
-import { setUser } from './actions/login';
+import { setUser } from './actions/login-action';
 import { initialConnection } from './actions/chat';
 import { getUnreadMessages } from './actions/chats';
-import { updateEventsFilters } from './actions/event-list';
+import { updateEventsFilters } from './actions/event-list-action';
 import eventHelper from '../src/components/helpers/eventHelper';
 
 

@@ -1,5 +1,5 @@
 ﻿import { CommentService } from '../services';
-import getComments from './comment-list';
+import getComments from './comment-list-action';
 import { setErrorAllertFromResponse } from './alert-action';
 
 export const SET_COMMENT_DELETE_PENDING = "SET_COMMENT_DELETE_PENDING";

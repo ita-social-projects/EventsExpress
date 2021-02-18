@@ -11,15 +11,14 @@ const history = createBrowserHistory({ forceRefresh: true });
 export default function add_copy_event(eventId) {
     return async dispatch => {
         dispatch(setCopyEventPending(true));
-
         let response = await api_serv.setCopyEvent(eventId);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        let x = await response.json();
+        let jsonRes = await response.json();
         dispatch(setSuccessAllert('Your event was created!'));
-        dispatch(history.push(`/event/${x.id}/1`));
+        dispatch(history.push(`/event/${jsonRes.id}/1`));
         return Promise.resolve();
     }
 }

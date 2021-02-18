@@ -1,23 +1,14 @@
-import EventsExpressService from './EventsExpressService'
+import EventsExpressService from './EventsExpressService';
 
 const baseService = new EventsExpressService();
 
 export default class UserService {
 
-    getUserById = async (id) => {
-        const res = await baseService.getResource(`users/GetUserProfileById?id=${id}`);
-        return res;
-    }
+    getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 
-    getUsers = async (filter) => {
-        const res = await baseService.getResource(`users/get${filter}`);
-        return res;
-    }
+    getUsers = filter => baseService.getResource(`users/get${filter}`);
 
-    getSearchUsers = async (filter) => {
-        const res = await baseService.getResource(`users/searchUsers${filter}`);
-        return res;
-    }
+    getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
     setContactUs = async (data) => {
         const res = await baseService.setResource('users/ContactAdmins', data);
