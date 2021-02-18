@@ -10,7 +10,7 @@ export default class CommentList extends Component {
         };
     }
 
-    handlePageChange = (page, e) => {
+    handlePageChange = (page) => {
         this.props.callback(this.props.evId, page);
         this.setState({
             currentPage: page

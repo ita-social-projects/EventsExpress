@@ -1,8 +1,7 @@
-
 import initialState from '../store/initialState';
 import {
-    GET_EVENT_SCHEDULE_ERROR, GET_EVENT_SCHEDULE_PENDING, GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE
-} from '../actions/eventSchedule-item-view';
+    GET_EVENT_SCHEDULE_PENDING, GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE
+} from '../actions/eventSchedule-item-view-action';
 
 
 export const reducer = (
@@ -10,12 +9,6 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_SCHEDULE_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case GET_EVENT_SCHEDULE_PENDING:
             return {
                 ...state,
@@ -34,4 +27,4 @@ export const reducer = (
         default:
             return state;
     }
-}  
+} 

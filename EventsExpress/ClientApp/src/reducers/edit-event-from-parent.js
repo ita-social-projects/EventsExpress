@@ -1,19 +1,12 @@
 ﻿import initialState from '../store/initialState';
 
 import {
-    SET_EVENT_FROM_PARENT_ERROR, SET_EVENT_FROM_PARENT_PENDING, SET_EVENT_FROM_PARENT_SUCCESS
-} from '../actions/edit-event-from-parent';
+    SET_EVENT_FROM_PARENT_PENDING, SET_EVENT_FROM_PARENT_SUCCESS
+} from '../actions/event-copy-with-edit-action';
 
 export const reducer = (state = initialState.edit_event_from_parent, action) => {
 
     switch (action.type) {
-
-        case SET_EVENT_FROM_PARENT_ERROR:
-            return {
-                ...state,
-                isEventFromParentPending: false,
-                eventFromParentError: action.payload
-            };
         case SET_EVENT_FROM_PARENT_PENDING:
             return {
                 ...state,

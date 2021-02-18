@@ -2,7 +2,7 @@
 import {
     SET_COMMENT_DELETE_PENDING,
     SET_COMMENT_DELETE_SUCCESS
-} from "../actions/delete-comment";
+} from "../actions/comment-delete-action";
 
 export const reducer = (state = initialState.delete_comment, action) => {
 
