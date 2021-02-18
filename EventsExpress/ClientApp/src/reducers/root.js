@@ -40,6 +40,7 @@ import * as Hub from './hub';
 import * as Alert from './alert';
 import * as ContactUs from './contact-us';
 import * as Notification from './notification';
+import * as NotificationTypes from './notificationType/notificationType-list';
 
 const rootReducers = {
     modal: ModalWind.reducer,
@@ -82,6 +83,8 @@ const rootReducers = {
     alert: Alert.reducer,
     contactUs: ContactUs.reducer,
     notification: Notification.reducer,
+    notificationType: NotificationTypes.reducer
+
 
 };
 

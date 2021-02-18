@@ -7,6 +7,7 @@ import EventScheduleService from './EventScheduleService'
 import InventoryService from './InventoryService'
 import RoleService from './RoleService'
 import UserService from './UserService'
+import NotificationTypeService from './NotificationTypeService'
 
 export {
     AuthenticationService,
@@ -17,5 +18,6 @@ export {
     EventScheduleService,
     InventoryService,
     RoleService,
-    UserService
+    UserService,
+    NotificationTypeService
 };

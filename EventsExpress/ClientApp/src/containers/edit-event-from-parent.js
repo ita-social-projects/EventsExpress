@@ -53,6 +53,8 @@ class EditFromParentEventWraper extends Component {
                 onSubmit={this.onSubmit}
                 initialValues={initialValues}
                 haveReccurentCheckBox={false}
+                haveMapCheckBox={true}
+                haveOnlineLocationCheckBox={true}
                 disabledDate={true}
                 isCreated={true} />
         </>

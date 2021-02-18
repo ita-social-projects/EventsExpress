@@ -29,6 +29,8 @@ namespace EventsExpress.ViewModels
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
+        public IEnumerable<NotificationTypeViewModel> NotificationTypes { get; set; }
+
         public IEnumerable<Rate> MyRates { get; set; }
     }
 }

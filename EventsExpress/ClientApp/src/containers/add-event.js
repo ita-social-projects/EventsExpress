@@ -6,7 +6,8 @@ import add_event,
     { setEventPending, setEventSuccess } from '../actions/event-add-action';
 import { setAlert } from '../actions/alert-action';
 import get_categories from '../actions/category/category-list';
-import { validateEventForm } from '../components/helpers/helpers'
+import { validateEventForm } from '../components/helpers/helpers';
+import { enumLocationType } from '../constants/EventLocationType';
 
 class AddEventWrapper extends Component {
 
@@ -40,10 +41,16 @@ class AddEventWrapper extends Component {
         this.setState({ open: false });
     }
 
+
     render() {
         if (this.props.add_event_status.isEventSuccess) {
             this.setState({ open: true });
         }
+        let initialValues = {
+            location: {
+                type: enumLocationType.map
+            }
+        };
 
         return <div className="w-50 m-auto pb-4 pt-4">
             <EventForm data={{}}
@@ -53,7 +60,10 @@ class AddEventWrapper extends Component {
                 form_values={this.props.form_values}
                 disabledDate={false}
                 haveReccurentCheckBox={true}
+                haveMapCheckBox={true}
+                haveOnlineLocationCheckBox={true}
                 addEventStatus={this.props.add_event_status}
+                initialValues={initialValues}
                 isCreated={false} />
         </div>
     }

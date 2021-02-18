@@ -23,7 +23,7 @@ export default class UserService {
         const res = await baseService.setResourceWithData('users/changeAvatar', file);
         return !res.ok
             ? { error: await res.text() }
-            : await res.text();
+            : res.text();
     }
 
     setChangeUserRole = async (userId, newRoleId) => {
@@ -87,6 +87,12 @@ export default class UserService {
             userToId: data.userToId,
             attitude: data.attitude
         });
+        return !res.ok
+            ? { error: await res.text() }
+            : res;
+    }
+    setUserNotificationType = async (data) => {
+        const res = await baseService.setResource('Users/EditUserNotificationType', data);
         return !res.ok
             ? { error: await res.text() }
             : res;

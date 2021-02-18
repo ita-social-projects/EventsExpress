@@ -13,7 +13,7 @@ class EditEventWrapper extends Component {
     componentWillMount = () => {
         this.props.get_categories();
     }
-    
+
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
@@ -31,9 +31,13 @@ class EditEventWrapper extends Component {
     render() {
         let initialValues = {
             ...this.props.event,
-            selectedPos: L.latLng(
-                this.props.event.latitude, 
-                this.props.event.longitude)
+            location: {
+                selectedPos: L.latLng(
+                    this.props.event.location.latitude,
+                    this.props.event.location.longitude),
+                onlineMeeting: this.props.event.location.onlineMeeting,
+                type: String(this.props.event.location.type)
+            },
         }
 
         return <>
@@ -45,6 +49,8 @@ class EditEventWrapper extends Component {
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
+                haveMapCheckBox={true}
+                haveOnlineLocationCheckBox={true}
                 disabledDate={false}
                 isCreated={true} />
         </>

@@ -30,10 +30,17 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
-        if (data.selectedPos) {
-            file.append('Latitude', data.selectedPos.lat);
-            file.append('Longitude', data.selectedPos.lng);
+        file.append('Location.Type', data.location.type)
+        if (data.location.selectedPos) {
+            file.append('Location.Latitude', data.location.selectedPos.lat);
+            file.append('Location.Longitude', data.location.selectedPos.lng);
         }
+        if (data.location.onlineMeeting) {
+            file.append('Location.OnlineMeeting', data.location.onlineMeeting);
+        }
+
+
+
 
         file.append('Title', data.title);
         file.append('Description', data.description);
