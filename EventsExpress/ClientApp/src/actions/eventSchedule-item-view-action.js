@@ -13,11 +13,11 @@ export default function getEventSchedule(id) {
         let response = await api_serv.getEventSchedule(id);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
-            return Promise.resolve();
+            return Promise.reject();
         }
         let jsonRes = await response.json();
         dispatch(get_eventSchedule(jsonRes));
-        return Promise.reject();
+        return Promise.resolve();
     }
 }
 
