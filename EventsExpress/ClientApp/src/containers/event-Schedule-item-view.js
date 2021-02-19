@@ -2,10 +2,10 @@
 import { connect } from 'react-redux';
 import EventScheduleItemView from '../components/eventSchedule/eventSchedule-item-view';
 import Spinner from '../components/spinner';
-import getEventSchedule from '../actions/eventSchedule-item-view';
+import getEventSchedule, {
+    resetEventSchedule
+} from '../actions/eventSchedule-item-view-action';
 import get_event from '../actions/event-item-view';
-import { resetEventSchedule } from '../actions/eventSchedule-item-view';
-import { resetEvent } from '../actions/event-item-view';
 
 class EventScheduleItemViewWrapper extends Component {
     componentWillMount() {

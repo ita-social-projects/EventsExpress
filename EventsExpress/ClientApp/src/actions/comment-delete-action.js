@@ -1,24 +1,23 @@
 ﻿import { CommentService } from '../services';
-import get_comments from './comment-list';
-import { setAlert } from './alert';
+import getComments from './comment-list-action';
+import { setErrorAllertFromResponse } from './alert-action';
+
 export const SET_COMMENT_DELETE_PENDING = "SET_COMMENT_DELETE_PENDING";
 export const SET_COMMENT_DELETE_SUCCESS = "SET_COMMENT_DELETE_SUCCESS";
 
 const api_serv = new CommentService();
 
-export default function delete_comment(data) {
-    return dispatch => {
+export default function delete_comment(data){
+    return async dispatch =>{
         dispatch(setCommentPending(true));
-        const res = api_serv.setCommentDelete(data);
-        return res.then(response => {
-            if (response.error == null) {
-
-                dispatch(setCommentSuccess(true));
-                dispatch(get_comments(data.eventId, 1));
-            } else {
-                dispatch(setAlert({ variant: 'error', message: 'Some error' }));
-            }
-        });
+        let response = await api_serv.setCommentDelete(data);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(setCommentSuccess(true));
+        dispatch(getComments(data.eventId));
+        return Promise.resolve;
     }
 }
 

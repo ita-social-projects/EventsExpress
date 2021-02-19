@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import add_event from '../actions/add-event';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-import { setAlert } from '../actions/alert';
+import add_event,
+    { setEventPending, setEventSuccess } from '../actions/event-add-action';
+import { setAlert } from '../actions/alert-action';
 import get_categories from '../actions/category/category-list';
 import { validateEventForm } from '../components/helpers/helpers';
 import { enumLocationType } from '../constants/EventLocationType';
@@ -87,7 +87,6 @@ const mapDispatchToProps = (dispatch) => {
         resetEventStatus: () => {
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));
-            dispatch(setEventError(null));
         }
     }
 };

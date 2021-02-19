@@ -1,8 +1,8 @@
 import {
   SET_LOGIN_PENDING,
   SET_LOGIN_SUCCESS
-} from "../actions/login";
-import { SET_LOGOUT } from '../actions/logout';
+} from "../actions/login-action";
+import { SET_LOGOUT } from '../actions/logout-action';
 import initialState from '../store/initialState';
 
 export const reducer = (
