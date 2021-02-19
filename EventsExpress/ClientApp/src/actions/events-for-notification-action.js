@@ -4,7 +4,7 @@ import { setErrorAllertFromResponse } from './alert-action';
 
 const api_serv = new EventService();
 
-export default function get_events(eventIds, page = 1) {
+export default function eventsForNotification(eventIds, page = 1) {
     return async dispatch => {
         dispatch(setEventPending(true));
         let response = await api_serv.getEvents(eventIds, page);

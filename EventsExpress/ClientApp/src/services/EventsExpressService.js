@@ -32,7 +32,7 @@ export default class EventsExpressService {
     }
 
     getResourceNew = async url => {
-        const call = url => fetch(this._baseUrl + url, {
+        const call = _url => fetch(this._baseUrl + _url, {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',

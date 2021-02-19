@@ -1,8 +1,7 @@
-﻿import { CommentService } from '../services';
-import getComments from './comment-list-action';
-import { SubmissionError } from 'redux-form';
+﻿import getComments from './comment-list-action';
+import { CommentService } from '../services';
+import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../components/helpers/action-helpers';
-import { reset } from 'redux-form';
 
 export const SET_COMMENT_PENDING = "SET_COMMENT_PENDING";
 export const SET_COMMENT_SUCCESS = "SET_COMMENT_SUCCESS";

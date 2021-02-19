@@ -10,7 +10,7 @@ export default class EventService {
 
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
-    setEventTemplate = async (data, path) => {
+    setEventTemplate = (data, path) => {
         let file = new FormData();
         if (data.id != null) {
             file.append('Id', data.id);
@@ -62,7 +62,7 @@ export default class EventService {
         data.categories.map(x => {
             return file.append(`Categories[${i++}].Id`, x.id);
         });
-        return await baseService.setResourceWithData(path, file);
+        return baseService.setResourceWithData(path, file);
     }
 
     setEvent = data => this.setEventTemplate(data, `event/create`);

@@ -10,7 +10,7 @@ export default class EventScheduleService {
     getAllEventSchedules = () =>
         baseService.getResourceNew(`eventSchedule/all`);
 
-    setEventSchedule = async (data) => {
+    setEventSchedule = (data) => {
         let file = new FormData();
 
         file.append('Id', data.id);
@@ -20,7 +20,7 @@ export default class EventScheduleService {
         file.append('Periodicity', data.periodicity);
         file.append('IsActive', data.isActive);
 
-        return await baseService.setResourceWithData(`eventSchedule/${data.eventId}/edit`, file);
+        return baseService.setResourceWithData(`eventSchedule/${data.eventId}/edit`, file);
     }
 
     setNextEventScheduleCancel = eventId =>
