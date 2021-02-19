@@ -1,43 +1,20 @@
-import EventsExpressService from './EventsExpressService'
+import EventsExpressService from './EventsExpressService';
 
 const baseService = new EventsExpressService();
 
 export default class AuthenticationService {
 
-    auth = async (data) => {
-        const res = await baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res.json();
-    }
+    auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
-    setLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/Login', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setLogin = data => baseService.setResource('Authentication/Login', data);
 
-    setGoogleLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/GoogleLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setGoogleLogin = data => baseService.setResource('Authentication/GoogleLogin', data);
 
-    setFacebookLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/FacebookLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setFacebookLogin = data => baseService.setResource('Authentication/FacebookLogin', data);
 
-    setTwitterLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/TwitterLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setTwitterLogin = data => baseService.setResource('Authentication/TwitterLogin', data);
+
+    revokeToken = () => baseService.setResource('token/revoke-token');
 
     setRecoverPassword = async (data) => {
         const res = await baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);

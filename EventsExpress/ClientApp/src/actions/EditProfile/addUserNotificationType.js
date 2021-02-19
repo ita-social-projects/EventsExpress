@@ -1,5 +1,5 @@
 import { UserService } from '../../services';
-import { setAlert } from '../alert';
+import { setAlert } from '../alert-action';
 
 export const addUserNotificationType = {
     PENDING: "SET_ADD_USER_NOTIFICATION_TYPE_PENDING",

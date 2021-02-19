@@ -1,6 +1,5 @@
-﻿
-import { UserService } from '../services';
-import get_future_events  from './events-for-profile';
+﻿import { UserService } from '../services';
+import { get_future_events } from './events-for-profile-action';
 
 
 export const GET_PROFILE_PENDING = "GET_PROFILE_PENDING";

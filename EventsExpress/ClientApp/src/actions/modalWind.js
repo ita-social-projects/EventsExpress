@@ -12,4 +12,3 @@ export function isOpen(data){
         payload: data
     }
 }  
-

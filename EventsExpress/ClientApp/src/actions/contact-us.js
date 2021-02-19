@@ -1,5 +1,5 @@
 import { UserService } from "../services";
-import {setAlert} from './alert';
+import {setAlert} from './alert-action';
 import { reset} from 'redux-form';
 
 export const contactUs={
