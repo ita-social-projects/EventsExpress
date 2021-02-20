@@ -1,6 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import { UserService } from '../../services';
-import { setAlert } from '../alert';
+import { setAlert } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/helpers.js'
 
 export const changeAvatar = {

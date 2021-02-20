@@ -1,6 +1,6 @@
 ﻿import { AuthenticationService } from '../../services';
 import { reset } from 'redux-form';
-import { setAlert } from '../alert';
+import { setAlert } from '../alert-action';
 
 export const changePassword = {
     PENDING: "SET_CHANGEPASSWORD_PENDING",
