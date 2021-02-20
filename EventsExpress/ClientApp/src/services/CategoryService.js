@@ -4,10 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class CategoryService {
 
-    getAllCategories = async () => {
-        const res = await baseService.getResource('category/all');
-        return res;
-    }
+    getAllCategories = () => baseService.getResource('category/all');
 
     setCategory = async (data) => {
         const res = await baseService.setResource('category/create', {

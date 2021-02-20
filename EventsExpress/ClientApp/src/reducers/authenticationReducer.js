@@ -1,27 +1,18 @@
-import{authenticate} from'../actions/authentication'
+import { authenticate } from '../actions/authentication-action';
 import initialState from '../store/initialState';
 
-export const reducer=(
-    state=initialState.authenticate,
-    action
-   )=>{
-       switch(action.type){
-           case authenticate.PENDING:
-               return{...state, isPending: true}
-           case authenticate.SUCCESS:
-                return {
-                    ...state,
-                    isPending: false,
-                    isSucces: true
-                }
-            case authenticate.ERROR:
-                return {
-                    ...state,
-                    isPending: false,
-                    isError: action.payload
-                }
+export const reducer = (state = initialState.authenticate, action) => {
+    switch (action.type) {
+        case authenticate.PENDING:
+            return { ...state, isPending: true }
+        case authenticate.SUCCESS:
+            return {
+                ...state,
+                isPending: false,
+                isSucces: true
+            }
 
-            default:
-                return state;         
-       }
-   }
+        default:
+            return state;
+    }
+}

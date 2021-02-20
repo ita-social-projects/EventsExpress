@@ -1,27 +1,24 @@
 import { AuthenticationService } from '../services';
+import { getErrorMessege } from '../components/helpers/action-helpers';
 
 export const authenticate = {
     PENDING: "SET_AUTHENTICATE_PENDING",
     SUCCESS: "SET_AUTHENTICATE_SUCCESS",
-    ERROR: "SET_AUTHENTICATE_ERROR",
     SET_AUTHENTICATE: "SET_AUTHENTICATE",
 }
 
 const api_serv = new AuthenticationService();
 
 export default function _authenticate(data) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setAuthenticatePending(true));
-
-        const res = api_serv.auth(data);
-
-        res.then(responce => {
-            if (responce.error == null) {
-                dispatch(setAuthenticate(responce));
-            } else {
-                dispatch(setAuthenticateError(responce.error));
-            }
-        })
+        let response = await api_serv.auth(data);
+        if (!response.ok) {
+            dispatch(getErrorMessege(responce));
+            return Promise.reject();
+        }
+        dispatch(setAuthenticate(responce));
+        return Promise.resolve();
     }
 }
 
@@ -43,12 +40,5 @@ export function setAuthenticateSuccess(isAuthenticateSuccess) {
     return {
         type: authenticate.SUCCESS,
         isAuthenticateSuccess
-    }
-}
-
-export function setAuthenticateError(isAuthenticateError) {
-    return {
-        type: authenticate.ERROR,
-        isAuthenticateError
     }
 }

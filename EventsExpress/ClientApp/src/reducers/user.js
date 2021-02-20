@@ -1,13 +1,13 @@
 import initialState from '../store/initialState';
-import { SET_USER } from '../actions/login';
-import { SET_LOGOUT } from '../actions/logout';
+import { SET_USER } from '../actions/login-action';
+import { SET_LOGOUT } from '../actions/logout-action';
 import { addUserCategory } from '../actions/EditProfile/addUserCategory';
 import { addUserNotificationType } from '../actions/EditProfile/addUserNotificationType';
 import { editBirthday } from '../actions/EditProfile/editBirthday';
 import { editGender } from '../actions/EditProfile/EditGender';
 import { editUsername } from '../actions/EditProfile/editUsername';
 import { changeAvatar } from '../actions/EditProfile/change-avatar';
-import { authenticate } from '../actions/authentication';
+import { authenticate } from '../actions/authentication-action';
 
 export const reducer = (state = initialState.user, action) => {
     switch (action.type) {

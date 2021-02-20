@@ -1,7 +1,7 @@
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
-    //#region Resource Interaction Interface
+    // Obsolete
     getResource = async (url) => {
         const call = (url) => fetch(this._baseUrl + url, {
             method: "get",
@@ -29,6 +29,23 @@ export default class EventsExpressService {
                 }
             };
         }
+    }
+
+    getResourceNew = async url => {
+        const call = _url => fetch(this._baseUrl + _url, {
+            method: "get",
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }),
+        });
+
+        let res = await call(url);
+        if (res.status === 401 && await this.refreshHandler()) {
+            // one more try:
+            res = await call(url);
+        }
+        return res;
     }
 
     setResource = async (url, data) => {

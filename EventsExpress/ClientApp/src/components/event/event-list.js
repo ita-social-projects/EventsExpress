@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PagePagination from '../shared/pagePagination';
 import { connect } from 'react-redux';
-import { reset_events, updateEventsFilters } from '../../actions/event-list';
+import { reset_events, updateEventsFilters } from '../../actions/event-list-action';
 import Event from './event-item';
 
 class EventList extends Component {

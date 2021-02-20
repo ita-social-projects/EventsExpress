@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reset_EventsSchedule } from '../../actions/eventSchedules-list';
 import EventSchedule from './eventSchedule-item';
 
 const limit = 2;
