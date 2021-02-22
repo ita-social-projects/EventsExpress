@@ -12,6 +12,7 @@ using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace EventsExpress.Core.Services
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
+        private readonly IValidator<Event> _validator;
 
         public EventService(
             AppDbContext context,
@@ -35,7 +37,8 @@ namespace EventsExpress.Core.Services
             ILocationService locationService,
             IAuthService authService,
             IHttpContextAccessor httpContextAccessor,
-            IEventScheduleService eventScheduleService)
+            IEventScheduleService eventScheduleService,
+            IValidator<Event> validator)
             : base(context, mapper)
         {
             _photoService = photoService;
@@ -44,6 +47,7 @@ namespace EventsExpress.Core.Services
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
+            _validator = validator;
         }
 
         public async Task AddUserToEvent(Guid userId, Guid eventId)
@@ -56,10 +60,6 @@ namespace EventsExpress.Core.Services
             var ev = Context.Events
                 .Include(e => e.Visitors)
                 .First(e => e.Id == eventId);
-            if (ev.IsDraft)
-            {
-                throw new EventsExpressException("You can not join to draft");
-            }
 
             if (ev.MaxParticipants <= ev.Visitors.Count)
             {
@@ -172,7 +172,6 @@ namespace EventsExpress.Core.Services
                 },
             };
             ev.IsBlocked = false;
-            ev.IsDraft = true;
             ev.Owners = new List<EventOwner>
             {
                 new EventOwner
@@ -265,6 +264,7 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
+        // edit only on save button
         public async Task<Guid> Edit(EventDto e)
         {
             var ev = Context.Events
@@ -300,17 +300,60 @@ namespace EventsExpress.Core.Services
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
             ev.EventLocationId = locationId;
-
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 
             ev.Categories = eventCategories;
-
             await Context.SaveChangesAsync();
 
             return ev.Id;
         }
 
+        public async Task<Guid> Publish(Guid id)
+        {
+            var ev = Context.Events
+               .Include(e => e.Photo)
+               .Include(e => e.EventLocation)
+               .Include(e => e.Categories)
+                   .ThenInclude(c => c.Category)
+               .FirstOrDefault(x => x.Id == id);
+
+            Dictionary<string, string> exept = new Dictionary<string, string>();
+            var result = _validator.Validate(ev);
+
+            // check validation
+            // implement if station in edit-event wrapper
+            // if i have field , i have conmponent in dom
+            if (result.IsValid)
+            {
+                ev.StatusHistory = new List<EventStatusHistory>
+            {
+                new EventStatusHistory
+                {
+                    EventStatus = EventStatus.Active,
+                    CreatedOn = DateTime.UtcNow,
+                    UserId = CurrentUser().Id,
+                },
+            };
+                await Context.SaveChangesAsync();
+
+                return ev.Id;
+            }
+            else
+            {
+                var p = result.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
+                foreach (var x in p)
+                {
+                    exept.Add(x.Key, x.Value);
+                }
+
+                // how to pass dict value with exept
+                throw new EventsExpressException("validation failed", exept);
+            }
+        }
+
+        // craate new cards for draft
+        // create a new method that validate and add new event historyStatus(avcive)
         public async Task<Guid> EditNextEvent(EventDto eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);

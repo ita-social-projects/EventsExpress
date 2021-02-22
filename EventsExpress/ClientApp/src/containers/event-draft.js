@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import { edit_event } from '../actions/add-event';
-import { publish_event } from '../actions/add-event';
+import { edit_event, publish_event } from '../actions/add-event';
 import { connect } from 'react-redux';
-import { formValues, getFormValues, reset } from 'redux-form';
+import { getFormValues, reset } from 'redux-form';
 import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
-import { validateEventForm } from '../components/helpers/helpers'
+import { validate, validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
-import Button from "@material-ui/core/Button";
 import get_categories from '../actions/category/category-list';
 import L from 'leaflet';
-import { 
-    isPristine,
-} from 'redux-form'
-
-class EditEventWrapper extends Component {
+import Button from "@material-ui/core/Button";
+// link for me
+class EventDraftWrapper extends Component {
 
     componentWillMount = () => {
         this.props.get_categories();
     }
-    
+
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
@@ -30,63 +26,41 @@ class EditEventWrapper extends Component {
         this.props.reset();
     }
 
-    onPublish = async (values) => { 
-        
-        if (!this.props.pristine)
-        {
-            await this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-        }
-         return await this.props.publish(this.props.event.id);
-        
+    onSubmit = (values) => {
+        return this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
-    onSave = () => {
-        return this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-    }
-
-    
-    
-
+    // check how to work with async validation
+    // setAlert check how its work  
     render() {
         let initialValues = {
             ...this.props.event,
             selectedPos: L.latLng(
-                this.props.event.latitude, 
+                this.props.event.latitude,
                 this.props.event.longitude)
-
         }
-        const { pristine } = this.props
-        console.log(this.props.form_values)
+
         return <>
-           
             <EventForm
+                validate={validate}
                 all_categories={this.props.all_categories}
                 onCancel={this.props.onCancelEditing}
-                onSubmit={this.onPublish}
-                onPublish={this.onSave}
+                onPublish={this.onPublish}
+                onSubmit={this.onSubmit}
                 initialValues={initialValues}
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
                 disabledDate={false}
-                isCreated={true} ><div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.onSave}
-                    >
-                        Save
-                        </Button>
-                </div>
+                isCreated={true}>
                 <div className="col">
                     <Button
                         className="border"
                         fullWidth={true}
                         color="primary"
                         type="submit"
-                        >
-                        Publish
+                    >
+                        Save
                         </Button>
                 </div>
                 <div className="col">
@@ -97,24 +71,23 @@ class EditEventWrapper extends Component {
                         onClick={this.handleClick}>
                         Cancel
                         </Button>
-                </div></EventForm>
+                </div>
+            </EventForm>
         </>
     }
-}   
+}
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
     add_event_status: state.add_event,
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),
-    pristine: isPristine('event-form')(state),
     event: state.event.data,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         add_event: (data) => dispatch(edit_event(data)),
-        publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         resetEvent: () => dispatch(resetEvent()),
         reset: () => {
@@ -126,4 +99,5 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(EventDraftWrapper);
+

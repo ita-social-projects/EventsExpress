@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import EventForm from './event-form';
 import { edit_event } from '../../actions/add-event';
+import { draft_event } from '../../actions/add-event';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import { setEventError, setEventPending, setEventSuccess } from '../../actions/add-event';
@@ -9,6 +10,8 @@ import { resetEvent } from '../../actions/event-item-view';
 import get_categories from '../../actions/category/category-list';
 import L from 'leaflet';
 
+
+// link for me
 class EditEventNew extends Component {
 
     componentWillMount = () => {
@@ -66,7 +69,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_event: (data) => dispatch(edit_event(data)),
+        add_event: (data) => dispatch(draft_event(data)),
         get_categories: () => dispatch(get_categories()),
         resetEvent: () => dispatch(resetEvent()),
         reset: () => {

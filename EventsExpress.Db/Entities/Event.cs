@@ -26,9 +26,6 @@ namespace EventsExpress.Db.Entities
         public bool? IsPublic { get; set; }
 
         [Track]
-        public bool IsDraft { get; set; }
-
-        [Track]
         public int? MaxParticipants { get; set; }
 
         [Track]

@@ -110,6 +110,15 @@ namespace EventsExpress.Controllers
             return Ok(result);
         }
 
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Publish(Guid eventId)
+        {
+            var result = await _eventService.Publish(eventId);
+
+            return Ok(new { id = result });
+        }
+
         /// <summary>
         /// This method have to return event.
         /// </summary>

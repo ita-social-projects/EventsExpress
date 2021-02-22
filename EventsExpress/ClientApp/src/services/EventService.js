@@ -31,8 +31,8 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
+        if (data.photo != null) {
+            file.append('Photo', data.photo.file);
         }
 
         if (data.isReccurent) {
@@ -93,9 +93,12 @@ export default class EventService {
     setEventFromParent = async (data) => {
         return this.setEventTemplate(data,`event/CreateNextFromParentWithEdit/${data.id}`);
     }
-
+    // link for me
     editEvent = async (data) => {
         return this.setEventTemplate(data,`event/${data.id}/edit`)
+    }
+    publishEvent = (id) => {
+       return baseService.setResource(`event/${id}/publish`)
     }
 
     setEventCancel = async (data) => {

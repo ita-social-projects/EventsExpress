@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
-import EventList from '../components/event/event-list';
+import EventList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
 import { get_drafts } from '../actions/event-list';
 import InternalServerError from '../components/Route guard/500';

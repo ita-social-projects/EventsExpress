@@ -16,7 +16,7 @@ const history = createBrowserHistory({ forceRefresh: true });
 export default class HeaderProfile extends Component {
     handleClick = () => {
         this.props.onSubmit(null);
-        //history.push(`/event/createEvent`);
+        
     }
 
     render() {

@@ -19,6 +19,14 @@ namespace EventsExpress.Filters
                         { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
+                if (eventsExpressException.CustomData.Count > 0)
+                {
+                    foreach (var x in eventsExpressException.CustomData)
+                    {
+                        errorTexts.Errors.Add(x.Key, new[] { x.Value });
+                    }
+                }
+
                 var result = new ObjectResult(errorTexts) { StatusCode = 400 };
                 context.Result = result;
                 context.ExceptionHandled = true;

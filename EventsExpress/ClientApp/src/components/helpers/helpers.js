@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
 import DatePicker from 'react-datepicker';
@@ -12,7 +12,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-
 export const radioButton = ({ input, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
@@ -114,6 +113,10 @@ export const validate = values => {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
 
+    //if (values.dateTo > Date.dateFrom) {
+    //    errors.dateTo = `the date cannot be less than the previous one`;
+    //}
+
     if (values.email &&
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address'
@@ -158,34 +161,6 @@ export const validateEventForm = values =>{
     return values;
 }
 
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
-    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
-    minValue = new Date().getFullYear() - 115;
-    maxValue = new Date().getFullYear() - 15;
-
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-        peekNextMonth
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-    />
-}
-
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime, disabled }) => {
-    value = value || defaultValue || new Date();
-    minValue = minValue || new Date();
-
-    return <DatePicker
-        onChange={onChange}
-        minDate={new Date(minValue)}
-        selected={new Date(value) || new Date()}
-        disabled={disabled}
-    />
-}
 
 export const maxLength = max => value =>
     value && value.length > max
@@ -287,6 +262,56 @@ export const renderTextField = ({
             {...custom}
         />
     )
+
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
+    minValue = new Date().getFullYear() - 115;
+    maxValue = new Date().getFullYear() - 15;
+
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+    />
+}
+
+export const renderDatePicker = ({
+    input: { onChange, value },
+    defaultValue,
+    minValue,
+    showTime,
+    disabled,
+    meta: { error, touched},
+}) => {
+    value = value || defaultValue || new Date();
+    minValue = minValue || new Date();
+    const containerClass = error && touched ? "invalid" : "valid";
+
+    return (
+        <Fragment>
+            <DatePicker className={containerClass}
+                onChange={onChange}
+                minDate={new Date(minValue)}
+                selected={new Date(value) || new Date()}
+                disabled={disabled}
+    />
+    {
+                error ? ( 
+                    <div>
+                        <span  className="error-text">
+                             {error}
+                        </span>
+                    </div>
+                        ) : null
+            }
+            </Fragment>
+   )
+}
 
 export const renderSelectField = ({
     input,

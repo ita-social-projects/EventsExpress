@@ -39,8 +39,6 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsPublic { get; set; }
 
-        public bool IsDraft { get; set; }
-
         public Point Point { get; set; }
 
         public IEnumerable<CategoryDto> Categories { get; set; }
