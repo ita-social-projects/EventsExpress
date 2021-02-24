@@ -111,6 +111,11 @@ namespace EventsExpress.Mapping
 
         private static LocationViewModel MapLocation(EventDto eventDto)
         {
+            if (eventDto.Point == null)
+            {
+                return null;
+            }
+
             return eventDto.Type == LocationType.Map ?
               new LocationViewModel
               {

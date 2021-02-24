@@ -8,6 +8,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Event;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -25,6 +26,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
         private static Mock<IHttpContextAccessor> httpContextAccessor;
+        private static Mock<IValidator<Event>> mockValidationService;
 
         private EventService service;
         private List<Event> events;
@@ -117,6 +119,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            mockValidationService = new Mock<IValidator<Event>>();
             httpContextAccessor = new Mock<IHttpContextAccessor>();
             httpContextAccessor.SetupGet(x => x.HttpContext)
                 .Returns(new Mock<HttpContext>().Object);
@@ -132,7 +135,8 @@ namespace EventsExpress.Test.ServiceTests
                 mockLocationService.Object,
                 mockAuthService.Object,
                 httpContextAccessor.Object,
-                mockEventScheduleService.Object);
+                mockEventScheduleService.Object,
+                mockValidationService.Object);
 
             eventLocationMap = new EventLocation
             {
@@ -300,6 +304,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
         }
 
+        [Test]
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Edit Event")]
         public void EditEvent_ValidEvent_Success(EventDto eventDto)
