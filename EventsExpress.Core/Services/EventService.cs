@@ -166,7 +166,7 @@ namespace EventsExpress.Core.Services
             {
                 new EventStatusHistory
                 {
-                    // присвоїли драфт
+                    // check db (null fields)
                     EventStatus = EventStatus.Draft,
                     CreatedOn = DateTime.UtcNow,
                     UserId = CurrentUser().Id,
