@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -8,6 +9,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Event;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -25,6 +27,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
         private static Mock<IHttpContextAccessor> httpContextAccessor;
+        private static Mock<IValidator<Event>> mockValidationService;
 
         private EventService service;
         private List<Event> events;
@@ -117,6 +120,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            mockValidationService = new Mock<IValidator<Event>>();
             httpContextAccessor = new Mock<IHttpContextAccessor>();
             httpContextAccessor.SetupGet(x => x.HttpContext)
                 .Returns(new Mock<HttpContext>().Object);
@@ -132,7 +136,8 @@ namespace EventsExpress.Test.ServiceTests
                 mockLocationService.Object,
                 mockAuthService.Object,
                 httpContextAccessor.Object,
-                mockEventScheduleService.Object);
+                mockEventScheduleService.Object,
+                mockValidationService.Object);
 
             eventLocationMap = new EventLocation
             {
@@ -200,6 +205,13 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -300,6 +312,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
         }
 
+        [Test]
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Edit Event")]
         public void EditEvent_ValidEvent_Success(EventDto eventDto)
@@ -371,6 +384,46 @@ namespace EventsExpress.Test.ServiceTests
                 userId,
                 eventId,
                 UserStatusEvent.Approved));
+        }
+
+        [Test]
+
+        public void CreateDraft_Works()
+        {
+            service.CreateDraft();
+            Assert.AreEqual(4, Context.Events.Count());
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InvalidId_Throw()
+        {
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(Guid.NewGuid()));
+            Assert.That(ex.Message, Contains.Substring("Not found"));
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_ValidEvent_Works()
+        {
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
+            Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.FirstEventId));
+            var statusHistory = Context.Events.Find(GetEventExistingId.FirstEventId).StatusHistory.Last();
+            Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InValidEvent_Throws()
+        {
+            var validationResultMock = new Mock<FluentValidation.Results.ValidationResult>();
+            validationResultMock
+                .SetupGet(x => x.IsValid)
+                .Returns(() => false);
+
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.FirstEventId));
+            Assert.That(ex.Message, Contains.Substring("validation failed"));
         }
     }
 }
