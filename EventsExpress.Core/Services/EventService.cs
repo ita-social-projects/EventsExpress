@@ -265,7 +265,6 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        // edit only on save button
         public async Task<Guid> Edit(EventDto e)
         {
             var ev = Context.Events
@@ -319,12 +318,14 @@ namespace EventsExpress.Core.Services
                    .ThenInclude(c => c.Category)
                .FirstOrDefault(x => x.Id == id);
 
+            if (ev == null)
+            {
+                throw new EventsExpressException("Not found");
+            }
+
             Dictionary<string, string> exept = new Dictionary<string, string>();
             var result = _validator.Validate(ev);
 
-            // check validation
-            // implement if station in edit-event wrapper
-            // if i have field , i have conmponent in dom
             if (result.IsValid)
             {
                 ev.StatusHistory = new List<EventStatusHistory>
@@ -348,13 +349,10 @@ namespace EventsExpress.Core.Services
                     exept.Add(x.Key, x.Value);
                 }
 
-                // how to pass dict value with exept
                 throw new EventsExpressException("validation failed", exept);
             }
         }
 
-        // craate new cards for draft
-        // create a new method that validate and add new event historyStatus(avcive)
         public async Task<Guid> EditNextEvent(EventDto eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);

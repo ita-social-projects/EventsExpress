@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -204,6 +205,13 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -376,6 +384,46 @@ namespace EventsExpress.Test.ServiceTests
                 userId,
                 eventId,
                 UserStatusEvent.Approved));
+        }
+
+        [Test]
+
+        public void CreateDraft_Works()
+        {
+            service.CreateDraft();
+            Assert.AreEqual(4, Context.Events.Count());
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InvalidId_Throw()
+        {
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(Guid.NewGuid()));
+            Assert.That(ex.Message, Contains.Substring("Not found"));
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_ValidEvent_Works()
+        {
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
+            Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.FirstEventId));
+            var statusHistory = Context.Events.Find(GetEventExistingId.FirstEventId).StatusHistory.Last();
+            Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InValidEvent_Throws()
+        {
+            var validationResultMock = new Mock<FluentValidation.Results.ValidationResult>();
+            validationResultMock
+                .SetupGet(x => x.IsValid)
+                .Returns(() => false);
+
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.FirstEventId));
+            Assert.That(ex.Message, Contains.Substring("validation failed"));
         }
     }
 }
