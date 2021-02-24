@@ -4,25 +4,13 @@ const baseService = new EventsExpressService();
 
 export default class EventService {
 
-    getEvent = async (id) => {
-        const res = await baseService.getResource(`event/${id}`);
-        return res;
-    }
+    getEvent = id => baseService.getResource(`event/${id}`);
 
-    getAllEvents = async (filters) => {
-        debugger;
-        const res = await baseService.getResource(`event/all${filters}`);
-        return res;
-    }
+    getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
 
-    getEvents = async (eventIds, page) => {
-        const res = await baseService.setResource(`event/getEvents?page=${page}`, eventIds);
-        return !res.ok
-            ? { error: await res.text() }
-            : res.json();
-    }
+    getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
-    setEventTemplate = async (data, path) => {
+    setEventTemplate = (data, path) => {
         let file = new FormData();
         if (data.id != null) {
             file.append('Id', data.id);
@@ -42,10 +30,17 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
-        if (data.selectedPos) {
-            file.append('Latitude', data.selectedPos.lat);
-            file.append('Longitude', data.selectedPos.lng);
+        file.append('Location.Type', data.location.type)
+        if (data.location.selectedPos) {
+            file.append('Location.Latitude', data.location.selectedPos.lat);
+            file.append('Location.Longitude', data.location.selectedPos.lng);
         }
+        if (data.location.onlineMeeting) {
+            file.append('Location.OnlineMeeting', data.location.onlineMeeting);
+        }
+
+
+
 
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -67,30 +62,18 @@ export default class EventService {
         data.categories.map(x => {
             return file.append(`Categories[${i++}].Id`, x.id);
         });
-        const res = await baseService.setResourceWithData(path, file);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
+        return baseService.setResourceWithData(path, file);
     }
 
-    setEvent = async (data) => {
-        return this.setEventTemplate(data, `event/create`)
-    }
+    setEvent = data => this.setEventTemplate(data, `event/create`);
 
-    setCopyEvent = async (eventId) => {
-        const res = await baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setCopyEvent = eventId =>
+        baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = async (data) => {
-        return this.setEventTemplate(data,`event/CreateNextFromParentWithEdit/${data.id}`);
-    }
+    setEventFromParent = async (data) =>
+        this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
 
-    editEvent = async(data) => {
-        return this.setEventTemplate(data,`event/${data.id}/edit`)
-    }
+    editEvent = data => this.setEventTemplate(data, `event/${data.id}/edit`);
 
     setEventStatus = async (data) => {
         const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
@@ -147,33 +130,19 @@ export default class EventService {
             : res;
     }
 
-    getCurrentRate = async (eventId) => {
-        const res = await baseService.getResource(`event/${eventId}/GetCurrentRate`);
-        return res;
-    }
+    getCurrentRate = eventId => baseService.getResource(`event/${eventId}/GetCurrentRate`);
 
-    getAverageRate = async (eventId) => {
-        const res = await baseService.getResource(`event/${eventId}/GetAverageRate`);
-        return res;
-    }
+    getAverageRate = eventId => baseService.getResource(`event/${eventId}/GetAverageRate`);
     
-    getFutureEvents = async (id, page) => {
-        const res = await baseService.getResource(`event/futureEvents?id=${id}&page=${page}`);
-        return res;
-    }
+    getFutureEvents = async (id, page) =>
+        baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);
 
-    getPastEvents = async (id, page) => {
-        const res = await baseService.getResource(`event/pastEvents?id=${id}&page=${page}`);
-        return res;
-    }
+    getPastEvents = (id, page) =>
+        baseService.getResourceNew(`event/pastEvents?id=${id}&page=${page}`);
 
-    getEventsToGo = async (id, page) => {
-        const res = await baseService.getResource(`event/EventsToGo?id=${id}&page=${page}`);
-        return res;
-    }
+    getEventsToGo = (id, page) =>
+        baseService.getResourceNew(`event/EventsToGo?id=${id}&page=${page}`);
 
-    getVisitedEvents = async (id, page) => {
-        const res = await baseService.getResource(`event/visitedEvents?id=${id}&page=${page}`);
-        return res;
-    }
+    getVisitedEvents = (id, page) =>
+        baseService.getResourceNew(`event/visitedEvents?id=${id}&page=${page}`);
 }

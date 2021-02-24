@@ -7,6 +7,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ServiceTests.TestClasses.Event;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -27,13 +28,86 @@ namespace EventsExpress.Test.ServiceTests
 
         private EventService service;
         private List<Event> events;
-        private EventDto eventDTO;
-        private EventLocation eventLocation;
-
+        private EventLocation eventLocationMap;
+        private EventLocation eventLocationOnline;
         private Guid userId = Guid.NewGuid();
-        private Guid firstEventId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
-        private Guid eventLocationId = Guid.NewGuid();
+        private Guid eventLocationIdMap = Guid.NewGuid();
+        private Guid eventLocationIdOnline = Guid.NewGuid();
+
+        private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
+        {
+            if (eventDto.Type == LocationType.Map)
+            {
+                return new LocationDto
+                {
+                    Id = Guid.NewGuid(),
+                    Point = eventDto.Point,
+                    Type = LocationType.Map,
+                };
+            }
+            else if (eventDto.Type == LocationType.Online)
+            {
+                return new LocationDto
+                {
+                    Id = Guid.NewGuid(),
+                    OnlineMeeting = eventDto.OnlineMeeting,
+                    Type = LocationType.Online,
+                };
+            }
+
+            return null;
+        }
+
+        private static EventLocation MapEventLocationFromLocationDto(LocationDto locationDto)
+        {
+            if (locationDto.Type == LocationType.Map)
+            {
+                return new EventLocation
+                {
+                    Id = Guid.NewGuid(),
+                    Point = locationDto.Point,
+                    Type = LocationType.Map,
+                };
+            }
+            else if (locationDto.Type == LocationType.Online)
+            {
+                return new EventLocation
+                {
+                    Id = Guid.NewGuid(),
+                    OnlineMeeting = locationDto.OnlineMeeting,
+                    Type = LocationType.Online,
+                };
+            }
+
+            return null;
+        }
+
+        private EventDto DeepCopyDto(EventDto eventDto)
+        {
+            List<User> users = new List<User>();
+            foreach (var owner in eventDto.Owners)
+            {
+                users.Add(owner);
+            }
+
+            return new EventDto
+            {
+                Id = eventDto.Id,
+                DateFrom = eventDto.DateFrom,
+                DateTo = eventDto.DateTo,
+                Description = eventDto.Description,
+                Owners = users,
+                PhotoId = eventDto.PhotoId,
+                Title = eventDto.Title,
+                IsBlocked = eventDto.IsBlocked,
+                IsPublic = eventDto.IsPublic,
+                Categories = eventDto.Categories,
+                Point = eventDto.Point,
+                MaxParticipants = eventDto.MaxParticipants,
+                Type = eventDto.Type,
+            };
+        }
 
         [SetUp]
         protected override void Initialize()
@@ -60,32 +134,17 @@ namespace EventsExpress.Test.ServiceTests
                 httpContextAccessor.Object,
                 mockEventScheduleService.Object);
 
-            eventDTO = new EventDto
+            eventLocationMap = new EventLocation
             {
-                Id = firstEventId,
-                DateFrom = DateTime.Today,
-                DateTo = DateTime.Today,
-                Description = "sjsdnl sdmkskdl dsnlndsl",
-                Owners = new List<User>()
-                {
-                    new User
-                    {
-                        Id = Guid.NewGuid(),
-                    },
-                },
-                PhotoId = Guid.NewGuid(),
-                Title = "SLdndsndj",
-                IsBlocked = false,
-                IsPublic = true,
-                Categories = null,
+                Id = eventLocationIdMap,
                 Point = new Point(10.45, 12.34),
-                MaxParticipants = 2147483647,
+                Type = LocationType.Map,
             };
-
-            eventLocation = new EventLocation
+            eventLocationOnline = new EventLocation
             {
-                Id = eventLocationId,
-                Point = new Point(10.45, 12.34),
+                Id = eventLocationIdOnline,
+                OnlineMeeting = new Uri("http://basin.example.com/#branch"),
+                Type = LocationType.Online,
             };
 
             List<User> users = new List<User>()
@@ -102,7 +161,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 new Event
                 {
-                    Id = firstEventId,
+                    Id = GetEventExistingId.FirstEventId,
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
@@ -114,7 +173,28 @@ namespace EventsExpress.Test.ServiceTests
                         },
                     },
                     PhotoId = Guid.NewGuid(),
-                    EventLocationId = eventLocationId,
+                    EventLocationId = eventLocationIdMap,
+                    Title = "SLdndsndj",
+                    IsBlocked = false,
+                    IsPublic = true,
+                    Categories = null,
+                    MaxParticipants = 2147483647,
+                },
+                new Event
+                {
+                    Id = GetEventExistingId.SecondEventId,
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "sjsdnl sdmkskdl dsnlndsl",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = Guid.NewGuid(),
+                        },
+                    },
+                    PhotoId = Guid.NewGuid(),
+                    EventLocationId = eventLocationIdOnline,
                     Title = "SLdndsndj",
                     IsPublic = true,
                     Categories = null,
@@ -152,27 +232,16 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            Context.EventLocations.Add(eventLocation);
+            Context.EventLocations.Add(eventLocationMap);
+            Context.EventLocations.Add(eventLocationOnline);
             Context.Events.AddRange(events);
             Context.SaveChanges();
 
             MockMapper.Setup(u => u.Map<EventDto, LocationDto>(It.IsAny<EventDto>()))
-                .Returns((EventDto e) => e == null ?
-                null :
-                new LocationDto
-                {
-                    Id = Guid.NewGuid(),
-                    Point = e.Point,
-                });
+                .Returns((EventDto e) => MapLocationDtoFromEventDto(e));
 
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
-                .Returns((LocationDto e) => e == null ?
-                null :
-                new EventLocation
-                {
-                    Point = e.Point,
-                    Id = e.Id,
-                });
+                .Returns((LocationDto e) => MapEventLocationFromLocationDto(e));
 
             MockMapper.Setup(u => u.Map<EventDto, Event>(It.IsAny<EventDto>()))
                 .Returns((EventDto e) => e == null ?
@@ -203,13 +272,15 @@ namespace EventsExpress.Test.ServiceTests
                 });
         }
 
-        [Test]
-        public void GetEvent_ExistingId_Success()
+        [TestCaseSource(typeof(GetEventExistingId))]
+        [Category("Get Event")]
+        public void GetEvent_ExistingId_Success(Guid existingId)
         {
-            Assert.DoesNotThrow(() => service.EventById(firstEventId));
+            Assert.DoesNotThrow(() => service.EventById(existingId));
         }
 
         [Test]
+        [Category("Get Event")]
         public void GetEvent_NotExistingId_Failed()
         {
             var result = service.EventById(Guid.NewGuid());
@@ -217,69 +288,81 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNull(result);
         }
 
-        [Test]
-        public void CreateEvent_ValidEvent_Success()
+        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
+        [Category("Create Event")]
+        public void CreateEvent_ValidEvent_Success(EventDto eventDto)
         {
-            eventDTO.Id = Guid.Empty;
+            EventDto dto = DeepCopyDto(eventDto);
+            dto.Id = Guid.Empty;
 
-            Assert.DoesNotThrowAsync(async () => await service.Create(eventDTO));
+            Assert.DoesNotThrowAsync(async () => await service.Create(dto));
+        }
+
+        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
+        [Category("Edit Event")]
+        public void EditEvent_ValidEvent_Success(EventDto eventDto)
+        {
+            Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
         }
 
         [Test]
-        public void EditEvent_ValidEvent_Success()
-        {
-            Assert.DoesNotThrowAsync(async () => await service.Edit(eventDTO));
-        }
-
-        [Test]
+        [Category("Edit Event")]
         public void EditEvent_InvalidEvent_Failed()
         {
             Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
         }
 
-        [Test]
-        public void AddUserToEvent_ReturnTrue()
+        [TestCaseSource(typeof(GetEventExistingId))]
+        [Category("Add user to event")]
+        public void AddUserToEvent_ReturnTrue(Guid id)
         {
-            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, firstEventId));
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, id));
         }
 
         [Test]
+        [Category("Add user to event")]
         public void AddUserToEvent_UserNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
+        [Category("Add user to event")]
         public void AddUserToEvent_ToMuchParticipants_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, eventId));
         }
 
         [Test]
+        [Category("Add user to event")]
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
+        [Category("Delete user")]
         public void DeleteUserFromEvent_ReturnTrue()
         {
             Assert.DoesNotThrowAsync(async () => await service.DeleteUserFromEvent(userId, eventId));
         }
 
         [Test]
+        [Category("Delete user")]
         public void DeleteUserFromEvent_UserNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(Guid.NewGuid(), eventId));
         }
 
         [Test]
+        [Category("Delete user")]
         public void DeleteUserFromEvent_EventNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.DeleteUserFromEvent(userId, Guid.NewGuid()));
         }
 
         [Test]
+        [Category("Change visitor status")]
         public void ChangeVisitorStatus_ReturnTrue()
         {
             Assert.DoesNotThrowAsync(async () => await service.ChangeVisitorStatus(

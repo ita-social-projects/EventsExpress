@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import MySnackbar from '../components/helpers/Alert';
-import { setAlertOpen } from '../actions/alert'
+import { setAlertOpen } from '../actions/alert-action'
 
 class AlertContainer extends React.Component {
   render() {

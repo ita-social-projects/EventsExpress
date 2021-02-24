@@ -98,7 +98,8 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-            user.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+            user.Salt = PasswordHasher.GenerateSalt();
+            user.PasswordHash = PasswordHasher.GenerateHash(newPassword, user.Salt);
 
             await Context.SaveChangesAsync();
             await _emailService.SendEmailAsync(new EmailDto
@@ -134,8 +135,11 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
                 .Include(u => u.Role)
+                .Include(u => u.Email)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
                 .FirstOrDefault(x => x.Id == userId));
 
             user.Rating = GetRating(user.Id);
@@ -152,6 +156,8 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Email == email));
 
@@ -304,7 +310,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = false;
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedUserMessage(user.Email));
+            await _mediator.Publish(new UnblockedUserMessage(user));
         }
 
         public async Task Block(Guid userId)
@@ -317,7 +323,7 @@ namespace EventsExpress.Core.Services
 
             user.IsBlocked = true;
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedUserMessage(user.Email));
+            await _mediator.Publish(new BlockedUserMessage(user));
         }
 
         public async Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories)
@@ -388,6 +394,32 @@ namespace EventsExpress.Core.Services
             {
                 return 0;
             }
+        }
+
+        public IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds)
+        {
+            var users = Context.UserNotificationTypes.Include(unt => unt.User)
+                                    .Where(x => x.NotificationTypeId == notificationType && userIds.Contains(x.UserId))
+                                    .Select(x => x.User)
+                                    .AsEnumerable();
+            return Mapper.Map<IEnumerable<UserDto>>(users);
+        }
+
+        public async Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
+        {
+            var user = Context.Users
+                .Include(u => u.NotificationTypes)
+                .Single(user => user.Id == userDto.Id);
+
+            var newNotificationTypes = notificationTypes
+                .Select(x => new UserNotificationType { UserId = user.Id, NotificationTypeId = x.Id })
+                .ToList();
+
+            user.NotificationTypes = newNotificationTypes;
+
+            Update(user);
+            await Context.SaveChangesAsync();
+            return user.Id;
         }
     }
 }

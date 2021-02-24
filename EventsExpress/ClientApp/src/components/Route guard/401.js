@@ -1,14 +1,13 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
-import logout from '../../actions/logout';
+import logout from '../../actions/logout-action';
 import { isOpen } from '../../actions/modalWind'
 import { setRegisterError } from '../../actions/register'
 import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
 import { setEditGenderError } from '../../actions/EditProfile/EditGender'
 import { setEditBirthdayError } from '../../actions/EditProfile/editBirthday'
 import { setAvatarError } from '../../actions/EditProfile/change-avatar'
-import { setEventError } from '../../actions/add-event'
 import { setCategoryError } from '../../actions/category/add-category'
 import { getUsersError } from '../../actions/users'
 import { getEventError } from '../../actions/event-item-view'
@@ -46,7 +45,6 @@ const mapDispatchToProps = (dispatch) => {
            dispatch(setEditUsernameError(null));
            dispatch(setEditGenderError(null));
            dispatch(setEditBirthdayError(null));
-           dispatch(setEventError(false));
            dispatch(setCategoryError(false));
            dispatch(getUsersError(false));
            dispatch(getEventError(false));

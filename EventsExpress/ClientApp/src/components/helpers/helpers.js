@@ -22,6 +22,15 @@ export const radioButton = ({ input, ...rest }) => (
         </RadioGroup>
     </FormControl>
 )
+export const radioLocationType = ({ input, ...rest }) => (
+    <FormControl>
+
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="0" control={<Radio />} label="Map" />
+            <FormControlLabel value="1" control={<Radio />} label="Online" />
+        </RadioGroup>
+    </FormControl>
+)
 
 export const validate = values => {
     const errors = {};
@@ -45,7 +54,8 @@ export const validate = values => {
         'itemName',
         'needQuantity',
         'unitOfMeasuring',
-        'willTake'
+        'willTake',
+        'image'
     ];
 
     requiredFields.forEach(field => {
@@ -70,7 +80,7 @@ export const validate = values => {
             if (item.itemName && item.itemName.length > 30) {
                 inventoriesErrors.itemName = 'Invalid length: 1 - 30 symbols';
                 inventoriesArrayErrors[index] = inventoriesErrors;
-            }            
+            }
             if (!item || !item.needQuantity) {
                 inventoriesErrors.needQuantity = 'Required';
                 inventoriesArrayErrors[index] = inventoriesErrors;
@@ -88,9 +98,16 @@ export const validate = values => {
         if (inventoriesArrayErrors.length) {
             errors.inventories = inventoriesArrayErrors;
         }
-    }  
+    }
 
-    if (!values.selectedPos || values.selectedPos == ""){
+    if (values.image != null && values.image.file != null && values.image.file.size < 4096)
+        errors.image = "Image is too small";
+
+    if (values.categories != null && values.categories.length == 0) {
+        errors.categories = "Required";
+    }
+
+    if (!values.selectedPos || values.selectedPos == "") {
         errors.selectedPos = "Required";
     }
 
@@ -134,7 +151,7 @@ export const validate = values => {
     return errors;
 }
 
-export const validateEventForm = values =>{
+export const validateEventForm = values => {
 
     if (!values.isPublic) {
         values.isPublic = false;
@@ -248,17 +265,17 @@ export const renderTextArea = ({
     meta: { touched, invalid, error },
     ...custom
 }) => (
-        <TextField
-            label={label}
-            defaultValue={defaultValue}
-            multiline
-            rows="4"
-            fullWidth
-            {...input}
-            error={touched && invalid}
-            helperText={touched && error}
-            variant="outlined"
-        />)
+    <TextField
+        label={label}
+        defaultValue={defaultValue}
+        multiline
+        rows="4"
+        fullWidth
+        {...input}
+        error={touched && invalid}
+        helperText={touched && error}
+        variant="outlined"
+    />)
 
 export const renderTextField = ({
     label,
@@ -270,20 +287,20 @@ export const renderTextField = ({
     meta: { touched, invalid, error },
     ...custom
 }) => (
-        <TextField
-            rows={rows}
-            fullWidth={fullWidth === undefined ? true : false}
-            label={label}
-            placeholder={label}
-            error={touched && invalid}
-            defaultValue={defaultValue}
-            value={defaultValue}
-            inputProps={inputProps}
-            helperText={touched && error}
-            {...input}
-            {...custom}
-        />
-    )
+    <TextField
+        rows={rows}
+        fullWidth={fullWidth === undefined ? true : false}
+        label={label}
+        placeholder={label}
+        error={touched && invalid}
+        defaultValue={defaultValue}
+        value={defaultValue}
+        inputProps={inputProps}
+        helperText={touched && error}
+        {...input}
+        {...custom}
+    />
+)
 
 export const renderSelectField = ({
     input,
@@ -292,25 +309,25 @@ export const renderSelectField = ({
     children,
     ...custom
 }) => (
-        <FormControl error={touched && error}>
-            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
-            <Select
-                fullWidth
-                native
-                error={touched && invalid}
-                helperText={touched && error}
-                {...input}
-                {...custom}
-                inputProps={{
-                    name: { label },
-                    id: 'age-native-simple'
-                }}
-            >
-                {children}
-            </Select>
-            {renderFromHelper({ touched, error })}
-        </FormControl>
-    )
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+        <Select
+            fullWidth
+            native
+            error={touched && invalid}
+            helperText={touched && error}
+            {...input}
+            {...custom}
+            inputProps={{
+                name: { label },
+                id: 'age-native-simple'
+            }}
+        >
+            {children}
+        </Select>
+        {renderFromHelper({ touched, error })}
+    </FormControl>
+)
 
 const renderFromHelper = ({ touched, error }) => {
     if (!(touched && error)) {
@@ -337,30 +354,28 @@ export const renderCheckbox = ({ input, label }) => (
 export const renderErrorMessage = (responseData, key) => {
     let response;
     response = JSON.parse(responseData)["errors"];
-        if(response[key]){
-            return (<div className="text-danger">
-                {response[key].map(item =>
+    if (response[key]) {
+        return (<div className="text-danger">
+            {response[key].map(item =>
                 <div>
                     {item}
                 </div>
-                )}
-            </div>
-            )
-        }
+            )}
+        </div>
+        )
     }
+}
 
 export const buildValidationState = (responseData) => {
     let response;
     response = JSON.parse(responseData)["errors"];
     let result = {};
     for (const [key, value] of Object.entries(response)) {
-        if(key == "")
-        {
-            result = {...result, _error: value}
+        if (key == "") {
+            result = { ...result, _error: value }
         }
-        else
-        {
-            result = {...result, [key]: value}
+        else {
+            result = { ...result, [key]: value }
         }
     }
     return result;

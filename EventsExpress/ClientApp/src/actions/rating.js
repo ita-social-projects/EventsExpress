@@ -1,5 +1,5 @@
 import { EventService } from '../services';
-import { setAlert } from './alert'
+import { setAlert } from './alert-action'
 
 export const getRate = {
     PENDING: 'GET_RATE_PENDING',

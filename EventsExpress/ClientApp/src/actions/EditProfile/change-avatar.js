@@ -1,5 +1,7 @@
+import { SubmissionError } from 'redux-form';
 import { UserService } from '../../services';
-import { setAlert } from '../alert';
+import { setAlert } from '../alert-action';
+import { buildValidationState } from '../../components/helpers/helpers.js'
 
 export const changeAvatar = {
     PENDING: "SET_CHANGE_AVATAR_PENDING",
@@ -13,15 +15,15 @@ const api_serv = new UserService();
 export default function change_avatar(data) {
     return dispatch => {
         dispatch(setAvatarPending(true));
-        const res = api_serv.setAvatar(data);
-        res.then(response => {
+        return api_serv.setAvatar(data).then(response => {
             if (response.error == null) {
                 dispatch(setAvatarSuccess(true));
                 dispatch(updateAvatar(response));
                 dispatch(setAlert({ variant: 'success', message: 'Avatar is update' }));
+                return Promise.resolve('success');
             } else {
-                dispatch(setAvatarError(response.error));
                 dispatch(setAlert({ variant: 'error', message: 'Failed' }));
+                throw new SubmissionError(buildValidationState(response.error));
             }
         });
     }

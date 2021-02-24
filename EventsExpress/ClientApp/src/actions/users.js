@@ -1,4 +1,3 @@
-
 import { UserService } from '../services';
 
 export const GET_USERS_PENDING = "GET_USERS_PENDING";

@@ -1,8 +1,8 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Test.ServiceTests.TestClasses.Location;
 using Moq;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
@@ -14,29 +14,31 @@ namespace EventsExpress.Test.ServiceTests
     internal class LocationServiceTest : TestInitializer
     {
         private LocationService service;
-        private EventLocation location;
-        private LocationDto locationDTO;
+        private EventLocation locationMap;
+        private EventLocation locationOnline;
 
-        private Guid locationId = Guid.NewGuid();
+        private EventLocation FromDtoToEf(LocationDto locationDto)
+        {
+            return new EventLocation
+            {
+                Id = locationDto.Id,
+                Point = locationDto.Point,
+                OnlineMeeting = locationDto.OnlineMeeting,
+                Type = locationDto.Type,
+            };
+        }
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
             service = new LocationService(Context, MockMapper.Object);
-            location = new EventLocation
-            {
-                Id = locationId,
-                Point = new Point(12.45, 24.6),
-            };
+            locationMap = FromDtoToEf(CreatingExistingLocation.LocationDTOMap);
+            locationOnline = FromDtoToEf(CreatingExistingLocation.LocationDTOOnline);
 
-            locationDTO = new LocationDto
-            {
-                Id = locationId,
-                Point = new Point(12.45, 24.6),
-            };
-
-            Context.EventLocations.Add(location);
+            Context.EventLocations.Add(locationMap);
+            Context.SaveChanges();
+            Context.EventLocations.Add(locationOnline);
             Context.SaveChanges();
 
             MockMapper.Setup(u => u.Map<LocationDto>(It.IsAny<EventLocation>()))
@@ -46,6 +48,8 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     Id = el.Id,
                     Point = el.Point,
+                    OnlineMeeting = el.OnlineMeeting,
+                    Type = el.Type,
                 });
 
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
@@ -55,81 +59,96 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     Id = el.Id,
                     Point = el.Point,
+                    OnlineMeeting = el.OnlineMeeting,
+                    Type = el.Type,
                 });
         }
 
-        [Test]
-        public void Create_newLocation_Success()
+        [TestCaseSource(typeof(CreatingNotExistingLocation))]
+        [Category("Create")]
+        public void Create_newLocation_IdEquals(LocationDto locationDto)
         {
-            // Arrange
-            locationDTO.Id = Guid.NewGuid();
+            var result = service.Create(locationDto);
 
-            // Act
+            Assert.That(Guid.Equals(result.Result, locationDto.Id), Is.True);
+        }
 
-            // Assert
+        [TestCaseSource(typeof(CreatingNotExistingLocation))]
+        [Category("Create")]
+        public void Create_newLocation_DoesNotThrowAsync(LocationDto locationDto)
+        {
             Assert.DoesNotThrowAsync(
-                async () => await service.Create(locationDTO));
+                async () => await service.Create(locationDto));
         }
 
-        [Test]
-        public void Create_ExistingLocation_Failed()
+        [TestCaseSource(typeof(CreatingExistingLocation))]
+        [Category("Create")]
+        public void Create_ExistingLocation_Failed(LocationDto locationDto)
         {
-            // Arrange
-
-            // Act
-
-            // Assert
             Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await service.Create(locationDTO));
+                async () => await service.Create(locationDto));
         }
 
         [Test]
+        [Category("Location by Point")]
         public void LocationByPoint_ExistingPoint_ReturnLocationDTO()
         {
-            // Arrange
+            Point point = new Point(locationMap.Point.X, locationMap.Point.Y);
+            Guid id = locationMap.Id;
 
-            // Act
-            var actual = service.LocationByPoint(locationDTO.Point);
+            var actual = service.LocationByPoint(point);
 
-            // Assert
-            Assert.AreEqual(locationDTO.Id, actual.Id);
+            Assert.That(Is.Equals(actual.Id, id), Is.True);
         }
 
         [Test]
-        public void LocationByPoint_NotExistingPoint_ReturnNull()
+        [Category("Location by Point")]
+        public void LocationByPoint_NotExistingPoint_ReturnLocationDTO()
         {
-            // Arrange
+            Point point = new Point(1.1, 1.8);
 
-            // Act
-            var actual = service.LocationByPoint(new Point(12.45, 24.00));
+            var actual = service.LocationByPoint(point);
 
-            // Assert
-            Assert.AreEqual(null, actual);
+            Assert.That(actual, Is.Null);
         }
 
         [Test]
-        public void AddLocationToEvent_ExistingLocation_ReturnExistingLocationId()
+        [Category("Location by Url")]
+        public void LocationByUrl_ExistingUrl_ReturnLocationDTO()
         {
-            // Arrange
+            Uri uri = new Uri(locationOnline.OnlineMeeting.ToString());
+            Guid id = locationOnline.Id;
 
-            // Act
-            var actual = service.AddLocationToEvent(locationDTO);
+            var actual = service.LocationByURI(uri);
 
-            // Assert
-            Assert.AreEqual(locationDTO.Id, actual.Result);
+            Assert.That(Is.Equals(actual.Id, id), Is.True);
         }
 
         [Test]
-        public void AddLocationToEvent_NotExistingLocation_CreateNewLocation()
+        [Category("Location by Url")]
+        public void LocationByUrl_NotExistingUrl_ReturnLocationDTO()
         {
-            // Arrange
-            var locationDTO = new LocationDto { Point = new Point(10.23, 2.3) };
+            Uri uri = new Uri("http://basin.example.com/#branch");
 
-            // Act
+            var actual = service.LocationByURI(uri);
 
-            // Assert
+            Assert.That(actual, Is.Null);
+        }
+
+        [TestCaseSource(typeof(CreatingExistingLocation))]
+        [Category("Add Location To Event")]
+        public void AddLocationToEvent_ExistingLocation_ReturnExistingLocationId(LocationDto locationDto)
+        {
+            var actual = service.AddLocationToEvent(locationDto);
+            Assert.That(Is.Equals(locationDto.Id, actual.Result), Is.True);
+        }
+
+        [TestCaseSource(typeof(CreatingNotExistingLocation))]
+        [Category("Add Location To Event")]
+        public void AddLocationToEvent_NotExistingLocation_CreateNewLocation(LocationDto locationDto)
+        {
             Assert.DoesNotThrowAsync(
-                async () => await service.AddLocationToEvent(locationDTO));
+                async () => await service.AddLocationToEvent(locationDto));
         }
     }
 }

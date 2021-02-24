@@ -19,7 +19,8 @@ const initialState = {
         role: null,
         photoUrl: null,
         token: null,
-        categories: []
+        categories: [],
+        notificationTypes: [],
     },
     roles: {
         isPending: false,
@@ -28,7 +29,6 @@ const initialState = {
     },
     login: {
         isLoginSuccess: false,
-        loginError: null
     },
     register: {
         isRegisterPending: false,
@@ -38,10 +38,10 @@ const initialState = {
     unitsOfMeasuring: {
         isPending: true,
         isError: false,
-        units: [],       
+        units: [],
         editedUnitOfMeasuring: null,
-        isAdded:false,
-        
+        isAdded: false,
+
     },
     add_unitOfMeasuring: {
         isUnitOfMeasuringPending: false,
@@ -86,11 +86,9 @@ const initialState = {
     add_comment: {
         isCommentPending: false,
         isCommentSuccess: false,
-        commentError: null
     },
     comments: {
         isPending: false,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -99,11 +97,9 @@ const initialState = {
     delete_comment: {
         isCommentDeletePending: false,
         isCommentDeleteSuccess: false,
-        commentDeleteError: null
     },
     event: {
         isPending: true,
-        isError: false,
         cancelationModalStatus: false,
         cancelation: {},
         data: {
@@ -114,7 +110,6 @@ const initialState = {
     },
     eventSchedule: {
         isPending: true,
-        isError: false,
         cancelationModalStatus: false,
         cancelation: {},
         data: {
@@ -125,32 +120,22 @@ const initialState = {
     add_event: {
         isEventPending: false,
         isEventSuccess: false,
-        eventError: null
     },
     add_copy_event: {
         isCopyEventPending: false,
         isCopyEventSuccess: false,
-        copyEventError: null
     },
     edit_event_from_parent: {
         isEventFromParentPending: false,
         isEventFromParentSuccess: false,
-        eventFromParentError: null
-    },
-    add_eventSchedule: {
-        isEventSchedulePending: false,
-        isEventScheduleSuccess: false,
-        eventScheduleError: null
     },
     cancel_next_eventSchedule: {
         isCancelNextEventSchedulePending: false,
         isCancelNextEventScheduleSuccess: false,
-        cancelNextEventScheduleError: null
     },
     cancel_eventSchedules: {
         isCancelEventSchedulesPending: false,
         isCancelEventSchedulesSuccess: false,
-        cancelEventSchedulesError: null
     },
     events: {
         isPending: true,
@@ -186,7 +171,6 @@ const initialState = {
     },
     events_for_profile: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -205,7 +189,6 @@ const initialState = {
     authenticate: {
         isPending: false,
         isSucces: false,
-        isError: null,
         data: []
     },
     hubConnection: null,
@@ -231,11 +214,6 @@ const initialState = {
         autoHideDuration: null,
         open: false
     },
-    dialog: {
-        title: null,
-        message: null,
-        open: false
-    },
     contactUs: {
         isPending: false,
         isSuccess: false,
@@ -246,6 +224,11 @@ const initialState = {
         messages: [],
         seen_messages: [],
         events: []
+    },
+    notificationTypes: {
+        isPending: false,
+        isError: false,
+        data: []
     }
 };
 

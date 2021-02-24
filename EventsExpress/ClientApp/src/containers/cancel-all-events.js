@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import cancel_all_eventSchedules from '../actions/cancel-all-eventSchedules';
 import { connect } from 'react-redux';
-import Dropdown from 'react-bootstrap/Dropdown'
-import { reset } from 'redux-form';
-import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
-import {
-    setCancelAllEventSchedulesPending,
-    setCancelAllEventSchedulesError,
-    setCancelAllEventSchedulesSuccess
-}
-    from '../actions/cancel-all-eventSchedules';
+import Dropdown from 'react-bootstrap/Dropdown';
+import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal';
+import cancel_all_eventSchedules from '../actions/eventSchedule-cancel-all-action';
 
 class CancelAllEventsWrapper extends Component {
     constructor() {
@@ -19,14 +12,6 @@ class CancelAllEventsWrapper extends Component {
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
-    }
-
-    componentDidUpdate = () => {
-        if (!this.props.cancel_all_eventSchedule_status.cancelEventSchedulesError &&
-            this.props.cancel_all_eventSchedule_status.isCancelEventSchedulesSuccess) {
-            this.props.resetEvent();
-            this.props.reset();
-        }
     }
 
     cancelHandler = () => {
@@ -71,12 +56,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         cancel_all_eventSchedules: (data) => dispatch(cancel_all_eventSchedules(data)),
-        resetEvent: () => dispatch(reset('event-form')),
-        reset: () => {
-            dispatch(setCancelAllEventSchedulesPending(true));
-            dispatch(setCancelAllEventSchedulesSuccess(false));
-            dispatch(setCancelAllEventSchedulesError(null));
-        }
     }
 };
 

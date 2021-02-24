@@ -67,6 +67,10 @@ namespace EventsExpress.Db.EF
 
         public DbSet<ChangeInfo> ChangeInfos { get; set; }
 
+        public DbSet<NotificationType> NotificationTypes { get; set; }
+
+        public DbSet<UserNotificationType> UserNotificationTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -74,6 +78,8 @@ namespace EventsExpress.Db.EF
             // user config
             modelBuilder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
+            modelBuilder.Entity<User>()
+                .Property(u => u.Salt).HasMaxLength(16);
 
             modelBuilder.Entity<UnitOfMeasuring>()
                 .HasIndex(u => new { u.UnitName, u.ShortName }).IsUnique().HasFilter("IsDeleted = 0");
@@ -190,6 +196,36 @@ namespace EventsExpress.Db.EF
                 .HasOne(uei => uei.Inventory)
                 .WithMany(i => i.UserEventInventories)
                 .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
+
+            // user-notification
+            modelBuilder.Entity<UserNotificationType>()
+              .HasKey(t => new { t.UserId, t.NotificationTypeId });
+            modelBuilder.Entity<UserNotificationType>()
+                .HasOne(ec => ec.User)
+                .WithMany(e => e.NotificationTypes)
+                .HasForeignKey(ec => ec.UserId);
+            modelBuilder.Entity<UserNotificationType>()
+                .HasOne(ec => ec.NotificationType)
+                .WithMany(c => c.Users)
+                .HasForeignKey(uc => uc.NotificationTypeId);
+
+            // notification type
+            modelBuilder.Entity<NotificationType>()
+                .HasData(new[]
+                {
+                    new NotificationType { Id = NotificationChange.OwnEvent, Name = "Own Event Change" },
+                    new NotificationType { Id = NotificationChange.Profile, Name = "Profile Change" },
+                    new NotificationType { Id = NotificationChange.VisitedEvent, Name = "Visited Event Change" },
+                });
+            modelBuilder.Entity<NotificationType>()
+            .HasKey(c => c.Id);
+
+            modelBuilder.Entity<NotificationType>()
+                .Property(c => c.Id)
+                .ValueGeneratedNever();
+            modelBuilder.Entity<NotificationType>()
+                .Property(c => c.Name)
+                .IsRequired();
         }
 
         public void SaveTracks()

@@ -10,6 +10,8 @@ namespace EventsExpress.Db.Entities
 
         public string PasswordHash { get; set; }
 
+        public string Salt { get; set; }
+
         public string Email { get; set; }
 
         public bool EmailConfirmed { get; set; }
@@ -45,5 +47,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
+
+        public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }
 }

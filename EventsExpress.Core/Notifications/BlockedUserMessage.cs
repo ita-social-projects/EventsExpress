@@ -1,14 +1,15 @@
-﻿using MediatR;
+﻿using EventsExpress.Db.Entities;
+using MediatR;
 
 namespace EventsExpress.Core.Notifications
 {
     public class BlockedUserMessage : INotification
     {
-        public BlockedUserMessage(string email)
+        public BlockedUserMessage(User user)
         {
-            Email = email;
+            User = user;
         }
 
-        public string Email { get; }
+        public User User { get; }
     }
 }

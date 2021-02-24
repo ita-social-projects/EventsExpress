@@ -14,6 +14,7 @@ namespace EventsExpress.Mapping
         {
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
+                .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.Rating, opts => opts.Ignore())
                 .ForMember(dest => dest.Attitude, opts => opts.Ignore())
@@ -30,9 +31,11 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
+                .ForMember(dest => dest.Salt, opts => opts.MapFrom(src => src.Salt))
                 .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
+                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Phone, opts => opts.MapFrom(src => src.Phone))
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens))
                 .ForAllOtherMembers(x => x.Ignore());
@@ -44,6 +47,10 @@ namespace EventsExpress.Mapping
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
                         src.Categories.Select(x => new CategoryViewModel { Id = x.Category.Id, Name = x.Category.Name })))
+                .ForMember(
+                    dest => dest.NotificationTypes,
+                    opts => opts.MapFrom(src =>
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
@@ -80,13 +87,21 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })));
+                        src.Categories.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name })))
+                .ForMember(
+                    dest => dest.NotificationTypes,
+                    opts => opts.MapFrom(src =>
+                        src.NotificationTypes.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name })));
 
             CreateMap<ProfileDto, ProfileViewModel>()
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
-                        src.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name })));
+                        src.Categories.Select(x => new CategoryViewModel { Id = x.Id, Name = x.Name })))
+                .ForMember(
+                    dest => dest.NotificationTypes,
+                    opts => opts.MapFrom(src =>
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
 
             CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))

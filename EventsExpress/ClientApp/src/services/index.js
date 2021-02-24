@@ -5,9 +5,9 @@ import CommentService from './CommentService'
 import EventService from './EventService'
 import EventScheduleService from './EventScheduleService'
 import InventoryService from './InventoryService'
-import LocationService from './LocationService'
 import RoleService from './RoleService'
 import UserService from './UserService'
+import NotificationTypeService from './NotificationTypeService'
 
 export {
     AuthenticationService,
@@ -17,7 +17,7 @@ export {
     EventService, 
     EventScheduleService,
     InventoryService,
-    LocationService,
     RoleService,
-    UserService
+    UserService,
+    NotificationTypeService
 };
