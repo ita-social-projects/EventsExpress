@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
-import { loginGoogle } from '../actions/login';
+import { loginGoogle } from '../actions/login-action';
 import config from '../config';
 import { withRouter } from 'react-router-dom';
 import './css/Auth.css';

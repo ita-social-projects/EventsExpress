@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import { edit_event } from '../actions/add-event';
-import { publish_event } from '../actions/add-event';
 import { connect } from 'react-redux';
 import { formValues, getFormValues, reset } from 'redux-form';
-import { setEventError, setEventPending, setEventSuccess } from '../actions/add-event';
+import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import Button from "@material-ui/core/Button";
@@ -19,7 +17,7 @@ class EditEventWrapper extends Component {
     componentWillMount = () => {
         this.props.get_categories();
     }
-    
+
     componentDidUpdate = () => {
         if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
             this.props.reset();
@@ -50,9 +48,15 @@ class EditEventWrapper extends Component {
     render() {
         let initialValues = {
             ...this.props.event,
-            selectedPos: L.latLng(
-                this.props.event.latitude, 
-                this.props.event.longitude)
+            location: this.props.event.location !== null ? {
+                selectedPos: L.latLng(
+                    
+                    this.props.event.location.latitude,
+                    this.props.event.location.longitude
+                ),
+                onlineMeeting: this.props.event.location.onlineMeeting,
+                type: String(this.props.event.location.type)
+            } : null,
 
         }
         const { pristine } = this.props
@@ -68,6 +72,8 @@ class EditEventWrapper extends Component {
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
+                haveMapCheckBox={true}
+                haveOnlineLocationCheckBox={true}
                 disabledDate={false}
                 isCreated={true} ><div className="col">
                     <Button
@@ -121,7 +127,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(reset('event-form'));
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));
-            dispatch(setEventError(null));
         }
     }
 };

@@ -64,11 +64,6 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]/{eventId:Guid}")]
         public async Task<IActionResult> CreateNextFromParent(Guid eventId)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var result = await _eventService.CreateNextEvent(eventId);
 
             return Ok(new { id = result });
@@ -83,7 +78,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public IActionResult Create()
         {
-            var result = _eventService.Create();
+            var result = _eventService.CreateDraft();
 
             return Ok(new { id = result });
         }

@@ -320,9 +320,9 @@ export default class EventItemView extends Component {
                                 </span>
                                 <br />
                                 <DisplayLocation
-                                    latitude={this.props.event.data.latitude}
-                                    longitude={this.props.event.data.longitude}
+                                    location={this.props.event.data.location}
                                 />
+
                                 {categories_list}
                             </div>
                             <div className="button-block">

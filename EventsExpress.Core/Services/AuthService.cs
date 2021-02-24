@@ -97,11 +97,14 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword)
+        public async Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
             {
-                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+                userDto.Salt = PasswordHasher.GenerateSalt();
+                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword, userDto.Salt);
+                await _userService.Update(userDto);
+                return;
             }
 
             throw new EventsExpressException("Invalid password");
@@ -120,6 +123,6 @@ namespace EventsExpress.Core.Services
         }
 
         private static bool VerifyPassword(UserDto user, string actualPassword) =>
-            user.PasswordHash == PasswordHasher.GenerateHash(actualPassword);
+            user.PasswordHash == PasswordHasher.GenerateHash(actualPassword, user.Salt);
     }
 }

@@ -13,9 +13,9 @@ namespace EventsExpress.Validation
             RuleFor(x => x.Title).MaximumLength(60).WithMessage("Title length exceeded the recommended length of 60 character!");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateFrom).NotEmpty().WithMessage("Field is required!");
-            RuleFor(x => x.DateFrom).GreaterThanOrEqualTo(DateTime.Today).WithMessage("date from must be older than date now!");
+            RuleFor(x => x.DateFrom).GreaterThan(DateTime.Today).WithMessage("date from must be older than date now!");
             RuleFor(x => x.DateTo).NotEmpty().WithMessage("Field is required!");
-            RuleFor(x => x.EventLocation).NotEmpty().WithMessage("Field is required!");
+            RuleFor(x => x.EventLocation).NotEmpty().OverridePropertyName("location.type").WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Incorrect quantity of participants!");
             RuleFor(x => x.PhotoId).NotEmpty().WithMessage("Photo required");
             RuleFor(x => x.Photo).NotEmpty().WithMessage("Photo required");

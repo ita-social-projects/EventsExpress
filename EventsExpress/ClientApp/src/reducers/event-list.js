@@ -1,20 +1,14 @@
 import { blockEvent, unBlockEvent } from '../actions/event-item-view';
 import initialState from '../store/initialState';
 import {
-    SET_EVENTS_ERROR,
     SET_EVENTS_PENDING,
     GET_EVENTS_SUCCESS,
     RESET_EVENTS,
     UPDATE_EVENTS_FILTERS
-} from '../actions/event-list';
+} from '../actions/event-list-action';
 
 export const reducer = (state = initialState.events, action) => {
     switch (action.type) {
-        case SET_EVENTS_ERROR:
-            return {
-                ...state,
-                isError: action.payload
-            };
         case SET_EVENTS_PENDING:
             return {
                 ...state,

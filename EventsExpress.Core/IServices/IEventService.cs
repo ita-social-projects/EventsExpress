@@ -8,7 +8,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventService
     {
-        Guid Create();
+        Guid CreateDraft();
 
         Task<Guid> CreateNextEvent(Guid eventId);
 

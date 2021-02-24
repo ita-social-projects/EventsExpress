@@ -138,7 +138,8 @@ namespace EventsExpress.Core.Services
 
             await Context.SaveChangesAsync();
 
-            Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
+            var userIds = Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
+            await _mediator.Publish(new BlockedEventMessage(userIds, evnt.Id));
         }
 
         public async Task UnblockEvent(Guid eventId)
@@ -158,7 +159,7 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
         }
 
-        public Guid Create()
+        public Guid CreateDraft()
         {
             var ev = new Event();
             ev.StatusHistory = new List<EventStatusHistory>
@@ -187,7 +188,7 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public async Task<Guid> CreateOld(EventDto eventDTO)
+        public async Task<Guid> Create(EventDto eventDTO)
         {
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
@@ -258,7 +259,7 @@ namespace EventsExpress.Core.Services
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
 
-            var createResult = await CreateOld(eventDTO);
+            var createResult = await Create(eventDTO);
             await _eventScheduleService.Edit(eventScheduleDTO);
 
             return createResult;
@@ -364,7 +365,7 @@ namespace EventsExpress.Core.Services
             eventDTO.IsReccurent = false;
             eventDTO.Id = Guid.Empty;
 
-            var createResult = await CreateOld(eventDTO);
+            var createResult = await Create(eventDTO);
             await _eventScheduleService.Edit(eventScheduleDTO);
 
             return createResult;

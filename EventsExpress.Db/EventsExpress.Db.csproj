@@ -2,15 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20210204154447_newCreateMethod.cs" />
-    <Compile Remove="Migrations\20210204154447_newCreateMethod.Designer.cs" />
-    <Compile Remove="Migrations\20210204155042_NewCreate.cs" />
-    <Compile Remove="Migrations\20210204155042_NewCreate.Designer.cs" />
-  </ItemGroup>
-  
+  </PropertyGroup>    
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />

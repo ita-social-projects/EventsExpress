@@ -15,6 +15,8 @@ namespace EventsExpress.Core.DTOs
 
         public string PasswordHash { get; set; }
 
+        public string Salt { get; set; }
+
         public string Email { get; set; }
 
         public bool EmailConfirmed { get; set; }
@@ -50,5 +52,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
+
+        public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }
 }
