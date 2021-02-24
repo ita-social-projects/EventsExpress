@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
+import Event from '../components/event/event-item';
 import Spinner from '../components/spinner';
 import get_event, { 
     join, 
     leave, 
     resetEvent, 
-    cancel_event, 
+    change_event_status, 
     approveUser, 
     deleteFromOwners, 
     promoteToOwner
@@ -51,6 +52,7 @@ class EventItemViewWrapper extends Component{
         return isPending
             ? <Spinner />
             : <EventItemView
+               // <Event
                 event={this.props.event}
                 match={this.props.match} 
                 onLeave={this.onLeave} 
@@ -73,7 +75,7 @@ const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
-    cancel: (eventId, reason, eventStatus) => dispatch(cancel_event(eventId, reason, eventStatus)),
+    cancel: (eventId, reason, eventStatus) => dispatch(change_event_status(eventId, reason, eventStatus)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
     promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),

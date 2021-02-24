@@ -18,12 +18,6 @@ class EventFilter extends Component {
         this.state = {
             viewMore: false,
             needInitializeValues: true,
-            all: this.props.initialFormValues.statuses[StatusHistory.Active].checked &&
-                this.props.initialFormValues.statuses[StatusHistory.Blocked].checked &&
-                this.props.initialFormValues.statuses[StatusHistory.Canceled].checked,
-            active: this.props.initialFormValues.statuses[StatusHistory.Active].checked,
-            blocked: this.props.initialFormValues.statuses[StatusHistory.Blocked].checked,
-            canceled: this.props.initialFormValues.statuses[StatusHistory.Canceled].checked,
         };
     }
 
@@ -45,24 +39,9 @@ class EventFilter extends Component {
         }
     }
 
-    handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.checked });
-        /*if (event.target.name !== 'all') {
-            this.setState({ [event.target.name]: event.target.checked });
-            this.setState({ ['all']: false });
-        }
-        else if (event.target.name === 'all') {
-            this.setState({ [event.target.name]: event.target.checked });
-            this.setState({ ['active']: !event.target.checked });
-            this.setState({ ['blocked']: false });
-            this.setState({ ['canceled']: false });
-        }*/
-    }
-
     render() {
         const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
-
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -103,13 +82,14 @@ class EventFilter extends Component {
                                     placeholder='#hashtags'
                                 />
                             </div>
-                            {current_user.role === "Admin" && 
-                                <Field name="statuses" 
-                                    component={EventFilterStatus}
-                                    status={this.state}
-                                    onChange={this.handleChange}
-                                />
-                            }
+                            <div className="form-group">
+                                {current_user.role === "Admin" &&
+                                    <Field name="statuses"
+                                        component={EventFilterStatus}
+                                        options={[StatusHistory.Active, StatusHistory.Blocked, StatusHistory.Canceled]}
+                                    />
+                                }
+                            </div>
                         </>
                     }
                     <div>
@@ -147,11 +127,12 @@ class EventFilter extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            disabled={this.props.pristine || this.props.submitting}
+                            disabled={this.props.submitting}
                         >
                             Search
                         </Button>
                     </div>
+                     
                 </form>
             </div>
         </>

@@ -122,38 +122,6 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task BlockEvent(Guid eventId)
-        {
-            var evnt = Context.Events.Find(eventId);
-            if (evnt == null)
-            {
-                throw new EventsExpressException("Invalid event id");
-            }
-
-            evnt.IsBlocked = true;
-
-            await Context.SaveChangesAsync();
-
-            Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
-        }
-
-        public async Task UnblockEvent(Guid eventId)
-        {
-            var evnt = Context.Events.Find(eventId);
-            if (evnt == null)
-            {
-                throw new EventsExpressException("Invalid event Id");
-            }
-
-            evnt.IsBlocked = false;
-
-            await Context.SaveChangesAsync();
-
-            var userIds = Context.EventOwners.Where(x => x.EventId == eventId).Select(x => x.UserId);
-
-            await _mediator.Publish(new UnblockedEventMessage(userIds, evnt.Id));
-        }
-
         public async Task<Guid> Create(EventDto eventDTO)
         {
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
@@ -348,16 +316,9 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
                 : events;
 
-            /*switch (model.Statuses)
-            {
-                case EventStatus.Active:
-                    events = events.Where(x => !x.IsBlocked);
-                    break;
-                case EventStatus.Blocked:
-                    events = events.Where(x => x.IsBlocked);
-                    break;
-            }*/
-
+            // events = (model.Statuses != null)
+            // ? events.Where(x => x.StatusHistory.Any(v => v.EventStatus == model.Statuses.FirstOrDefault()))
+            // : events;
             if (model.Categories != null)
             {
                 List<Guid> categoryIds = model.Categories
@@ -459,6 +420,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
+                .Include(e => e.StatusHistory)
                 .Where(x => eventIds.Contains(x.Id))
                 .AsNoTracking()
                 .AsQueryable();

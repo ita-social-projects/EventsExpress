@@ -24,7 +24,7 @@ export default class SimpleModal extends Component {
     }
 
     onConfirm = () => {
-        this.props.action(this.props.id)
+        this.props.action()
         this.setState({ isOpen: false });
     }
 

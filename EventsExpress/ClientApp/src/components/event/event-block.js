@@ -5,7 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 export default function EventBlock(props) {
     const { block, unblock } = props;
 
-    return props.eventItem.isBlocked ?
+    return props.eventItem.eventStatus.Blocked ?
         <Tooltip title="Blocked event">
             <IconButton className="text-success" size="middle" onClick={unblock}>
                 <i className="fas fa-lock"></i>

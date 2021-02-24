@@ -1,83 +1,53 @@
-import React, { Component } from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
-import { purple } from '@material-ui/core/colors';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import StatusHistory from '../helpers/EventStatusEnum';
+﻿import React, { Component } from 'react';
 
-const PurpleSwitch = withStyles({
-    switchBase: {
-      color: purple[300],
-      '&$checked': {
-        color: purple[500],
-      },
-      '&$checked + $track': {
-        backgroundColor: purple[500],
-      },
-    },
-    checked: {},
-    track: {},
-  })(Switch);
-
-class EventFilterStatus extends Component {
-    
-    render() {
-        const { input: { value, onChange } } = this.props;
-        const all = value[StatusHistory.Active] && value[StatusHistory.Blocked] && value[StatusHistory.Canceled];
-        return (
-            <div>
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel-content"
-                        id="panel-header"
-                        >
-                        <Typography>Details of event</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography className = "w-100">
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={<PurpleSwitch />}
-                                    checked={this.props.status.all}
-                                    onChange={onChange}
-                                    label="All"
-                                    name="all"
-                                />
-                                <FormControlLabel
-                                    control={<PurpleSwitch />}
-                                    checked={this.props.status.active}
-                                    onChange={onChange}
-                                    label="Active"
-                                    name="active"
-                                />
-                                <FormControlLabel
-                                    control={<PurpleSwitch />}
-                                    checked={this.props.status.blocked}
-                                    onChange={onChange}
-                                    label="Blocked"
-                                    name="blocked"
-                                />
-                                <FormControlLabel
-                                    control={<PurpleSwitch />}
-                                    checked={this.props.status.canceled}
-                                    onChange={onChange}
-                                    label="Canceled"
-                                    name="canceled"
-                                />
-                            </FormGroup>
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            </div>
-        )
+function eventStatusHistoryReadingString(option) {
+    switch (option) {
+        case 0:
+            return " Active"
+        case 1:
+            return " Blocked"
+        case 2:
+            return " Canceled"
+        default:
+            return " Default status"
     }
 }
 
+class EventFilterStatus extends Component {
+    checkboxGroup() {
+        let { label, required, options, input, meta } = this.props;
+        input.value = input.value.StatusHistory || input.value;
+        console.log(this.props);
+        return options.map((option, index) => {
+            return (
+                <div className="checkbox" key={index}>
+                    <label>
+                        <input type="checkbox"
+                            name={`${input.name}[${index}]`}
+                            value={option}
+                            checked={input.value.find(x => x === option) !== undefined}
+                            onChange={(event) => {
+                                const newValue = [...input.value];
+                                if (event.target.checked) {
+                                    newValue.push(option);
+                                } else {
+                                    newValue.splice(newValue.indexOf(option), 1);
+                                }
+                                return input.onChange(newValue);
+                            }} />
+                        {eventStatusHistoryReadingString(option)}
+                    </label>
+                </div>)
+        });
+    }
+    render() {
+        return (
+            <div>
+                {this.checkboxGroup()}
+            </div>
+        )
+    }
+    
+}
 export default EventFilterStatus;
+

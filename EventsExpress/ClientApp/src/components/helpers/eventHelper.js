@@ -35,9 +35,7 @@ const eventHelper = (function () {
                 dateFrom: undefined,
                 dateTo: undefined,
                 categories: [],
-                statuses: [ {eventStatus: StatusHistory.Active, checked: true}, 
-                    {eventStatus: StatusHistory.Blocked, checked: false}, 
-                    {eventStatus: StatusHistory.Canceled, checked: false} ],
+                statuses: [0],
             }
         },
         getQueryStringByEventFilter: function (filter) {

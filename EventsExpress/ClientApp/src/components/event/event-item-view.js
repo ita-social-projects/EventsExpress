@@ -53,8 +53,7 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                id={x.id}
-                                action={this.props.onDeleteFromOwners}
+                                action={()=>this.props.onDeleteFromOwners(x.id)}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
                                     <Tooltip title="Delete from owners">
@@ -256,7 +255,7 @@ export default class EventItemView extends Component {
             visitors,
             owners
         } = this.props.event.data;
-        
+        console.log(this.props);
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
@@ -275,6 +274,8 @@ export default class EventItemView extends Component {
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== StatusHistory.Canceled;
         let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === StatusHistory.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
+        let canBlocked = eventStatus !== StatusHistory.Blocked;
+        let canUnblocked = eventStatus === StatusHistory.Blocked;
 
         return <>
             <div className="container-fluid mt-1">

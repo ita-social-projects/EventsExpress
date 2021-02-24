@@ -21,7 +21,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import './event-item.css';
 import StatusHistory from '../helpers/EventStatusEnum';
-
+import EventBlockUnblockModal from './event-block-unblock-modal'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -78,8 +78,11 @@ export default class Event extends Component {
             isBlocked,
             owners
         } = this.props.item;
+        console.log(this.props);
         const INT32_MAX_VALUE = 2147483647;
         const { anchorEl } = this.state;
+        let canBlocked = eventStatus !== StatusHistory.Blocked;
+        let canUnblocked = eventStatus === StatusHistory.Blocked;
 
         const PrintMenuItems = owners.map(x => (
             <MenuItem onClick={this.handleClose}>
@@ -213,7 +216,17 @@ export default class Event extends Component {
                                 }
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
-                                    ? <EventManagmentWrapper eventItem={this.props.item} />
+                                    ? ((canBlocked) && <EventBlockUnblockModal
+                                        submitCallback={(reason) =>this.props.onBlock(this.props.item.id, reason)}
+                                      //  cancelationStatus={this.props.event.cancelation}
+                                        eventStatus={StatusHistory.Blocked}
+                                    />) ||
+                                    ((canUnblocked) && <EventBlockUnblockModal
+                                        submitCallback={(reason) => this.props.onUnBlock(this.props.item.id, reason)}
+                                      //   cancelationStatus={this.props.event.cancelation}
+                                        eventStatus={!StatusHistory.Blocked}
+                                    />)
+                                    //<EventManagmentWrapper eventItem={this.props.item} />
                                     : null
                                 }
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />

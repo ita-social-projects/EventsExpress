@@ -12,14 +12,14 @@ export const blockEvent = {
     PENDING: 'PENDING_BLOCK',
     SUCCESS: 'SUCCESS_BLOCK',
     ERROR: 'ERROR_BLOCK',
-    UPDATE: 'UPDATE_BLOCKED'
+    UPDATE: 'UPDATE_BLOCKED',
 }
 
 export const unBlockEvent = {
     PENDING: 'PENDING_UNBLOCK',
     SUCCESS: 'SUCCESS_UNBLOCK',
     ERROR: 'ERROR_UNBLOCK',
-    UPDATE: 'UPDATE_UNBLOCKED'
+    UPDATE: 'UPDATE_UNBLOCKED',
 }
 
 export const cancelEvent = {
@@ -147,7 +147,7 @@ export function unblock_event(id) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(setUnBlockEventSuccess());
-                dispatch(updateUnBlockedEvent(id));
+                dispatch(updateUnBlockedEvent(eventId));
             } else {
                 dispatch(setUnBlockEventError(response.error));
             }
@@ -160,12 +160,12 @@ export function block_event(id) {
     return dispatch => {
         dispatch(setBlockEventPending(true));
 
-        const res = api_serv.setEventBlock(id);
-
+         const res = api_serv.setEventBlock(id);
+       
         res.then(response => {
             if (response.error == null) {
                 dispatch(setBlockEventSuccess());
-                dispatch(updateBlockedEvent(id));
+                dispatch(updateBlockedEvent(eventId));
             } else {
                 dispatch(setBlockEventError(response.error));
             }
@@ -174,11 +174,11 @@ export function block_event(id) {
 }
 
 // ACTION CREATOR FOR EVENT CANCELATION:
-export function cancel_event(eventId, reason, eventStatus) {
+export function change_event_status(eventId, reason, eventStatus) {
     return dispatch => {
         dispatch(setCancelEventPending(true));
 
-        const res = api_serv.setEventCancel({ EventId: eventId, Reason: reason, EventStatus: eventStatus });
+        const res = api_serv.setEventStatus({ EventId: eventId, Reason: reason, EventStatus: eventStatus });
 
         res.then(response => {
             if (response.error == null) {
@@ -242,7 +242,7 @@ function setBlockEventError(data) {
     }
 }
 
-function updateBlockedEvent(id) {
+function updateBlockedEvent(data) {
     return {
         type: blockEvent.UPDATE,
         payload: id
@@ -270,7 +270,7 @@ function setUnBlockEventError(data) {
     }
 }
 
-function updateUnBlockedEvent(id) {
+function updateUnBlockedEvent(data) {
     return {
         type: unBlockEvent.UPDATE,
         payload: id

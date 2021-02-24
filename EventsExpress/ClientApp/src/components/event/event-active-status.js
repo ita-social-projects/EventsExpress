@@ -17,7 +17,7 @@ export default function EventActiveStatus(props) {
                 </Tooltip>)
         case StatusHistory.Canceled:
             return (
-                <Tooltip title="Passed event">
+                <Tooltip title="Canceled event">
                     <IconButton className="text-danger" size="middle" color="secondary" >
                         <EventBusyIcon style={{ color: grey[600] }} />
                     </IconButton>

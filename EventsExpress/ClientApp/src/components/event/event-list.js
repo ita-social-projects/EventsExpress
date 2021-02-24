@@ -3,6 +3,9 @@ import PagePagination from '../shared/pagePagination';
 import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event-list';
 import Event from './event-item';
+import { change_event_status } from '../../actions/event-item-view';
+import StatusHistory from '../helpers/EventStatusEnum';
+
 
 class EventList extends Component {
     handlePageChange = (page) => {
@@ -18,6 +21,8 @@ class EventList extends Component {
                 key={item.id + item.isBlocked}
                 item={item}
                 current_user={this.props.current_user}
+                onBlock={this.props.onBlock}
+                onUnBlock={this.props.onUnBlock}
             />
         ));
 
@@ -53,6 +58,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         reset_events: () => dispatch(reset_events()),
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
+        onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Blocked)),
+        onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Active))
+
     }
 };
 

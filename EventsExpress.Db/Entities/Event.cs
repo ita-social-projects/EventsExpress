@@ -8,9 +8,6 @@ namespace EventsExpress.Db.Entities
     public class Event : BaseEntity
     {
         [Track]
-        public bool IsBlocked { get; set; }
-
-        [Track]
         public string Title { get; set; }
 
         [Track]
