@@ -184,6 +184,14 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Active,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -195,7 +203,7 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new EventOwner
                         {
-                            UserId = Guid.NewGuid(),
+                            UserId = userId,
                         },
                     },
                     PhotoId = Guid.NewGuid(),
@@ -210,6 +218,7 @@ namespace EventsExpress.Test.ServiceTests
                         new EventStatusHistory
                         {
                             EventStatus = EventStatus.Draft,
+                            CreatedOn = DateTime.Today,
                         },
                     },
                 },
@@ -232,6 +241,14 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = false,
                     Categories = null,
                     MaxParticipants = 1,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Active,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent
@@ -407,8 +424,8 @@ namespace EventsExpress.Test.ServiceTests
         public void Publish_ValidEvent_Works()
         {
             mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
-            Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.FirstEventId));
-            var statusHistory = Context.Events.Find(GetEventExistingId.FirstEventId).StatusHistory.Last();
+            Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
+            var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
         }
 
@@ -422,8 +439,19 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns(() => false);
 
             mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.FirstEventId));
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.SecondEventId));
             Assert.That(ex.Message, Contains.Substring("validation failed"));
+        }
+
+        [Test]
+        [Category("Get all drafts")]
+
+        public void GetAllDrafts_Works()
+        {
+            MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
+                .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
+            var result = service.GetAllDraftEvents(userId);
+            Assert.AreEqual(1, result.Count());
         }
     }
 }

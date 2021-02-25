@@ -328,15 +328,13 @@ namespace EventsExpress.Core.Services
 
             if (result.IsValid)
             {
-                ev.StatusHistory = new List<EventStatusHistory>
-            {
-                new EventStatusHistory
-                {
-                    EventStatus = EventStatus.Active,
-                    CreatedOn = DateTime.UtcNow,
-                    UserId = CurrentUser().Id,
-                },
-            };
+                ev.StatusHistory.Add(
+                    new EventStatusHistory
+                    {
+                        EventStatus = EventStatus.Active,
+                        CreatedOn = DateTime.UtcNow,
+                        UserId = CurrentUser().Id,
+                    });
                 await Context.SaveChangesAsync();
 
                 return ev.Id;
@@ -476,7 +474,7 @@ namespace EventsExpress.Core.Services
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus == EventStatus.Draft);
             events = events.Where(x => x.Owners.Any(o => o.UserId == user_id));
             var result = events.ToList();
-            return Mapper.Map<IEnumerable<EventDto>>(result);
+            return Mapper.Map<IEnumerable<Event>, IEnumerable<EventDto>>(result);
         }
 
         public IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)

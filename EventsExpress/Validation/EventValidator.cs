@@ -1,6 +1,5 @@
 ﻿using System;
 using EventsExpress.Db.Entities;
-using EventsExpress.ViewModels.Base;
 using FluentValidation;
 
 namespace EventsExpress.Validation
