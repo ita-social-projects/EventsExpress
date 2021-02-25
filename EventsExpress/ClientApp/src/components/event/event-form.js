@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
@@ -42,8 +41,7 @@ class EventForm extends Component {
 
 
     render() {
-        const { form_values, all_categories, isCreated, pristine,
-            submitting, disabledDate, onCancel, onPublish} = this.props;
+        const { form_values, all_categories, isCreated, disabledDate,} = this.props;
         const { checked } = this.state;
         const { handleChange } = this;
 

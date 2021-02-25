@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
 import DatePicker from 'react-datepicker';
@@ -131,10 +131,6 @@ export const validate = values => {
         && values.maxParticipants < values.visitors.length) {
         errors.maxParticipants = `${values.visitors.length} participants are subscribed to event`;
     }
-
-    //if (values.dateTo > Date.dateFrom) {
-    //    errors.dateTo = `the date cannot be less than the previous one`;
-    //}
 
     if (values.email &&
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {

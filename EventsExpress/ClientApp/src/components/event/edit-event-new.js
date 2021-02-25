@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import EventForm from './event-form';
-import { edit_event } from '../../actions/add-event';
 import { draft_event } from '../../actions/add-event';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
@@ -10,8 +9,6 @@ import { resetEvent } from '../../actions/event-item-view';
 import get_categories from '../../actions/category/category-list';
 import L from 'leaflet';
 
-
-// link for me
 class EditEventNew extends Component {
 
     componentWillMount = () => {

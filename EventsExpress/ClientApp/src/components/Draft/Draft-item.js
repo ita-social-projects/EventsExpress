@@ -8,16 +8,11 @@ import { Button, Menu, MenuItem } from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
-import SocialShareMenu from '../event/share/SocialShareMenu';
-import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
-import DisplayLocation from '../event/map/display-location';
 import './event-item.css';
 
 const useStyles = makeStyles(theme => ({
