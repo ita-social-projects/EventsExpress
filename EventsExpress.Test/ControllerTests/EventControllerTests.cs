@@ -23,5 +23,26 @@ namespace EventsExpress.Test.ControllerTests
 {
     internal class EventControllerTests
     {
+        private Mock<IEventService> service;
+        private EventController eventController;
+        private Mock<IAuthService> auth;
+
+        private Mock<IMapper> MockMapper { get; set; }
+
+        [SetUp]
+        protected void Initialize()
+        {
+            MockMapper = new Mock<IMapper>();
+            auth = new Mock<IAuthService>();
+            service = new Mock<IEventService>();
+            eventController = new EventController(service.Object, auth.Object, MockMapper.Object);
+        }
+
+        [Test]
+        public void Create_OkResult()
+        {
+            var expected = eventController.Create();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
     }
 }
