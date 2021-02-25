@@ -1,12 +1,16 @@
 ﻿using System;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ValidationTests.TestClasses.Location;
+using EventsExpress.Test.ValidatorTests.TestClasses.Location;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using Moq;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ValidatorTests
@@ -172,6 +176,43 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
+        }
+
+        [TestCaseSource(typeof(CorrectLocation))]
+        public void Check_CorrectLocation_validation(EventLocation location)
+        {
+            // Arrange
+            ev.EventLocation = location;
+
+            // Act
+            var result = validator.TestValidate(ev);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(e => e.EventLocation);
+        }
+
+        [Test]
+        public void Check_CorrectPhotoId_validation()
+        {
+            // Arrange
+
+            // Act
+            var result = validator.TestValidate(ev);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.PhotoId);
+        }
+
+        [Test]
+        public void Check_CorrectPhoto_validation()
+        {
+            // Arrange
+
+            // Act
+            var result = validator.TestValidate(ev);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Photo);
         }
     }
 }

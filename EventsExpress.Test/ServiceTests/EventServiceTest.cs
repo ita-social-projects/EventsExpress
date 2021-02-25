@@ -319,6 +319,14 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNull(result);
         }
 
+        [Test]
+        public void Create_ExistingId_Success()
+        {
+            var result = service.CreateNextEvent(GetEventExistingId.FirstEventId);
+
+            Assert.IsNotNull(result);
+        }
+
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Create Event")]
         public void CreateEvent_ValidEvent_Success(EventDto eventDto)
