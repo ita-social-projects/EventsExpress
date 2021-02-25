@@ -21,6 +21,21 @@ export function get_events(filters) {
         return Promise.resolve();
     }
 }
+export function get_drafts() {
+    return dispatch => {
+        dispatch(setEventPending(true));
+        const res = api_serv.getAllDrafts();
+        res.then(response => {
+            if (response.error == null) {
+                dispatch(getEvents(response));
+            } else {
+                dispatch(setEventError(response.error));
+            }
+        });
+    }
+}
+
+
 
 export function setEventPending(data) {
     return {
