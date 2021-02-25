@@ -173,19 +173,5 @@ namespace EventsExpress.Test.ValidatorTests
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
         }
-
-        [TestCase(null)]
-        public void Check_Location_validation(EventLocation loc)
-        {
-
-            // Arrange
-            ev.EventLocation = loc;
-
-            // Act
-            var result = validator.TestValidate(ev);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
-        }
     }
 }
