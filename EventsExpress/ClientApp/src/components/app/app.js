@@ -26,7 +26,8 @@ import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import AddEventWrapper from '../../containers/add-event';
-
+import EventItemViewWrapperNew from '../../containers/event-item-view-new';
+import Draft from '../Draft/Draft';
 export default class App extends Component {
     render() {
         return (
@@ -65,8 +66,8 @@ export default class App extends Component {
                         <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
-                        
-
+                        <Route path='/editEvent/:id' component={EventItemViewWrapperNew} />
+                        <Route path='/editEvent/' component={Draft} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
