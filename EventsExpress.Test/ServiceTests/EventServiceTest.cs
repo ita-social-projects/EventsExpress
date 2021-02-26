@@ -167,6 +167,13 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = GetEventExistingId.FirstEventId,
+                    EventSchedule = new EventSchedule
+                    {
+                        IsActive = true,
+                        Frequency = 1,
+                        Periodicity = Periodicity.Weekly,
+                        NextRun = DateTime.Today.AddDays(7),
+                    },
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
@@ -320,9 +327,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void Create_ExistingId_Success()
+        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
+        public void EditNextEvent_Work_Plug(EventDto eventDto)
         {
-            var result = service.CreateNextEvent(GetEventExistingId.FirstEventId);
+            var result = service.EditNextEvent(eventDto);
 
             Assert.IsNotNull(result);
         }
@@ -343,6 +351,7 @@ namespace EventsExpress.Test.ServiceTests
         public void EditEvent_ValidEvent_Success(EventDto eventDto)
         {
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
+            Assert.IsNull(eventDto.Photo);
         }
 
         [Test]
@@ -460,6 +469,24 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
             var result = service.GetAllDraftEvents(userId);
             Assert.AreEqual(1, result.Count());
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task CreateNextEvent_WorksAsync()
+        {
+            mockEventScheduleService.Setup(e => e.EventScheduleByEventId(GetEventExistingId.FirstEventId)).Returns(new EventScheduleDto()
+            {
+                IsActive = true,
+                Frequency = 1,
+                Periodicity = Periodicity.Weekly,
+                NextRun = DateTime.Today.AddDays(7),
+            });
+            var result = await service.CreateNextEvent(GetEventExistingId.FirstEventId);
+
+            Assert.AreNotEqual(Guid.Empty, result);
+            var test = Context.Events.Find(result);
+            Assert.IsNotNull(test);
+            Assert.AreEqual(DateTime.Today.AddDays(7), test.DateFrom);
         }
     }
 }

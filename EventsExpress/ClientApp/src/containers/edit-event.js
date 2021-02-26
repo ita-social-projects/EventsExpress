@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
-import { formValues, getFormValues, reset } from 'redux-form';
+import { getFormValues, reset , isPristine} from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import Button from "@material-ui/core/Button";
 import get_categories from '../actions/category/category-list';
 import L from 'leaflet';
-import { 
-    isPristine,
-} from 'redux-form'
 
 class EditEventWrapper extends Component {
 
@@ -59,7 +56,6 @@ class EditEventWrapper extends Component {
             } : null,
 
         }
-        const { pristine } = this.props
         console.log(this.props.form_values)
         return <>
            

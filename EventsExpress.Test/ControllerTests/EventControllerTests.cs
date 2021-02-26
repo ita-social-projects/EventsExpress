@@ -44,5 +44,12 @@ namespace EventsExpress.Test.ControllerTests
             var expected = eventController.Create();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
+
+        [Test]
+        public void AllDraft_OkResult()
+        {
+            var expected = eventController.AllDraft();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
     }
 }

@@ -1,9 +1,8 @@
 ﻿import React, { Component } from 'react';
 import EventForm from './event-form';
-import { draft_event } from '../../actions/add-event';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventError, setEventPending, setEventSuccess } from '../../actions/add-event';
+import { setEventError, setEventPending, setEventSuccess, draft_event } from '../../actions/add-event';
 import { validateEventForm } from '../helpers/helpers'
 import { resetEvent } from '../../actions/event-item-view';
 import get_categories from '../../actions/category/category-list';

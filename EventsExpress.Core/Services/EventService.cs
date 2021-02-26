@@ -309,14 +309,14 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
-        public async Task<Guid> Publish(Guid id)
+        public async Task<Guid> Publish(Guid eventID)
         {
             var ev = Context.Events
                .Include(e => e.Photo)
                .Include(e => e.EventLocation)
                .Include(e => e.Categories)
                    .ThenInclude(c => c.Category)
-               .FirstOrDefault(x => x.Id == id);
+               .FirstOrDefault(x => x.Id == eventID);
 
             if (ev == null)
             {
