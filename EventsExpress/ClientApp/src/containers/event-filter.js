@@ -39,8 +39,19 @@ class EventFilterWrapper extends Component {
                 case 'categories':
                     this.props.events.filter[key] = value.map(item => item.id);
                     break;
+                case 'radius':
+                    this.props.events.filter[key] = value;
+                    break;
+                case 'selectedPos':
+                    var x = value.lat;
+                    var y = value.lng;
+                    this.props.events.filter['x'] = x;
+                    this.props.events.filter['y'] = y;
+                    this.props.events.filter[key] = { lat: x, lng: y }
+                    break;
                 default:
                     this.props.events.filter[key] = value;
+                    break;
             }
         }.bind(this));
 
@@ -59,7 +70,6 @@ class EventFilterWrapper extends Component {
 
         return values;
     };
-
     render() {
         const initialFormValues = this.buildInitialFormValues();
         return <>

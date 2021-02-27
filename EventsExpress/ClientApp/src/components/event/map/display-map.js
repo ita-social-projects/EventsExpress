@@ -33,6 +33,12 @@ class DisplayMap extends Component {
 
         this.setState(() => ({ address: result.address }));
     }
+    componentDidUpdate(prevProps) {
+        if (this.props.location.latitude !== prevProps.location.latitude &&
+            this.props.location.longitude !== prevProps.location.longitude) {
+            this.geocodeCoords();
+        }
+    }
 
     render() {
         const { PlaceName, City, CountryCode } = this.state.address;
