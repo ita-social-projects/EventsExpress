@@ -78,7 +78,7 @@ class MapModal extends Component {
                         {this.props.values && this.props.values.radius &&
                             <div>
                                 <div class="slidecontainer">
-                                    <label>Radius is {this.props.values.radius}</label>
+                                    <label>Radius is {this.props.values.radius} km</label>
                                     <Field name="radius" component="input"
                                         type="range"
                                         min="0" max="10000" value={this.props.values.radius}
@@ -101,8 +101,8 @@ class MapModal extends Component {
                                 this.props.values.selectedPos.lng != undefined &&
                                 <div>
                                     <p>Current position on the Map is:</p>
-                                    <p>latitude:{this.props.values.selectedPos.lat}</p>
-                                    <p>longitude:{this.props.values.selectedPos.lng}</p>
+                                    <p>latitude: {this.props.values.selectedPos.lat}</p>
+                                    <p>longitude: {this.props.values.selectedPos.lng}</p>
                                     {this.props.values && this.state.map == false && <DisplayMap location={{ latitude: this.props.values.selectedPos.lat, longitude: this.props.values.selectedPos.lng }} />}
                                 </div>
 

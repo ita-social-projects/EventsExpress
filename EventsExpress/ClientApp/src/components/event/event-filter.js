@@ -108,7 +108,7 @@ class EventFilter extends Component {
                                     <div>
                                         <p>
                                             Radius:
-                                {values.radius}
+                                {values.radius} km
                                         </p>
                                         <p>
                                             Location:
