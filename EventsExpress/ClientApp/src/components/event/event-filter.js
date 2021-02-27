@@ -45,7 +45,7 @@ class EventFilter extends Component {
         this.props.onReset();
     }
     render() {
-        const { all_categories, form_values, current_user, initialFormValues } = this.props;
+        const { all_categories, form_values, current_user} = this.props;
         let values = form_values || {};
         return <>
             <div className="sidebar-filter" >

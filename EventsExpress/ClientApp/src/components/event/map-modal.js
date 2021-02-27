@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,7 +6,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LocationMap from './map/location-map';
 import { Field } from 'redux-form';
-import { Component } from 'react';
 import eventHelper from '../helpers/eventHelper';
 import './slider.css';
 import DisplayMap from '../event/map/display-map';
@@ -51,7 +50,6 @@ class MapModal extends Component {
         })
     };
     handleFilter = () => {
-        console.log("handleFilter");
         this.setState({ open: false });
     }
 
@@ -68,12 +66,6 @@ class MapModal extends Component {
     }
 
     render() {
-        let currentLocation = "Choose position on the Map!";
-        let location = { latitude: 0, longitude: 0 };
-        if (this.state.selectedPos != null) {
-            currentLocation = "Current position on the Map is:" + "latitude:" + this.state.selectedPos[0] + "longitude:" + this.state.selectedPos[1];
-            location = { latitude: this.state.selectedPos[0], longitude: this.state.selectedPos[1] }
-        }
         return (
             <div>
                 <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
