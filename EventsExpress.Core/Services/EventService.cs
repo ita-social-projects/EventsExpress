@@ -347,6 +347,10 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
                 : events;
 
+            events = (model.X != null && model.Y != null && model.Radius != null)
+                ? events.Where(x => Math.Pow(x.EventLocation.Point.X - (double)model.X, 2) + Math.Pow(x.EventLocation.Point.Y - (double)model.Y, 2) - Math.Pow((double)model.Radius, 2) <= 0)
+                : events;
+
             switch (model.Status)
             {
                 case EventStatus.Active:
