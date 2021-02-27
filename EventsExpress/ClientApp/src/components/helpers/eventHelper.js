@@ -35,6 +35,10 @@ const eventHelper = (function () {
                 dateTo: undefined,
                 categories: [],
                 status: 'active',
+                selectedPos: null,
+                radius: 8,
+                x: null,
+                y: null
             }
         },
         getQueryStringByEventFilter: function (filter) {

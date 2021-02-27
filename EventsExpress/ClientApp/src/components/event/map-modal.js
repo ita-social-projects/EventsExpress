@@ -5,126 +5,148 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LocationMap from './map/location-map';
-import { makeStyles } from "@material-ui/core/styles";
 import { Field } from 'redux-form';
-import Typography from "@material-ui/core/Typography";
-import Slider from "@material-ui/core/Slider";
-
-function RadiusSlider(props) {
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            width: "auto"
-        },
-        margin: {
-            height: theme.spacing(3)
+import { Component } from 'react';
+import eventHelper from '../helpers/eventHelper';
+import './slider.css';
+import DisplayMap from '../event/map/display-map';
+class MapModal extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            selectedPos: null,
+            radius: this.props.initialValues.radius != undefined ? this.props.initialValues.radius : 0,
+            needInitializeValues: true,
+            map: false
         }
-    }));
-
-    const classes = useStyles();
-
-    const marks = [
-        {
-            value: 0,
-            label: "0"
-        },
-
-        {
-            value: 2000,
-            label: "2000"
+        this.baseState = this.state;
+        this.radius = React.createRef();
+    }
+    componentDidUpdate(prevProps) {
+        const initialValues = this.props.initialFormValues;
+        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
+            || this.state.needInitializeValues) {
+            this.props.initialize({
+                radius: this.props.values.radius,
+                selectedPos: this.props.values.selectedPos
+            });
+            this.setState({
+                ['needInitializeValues']: false
+            });
         }
-    ];
-
-    const valuetext = (value) => value;
-
-    const onChange = (event, value) => {
-        props.onRadiusChange(value);
     }
 
-    return (
-        <div className={classes.root}>
-            <Typography id="discrete-slider-custom" gutterBottom>
-                Radius
-      </Typography>
-            <Slider
-                defaultValue={20}
-                getAriaValueText={valuetext}
-                aria-labelledby="discrete-slider-custom"
-                valueLabelDisplay="auto"
-                marks={marks}
-                scale={(x) => Math.exp(x-100)}
-                min={0}
-                max={2000}
-                onChange={onChange}
-            />
-        </div>
-    );
-}
+    componentDidUpdate() {
+        return true;
+    }
 
-const MapModal = props => {
-    const [open, setOpen] = React.useState(false);
-    const [selectedPos, setSelectedPos] = React.useState(null)
-    const [radius, setRadius] = React.useState(10);
-
-    const handleClickOpen = () => {
-        setOpen(true);
+    handleClickOpen = () => {
+        this.setState({ open: true });
     };
-
-    const handleClose = () => {
-        setOpen(false);
+    handleClose = () => {
+        this.props.initialize({
+            radius: this.props.initialValues.radius,
+            selectedPos: this.props.initialValues.selectedPos != null ? this.props.initialValues.selectedPos : { lat: null, lng: null }
+        })
     };
-
-    const onClickCallBack = (coords) => {        
-        setSelectedPos([coords.lat, coords.lng]);
+    handleFilter = () => {
+        console.log("handleFilter");
+        this.setState({ open: false });
     }
 
-    const onRadiusChange = (value) => {
-        setRadius(value);
+    onClickCallBack = (coords) => {
+        this.setState({ selectedPos: [coords.lat, coords.lng] });
+
     }
 
-    const pos = () => {
-        if (selectedPos != null) {
-            return (
-                <div>
-                    <div>{selectedPos[0]}</div>
-                    <div>{selectedPos[1]}</div>
-                </div>
-                );
+    onRadiusChange = (event) => {
+        const { value } = event.target
+        this.setState({ radius: value });
+
+
+    }
+
+    render() {
+        let currentLocation = "Choose position on the Map!";
+        let location = { latitude: 0, longitude: 0 };
+        if (this.state.selectedPos != null) {
+            currentLocation = "Current position on the Map is:" + "latitude:" + this.state.selectedPos[0] + "longitude:" + this.state.selectedPos[1];
+            location = { latitude: this.state.selectedPos[0], longitude: this.state.selectedPos[1] }
         }
-    }
-
-    return (
-        <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Filter by location
+        return (
+            <div>
+                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                    Filter by location
             </Button>
-            <Dialog fullWidth={true} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Filter by location</DialogTitle>
-                <DialogContent>
-                    <Field
-                        name='radius'
-                        component={RadiusSlider}
-                        onRadiusChange={onRadiusChange}
-                    />
-                    <Field
-                        name='selectedPos'
-                        component={LocationMap}
-                        onClickCallBack={onClickCallBack}
-                        circle
-                        radius={radius}
-                    />
-                    {pos()}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
+
+                <Dialog fullWidth={true} open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Filter by location</DialogTitle>
+                    <DialogContent>
+                        {this.props.values && this.props.values.radius &&
+                            <div>
+                                <div class="slidecontainer">
+                                    <label>Radius is {this.props.values.radius}</label>
+                                    <Field name="radius" component="input"
+                                        type="range"
+                                        min="0" max="10000" value={this.props.values.radius}
+                                        onChange={this.onRadiusChange}
+                                        step="any"
+                                        className="radius-slider"
+
+                                    />
+                                </div>
+
+
+                            </div>
+
+                        }
+                        <div>
+                            {
+                                this.props.values &&
+                                this.props.values.selectedPos != undefined &&
+                                this.props.values.selectedPos.lat != undefined &&
+                                this.props.values.selectedPos.lng != undefined &&
+                                <div>
+                                    <p>Current position on the Map is:</p>
+                                    <p>latitude:{this.props.values.selectedPos.lat}</p>
+                                    <p>longitude:{this.props.values.selectedPos.lng}</p>
+                                    {this.props.values && this.state.map == false && <DisplayMap location={{ latitude: this.props.values.selectedPos.lat, longitude: this.props.values.selectedPos.lng }} />}
+                                </div>
+
+                            }
+                            {
+                                this.props.values &&
+                                this.props.values.selectedPos.lat == null &&
+                                this.props.values.selectedPos.lng == null &&
+                                <div>
+                                    <p>Choose position on the Map!</p>
+                                </div>
+                            }
+
+                            <Field
+                                name='selectedPos'
+                                component={LocationMap}
+                                onClickCallBack={this.onClickCallBack}
+                                circle
+                                radius={this.props.values.radius}
+                                initialValues={this.props.values}
+                            />
+
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Cancel
                     </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Filter
+                        <Button onClick={this.handleFilter} color="primary">
+                            Filter
                 </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+                    </DialogActions>
+                </Dialog>
+            </div>
+        );
+    }
 }
 
 export default MapModal;

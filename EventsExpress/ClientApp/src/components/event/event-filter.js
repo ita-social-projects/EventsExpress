@@ -11,7 +11,7 @@ import {
 import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
-
+import DisplayMap from '../event/map/display-map';
 
 class EventFilter extends Component {
     constructor(props) {
@@ -24,7 +24,6 @@ class EventFilter extends Component {
 
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
-
         if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
@@ -33,17 +32,21 @@ class EventFilter extends Component {
                 dateTo: initialValues.dateTo,
                 categories: initialValues.categories,
                 status: initialValues.status,
+                radius: initialValues.radius,
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { lat: null, lng: null },
+
             });
             this.setState({
                 ['needInitializeValues']: false
             });
         }
     }
-
+    ResetData = () => {
+        this.props.onReset();
+    }
     render() {
-        const { all_categories, form_values, current_user } = this.props;
+        const { all_categories, form_values, current_user, initialFormValues } = this.props;
         let values = form_values || {};
-
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -92,10 +95,30 @@ class EventFilter extends Component {
                                         <Radio value="true" label="Blocked" />
                                     </Field>
                                 </div>
-                        )}
-                        <div>
-                            <MapModal />
-                        </div>
+                            )}
+
+                            <div>
+                                <MapModal initialize={this.props.initialize} initialValues={this.props.initialFormValues} values={values} reset={this.props.onReset} />
+                            </div>
+
+                            <div className="d-flex">
+
+                                {values.selectedPos &&
+                                    values.selectedPos.lat &&
+                                    <div>
+                                        <p>
+                                            Radius:
+                                {values.radius}
+                                        </p>
+                                        <p>
+                                            Location:
+                                        </p>
+                                        <DisplayMap location={{ latitude: values.selectedPos.lat, longitude: values.selectedPos.lng }} />
+                                    </div>
+
+                                }
+
+                            </div>
                         </>
                     }
                     <div>
