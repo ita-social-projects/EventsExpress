@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
+
 import 'moment-timezone';
+import './event-item.css';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import { Button, Menu, MenuItem } from '@material-ui/core'
@@ -14,14 +17,12 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
+
 import SocialShareMenu from './share/SocialShareMenu';
-import EventManagmentWrapper from '../../containers/event-managment';
 import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
-import './event-item.css';
 import StatusHistory from '../helpers/EventStatusEnum';
-import EventBlockUnblockModal from './event-block-unblock-modal'
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -75,14 +76,10 @@ export default class Event extends Component {
             photoUrl,
             categories,
             countVisitor,
-            isBlocked,
             owners
         } = this.props.item;
-        console.log(this.props);
         const INT32_MAX_VALUE = 2147483647;
         const { anchorEl } = this.state;
-        let canBlocked = eventStatus !== StatusHistory.Blocked;
-        let canUnblocked = eventStatus === StatusHistory.Blocked;
 
         const PrintMenuItems = owners.map(x => (
             <MenuItem onClick={this.handleClose}>
@@ -109,7 +106,7 @@ export default class Event extends Component {
                 <Card
                     className={classes.cardCanceled}
                     style={{
-                        backgroundColor: (isBlocked) ? "gold" : "",
+                        backgroundColor: (eventStatus ===StatusHistory.Blocked) ? "gold" : "",
                         opacity: (eventStatus === StatusHistory.Canceled) ? 0.5 : 1
 
                     }}
@@ -212,24 +209,13 @@ export default class Event extends Component {
                                 </Link>
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
-                                    ? <EventActiveStatus eventStatus={this.props.item.eventStatus} />
-                                    : null
-                                }
-                                {(this.props.current_user !== null
-                                    && this.props.current_user.role === "Admin")
-                                    ? ((canBlocked) && <EventBlockUnblockModal
-                                        submitCallback={(reason) =>this.props.onBlock(this.props.item.id, reason)}
-                                      //  cancelationStatus={this.props.event.cancelation}
-                                        eventStatus={StatusHistory.Blocked}
-                                    />) ||
-                                    ((canUnblocked) && <EventBlockUnblockModal
-                                        submitCallback={(reason) => this.props.onUnBlock(this.props.item.id, reason)}
-                                      //   cancelationStatus={this.props.event.cancelation}
-                                        eventStatus={!StatusHistory.Blocked}
-                                    />)
-                                    //<EventManagmentWrapper eventItem={this.props.item} />
-                                    : null
-                                }
+                                    && <EventActiveStatus
+                                    key={this.props.item.id + this.props.item.eventStatus}
+                                    eventStatus={this.props.item.eventStatus}
+                                    eventId={this.props.item.id}
+                                    onBlock = {this.props.onBlock}
+                                    onUnBlock = {this.props.onUnBlock}/>
+                                }                        
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>

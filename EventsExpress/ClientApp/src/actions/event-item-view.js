@@ -1,6 +1,4 @@
-
 import { EventService } from '../services';
-
 
 export const GET_EVENT_PENDING = "GET_EVENT_PENDING";
 export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";
@@ -8,26 +6,9 @@ export const GET_EVENT_ERROR = "GET_EVENT_ERROR";
 export const RESET_EVENT = "RESET_EVENT";
 
 
-export const blockEvent = {
-    PENDING: 'PENDING_BLOCK',
-    SUCCESS: 'SUCCESS_BLOCK',
-    ERROR: 'ERROR_BLOCK',
-    UPDATE: 'UPDATE_BLOCKED',
-}
-
-export const unBlockEvent = {
-    PENDING: 'PENDING_UNBLOCK',
-    SUCCESS: 'SUCCESS_UNBLOCK',
-    ERROR: 'ERROR_UNBLOCK',
-    UPDATE: 'UPDATE_UNBLOCKED',
-}
-
-export const cancelEvent = {
-    PENDING: 'PENDING_CANCEL',
-    SUCCESS: 'SUCCESS_CANCEL',
-    ERROR: 'ERROR_CANCEL',
-    UPDATE: 'UPDATE_CANCEL',
-    SET_EVENT_CANCELATION_MODAL_STATUS: "TOGLE_EVENT_CANCELATION_MODAL_STATUS"
+export const event = {
+    CHANGE_STATUS: 'UPDATE_EVENT',
+    ERROR: 'ERROR_EVENT',
 }
 
 const api_serv = new EventService();
@@ -66,7 +47,6 @@ export function leave(userId, eventId) {
     }
 }
 
-
 export function join(userId, eventId) {
     return dispatch => {
         api_serv.setUserToEvent({ userId: userId, eventId: eventId }).then(response => {
@@ -74,7 +54,6 @@ export function join(userId, eventId) {
                 api_serv.getEvent(eventId).then(response => {
                     if (response.error == null) {
                         dispatch(getEvent(response));
-
                     } else {
                         dispatch(getEventError(response.error));
                     }
@@ -137,57 +116,16 @@ export function promoteToOwner(userId, eventId) {
     }
 }
 
-// ACTION CREATOR FOR EVENT UNBLOCK:
-export function unblock_event(id) {
-    return dispatch => {
-        dispatch(setUnBlockEventPending(true));
-
-        const res = api_serv.setEventUnblock(id);
-
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setUnBlockEventSuccess());
-                dispatch(updateUnBlockedEvent(eventId));
-            } else {
-                dispatch(setUnBlockEventError(response.error));
-            }
-        });
-    }
-}
-
-// ACTION CREATOR FOR USER BLOCK:
-export function block_event(id) {
-    return dispatch => {
-        dispatch(setBlockEventPending(true));
-
-         const res = api_serv.setEventBlock(id);
-       
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setBlockEventSuccess());
-                dispatch(updateBlockedEvent(eventId));
-            } else {
-                dispatch(setBlockEventError(response.error));
-            }
-        });
-    }
-}
-
-// ACTION CREATOR FOR EVENT CANCELATION:
+// ACTION CREATOR FOR CHANGE EVENT STATUS:
 export function change_event_status(eventId, reason, eventStatus) {
     return dispatch => {
-        dispatch(setCancelEventPending(true));
-
         const res = api_serv.setEventStatus({ EventId: eventId, Reason: reason, EventStatus: eventStatus });
 
         res.then(response => {
             if (response.error == null) {
-                dispatch(setCancelEventSuccess());
-                dispatch(updateCancelEvent(eventId));
-                dispatch(setEventCanelationModalStatus(false));
-                dispatch(get_event(response.eventId));
+                dispatch(changeEventStatus(eventId, eventStatus));
             } else {
-                dispatch(setCancelEventError(response.error));
+                dispatch(eventError(response.error));
             }
         });
     }
@@ -220,95 +158,18 @@ export function getEventError(data) {
         payload: data
     }
 }
-//block Event actions
 
-function setBlockEventPending(data) {
+    //CHANGE EVENT ACTIONS
+function changeEventStatus(id, eventStatus) {
     return {
-        type: blockEvent.PENDING,
-        payload: data
+        type: event.CHANGE_STATUS,
+        payload: { eventId: id, eventStatus: eventStatus }
     }
 }
 
-function setBlockEventSuccess() {
+function eventError(data) {
     return {
-        type: blockEvent.SUCCESS
-    }
-}
-
-function setBlockEventError(data) {
-    return {
-        type: blockEvent.ERROR,
-        payload: data
-    }
-}
-
-function updateBlockedEvent(data) {
-    return {
-        type: blockEvent.UPDATE,
-        payload: id
-    }
-}
-
-// unBlock User actions
-function setUnBlockEventPending(data) {
-    return {
-        type: unBlockEvent.PENDING,
-        payload: data
-    }
-}
-
-function setUnBlockEventSuccess() {
-    return {
-        type: unBlockEvent.SUCCESS
-    }
-}
-
-function setUnBlockEventError(data) {
-    return {
-        type: unBlockEvent.ERROR,
-        payload: data
-    }
-}
-
-function updateUnBlockedEvent(data) {
-    return {
-        type: unBlockEvent.UPDATE,
-        payload: id
-    }
-}
-
-// cancelEvent User actions
-
-function setCancelEventSuccess() {
-    return {
-        type: cancelEvent.SUCCESS
-    }
-}
-
-function setCancelEventPending(data) {
-    return {
-        type: cancelEvent.PENDING,
-        payload: data
-    }
-}
-
-function setCancelEventError(data) {
-    return {
-        type: cancelEvent.ERROR,
-        payload: data
-    }
-}
-
-function updateCancelEvent(data) {
-    return {
-        type: cancelEvent.UPDATE,
-        payload: data
-    }
-}
-
-export function setEventCanelationModalStatus(data) {
-    return {
-        type: cancelEvent.SET_EVENT_CANCELATION_MODAL_STATUS,
+        type: event.ERROR,
         payload: data
     }
 }

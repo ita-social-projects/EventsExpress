@@ -6,7 +6,6 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
-import EventCancelModal from './event-cancel-modal';
 import SimpleModal from './simple-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
@@ -20,6 +19,7 @@ import DisplayLocation from './map/display-location';
 import Tooltip from '@material-ui/core/Tooltip';
 import userStatus from '../helpers/UserStatusEnum';
 import StatusHistory from '../helpers/EventStatusEnum';
+import EventChangeStatusModal from './event-change-status-modal';
 
 
 export default class EventItemView extends Component {
@@ -53,7 +53,7 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                action={()=>this.props.onDeleteFromOwners(x.id)}
+                                action={() => this.props.onDeleteFromOwners(x.id)}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
                                     <Tooltip title="Delete from owners">
@@ -274,8 +274,6 @@ export default class EventItemView extends Component {
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== StatusHistory.Canceled;
         let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === StatusHistory.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
-        let canBlocked = eventStatus !== StatusHistory.Blocked;
-        let canUnblocked = eventStatus === StatusHistory.Blocked;
 
         return <>
             <div className="container-fluid mt-1">
@@ -318,20 +316,17 @@ export default class EventItemView extends Component {
                                 <DisplayLocation
                                     location={this.props.event.data.location}
                                 />
-
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel && <EventCancelModal 
-                                    submitCallback={this.props.onCancel}
-                                    cancelationStatus={this.props.event.cancelation}
-                                    eventStatus={StatusHistory.Canceled}
-                                />}
-                                {(canUncancel) && <EventCancelModal
-                                    submitCallback={this.props.onCancel}
-                                    cancelationStatus={this.props.event.cancelation}
-                                    eventStatus={StatusHistory.Active}
+                                {canCancel && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Cancel</button>}
+                                    submitCallback={this.props.onCancel}           
+                                    />}
+                                {(canUncancel) && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Undo cancel</button>}
+                                    submitCallback={this.props.onUnCancel}
                                 />}
                             </div>
                         </div>

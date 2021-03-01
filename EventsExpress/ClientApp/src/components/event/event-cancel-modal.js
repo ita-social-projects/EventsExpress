@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
 import { renderErrorMessage } from '../helpers/helpers';
-import { setEventCanelationModalStatus } from '../../actions/event-item-view';
 import StatusHistory from '../helpers/EventStatusEnum';
 
 class EventCancelModal extends Component {
