@@ -24,14 +24,6 @@ class EventItemViewWrapperNew extends Component{
         this.props.reset();
     }
 
-    onJoin = () => {
-        this.props.join(this.props.current_user.id, this.props.event.data.id);
-    }
-
-    onLeave = () => {
-        this.props.leave(this.props.current_user.id, this.props.event.data.id);
-    }
-
     onCancel = (reason) => {
         this.props.cancel(this.props.event.data.id, reason);
     }
@@ -40,13 +32,6 @@ class EventItemViewWrapperNew extends Component{
         this.props.approveUser(userId, this.props.event.data.id, buttonAction);
     }
 
-    onDeleteFromOwners = (userId) => {
-        this.props.deleteFromOwners(userId, this.props.event.data.id);
-    }
-
-    onPromoteToOwner = (userId) => {
-        this.props.promoteToOwner(userId, this.props.event.data.id);
-    }
     render(){   
         const { isPending } = this.props.event;
 
@@ -55,12 +40,8 @@ class EventItemViewWrapperNew extends Component{
             : <EventItemViewNew
                 event={this.props.event}
                 match={this.props.match} 
-                onLeave={this.onLeave} 
-                onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onApprove={this.onApprove}
-                onDeleteFromOwners={this.onDeleteFromOwners}
-                onPromoteToOwner={this.onPromoteToOwner}
                 current_user={this.props.current_user}
             />
     }
@@ -73,12 +54,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
-    join: (userId, eventId) => dispatch(join(userId, eventId)),
-    leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
-    deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
-    promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),
     reset: () => dispatch(resetEvent())
 });
 

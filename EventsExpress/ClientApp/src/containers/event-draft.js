@@ -29,8 +29,6 @@ class EventDraftWrapper extends Component {
         return this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
-    // check how to work with async validation
-    // setAlert check how its work  
     render() {
         let initialValues = {
             ...this.props.event,

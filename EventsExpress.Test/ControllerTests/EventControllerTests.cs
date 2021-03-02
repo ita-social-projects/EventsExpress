@@ -26,6 +26,9 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IEventService> service;
         private EventController eventController;
         private Mock<IAuthService> auth;
+        private UserDto _userDto;
+        private Guid _idUser = Guid.NewGuid();
+        private string _userEmal = "user@gmail.com";
 
         private Mock<IMapper> MockMapper { get; set; }
 
@@ -36,12 +39,29 @@ namespace EventsExpress.Test.ControllerTests
             auth = new Mock<IAuthService>();
             service = new Mock<IEventService>();
             eventController = new EventController(service.Object, auth.Object, MockMapper.Object);
+            eventController.ControllerContext = new ControllerContext();
+            eventController.ControllerContext.HttpContext = new DefaultHttpContext();
+            _userDto = new UserDto
+            {
+                Id = _idUser,
+                Email = _userEmal,
+                Photo = new Photo { Id = Guid.NewGuid(), Img = new byte[8], Thumb = new byte[8] },
+            };
         }
 
         [Test]
         public void Create_OkResult()
         {
             var expected = eventController.Create();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void AllDraft_OkResult()
+        {
+            service.Setup(e => e.GetAllDraftEvents(It.IsAny<Guid>())).Returns(new List<EventDto>());
+            auth.Setup(e => e.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(new UserDto());
+            var expected = eventController.AllDraft();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
     }

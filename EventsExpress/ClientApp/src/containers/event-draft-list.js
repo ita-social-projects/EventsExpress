@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
 import { get_drafts } from '../actions/event-list-action';
@@ -8,7 +7,6 @@ import InternalServerError from '../components/Route guard/500';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';
-import history from '../history';
 import eventHelper from '../components/helpers/eventHelper';
 
 
@@ -19,15 +17,14 @@ class EventDraftListWrapper extends Component {
     }
 
     componentDidMount() {
-        this.setSearchParamsToEventFilter(this.props.location.search);
-        this.executeSearchEvents();
+        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
+        this.props.get_events(queryString);
     }
 
     componentDidUpdate(prevProps) {
         const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
         if (this.hasUpdateSearchParams(objFilterParams)) {
             this.objCurrentQueryParams = objFilterParams;
-            this.executeSearchEvents();
         }
     }
 
@@ -35,21 +32,7 @@ class EventDraftListWrapper extends Component {
         return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
     }
 
-    executeSearchEvents = () => {
-        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
-        this.props.get_events(queryString);
-        history.push(`${this.props.location.pathname}${queryString}`);
-    }
 
-    setSearchParamsToEventFilter = search => {
-        this.objCurrentQueryParams = queryStringParse(search);
-
-        Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
-            this.props.events.filter[key] = value;
-        }.bind(this));
-
-        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
-    }
 
     render() {
         let current_user = this.props.current_user.id !== null

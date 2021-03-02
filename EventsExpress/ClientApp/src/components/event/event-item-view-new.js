@@ -8,11 +8,7 @@ export default class EventItemViewNew extends Component {
 
     render() {        
         return <>
-           
-                       
-                                <EditEventWrapper />
-                        
-              
+                                <EditEventWrapper/>   
         </>
     }
 }
