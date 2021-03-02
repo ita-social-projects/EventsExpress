@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event';
+import EventDraftWrapper from '../../containers/event-draft';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
@@ -335,7 +335,7 @@ export default class EventItemView extends Component {
                         </div>
                         {this.state.edit
                             ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                                <EditEventWrapper
+                                <EventDraftWrapper
                                     onCancelEditing={() => this.setState({ edit: false })}
                                 />
                             </div>

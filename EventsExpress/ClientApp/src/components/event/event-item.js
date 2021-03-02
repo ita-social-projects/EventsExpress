@@ -19,33 +19,9 @@ import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import './event-item.css';
+import { useStyle } from '../event/CardStyle'
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        maxHeight: 200,
-        backgroundColor: theme.palette.primary.dark
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    avatar: {
-        backgroundColor: red[500],
-    },
-    button: {
-    }
-}));
+const useStyles = useStyle;
 
 export default class Event extends Component {
     constructor(props) {
@@ -84,7 +60,7 @@ export default class Event extends Component {
             isBlocked,
             owners
         } = this.props.item;
-        const INT32_MAX_VALUE = 2147483647;
+        const INT32_MAX_VALUE = null;
         const { anchorEl } = this.state;
 
         const PrintMenuItems = owners.map(x => (
@@ -176,11 +152,13 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                            <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                {description.substr(0, 128)}
-                            </Typography>
-                        </Tooltip>
+                        {description &&
+                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                                <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                    {description.substr(0, 128)}
+                                </Typography>
+                            </Tooltip>
+                        } 
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
