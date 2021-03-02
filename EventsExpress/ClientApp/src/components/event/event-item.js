@@ -84,7 +84,7 @@ export default class Event extends Component {
             isBlocked,
             owners
         } = this.props.item;
-        const INT32_MAX_VALUE = 2147483647;
+        const INT32_MAX_VALUE = null;
         const { anchorEl } = this.state;
 
         const PrintMenuItems = owners.map(x => (
@@ -176,11 +176,13 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                            <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                {description.substr(0, 128)}
-                            </Typography>
-                        </Tooltip>
+                        {description &&
+                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                                <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                    {description.substr(0, 128)}
+                                </Typography>
+                            </Tooltip>
+                        } 
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
