@@ -8,7 +8,6 @@ import { renderTextField} from '../helpers/helpers';
 
 export const validate = values => {
     const errors = {};
-    const minLength = { max: values.changeStatusReason };
     const requiredFields = [
         'changeStatusReason'
     ];
@@ -17,7 +16,6 @@ export const validate = values => {
             errors[field] = 'Required'
         }
     });
-
     if (values.changeStatusReason && values.changeStatusReason.length < 6) {
         errors.changeStatusReason = `Must be minimum 6 symbols`;
     }

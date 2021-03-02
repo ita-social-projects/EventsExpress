@@ -142,11 +142,6 @@ namespace EventsExpress.Controllers
                 {
                     filter.DateFrom = DateTime.Today;
                 }
-
-                if (filter.Statuses.Count != 0)
-                {
-                    return Forbid();
-                }
             }
 
             try

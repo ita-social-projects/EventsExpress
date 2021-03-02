@@ -35,7 +35,7 @@ const eventHelper = (function () {
                 dateFrom: undefined,
                 dateTo: undefined,
                 categories: [],
-                statuses: [0],
+                statuses: []
             }
         },
         getQueryStringByEventFilter: function (filter) {

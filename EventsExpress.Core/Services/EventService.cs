@@ -316,9 +316,13 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
                 : events;
 
-            // events = (model.Statuses != null)
-            // ? events.Where(x => x.StatusHistory.Any(v => v.EventStatus == model.Statuses.FirstOrDefault()))
-            // : events;
+            events = (model.Statuses != null)
+            ? events.Where(e => model.Statuses.Contains(e.StatusHistory
+               .OrderByDescending(n => n.CreatedOn)
+               .FirstOrDefault()
+               .EventStatus))
+            : events;
+
             if (model.Categories != null)
             {
                 List<Guid> categoryIds = model.Categories

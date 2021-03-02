@@ -15,7 +15,7 @@ function eventStatusHistoryReadingString(option) {
 
 class EventFilterStatus extends Component {
     checkboxGroup() {
-        let { label, required, options, input, meta } = this.props;
+        let { options, input } = this.props;
         input.value = input.value.StatusHistory || input.value;
         console.log(this.props);
         return options.map((option, index) => {
