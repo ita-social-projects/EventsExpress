@@ -19,33 +19,9 @@ import EventManagmentWrapper from '../../containers/event-managment';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import './event-item.css';
+import { useStyle } from '../event/CardStyle'
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        maxHeight: 200,
-        backgroundColor: theme.palette.primary.dark
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    avatar: {
-        backgroundColor: red[500],
-    },
-    button: {
-    }
-}));
+const useStyles = useStyle;
 
 export default class Event extends Component {
     constructor(props) {

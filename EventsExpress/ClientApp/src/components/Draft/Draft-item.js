@@ -2,45 +2,19 @@
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 import 'moment-timezone';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
 import CustomAvatar from '../avatar/custom-avatar';
 import './event-item.css';
+import { useStyle } from '../event/CardStyle'
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        maxHeight: 200,
-        backgroundColor: theme.palette.primary.dark
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    avatar: {
-        backgroundColor: red[500],
-    },
-    button: {
-    }
-}));
+const useStyles = useStyle;
 
 export default class Event extends Component {
     constructor(props) {
