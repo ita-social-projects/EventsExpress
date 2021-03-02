@@ -175,7 +175,6 @@ namespace EventsExpress.Test.ServiceTests
                     PhotoId = Guid.NewGuid(),
                     EventLocationId = eventLocationIdMap,
                     Title = "SLdndsndj",
-                    IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
