@@ -72,55 +72,14 @@ export default class Event extends Component {
             dateFrom,
             description,
             photoUrl,
-            isBlocked,
             owners
-        } = this.props.item;
-        const { anchorEl } = this.state;
-
-        const PrintMenuItems = owners.map(x => (
-            <MenuItem onClick={this.handleClose}>
-                <div className="d-flex align-items-center border-bottom">
-                    <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar
-                                    photoUrl={x.photoUrl}
-                                    name={x.username}
-                                />
-                                <div>
-                                    <h5 className="pl-2">{x.username}</h5>
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-            </MenuItem>
-        ))
-
+        } = this.props.item;    
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Link to={`/editEvent/${id}/`}>
                 <Card
                     className={classes.card}
-                    style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
-                >
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horisontal: "left"
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={this.handleClose}
-                    >
-
-                        {
-                            PrintMenuItems
-                        }
-                    </Menu>
-                   
+                >                 
                         <CardHeader
                             avatar={
                                 <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>

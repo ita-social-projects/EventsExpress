@@ -32,38 +32,25 @@ class EventDraftListWrapper extends Component {
         return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
     }
 
-
-
     render() {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending, isError } = this.props.events;
+        const { data, isPending } = this.props.events;
         const { items } = this.props.events.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <InternalServerError />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
-            ? <EventList
+        const content = 
+             <EventList
                 current_user={current_user}
                 data_list={items}
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
             />
-            : null;
 
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
+            {
+                 spinner || content
             }
         </>
     }
