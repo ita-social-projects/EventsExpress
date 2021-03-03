@@ -26,6 +26,9 @@ namespace EventsExpress.Db.Entities
         public int MaxParticipants { get; set; }
 
         [Track]
+        public bool IsBlocked { get; set; }
+
+        [Track]
         public Guid? PhotoId { get; set; }
 
         [Track]

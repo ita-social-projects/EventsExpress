@@ -56,7 +56,7 @@ namespace EventsExpress.Test.HandlerTests
             {
                 Id = _idEvent,
             };
-            _cancelEventMessage = new EventStatusMessage(_idEvent, "testreason", EventStatus.Canceled);
+            _cancelEventMessage = new EventStatusMessage(_idEvent, "testReason", EventStatus.Canceled);
             firstUserDto = new UserDto
             {
                 Id = firstIdUser,
