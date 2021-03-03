@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 import EventList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
 import { get_drafts } from '../actions/event-list-action';
-import InternalServerError from '../components/Route guard/500';
-import BadRequest from '../components/Route guard/400';
-import Unauthorized from '../components/Route guard/401';
-import Forbidden from '../components/Route guard/403';
 import eventHelper from '../components/helpers/eventHelper';
 
 

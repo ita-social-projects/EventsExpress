@@ -11,7 +11,7 @@ class RenderList extends Component {
     constructor(props)
     {
         super(props)
-    };
+    }
 
     render() {
         const { page, totalPages, data_list } = this.props;

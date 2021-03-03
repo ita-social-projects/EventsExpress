@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event-list-action';
-import  { resetEvent } from '../../actions/event-item-view';
-import RenderList from './ListRender'
+import RenderList from './RenderList'
 import EventCard from './event-item';
 
 class EventList extends Component {
@@ -25,14 +24,13 @@ class EventList extends Component {
         return <>
             <RenderList {...this.props} renderSingleItem={this.renderSingleItem} handlePageChange={this.handlePageChange} />
             </>
-    };
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         reset_events: () => dispatch(reset_events()),
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
-        reset: () => dispatch(resetEvent())
     }
 };
 

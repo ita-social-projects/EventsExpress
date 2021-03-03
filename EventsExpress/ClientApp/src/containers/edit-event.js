@@ -31,7 +31,7 @@ class EditEventWrapper extends Component {
         {
             await this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
         }
-         return await this.props.publish(this.props.event.id);
+         return this.props.publish(this.props.event.id);
         
     }
 

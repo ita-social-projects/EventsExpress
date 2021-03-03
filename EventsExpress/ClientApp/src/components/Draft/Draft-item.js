@@ -25,19 +25,6 @@ export default class DraftEventCard extends Component {
         }
     }
 
-    renderCategories = (arr) => {
-        return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
-        );
-    }
-
-    handleClick = (event) => {
-        this.setState({ anchorEl: event.currentTarget });
-    }
-
-    handleClose = () => {
-        this.setState({ anchorEl: null });
-    }
-
     render() {
         const classes = useStyles;
         const {
@@ -56,9 +43,8 @@ export default class DraftEventCard extends Component {
                 >                 
                         <CardHeader
                             avatar={
-                                <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
+                                <Button title={owners[0].username} className="btn-custom">
                                     <Badge overlap="circle" badgeContent={owners.length} color="primary">
-
                                         <CustomAvatar
                                             className={classes.avatar}
                                             photoUrl={owners[0].photoUrl}
@@ -66,7 +52,6 @@ export default class DraftEventCard extends Component {
                                         />
                                     </Badge>
                                 </Button>
-
                             }
 
                             title={title}
@@ -74,14 +59,14 @@ export default class DraftEventCard extends Component {
                             classes={{ title: 'title' }}
                         />
                         <CardMedia
-                            className={classes.media}
+                            className={classes.media + ' d-flex justify-content-center'}
                             title={title}
                         >                                                    
                             {photoUrl &&
                                 <img src={photoUrl} className="w-100" alt="Event" /> 
                             }
                             {photoUrl === null &&
-                                <i class="far fa-images fa-10x " ></i>   
+                                <i class="far fa-images fa-10x" ></i>   
                             }
                         </CardMedia>
                     <CardContent>

@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { reset_events } from '../../actions/event-list-action';
 import DraftEventCard from './Draft-item';
-import RenderList from '../event/ListRender'
+import RenderList from '../event/RenderList'
 
 class DraftList extends Component {
     handlePageChange = (page) => { };
@@ -19,7 +19,7 @@ class DraftList extends Component {
         return <>
             <RenderList {...this.props} renderSingleItem={this.renderSingleItem} handlePageChange={this.handlePageChange} />
             </>
-    };
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
