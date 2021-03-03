@@ -112,7 +112,7 @@ namespace EventsExpress.Test.HandlerTests
         public void Handle_AllUser_AllSubscribingUsers()
         {
             var result = _cancelEventHandler.Handle(_cancelEventMessage, CancellationToken.None);
-            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
     }
 }
