@@ -21,7 +21,7 @@ import { useStyle } from '../event/CardStyle'
 
 const useStyles = useStyle;
 
-export default class Event extends Component {
+export default class EventCard extends Component {
     constructor(props) {
         super(props);
 

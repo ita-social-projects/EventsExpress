@@ -175,7 +175,7 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns filltered events.</returns>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("[action]")]
         public IActionResult AllDraft()
         {
