@@ -54,6 +54,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\event\event-block.js" />
+    <None Remove="ClientApp\src\components\event\event-block.js" />
+    <None Remove="ClientApp\src\components\event\event-cancel-modal - Copy.js" />
+    <None Remove="ClientApp\src\components\event\event-cancel-modal - Copy.js" />
+    <None Remove="ClientApp\src\components\event\event-cancel-modal.js" />
+    <None Remove="ClientApp\src\components\event\event-cancel-modal.js" />
+    <None Remove="ClientApp\src\components\event\event-change-status-form.js" />
+    <None Remove="ClientApp\src\components\event\event-change-status-form.js" />
+    <None Remove="ClientApp\src\containers\event-managment.js" />
+    <None Remove="ClientApp\src\containers\event-managment.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EventsExpress.Core\EventsExpress.Core.csproj" />
   </ItemGroup>
 

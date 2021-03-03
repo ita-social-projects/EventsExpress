@@ -75,8 +75,8 @@ export default class EventService {
 
     editEvent = data => this.setEventTemplate(data, `event/${data.id}/edit`);
 
-    setEventCancel = async (data) => {
-        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/Cancel`, data);
+    setEventStatus = async (data) => {
+        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
         return !res.ok
             ? { error: await res.text() }
             : await res.json();
@@ -133,21 +133,7 @@ export default class EventService {
     getCurrentRate = eventId => baseService.getResource(`event/${eventId}/GetCurrentRate`);
 
     getAverageRate = eventId => baseService.getResource(`event/${eventId}/GetAverageRate`);
-
-    setEventBlock = async (id) => {
-        const res = await baseService.setResource(`Event/${id}/Block`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
-    setEventUnblock = async (id) => {
-        const res = await baseService.setResource(`event/${id}/Unblock`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
+    
     getFutureEvents = async (id, page) =>
         baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);
 

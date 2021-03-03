@@ -55,7 +55,6 @@ namespace EventsExpress.Test.MapperTests
             return new Event
             {
                 Id = idEvent,
-                IsBlocked = false,
                 Title = "First event",
                 Description = "It is the first event for testing",
                 DateFrom = DateTime.Now,

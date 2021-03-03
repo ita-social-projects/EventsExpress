@@ -8,9 +8,6 @@ namespace EventsExpress.Db.Entities
     public class Event : BaseEntity
     {
         [Track]
-        public bool IsBlocked { get; set; }
-
-        [Track]
         public string Title { get; set; }
 
         [Track]
@@ -27,6 +24,9 @@ namespace EventsExpress.Db.Entities
 
         [Track]
         public int MaxParticipants { get; set; }
+
+        [Track]
+        public bool IsBlocked { get; set; }
 
         [Track]
         public Guid? PhotoId { get; set; }

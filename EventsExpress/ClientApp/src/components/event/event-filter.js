@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
 import {
     renderTextField,
     renderDatePicker,
-    renderMultiselect,
-    radioButton
+    renderMultiselect
 } from '../helpers/helpers';
 import eventHelper from '../helpers/eventHelper';
 import './event-filter.css';
+import EventFilterStatus from './event-filter-status';
+import StatusHistory from '../helpers/EventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {
         super(props);
+        let { x } = this.props.initialFormValues.statuses;
         this.state = {
             viewMore: false,
             needInitializeValues: true,
@@ -30,7 +31,7 @@ class EventFilter extends Component {
                 dateFrom: initialValues.dateFrom,
                 dateTo: initialValues.dateTo,
                 categories: initialValues.categories,
-                status: initialValues.status,
+                statuses: initialValues.statuses,
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -41,7 +42,6 @@ class EventFilter extends Component {
     render() {
         const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
-
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -82,15 +82,14 @@ class EventFilter extends Component {
                                     placeholder='#hashtags'
                                 />
                             </div>
-                            {current_user.role === "Admin" && (
-                                <div className="form-group">
-                                    <Field name="status" component={radioButton}>
-                                        <Radio value="true" label="All" />
-                                        <Radio value="true" label="Active" />
-                                        <Radio value="true" label="Blocked" />
-                                    </Field>
-                                </div>
-                            )}
+                            <div className="form-group">
+                                {current_user.role === "Admin" &&
+                                    <Field name="statuses"
+                                        component={EventFilterStatus}
+                                        options={[StatusHistory.Active, StatusHistory.Blocked, StatusHistory.Canceled]}
+                                    />
+                                }
+                            </div>
                         </>
                     }
                     <div>
@@ -128,11 +127,12 @@ class EventFilter extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            disabled={this.props.pristine || this.props.submitting}
+                            disabled={this.props.submitting}
                         >
                             Search
                         </Button>
                     </div>
+                     
                 </form>
             </div>
         </>
