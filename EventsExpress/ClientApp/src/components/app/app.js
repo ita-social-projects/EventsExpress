@@ -50,7 +50,7 @@ export default class App extends Component {
                             )}
                         />
                         <Route path="/profile/" component={Profile} />
-                        <Route path="/event/:id/:page" component={EventItemViewWrapperNew} />
+                        <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />

@@ -290,8 +290,12 @@ namespace EventsExpress.Core.Services
                 }
             }
 
-            var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
-            var locationId = await _locationService.AddLocationToEvent(locationDTO);
+            if (e.OnlineMeeting != null || e.Point != null)
+            {
+                var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
+                var locationId = await _locationService.AddLocationToEvent(locationDTO);
+                ev.EventLocationId = locationId;
+            }
 
             ev.Title = e.Title;
             ev.MaxParticipants = e.MaxParticipants;
@@ -299,7 +303,6 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
-            ev.EventLocationId = locationId;
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 

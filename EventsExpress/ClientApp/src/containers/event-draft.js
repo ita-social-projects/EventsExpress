@@ -2,7 +2,7 @@
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event } from '../actions/event-add-action';
+import { setEventPending, setEventSuccess, edit_event} from '../actions/event-add-action';
 import { validate, validateEventForm  } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import get_categories from '../actions/category/category-list';
@@ -32,9 +32,15 @@ class EventDraftWrapper extends Component {
     render() {
         let initialValues = {
             ...this.props.event,
-            selectedPos: L.latLng(
-                this.props.event.latitude,
-                this.props.event.longitude)
+            location: this.props.event.location !== null ? {
+                selectedPos: L.latLng(
+
+                    this.props.event.location.latitude,
+                    this.props.event.location.longitude
+                ),
+                onlineMeeting: this.props.event.location.onlineMeeting,
+                type: String(this.props.event.location.type)
+            } : null,
         }
 
         return <>
@@ -91,7 +97,6 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(reset('event-form'));
             dispatch(setEventPending(true));
             dispatch(setEventSuccess(false));
-            dispatch(setEventError(null));
         }
     }
 };

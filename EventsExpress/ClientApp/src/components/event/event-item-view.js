@@ -319,9 +319,11 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <DisplayLocation
-                                    location={this.props.event.data.location}
-                                />
+                                {this.props.event.data.location &&
+                                    <DisplayLocation
+                                        location={this.props.event.data.location}
+                                    />
+                                }                                                                 
 
                                 {categories_list}
                             </div>

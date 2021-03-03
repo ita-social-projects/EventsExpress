@@ -3,6 +3,8 @@ import PagePagination from '../shared/pagePagination';
 import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event-list-action';
 import Event from './event-item';
+import  { resetEvent }
+    from '../../actions/event-item-view';
 
 class EventList extends Component {
     handlePageChange = (page) => {
@@ -11,6 +13,10 @@ class EventList extends Component {
             page: page,
         });
     };
+
+    componentWillUnmount() {
+        this.props.reset();
+    }
 
     renderItems = arr =>
         arr.map(item => (
@@ -53,6 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         reset_events: () => dispatch(reset_events()),
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
+        reset: () => dispatch(resetEvent())
     }
 };
 

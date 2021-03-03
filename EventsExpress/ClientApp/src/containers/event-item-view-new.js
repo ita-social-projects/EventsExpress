@@ -1,15 +1,11 @@
 ﻿import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import EventItemViewNew from '../components/event/event-item-view-new';
 import Spinner from '../components/spinner';
+import EditEventWrapper from './edit-event';
 import get_event, { 
-    join, 
-    leave, 
     resetEvent, 
     cancel_event, 
     approveUser, 
-    deleteFromOwners, 
-    promoteToOwner
     }
 from '../actions/event-item-view';
 
@@ -34,16 +30,9 @@ class EventItemViewWrapperNew extends Component{
 
     render(){   
         const { isPending } = this.props.event;
-
         return isPending
             ? <Spinner />
-            : <EventItemViewNew
-                event={this.props.event}
-                match={this.props.match} 
-                onCancel={this.onCancel}
-                onApprove={this.onApprove}
-                current_user={this.props.current_user}
-            />
+            : <EditEventWrapper/>
     }
 }
 
