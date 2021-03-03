@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
@@ -98,9 +99,9 @@ namespace EventsExpress.Test.HandlerTests
             _eventStatusHistory = new EventStatusHistory
             {
                 Reason = _reason,
-                EventStatus = EventStatus.Cancelled,
+                EventStatus = EventStatus.Canceled,
             };
-            _eventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Cancelled)).Returns(_eventStatusHistory);
+            _eventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Canceled)).Returns(_eventStatusHistory);
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);

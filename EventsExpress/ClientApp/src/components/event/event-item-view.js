@@ -255,7 +255,6 @@ export default class EventItemView extends Component {
             visitors,
             owners
         } = this.props.event.data;
-        console.log(this.props);
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
