@@ -136,12 +136,9 @@ namespace EventsExpress.Controllers
             filter.OwnerId = null;
             filter.VisitorId = null;
 
-            if (!User.IsInRole("Admin"))
+            if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)
             {
-                if (filter.DateFrom == DateTime.MinValue)
-                {
-                    filter.DateFrom = DateTime.Today;
-                }
+                filter.DateFrom = DateTime.Today;
             }
 
             try

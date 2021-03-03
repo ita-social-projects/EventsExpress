@@ -21,7 +21,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IEventService> _eventService;
         private Mock<IEventStatusHistoryService> _eventStatusHistoryService;
         private Mock<IUserService> _userService;
-        private CancelEventHandler _cancelEventHandler;
+        private EventStatusHandler _cancelEventHandler;
         private Guid _idEvent = Guid.NewGuid();
         private Guid _idUser = Guid.NewGuid();
         private Guid[] usersId;
@@ -39,7 +39,7 @@ namespace EventsExpress.Test.HandlerTests
         private string firstEmail = "first@gmail.com";
         private string secondEmail = "second@gmail.com";
         private string thirdEmail = "third@gmail.com";
-        private CancelEventMessage _cancelEventMessage;
+        private EventStatusMessage _cancelEventMessage;
         private Event _event;
         private EventDto _eventDto;
         private EventStatusHistory _eventStatusHistory;
@@ -56,7 +56,7 @@ namespace EventsExpress.Test.HandlerTests
             {
                 Id = _idEvent,
             };
-            _cancelEventMessage = new CancelEventMessage(_idEvent);
+            _cancelEventMessage = new EventStatusMessage(_idEvent, "testreason", EventStatus.Canceled);
             firstUserDto = new UserDto
             {
                 Id = firstIdUser,
@@ -105,7 +105,7 @@ namespace EventsExpress.Test.HandlerTests
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);
-            _cancelEventHandler = new CancelEventHandler(_emailService.Object, _eventService.Object, _eventStatusHistoryService.Object, _userService.Object);
+            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _eventService.Object);
         }
 
         [Test]

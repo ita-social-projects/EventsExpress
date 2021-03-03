@@ -11,8 +11,8 @@ namespace EventsExpress.Core.NotificationHandlers
 {
     public class EventStatusHandler : INotificationHandler<EventStatusMessage>
     {
-        private IEventService _eventService;
-        private IEmailService _sender;
+        private readonly IEventService _eventService;
+        private readonly IEmailService _sender;
 
         public EventStatusHandler(
             IEmailService sender,
