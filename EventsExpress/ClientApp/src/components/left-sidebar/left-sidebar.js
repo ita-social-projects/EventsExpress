@@ -92,6 +92,11 @@ class LeftSidebar extends Component {
                                         icon={'fa fa-users'}
                                         text={"Users"}
                                     />
+                                    <NavItem
+                                        to={'/admin/tracks/'}
+                                        icon={'fa fa-server'}
+                                        text={"Tracks"}
+                                    />
                                 </>
                             }
                             {this.props.user.role === "User" &&

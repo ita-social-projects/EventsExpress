@@ -8,6 +8,7 @@ import {
 import Home from '../home';
 import Profile from '../profile';
 import Category from '../category/categories';
+import Track from '../tracks/track';
 import UsersWrapper from '../../containers/users';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UserItemViewWrapper from '../../containers/user-item-view';
@@ -52,6 +53,7 @@ export default class App extends Component {
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
                         <Route path="/admin/categories/" component={Category} />
+                        <Route path="/admin/tracks" component={Track} />
                         <Route path="/admin/users" component={UserPWrapper} />
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/admin/users" component={UsersWrapper} />

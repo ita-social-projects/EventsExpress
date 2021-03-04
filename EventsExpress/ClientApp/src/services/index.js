@@ -8,6 +8,7 @@ import InventoryService from './InventoryService'
 import LocationService from './LocationService'
 import RoleService from './RoleService'
 import UserService from './UserService'
+import TrackService from './TrackService'
 
 export {
     AuthenticationService,
@@ -19,5 +20,6 @@ export {
     InventoryService,
     LocationService,
     RoleService,
-    UserService
+    UserService,
+    TrackService
 };

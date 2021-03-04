@@ -248,8 +248,8 @@ namespace EventsExpress.Db.EF
                 {
                     case EntityState.Modified:
                         {
-                            var newValue = change.CurrentValues[prop.Name].ToString();
-                            var oldValue = change.OriginalValues[prop.Name].ToString();
+                            var newValue = change.CurrentValues[prop.Name]?.ToString();
+                            var oldValue = change.OriginalValues[prop.Name]?.ToString();
 
                             if (oldValue != newValue)
                             {

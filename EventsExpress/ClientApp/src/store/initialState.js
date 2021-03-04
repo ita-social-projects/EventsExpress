@@ -163,6 +163,22 @@ const initialState = {
         },
         filter: eventHelper.getDefaultEventFilter(),
     },
+    tracks: {
+        isPending: false,
+        isError: false,
+        data: {
+            items:{},
+            pageViewModel: {},
+        },
+        filter: {
+            page: 1,
+            userName: "",
+            changesType: [],
+            dateFrom: null,
+            dateTo: null,
+            entityName: []
+        }
+    },
     inventories: {
         isPending: true,
         listInventoriesErrorMessage: false,

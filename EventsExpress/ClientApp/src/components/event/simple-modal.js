@@ -51,15 +51,17 @@ export default class SimpleModal extends Component {
                             >
                                 discard
                             </Button>
-                            <Button
-                                fullWidth={true}
-                                type="button"
-                                value="Login"
-                                color="primary"
-                                onClick={this.onConfirm}
-                            >
-                                confirm
-                            </Button>
+                            {this.props.action &&
+                                <Button
+                                    fullWidth={true}
+                                    type="button"
+                                    value="Login"
+                                    color="primary"
+                                    onClick={this.onConfirm}
+                                >
+                                    confirm
+                                </Button>
+                            }
                         </DialogActions>
                     </div>
                 </Dialog>

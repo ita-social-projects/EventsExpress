@@ -259,6 +259,11 @@ namespace EventsExpress.Mapping
 
             #endregion
 
+            #region TRACKS MAPPING
+            CreateMap<ChangeInfo, TrackDTO>();
+
+            #endregion
+
             #region ATTITUDE MAPPING
             CreateMap<AttitudeDTO, AttitudeViewModel>()
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom(src => src.Attitude));
