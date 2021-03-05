@@ -27,18 +27,30 @@ namespace EventsExpress.Core.NotificationHandlers
             var userEvent = _eventService.EventById(notification.EventId);
             var visitors = userEvent.Visitors;
             string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.EventId}/1";
-            string subject = notification.EventStatus == EventStatus.Canceled
-                ? $"The event you have been joined was canceled"
-                : $"The event you have been joined was uncanceled";
 
             foreach (var visitor in visitors)
             {
                 var email = visitor.User.Email;
-                string messageText = notification.EventStatus == EventStatus.Canceled
-                                ? $"Dear {email}, the event you have been joined was CANCELED. The reason is: {notification.Reason} " +
-                                                  $"\"<a href='{eventLink}'>{userEvent.Title}</>\""
-                                : $"Dear {email}, the event you have been joined was UNCANCELED. The reason is: {notification.Reason} " +
+                string messageText;
+                string subject;
+                if (notification.EventStatus == EventStatus.Canceled)
+                {
+                    subject = $"The event you have been joined was canceled";
+                    messageText = $"Dear {email}, the event you have been joined was CANCELED. The reason is: {notification.Reason} " +
                                                   $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
+                }
+                else if (notification.EventStatus == EventStatus.Blocked)
+                {
+                    subject = $"The event you have been joined was blocked";
+                    messageText = $"Dear {email}, the event you have been joined was BLOCKED. The reason is: {notification.Reason} " +
+                                                  $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
+                }
+                else
+                {
+                    subject = $"The event you have been joined was unblocked";
+                    messageText = $"Dear {email}, the event you have been joined was UNBLOCKED. The reason is: {notification.Reason} " +
+                                                  $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
+                }
 
                 await _sender.SendEmailAsync(new EmailDto
                 {

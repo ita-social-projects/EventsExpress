@@ -9,12 +9,11 @@ import {
 import eventHelper from '../helpers/eventHelper';
 import './event-filter.css';
 import EventFilterStatus from './event-filter-status';
-import StatusHistory from '../helpers/EventStatusEnum';
+import eventStatusEnum from '../helpers/eventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {
         super(props);
-        let { x } = this.props.initialFormValues.statuses;
         this.state = {
             viewMore: false,
             needInitializeValues: true,
@@ -86,7 +85,7 @@ class EventFilter extends Component {
                                 {current_user.role === "Admin" &&
                                     <Field name="statuses"
                                         component={EventFilterStatus}
-                                        options={[StatusHistory.Active, StatusHistory.Blocked, StatusHistory.Canceled]}
+                                        options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}
                                     />
                                 }
                             </div>
@@ -132,7 +131,7 @@ class EventFilter extends Component {
                             Search
                         </Button>
                     </div>
-                     
+
                 </form>
             </div>
         </>

@@ -1,7 +1,6 @@
 'use strict';
 
 import { stringify as queryStringStringify } from 'query-string';
-import StatusHistory from './EventStatusEnum';
 
 const eventHelper = (function () {
     return {
@@ -35,7 +34,7 @@ const eventHelper = (function () {
                 dateFrom: undefined,
                 dateTo: undefined,
                 categories: [],
-                statuses: []
+                statuses: [0,1,2]
             }
         },
         getQueryStringByEventFilter: function (filter) {

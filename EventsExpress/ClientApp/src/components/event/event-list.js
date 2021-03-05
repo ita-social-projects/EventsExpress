@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event-list-action';
 import Event from './event-item';
 import { change_event_status } from '../../actions/event-item-view';
-import StatusHistory from '../helpers/EventStatusEnum';
+import eventStatusEnumStatusHistory from '../helpers/eventStatusEnum';
 
 
 class EventList extends Component {
@@ -58,8 +58,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         reset_events: () => dispatch(reset_events()),
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
-        onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Blocked)),
-        onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Active))
+        onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Blocked)),
+        onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active))
 
     }
 };

@@ -22,7 +22,7 @@ import SocialShareMenu from './share/SocialShareMenu';
 import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
-import StatusHistory from '../helpers/EventStatusEnum';
+import eventStatusEnum from '../helpers/eventStatusEnum';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -106,8 +106,8 @@ export default class Event extends Component {
                 <Card
                     className={classes.cardCanceled}
                     style={{
-                        backgroundColor: (eventStatus ===StatusHistory.Blocked) ? "gold" : "",
-                        opacity: (eventStatus === StatusHistory.Canceled) ? 0.5 : 1
+                        backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
+                        opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
 
                     }}
                 >

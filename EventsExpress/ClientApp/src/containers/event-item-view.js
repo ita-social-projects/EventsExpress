@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
-import StatusHistory from '../components/helpers/EventStatusEnum';
+import eventStatusEnum from '../components/helpers/eventStatusEnum';
 import Spinner from '../components/spinner';
 import get_event, { 
     join, 
@@ -79,8 +79,8 @@ const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
-    cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Canceled)),
-    unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, StatusHistory.Active)),
+    cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Canceled)),
+    unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
     promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),

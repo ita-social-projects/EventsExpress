@@ -29,7 +29,6 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
-            _mediator = mediator;
         }
 
         public async Task SetStatusEvent(Guid eventId, string reason, EventStatus eventStatus)
@@ -48,7 +47,7 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
         }
 
-        private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
+        public EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
         {
             var record = new EventStatusHistory
             {
