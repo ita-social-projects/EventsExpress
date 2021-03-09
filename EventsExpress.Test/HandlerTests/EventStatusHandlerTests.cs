@@ -58,10 +58,10 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _eventService = new Mock<IEventService>();
+            _userService = new Mock<IUserService>();
             _cancelEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _blockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _unblockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
-            _userService = new Mock<IUserService>();
             _event = new Event
             {
                 Id = _idEvent,
@@ -124,35 +124,35 @@ namespace EventsExpress.Test.HandlerTests
                 EventStatus = EventStatus.Active,
             };
             _cancelEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Canceled)).Returns(_eventStatusHistoryCanceled);
-            _blockEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Canceled)).Returns(_eventStatusHistoryBlocked);
-            _unblockEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Canceled)).Returns(_eventStatusHistoryUnBlocked);
+            _blockEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Blocked)).Returns(_eventStatusHistoryBlocked);
+            _unblockEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Active)).Returns(_eventStatusHistoryUnBlocked);
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);
-            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _eventService.Object);
-            _blockEventHandler = new EventStatusHandler(_emailService.Object, _eventService.Object);
-            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _eventService.Object);
+            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
+            _blockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
+            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
         }
 
         [Test]
         public void Handle_AllCanceledUsers_AllSubscribingUsers()
         {
             var result = _cancelEventHandler.Handle(_cancelEventStatusMessage, CancellationToken.None);
-            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
 
         [Test]
         public void Handle_AllBlockedUsers_AllSubscribingUsers()
         {
             var result = _blockEventHandler.Handle(_blockEventStatusMessage, CancellationToken.None);
-            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
 
         [Test]
         public void Handle_AllUnBlockUsers_AllSubscribingUsers()
         {
             var result = _unblockEventHandler.Handle(_unblockEventStatusMessage, CancellationToken.None);
-            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
+            _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
     }
 }

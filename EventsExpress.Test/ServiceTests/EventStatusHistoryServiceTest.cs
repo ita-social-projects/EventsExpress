@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -48,26 +51,21 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Set status event")]
-        public void SetStatusEvent_InvalidEventId_ReturnFalse()
+        public void SetStatusEvent_InvalidEventId_ThrowsException()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.SetStatusEvent(eventId, reason, eventStatus));
         }
 
         [Test]
         [Category("Set status event")]
-        public void SetStatusEvent_CreateEventStatus_ReturnTrue()
+        public async Task SetStatusEvent_InsertEventStatus_ReturnTrue()
         {
-            var result = service.SetStatusEvent(eventId, reason, eventStatus);
-
-            Assert.IsNotNull(result);
+             await service.SetStatusEvent(eventId, reason, eventStatus);
+             var res = Context.EventStatusHistory.LastOrDefault(e => e.EventId == eventId && e.EventStatus == eventStatus);
+             Assert.IsNotNull(res);
+             mockMediator.Verify(m => m.Publish(It.IsAny<EventStatusMessage>(), default), Times.Once);
         }
 
-        // [Test]
-        // [Category("Set status event")]
-        // public void SetStatusEvent_CreatedEventStatus_ReturnTrue()
-        // {
-        //    Assert.DoesNotThrowAsync(async () => await service.SetStatusEvent(eventId, reason, eventStatus));
-        // }
         [Test]
         [Category("Create event status record")]
         public void CreateEventStatusRecord_EventCreated_ReturnTrue()
