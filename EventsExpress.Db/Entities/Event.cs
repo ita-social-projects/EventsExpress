@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
@@ -7,9 +8,6 @@ namespace EventsExpress.Db.Entities
     [Track]
     public class Event : BaseEntity
     {
-        [Track]
-        public bool IsBlocked { get; set; }
-
         [Track]
         public string Title { get; set; }
 
@@ -27,6 +25,9 @@ namespace EventsExpress.Db.Entities
 
         [Track]
         public int MaxParticipants { get; set; }
+
+        [NotMapped]
+        public bool IsBlocked { get; set; }
 
         [Track]
         public Guid? PhotoId { get; set; }

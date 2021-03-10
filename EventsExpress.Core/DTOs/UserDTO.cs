@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Google.Apis;
 
 namespace EventsExpress.Core.DTOs
 {
