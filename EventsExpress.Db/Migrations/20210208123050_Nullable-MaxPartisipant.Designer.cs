@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210208123050_Nullable-MaxPartisipant")]
+    partial class NullableMaxPartisipant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,6 +133,9 @@ namespace EventsExpress.Db.Migrations
                     b.Property<bool?>("IsBlocked")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
 
@@ -173,14 +178,8 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("OnlineMeeting")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Point>("Point")
                         .HasColumnType("geography");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -329,37 +328,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Message");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NotificationTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Own Event Change"
-                        },
-                        new
-                        {
-                            Id = 0,
-                            Name = "Profile Change"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Visited Event Change"
-                        });
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Permission", b =>
@@ -576,10 +544,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
-
                     b.HasKey("Id");
 
                     b.HasIndex("PhotoId");
@@ -665,21 +629,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId", "EventId");
 
                     b.ToTable("UserEventInventories");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("NotificationTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "NotificationTypeId");
-
-                    b.HasIndex("NotificationTypeId");
-
-                    b.ToTable("UserNotificationTypes");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
@@ -923,21 +872,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("Inventories")
                         .HasForeignKey("UserId", "EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.NotificationType", "NotificationType")
-                        .WithMany("Users")
-                        .HasForeignKey("NotificationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "User")
-                        .WithMany("NotificationTypes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

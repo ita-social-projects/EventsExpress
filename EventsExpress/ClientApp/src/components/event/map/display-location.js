@@ -21,6 +21,9 @@ class DisplayLocation extends Component {
                 <DisplayOnline locationPath={this.props.location.onlineMeeting} />
             )
         }
+        else {
+            return null
+        }
     }
 }
 
