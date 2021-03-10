@@ -11,8 +11,6 @@ namespace EventsExpress.Core.DTOs
     {
         public Guid Id { get; set; }
 
-        public bool IsBlocked { get; set; }
-
         public bool IsReccurent { get; set; }
 
         public string Title { get; set; }

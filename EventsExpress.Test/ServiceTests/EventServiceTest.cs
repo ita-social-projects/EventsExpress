@@ -100,7 +100,6 @@ namespace EventsExpress.Test.ServiceTests
                 Owners = users,
                 PhotoId = eventDto.PhotoId,
                 Title = eventDto.Title,
-                IsBlocked = eventDto.IsBlocked,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
                 Point = eventDto.Point,
