@@ -183,7 +183,7 @@ namespace EventsExpress.Controllers
             try
             {
                 int pageSize = 5;
-                var result = _eventService.GetAllDraftEvents(page, pageSize, _authService.GetCurrentUser(HttpContext.User).Id, out int count);
+                var result = _eventService.GetAllDraftEvents(page, pageSize, out int count);
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(result),

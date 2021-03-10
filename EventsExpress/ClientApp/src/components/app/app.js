@@ -68,7 +68,7 @@ export default class App extends Component {
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
                         <Route path='/editEvent/:id/' component={DraftEditWrapper} />
-                        <Route path='/Drafts/:page' component={EventDraftListWrapper} />
+                        <Route path='/drafts' component={EventDraftListWrapper} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>

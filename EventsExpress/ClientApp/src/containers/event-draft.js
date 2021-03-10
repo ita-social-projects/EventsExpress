@@ -14,7 +14,7 @@ const history = createBrowserHistory({ forceRefresh: true });
 class EventDraftWrapper extends Component {
 
     handleClick = () => {
-        history.push(`/Drafts/1`);
+        history.push(`/drafts`);
     }
 
     componentWillMount = () => {

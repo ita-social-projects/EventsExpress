@@ -60,8 +60,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AllDraft_OkResult()
         {
             int x = 1;
-            service.Setup(e => e.GetAllDraftEvents(1, 1, It.IsAny<Guid>(), out x)).Returns(new List<EventDto>());
-            auth.Setup(e => e.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(new UserDto());
+            service.Setup(e => e.GetAllDraftEvents(1, 1, out x)).Returns(new List<EventDto>());
             var expected = eventController.AllDraft();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }

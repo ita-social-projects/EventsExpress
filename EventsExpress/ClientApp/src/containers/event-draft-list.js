@@ -13,9 +13,7 @@ class EventDraftListWrapper extends Component {
     }
 
     componentDidMount() {
-
-        const { page } = this.props.match.params.page;
-        this.props.get_drafts(page);
+        this.props.get_drafts(1);
     }
 
     componentDidUpdate(prevProps) {

@@ -60,7 +60,7 @@ class LeftSidebar extends Component {
                                         text={"Profile"}
                                     />
                                     <NavItem
-                                         to={'/Drafts/1'}
+                                         to={'/drafts'}
                                          icon={'fa fa-edit'}
                                          text={"Draft"}
                                     />
