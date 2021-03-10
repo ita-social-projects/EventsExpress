@@ -173,6 +173,7 @@ namespace EventsExpress.Controllers
         /// This method have to return all events.
         /// </summary>
         /// <returns>The method returns filltered events.</returns>
+        /// <param name="page">Param page defines page count.</param>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [Authorize]

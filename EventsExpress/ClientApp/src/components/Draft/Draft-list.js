@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import DraftEventCard from './Draft-item';
+import DraftEventCard from './DraftEventCard';
 import RenderList from '../event/RenderList'
 
 class DraftList extends Component {
