@@ -21,21 +21,20 @@ export function get_events(filters) {
         return Promise.resolve();
     }
 }
-export function get_drafts() {
-    return dispatch => {
+
+export function get_drafts(page = 1) {
+    return async dispatch => {
         dispatch(setEventPending(true));
-        const res = api_serv.getAllDrafts();
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(getEvents(response));
-            } else {
-                dispatch(setEventError(response.error));
-            }
-        });
+        let response = await api_serv.getAllDrafts(page);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        let jsonRes = await response.json();
+        dispatch(getEvents(jsonRes));
+        return Promise.resolve();
     }
 }
-
-
 
 export function setEventPending(data) {
     return {

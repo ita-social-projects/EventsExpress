@@ -465,9 +465,10 @@ namespace EventsExpress.Test.ServiceTests
 
         public void GetAllDrafts_Works()
         {
+            int x = 1;
             MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            var result = service.GetAllDraftEvents(userId);
+            var result = service.GetAllDraftEvents(1, 1, userId, out x);
             Assert.AreEqual(1, result.Count());
         }
 

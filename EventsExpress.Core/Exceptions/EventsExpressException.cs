@@ -22,9 +22,9 @@ namespace EventsExpress.Core.Exceptions
         public EventsExpressException(string message, Dictionary<string, string> customData)
             : base(message)
         {
-            CustomData = customData;
+            ValidationErrors = customData;
         }
 
-        public Dictionary<string, string> CustomData { get; set; }
+        public Dictionary<string, string> ValidationErrors { get; set; }
     }
 }

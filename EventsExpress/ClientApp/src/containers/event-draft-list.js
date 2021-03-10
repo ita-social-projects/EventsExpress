@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import EventList from '../components/Draft/Draft-list';
+import DraftList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
-import { get_drafts } from '../actions/event-list-action';
+import { get_drafts, reset_events } from '../actions/event-list-action';
 import eventHelper from '../components/helpers/eventHelper';
 
 
@@ -13,8 +13,9 @@ class EventDraftListWrapper extends Component {
     }
 
     componentDidMount() {
-        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
-        this.props.get_events(queryString);
+
+        const { page } = this.props.match.params.page;
+        this.props.get_drafts(page);
     }
 
     componentDidUpdate(prevProps) {
@@ -36,14 +37,16 @@ class EventDraftListWrapper extends Component {
         const { items } = this.props.events.data;
         const spinner = isPending ? <Spinner /> : null;
         const content = 
-             <EventList
+             <DraftList
                 current_user={current_user}
                 data_list={items}
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
+                reset_events={this.props.reset_events}
+                get_drafts={this.props.get_drafts}
+                match={this.props.match}
             />
-
         return <>
             {
                  spinner || content
@@ -61,11 +64,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_events: (filter) => dispatch(get_drafts(filter)),
+        get_drafts: (page) => dispatch(get_drafts(page)),
+        reset_events: () => dispatch(reset_events()),
     }
 };
 
-export default connect(
+    export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(EventDraftListWrapper);

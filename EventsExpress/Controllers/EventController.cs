@@ -176,16 +176,17 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [Authorize]
-        [HttpGet("[action]")]
-        public IActionResult AllDraft()
+        [HttpGet("[action]/{page:int}")]
+        public IActionResult AllDraft(int page = 1)
         {
             try
             {
-                var result = _eventService.GetAllDraftEvents(_authService.GetCurrentUser(HttpContext.User).Id);
+                int pageSize = 5;
+                var result = _eventService.GetAllDraftEvents(page, pageSize, _authService.GetCurrentUser(HttpContext.User).Id, out int count);
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(result),
-                    PageViewModel = new PageViewModel(result.Count(), 1, 1000),
+                    PageViewModel = new PageViewModel(count, page, pageSize),
                 };
                 return Ok(viewModel);
             }

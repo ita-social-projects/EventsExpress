@@ -19,9 +19,9 @@ namespace EventsExpress.Filters
                         { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
-                if (eventsExpressException.CustomData.Count > 0)
+                if (eventsExpressException.ValidationErrors.Count > 0)
                 {
-                    foreach (var x in eventsExpressException.CustomData)
+                    foreach (var x in eventsExpressException.ValidationErrors)
                     {
                         errorTexts.Errors.Add(x.Key, new[] { x.Value });
                     }

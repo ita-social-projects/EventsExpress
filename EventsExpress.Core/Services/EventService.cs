@@ -166,7 +166,6 @@ namespace EventsExpress.Core.Services
             {
                 new EventStatusHistory
                 {
-                    // check db (null fields)
                     EventStatus = EventStatus.Draft,
                     CreatedOn = DateTime.UtcNow,
                     UserId = CurrentUser().Id,
@@ -461,7 +460,7 @@ namespace EventsExpress.Core.Services
             return Mapper.Map<IEnumerable<EventDto>>(result);
         }
 
-        public IEnumerable<EventDto> GetAllDraftEvents(Guid user_id)
+        public IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, Guid user_id, out int count)
         {
             var events = Context.Events
                 .Include(e => e.Photo)
@@ -477,7 +476,8 @@ namespace EventsExpress.Core.Services
                 .AsQueryable();
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus == EventStatus.Draft);
             events = events.Where(x => x.Owners.Any(o => o.UserId == user_id));
-            var result = events.ToList();
+            count = events.Count();
+            var result = events.OrderBy(x => x.DateFrom).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return Mapper.Map<IEnumerable<Event>, IEnumerable<EventDto>>(result);
         }
 

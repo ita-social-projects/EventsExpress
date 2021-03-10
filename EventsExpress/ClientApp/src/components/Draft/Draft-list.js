@@ -1,12 +1,21 @@
 ﻿import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { reset_events } from '../../actions/event-list-action';
 import DraftEventCard from './Draft-item';
 import RenderList from '../event/RenderList'
 
 class DraftList extends Component {
-    handlePageChange = (page) => { };
-
+    constructor() {
+        super();
+        this.state = {
+            currentPage: 1
+        };
+    }
+    handlePageChange = (page) => {
+        this.props.get_drafts(page);
+        this.setState({
+            currentPage: page
+        });
+    };
+        
     renderSingleItem = (item) => (
         <DraftEventCard
             key={item.id + item.isBlocked}
@@ -22,13 +31,4 @@ class DraftList extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        reset_events: () => dispatch(reset_events()),
-    }
-};
-
-export default connect(
-    null,
-    mapDispatchToProps
-)(DraftList);
+export default DraftList;

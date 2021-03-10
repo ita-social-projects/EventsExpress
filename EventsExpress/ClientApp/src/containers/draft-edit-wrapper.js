@@ -1,7 +1,7 @@
 ﻿import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Spinner from '../components/spinner';
-import EditEventWrapper from './edit-event';
+import EventDraftWrapper from './event-draft';
 import get_event, { 
     resetEvent, 
     cancel_event, 
@@ -9,8 +9,8 @@ import get_event, {
     }
 from '../actions/event-item-view';
 
-class EventItemViewWrapperNew extends Component{
-
+class DraftEditWrapper extends Component{
+    EventItemViewWrapperNew
     componentWillMount(){    
         const { id } = this.props.match.params;        
         this.props.get_event(id);
@@ -32,7 +32,7 @@ class EventItemViewWrapperNew extends Component{
         const { isPending } = this.props.event;
         return isPending
             ? <Spinner />
-            : <EditEventWrapper/>
+            : <EventDraftWrapper/>
     }
 }
 
@@ -49,4 +49,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventItemViewWrapperNew);
+export default connect(mapStateToProps, mapDispatchToProps)(DraftEditWrapper);

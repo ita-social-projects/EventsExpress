@@ -26,7 +26,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count);
 
-        IEnumerable<EventDto> GetAllDraftEvents(Guid user_id);
+        IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, Guid user_id, out int count);
 
         IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel);
 
