@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,158 +75,13 @@ namespace EventsExpress.Db.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             // user config
             modelBuilder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
             modelBuilder.Entity<User>()
                 .Property(u => u.Salt).HasMaxLength(16);
-
-            modelBuilder.Entity<UnitOfMeasuring>()
-                .HasIndex(u => new { u.UnitName, u.ShortName }).IsUnique().HasFilter("IsDeleted = 0");
-
-            // user-event many-to-many configs
-            // user as visitor
-            modelBuilder.Entity<UserEvent>()
-                .HasKey(t => new { t.UserId, t.EventId });
-            modelBuilder.Entity<UserEvent>()
-                .HasOne(ue => ue.User)
-                .WithMany(u => u.EventsToVisit)
-                .HasForeignKey(ue => ue.UserId);
-            modelBuilder.Entity<UserEvent>()
-                .HasOne(ue => ue.Event)
-                .WithMany(e => e.Visitors)
-                .HasForeignKey(ue => ue.EventId);
-
-            modelBuilder.Entity<EventOwner>()
-                .HasKey(c => new { c.UserId, c.EventId });
-            modelBuilder.Entity<EventOwner>()
-                .HasOne(ue => ue.User)
-                .WithMany(u => u.Events)
-                .HasForeignKey(ue => ue.UserId);
-            modelBuilder.Entity<EventOwner>()
-                .HasOne(ue => ue.Event)
-                .WithMany(e => e.Owners)
-                .HasForeignKey(ue => ue.EventId);
-            modelBuilder.Entity<EventOwner>()
-                .HasIndex(p => new { p.UserId, p.EventId });
-
-            // user as owner
-            modelBuilder.Entity<Event>()
-                .Property(u => u.DateFrom).HasColumnType("date");
-            modelBuilder.Entity<Event>()
-                .Property(u => u.DateTo).HasColumnType("date");
-
-            // rates config
-            modelBuilder.Entity<Rate>()
-                .HasOne(r => r.UserFrom)
-                .WithMany(u => u.Rates)
-                .HasForeignKey(r => r.UserFromId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Rate>()
-                .HasOne(r => r.Event)
-                .WithMany(e => e.Rates)
-                .HasForeignKey(r => r.EventId).OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Relationship>()
-                .HasOne(r => r.UserFrom)
-                .WithMany(u => u.Relationships)
-                .HasForeignKey(r => r.UserFromId).OnDelete(DeleteBehavior.Restrict);
-
-            // user-category many-to-many
-            modelBuilder.Entity<UserCategory>()
-                .HasKey(t => new { t.UserId, t.CategoryId });
-            modelBuilder.Entity<UserCategory>()
-                .HasOne(uc => uc.User)
-                .WithMany(u => u.Categories)
-                .HasForeignKey(uc => uc.UserId);
-            modelBuilder.Entity<UserCategory>()
-                .HasOne(uc => uc.Category)
-                .WithMany(c => c.Users)
-                .HasForeignKey(uc => uc.CategoryId);
-
-            // event-category many-to-many
-            modelBuilder.Entity<EventCategory>()
-                .HasKey(t => new { t.EventId, t.CategoryId });
-            modelBuilder.Entity<EventCategory>()
-                .HasOne(ec => ec.Event)
-                .WithMany(e => e.Categories)
-                .HasForeignKey(ec => ec.EventId);
-            modelBuilder.Entity<EventCategory>()
-                .HasOne(ec => ec.Category)
-                .WithMany(c => c.Events)
-                .HasForeignKey(uc => uc.CategoryId);
-
-            // EventStatusHistory config
-            modelBuilder.Entity<EventStatusHistory>()
-                .HasOne(esh => esh.User)
-                .WithMany(u => u.ChangedStatusEvents);
-            modelBuilder.Entity<EventStatusHistory>()
-                .HasOne(esh => esh.Event)
-                .WithMany(e => e.StatusHistory);
-
-            // category config
-            modelBuilder.Entity<Category>()
-                .Property(c => c.Name).IsRequired();
-
-            // comment config
-            modelBuilder.Entity<Comments>()
-                .HasOne(c => c.Parent).WithMany(prop => prop.Children).HasForeignKey(c => c.CommentsId);
-
-            // event config
-            modelBuilder.Entity<Event>()
-                .Property(c => c.MaxParticipants).HasDefaultValue(int.MaxValue);
-
-            // inventory config
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Event)
-                .WithMany(e => e.Inventories)
-                .HasForeignKey(i => i.EventId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.UnitOfMeasuring)
-                .WithMany(u => u.Inventories)
-                .HasForeignKey(i => i.UnitOfMeasuringId).OnDelete(DeleteBehavior.Restrict);
-
-            // userevent-inventory many-to-many
-            modelBuilder.Entity<UserEventInventory>()
-                .HasKey(t => new { t.InventoryId, t.UserId, t.EventId });
-            modelBuilder.Entity<UserEventInventory>()
-                .HasOne(uei => uei.UserEvent)
-                .WithMany(ue => ue.Inventories)
-                .HasForeignKey(uei => new { uei.UserId, uei.EventId }).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<UserEventInventory>()
-                .HasOne(uei => uei.Inventory)
-                .WithMany(i => i.UserEventInventories)
-                .HasForeignKey(uei => uei.InventoryId).OnDelete(DeleteBehavior.Restrict);
-
-            // user-notification
-            modelBuilder.Entity<UserNotificationType>()
-              .HasKey(t => new { t.UserId, t.NotificationTypeId });
-            modelBuilder.Entity<UserNotificationType>()
-                .HasOne(ec => ec.User)
-                .WithMany(e => e.NotificationTypes)
-                .HasForeignKey(ec => ec.UserId);
-            modelBuilder.Entity<UserNotificationType>()
-                .HasOne(ec => ec.NotificationType)
-                .WithMany(c => c.Users)
-                .HasForeignKey(uc => uc.NotificationTypeId);
-
-            // notification type
-            modelBuilder.Entity<NotificationType>()
-                .HasData(new[]
-                {
-                    new NotificationType { Id = NotificationChange.OwnEvent, Name = "Own Event Change" },
-                    new NotificationType { Id = NotificationChange.Profile, Name = "Profile Change" },
-                    new NotificationType { Id = NotificationChange.VisitedEvent, Name = "Visited Event Change" },
-                });
-            modelBuilder.Entity<NotificationType>()
-            .HasKey(c => c.Id);
-
-            modelBuilder.Entity<NotificationType>()
-                .Property(c => c.Id)
-                .ValueGeneratedNever();
-            modelBuilder.Entity<NotificationType>()
-                .Property(c => c.Name)
-                .IsRequired();
         }
 
         public void SaveTracks()
