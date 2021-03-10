@@ -47,3 +47,6 @@
     overflow-wrap: anywhere;    
     scroll-behavior: auto;
 }
+.cancel-text {
+  font-size: 24px;
+}

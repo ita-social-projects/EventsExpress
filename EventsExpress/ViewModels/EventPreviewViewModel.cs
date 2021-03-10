@@ -1,4 +1,5 @@
 ﻿using System;
+using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels.Base;
 
 namespace EventsExpress.ViewModels
@@ -9,8 +10,8 @@ namespace EventsExpress.ViewModels
 
         public string PhotoUrl { get; set; }
 
-        public bool IsBlocked { get; set; }
-
         public int CountVisitor { get; set; }
+
+        public EventStatus EventStatus { get; set; }
     }
 }

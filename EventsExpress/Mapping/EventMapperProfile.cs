@@ -30,6 +30,7 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.EventSchedule.Periodicity))
                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.EventSchedule != null)))
                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
+               .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus))
                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
                        src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
@@ -61,6 +62,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
+                .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))));
 
             CreateMap<EventDto, EventViewModel>()
@@ -87,7 +89,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
                 .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
-                .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
@@ -103,7 +104,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                         src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
-                .ForMember(dest => dest.IsBlocked, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
                 .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());

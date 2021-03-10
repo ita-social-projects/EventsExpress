@@ -214,6 +214,8 @@ export const minLength = min => value =>
 export const maxLength15 = maxLength(15);
 export const minLength2 = minLength(6);
 export const minLength3 = minLength(4);
+export const minLength5 = minLength(5);
+export const required = value => value ? undefined : 'Field is required'
 
 export const renderSelectPeriodicityField = ({
     input,
@@ -299,7 +301,7 @@ export const renderTextField = ({
         helperText={touched && error}
         {...input}
         {...custom}
-    />
+        />
 )
 
 export const renderSelectField = ({
