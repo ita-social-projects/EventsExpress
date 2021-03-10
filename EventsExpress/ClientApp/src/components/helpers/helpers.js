@@ -12,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-
+import './helpers.css'
 export const radioButton = ({ input, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
@@ -22,13 +22,14 @@ export const radioButton = ({ input, ...rest }) => (
         </RadioGroup>
     </FormControl>
 )
-export const radioLocationType = ({ input, ...rest }) => (
+export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) => (
     <FormControl>
 
         <RadioGroup {...input} {...rest}>
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
+        {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 )
 
@@ -153,6 +154,9 @@ export const validate = values => {
 
 export const validateEventForm = values => {
 
+    if (!values)
+        return values;
+
     if (!values.isPublic) {
         values.isPublic = false;
     }
@@ -172,34 +176,6 @@ export const validateEventForm = values => {
     return values;
 }
 
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
-    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
-    minValue = new Date().getFullYear() - 115;
-    maxValue = new Date().getFullYear() - 15;
-
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-        peekNextMonth
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-    />
-}
-
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime, disabled }) => {
-    value = value || defaultValue || new Date();
-    minValue = minValue || new Date();
-
-    return <DatePicker
-        onChange={onChange}
-        minDate={new Date(minValue)}
-        selected={new Date(value) || new Date()}
-        disabled={disabled}
-    />
-}
 
 export const maxLength = max => value =>
     value && value.length > max
@@ -239,7 +215,7 @@ export const renderSelectPeriodicityField = ({
             <option value=""></option>
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
-        {renderFromHelper({ touched, error })}
+        {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 
 
@@ -254,7 +230,7 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
             textField={textField}
             placeholder={placeholder}
         />
-        {renderFromHelper({ touched, error })}
+        {renderErrorsFromHelper({ touched, error })}
     </>
 
 export const renderTextArea = ({
@@ -265,17 +241,17 @@ export const renderTextArea = ({
     meta: { touched, invalid, error },
     ...custom
 }) => (
-    <TextField
-        label={label}
-        defaultValue={defaultValue}
-        multiline
-        rows="4"
-        fullWidth
-        {...input}
-        error={touched && invalid}
-        helperText={touched && error}
-        variant="outlined"
-    />)
+        <TextField
+            label={label}
+            defaultValue={defaultValue}
+            multiline
+            rows="4"
+            fullWidth
+            {...input}
+            error={touched && invalid}
+            helperText={touched && error}
+            variant="outlined"
+        />)
 
 export const renderTextField = ({
     label,
@@ -287,20 +263,63 @@ export const renderTextField = ({
     meta: { touched, invalid, error },
     ...custom
 }) => (
-    <TextField
-        rows={rows}
-        fullWidth={fullWidth === undefined ? true : false}
-        label={label}
-        placeholder={label}
-        error={touched && invalid}
-        defaultValue={defaultValue}
-        value={defaultValue}
-        inputProps={inputProps}
-        helperText={touched && error}
-        {...input}
-        {...custom}
+        <TextField
+            rows={rows}
+            fullWidth={fullWidth === undefined ? true : false}
+            label={label}
+            placeholder={label}
+            error={touched && invalid}
+            defaultValue={defaultValue}
+            value={defaultValue}
+            inputProps={inputProps}
+            helperText={touched && error}
+            {...input}
+            {...custom}
+        />
+    )
+
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
+    minValue = new Date().getFullYear() - 115;
+    maxValue = new Date().getFullYear() - 15;
+
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
     />
-)
+}
+
+export const renderDatePicker = ({
+    input: { onChange, value },
+    defaultValue,
+    minValue,
+    showTime,
+    disabled,
+    meta: { error, touched },
+}) => {
+    value = value || defaultValue || new Date();
+    minValue = minValue || new Date();
+    const containerClass = error ? "invalid" : "valid";
+
+    return (
+        <div>
+            <DatePicker
+                className={`m-0 ${containerClass}`}
+                onChange={onChange}
+                minDate={new Date(minValue)}
+                selected={new Date(value) || new Date()}
+                disabled={disabled}
+            />
+            {renderErrorsFromHelper({ touched, error })}
+        </div>
+    )
+}
 
 export const renderSelectField = ({
     input,
@@ -309,27 +328,27 @@ export const renderSelectField = ({
     children,
     ...custom
 }) => (
-    <FormControl error={touched && error}>
-        <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
-        <Select
-            fullWidth
-            native
-            error={touched && invalid}
-            helperText={touched && error}
-            {...input}
-            {...custom}
-            inputProps={{
-                name: { label },
-                id: 'age-native-simple'
-            }}
-        >
-            {children}
-        </Select>
-        {renderFromHelper({ touched, error })}
-    </FormControl>
-)
+        <FormControl error={touched && error}>
+            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+            <Select
+                fullWidth
+                native
+                error={touched && invalid}
+                helperText={touched && error}
+                {...input}
+                {...custom}
+                inputProps={{
+                    name: { label },
+                    id: 'age-native-simple'
+                }}
+            >
+                {children}
+            </Select>
+            {renderErrorsFromHelper({ touched, error })}
+        </FormControl>
+    )
 
-const renderFromHelper = ({ touched, error }) => {
+const renderErrorsFromHelper = ({ touched, error }) => {
     if (!(touched && error)) {
         return;
     } else {

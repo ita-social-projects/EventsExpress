@@ -135,7 +135,6 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
                 .Include(u => u.Role)
-                .Include(u => u.Email)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
