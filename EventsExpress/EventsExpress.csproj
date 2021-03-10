@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
@@ -44,13 +44,22 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\build\**" />
+    <Compile Remove="ClientApp\src\components\Новая папка\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\components\Новая папка\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="ClientApp\build\**" />
+    <EmbeddedResource Remove="ClientApp\src\components\Новая папка\**" />
     <None Remove="ClientApp\build\**" />
+    <None Remove="ClientApp\src\components\Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\containers\event-item-draft-view.js" />
+    <None Remove="ClientApp\src\containers\event-item-draft-view.js" />
   </ItemGroup>
 
   <ItemGroup>

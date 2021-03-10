@@ -13,7 +13,7 @@ namespace EventsExpress.Validation
         {
             _eventService = eventSrv;
 
-            CascadeMode = CascadeMode.StopOnFirstFailure;
+            CascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.EventId)
                 .NotEqual(Guid.Empty)
