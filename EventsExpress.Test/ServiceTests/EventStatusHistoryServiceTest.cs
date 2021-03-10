@@ -67,17 +67,5 @@ namespace EventsExpress.Test.ServiceTests
              Assert.IsNotNull(res);
              mockMediator.Verify(m => m.Publish(It.IsAny<EventStatusMessage>(), default), Times.Once);
         }
-
-        [Test]
-        [Category("Create event status record")]
-        public void CreateEventStatusRecord_EventCreated_ReturnTrue()
-        {
-            var ev = new Event()
-            {
-                Title = "testTitle",
-            };
-            var result = service.CreateEventStatusRecord(ev, reason, eventStatus);
-            Assert.IsNotNull(result);
-        }
     }
 }

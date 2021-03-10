@@ -47,7 +47,7 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
         }
 
-        public EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
+        private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
         {
             var record = new EventStatusHistory
             {
