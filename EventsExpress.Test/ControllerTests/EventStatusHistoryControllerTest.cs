@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using EventsExpress.Controllers;
-using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
@@ -22,25 +18,32 @@ namespace EventsExpress.Test.ControllerTests
         private EventStatusHistoryController controller;
 
         private Guid eventId = Guid.NewGuid();
-        private string reason = "testReason";
         private EventStatusHistoryViewModel eventStatus;
-        private EventStatus evStatus = EventStatus.Blocked;
 
         [SetUp]
         protected void Initialize()
         {
             service = new Mock<IEventStatusHistoryService>();
             controller = new EventStatusHistoryController(service.Object);
-            eventStatus = new EventStatusHistoryViewModel { EventId = eventId, EventStatus = EventStatus.Blocked };
+            eventStatus = new EventStatusHistoryViewModel { EventId = eventId, Reason = "test", EventStatus = EventStatus.Blocked };
         }
 
         [Test]
         public async Task SetStatus_OkResult()
         {
-            service.Setup(item => item.SetStatusEvent(eventId, reason, evStatus)).Returns(Task.CompletedTask);
+            service.Setup(item => item.SetStatusEvent(eventStatus.EventId, eventStatus.Reason, eventStatus.EventStatus)).Returns(Task.CompletedTask);
 
             var expected = await controller.SetStatus(eventId, eventStatus);
+            Assert.DoesNotThrowAsync(() => Task.FromResult(expected));
             Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void SetStatus_ThrowsException()
+        {
+            service.Setup(item => item.SetStatusEvent(eventStatus.EventId, eventStatus.Reason, eventStatus.EventStatus)).Throws<EventsExpressException>();
+
+            Assert.ThrowsAsync<EventsExpressException>(() => controller.SetStatus(eventId, eventStatus));
         }
     }
 }

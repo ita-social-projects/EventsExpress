@@ -60,6 +60,8 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Set status event")]
         public async Task SetStatusEvent_InsertEventStatus_ReturnTrue()
         {
+             Context.Events.Add(new Event { Id = eventId });
+             Context.SaveChanges();
              await service.SetStatusEvent(eventId, reason, eventStatus);
              var res = Context.EventStatusHistory.LastOrDefault(e => e.EventId == eventId && e.EventStatus == eventStatus);
              Assert.IsNotNull(res);
