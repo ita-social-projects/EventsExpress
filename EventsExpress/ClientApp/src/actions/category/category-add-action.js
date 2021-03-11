@@ -1,6 +1,6 @@
 ﻿import { CategoryService } from '../../services';
 import get_categories from './category-list-action';
-import { SubmissionError, reset } from 'redux-form';
+import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_CATEGORY_PENDING = "SET_CATEGORY_PENDING";
@@ -14,42 +14,38 @@ export function add_category(data) {
         dispatch(setCategoryPending(true));
         let response = await api_serv.setCategory(data);
         if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
+            throw new SubmissionError(buildValidationState(response.error));
         }
         dispatch(setCategorySuccess(true));
         dispatch(get_categories());
-        dispatch(set_edited_category(null));
-        dispatch(reset('add-form'));
-    }
-    return Promise.resolve();
-}
-
-export function set_edited_category(id) {
-    return dispatch => {
-        dispatch(setCategoryError(null));
-        dispatch(setCategoryEdited(id));
+        return Promise.resolve();
     }
 }
+    export function set_edited_category(id) {
+        return dispatch => {
+            dispatch(setCategoryEdited(id));
+        }
+    }
 
-function setCategoryEdited(data) {
-    return {
-        type: SET_CATEGORY_EDITED,
-        payload: data
-    };
-}
+    function setCategoryEdited(data) {
+        return {
+            type: SET_CATEGORY_EDITED,
+            payload: data
+        };
+    }
 
-export function setCategoryPending(data) {
-    return {
-        type: SET_CATEGORY_PENDING,
-        payload: data
-    };
-}
+    export function setCategoryPending(data) {
+        return {
+            type: SET_CATEGORY_PENDING,
+            payload: data
+        };
+    }
 
-export function setCategorySuccess(data) {
-    return {
-        type: SET_CATEGORY_SUCCESS,
-        payload: data
-    };
-}
+    export function setCategorySuccess(data) {
+        return {
+            type: SET_CATEGORY_SUCCESS,
+            payload: data
+        };
+    }
 
 

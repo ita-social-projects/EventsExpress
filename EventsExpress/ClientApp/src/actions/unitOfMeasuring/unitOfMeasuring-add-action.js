@@ -1,6 +1,6 @@
 import UnitOfMeasuringService from '../../services/unitOfMeasuringService';
 import get_unitsOfMeasuring from './unitsOfMeasuring-list-action';
-import { SubmissionError, reset } from 'redux-form';
+import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_UNIT_OF_MEASURING_PENDING = "SET_UNIT_OF_MEASURING_PENDING";
@@ -18,10 +18,6 @@ export function add_unitOfMeasuring(data) {
         }
         dispatch(setUnitOfMeasuringSuccess(true));
         dispatch(get_unitsOfMeasuring());
-        dispatch(set_edited_unitOfMeasuring(null));
-        dispatch(reset('add-form'));
-        //  dispatch(setUnitOfMeasuringPending(false));
-        //  dispatch(setUnitOfMeasuringSuccess(false));
         return Promise.resolve();
     }
 }

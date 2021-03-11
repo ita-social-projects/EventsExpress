@@ -18,14 +18,14 @@ class CategoryAddWrapper extends React.Component {
         this.props.add({ ...values });
     };
 
-    //componentWillUpdate = () => {
-    //    const {isCategorySuccess } = this.props.status;
+    componentWillUpdate = () => {
+        const {isCategorySuccess } = this.props.status;
         
-    //    if (isCategorySuccess){
-    //        this.props.reset();
-    //        this.props.edit_cansel();
-    //    }
-    //}
+        if (isCategorySuccess){
+            this.props.reset();
+            this.props.edit_cansel();
+        }
+    }
 
     render() {
         return (this.props.item.id !== this.props.editedCategory) 

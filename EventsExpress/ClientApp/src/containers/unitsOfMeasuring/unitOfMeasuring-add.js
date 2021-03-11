@@ -19,14 +19,14 @@ class UnitOfMeasuringAddWrapper extends React.Component {
         this.props.add({ ...values });
     };
 
-    //componentWillUpdate = () => {
-    //    const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
+    componentWillUpdate = () => {
+        const {isUnitOfMeasuringSuccess } = this.props.status;
 
-    //    if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
-    //        this.props.reset();
-    //        this.props.edit_cansel();
-    //    }
-    //}
+        if (isUnitOfMeasuringSuccess) {
+            this.props.reset();
+            this.props.edit_cansel();
+        }
+    }
 
     render() {
         console.log(this.props.status);
