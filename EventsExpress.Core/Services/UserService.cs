@@ -7,12 +7,9 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Notifications;
-using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -49,65 +46,16 @@ namespace EventsExpress.Core.Services
             }
 
             var user = Mapper.Map<User>(userDto);
-
-            user.Role = Context.Roles.FirstOrDefault(r => r.Name == "User");
-
-            var result = Insert(user);
-            if (result.Email != user.Email || result.Id == Guid.Empty)
+            var newUser = Insert(user);
+            if (newUser.Email != user.Email || newUser.Id == Guid.Empty)
             {
                 throw new EventsExpressException("Registration failed");
             }
 
-            await Context.SaveChangesAsync();
-            userDto.Id = result.Id;
-            if (!userDto.EmailConfirmed)
-            {
-                await _mediator.Publish(new RegisterVerificationMessage(userDto));
-            }
-        }
-
-        public async Task ConfirmEmail(CacheDto cacheDto)
-        {
-            var user = Context.Users.Find(cacheDto.UserId);
-            if (user == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            if (string.IsNullOrEmpty(cacheDto.Token))
-            {
-                throw new EventsExpressException("Token is null or empty");
-            }
-
-            if (cacheDto.Token != _cacheHelper.GetValue(cacheDto.UserId).Token)
-            {
-                throw new EventsExpressException("Validation failed");
-            }
-
-            user.EmailConfirmed = true;
-            await Context.SaveChangesAsync();
-            _cacheHelper.Delete(cacheDto.UserId);
-        }
-
-        public async Task PasswordRecover(UserDto userDto)
-        {
-            var user = Context.Users.Find(userDto.Id);
-            if (user == null)
-            {
-                throw new EventsExpressException("Not found");
-            }
-
-            var newPassword = Guid.NewGuid().ToString();
-            user.Salt = PasswordHasher.GenerateSalt();
-            user.PasswordHash = PasswordHasher.GenerateHash(newPassword, user.Salt);
+            var account = Context.Accounts.Find(userDto.AccountId);
+            account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
-            await _emailService.SendEmailAsync(new EmailDto
-            {
-                Subject = "EventsExpress password recovery",
-                RecepientEmail = user.Email,
-                MessageText = $"Hello, {user.Email}.\nYour new Password is: {newPassword}",
-            });
         }
 
         public async Task Update(UserDto userDto)
@@ -134,15 +82,29 @@ namespace EventsExpress.Core.Services
                 Context.Users
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
-                .Include(u => u.Role)
-                .Include(u => u.Email)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthExternal)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
                     .ThenInclude(n => n.NotificationType)
+                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId));
 
             user.Rating = GetRating(user.Id);
+
+            return user;
+        }
+
+        public UserDto GetByAuthLocalId(Guid authLocalId)
+        {
+            var user = Mapper.Map<UserDto>(
+                Context.Users
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .FirstOrDefault(u => u.Account.AuthLocal.Id == authLocalId));
 
             return user;
         }
@@ -153,7 +115,10 @@ namespace EventsExpress.Core.Services
                  Context.Users
                 .Include(u => u.Photo)
                 .Include(u => u.Events)
-                .Include(u => u.Role)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthExternal)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
@@ -163,7 +128,7 @@ namespace EventsExpress.Core.Services
 
             if (user != null)
             {
-                user.CanChangePassword = !string.IsNullOrEmpty(user.PasswordHash);
+                user.CanChangePassword = !string.IsNullOrEmpty(user.Account?.AuthLocal?.PasswordHash);
                 user.Rating = GetRating(user.Id);
             }
 
@@ -174,37 +139,36 @@ namespace EventsExpress.Core.Services
         {
             var users = Context.Users
                 .Include(u => u.Photo)
-                .Include(u => u.Role)
-                .AsNoTracking()
-                .AsEnumerable();
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .AsNoTracking();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
                 ? users.Where(x => x.Email.Contains(model.KeyWord) ||
                     (x.Name != null && x.Name.Contains(model.KeyWord)))
                 : users;
 
-            users = !string.IsNullOrEmpty(model.Role)
-                ? users.Where(x => x.Role.Name.Contains(model.Role))
-                : users;
-
+            // users = !string.IsNullOrEmpty(model.Role)
+            //    ? users.Where(x => x.Role.Name.Contains(model.Role))
+            //    : users;
             users = model.Blocked
-                ? users.Where(x => x.IsBlocked == model.Blocked)
+                ? users.Where(x => x.Account.IsBlocked == model.Blocked)
                 : users;
 
             users = model.UnBlocked
-                ? users.Where(x => x.IsBlocked == !model.UnBlocked)
+                ? users.Where(x => x.Account.IsBlocked == !model.UnBlocked)
                 : users;
 
             users = (model.IsConfirmed != null)
-                ? users.Where(x => x.EmailConfirmed == model.IsConfirmed)
+                ? users.Where(x => x.Account.AuthLocal.EmailConfirmed == model.IsConfirmed)
                 : users;
 
             count = users.Count();
 
-            users = users.Skip((model.Page - 1) * model.PageSize)
+            var usersList = users.Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
 
-            var result = Mapper.Map<IEnumerable<UserDto>>(users);
+            var result = Mapper.Map<IEnumerable<UserDto>>(usersList);
 
             foreach (var u in result)
             {
@@ -221,12 +185,15 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UserDto> GetUsersByRole(string role)
         {
-            var users = Context.Users
-               .Include(u => u.Role)
-               .Where(user => user.Role.Name == role)
-               .Include(user => user.RefreshTokens)
+            var users = Context.Roles
+                .Include(r => r.Accounts)
+                    .ThenInclude(ar => ar.Account)
+                        .ThenInclude(a => a.User)
+               .Where(r => r.Name == role)
                .AsNoTracking()
-               .AsEnumerable();
+               .FirstOrDefault()
+               .Accounts
+               .Select(ar => ar.Account.User);
 
             return Mapper.Map<IEnumerable<UserDto>>(users);
         }
@@ -237,7 +204,6 @@ namespace EventsExpress.Core.Services
 
             var users = Context.Users
                 .Include(u => u.Photo)
-                .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Where(user => user.Categories
@@ -246,30 +212,6 @@ namespace EventsExpress.Core.Services
                 .AsEnumerable();
 
             return Mapper.Map<IEnumerable<UserDto>>(users);
-        }
-
-        public UserDto GetUserByRefreshToken(string token)
-        {
-            var user = Context.Users
-                .Include(u => u.Role)
-                .Include(u => u.RefreshTokens)
-                .AsNoTracking()
-                .SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token.Equals(token)));
-
-            return Mapper.Map<UserDto>(user);
-        }
-
-        public async Task ChangeRole(Guid userId, Guid roleId)
-        {
-            var newRole = Context.Roles.Find(roleId);
-            var user = Context.Users.Find(userId);
-            if (user == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            user.Role = newRole ?? throw new EventsExpressException("Invalid role Id");
-            await Context.SaveChangesAsync();
         }
 
         public async Task ChangeAvatar(Guid userId, IFormFile avatar)
@@ -298,32 +240,6 @@ namespace EventsExpress.Core.Services
             {
                 throw new EventsExpressException("Bad image file");
             }
-        }
-
-        public async Task Unblock(Guid userId)
-        {
-            var user = Context.Users.Find(userId);
-            if (user == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            user.IsBlocked = false;
-            await Context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedUserMessage(user));
-        }
-
-        public async Task Block(Guid userId)
-        {
-            var user = Context.Users.Find(userId);
-            if (user == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            user.IsBlocked = true;
-            await Context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedUserMessage(user));
         }
 
         public async Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories)

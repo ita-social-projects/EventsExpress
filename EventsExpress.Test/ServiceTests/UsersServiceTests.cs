@@ -25,7 +25,7 @@ namespace EventsExpress.Test.ServiceTests
 
         private UserDto existingUserDTO;
         private User existingUser;
-        private Role role;
+        private Db.Entities.Role role;
 
         private Guid roleId = Guid.NewGuid();
         private Guid userId = Guid.NewGuid();
@@ -52,7 +52,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockCacheHelper.Object,
                 mockEmailService.Object);
 
-            role = new Role
+            role = new Db.Entities.Role
             {
                 Id = roleId,
                 Name = "Admin",
@@ -191,7 +191,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             CacheDto cache = new CacheDto()
             {
-                UserId = existingUser.Id,
+                AuthLocalId = existingUser.Id,
                 Token = token,
             };
 
@@ -203,11 +203,11 @@ namespace EventsExpress.Test.ServiceTests
         {
             CacheDto cache = new CacheDto()
             {
-                UserId = existingUser.Id,
+                AuthLocalId = existingUser.Id,
                 Token = "validToken",
             };
 
-            mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
+            mockCacheHelper.Setup(u => u.GetValue(cache.AuthLocalId))
                 .Returns(new CacheDto { Token = cache.Token });
 
             Assert.DoesNotThrowAsync(async () => await service.ConfirmEmail(cache));
@@ -218,11 +218,11 @@ namespace EventsExpress.Test.ServiceTests
         {
             CacheDto cache = new CacheDto()
             {
-                UserId = existingUser.Id,
+                AuthLocalId = existingUser.Id,
                 Token = "validToken,",
             };
 
-            mockCacheHelper.Setup(u => u.GetValue(cache.UserId))
+            mockCacheHelper.Setup(u => u.GetValue(cache.AuthLocalId))
                 .Returns(new CacheDto { Token = "invalidToken" });
 
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.ConfirmEmail(cache));

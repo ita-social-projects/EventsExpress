@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,14 @@ namespace EventsExpress.Db.EF
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public DbSet<Account> Accounts { get; set; }
+
+        public DbSet<AuthLocal> AuthLocal { get; set; }
+
+        public DbSet<AuthExternal> AuthExternal { get; set; }
+
+        public DbSet<AccountRole> AccountRoles { get; set; }
+
         public DbSet<Permission> Permissions { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -31,7 +40,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Rate> Rates { get; set; }
 
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Entities.Role> Roles { get; set; }
 
         public DbSet<Relationship> Relationships { get; set; }
 
@@ -75,11 +84,11 @@ namespace EventsExpress.Db.EF
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
             // user config
             modelBuilder.Entity<User>()
                 .Property(u => u.Birthday).HasColumnType("date");
-            modelBuilder.Entity<User>()
-                .Property(u => u.Salt).HasMaxLength(16);
 
             modelBuilder.Entity<UnitOfMeasuring>()
                 .HasIndex(u => new { u.UnitName, u.ShortName }).IsUnique().HasFilter("IsDeleted = 0");

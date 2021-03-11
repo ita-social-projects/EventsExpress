@@ -101,23 +101,6 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to change role of user.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <param name="roleId">Param roleId defines the role identifier.</param>
-        /// <returns>The method changes role for users.</returns>
-        /// <response code="200">Change role success.</response>
-        /// <response code="400">Change role failed.</response>
-        [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
-        {
-            await _userService.ChangeRole(userId, roleId);
-
-            return Ok();
-        }
-
-        /// <summary>
         /// This method is to block user.
         /// </summary>
         /// <param name="userId">Param userId defines the user identifier.</param>
@@ -128,7 +111,7 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock(Guid userId)
         {
-            await _userService.Unblock(userId);
+            await _authService.Unblock(userId);
 
             return Ok();
         }
@@ -144,7 +127,7 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block(Guid userId)
         {
-            await _userService.Block(userId);
+            await _authService.Block(userId);
 
             return Ok();
         }

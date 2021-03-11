@@ -24,7 +24,7 @@ export default class AuthenticationService {
     }
 
     setRegister = async (data) => {
-        const res = await baseService.setResource('Authentication/register', data);
+        const res = await baseService.setResource('Authentication/registerBegin', data);
         return !res.ok
             ? { error: await res.text() }
             : res;

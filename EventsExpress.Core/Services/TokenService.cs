@@ -9,31 +9,32 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventsExpress.Core.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService : BaseService<RefreshToken>, ITokenService
     {
-        private readonly IUserService _userService;
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
         private readonly IOptions<JwtOptionsModel> _jwtOptions;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
         public TokenService(
+            AppDbContext context,
+            IMapper mapper,
             IOptions<JwtOptionsModel> opt,
             IJwtSigningEncodingKey jwtSigningEncodingKey,
-            IUserService userService,
-            IHttpContextAccessor httpContextAccessor,
-            IMapper mapper)
+            IHttpContextAccessor httpContextAccessor)
+            : base(context, mapper)
         {
             _jwtOptions = opt;
             _signingEncodingKey = jwtSigningEncodingKey;
-            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
@@ -53,15 +54,10 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public string GenerateAccessToken(UserDto user)
+        public string GenerateAccessToken(Account account, string email)
         {
             var lifeTime = _jwtOptions.Value.LifeTime;
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.Name),
-                new Claim(ClaimTypes.Name, user.Id.ToString()),
-            };
+            var claims = GetClaims(account, email);
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(lifeTime),
@@ -72,7 +68,58 @@ namespace EventsExpress.Core.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
 
-        public RefreshToken GenerateRefreshToken()
+        public async Task<AuthenticateResponseModel> RefreshToken(string token)
+        {
+            var account = Context.Accounts
+                .Include(a => a.User)
+                .Include(a => a.AccountRoles)
+                    .ThenInclude(ar => ar.Role)
+                .Include(a => a.RefreshTokens)
+                .SingleOrDefault(a => a.RefreshTokens.Any(t => t.Token.Equals(token)));
+
+            // return null if no user found with token
+            if (account == null)
+            {
+                return null;
+            }
+
+            var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
+
+            // return null if token is no longer active
+            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
+            {
+                return null;
+            }
+
+            // replace old refresh token with a new one and save
+            var newRefreshToken = GenerateRefreshToken(refreshToken.Email);
+            refreshToken.Revoked = DateTime.Now;
+            refreshToken.RevokedByIp = IpAddress;
+            refreshToken.ReplacedByToken = newRefreshToken.Token;
+            account.RefreshTokens.Add(newRefreshToken);
+
+            await Context.SaveChangesAsync();
+
+            // generate new jwt
+            var jwtToken = GenerateAccessToken(account, refreshToken.Email);
+            return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
+        }
+
+        private Claim[] GetClaims(Account account, string email)
+        {
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, account.UserId.ToString()));
+            claims.Add(new Claim(ClaimTypes.Email, email));
+            var roles = account.AccountRoles.Select(ar => ar.Role);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
+
+            return claims.ToArray();
+        }
+
+        public RefreshToken GenerateRefreshToken(string email)
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
@@ -111,48 +158,9 @@ namespace EventsExpress.Core.Services
             return principal;
         }
 
-        public async Task<AuthenticateResponseModel> RefreshToken(string token)
-        {
-            var user = _userService.GetUserByRefreshToken(token);
-
-            // return null if no user found with token
-            if (user == null)
-            {
-                return null;
-            }
-
-            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
-
-            // return null if token is no longer active
-            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
-            {
-                return null;
-            }
-
-            // replace old refresh token with a new one and save
-            var newRefreshToken = GenerateRefreshToken();
-            refreshToken.Revoked = DateTime.Now;
-            refreshToken.RevokedByIp = IpAddress;
-            refreshToken.ReplacedByToken = newRefreshToken.Token;
-            user.RefreshTokens = new List<RefreshToken> { newRefreshToken, refreshToken };
-
-            await _userService.Update(user);
-
-            // generate new jwt
-            var jwtToken = GenerateAccessToken(user);
-
-            return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
-        }
-
         public async Task<bool> RevokeToken(string token)
         {
-            var user = _userService.GetUserByRefreshToken(token);
-            if (user == null)
-            {
-                return false;
-            }
-
-            var refreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == token);
+            var refreshToken = Context.RefreshTokens.SingleOrDefault(rt => rt.Token == token);
 
             // return false if token is not active
             if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive || refreshToken == null)
@@ -163,8 +171,7 @@ namespace EventsExpress.Core.Services
             // revoke token and save
             refreshToken.Revoked = DateTime.Now;
             refreshToken.RevokedByIp = IpAddress;
-            user.RefreshTokens = new List<RefreshToken> { refreshToken };
-            await _userService.Update(user);
+            await Context.SaveChangesAsync();
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
 
             return true;

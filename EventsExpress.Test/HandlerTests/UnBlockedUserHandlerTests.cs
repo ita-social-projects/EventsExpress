@@ -20,7 +20,7 @@ namespace EventsExpress.Test.HandlerTests
         private string _emailUser = "user@gmail.com";
         private User _user;
         private UserDto _userDto;
-        private UnblockedUserMessage _unBlockedUserMessage;
+        private UnblockedAccountMessage _unBlockedUserMessage;
         private NotificationChange _notificationChange = NotificationChange.Profile;
         private Guid[] _usersIds;
 
@@ -40,7 +40,7 @@ namespace EventsExpress.Test.HandlerTests
                 Id = _idUser,
                 Email = _emailUser,
             };
-            _unBlockedUserMessage = new UnblockedUserMessage(_user);
+            _unBlockedUserMessage = new UnblockedAccountMessage(_user);
             _usersIds = new Guid[] { _idUser };
             _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
         }

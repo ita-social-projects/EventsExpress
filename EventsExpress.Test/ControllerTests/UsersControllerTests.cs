@@ -186,7 +186,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
             string roleName = "Admin";
-            Role role = new Role { Id = Guid.NewGuid(), Name = roleName };
+            Db.Entities.Role role = new Db.Entities.Role { Id = Guid.NewGuid(), Name = roleName };
             UserDto firstAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
             UserDto secondAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
             var admins = new UserDto[] { firstAdmin, secondAdmin };

@@ -59,7 +59,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = userId,
                 Name = "Name",
                 Email = "Email",
-                Role = new Role(),
+                Role = new Db.Entities.Role(),
             };
 
             validUserButNotVisitor = new User
@@ -67,7 +67,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = validUserId,
                 Name = "Name",
                 Email = "Email",
-                Role = new Role(),
+                Role = new Db.Entities.Role(),
             };
 
             inventory = new Inventory
