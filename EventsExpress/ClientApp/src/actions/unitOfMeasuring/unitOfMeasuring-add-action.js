@@ -1,42 +1,34 @@
 import UnitOfMeasuringService from '../../services/unitOfMeasuringService';
-import get_unitsOfMeasuring from './unitsOfMeasuring-list';
-
+import get_unitsOfMeasuring from './unitsOfMeasuring-list-action';
+import { SubmissionError, reset } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_UNIT_OF_MEASURING_PENDING = "SET_UNIT_OF_MEASURING_PENDING";
 export const SET_UNIT_OF_MEASURING_SUCCESS = "SET_UNIT_OF_MEASURING_SUCCESS";
-export const SET_UNIT_OF_MEASURING_ERROR = "SET_UNIT_OF_MEASURING_ERROR";
 export const SET_UNIT_OF_MEASURING_EDITED = "SET_UNIT_OF_MEASURING_EDITED";
 
 const api_serv = new UnitOfMeasuringService();
 
-
 export function add_unitOfMeasuring(data) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setUnitOfMeasuringPending(true));
-
-        let res;
-        if  (data.id) {
-            res = api_serv.editUnitOfMeasuring(data);
-        } else {
-            res = api_serv.setUnitOfMeasuring(data);
-        }        
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setUnitOfMeasuringSuccess(true));
-                dispatch(get_unitsOfMeasuring());
-            } else {
-                dispatch(setUnitOfMeasuringError(response.error));
-            }
-        });
+        let response = await api_serv.setUnitOfMeasuring(data)       
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setUnitOfMeasuringSuccess(true));
+        dispatch(get_unitsOfMeasuring());
+        dispatch(set_edited_unitOfMeasuring(null));
+        dispatch(reset('add-form'));
+        //  dispatch(setUnitOfMeasuringPending(false));
+        //  dispatch(setUnitOfMeasuringSuccess(false));
+        return Promise.resolve();
     }
 }
 
-
 export function set_edited_unitOfMeasuring(id) {
-   
     return dispatch => {
-        dispatch(setUnitOfMeasuringError(null));
-        dispatch(setUnitOfMeasuringEdited(id));     
+        dispatch(setUnitOfMeasuringEdited(id));
     }
 }
 
@@ -61,10 +53,4 @@ export function setUnitOfMeasuringSuccess(data) {
     };
 }
 
-export function setUnitOfMeasuringError(data) {
-    return {
-        type: SET_UNIT_OF_MEASURING_ERROR,
-        payload: data
-    };
-}
 

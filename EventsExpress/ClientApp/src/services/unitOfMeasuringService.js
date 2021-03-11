@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class UnitOfMeasuringService {
     getUnitsOfMeasuring = async () => {
-        return await baseService.getResource('unitofmeasuring/all');
+        return await baseService.getResourceNew('unitofmeasuring/all');
     }
 
     setUnitOfMeasuringDelete = async (data) => {

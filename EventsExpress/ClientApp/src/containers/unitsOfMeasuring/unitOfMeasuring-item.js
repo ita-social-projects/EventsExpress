@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import UnitOfMeasuringItem from "../../components/unitOfMeasuring/unitOfMeasuring-item";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
-import { add_unitOfMeasuring } from "../../actions/unitOfMeasuring/add-unitOfMeasuring";
-import { delete_unitOfMeasuring } from "../../actions/unitOfMeasuring/delete-unitOfMeasuring";
-import { set_edited_unitOfMeasuring } from "../../actions/unitOfMeasuring/add-unitOfMeasuring";
+import { add_unitOfMeasuring, set_edited_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
+import { delete_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-delete-action";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -19,13 +18,13 @@ class UnitOfMeasuringItemWrapper extends Component {
         }
     };
 
-    componentWillUpdate = () => {
-        const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
+    //componentWillUpdate = () => {
+    //    const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
 
-        if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
-            this.props.edit_cancel();
-        }
-    }
+    //    if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
+    //        this.props.edit_cancel();
+    //    }
+    //}
 
     isDeleteConfirm = () => {
         const { unitName, shortName, id } = this.props.item;
@@ -57,7 +56,6 @@ class UnitOfMeasuringItemWrapper extends Component {
                     item={this.props.item}
                     callback={this.save}
                     cancel={edit_cancel}
-                    message={this.props.status.unitOfMeasuringError}
                 />
                 : <UnitOfMeasuringItem
                     item={this.props.item}

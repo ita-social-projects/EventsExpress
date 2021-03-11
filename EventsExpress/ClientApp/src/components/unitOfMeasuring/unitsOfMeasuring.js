@@ -3,7 +3,7 @@ import UnitOfMeasuringAddWrapper from '../../containers/unitsOfMeasuring/unitOfM
 import Spinner from '../spinner';
 import UnitOfMeasuringListWrapper from '../../containers/unitsOfMeasuring/UnitOfMeasuringListWrapper';
 import { connect } from 'react-redux';
-import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list';
+import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 
 class UnitsOfMeasuring extends Component {
 

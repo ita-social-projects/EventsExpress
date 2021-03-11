@@ -6,12 +6,9 @@ import IconButton from "@material-ui/core/IconButton";
 
 import {
     add_category, 
-    setCategoryError, 
     setCategoryPending, 
-    setCategorySuccess } from '../../actions/category/add-category';
-import { 
-    set_edited_category } from "../../actions/category/add-category";
-
+    setCategorySuccess,
+    set_edited_category} from '../../actions/category/category-add-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
@@ -21,14 +18,14 @@ class CategoryAddWrapper extends React.Component {
         this.props.add({ ...values });
     };
 
-    componentWillUpdate = () => {
-        const {categoryError, isCategorySuccess } = this.props.status;
+    //componentWillUpdate = () => {
+    //    const {isCategorySuccess } = this.props.status;
         
-        if (!categoryError && isCategorySuccess){
-            this.props.reset();
-            this.props.edit_cansel();
-        }
-    }
+    //    if (isCategorySuccess){
+    //        this.props.reset();
+    //        this.props.edit_cansel();
+    //    }
+    //}
 
     render() {
         return (this.props.item.id !== this.props.editedCategory) 
@@ -51,7 +48,6 @@ class CategoryAddWrapper extends React.Component {
                     item={this.props.item}
                     callback={this.submit} 
                     cancel={this.props.edit_cansel}
-                    message={this.props.status.categoryError}
                 />
                 <td></td>
             </tr>
@@ -72,13 +68,11 @@ const mapDispatchToProps = (dispatch, props) => {
         set_category_edited: () => dispatch(set_edited_category(props.item.id)),
         edit_cansel: () => {
             dispatch(set_edited_category(null));
-            dispatch(setCategoryError(null));
         },
         reset: () => {
             dispatch(reset('add-form'));
             dispatch(setCategoryPending(false));
             dispatch(setCategorySuccess(false));
-            dispatch(setCategoryError(null));
         }
     };
 };
