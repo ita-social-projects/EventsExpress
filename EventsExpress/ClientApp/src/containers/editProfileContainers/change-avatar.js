@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import ChangeAvatar from '../../components/profile/editProfile/change-avatar';
-import change_avatar from '../../actions/EditProfile/change-avatar';
+import change_avatar from '../../actions/EditProfile/avatar-change-action';
 
 class ChangeAvatarWrapper extends Component {
     submit = values => {

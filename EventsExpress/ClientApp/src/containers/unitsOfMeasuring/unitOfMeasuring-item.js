@@ -18,13 +18,13 @@ class UnitOfMeasuringItemWrapper extends Component {
         }
     };
 
-    //componentWillUpdate = () => {
-    //    const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
+    componentWillUpdate = () => {
+        const {isUnitOfMeasuringSuccess } = this.props.status;
 
-    //    if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
-    //        this.props.edit_cancel();
-    //    }
-    //}
+        if (isUnitOfMeasuringSuccess) {
+            this.props.edit_cancel();
+        }
+    }
 
     isDeleteConfirm = () => {
         const { unitName, shortName, id } = this.props.item;

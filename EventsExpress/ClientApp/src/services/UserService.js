@@ -60,12 +60,7 @@ export default class UserService {
             : res;
     }
 
-    setUserCategory = async (data) => {
-        const res = await baseService.setResource('Users/EditUserCategory', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserCategory = data => baseService.setResource('Users/EditUserCategory', data);
 
     setUserBlock = async (id) => {
         const res = await baseService.setResource(`Users/Block/?userId=${id}`);

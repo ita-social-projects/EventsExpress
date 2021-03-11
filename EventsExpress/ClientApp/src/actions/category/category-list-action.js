@@ -1,5 +1,6 @@
 ﻿
 import { CategoryService } from '../../services';
+import { setErrorAllertFromResponse } from './../alert-action';
 
 export const SET_CATEGORIES_PENDING = "SET_CATEGORIES_PENDING";
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
@@ -20,7 +21,6 @@ export default function get_categories() {
         return Promise.resolve();
     }
 }
-
 
 function setCategoryPending(data) {
     return {
