@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
+import eventStatusEnum from '../components/helpers/eventStatusEnum';
 import Spinner from '../components/spinner';
 import get_event, { 
     join, 
     leave, 
     resetEvent, 
-    cancel_event, 
+    change_event_status, 
     approveUser, 
     deleteFromOwners, 
     promoteToOwner
@@ -31,8 +32,12 @@ class EventItemViewWrapper extends Component{
         this.props.leave(this.props.current_user.id, this.props.event.data.id);
     }
 
-    onCancel = (reason) => {
-        this.props.cancel(this.props.event.data.id, reason);
+    onCancel = (reason, eventStatus) => {
+        this.props.cancel(this.props.event.data.id, reason, eventStatus);
+    }
+
+    onUnCancel = (reason, eventStatus) => {
+        this.props.unCancel(this.props.event.data.id, reason, eventStatus);
     }
 
     onApprove = (userId, buttonAction) => {
@@ -56,6 +61,7 @@ class EventItemViewWrapper extends Component{
                 onLeave={this.onLeave} 
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
+                onUnCancel={this.onUnCancel}
                 onApprove={this.onApprove}
                 onDeleteFromOwners={this.onDeleteFromOwners}
                 onPromoteToOwner={this.onPromoteToOwner}
@@ -73,7 +79,8 @@ const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
     join: (userId, eventId) => dispatch(join(userId, eventId)),
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
-    cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),
+    cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Canceled)),
+    unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
     promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),
