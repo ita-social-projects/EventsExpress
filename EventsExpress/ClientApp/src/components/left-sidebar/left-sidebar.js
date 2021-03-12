@@ -53,11 +53,16 @@ class LeftSidebar extends Component {
                                 text={"Home"}
                             />
                             {this.props.user.id &&
-                                <>
+                                    <>
                                     <NavItem
                                         to={'/user/' + this.props.user.id}
                                         icon={'fa fa-user'}
                                         text={"Profile"}
+                                    />
+                                    <NavItem
+                                         to={'/drafts'}
+                                         icon={'fa fa-edit'}
+                                         text={"Draft"}
                                     />
                                     <NavItem
                                         to={'/search/users?page=1'}
