@@ -1,10 +1,10 @@
-import { AuthenticationService } from '../services';
-import eventHelper from '../components/helpers/eventHelper';
-import { initialConnection } from './chat';
-import { getUnreadMessages } from './chats';
-import { updateEventsFilters } from './event-list-action';
+import { AuthenticationService } from '../../services';
+import eventHelper from '../../components/helpers/eventHelper';
+import { initialConnection } from '../chat/chat';
+import { getUnreadMessages } from '../chat/chats';
+import { updateEventsFilters } from '../event/event-list-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";

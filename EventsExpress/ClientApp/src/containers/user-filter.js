@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UsersFilters from '../components/users/UsersFilters';
-import { get_users } from '../actions/users';
+import { get_users } from '../actions/users/users';
 import history from '../history';
 class UsersFilterWrapper extends Component {
    

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import get_chats from '../../actions/chats';
+import get_chats from '../../actions/chat/chats';
 import { connect } from 'react-redux';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';

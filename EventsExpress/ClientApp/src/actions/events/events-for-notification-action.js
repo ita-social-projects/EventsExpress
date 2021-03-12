@@ -1,6 +1,6 @@
-import { EventService } from '../services';
-import { setEventPending, getEvents } from './event-list-action';
-import { setErrorAllertFromResponse } from './alert-action';
+import { EventService } from '../../services';
+import { setEventPending, getEvents } from '../event/event-list-action';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 const api_serv = new EventService();
 

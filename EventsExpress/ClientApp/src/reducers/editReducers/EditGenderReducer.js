@@ -1,4 +1,4 @@
-﻿import {editGender} from '../../actions/EditProfile/EditGender';
+﻿import {editGender} from '../../actions/editProfile/editGender';
 
 export const reducer = (
     state = {

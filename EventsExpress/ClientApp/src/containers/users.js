@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {get_users, reset_users } from '../actions/users';
+import { get_users, reset_users } from '../actions/users/users';
 import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';

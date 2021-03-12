@@ -105,12 +105,8 @@ export default class EventsExpressService {
         localStorage.setItem('token', rest.jwtToken);
         return true;
     }
-	setWantToTake = async (data) => {
-        const res = await this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
-    getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+
+    getUsersInventories = eventId => this.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 }

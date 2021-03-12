@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event } from '../actions/event-add-action';
+import { setEventPending, setEventSuccess, edit_event } from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
-import { resetEvent } from '../actions/event-item-view';
+import { resetEvent } from '../actions/event/event-item-view';
 import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
 

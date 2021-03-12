@@ -1,6 +1,6 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { get_SearchUsers, reset_users } from '../actions/users';
+import { get_SearchUsers, reset_users } from '../actions/users/users';
 import Spinner from '../components/spinner';
 import UserItemList from '../components/users/user-item';
 import UserSearchFilterWrapper from '../containers/UserSearchFilterWrapper';

@@ -1,5 +1,5 @@
-﻿import { EventService } from '../services';
-import { setErrorAllertFromResponse } from './alert-action';
+﻿import { EventService } from '../../services';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_EVENTS_PROFILE_PENDING = "SET_EVENTS_PROFILE_PENDING";
 export const GET_EVENTS_PROFILE_SUCCESS = "GET_EVENTS_PROFILE_SUCCESS";

@@ -7,7 +7,7 @@ import edit_event_from_parent, {
     setEventFromParentPending,
     setEventFromParentSuccess
 }
-    from '../actions/event-copy-with-edit-action';
+    from '../actions/event/event-copy-with-edit-action';
 import * as moment from 'moment';
 import { validateEventForm } from '../components/helpers/helpers'
 import get_categories from '../actions/category/category-list-action';

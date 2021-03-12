@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { SET_USERSINVENTORIES_PENDING, GET_USERSINVENTORIES_SUCCESS } from '../actions/usersInventories-action';
+import { SET_USERSINVENTORIES_PENDING, GET_USERSINVENTORIES_SUCCESS } from '../actions/users/users-inventories-action';
 
 
 export const reducer = (state = initialState.usersInventories, action) => {

@@ -1,5 +1,5 @@
 import { UserService } from '../../services';
-import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
+import { setSuccessAllert} from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/helpers.js'
 
@@ -17,13 +17,13 @@ export default function change_avatar(data) {
 
         let response = await api_serv.setAvatar(data);
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));;
-            throw new SubmissionError(buildValidationState(response.error));
+            let jsonRes = await response.json();
+            throw new SubmissionError(buildValidationState(jsonRes));
         }
         dispatch(setAvatarSuccess(true));
         dispatch(updateAvatar(response));
         dispatch(setSuccessAllert('Avatar is update'));
-        return Promise.resolve('success');
+        return Promise.resolve();
     }
 }
 

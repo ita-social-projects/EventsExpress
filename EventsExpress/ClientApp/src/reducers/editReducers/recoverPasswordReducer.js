@@ -1,4 +1,4 @@
-﻿import { recoverPassword } from '../../actions/EditProfile/recoverPassword';
+﻿import { recoverPassword } from '../../actions/editProfile/recoverPassword';
 import initialState from './../../store/initialState'
 
 

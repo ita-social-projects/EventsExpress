@@ -12,7 +12,12 @@ const api_serv = new CategoryService();
 export function add_category(data) {
     return async dispatch => {
         dispatch(setCategoryPending(true));
-        let response = await api_serv.setCategory(data);
+        let response;
+        if (!!(data.id)) {
+            response = await api_serv.editCategory(data)
+        } else {
+            response = await api_serv.setCategory(data)
+        }
         if (!response.ok) {
             throw new SubmissionError(buildValidationState(response.error));
         }

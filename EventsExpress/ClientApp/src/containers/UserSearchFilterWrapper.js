@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserSearchFilter from '../components/users/UserSearchFilter';
-import { get_SearchUsers, change_Filter } from '../actions/users';
+import { get_SearchUsers, change_Filter } from '../actions/users/users';
 
 
 class UserSearchFilterWrapper extends Component {

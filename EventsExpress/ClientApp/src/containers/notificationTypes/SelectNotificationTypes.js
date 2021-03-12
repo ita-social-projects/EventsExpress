@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import setUserNotificationTypes from '../../actions/EditProfile/addUserNotificationType';
+import setUserNotificationTypes from '../../actions/editProfile/addUserNotificationType';
 import get_notificationTypes from '../../actions/notificationType/notificationType-list-action';
 import SelectNotificationType from '../../components/SelectNotificationTypes/SelectNotificationType';
 

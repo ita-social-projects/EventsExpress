@@ -1,4 +1,4 @@
-﻿import { UserService } from '../services';
+﻿import { UserService } from '../../services';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',

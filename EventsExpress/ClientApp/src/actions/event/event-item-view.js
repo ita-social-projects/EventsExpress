@@ -1,4 +1,4 @@
-import { EventService } from '../services';
+import { EventService } from '../../services';
 
 export const GET_EVENT_PENDING = "GET_EVENT_PENDING";
 export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";

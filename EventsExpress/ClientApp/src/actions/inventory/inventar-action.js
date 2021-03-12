@@ -1,9 +1,9 @@
-import { InventoryService } from '../services';
+import { InventoryService } from '../../services';
 import { get_inventories_by_event_id } from './inventory-list-action';
-import { get_users_inventories_by_event_id } from './usersInventories-action';
-import { setErrorAllertFromResponse } from './alert-action';
+import { get_users_inventories_by_event_id } from '../users/users-inventories-action';
+import { setErrorAllertFromResponse } from '../alert-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 const api_serv = new InventoryService();
 
@@ -12,7 +12,7 @@ export function add_item(item, eventId) {
         let response = await api_serv.setItemToInventory(item, eventId);
         dispatch(get_inventories_by_event_id(eventId));
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response.error));
+            throw new SubmissionError(buildValidationState(response));
         }
         dispatch(setInvertarError(null));
         return Promise.resolve();

@@ -1,5 +1,5 @@
-﻿import { CommentService } from '../services';
-import { setErrorAllertFromResponse } from './alert-action';
+﻿import { CommentService } from '../../services';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_COMMENTS_PENDING = "SET_COMMENTS_PENDING";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";

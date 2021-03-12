@@ -2,9 +2,9 @@
 import initialState from '../store/initialState';
 import {
    INITIAL_CONNECTION, RESET_HUB
-}from '../actions/chat';
+} from '../actions/chat/chat';
 
-import { EVENT_WAS_CREATED } from '../actions/event-add-action';
+import { EVENT_WAS_CREATED } from '../actions/event/event-add-action';
 
 export const reducer = (
     state = initialState.hubConnection,

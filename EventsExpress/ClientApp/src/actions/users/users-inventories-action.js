@@ -1,8 +1,8 @@
-import InventoryService from '../services/InventoryService';
-import { get_inventories_by_event_id } from './inventory-list-action';
-import { setErrorAllertFromResponse } from './alert-action';
+import InventoryService from '../../services/InventoryService';
+import { get_inventories_by_event_id } from '../inventory/inventory-list-action';
+import { setErrorAllertFromResponse } from '../alert-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const GET_USERSINVENTORIES_SUCCESS = 'GET_USERSINVENTORIES_SUCCESS';
 export const SET_USERSINVENTORIES_PENDING = 'SET_USERSINVENTORIES_PENDING';

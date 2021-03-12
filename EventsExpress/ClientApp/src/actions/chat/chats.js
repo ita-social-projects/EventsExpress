@@ -1,4 +1,4 @@
-import { ChatService } from '../services';
+import { ChatService } from '../../services';
 
 export const GET_CHATS_PENDING = "GET_CHATS_PENDING";
 export const GET_CHATS_SUCCESS = "GET_CHATS_SUCCESS";
