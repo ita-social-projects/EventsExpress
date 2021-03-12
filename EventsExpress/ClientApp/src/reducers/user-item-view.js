@@ -2,7 +2,7 @@
 import initialState from '../store/initialState';
 import {
     GET_PROFILE_ERROR, GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, RESET_USER
-} from '../actions/user-item-view';
+} from '../actions/user/user-item-view';
 
 export const reducer = (
     state = initialState.profile,

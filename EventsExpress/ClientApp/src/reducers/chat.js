@@ -1,7 +1,7 @@
 import initialState from '../store/initialState';
 import {
     GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, RESET_CHAT, CONCAT_NEW_MSG, RECEIVE_SEEN_MESSAGE
-} from '../actions/chat';
+} from '../actions/chat/chat';
 
 export const reducer = (
     state = initialState.chat,

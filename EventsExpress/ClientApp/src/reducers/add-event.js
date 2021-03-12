@@ -2,7 +2,7 @@
 
 import {
     SET_EVENT_PENDING, SET_EVENT_SUCCESS
-}from '../actions/event-add-action';
+} from '../actions/event/event-add-action';
 
 export const reducer = (state = initialState.add_event, action) => {
 

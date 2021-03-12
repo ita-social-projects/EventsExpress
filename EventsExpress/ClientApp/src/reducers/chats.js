@@ -1,8 +1,8 @@
 import initialState from '../store/initialState';
 import {
     GET_CHATS_ERROR, GET_CHATS_PENDING, GET_CHATS_SUCCESS
-} from '../actions/chats';
-import { RECEIVE_MESSAGE } from '../actions/chat';
+} from '../actions/chat/chats';
+import { RECEIVE_MESSAGE } from '../actions/chat/chat';
 
 export const reducer = (
     state = initialState.chats,

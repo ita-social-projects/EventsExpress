@@ -12,7 +12,12 @@ const api_serv = new UnitOfMeasuringService();
 export function add_unitOfMeasuring(data) {
     return async dispatch => {
         dispatch(setUnitOfMeasuringPending(true));
-        let response = await api_serv.setUnitOfMeasuring(data)       
+        let response;
+        if (!!(data.id)) {
+            response = await api_serv.editUnitOfMeasuring(data)
+        } else {
+            response = await api_serv.setUnitOfMeasuring(data)
+        }
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }

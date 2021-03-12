@@ -1,7 +1,7 @@
 import { SubmissionError } from 'redux-form';
-import { EventService } from '../services';
+import { EventService } from '../../services';
 import get_event from './event-item-view';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";

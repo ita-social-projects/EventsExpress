@@ -1,6 +1,6 @@
 import initialState from '../store/initialState';
-import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users';
-import { blockUser, unBlockUser, changeUserRole } from '../actions/user';
+import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users';
+import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user';
 
 export const reducer = (state = initialState.users, action) => {
     switch(action.type) {

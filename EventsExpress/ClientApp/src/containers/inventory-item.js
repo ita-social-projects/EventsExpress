@@ -4,9 +4,9 @@ import OwnerSeeItem from '../components/inventory/ownerSeeItem';
 import OwnerEditItemForm from '../components/inventory/ownerEditItem';
 import VisitorSeeItem from '../components/inventory/VisitorSeeItem';
 import VisitorEditItemForm from '../components/inventory/visitorTakeItem';
-import { get_inventories_by_event_id }  from '../actions/inventory-list-action';
-import { delete_users_inventory, edit_users_inventory }  from '../actions/usersInventories-action';
-import { delete_item, edit_item, add_item, want_to_take } from '../actions/inventar-action';
+import { get_inventories_by_event_id } from '../actions/inventory/inventory-list-action';
+import { delete_users_inventory, edit_users_inventory } from '../actions/users/users-inventories-action';
+import { delete_item, edit_item, add_item, want_to_take } from '../actions/inventory/inventar-action';
 
 class InventoryItemWrapper extends Component {
 

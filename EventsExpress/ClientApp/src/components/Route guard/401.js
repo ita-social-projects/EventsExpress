@@ -1,14 +1,14 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
-import logout from '../../actions/logout-action';
+import logout from '../../actions/login/logout-action';
 import { isOpen } from '../../actions/modalWind'
 import { setRegisterError } from '../../actions/register'
-import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
-import { setEditGenderError } from '../../actions/EditProfile/EditGender'
-import { setEditBirthdayError } from '../../actions/EditProfile/editBirthday'
-import { getUsersError } from '../../actions/users'
-import { getEventError } from '../../actions/event-item-view'
+import { setEditUsernameError } from '../../actions/editProfile/editUsername'
+import { setEditGenderError } from '../../actions/editProfile/editGender'
+import { setEditBirthdayError } from '../../actions/editProfile/editBirthday'
+import { getUsersError } from '../../actions/users/users'
+import { getEventError } from '../../actions/event/event-item-view'
 import { setRolesError } from '../../actions/roles'
 
 

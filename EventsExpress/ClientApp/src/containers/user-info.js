@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { block_user, unblock_user } from '../actions/user'
+import { block_user, unblock_user } from '../actions/user/user'
 import UserInfo from '../components/user-info'
 import { UserBlock } from '../components/user-info/user-block'
 import UserRoleWrapper from '../containers/user-role'

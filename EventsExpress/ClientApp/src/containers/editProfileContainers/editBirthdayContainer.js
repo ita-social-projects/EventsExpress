@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import EditBirthday from "../../components/profile/editProfile/editBirthday";
 import { connect } from "react-redux";
-import editBirthday from "../../actions/EditProfile/editBirthday";
+import editBirthday from "../../actions/editProfile/editBirthday";
 
 class EditBirthdayContainer extends React.Component {
     submit = value => {

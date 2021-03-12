@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import eventHelper from '../components/helpers/eventHelper';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import { get_events } from '../actions/event-list-action';
+import { get_events } from '../actions/event/event-list-action';
 import BadRequest from '../components/Route guard/400';
 import Unauthorized from '../components/Route guard/401';
 import Forbidden from '../components/Route guard/403';

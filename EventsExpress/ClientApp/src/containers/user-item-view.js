@@ -3,13 +3,13 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Profile from '../components/profile/user-profile';
 import Spinner from '../components/spinner';
-import get_user, { setAttitude, reset_user } from '../actions/user-item-view';
+import get_user, { setAttitude, reset_user } from '../actions/user/user-item-view';
 import {
     get_future_events,
     get_past_events,
     get_visited_events,
     get_events_togo
-} from '../actions/events-for-profile-action';
+} from '../actions/events/events-for-profile-action';
 import BadRequest from '../components/Route guard/400';
 import Forbidden from '../components/Route guard/403';
 

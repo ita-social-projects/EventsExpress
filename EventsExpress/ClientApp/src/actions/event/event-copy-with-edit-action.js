@@ -1,5 +1,5 @@
-import { EventService } from '../services';
-import { setErrorAllertFromResponse, setSuccessAllert } from './alert-action';
+import { EventService } from '../../services';
+import { setErrorAllertFromResponse, setSuccessAllert } from '../alert-action';
 import { createBrowserHistory } from 'history';
 
 export const SET_EVENT_FROM_PARENT_SUCCESS = "SET_EVENT_FROM_PARENT_SUCCESS";

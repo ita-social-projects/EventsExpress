@@ -2,7 +2,7 @@
 import initialState from '../store/initialState';
 import {
     GET_EVENT_ERROR, GET_EVENT_PENDING, GET_EVENT_SUCCESS, RESET_EVENT,  event 
-} from '../actions/event-item-view';
+} from '../actions/event/event-item-view';
 import { getRate, getAverageRate } from '../actions/rating'
 
 

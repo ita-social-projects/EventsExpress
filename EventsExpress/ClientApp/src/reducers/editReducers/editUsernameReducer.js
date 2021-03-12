@@ -1,4 +1,4 @@
-﻿import {editUsername} from '../../actions/EditProfile/editUsername';
+﻿import {editUsername} from '../../actions/editProfile/editUsername';
 
 export const reducer = (
     state = {

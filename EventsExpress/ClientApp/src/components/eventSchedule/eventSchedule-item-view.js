@@ -13,7 +13,7 @@ import { renderPeriod } from './render-period'
 import { useStyles } from './card-style-const'
 import SelectiveForm from './selective-form'
 import '../layout/colorlib.css';
-import get_event from '../../actions/event-item-view';
+import get_event from '../../actions/event/event-item-view';
 
 class EventScheduleItemView extends Component {
 

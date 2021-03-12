@@ -1,5 +1,5 @@
-import { EventScheduleService } from '../services';
-import { setErrorAllertFromResponse } from './alert-action';
+import { EventScheduleService } from '../../services';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_EVENTS_SCHEDULE_PENDING = "SET_EVENTS_SCHEDULE_PENDING";
 export const GET_EVENTS_SCHEDULE_SUCCESS = "GET_EVENTS_SCHEDULE_SUCCESS";

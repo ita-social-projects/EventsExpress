@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { UserRoleDisplay } from './../components/user-info/user-role-display'
 import UserRoleEdit from './../components/user-info/user-role-edit'
-import { change_user_role, set_edited_user } from './../actions/user'
+import { change_user_role, set_edited_user } from './../actions/user/user'
 
 class UserRoleWpapper extends Component {
 

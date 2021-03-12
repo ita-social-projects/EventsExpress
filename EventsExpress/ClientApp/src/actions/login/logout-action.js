@@ -1,8 +1,8 @@
-import eventHelper from '../components/helpers/eventHelper';
-import { AuthenticationService } from '../services';
-import { reset_hub } from './chat';
-import { resetNotification } from './chats';
-import { updateEventsFilters } from './event-list-action';
+import eventHelper from '../../components/helpers/eventHelper';
+import { AuthenticationService } from '../../services';
+import { reset_hub } from '../chat/chat';
+import { resetNotification } from '../chat/chats';
+import { updateEventsFilters } from '../event/event-list-action';
 
 export const SET_LOGOUT = "SET_LOGOUT";
 

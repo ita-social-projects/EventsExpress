@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { SET_INVENTORY_PENDING, GET_INVENTORY_SUCCESS} from '../actions/inventory-list-action';
+import { SET_INVENTORY_PENDING, GET_INVENTORY_SUCCESS } from '../actions/inventory/inventory-list-action';
 
 export const reducer = (state = initialState.inventories, action) => {
     switch (action.type) {

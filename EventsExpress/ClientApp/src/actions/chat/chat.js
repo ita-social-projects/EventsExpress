@@ -1,6 +1,6 @@
-import { ChatService } from '../services';
+import { ChatService } from '../../services';
 import * as SignalR from '@aspnet/signalr';
-import { setAlert } from './alert-action';
+import { setAlert } from '../alert-action';
 
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";

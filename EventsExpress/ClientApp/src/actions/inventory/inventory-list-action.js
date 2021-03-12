@@ -1,5 +1,5 @@
-import { InventoryService } from '../services';
-import { setErrorAllertFromResponse } from './alert-action';
+import { InventoryService } from '../../services';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_INVENTORY_PENDING = "SET_INVENTORY_PENDING";
 export const GET_INVENTORY_SUCCESS = "GET_INVENTORY_SUCCESS";
