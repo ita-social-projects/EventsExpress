@@ -1,22 +1,22 @@
 import { InventoryService } from '../services';
+import { setErrorAllertFromResponse } from './alert-action';
 
 export const SET_INVENTORY_PENDING = "SET_INVENTORY_PENDING";
 export const GET_INVENTORY_SUCCESS = "GET_INVENTORY_SUCCESS";
-export const SET_INVENTORY_ERROR = "SET_INVENTORY_ERROR";
 
 const api_serv = new InventoryService();
 
 export function get_inventories_by_event_id(eventId) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setInventoryPending(true));
-        const res = api_serv.getInventoriesByEventId(eventId);
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(getInventorySuccess(response));
-            } else {
-                dispatch(setInventoryError(response.error));
-            }
-        });
+        let response = await api_serv.getInventoriesByEventId(eventId);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        let jsonRes = await response.json();
+        dispatch(getInventorySuccess(jsonRes));
+        return Promise.resolve();
     }
 }
 
@@ -36,13 +36,6 @@ export function setInventoryPending(data) {
 export function getInventorySuccess(data) {
     return {
         type: GET_INVENTORY_SUCCESS,
-        payload: data
-    }
-}
-
-export function setInventoryError(data) {
-    return {
-        type: SET_INVENTORY_ERROR,
         payload: data
     }
 }

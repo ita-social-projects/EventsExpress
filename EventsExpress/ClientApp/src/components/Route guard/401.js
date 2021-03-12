@@ -43,10 +43,8 @@ const mapDispatchToProps = (dispatch) => {
            dispatch(setEditUsernameError(null));
            dispatch(setEditGenderError(null));
            dispatch(setEditBirthdayError(null));
-           dispatch(setCategoryError(false));
            dispatch(getUsersError(false));
            dispatch(getEventError(false));
-           dispatch(setAvatarError(false));
            dispatch(setRolesError(false));
         }
     };

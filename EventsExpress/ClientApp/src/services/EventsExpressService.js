@@ -112,8 +112,5 @@ export default class EventsExpressService {
             : res;
     }
 
-    getUsersInventories = async (eventId) => {
-        const res = await this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
-        return res;
-    }
+    getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 }

@@ -3,10 +3,9 @@ import InventoryHeaderButton from './InventoryHeaderButton';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 import IconButton from "@material-ui/core/IconButton";
-import { get_inventories_by_event_id }  from '../../actions/inventory-list';
+import { get_inventories_by_event_id, update_inventories }  from '../../actions/inventory-list-action';
 import InventoryItemWrapper from '../../containers/inventory-item';
-import { update_inventories }  from '../../actions/inventory-list';
-import { get_users_inventories_by_event_id, edit_users_inventory }  from '../../actions/usersInventories';
+import { get_users_inventories_by_event_id, edit_users_inventory }  from '../../actions/usersInventories-action';
 
 class InventoryList extends Component {
 

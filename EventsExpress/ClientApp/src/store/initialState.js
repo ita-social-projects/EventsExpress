@@ -37,7 +37,6 @@ const initialState = {
     },
     unitsOfMeasuring: {
         isPending: true,
-        isError: false,
         units: [],
         editedUnitOfMeasuring: null,
         isAdded: false,
@@ -46,12 +45,10 @@ const initialState = {
     add_unitOfMeasuring: {
         isUnitOfMeasuringPending: false,
         isUnitOfMeasuringSuccess: false,
-        unitOfMeasuringError: null
     },
     change_avatar: {
         isPending: false,
         isSuccess: false,
-        Error: {}
     },
     editUsername: {
         isEditUsernamePending: false,
@@ -65,11 +62,9 @@ const initialState = {
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,
-        categoryError: null
     },
     categories: {
         isPending: false,
-        isError: false,
         editedCategory: null,
         data: []
     },
@@ -148,13 +143,10 @@ const initialState = {
     },
     inventories: {
         isPending: true,
-        listInventoriesErrorMessage: false,
-        setItemErrorMessage: null,
         items: []
     },
     usersInventories: {
         isPending: true,
-        isError: false,
         data: []
     },
     eventSchedules: {
@@ -227,7 +219,6 @@ const initialState = {
     },
     notificationTypes: {
         isPending: false,
-        isError: false,
         data: []
     }
 };
