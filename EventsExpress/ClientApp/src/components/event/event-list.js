@@ -16,12 +16,14 @@ class EventList extends Component {
 
     renderSingleItem = (item) => (
         <EventCard
-            key={item.id + item.isBlocked}
+            key={item.id + item.Active}
             item={item}
             current_user={this.props.current_user}
+            onBlock={this.props.onBlock}
+            onUnBlock={this.props.onUnBlock}
         />
     )
-    
+
     render(){
         return <>
             <RenderList {...this.props} renderSingleItem={this.renderSingleItem} handlePageChange={this.handlePageChange} />

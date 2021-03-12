@@ -4,7 +4,6 @@ import Spinner from '../components/spinner';
 import EventDraftWrapper from './event-draft';
 import get_event, { 
     resetEvent, 
-    cancel_event, 
     approveUser, 
     }
 from '../actions/event-item-view';
@@ -43,7 +42,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id)),
-    cancel: (eventId, reason) => dispatch(cancel_event(eventId, reason)),
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     reset: () => dispatch(resetEvent())
 });

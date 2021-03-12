@@ -138,7 +138,6 @@ namespace EventsExpress.Core.Services
                     UserId = CurrentUser().Id,
                 },
             };
-            ev.IsBlocked = false;
             ev.Owners = new List<EventOwner>
             {
                 new EventOwner
