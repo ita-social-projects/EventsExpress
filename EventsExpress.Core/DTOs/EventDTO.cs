@@ -11,8 +11,6 @@ namespace EventsExpress.Core.DTOs
     {
         public Guid Id { get; set; }
 
-        public bool? IsBlocked { get; set; }
-
         public bool IsReccurent { get; set; }
 
         public string Title { get; set; }
@@ -46,6 +44,8 @@ namespace EventsExpress.Core.DTOs
         public Uri OnlineMeeting { get; set; }
 
         public IEnumerable<CategoryDto> Categories { get; set; }
+
+        public EventStatus EventStatus { get; set; }
 
         public IEnumerable<UserEvent> Visitors { get; set; }
 

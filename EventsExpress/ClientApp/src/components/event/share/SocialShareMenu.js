@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ShareButtons from './ShareButtons'
+import Tooltip from '@material-ui/core/Tooltip';
 
 const StyledMenu = withStyles({
     paper: {
@@ -49,13 +50,15 @@ export default function SocialShareMenu(props) {
 
     return (
         <div>
-            <IconButton className="btn"
-                aria-controls="customized-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <i className="fas fa-share-alt"></i>
-            </IconButton>
+            <Tooltip title="SocialShare">
+                <IconButton className="btn"
+                    aria-controls="customized-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                >
+                    <i className="fas fa-share-alt"></i>
+                </IconButton>
+            </Tooltip>
             <StyledMenu
                 id="customized-menu"
                 anchorEl={anchorEl}

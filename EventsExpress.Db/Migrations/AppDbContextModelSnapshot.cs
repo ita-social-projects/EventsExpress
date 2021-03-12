@@ -128,9 +128,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid?>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsBlocked")
-                        .HasColumnType("bit");
-
                     b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
 

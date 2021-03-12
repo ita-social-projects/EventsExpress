@@ -103,7 +103,6 @@ namespace EventsExpress.Test.ServiceTests
                 Owners = users,
                 PhotoId = eventDto.PhotoId,
                 Title = eventDto.Title,
-                IsBlocked = eventDto.IsBlocked,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
                 Point = eventDto.Point,
@@ -187,7 +186,6 @@ namespace EventsExpress.Test.ServiceTests
                     PhotoId = Guid.NewGuid(),
                     EventLocationId = eventLocationIdMap,
                     Title = "SLdndsndj",
-                    IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
@@ -216,7 +214,6 @@ namespace EventsExpress.Test.ServiceTests
                     PhotoId = Guid.NewGuid(),
                     EventLocationId = eventLocationIdOnline,
                     Title = "SLdndsndj",
-                    IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
@@ -244,7 +241,6 @@ namespace EventsExpress.Test.ServiceTests
                     },
                     PhotoId = Guid.NewGuid(),
                     Title = "SLdndstrhndj",
-                    IsBlocked = false,
                     IsPublic = false,
                     Categories = null,
                     MaxParticipants = 1,
@@ -370,9 +366,9 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Add user to event")]
-        public void AddUserToEvent_UserNotFound_ReturnFalse()
+        public void AddUserToEvent_UserNotFound_Failed()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), eventId));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(eventId, Guid.NewGuid()));
         }
 
         [Test]
@@ -387,6 +383,13 @@ namespace EventsExpress.Test.ServiceTests
         public void AddUserToEvent_EventNotFound_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_UserNotFound_ReturnFalse()
+        {
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), userId));
         }
 
         [Test]

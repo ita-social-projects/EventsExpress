@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
+
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
 import { Button, Menu, MenuItem } from '@material-ui/core'
@@ -12,11 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
+
 import SocialShareMenu from './share/SocialShareMenu';
-import EventManagmentWrapper from '../../containers/event-managment';
+import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
-import './event-item.css';
+import eventStatusEnum from '../helpers/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 
 const useStyles = useStyle;
@@ -52,10 +54,10 @@ export default class EventCard extends Component {
             description,
             isPublic,
             maxParticipants,
+            eventStatus,
             photoUrl,
             categories,
             countVisitor,
-            isBlocked,
             owners
         } = this.props.item;
         const INT32_MAX_VALUE = null;
@@ -84,8 +86,12 @@ export default class EventCard extends Component {
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Card
-                    className={classes.card}
-                    style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
+                    className={classes.cardCanceled}
+                    style={{
+                        backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
+                        opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
+
+                    }}
                 >
                     <Menu
                         id="simple-menu"
@@ -180,15 +186,21 @@ export default class EventCard extends Component {
                                     </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
-                                    <IconButton className={classes.button} aria-label="view">
-                                        <i className="fa fa-eye"></i>
-                                    </IconButton>
+                                    <Tooltip title="View">
+                                        <IconButton aria-label="view">
+                                            <i className="fa fa-eye"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 </Link>
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
-                                    ? <EventManagmentWrapper eventItem={this.props.item} />
-                                    : null
-                                }
+                                    && <EventActiveStatus
+                                    key={this.props.item.id + this.props.item.eventStatus}
+                                    eventStatus={this.props.item.eventStatus}
+                                    eventId={this.props.item.id}
+                                    onBlock = {this.props.onBlock}
+                                    onUnBlock = {this.props.onUnBlock}/>
+                                }                        
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
