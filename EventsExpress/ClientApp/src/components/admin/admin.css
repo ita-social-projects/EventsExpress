@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.wrapper-content {    
+    display: flex;
+}
+
+#sub-nav {
+    position: relative;
+    flex-grow: 1; 
+}
+
+main {
+    flex-grow: 3;
+}
+
+.item {
+    width: 15em;
+}
+
+.extra-sidebar ul li .link {
+    padding: 10px;
+    font-size: 1.1em;
+    color: rgba(0, 0, 0, 0.75);
+    display: block;
+    width: fit-content;
+}
+
+.extra-sidebar ul li .link:hover {
+    color: rgb(0, 0, 0);
+    background: #fff;
+    font-weight: 550;
+    border-bottom: 3px solid rgb(63, 81, 181);
+    transition: 0.1s;
+}
