@@ -9,10 +9,10 @@ body {
 
 .wrapper-content {    
     display: flex;
+    flex-wrap: wrap;
 }
 
-#sub-nav {
-    position: relative;
+#sub-nav {    
     flex-grow: 1; 
 }
 
@@ -28,8 +28,7 @@ main {
     padding: 10px;
     font-size: 1.1em;
     color: rgba(0, 0, 0, 0.75);
-    display: block;
-    width: fit-content;
+    display: block;    
 }
 
 .extra-sidebar ul li .link:hover {
