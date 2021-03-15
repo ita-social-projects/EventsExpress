@@ -52,8 +52,6 @@ namespace EventsExpress.Db.EF
 
         public DbSet<ChatRoom> ChatRoom { get; set; }
 
-        public DbSet<Photo> Photos { get; set; }
-
         public DbSet<Message> Message { get; set; }
 
         public DbSet<EventStatusHistory> EventStatusHistory { get; set; }

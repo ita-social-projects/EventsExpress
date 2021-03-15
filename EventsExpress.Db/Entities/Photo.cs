@@ -1,7 +1,8 @@
-﻿using EventsExpress.Db.EF;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventsExpress.Db.Entities
 {
+    [NotMapped]
     public class Photo : BaseEntity
     {
         public byte[] Thumb { get; set; }
