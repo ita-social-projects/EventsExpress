@@ -1,5 +1,7 @@
 ﻿import { UserService } from '../../services';
-import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
+import { setSuccessAllert } from '../alert-action';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/helpers.js';
 
 export const editUsername = {
     PENDING : "SET_EDITUSERNAME_PENDING",
@@ -14,8 +16,7 @@ export default function edit_Username(data) {
         dispatch(setEditUsernamePending(true));
         let response = await api_serv.setUsername(data);
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(buildValidationState(response));
         }
         dispatch(setEditUsernameSuccess(true));
         dispatch(updateUsername(data));

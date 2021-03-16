@@ -39,15 +39,6 @@ export function leave(userId, eventId) {
             dispatch(getEvent(jsonRes))
             return Promise.reject();
         }
-        //.then(response => {
-        //    if (response.error == null) {
-        //        api_serv.getEvent(eventId).then(response => {
-        //            if (response.error == null) {
-        //                dispatch(getEvent(response));
-
-        //            } else {
-        //                dispatch(getEventError(response.error));
-        //            }
     }
 }
 
@@ -66,15 +57,6 @@ export function join(userId, eventId) {
         }
     }
 }
-//api_serv.setUserToEvent({ userId: userId, eventId: eventId }).then(response => {
-//    if (response.error == null) {
-//        api_serv.getEvent(eventId).then(response => {
-//            if (response.error == null) {
-//                dispatch(getEvent(response));
-//            } else {
-//                dispatch(getEventError(response.error));
-//            }
-
 
 // ACTION APPROVER FOR USER
 export function approveUser(userId, eventId, buttonAction) {

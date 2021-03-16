@@ -32,7 +32,8 @@ export function getUnreadMessages(userId) {
     return async dispatch => {
         let response = await api_serv.getUnreadMessages(userId);
         if (response.ok) {
-            dispatch({ type: GET_UNREAD_MESSAGES, payload: response });
+            let jsonRes = await response.json();
+            dispatch({ type: GET_UNREAD_MESSAGES, payload: jsonRes });
             return Promise.resolve();
         }
     }

@@ -2,7 +2,6 @@ import { ChatService } from '../../services';
 import * as SignalR from '@aspnet/signalr';
 import { setErrorAllertFromResponse, setAlert } from '../alert-action';
 
-
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
 export const INITIAL_CONNECTION = "INITIAL_CONNECTION";

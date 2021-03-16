@@ -1,6 +1,8 @@
 ﻿import { AuthenticationService } from '../../services';
 import { reset } from 'redux-form';
-import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
+import { setSuccessAllert } from '../alert-action';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/helpers.js'
 
 export const changePassword = {
     PENDING: "SET_CHANGEPASSWORD_PENDING",
@@ -16,8 +18,7 @@ export default function change_Password(data) {
 
         let response = await api_serv.setChangePassword(data);
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(buildValidationState(response));
         }
         dispatch(setChangePasswordSuccess(true));
         dispatch(setSuccessAllert('Password was succesfully changed'));
