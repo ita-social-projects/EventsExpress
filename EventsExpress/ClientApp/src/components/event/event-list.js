@@ -3,7 +3,7 @@ import PagePagination from '../shared/pagePagination';
 import { connect } from 'react-redux';
 import { reset_events, updateEventsFilters } from '../../actions/event/event-list-action';
 import Event from './event-item';
-import { change_event_status } from '../../actions/event/event-item-view';
+import { change_event_status } from '../../actions/event/event-item-view-action';
 import eventStatusEnum from '../helpers/eventStatusEnum';
 
 class EventList extends Component {
@@ -59,7 +59,6 @@ const mapDispatchToProps = (dispatch) => {
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
         onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Blocked)),
         onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active))
-
     }
 };
 

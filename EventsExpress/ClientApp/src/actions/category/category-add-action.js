@@ -19,7 +19,7 @@ export function add_category(data) {
             response = await api_serv.setCategory(data)
         }
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response.error));
+            throw new SubmissionError(buildValidationState(response));
         }
         dispatch(setCategorySuccess(true));
         dispatch(get_categories());

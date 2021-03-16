@@ -1,8 +1,8 @@
 import initialState from '../store/initialState';
 import {
-    GET_CHATS_ERROR, GET_CHATS_PENDING, GET_CHATS_SUCCESS
-} from '../actions/chat/chats';
-import { RECEIVE_MESSAGE } from '../actions/chat/chat';
+    GET_CHATS_PENDING, GET_CHATS_SUCCESS
+} from '../actions/chat/chats-action';
+import { RECEIVE_MESSAGE } from '../actions/chat/chat-action';
 
 export const reducer = (
     state = initialState.chats,
@@ -20,12 +20,6 @@ export const reducer = (
             return {
                 ...state,
                 data: newChats
-            }
-        case GET_CHATS_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
             }
         case GET_CHATS_PENDING:
             return {

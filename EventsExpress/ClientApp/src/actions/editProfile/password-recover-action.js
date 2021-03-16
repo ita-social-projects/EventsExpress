@@ -1,25 +1,23 @@
 ﻿import { AuthenticationService } from '../../services';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/helpers.js'
 
 export const recoverPassword = {
     PENDING: "SET_RECOVERPASSWORD_PENDING",
     SUCCESS: "SET_RECOVERPASSWORD_SUCCESS",
-    ERROR: "SET_RECOVERPASSWORD_ERROR",
-
 }
 
 const api_serv = new AuthenticationService();
 
 export default function recover_Password(data) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setRecoverPasswordPending(true));
-        const res = api_serv.setRecoverPassword(data);
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setRecoverPasswordSuccess(true));
-            } else {
-                dispatch(setRecoverPasswordError(response.error));
-            }
-        });
+        let response = await api_serv.setRecoverPassword(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setRecoverPasswordSuccess(true));
+        return Promise.resolve();
     }
 }
 
@@ -37,9 +35,3 @@ function setRecoverPasswordSuccess(data) {
     };
 }
 
-function setRecoverPasswordError(data) {
-    return {
-        type: recoverPassword.ERROR,
-        payload: data
-    };
-}

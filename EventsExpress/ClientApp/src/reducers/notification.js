@@ -2,11 +2,11 @@
 import initialState from '../store/initialState';
 import {
      RECEIVE_MESSAGE, DELETE_OLD_NOTIFICATION, RECEIVE_SEEN_MESSAGE, DELETE_SEEN_MSG_NOTIFICATION, RECEIVED_NEW_EVENT
-} from '../actions/chat/chat';
+} from '../actions/chat/chat-action';
 
 import {
     GET_UNREAD_MESSAGES, RESET_NOTIFICATION
-} from '../actions/chat/chats';
+} from '../actions/chat/chats-action';
 
 
 export const reducer = (

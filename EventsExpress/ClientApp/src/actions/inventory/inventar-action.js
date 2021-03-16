@@ -10,11 +10,10 @@ const api_serv = new InventoryService();
 export function add_item(item, eventId) {
     return async dispatch => {
         let response = await api_serv.setItemToInventory(item, eventId);
-        dispatch(get_inventories_by_event_id(eventId));
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
-        }
-        dispatch(setInvertarError(null));
+            throw new SubmissionError(await buildValidationState(response));
+        } 
+        dispatch(get_inventories_by_event_id(eventId));
         return Promise.resolve();
     }
 }
@@ -22,12 +21,11 @@ export function add_item(item, eventId) {
 export function delete_item(itemId, eventId) {
     return async dispatch => {
         let response = await api_serv.setItemDelete(itemId, eventId);
-        dispatch(get_inventories_by_event_id(eventId));
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        dispatch(setInvertarError(null));
+        dispatch(get_inventories_by_event_id(eventId));
         return Promise.resolve();
     }
 }
@@ -35,13 +33,11 @@ export function delete_item(itemId, eventId) {
 export function edit_item(item, eventId) {
     return async dispatch => {
         let response = await api_serv.setItem(item, eventId);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
         dispatch(get_inventories_by_event_id(eventId));
         dispatch(get_users_inventories_by_event_id(eventId));
-        if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
-        }
-        dispatch(setInvertarError(null));
         return Promise.resolve();
     }
 }

@@ -1,9 +1,9 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_EVENT_ERROR, GET_EVENT_PENDING, GET_EVENT_SUCCESS, RESET_EVENT,  event 
-} from '../actions/event/event-item-view';
-import { getRate, getAverageRate } from '../actions/rating'
+    GET_EVENT_PENDING, GET_EVENT_SUCCESS, RESET_EVENT, event
+} from '../actions/event/event-item-view-action';
+import { getRate, getAverageRate } from '../actions/rating-action'
 
 
 export const reducer = (
@@ -11,12 +11,6 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case GET_EVENT_PENDING:
             return {
                 ...state,
@@ -30,8 +24,9 @@ export const reducer = (
             }
         case event.CHANGE_STATUS:
             let stateChangeEvent = { ...state };
-            stateChangeEvent.data.eventStatus = action.payload.eventStatus;                   
+            stateChangeEvent.data.eventStatus = action.payload.eventStatus;
             return stateChangeEvent;
+
         case RESET_EVENT:
             return {
                 ...initialState.event

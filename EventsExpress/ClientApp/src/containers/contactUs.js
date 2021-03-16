@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ContactUs from "../components/contactUs/contactUs";
-import contact_Us from '../actions/contact-us';
+import contact_Us from '../actions/contact-us-action';
 
 class ContactUsContainer extends React.Component {
     submit = values => {

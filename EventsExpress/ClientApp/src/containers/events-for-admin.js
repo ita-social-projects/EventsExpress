@@ -20,20 +20,20 @@ class AdminEventListWrapper extends Component {
             : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <Redirect
-                    from="*"
-                    to={eventHelper.getQueryStringByEventFilter(this.props.events.filter)}
-                />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
+        //const errorMessage = isError.ErrorCode == '403'
+        //    ? <Forbidden />
+        //    : isError.ErrorCode == '500'
+        //        ? <Redirect
+        //            from="*"
+        //            to={eventHelper.getQueryStringByEventFilter(this.props.events.filter)}
+        //        />
+        //        : isError.ErrorCode == '401'
+        //            ? <Unauthorized />
+        //            : isError.ErrorCode == '400'
+        //                ? <BadRequest />
+        //                : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
+        const content = !isPending
             ? <EventList
                 current_user={current_user}
                 data_list={items}
@@ -44,10 +44,7 @@ class AdminEventListWrapper extends Component {
             : null;
 
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
-            }
+            { spinner || content }
         </>
     }
 }

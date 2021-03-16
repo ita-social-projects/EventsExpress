@@ -1,16 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TogleOpenWind } from '../../actions/modalWind';
+import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
 import logout from '../../actions/login/logout-action';
-import { isOpen } from '../../actions/modalWind'
 import { setRegisterError } from '../../actions/register'
-import { setEditUsernameError } from '../../actions/editProfile/editUsername'
-import { setEditGenderError } from '../../actions/editProfile/editGender'
-import { setEditBirthdayError } from '../../actions/editProfile/editBirthday'
-import { getUsersError } from '../../actions/users/users'
-import { getEventError } from '../../actions/event/event-item-view'
 import { setRolesError } from '../../actions/roles'
-
 
  class Unauthorized extends Component {
      componentWillMount = () => {
@@ -40,12 +33,7 @@ const mapDispatchToProps = (dispatch) => {
         resetError: () => {
             dispatch(isOpen(false));
             dispatch(setRegisterError(null));
-           dispatch(setEditUsernameError(null));
-           dispatch(setEditGenderError(null));
-           dispatch(setEditBirthdayError(null));
-           dispatch(getUsersError(false));
-           dispatch(getEventError(false));
-           dispatch(setRolesError(false));
+            dispatch(setRolesError(false));
         }
     };
 }

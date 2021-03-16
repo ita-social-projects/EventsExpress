@@ -13,7 +13,7 @@ import { renderPeriod } from './render-period'
 import { useStyles } from './card-style-const'
 import SelectiveForm from './selective-form'
 import '../layout/colorlib.css';
-import get_event from '../../actions/event/event-item-view';
+import get_event from '../../actions/event/event-item-view-action';
 
 class EventScheduleItemView extends Component {
 
@@ -58,7 +58,6 @@ class EventScheduleItemView extends Component {
         const classes = useStyles;
         const { current_user } = this.props;
         const {
-            isActive,
             frequency,
             periodicity,
             lastRun,
@@ -115,6 +114,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id))
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemView);

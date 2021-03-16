@@ -12,7 +12,7 @@ import get_event, {
     deleteFromOwners, 
     promoteToOwner
     }
-    from '../actions/event/event-item-view';
+    from '../actions/event/event-item-view-action';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    

@@ -2,25 +2,23 @@
 import { connect } from 'react-redux';
 import { UserRoleDisplay } from './../components/user-info/user-role-display'
 import UserRoleEdit from './../components/user-info/user-role-edit'
-import { change_user_role, set_edited_user } from './../actions/user/user'
+import { change_user_role, set_edited_user } from './../actions/user/user-action'
 
 class UserRoleWpapper extends Component {
 
-    saveChanges = (role) => {        
+    saveChanges = (role) => {
         if (role && role.id !== this.props.user.role.id) {
             this.props.set_new_role(this.props.user.id, role)
         }
         this.props.set_mode_display();
     }
 
-
-    render() {       
+    render() {
         const { user, isCurrentUser, set_mode_display, set_mode_edit } = this.props;
 
-        return (this.props.isEdit) 
-            ? <UserRoleEdit user={this.props.user} callback={this.saveChanges} cancel={set_mode_display}/> 
+        return (this.props.isEdit)
+            ? <UserRoleEdit user={this.props.user} callback={this.saveChanges} cancel={set_mode_display} />
             : <UserRoleDisplay user={user} isCurrentUser={isCurrentUser} callback={set_mode_edit} />
-               
     }
 }
 

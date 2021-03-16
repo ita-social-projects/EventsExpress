@@ -1,16 +1,15 @@
 ﻿import { UserService } from '../../services';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',
     SUCCESS: 'SUCCESS_BLOCK',
-    ERROR: 'ERROR_BLOCK',
     UPDATE: 'UPDATE_BLOCKED'
 }
 
 export const unBlockUser = {
     PENDING: 'PENDING_UNBLOCK',
     SUCCESS: 'SUCCESS_UNBLOCK',
-    ERROR: 'ERROR_UNBLOCK',
     UPDATE: 'UPDATE_UNBLOCKED'
 }
 
@@ -18,62 +17,57 @@ export const changeUserRole = {
     SET_EDITED: 'SET_EDITED_USER',
     PENDING: 'PENDING_CHANGE_ROLE',
     SUCCESS: 'SUCCESS_CHANGE_ROLE',
-    ERROR: 'ERROR_CHANGE_ROLE',
     UPDATE: 'UPDATE_CHANGE_ROLE'
 }
 const api_serv = new UserService();
 
 // ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setUnBlockUserPending(true));
 
-        const res = api_serv.setUserUnblock(id);
-
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setUnBlockUserSuccess());
-                dispatch(updateUnBlockedUser(id));
-            } else {
-                dispatch(setUnBlockUserError(response.error));
-            }
-        });
+        let response = await api_serv.setUserUnblock(id);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(setUnBlockUserSuccess());
+        dispatch(updateUnBlockedUser(id));
+        return Promise.resolve();
     }
 }
 
 // ACTION CREATOR FOR USER BLOCK:
 export function block_user(id) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setBlockUserPending(true));
 
-        const res = api_serv.setUserBlock(id);
-
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setBlockUserSuccess());
-                dispatch(updateBlockedUser(id));
-            } else {
-                dispatch(setBlockUserError(response.error));
-            }
-        });
+        let response = api_serv.setUserBlock(id);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(setBlockUserSuccess());
+        dispatch(updateBlockedUser(id));
+        return Promise.resolve();
     }
 }
 
+
+
 // ACTION CREATOR FOR CHANGE USER ROLE:
 export function change_user_role(userId, newRole) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setChangeUserRolePending(true));
 
-        const res = api_serv.setChangeUserRole(userId, newRole.id);
-
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setChangeUserRoleSuccess());
-                dispatch(updateChangeUserRole({ userId: userId, newRole: newRole }));
-            } else {
-                dispatch(setChangeUserRoleError(response.error));
-            }
-        });
+        let response = await api_serv.setChangeUserRole(userId, newRole.id);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(setChangeUserRoleSuccess());
+        dispatch(updateChangeUserRole({ userId: userId, newRole: newRole }));
+        return Promise.resolve();
     }
 }
 
@@ -105,20 +99,12 @@ function setChangeUserRoleSuccess() {
     }
 }  
 
-function setChangeUserRoleError(data) {
-    return {
-        type: changeUserRole.ERROR,
-        payload: data
-    }
-}  
-
 function updateChangeUserRole(data) {
     return {
         type: changeUserRole.UPDATE,
         payload: data
     }
 }  
-
 
 // block User actions
 function setBlockUserPending(data) {
@@ -133,13 +119,6 @@ function setBlockUserSuccess() {
         type: blockUser.SUCCESS
     }
 }
-
-function setBlockUserError(data) {
-    return {
-        type: blockUser.ERROR,
-        payload: data
-    }
-} 
 
 function updateBlockedUser(id) {
     return {
@@ -159,13 +138,6 @@ function setUnBlockUserPending(data) {
 function setUnBlockUserSuccess() {
     return {
         type: unBlockUser.SUCCESS
-    }
-}
-
-function setUnBlockUserError(data) {
-    return {
-        type: unBlockUser.ERROR,
-        payload: data
     }
 }
 

@@ -1,10 +1,9 @@
-﻿import { changePassword } from '../../actions/editProfile/changePassword';
+﻿import { changePassword } from '../../actions/editProfile/password-change-action';
 
 export const reducer = (
     state = {
         isChangePasswordPending: false,
         isChangePasswordSuccess: false,
-        ChangePasswordError: null
     },
     action) => {
     switch (action.type) {
@@ -13,7 +12,6 @@ export const reducer = (
                 ...state,
                 isChangePasswordPending: action.isChangePasswordPending
             };
-
         case changePassword.SUCCESS:
             return {
                 ...state,
@@ -21,14 +19,6 @@ export const reducer = (
                 isChangePasswordSuccess: false,
                 ChangePasswordError: null
             };
-
-        case changePassword.ERROR:
-            return {
-                ...state, 
-                ChangePasswordError: action.ChangePasswordError,
-                isChangePasswordSuccess:false
-            };
-
         default:
             return state;
     }

@@ -1,4 +1,4 @@
-import { event } from '../actions/event/event-item-view';
+import { event } from '../actions/event/event-item-view-action';
 import initialState from '../store/initialState';
 import {
     SET_EVENTS_PENDING,

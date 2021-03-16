@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat/chat';
+import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat/chat-action';
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
 import { renderTextArea } from '../helpers/helpers';

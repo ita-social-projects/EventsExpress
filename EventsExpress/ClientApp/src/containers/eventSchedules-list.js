@@ -21,33 +21,40 @@ class EventSchedulesListWrapper extends Component {
             : {};
         const { data, isPending, isError } = this.props.eventSchedules;
         const { items } = this.props.eventSchedules.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <Redirect
-                    from="*"
-                    to={{
-                        pathname: "/home/eventSchedules",
-                    }}
-                />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
+        //const errorMessage = isError.ErrorCode == '403'
+        //    ? <Forbidden />
+        //    : isError.ErrorCode == '500'
+        //        ? <Redirect
+        //            from="*"
+        //            to={{
+        //                pathname: "/home/eventSchedules",
+        //            }}
+        //        />
+        //        : isError.ErrorCode == '401'
+        //            ? <Unauthorized />
+        //            : isError.ErrorCode == '400'
+        //                ? <BadRequest />
+        //                : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
-            ? <EventSchedulesList
+        //const content = !errorMessage
+        //    ? <EventSchedulesList
+        //        current_user={current_user}
+        //        data_list={data.items}
+        //    />
+        //    : null;
+
+        //{
+        //    !errorMessage
+        //    ? spinner || content
+        //    : errorMessage
+        //}
+        const content = 
+             <EventSchedulesList
                 current_user={current_user}
                 data_list={data.items}
             />
-            : null;
-
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
-            }
+            { spinner || content }
         </>
     }
 }

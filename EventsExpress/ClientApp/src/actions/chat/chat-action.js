@@ -1,11 +1,10 @@
 import { ChatService } from '../../services';
 import * as SignalR from '@aspnet/signalr';
-import { setAlert } from '../alert-action';
+import { setErrorAllertFromResponse, setAlert } from '../alert-action';
 
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
-export const GET_CHAT_ERROR = "GET_CHAT_ERROR";
 export const INITIAL_CONNECTION = "INITIAL_CONNECTION";
 export const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
 export const RECEIVE_NOTIFICATION = "RECEIVE_NOTIFICATION";
@@ -21,19 +20,20 @@ const api_serv = new ChatService();
 
 export default function get_chat(chatId) {
 
-    return dispatch => {
+    return async dispatch => {
         dispatch(getChatPending(true));
 
-        const res = api_serv.getChat(chatId);
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(getChatSuccess({ isSuccess: true, data: response }));
-            } else {
-                dispatch(getChatError(response.error));
-            }
-        });
+        let response = await api_serv.getChat(chatId);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        let jsonRes = await response.json();
+        dispatch(getChatsSuccess({ isSuccess: true, data: jsonRes }));
+        return Promise.resolve();
     }
 }
+
 export function initialConnection() {
     return dispatch => {
         const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/chatroom`,
@@ -138,9 +138,3 @@ export function getChatPending(data) {
     };
 }
 
-export function getChatError(data) {
-    return {
-        type: GET_CHAT_ERROR,
-        payload: data
-    };
-}

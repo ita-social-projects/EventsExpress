@@ -10,83 +10,41 @@ export default class UserService {
 
     getSearchUsers = filter => baseService.getResourceNew(`users/searchUsers${filter}`);
 
-    setContactUs = async (data) => {
-        const res = await baseService.setResource('users/ContactAdmins', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setContactUs = data => baseService.setResource('users/ContactAdmins', data);
 
-    setAvatar = data => {
+    setAvatar = async(data) => {
         let file = new FormData();
         file.append('newAva', data.image.file);
-        baseService.setResourceWithData('users/changeAvatar', file);
+        let res = await baseService.setResourceWithData('users/changeAvatar', file);
+        return res;
     }
 
-    setChangeUserRole = async (userId, newRoleId) => {
-        const res = await baseService.setResource(`users/ChangeRole/?userId=${userId}&roleId=${newRoleId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setChangeUserRole = (userId, newRoleId) =>
+        baseService.setResource(`users/ChangeRole/?userId=${userId}&roleId=${newRoleId}`);
 
-    setUsername = async (data) => {
-        const res = await baseService.setResource('Users/EditUsername', {
-            name: data.UserName
-        });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUsername = data => baseService.setResource('Users/EditUsername', {
+        name: data.UserName
+    });
 
-    setBirthday = async (data) => {
-        const res = await baseService.setResource('Users/EditBirthday', {
-            birthday: new Date(data.Birthday)
-        });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setBirthday = data => baseService.setResource('Users/EditBirthday', {
+        birthday: new Date(data.Birthday)
+    });
 
-    setGender = async (data) => {
-        const res = await baseService.setResource('Users/EditGender', {
-            gender: Number(data.Gender)
-        });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setGender = data => baseService.setResource('Users/EditGender', {
+        gender: Number(data.Gender)
+    });
 
     setUserCategory = data => baseService.setResource('Users/EditUserCategory', data);
 
-    setUserBlock = async (id) => {
-        const res = await baseService.setResource(`Users/Block/?userId=${id}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserBlock = id => baseService.setResource(`Users/Block/?userId=${id}`);
 
-    setUserUnblock = async (id) => {
-        const res = await baseService.setResource(`Users/${id}/Unblock`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserUnblock = id => baseService.setResource(`Users/${id}/Unblock`);
 
-    setAttitude = async (data) => {
-        const res = await baseService.setResource('users/SetAttitude', {
-            userFromId: data.userFromId,
-            userToId: data.userToId,
-            attitude: data.attitude
-        });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-    setUserNotificationType = async (data) => {
-        const res = await baseService.setResource('Users/EditUserNotificationType', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setAttitude = data => baseService.setResource('users/SetAttitude', {
+        userFromId: data.userFromId,
+        userToId: data.userToId,
+        attitude: data.attitude
+    });
+
+    setUserNotificationType = data => baseService.setResource('Users/EditUserNotificationType', data);
 }
