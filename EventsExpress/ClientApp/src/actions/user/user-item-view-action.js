@@ -17,7 +17,8 @@ export default function get_user(id) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        dispatch(getProfile(response));
+        let jsonRes = await response.json();
+        dispatch(getProfile(jsonRes));
         dispatch(get_future_events(id));
         return Promise.resolve();
     }
@@ -36,17 +37,6 @@ export function setAttitude(data) {
             dispatch(getProfile(jsonRes))
             return Promise.reject();
         }
-        //res.then(response => {
-        //    if (response.error == null) {
-        //        const res1 = api_serv.getUserById(data.userToId);
-        //        res1.then(response => {
-        //            if (response.error == null) {
-        //                dispatch(getProfile(response));
-        //            } else {
-        //                dispatch(getProfileError(response.error));
-        //            }
-        //        });
-        //    }
     }
 }
 

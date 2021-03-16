@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Profile from '../components/profile/user-profile';
 import Spinner from '../components/spinner';
@@ -10,8 +9,6 @@ import {
     get_visited_events,
     get_events_togo
 } from '../actions/events/events-for-profile-action';
-import BadRequest from '../components/Route guard/400';
-import Forbidden from '../components/Route guard/403';
 
 class UserItemViewWrapper extends Component {
     state = {
@@ -80,19 +77,9 @@ class UserItemViewWrapper extends Component {
     }
 
     render() {
-        const { data, isPending, isError } = this.props.profile;
-        //const errorMessage = isError.ErrorCode == '403'
-        //    ? <Forbidden />
-        //    : isError.ErrorCode == '500'
-        //        ? <Redirect from="*" to="/home/events" />
-        //        : isError.ErrorCode == '401'
-        //            ? <Redirect from="*" to="/home/events" />
-        //            : isError.ErrorCode == '400'
-        //                ? <BadRequest />
-        //                : null;
-
+        const { data, isPending } = this.props.profile;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending === null
+        const content = !isPending
             ? <Profile
                 onAddEvent={this.onAddEvent}
                 add_event_flag={this.state.flag}

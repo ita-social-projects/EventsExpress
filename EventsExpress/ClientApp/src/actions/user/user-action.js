@@ -53,8 +53,6 @@ export function block_user(id) {
     }
 }
 
-
-
 // ACTION CREATOR FOR CHANGE USER ROLE:
 export function change_user_role(userId, newRole) {
     return async dispatch => {

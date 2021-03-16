@@ -26,31 +26,32 @@ export function add_category(data) {
         return Promise.resolve();
     }
 }
-    export function set_edited_category(id) {
-        return dispatch => {
-            dispatch(setCategoryEdited(id));
-        }
-    }
 
-    function setCategoryEdited(data) {
-        return {
-            type: SET_CATEGORY_EDITED,
-            payload: data
-        };
+export function set_edited_category(id) {
+    return dispatch => {
+        dispatch(setCategoryEdited(id));
     }
+}
 
-    export function setCategoryPending(data) {
-        return {
-            type: SET_CATEGORY_PENDING,
-            payload: data
-        };
-    }
+function setCategoryEdited(data) {
+    return {
+        type: SET_CATEGORY_EDITED,
+        payload: data
+    };
+}
 
-    export function setCategorySuccess(data) {
-        return {
-            type: SET_CATEGORY_SUCCESS,
-            payload: data
-        };
-    }
+export function setCategoryPending(data) {
+    return {
+        type: SET_CATEGORY_PENDING,
+        payload: data
+    };
+}
+
+export function setCategorySuccess(data) {
+    return {
+        type: SET_CATEGORY_SUCCESS,
+        payload: data
+    };
+}
 
 

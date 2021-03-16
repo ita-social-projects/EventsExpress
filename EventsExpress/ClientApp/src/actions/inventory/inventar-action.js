@@ -10,10 +10,10 @@ const api_serv = new InventoryService();
 export function add_item(item, eventId) {
     return async dispatch => {
         let response = await api_serv.setItemToInventory(item, eventId);
+        dispatch(get_inventories_by_event_id(eventId));
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
-        } 
-        dispatch(get_inventories_by_event_id(eventId));
+        }         
         return Promise.resolve();
     }
 }
@@ -33,11 +33,11 @@ export function delete_item(itemId, eventId) {
 export function edit_item(item, eventId) {
     return async dispatch => {
         let response = await api_serv.setItem(item, eventId);
+        dispatch(get_inventories_by_event_id(eventId));
+        dispatch(get_users_inventories_by_event_id(eventId));
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(get_inventories_by_event_id(eventId));
-        dispatch(get_users_inventories_by_event_id(eventId));
         return Promise.resolve();
     }
 }
