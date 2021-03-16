@@ -1,0 +1,49 @@
+import { UserService } from '../../services';
+import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
+
+export const addUserNotificationType = {
+    PENDING: "SET_ADD_USER_NOTIFICATION_TYPE_PENDING",
+    SUCCESS: "SET_ADD_USER_NOTIFICATION_TYPE_SUCCESS",
+    UPDATE: "UPDATE_NOTIFICATION_TYPES",
+}
+
+const api_serv = new UserService();
+
+export default function setUserNotificationTypes(data) {
+    return async dispatch => {
+        dispatch(setAddUserNotificationTypePending(true));
+        let response = await api_serv.setUserNotificationType(data);
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(setAddUserNotificationTypeSuccess(true));
+        dispatch(updateNotificationTypes(data));
+        const textMessage = `Favorite notification type${data.notificationTypes.length > 1 ? "s have" : " has"} been updated`;
+        dispatch(setSuccessAllert(textMessage));
+        return Promise.resolve();
+    }
+}
+
+function updateNotificationTypes(data) {
+    return {
+        type: addUserNotificationType.UPDATE,
+        payload: data.notificationTypes,
+    };
+}
+
+function setAddUserNotificationTypePending(data) {
+    return {
+        type: addUserNotificationType.PENDING,
+        payload: data
+    };
+}
+
+function setAddUserNotificationTypeSuccess(data) {
+    return {
+        type: addUserNotificationType.SUCCESS,
+        payload: data
+    };
+}
+
+

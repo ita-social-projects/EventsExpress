@@ -1,7 +1,7 @@
 import { AuthenticationService } from '../../services';
 import eventHelper from '../../components/helpers/eventHelper';
-import { initialConnection } from '../chat/chat';
-import { getUnreadMessages } from '../chat/chats';
+import { initialConnection } from '../chat/chat-action';
+import { getUnreadMessages } from '../chat/chats-action';
 import { updateEventsFilters } from '../event/event-list-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';

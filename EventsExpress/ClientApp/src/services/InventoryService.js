@@ -6,34 +6,29 @@ export default class InventoryService {
 
     getInventoriesByEventId = eventId => baseService.getResourceNew(`inventory/${eventId}/GetInventar`);
 
-    setItem = (item, eventId) => {
-        const data = {
+    setItem = (item, eventId) =>
+        baseService.setResource(`inventory/${eventId}/EditInventar`, {
             id: item.id,
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
             unitOfMeasuring: item.unitOfMeasuring
-        }
-        baseService.setResource(`inventory/${eventId}/EditInventar`, data);
-    }
+        });
 
-    setItemToInventory = (item, eventId) => {
-        const data = {
+    setItemToInventory = (item, eventId) =>
+        baseService.setResource(`inventory/${eventId}/AddInventar`, {
             itemName: item.itemName,
             needQuantity: Number(item.needQuantity),
             unitOfMeasuring: item.unitOfMeasuring
-        }
-        baseService.setResource(`inventory/${eventId}/AddInventar`, data);
-    }
+        });
 
-    setItemDelete = (itemId, eventId) => {
+    setItemDelete = (itemId, eventId) =>
         baseService.setResource(`inventory/${eventId}/DeleteInventar/?itemId=${itemId}`);
-    }
 
-    getUnitsOfMeasuring = () => baseService.getResource('unitofmeasuring/all');
+    getUnitsOfMeasuring = () => baseService.getResourceNew('unitofmeasuring/all');
 
     setWantToTake = data => baseService.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
-    getUsersInventories = eventId => baseService.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+    getUsersInventories = eventId => baseService.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 
 
     setUsersInventoryDelete = data => {

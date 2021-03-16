@@ -56,31 +56,35 @@ class EventListWrapper extends Component {
             : {};
         const { data, isPending, isError } = this.props.events;
         const { items } = this.props.events.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <InternalServerError />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
+        //const errorMessage = isError.ErrorCode == '403'
+        //    ? <Forbidden />
+        //    : isError.ErrorCode == '500'
+        //        ? <InternalServerError />
+        //        : isError.ErrorCode == '401'
+        //            ? <Unauthorized />
+        //            : isError.ErrorCode == '400'
+        //                ? <BadRequest />
+        //                : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
-            ? <EventList
+        //const content = !errorMessage
+        //    ? <EventList
+        //        current_user={current_user}
+        //        data_list={items}
+        //        filter={this.props.events.filter}
+        //        page={data.pageViewModel.pageNumber}
+        //        totalPages={data.pageViewModel.totalPages}
+        //    />
+        //    : null;
+        const content = 
+            <EventList
                 current_user={current_user}
                 data_list={items}
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
             />
-            : null;
-
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
-            }
+            {spinner || content}
         </>
     }
 }

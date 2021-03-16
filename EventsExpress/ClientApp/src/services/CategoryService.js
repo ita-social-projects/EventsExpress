@@ -7,13 +7,13 @@ export default class CategoryService {
     getAllCategories = () => baseService.getResourceNew('category/all');
 
     setCategory = data => baseService.setResource('category/create', {
-            name: data.name
-        });
+        name: data.name
+    });
 
     editCategory = data => baseService.setResource('category/edit', {
-            id: data.id,
-            name: data.name
-        });
+        id: data.id,
+        name: data.name
+    });
 
     setCategoryDelete = data => baseService.setResource(`category/delete/${data}`);
 }

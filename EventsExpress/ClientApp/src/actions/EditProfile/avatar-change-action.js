@@ -17,8 +17,7 @@ export default function change_avatar(data) {
 
         let response = await api_serv.setAvatar(data);
         if (!response.ok) {
-            let jsonRes = await response.json();
-            throw new SubmissionError(buildValidationState(jsonRes));
+            throw new SubmissionError(buildValidationState(response));
         }
         dispatch(setAvatarSuccess(true));
         dispatch(updateAvatar(response));

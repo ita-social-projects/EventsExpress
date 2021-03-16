@@ -1,10 +1,9 @@
-﻿import {editUsername} from '../../actions/editProfile/editUsername';
+﻿import { editUsername } from '../../actions/editProfile/userName-edit-action';
 
 export const reducer = (
     state = {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
-        EditUsernameError: null
     },
     action) => {
     switch (action.type) {
@@ -16,11 +15,6 @@ export const reducer = (
         case editUsername.SUCCESS:
             return Object.assign({}, state, {
                 isEditUsernameSuccess: action.isEditUsernameSuccess
-            });
-
-        case editUsername.ERROR:
-            return Object.assign({}, state, {
-                EditUsernameError: action.EditUsernameError
             });
 
         default:

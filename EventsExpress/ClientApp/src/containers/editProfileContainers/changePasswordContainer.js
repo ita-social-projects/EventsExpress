@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import ChangePassword from "../../components/profile/editProfile/ChangePassword";
 import { connect } from "react-redux";
-import changePassword from "../../actions/editProfile/changePassword";
+import changePassword from "../../actions/editProfile/password-change-action";
 import { reset } from 'redux-form';
 
 class ChangePasswordContainer extends React.Component {

@@ -1,10 +1,9 @@
-﻿import {editGender} from '../../actions/editProfile/editGender';
+﻿import { editGender } from '../../actions/editProfile/gender-edit-action';
 
 export const reducer = (
     state = {
         isEditGenderPending: false,
         isEditGenderSuccess: false,
-        EditGenderError: null
     },
     action) => {
     switch (action.type) {
@@ -16,11 +15,6 @@ export const reducer = (
         case editGender.SUCCESS:
             return Object.assign({}, state, {
                 isEditGendeSuccess: action.isEditGendeSuccess
-            });
-
-        case editGender.ERROR:
-            return Object.assign({}, state, {
-                EditGendeError: action.EditGendeError
             });
 
         default:

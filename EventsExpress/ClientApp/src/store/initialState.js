@@ -53,11 +53,9 @@ const initialState = {
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
-        EditUsernameError: {}
     },
     SelectCategories: {
         IsSelectCategoriesSeccess: false,
-        IsSelectCategoriesError: null
     },
     add_category: {
         isCategoryPending: false,
@@ -70,7 +68,6 @@ const initialState = {
     },
     users: {
         isPending: true,
-        isError: false,
         editedUser: null,
         userSearchFilter: null,
         data: {
@@ -134,7 +131,6 @@ const initialState = {
     },
     events: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -151,14 +147,12 @@ const initialState = {
     },
     eventSchedules: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
         },
     },
     profile: {
         isPending: true,
-        isError: false,
         data: null
     },
     events_for_profile: {
@@ -170,12 +164,10 @@ const initialState = {
     },
     changePassword: {
         isPending: false,
-        isError: false,
         data: []
     },
     recoverPassword: {
         isPending: false,
-        isError: false,
         isSucces: null,
     },
     authenticate: {
@@ -187,7 +179,6 @@ const initialState = {
     chat: {
         isPending: false,
         isSuccess: false,
-        isError: null,
         data: {
             messages: [],
             users: [],
@@ -197,7 +188,6 @@ const initialState = {
     chats: {
         isPending: false,
         isSuccess: false,
-        isError: null,
         data: []
     },
     alert: {
@@ -209,7 +199,6 @@ const initialState = {
     contactUs: {
         isPending: false,
         isSuccess: false,
-        isError: null
     },
     notification:
     {
