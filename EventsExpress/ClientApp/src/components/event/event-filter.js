@@ -126,7 +126,7 @@ class EventFilter extends Component {
                         <Button
                             fullWidth={true}
                             type="submit"
-                            color="primary"                            
+                            color="primary"
                             disabled={this.props.submitting}
                         >
                             Search
