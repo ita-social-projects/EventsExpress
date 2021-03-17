@@ -1,27 +1,18 @@
-* {
-    margin: 0;
-    padding: 0;
+#sub-nav div li a 
+{
+    width: 100%;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    height: 100vh;
 }
 
-.wrapper-content {    
-    display: flex;
-    flex-wrap: wrap;
+#root {
+    height: 100%;
 }
 
-#sub-nav {    
-    flex-grow: 1; 
-}
-
-main {
-    flex-grow: 3;
-}
-
-.item {
-    width: 15em;
+.extra-sidebar {
+    background-color: rgba(114, 113, 113, 0.2);
 }
 
 .extra-sidebar ul li .link {
@@ -29,6 +20,7 @@ main {
     font-size: 1.1em;
     color: rgba(0, 0, 0, 0.75);
     display: block;    
+    width: 100%;
 }
 
 .extra-sidebar ul li .link:hover {

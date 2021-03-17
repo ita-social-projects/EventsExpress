@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
         <>
             <LeftSidebarWrapper />
             <AlertContainer />
-            <div id="main" className="container-fluid pl-5">
+            <div id="main" className="container-fluid h-100 pl-5">
                 {children}
             </div>
         </>

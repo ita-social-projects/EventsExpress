@@ -12,25 +12,25 @@ export default class Admin extends Component {
 
         return (
             <>
-                <div className="wrapper-content">
-                    <div className="extra-sidebar">
+                <div className="row h-100">
+                    <div className="extra-sidebar col-sm-2">
                         <ul className="list-unstyled">
                             <nav id="sub-nav">
-                                <div className="item">
+                                <div>
                                     <NavItem
                                         to={'/admin/categories/'}
                                         icon={'fa fa-hashtag'}
                                         text={"Categories"}
                                     />
                                 </div>
-                                <div className="item">
+                                <div>
                                     <NavItem
                                         to={'/admin/unitsOfMeasuring/'}
                                         icon={'fa fa-plus'}
                                         text={"UnitsOfMeasuring"}
                                     />
                                 </div>
-                                <div className="item">
+                                <div>
                                     <NavItem
                                         to={'/admin/users?page=1'}
                                         icon={'fa fa-users'}
@@ -40,11 +40,11 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <main>
-                        <Route path="/admin/categories/" component={Category} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                        <Route path="/admin/users" component={UserPWrapper} />
-                    </main>
+                    <div className="col-sm-9 offset-sm-1 mt-2">                        
+                            <Route path="/admin/categories/" component={Category} />
+                            <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                            <Route path="/admin/users" component={UserPWrapper} />                    
+                    </div>
                 </div>
             </>
         );
