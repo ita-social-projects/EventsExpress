@@ -12,12 +12,15 @@ export default class Admin extends Component {
 
         return (
             <>
+                <div className="admin-panel row">
+                    <h3>Admin Panel</h3>
+                </div>
                 <div className="row h-100">
-                    <div className="extra-sidebar col-sm-2">
+                    <div className="admin-sidebar col-sm-2">
                         <ul className="list-unstyled">
                             <nav id="sub-nav">
                                 <div>
-                                    <NavItem
+                                    <NavItem                                                                               
                                         to={'/admin/categories/'}
                                         icon={'fa fa-hashtag'}
                                         text={"Categories"}
@@ -40,7 +43,7 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1 mt-2">                        
+                    <div className="col-sm-9 offset-sm-1">                        
                             <Route path="/admin/categories/" component={Category} />
                             <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                             <Route path="/admin/users" component={UserPWrapper} />                    
