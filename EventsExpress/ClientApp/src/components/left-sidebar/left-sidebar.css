@@ -10,7 +10,7 @@ body {
     z-index: 101;
     top: 0;
     left: 0;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255); 
     overflow-x: hidden;
     transition: 0.5s;
 }
@@ -57,7 +57,7 @@ body {
     .left-sidebar ul li .link {
         padding: 10px;
         font-size: 1.1em;
-        color: rgba(0, 0, 0, 0.75);;
+        color: rgba(0, 0, 0, 0.75);
         display: block;
     }
 
@@ -69,6 +69,10 @@ body {
         transition: 0.1s;
     }
 
+.list-unstyled li a 
+{
+    width: 100%;
+}
 
 
 /* ---------------------------------------------------
