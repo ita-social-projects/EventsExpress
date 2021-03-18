@@ -136,17 +136,9 @@ namespace EventsExpress.Controllers
             filter.OwnerId = null;
             filter.VisitorId = null;
 
-            if (!User.IsInRole("Admin"))
+            if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)
             {
-                if (filter.DateFrom == DateTime.MinValue)
-                {
-                    filter.DateFrom = DateTime.Today;
-                }
-
-                if (filter.Status != EventStatus.Active)
-                {
-                    return Forbid();
-                }
+                filter.DateFrom = DateTime.Today;
             }
 
             try
@@ -225,39 +217,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> DeleteUserFromEvent(Guid eventId, Guid userId)
         {
             await _eventService.DeleteUserFromEvent(userId, eventId);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// This method is to block event.
-        /// </summary>
-        /// <param name="eventId">Param eventId defines the event identifier.</param>
-        /// <returns>The method returns blocked event.</returns>
-        /// <response code="200">Block is succesful.</response>
-        /// <response code="302">If user isn't admin.</response>
-        /// <response code="400">Block process failed.</response>
-        [HttpPost("{eventId:Guid}/[action]")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Block(Guid eventId)
-        {
-            await _eventService.BlockEvent(eventId);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// This method is to unblock event.
-        /// </summary>
-        /// <param name="eventId">Param eventId defines the event identifier.</param>
-        /// <returns>The method returns unblocked event.</returns>
-        /// <response code="200">Unblock is succesful.</response>
-        /// <response code="400">Unblock process is failed.</response>
-        [HttpPost("{eventId:Guid}/[action]")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Unblock(Guid eventId)
-        {
-            await _eventService.UnblockEvent(eventId);
 
             return Ok();
         }

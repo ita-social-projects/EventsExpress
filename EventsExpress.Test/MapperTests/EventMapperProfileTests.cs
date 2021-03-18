@@ -55,7 +55,6 @@ namespace EventsExpress.Test.MapperTests
             return new Event
             {
                 Id = idEvent,
-                IsBlocked = false,
                 Title = "First event",
                 Description = "It is the first event for testing",
                 DateFrom = DateTime.Now,
@@ -483,7 +482,6 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resDto.OnlineMeeting, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Online ?
                  new Uri(firstEventEditViewModel.Location.OnlineMeeting) : null));
             Assert.That(resDto.Type, Is.EqualTo(firstEventEditViewModel.Location.Type));
-            Assert.That(resDto.IsBlocked, Is.EqualTo(default(bool)));
             Assert.That(resDto.PhotoBytes, Is.EqualTo(default(string)));
             Assert.That(resDto.Visitors, Is.EqualTo(default(string)));
         }
@@ -520,7 +518,6 @@ namespace EventsExpress.Test.MapperTests
                                                          ex.UnitOfMeasuring.ShortName == f.UnitOfMeasuring.ShortName &&
                                                          ex.UnitOfMeasuring.UnitName == f.UnitOfMeasuring.UnitName)));
             Assert.That(resDto.Id, Is.EqualTo(default(Guid)));
-            Assert.That(resDto.IsBlocked, Is.EqualTo(default(bool)));
             Assert.That(resDto.PhotoUrl, Is.Null);
             Assert.That(resDto.PhotoBytes, Is.Null);
             Assert.That(resDto.Visitors, Is.Null);

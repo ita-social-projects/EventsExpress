@@ -147,3 +147,7 @@
 .react-datepicker-popper {
     z-index: 460;
 }
+
+.retreat {
+    padding-left: 15px;
+}

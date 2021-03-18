@@ -39,6 +39,9 @@ class EventFilterWrapper extends Component {
                 case 'categories':
                     this.props.events.filter[key] = value.map(item => item.id);
                     break;
+                case 'statuses':
+                    this.props.events.filter[key] = value;
+                    break;
                 default:
                     this.props.events.filter[key] = value;
             }
