@@ -5,7 +5,7 @@ import editBirthday from "../../actions/editProfile/birthday-edit-action";
 
 class EditBirthdayContainer extends React.Component {
     submit = value => {
-        this.props.editBirthday(value);
+        return this.props.editBirthday(value);
     }
     render() {
         return <EditBirthday onSubmit={this.submit} />;

@@ -5,7 +5,7 @@ import edit_Gender from "../../actions/editProfile/gender-edit-action";
 
 class EditGenderContainer extends React.Component {
     submit = value => {
-        this.props.editGender(value);
+       return this.props.editGender(value);
     }
     render() {
         return <EditGender onSubmit={this.submit} />;

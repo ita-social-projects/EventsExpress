@@ -1,11 +1,9 @@
 ﻿import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from "redux-form";
-
-import { renderErrorMessage, renderTextField } from '../helpers/helpers';
-
+import { renderTextField } from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
-
+import ErrorMessages from '../shared/errorMessage';
 
 class CategoryEdit extends Component {
 
@@ -14,36 +12,23 @@ class CategoryEdit extends Component {
         this.props.initialize(obj)
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.callback({ name: this.props.newName });
-    }
-
-    renderError() {
-        if (!this.props.message) {
-            return null;
-        }
-        return renderErrorMessage(this.props.message, "name");
-    }
-
     render() {
 
         return <>
             <td className="align-middle" width="75%">
-                <form className="w-100" id="save-form" onSubmit={this.handleSubmit}>
+                <form className="w-100" id="save-form" onSubmit={this.props.handleSubmit}>
                     <div className="d-flex flex-column justify-content-around ">
                         <Field
-                            className="form-control"
-                            autoFocus
                             name="category"
                             label="Name"
-                            defaultValue={this.props.item.name}
                             component={renderTextField}
                         />
-                        {this.renderError()}
                     </div>
                 </form>
-
+                {
+                    this.props.error &&
+                    <ErrorMessages error={this.props.error} className="text-center" />
+                }
 
             </td>
             <td></td>
@@ -81,3 +66,6 @@ CategoryEdit = reduxForm({
 })(CategoryEdit);
 
 export default CategoryEdit;
+
+
+

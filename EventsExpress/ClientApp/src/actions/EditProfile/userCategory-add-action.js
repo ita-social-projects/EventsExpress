@@ -1,7 +1,7 @@
 ﻿import { UserService } from '../../services';
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../../components/helpers/helpers.js'
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 
 export const addUserCategory = {
@@ -17,7 +17,7 @@ export default function setUserCategory(data) {
         dispatch(setAddUserCategoryPending(true));
         let response = await api_serv.setUserCategory(data);
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setAddUserCategorySuccess(true));
         dispatch(updateCategories(data));

@@ -6,7 +6,7 @@ import { reset } from 'redux-form';
 
 class ChangePasswordContainer extends React.Component {
     submit = value => {
-        this.props.changePassword(value);
+        return this.props.changePassword(value);
     }
 
     render() {

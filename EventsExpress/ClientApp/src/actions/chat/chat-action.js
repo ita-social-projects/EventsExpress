@@ -28,39 +28,38 @@ export default function get_chat(chatId) {
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getChatsSuccess({ isSuccess: true, data: jsonRes }));
+        dispatch(getChatSuccess({ isSuccess: true, data: jsonRes }));
         return Promise.resolve();
     }
 }
 
 export function initialConnection() {
-    return dispatch => {
+    return async dispatch => {
         const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/chatroom`,
             { accessTokenFactory: () => (localStorage.getItem('token')) }).build();
+        try {
+            await hubConnection.start();
 
-        hubConnection
-            .start()
-            .then(() => {
-                hubConnection.on('ReceiveMessage', (data) => {
-                    dispatch(ReceiveMsg(data));
-                    if (data.senderId != localStorage.getItem('id')) {
-                        dispatch(setAlert({ variant: 'info', message: "You have a new message", autoHideDuration: 5000 }));
-                    }
-                });
-                hubConnection.on('wasSeen', (data) => {
-                    dispatch(ReceiveSeenMsg(data));
-                });
+            hubConnection.on('ReceiveMessage', (data) => {
+                dispatch(ReceiveMsg(data));
+                if (data.senderId != localStorage.getItem('id')) {
+                    dispatch(setAlert({ variant: 'info', message: "You have a new message", autoHideDuration: 5000 }));
+                }
+            });
+            hubConnection.on('wasSeen', (data) => {
+                dispatch(ReceiveSeenMsg(data));
+            });
 
-                hubConnection.on('ReceivedNewEvent', (data) => {
-                    dispatch(receivedNewEvent(data));
-                    dispatch(setAlert({
-                        variant: 'info',
-                        message: `The event was created which could interested you.`,
-                        autoHideDuration: 5000
-                    }));
-                });
-            })
-            .catch(err => console.log('Error while establishing connection :('));
+            hubConnection.on('ReceivedNewEvent', (data) => {
+                dispatch(receivedNewEvent(data));
+                dispatch(setAlert({
+                    variant: 'info',
+                    message: `The event was created which could interested you.`,
+                    autoHideDuration: 5000
+                }));
+            });
+        }
+        catch { (err => console.log('Error while establishing connection :(')); }
 
         dispatch({
             type: INITIAL_CONNECTION,

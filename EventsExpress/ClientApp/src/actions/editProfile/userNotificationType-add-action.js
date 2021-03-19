@@ -1,7 +1,7 @@
 import { UserService } from '../../services';
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../../components/helpers/helpers.js';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const addUserNotificationType = {
     PENDING: "SET_ADD_USER_NOTIFICATION_TYPE_PENDING",
@@ -16,7 +16,7 @@ export default function setUserNotificationTypes(data) {
         dispatch(setAddUserNotificationTypePending(true));
         let response = await api_serv.setUserNotificationType(data);
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setAddUserNotificationTypeSuccess(true));
         dispatch(updateNotificationTypes(data));

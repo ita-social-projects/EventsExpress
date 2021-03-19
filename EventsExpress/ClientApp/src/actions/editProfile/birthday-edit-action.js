@@ -1,7 +1,7 @@
 ﻿import { UserService } from '../../services';
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../../components/helpers/helpers.js';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const editBirthday = {
     PENDING: "SET_EDITBIRTHDAY_PENDING",
@@ -16,7 +16,7 @@ export default function edit_Birthday(data) {
         dispatch(setEditBirthdayPending(true));
         let response = await api_serv.setBirthday(data);
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEditBirthdaySuccess(true));
         dispatch(updateBirthday(data.Birthday));
