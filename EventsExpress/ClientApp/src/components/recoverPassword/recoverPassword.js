@@ -4,8 +4,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Module from '../helpers';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
-
+import ErrorMessages from '../shared/errorMessage';
 
 const { validate, renderTextField } = Module;
 
@@ -16,17 +15,20 @@ class RecoverPassword extends React.Component {
         return (
             <form onSubmit={handleSubmit}>
                 <DialogContentText>
-                    If you forgot your password please enter your  <br /> email address here. We will send you new<br/> password.
-                    
+                    If you forgot your password please enter your  <br /> email address here. We will send you new<br /> password.
                   </DialogContentText>
                 <div>
                     <Field
                         name="email"
                         component={renderTextField}
                         label="E-mail:"
-                        
                     />
+                    {
+                        props.error &&
+                        <ErrorMessages error={props.error} className="text-center" />
+                    }
                 </div>
+
                 <div>
                     <DialogActions className="d-flex flex-column ">
 
@@ -38,13 +40,10 @@ class RecoverPassword extends React.Component {
                                 Submit
                                     </Button>
                         </div>
-                        
-
-
                     </DialogActions>
                 </div>
             </form>
-            )
+        )
     }
 }
 

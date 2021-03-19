@@ -9,7 +9,7 @@ export const SET_CATEGORY_EDITED = "SET_CATEGORY_EDITED";
 
 const api_serv = new CategoryService();
 
-export function add_category(data) {
+export default function add_category(data) {
     return async dispatch => {
         dispatch(setCategoryPending(true));
         let response;
@@ -19,7 +19,7 @@ export function add_category(data) {
             response = await api_serv.setCategory(data)
         }
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setCategorySuccess(true));
         dispatch(get_categories());

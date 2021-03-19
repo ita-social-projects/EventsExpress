@@ -11,7 +11,7 @@ class RecoverPasswordContainer extends React.Component {
     }
 
     submit = value => {
-        this.props.recoverPassword(value);
+        return this.props.recoverPassword(value);
     }
 
     render() {

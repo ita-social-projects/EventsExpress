@@ -1,6 +1,6 @@
 ﻿import { AuthenticationService } from '../../services';
 import { SubmissionError } from 'redux-form';
-import { buildValidationState } from '../../components/helpers/helpers.js'
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const recoverPassword = {
     PENDING: "SET_RECOVERPASSWORD_PENDING",

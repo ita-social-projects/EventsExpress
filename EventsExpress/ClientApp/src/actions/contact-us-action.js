@@ -16,7 +16,7 @@ export default function contact_Us(data) {
         dispatch(setContactUsPending(true));
         let response = await api_serv.setContactUs(data);
         if (!response.ok) {
-            throw new SubmissionError(buildValidationState(response));
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setContactUsSuccess(true));
         dispatch(setSuccessAllert('Message was succesfully sended'));
