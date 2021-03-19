@@ -2,6 +2,8 @@
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
 
@@ -9,7 +11,9 @@ namespace EventsExpress.Mapping
 {
     public class EventScheduleMapperProfile : Profile
     {
-        public EventScheduleMapperProfile()
+        private readonly IPhotoService photoService;
+
+        public EventScheduleMapperProfile(IPhotoService photoService)
         {
             CreateMap<EventSchedule, EventScheduleDto>()
            .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDto
@@ -22,7 +26,6 @@ namespace EventsExpress.Mapping
                {
                    Id = x.UserId,
                }),
-               PhotoBytes = src.Event.Photo,
            }));
 
             CreateMap<EventScheduleDto, EventSchedule>()
@@ -31,17 +34,17 @@ namespace EventsExpress.Mapping
             CreateMap<EventScheduleDto, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()));
+                .AfterMap((src, dest) => dest.PhotoUrl = photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result);
 
             CreateMap<EventScheduleDto, EventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom(src => src.Event.PhotoBytes.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Event.Owners.Select(x => new UserPreviewViewModel
                 {
                     Id = x.Id,
                     Username = x.Name,
-                })));
+                })))
+                .AfterMap((src, dest) => dest.PhotoUrl = photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result);
 
             CreateMap<PreviewEventScheduleViewModel, EventScheduleDto>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
@@ -53,6 +56,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true))
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
+            this.photoService = photoService;
         }
     }
 }

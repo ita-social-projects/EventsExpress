@@ -3,6 +3,8 @@ using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
 
@@ -10,8 +12,12 @@ namespace EventsExpress.Mapping
 {
     public class UserMapperProfile : Profile
     {
-        public UserMapperProfile()
+        private readonly IPhotoService photoService;
+
+        public UserMapperProfile(IPhotoService photoService)
         {
+            this.photoService = photoService;
+
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
@@ -32,10 +38,9 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PasswordHash, opts => opts.MapFrom(src => src.PasswordHash))
                 .ForMember(dest => dest.Salt, opts => opts.MapFrom(src => src.Salt))
-                .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                 .ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
-                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
+                .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Phone, opts => opts.MapFrom(src => src.Phone))
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens))
                 .ForAllOtherMembers(x => x.Ignore());
@@ -51,12 +56,10 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
-                .ForMember(
-                    dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.Token, opts => opts.Ignore())
-                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
+                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore())
+                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -66,23 +69,16 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.Role,
                     opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }))
-                .ForMember(
-                    dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
+                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(
-                    dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
+                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
 
             CreateMap<UserDto, ProfileDto>()
-                .ForMember(
-                    dest => dest.UserPhoto,
-                    opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(
                     dest => dest.Categories,
@@ -101,7 +97,8 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
+                .AfterMap((src, dest) => dest.UserPhoto = GetUserPhotoFromBlob(src.Id));
 
             CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
@@ -113,5 +110,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForAllOtherMembers(x => x.Ignore());
         }
+
+        private string GetUserPhotoFromBlob(Guid id)
+            => photoService.GetPhotoFromAzureBlob($"users/{id}/photo.png").Result;
     }
 }

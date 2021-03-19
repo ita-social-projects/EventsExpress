@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
@@ -18,17 +19,20 @@ namespace EventsExpress.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public EventController(
             IEventService eventService,
             IAuthService authSrv,
-            IMapper mapper)
+            IMapper mapper,
+            IPhotoService photoService)
         {
             _eventService = eventService;
             _authService = authSrv;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         /// <summary>

@@ -1,8 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using AutoMapper;
+using Azure.Storage.Blobs;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -13,31 +17,28 @@ namespace EventsExpress.Mapping
 {
     public class EventMapperProfile : Profile
     {
-        public EventMapperProfile()
+        private readonly IPhotoService photoService;
+
+        public EventMapperProfile(IPhotoService photoService)
         {
             CreateMap<Event, EventDto>()
-               .ForMember(dest => dest.Photo, opt => opt.Ignore())
                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
-                   dest => dest.Categories,
-                   opts => opts.MapFrom(src =>
-                       src.Categories.Select(x => MapCategoryToCategoryDto(x))))
-               .ForMember(dest => dest.PhotoBytes, opt => opt.MapFrom(src => src.Photo))
+                    dest => dest.Categories,
+                    opts => opts.MapFrom(src =>
+                        src.Categories.Select(x => MapCategoryToCategoryDto(x))))
                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.EventSchedule.Frequency))
                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.EventSchedule.Periodicity))
                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.EventSchedule != null)))
-               .ForMember(dest => dest.PhotoId, opts => opts.MapFrom(src => src.PhotoId))
                .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus))
                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
-                       src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
-               .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
+                    src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
                .ForMember(dest => dest.OwnerIds, opts => opts.Ignore());
 
             CreateMap<EventDto, Event>()
-                .ForMember(dest => dest.Photo, opt => opt.Ignore())
                 .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Owners.Select(x =>
                    new EventOwner
                    {
@@ -47,7 +48,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
+                    src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
                 .ForMember(dest => dest.EventLocationId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventLocation, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
@@ -55,41 +56,36 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.StatusHistory, opts => opts.Ignore());
 
             CreateMap<EventDto, EventPreviewViewModel>()
-                .ForMember(
-                    dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.PhotoBytes.Thumb.ToRenderablePictureString()))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
-                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))));
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
+                .AfterMap((src, dest) => dest.PhotoUrl = EventPreviewPhoto(src.Id));
 
             CreateMap<EventDto, EventViewModel>()
-                 .ForMember(
-                    dest => dest.PhotoUrl,
-                    opts => opts.MapFrom(src => src.PhotoBytes.Img.ToRenderablePictureString()))
-                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
-                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => MapInventoryViewModelFromInventoryDto(x))))
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
+                .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
+                    src.Inventories.Select(x => MapInventoryViewModelFromInventoryDto(x))))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x => MapUserEventToUserPreviewViewModel(x))))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
+                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
+                .AfterMap((src, dest) => dest.PhotoUrl = EventFullPhoto(src.Id));
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
+                    src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
                 .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
-                .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
             CreateMap<EventCreateViewModel, EventDto>()
@@ -102,11 +98,10 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
-                        src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
+                    src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
-                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
-                .ForMember(dest => dest.PhotoBytes, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
+            this.photoService = photoService;
         }
 
         private static LocationViewModel MapLocation(EventDto eventDto)
@@ -153,37 +148,9 @@ namespace EventsExpress.Mapping
                  new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
         }
 
-        private static string UserPreviewViewModelPhoto(User user)
-        {
-            return user.Photo != null ? user.Photo.Thumb.ToRenderablePictureString() : null;
-        }
-
         private static string UserName(User user)
         {
             return user.Name ?? user.Email.Substring(0, user.Email.IndexOf("@", StringComparison.Ordinal));
-        }
-
-        private static UserPreviewViewModel MapUserToUserPreviewViewModel(User user)
-        {
-            return new UserPreviewViewModel
-            {
-                Birthday = user.Birthday,
-                Id = user.Id,
-                PhotoUrl = UserPreviewViewModelPhoto(user),
-                Username = UserName(user),
-            };
-        }
-
-        private static UserPreviewViewModel MapUserEventToUserPreviewViewModel(UserEvent userEvent)
-        {
-            return new UserPreviewViewModel
-            {
-                Id = userEvent.User.Id,
-                Username = UserName(userEvent.User),
-                Birthday = userEvent.User.Birthday,
-                PhotoUrl = UserPreviewViewModelPhoto(userEvent.User),
-                UserStatusEvent = userEvent.UserStatusEvent,
-            };
         }
 
         private static CategoryDto MapCategoryToCategoryDto(EventCategory eventCategory)
@@ -280,6 +247,42 @@ namespace EventsExpress.Mapping
                 ItemName = inventory.ItemName,
                 NeedQuantity = inventory.NeedQuantity,
                 UnitOfMeasuring = MapInventoryToUnitOfMeasuringDto(inventory),
+            };
+        }
+
+        private string EventPreviewPhoto(Guid id) =>
+            photoService.GetPhotoFromAzureBlob($"events/{id}/preview.png").Result;
+
+        private string EventFullPhoto(Guid id) =>
+            photoService.GetPhotoFromAzureBlob($"events/{id}/full.png").Result;
+
+        private string UserPreviewViewModelPhoto(User user)
+        {
+            var photo = photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+
+            return photo != null ? photo : null;
+        }
+
+        private UserPreviewViewModel MapUserToUserPreviewViewModel(User user)
+        {
+            return new UserPreviewViewModel
+            {
+                Birthday = user.Birthday,
+                Id = user.Id,
+                PhotoUrl = UserPreviewViewModelPhoto(user),
+                Username = UserName(user),
+            };
+        }
+
+        private UserPreviewViewModel MapUserEventToUserPreviewViewModel(UserEvent userEvent)
+        {
+            return new UserPreviewViewModel
+            {
+                Id = userEvent.User.Id,
+                Username = UserName(userEvent.User),
+                Birthday = userEvent.User.Birthday,
+                PhotoUrl = UserPreviewViewModelPhoto(userEvent.User),
+                UserStatusEvent = userEvent.UserStatusEvent,
             };
         }
     }

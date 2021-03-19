@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +18,18 @@ namespace EventsExpress.Controllers
         private readonly IMapper _mapper;
         private readonly IMessageService _messageService;
         private readonly IAuthService _authService;
+        private readonly IPhotoService _photoService;
 
         public ChatController(
             IMessageService messageService,
             IAuthService authService,
-            IMapper mapper)
+            IMapper mapper,
+            IPhotoService photoService)
         {
             _authService = authService;
             _messageService = messageService;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -38,7 +42,19 @@ namespace EventsExpress.Controllers
         public IActionResult All()
         {
             var currentUser = _authService.GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
+            var res = _mapper.Map<IEnumerable<ChatRoom>, IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id), opt =>
+            {
+                opt.AfterMap((src, dest) =>
+                {
+                    foreach (var c in _messageService.GetUserChats(currentUser.Id))
+                    {
+                        foreach (var u in c.Users)
+                        {
+
+                        }
+                    }
+                });
+            });
             return Ok(res);
         }
 
@@ -59,7 +75,16 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            return Ok(_mapper.Map<ChatViewModel>(chat));
+            return Ok(_mapper.Map<ChatRoom, ChatViewModel>(chat, opt =>
+            {
+                opt.AfterMap((src, dest) =>
+                {
+                    foreach (var d in dest.Users)
+                    {
+                        d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{d.Id}/photo.png").Result;
+                    }
+                });
+            }));
         }
 
         /// <summary>

@@ -9,8 +9,6 @@ namespace EventsExpress.ViewModels
     {
         public Guid Id { get; set; }
 
-        public Guid PhotoId { get; set; }
-
         public string PhotoUrl { get; set; }
 
         public EventStatus EventStatus { get; set; }

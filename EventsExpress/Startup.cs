@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -136,7 +137,7 @@ namespace EventsExpress
             services.AddScoped<IEventOwnersService, EventOwnersService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddSingleton<IPhotoService, PhotoService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
@@ -151,6 +152,12 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
+
+            services.AddAzureClients(builder =>
+            {
+                // Add a storage account client
+                builder.AddBlobServiceClient(Configuration.GetConnectionString("AzureBlobConnection"));
+            });
 
             services.AddMvc().AddFluentValidation(options =>
             {
@@ -171,7 +178,17 @@ namespace EventsExpress
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
-            services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(UserService).GetTypeInfo().Assembly);
+
+            services.AddSingleton(provider =>
+            new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new EventMapperProfile(provider.GetService<IPhotoService>()));
+                cfg.AddProfile(new UserMapperProfile(provider.GetService<IPhotoService>()));
+                cfg.AddProfile(new MessageMapperProfile(provider.GetService<IPhotoService>()));
+                cfg.AddProfile(new CommentMapperProfile(provider.GetService<IPhotoService>()));
+                cfg.AddProfile(new EventScheduleMapperProfile(provider.GetService<IPhotoService>()));
+            }).CreateMapper());
 
             services.AddControllersWithViews(options =>
             {
