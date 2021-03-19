@@ -11,9 +11,7 @@ namespace EventsExpress.Mapping
 {
     public class EventScheduleMapperProfile : Profile
     {
-        private readonly IPhotoService photoService;
-
-        public EventScheduleMapperProfile(IPhotoService photoService)
+        public EventScheduleMapperProfile()
         {
             CreateMap<EventSchedule, EventScheduleDto>()
            .ForMember(dest => dest.Event, opts => opts.MapFrom(src => new EventDto
@@ -33,8 +31,7 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventScheduleDto, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
-                .AfterMap((src, dest) => dest.PhotoUrl = photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result);
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
 
             CreateMap<EventScheduleDto, EventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
@@ -43,8 +40,7 @@ namespace EventsExpress.Mapping
                 {
                     Id = x.Id,
                     Username = x.Name,
-                })))
-                .AfterMap((src, dest) => dest.PhotoUrl = photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result);
+                })));
 
             CreateMap<PreviewEventScheduleViewModel, EventScheduleDto>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
@@ -56,7 +52,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.IsActive, opts => opts.MapFrom(src => true))
                 .ForMember(dest => dest.Event, opts => opts.Ignore());
-            this.photoService = photoService;
         }
     }
 }

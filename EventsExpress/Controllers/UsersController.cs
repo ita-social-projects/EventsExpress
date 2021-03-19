@@ -59,7 +59,16 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -92,7 +101,16 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -318,7 +336,13 @@ namespace EventsExpress.Controllers
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<ProfileViewModel>(_userService.GetProfileById(id, user.Id));
+            var res = _mapper.Map<ProfileDto, ProfileViewModel>(_userService.GetProfileById(id, user.Id), opt =>
+            {
+                opt.AfterMap((src, dest) =>
+                {
+                    dest.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                });
+            });
 
             return Ok(res);
         }

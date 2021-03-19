@@ -123,7 +123,13 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{eventId:Guid}")]
         public IActionResult Get(Guid eventId) =>
-            Ok(_mapper.Map<EventViewModel>(_eventService.EventById(eventId)));
+            Ok(_mapper.Map<EventDto, EventViewModel>(_eventService.EventById(eventId), opt =>
+            {
+                opt.AfterMap((src, dest) =>
+                {
+                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result;
+                });
+            }));
 
         /// <summary>
         /// This method have to return all events.
@@ -149,8 +155,17 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
-                        _eventService.GetAll(filter, out int count)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(
+                        _eventService.GetAll(filter, out int count), opt =>
+                        {
+                            opt.AfterMap((src, dest) =>
+                            {
+                                foreach (var d in dest)
+                                {
+                                    d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                }
+                            });
+                        }),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
@@ -303,7 +318,16 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.FutureEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.FutureEventsByUserId(id, model), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -334,7 +358,16 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.PastEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.PastEventsByUserId(id, model), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -365,7 +398,16 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.EventsToGoByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.EventsToGoByUserId(id, model), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -396,7 +438,16 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.VisitedEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.VisitedEventsByUserId(id, model), opt =>
+                    {
+                        opt.AfterMap((src, dest) =>
+                        {
+                            foreach (var d in dest)
+                            {
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                            }
+                        });
+                    }),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -428,8 +479,17 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
-                        _eventService.GetEvents(eventIds, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(
+                        _eventService.GetEvents(eventIds, model), opt =>
+                        {
+                            opt.AfterMap((src, dest) =>
+                            {
+                                foreach (var d in dest)
+                                {
+                                    d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                }
+                            });
+                        }),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);

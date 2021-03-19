@@ -187,7 +187,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GetPhotoFromBlob_DoesNotThrows()
         {
-            Assert.DoesNotThrowAsync(async () => await PhotoService.GetPhotoFromBlob($"events/{Guid.NewGuid()}/preview.png"));
+            Assert.DoesNotThrowAsync(async () => await PhotoService.GetPhotoFromAzureBlob($"events/{Guid.NewGuid()}/preview.png"));
             BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
         }
 

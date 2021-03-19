@@ -12,12 +12,8 @@ namespace EventsExpress.Mapping
 {
     public class UserMapperProfile : Profile
     {
-        private readonly IPhotoService photoService;
-
-        public UserMapperProfile(IPhotoService photoService)
+        public UserMapperProfile()
         {
-            this.photoService = photoService;
-
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
@@ -58,8 +54,7 @@ namespace EventsExpress.Mapping
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.Token, opts => opts.Ignore())
-                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore())
-                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
+                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -68,15 +63,13 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(
                     dest => dest.Role,
-                    opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }))
-                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
+                    opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }));
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
-                .AfterMap((src, dest) => dest.PhotoUrl = GetUserPhotoFromBlob(src.Id));
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -97,8 +90,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
-                .AfterMap((src, dest) => dest.UserPhoto = GetUserPhotoFromBlob(src.Id));
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
 
             CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
@@ -110,8 +102,5 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForAllOtherMembers(x => x.Ignore());
         }
-
-        private string GetUserPhotoFromBlob(Guid id)
-            => photoService.GetPhotoFromAzureBlob($"users/{id}/photo.png").Result;
     }
 }

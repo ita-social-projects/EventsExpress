@@ -46,11 +46,11 @@ namespace EventsExpress.Controllers
             {
                 opt.AfterMap((src, dest) =>
                 {
-                    foreach (var c in _messageService.GetUserChats(currentUser.Id))
+                    foreach (var d in dest)
                     {
-                        foreach (var u in c.Users)
+                        foreach (var u in d.Users)
                         {
-
+                            u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
                         }
                     }
                 });

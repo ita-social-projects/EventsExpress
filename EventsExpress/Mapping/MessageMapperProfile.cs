@@ -11,9 +11,7 @@ namespace EventsExpress.Mapping
 {
     public class MessageMapperProfile : Profile
     {
-        private readonly IPhotoService photoService;
-
-        public MessageMapperProfile(IPhotoService photoService)
+        public MessageMapperProfile()
         {
             CreateMap<ChatRoom, UserChatViewModel>()
                 .ForMember(dest => dest.LastMessage, opts => opts.MapFrom(src => src.Messages.LastOrDefault().Text))
@@ -42,15 +40,12 @@ namespace EventsExpress.Mapping
                 {
                     Id = x.UserId,
                     Birthday = x.User.Birthday,
-                    PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{x.UserId}/photo.png").Result != null ?
-                        photoService.GetPhotoFromAzureBlob($"users/{x.UserId}/photo.png").Result : null,
                     Username = x.User.Name ?? x.User.Email.Substring(0, x.User.Email.IndexOf("@")),
                 })))
                 .ForMember(dest => dest.LastMessage, opts => opts.Ignore())
                 .ForMember(dest => dest.LastMessageTime, opts => opts.Ignore());
 
             CreateMap<Message, MessageViewModel>().ReverseMap();
-            this.photoService = photoService;
         }
     }
 }

@@ -17,9 +17,7 @@ namespace EventsExpress.Mapping
 {
     public class EventMapperProfile : Profile
     {
-        private readonly IPhotoService photoService;
-
-        public EventMapperProfile(IPhotoService photoService)
+        public EventMapperProfile()
         {
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
@@ -61,8 +59,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
-                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
-                .AfterMap((src, dest) => dest.PhotoUrl = EventPreviewPhoto(src.Id));
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))));
 
             CreateMap<EventDto, EventViewModel>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
@@ -74,8 +71,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .AfterMap((src, dest) => dest.PhotoUrl = EventFullPhoto(src.Id));
+                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
@@ -101,7 +97,6 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
-            this.photoService = photoService;
         }
 
         private static LocationViewModel MapLocation(EventDto eventDto)
@@ -250,26 +245,12 @@ namespace EventsExpress.Mapping
             };
         }
 
-        private string EventPreviewPhoto(Guid id) =>
-            photoService.GetPhotoFromAzureBlob($"events/{id}/preview.png").Result;
-
-        private string EventFullPhoto(Guid id) =>
-            photoService.GetPhotoFromAzureBlob($"events/{id}/full.png").Result;
-
-        private string UserPreviewViewModelPhoto(User user)
-        {
-            var photo = photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
-
-            return photo != null ? photo : null;
-        }
-
         private UserPreviewViewModel MapUserToUserPreviewViewModel(User user)
         {
             return new UserPreviewViewModel
             {
                 Birthday = user.Birthday,
                 Id = user.Id,
-                PhotoUrl = UserPreviewViewModelPhoto(user),
                 Username = UserName(user),
             };
         }
@@ -281,7 +262,6 @@ namespace EventsExpress.Mapping
                 Id = userEvent.User.Id,
                 Username = UserName(userEvent.User),
                 Birthday = userEvent.User.Birthday,
-                PhotoUrl = UserPreviewViewModelPhoto(userEvent.User),
                 UserStatusEvent = userEvent.UserStatusEvent,
             };
         }

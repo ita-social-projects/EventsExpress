@@ -11,9 +11,7 @@ namespace EventsExpress.Mapping
 {
     public class CommentMapperProfile : Profile
     {
-        private readonly IPhotoService photoService;
-
-        public CommentMapperProfile(IPhotoService photoService)
+        public CommentMapperProfile()
         {
             CreateMap<CommentDto, Comments>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore())
@@ -23,12 +21,10 @@ namespace EventsExpress.Mapping
             CreateMap<CommentDto, CommentViewModel>()
                 .ForMember(
                     dest => dest.UserName,
-                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))))
-                .AfterMap((src, dest) => dest.UserPhoto = photoService.GetPhotoFromAzureBlob($"users/{src.User.Id}/photo.png").Result);
+                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
 
             CreateMap<CommentViewModel, CommentDto>()
                 .ForMember(dest => dest.User, opts => opts.Ignore());
-            this.photoService = photoService;
         }
     }
 }

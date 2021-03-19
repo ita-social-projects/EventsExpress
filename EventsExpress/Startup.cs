@@ -137,7 +137,7 @@ namespace EventsExpress
             services.AddScoped<IEventOwnersService, EventOwnersService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddSingleton<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
@@ -179,16 +179,6 @@ namespace EventsExpress
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserService).GetTypeInfo().Assembly);
-
-            services.AddSingleton(provider =>
-            new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new EventMapperProfile(provider.GetService<IPhotoService>()));
-                cfg.AddProfile(new UserMapperProfile(provider.GetService<IPhotoService>()));
-                cfg.AddProfile(new MessageMapperProfile(provider.GetService<IPhotoService>()));
-                cfg.AddProfile(new CommentMapperProfile(provider.GetService<IPhotoService>()));
-                cfg.AddProfile(new EventScheduleMapperProfile(provider.GetService<IPhotoService>()));
-            }).CreateMapper());
 
             services.AddControllersWithViews(options =>
             {
