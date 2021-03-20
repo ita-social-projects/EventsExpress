@@ -20,23 +20,23 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        private readonly IPhotoService _photoService;
 
         public AuthenticationController(
             IUserService userSrv,
+            IPhotoService photoService,
             IMapper mapper,
             IAuthService authSrv,
-            ITokenService tokenService,
-            IPhotoService photoService)
+            ITokenService tokenService)
         {
             _userService = userSrv;
+            _photoService = photoService;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
-            _photoService = photoService;
         }
 
         /// <summary>

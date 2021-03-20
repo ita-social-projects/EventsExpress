@@ -23,10 +23,10 @@ namespace EventsExpress.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
