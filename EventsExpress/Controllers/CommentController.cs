@@ -83,14 +83,23 @@ namespace EventsExpress.Controllers
                         {
                             foreach (var d in dest)
                             {
-                                d.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{d.Id}/photo.png").Result;
+                                d.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{d.UserId}/photo.png").Result;
                             }
                         });
                     });
 
             foreach (var com in res)
             {
-                com.Children = _mapper.Map<IEnumerable<CommentViewModel>>(com.Children);
+                com.Children = _mapper.Map<IEnumerable<CommentViewModel>, IEnumerable<CommentViewModel>>(com.Children, opt =>
+                {
+                    opt.AfterMap((src, dest) =>
+                    {
+                        foreach (var d in dest)
+                        {
+                            d.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{d.UserId}/photo.png").Result;
+                        }
+                    });
+                });
             }
 
             var viewModel = new IndexViewModel<CommentViewModel>

@@ -128,6 +128,16 @@ namespace EventsExpress.Controllers
                 opt.AfterMap((src, dest) =>
                 {
                     dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{src.Id}/preview.png").Result;
+
+                    foreach (var u in dest.Owners)
+                    {
+                        u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                    }
+
+                    foreach (var u in dest.Visitors)
+                    {
+                        u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                    }
                 });
             }));
 
@@ -163,6 +173,10 @@ namespace EventsExpress.Controllers
                                 foreach (var d in dest)
                                 {
                                     d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                    foreach (var u in d.Owners)
+                                    {
+                                        u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                    }
                                 }
                             });
                         }),
@@ -325,6 +339,10 @@ namespace EventsExpress.Controllers
                             foreach (var d in dest)
                             {
                                 d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                foreach (var u in d.Owners)
+                                {
+                                    u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                }
                             }
                         });
                     }),
@@ -365,6 +383,10 @@ namespace EventsExpress.Controllers
                             foreach (var d in dest)
                             {
                                 d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                foreach (var u in d.Owners)
+                                {
+                                    u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                }
                             }
                         });
                     }),
@@ -405,6 +427,10 @@ namespace EventsExpress.Controllers
                             foreach (var d in dest)
                             {
                                 d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                foreach (var u in d.Owners)
+                                {
+                                    u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                }
                             }
                         });
                     }),
@@ -445,6 +471,10 @@ namespace EventsExpress.Controllers
                             foreach (var d in dest)
                             {
                                 d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                foreach (var u in d.Owners)
+                                {
+                                    u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                }
                             }
                         });
                     }),
@@ -487,6 +517,10 @@ namespace EventsExpress.Controllers
                                 foreach (var d in dest)
                                 {
                                     d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
+                                    foreach (var u in d.Owners)
+                                    {
+                                        u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+                                    }
                                 }
                             });
                         }),

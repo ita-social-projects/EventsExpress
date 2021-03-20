@@ -26,6 +26,7 @@ namespace EventsExpress.Test.ControllerTests
     {
         private Mock<IUserService> _userService;
         private Mock<IAuthService> _authService;
+        private Mock<IPhotoService> _photoService;
         private Mock<IMapper> _mapper;
         private Mock<IEmailService> _emailService;
         private UsersController _usersController;
@@ -56,9 +57,10 @@ namespace EventsExpress.Test.ControllerTests
         {
             _userService = new Mock<IUserService>();
             _authService = new Mock<IAuthService>();
+            _photoService = new Mock<IPhotoService>();
             _mapper = new Mock<IMapper>();
             _emailService = new Mock<IEmailService>();
-            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _emailService.Object);
+            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _emailService.Object, _photoService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,

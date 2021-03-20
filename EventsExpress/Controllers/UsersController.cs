@@ -65,7 +65,7 @@ namespace EventsExpress.Controllers
                         {
                             foreach (var d in dest)
                             {
-                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{d.Id}/photo.png").Result;
                             }
                         });
                     }),
@@ -107,7 +107,7 @@ namespace EventsExpress.Controllers
                         {
                             foreach (var d in dest)
                             {
-                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                                d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{d.Id}/photo.png").Result;
                             }
                         });
                     }),
@@ -340,7 +340,7 @@ namespace EventsExpress.Controllers
             {
                 opt.AfterMap((src, dest) =>
                 {
-                    dest.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
+                    dest.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{dest.Id}/photo.png").Result;
                 });
             });
 
