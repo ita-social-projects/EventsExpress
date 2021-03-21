@@ -31,7 +31,8 @@ namespace EventsExpress.Mapping
 
             CreateMap<EventScheduleDto, PreviewEventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
-                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId));
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<EventScheduleDto, EventScheduleViewModel>()
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Event.Title))
@@ -40,7 +41,8 @@ namespace EventsExpress.Mapping
                 {
                     Id = x.Id,
                     Username = x.Name,
-                })));
+                })))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<PreviewEventScheduleViewModel, EventScheduleDto>()
                 .ForMember(dest => dest.Event, opts => opts.Ignore());

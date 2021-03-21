@@ -403,7 +403,8 @@ namespace EventsExpress.Test.MapperTests
                                                        firstEventDto.Owners
                                                        .All(f =>
                                                            ex.Id == f.Id &&
-                                                           ex.PhotoUrl == It.IsAny<byte[]>().ToRenderablePictureString() &&
+
+                                                           // ex.PhotoUrl == It.IsAny<byte[]>().ToRenderablePictureString() &&
                                                            ex.Birthday == f.Birthday &&
                                                            ex.Username == f.Name)));
         }

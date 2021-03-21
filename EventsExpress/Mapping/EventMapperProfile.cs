@@ -34,7 +34,8 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus))
                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
-               .ForMember(dest => dest.OwnerIds, opts => opts.Ignore());
+               .ForMember(dest => dest.OwnerIds, opts => opts.Ignore())
+               .ForMember(dest => dest.Photo, opts => opts.Ignore());
 
             CreateMap<EventDto, Event>()
                 .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Owners.Select(x =>
@@ -59,7 +60,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
-                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))));
+                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<EventDto, EventViewModel>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
@@ -71,7 +73,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
+                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))

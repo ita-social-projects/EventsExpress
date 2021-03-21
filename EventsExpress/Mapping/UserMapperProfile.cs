@@ -54,7 +54,8 @@ namespace EventsExpress.Mapping
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.Token, opts => opts.Ignore())
-                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
+                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore())
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -63,13 +64,15 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.IsBlocked))
                 .ForMember(
                     dest => dest.Role,
-                    opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }));
+                    opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }))
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -90,7 +93,8 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
+                .ForMember(dest => dest.UserPhoto, opts => opts.Ignore());
 
             CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
