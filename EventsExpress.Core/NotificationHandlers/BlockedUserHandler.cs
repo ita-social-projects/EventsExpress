@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -14,14 +15,18 @@ namespace EventsExpress.Core.NotificationHandlers
     public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
     {
         private readonly IEmailService _sender;
+        private readonly IEmailMessageService _messageService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public BlockedUserHandler(
-            IEmailService sender, IUserService userService)
+            IEmailService sender,
+            IUserService userService,
+            IEmailMessageService messageService)
         {
             _sender = sender;
             _userService = userService;
+            _messageService = messageService;
         }
 
         public async Task Handle(BlockedUserMessage notification, CancellationToken cancellationToken)
@@ -32,11 +37,18 @@ namespace EventsExpress.Core.NotificationHandlers
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
                 if (userEmail != null)
                 {
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
+                    {
+                        { "(UserName)", userEmail },
+                    };
+
+                    var emailMessage = await _messageService.GetByNotificationTypeAsync("BlockedUser");
+
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = "Your account was blocked",
+                        Subject = _messageService.PerformReplacement(emailMessage.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = $"Dear {userEmail}, your account was blocked for some reason!",
+                        MessageText = _messageService.PerformReplacement(emailMessage.MessageText, pattern),
                     });
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
@@ -16,15 +17,18 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly ICacheHelper _cacheHepler;
         private readonly ILogger<RegisterVerificationHandler> _logger;
+        private readonly IEmailMessageService _messageService;
 
         public RegisterVerificationHandler(
             IEmailService sender,
             ICacheHelper cacheHepler,
-            ILogger<RegisterVerificationHandler> logger)
+            ILogger<RegisterVerificationHandler> logger,
+            IEmailMessageService messageService)
         {
             _sender = sender;
             _cacheHepler = cacheHepler;
             _logger = logger;
+            _messageService = messageService;
         }
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
@@ -38,13 +42,20 @@ namespace EventsExpress.Core.NotificationHandlers
                 Token = token,
             });
 
+            var message = await _messageService.GetByNotificationTypeAsync("RegisterVerification");
+
+            Dictionary<string, string> pattern = new Dictionary<string, string>
+            {
+                { "(link)", theEmailLink },
+            };
+
             try
             {
                 await _sender.SendEmailAsync(new EmailDto
                 {
-                    Subject = "EventExpress registration",
+                    Subject = _messageService.PerformReplacement(message.Subject, pattern),
                     RecepientEmail = notification.User.Email,
-                    MessageText = $"For  confirm your email please follow the {theEmailLink}   ",
+                    MessageText = _messageService.PerformReplacement(message.MessageText, pattern),
                 });
 
                 _cacheHepler.GetValue(notification.User.Id);

@@ -1,4 +1,5 @@
-﻿using EventsExpress.Db.Entities;
+﻿using System.Collections.Generic;
+using EventsExpress.Db.Entities;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications

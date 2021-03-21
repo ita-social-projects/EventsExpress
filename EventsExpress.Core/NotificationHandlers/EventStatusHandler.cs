@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -18,15 +19,18 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
+        private readonly IEmailMessageService _messageService;
 
         public EventStatusHandler(
             IEmailService sender,
             IUserService userSrv,
-            IEventService eventService)
+            IEventService eventService,
+            IEmailMessageService messageService)
         {
             _sender = sender;
             _userService = userSrv;
             _eventService = eventService;
+            _messageService = messageService;
         }
 
         public async Task Handle(EventStatusMessage notification, CancellationToken cancellationToken)
@@ -39,32 +43,27 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     var userEvent = _eventService.EventById(notification.EventId);
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.EventId}/1";
-                    string messageText;
-                    string subject;
-                    if (notification.EventStatus == EventStatus.Canceled)
+
+                    string notificationType = notification.EventStatus switch
                     {
-                        subject = $"The event you have been joined was canceled";
-                        messageText = $"Dear {email}, the event you have been joined was CANCELED. The reason is: {notification.Reason} " +
-                                                      $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
-                    }
-                    else if (notification.EventStatus == EventStatus.Blocked)
+                        EventStatus.Canceled => "EventStatusCanceled",
+                        EventStatus.Blocked => "EventStatusBlocked",
+                        _ => "EventStatusActivated"
+                    };
+
+                    var message = await _messageService.GetByNotificationTypeAsync(notificationType);
+
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
-                        subject = $"The event you have been joined was blocked";
-                        messageText = $"Dear {email}, the event you have been joined was BLOCKED. The reason is: {notification.Reason} " +
-                                                      $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
-                    }
-                    else
-                    {
-                        subject = $"The event you have been joined was activated";
-                        messageText = $"Dear {email}, the event you have been joined was ACTIVATED. The reason is: {notification.Reason} " +
-                                                      $"\"<a href='{eventLink}'>{userEvent.Title}</>\"";
-                    }
+                        { "(UserName)", email },
+                        { "(link)", eventLink },
+                    };
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = subject,
+                        Subject = _messageService.PerformReplacement(message.Subject, pattern),
                         RecepientEmail = email,
-                        MessageText = messageText,
+                        MessageText = _messageService.PerformReplacement(message.NotificationType, pattern),
                     });
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -15,15 +16,18 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
+        private readonly IEmailMessageService _messageService;
 
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public UnblockedUserHandler(
             IEmailService sender,
-            IUserService userService)
+            IUserService userService,
+            IEmailMessageService messageService)
         {
             _sender = sender;
             _userService = userService;
+            _messageService = messageService;
         }
 
         public async Task Handle(UnblockedUserMessage notification, CancellationToken cancellationToken)
@@ -32,13 +36,21 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var userIds = new[] { notification.User.Id };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
+
                 if (userEmail != null)
                 {
+                    var message = await _messageService.GetByNotificationTypeAsync("UnblockedUser");
+
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
+                    {
+                        { "(UserName)", userEmail },
+                    };
+
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = "Your account was Unblocked",
+                        Subject = _messageService.PerformReplacement(message.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = $"Dear {userEmail}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress",
+                        MessageText = _messageService.PerformReplacement(message.MessageText, pattern),
                     });
                 }
             }
