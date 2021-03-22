@@ -6,6 +6,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
@@ -55,7 +56,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.Token, opts => opts.Ignore())
                 .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore())
-                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToInfoResolver>());
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -65,14 +66,14 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.Role,
                     opts => opts.MapFrom(src => new RoleViewModel { Id = src.RoleId, Name = src.Role.Name }))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToManageResolver>());
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
-                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToPreviewResolver>())
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -94,7 +95,7 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
-                .ForMember(dest => dest.UserPhoto, opts => opts.Ignore());
+                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom<ProfileDtoToViewModelResolver>());
 
             CreateMap<LoginViewModel, UserDto>()
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))

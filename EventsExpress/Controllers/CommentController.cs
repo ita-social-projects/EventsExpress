@@ -77,29 +77,11 @@ namespace EventsExpress.Controllers
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            var res = _mapper.Map<IEnumerable<CommentDto>, IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count), opt =>
-                    {
-                        opt.AfterMap((src, dest) =>
-                        {
-                            foreach (var d in dest)
-                            {
-                                d.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{d.UserId}/photo.png").Result;
-                            }
-                        });
-                    });
+            var res = _mapper.Map<IEnumerable<CommentDto>, IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {
-                com.Children = _mapper.Map<IEnumerable<CommentViewModel>, IEnumerable<CommentViewModel>>(com.Children, opt =>
-                {
-                    opt.AfterMap((src, dest) =>
-                    {
-                        foreach (var d in dest)
-                        {
-                            d.UserPhoto = _photoService.GetPhotoFromAzureBlob($"users/{d.UserId}/photo.png").Result;
-                        }
-                    });
-                });
+                com.Children = _mapper.Map<IEnumerable<CommentViewModel>, IEnumerable<CommentViewModel>>(com.Children);
             }
 
             var viewModel = new IndexViewModel<CommentViewModel>

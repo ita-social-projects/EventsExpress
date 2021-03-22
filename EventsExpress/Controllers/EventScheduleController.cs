@@ -45,16 +45,7 @@ namespace EventsExpress.Controllers
                 var viewModel = new IndexViewModel<PreviewEventScheduleViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<EventScheduleDto>, IEnumerable<PreviewEventScheduleViewModel>>(
-                        _eventScheduleService.GetAll(), opt =>
-                        {
-                            opt.AfterMap((src, dest) =>
-                            {
-                                foreach (var d in dest)
-                                {
-                                    d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{d.Id}/preview.png").Result;
-                                }
-                            });
-                        }),
+                        _eventScheduleService.GetAll()),
                 };
                 return Ok(viewModel);
             }
@@ -132,12 +123,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{eventScheduleId:Guid}")]
         public IActionResult Get(Guid eventScheduleId) =>
-            Ok(_mapper.Map<EventScheduleDto, EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId), opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"events/{dest.Id}/preview.png").Result;
-                });
-            }));
+            Ok(_mapper.Map<EventScheduleDto, EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId)));
     }
 }

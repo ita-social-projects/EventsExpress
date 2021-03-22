@@ -53,13 +53,7 @@ namespace EventsExpress.Controllers
             return
             user == null
                ? (IActionResult)Unauthorized()
-               : Ok(_mapper.Map<UserDto, UserInfoViewModel>(user, opt =>
-               {
-                   opt.AfterMap((src, dest) =>
-                   {
-                       dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
-                   });
-               }));
+               : Ok(_mapper.Map<UserDto, UserInfoViewModel>(user));
         }
 
         /// <summary>
@@ -81,13 +75,7 @@ namespace EventsExpress.Controllers
 
             var authResponseModel = await _authService.Authenticate(authRequest.Email, authRequest.Password);
             var user = _userService.GetByEmail(authRequest.Email);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user, opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
-                });
-            });
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -118,13 +106,7 @@ namespace EventsExpress.Controllers
 
             await SetPhoto(userExisting, userView.PhotoUrl);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(userView.Email), opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{userExisting.Id}/photo.png").Result;
-                });
-            });
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -159,13 +141,7 @@ namespace EventsExpress.Controllers
 
             await SetPhoto(userExisting, userView.PhotoUrl);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(payload.Email), opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{userExisting.Id}/photo.png").Result;
-                });
-            });
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(payload.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -196,13 +172,7 @@ namespace EventsExpress.Controllers
 
             await SetPhoto(userExisting, userView.PhotoUrl);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email);
-            UserInfoViewModel userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(userView.Email), opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{userExisting.Id}/photo.png").Result;
-                });
-            });
+            UserInfoViewModel userInfo = _mapper.Map<UserDto, UserInfoViewModel>(_userService.GetByEmail(userView.Email));
             userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -291,13 +261,7 @@ namespace EventsExpress.Controllers
             await _userService.ConfirmEmail(cache);
 
             var user = _userService.GetById(cache.UserId);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user, opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    dest.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
-                });
-            });
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
             var authResponseModel = await _authService.FirstAuthenticate(user);
             userInfo.Token = authResponseModel.JwtToken;
             await _userService.Update(user);

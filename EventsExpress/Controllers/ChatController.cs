@@ -42,19 +42,7 @@ namespace EventsExpress.Controllers
         public IActionResult All()
         {
             var currentUser = _authService.GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<IEnumerable<ChatRoom>, IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id), opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    foreach (var d in dest)
-                    {
-                        foreach (var u in d.Users)
-                        {
-                            u.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
-                        }
-                    }
-                });
-            });
+            var res = _mapper.Map<IEnumerable<ChatRoom>, IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
             return Ok(res);
         }
 
@@ -75,16 +63,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            return Ok(_mapper.Map<ChatRoom, ChatViewModel>(chat, opt =>
-            {
-                opt.AfterMap((src, dest) =>
-                {
-                    foreach (var d in dest.Users)
-                    {
-                        d.PhotoUrl = _photoService.GetPhotoFromAzureBlob($"users/{d.Id}/photo.png").Result;
-                    }
-                });
-            }));
+            return Ok(_mapper.Map<ChatRoom, ChatViewModel>(chat));
         }
 
         /// <summary>
