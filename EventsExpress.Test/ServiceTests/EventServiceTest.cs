@@ -245,8 +245,6 @@ namespace EventsExpress.Test.ServiceTests
                     Id = e.Id,
                     Title = e.Title,
                     Description = e.Description,
-
-                    // PhotoId = e.PhotoId,
                     DateFrom = e.DateFrom,
                     DateTo = e.DateTo,
                     MaxParticipants = e.MaxParticipants,
@@ -260,8 +258,6 @@ namespace EventsExpress.Test.ServiceTests
                     Id = e.Id,
                     Title = e.Title,
                     Description = e.Description,
-
-                    // PhotoId = (Guid)e.PhotoId,
                     DateFrom = e.DateFrom,
                     DateTo = e.DateTo,
                     MaxParticipants = e.MaxParticipants,

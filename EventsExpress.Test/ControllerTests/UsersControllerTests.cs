@@ -65,8 +65,6 @@ namespace EventsExpress.Test.ControllerTests
             {
                 Id = _idUser,
                 Email = _userEmal,
-
-                // Photo = new Photo { Id = Guid.NewGuid(), Img = new byte[8], Thumb = new byte[8] },
             };
 
             _mapper.Setup(u => u.Map<IEnumerable<NotificationTypeDto>, IEnumerable<NotificationType>>(It.IsAny<IEnumerable<NotificationTypeDto>>()))
@@ -231,7 +229,6 @@ namespace EventsExpress.Test.ControllerTests
         {
             _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
             _userService.Setup(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()));
-            _userService.Setup(user => user.GetById(_userDto.Id)).Returns(_userDto);
             _usersController.ControllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
             _usersController.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection { file });
@@ -245,7 +242,6 @@ namespace EventsExpress.Test.ControllerTests
             Assert.AreEqual(200, okResult.StatusCode);
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
-            _userService.Verify(user => user.GetById(_userDto.Id), Times.Exactly(1));
         }
 
         [Test]
