@@ -14,7 +14,7 @@ class UnitOfMeasuringItemWrapper extends Component {
             values.shortName === this.props.item.shortName) {
             this.props.edit_cancel();
         } else {
-            this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
+           return this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
         }
     };
 
@@ -53,8 +53,8 @@ class UnitOfMeasuringItemWrapper extends Component {
             {(this.props.item.id === this.props.editedUnitOfMeasuring)
                 ? <UnitOfMeasuringEdit
                     key={this.props.item.id + this.props.editedUnitOfMeasuring}
-                    item={this.props.item}
-                    callback={this.save}
+                    initialValues={this.props.item}
+                    onSubmit={this.save}
                     cancel={edit_cancel}
                 />
                 : <UnitOfMeasuringItem

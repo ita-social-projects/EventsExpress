@@ -16,7 +16,7 @@ const pStyle = {
 
 class UnitOfMeasuringAddWrapper extends React.Component {
     submit = values => {
-        this.props.add({ ...values });
+        return this.props.add({ ...values });
     };
 
     componentWillUpdate = () => {
@@ -24,12 +24,11 @@ class UnitOfMeasuringAddWrapper extends React.Component {
 
         if (isUnitOfMeasuringSuccess) {
             this.props.reset();
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         }
     }
 
     render() {
-        console.log(this.props.status);
         return (
             this.props.item.id !== this.props.editedUnitOfMeasuring)
             ? <tr>
@@ -48,8 +47,8 @@ class UnitOfMeasuringAddWrapper extends React.Component {
             : <tr>
                 <UnitOfMeasuringEdit
                     item={this.props.item}
-                    callback={this.submit}
-                    cancel={this.props.edit_cansel}
+                    onSubmit={this.submit}
+                    cancel={this.props.edit_cancel}
                 />
                 <td></td>
             </tr>
@@ -68,7 +67,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_unitOfMeasuring(data)),
         set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
-        edit_cansel: () => {
+        edit_cancel: () => {
             dispatch(set_edited_unitOfMeasuring(null));
         },
         reset: () => {

@@ -14,7 +14,7 @@ import CategoryEdit from "../../components/category/category-edit";
 class CategoryAddWrapper extends React.Component {
 
     submit = values => {
-        return this.props.add({ ...values });       
+      return this.props.add({ ...values });
     };
 
     componentWillUpdate = () => {
@@ -22,7 +22,7 @@ class CategoryAddWrapper extends React.Component {
 
         if (isCategorySuccess) {
             this.props.reset();
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         }
     }
 
@@ -41,12 +41,11 @@ class CategoryAddWrapper extends React.Component {
                 </td>
                 <td width="55%"></td>
             </tr>
-
             : <tr>
                 <CategoryEdit
                     item={this.props.item}
                     onSubmit={this.submit}
-                    cancel={this.props.edit_cansel}
+                    cancel={this.props.edit_cancel}
                 />
                 <td></td>
             </tr>
@@ -65,7 +64,7 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_category(data)),
         set_category_edited: () => dispatch(set_edited_category(props.item.id)),
-        edit_cansel: () => {
+        edit_cancel: () => {
             dispatch(set_edited_category(null));
         },
         reset: () => {

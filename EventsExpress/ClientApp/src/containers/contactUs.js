@@ -5,7 +5,7 @@ import contact_Us from '../actions/contact-us-action';
 
 class ContactUsContainer extends React.Component {
     submit = values => {
-        this.props.contactUs(values);
+       return this.props.contactUs(values);
     };
 
     render() {
