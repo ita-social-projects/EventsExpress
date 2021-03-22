@@ -6,12 +6,13 @@ import Module from '../helpers';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import ErrorMessages from '../shared/errorMessage';
 
+
 const { validate, renderTextField } = Module;
 
 class RecoverPassword extends React.Component {
 
     render() {
-        const { handleSubmit, pristine, reset, submitting } = this.props;
+        const { handleSubmit, pristine, reset, submitting, error } = this.props;
         return (
             <form onSubmit={handleSubmit}>
                 <DialogContentText>
@@ -24,8 +25,8 @@ class RecoverPassword extends React.Component {
                         label="E-mail:"
                     />
                     {
-                        props.error &&
-                        <ErrorMessages error={props.error} className="text-center" />
+                        error &&
+                        <ErrorMessages error={error} className="text-center" />
                     }
                 </div>
 

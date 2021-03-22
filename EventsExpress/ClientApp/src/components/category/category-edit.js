@@ -1,35 +1,30 @@
 ﻿import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import { renderTextField } from '../helpers/helpers';
-import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
+import IconButton from "@material-ui/core/IconButton";
+
 
 class CategoryEdit extends Component {
 
-    componentDidMount = () => {
-        let obj = JSON.parse('{"category":"' + this.props.item.name + '"}')
-        this.props.initialize(obj)
-    }
-
     render() {
-
         return <>
             <td className="align-middle" width="75%">
                 <form className="w-100" id="save-form" onSubmit={this.props.handleSubmit}>
                     <div className="d-flex flex-column justify-content-around ">
                         <Field
-                            name="category"
+                            className="form-control"
+                            name="name"
                             label="Name"
                             component={renderTextField}
                         />
+                        {
+                            this.props.error &&
+                            <ErrorMessages error={this.props.error} className="text-center" />
+                        }
                     </div>
                 </form>
-                {
-                    this.props.error &&
-                    <ErrorMessages error={this.props.error} className="text-center" />
-                }
-
             </td>
             <td></td>
             <td></td>
@@ -46,19 +41,8 @@ class CategoryEdit extends Component {
             </td>
         </>
     }
-
 };
 
-const selector = formValueSelector("save-form")
-
-const mapStateToProps = (state, props) => {
-    return {
-        newName: selector(state, "category"),
-        initialValues: props.item.name
-    };
-};
-
-CategoryEdit = connect(mapStateToProps, null)(CategoryEdit);
 
 CategoryEdit = reduxForm({
     form: "save-form",
@@ -66,6 +50,3 @@ CategoryEdit = reduxForm({
 })(CategoryEdit);
 
 export default CategoryEdit;
-
-
-

@@ -15,7 +15,7 @@ class CategoryItemWrapper extends Component {
         if (values.name === this.props.item.name) {
             this.props.edit_cansel();
         } else {
-            this.props.save_category({ ...values, id: this.props.item.id });
+          return this.props.save_category({ ...values, id: this.props.item.id });
         }
     };
 
@@ -33,8 +33,8 @@ class CategoryItemWrapper extends Component {
             {(this.props.item.id === this.props.editedCategory)
                 ? <CategoryEdit
                     key={this.props.item.id + this.props.editedCategory}
-                    item={this.props.item}
-                    callback={this.save}
+                    initialValues={this.props.item}
+                    onSubmit={this.save}
                     cancel={edit_cansel}
                 />
                 : <CategoryItem

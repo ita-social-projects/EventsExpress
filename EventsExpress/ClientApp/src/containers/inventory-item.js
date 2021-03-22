@@ -52,19 +52,19 @@ class InventoryItemWrapper extends Component {
     
     onSubmit = values => {
         if (!values.id) {
-            this.props.add_item(values, this.props.eventId);
+            return this.props.add_item(values, this.props.eventId);
         }
         else {
             values.unitOfMeasuring = {
                 id: values.unitOfMeasuring.id
             };
-            this.props.edit_item(values, this.props.eventId);
+            return this.props.edit_item(values, this.props.eventId);
         }
 
         this.setState({
             isEdit: false
         })
-        this.props.changeDisableEdit(false);
+       this.props.changeDisableEdit(false);
     }
 
     onCancel = inventar => {
