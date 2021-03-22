@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
@@ -18,17 +19,20 @@ namespace EventsExpress.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         public EventController(
             IEventService eventService,
             IAuthService authSrv,
-            IMapper mapper)
+            IMapper mapper,
+            IPhotoService photoService)
         {
             _eventService = eventService;
             _authService = authSrv;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -119,7 +123,7 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{eventId:Guid}")]
         public IActionResult Get(Guid eventId) =>
-            Ok(_mapper.Map<EventViewModel>(_eventService.EventById(eventId)));
+            Ok(_mapper.Map<EventDto, EventViewModel>(_eventService.EventById(eventId)));
 
         /// <summary>
         /// This method have to return all events.
@@ -145,7 +149,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(
                         _eventService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
@@ -299,7 +303,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.FutureEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.FutureEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -330,7 +334,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.PastEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.PastEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -361,7 +365,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.EventsToGoByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.EventsToGoByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -392,7 +396,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(_eventService.VisitedEventsByUserId(id, model)),
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(_eventService.VisitedEventsByUserId(id, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };
                 return Ok(viewModel);
@@ -424,7 +428,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<EventPreviewViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
+                    Items = _mapper.Map<IEnumerable<EventDto>, IEnumerable<EventPreviewViewModel>>(
                         _eventService.GetEvents(eventIds, model)),
                     PageViewModel = new PageViewModel(model.Count, model.Page, model.PageSize),
                 };

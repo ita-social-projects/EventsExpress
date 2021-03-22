@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -25,17 +26,20 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IEmailService emailService)
+            IEmailService emailService,
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -55,7 +59,7 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -88,7 +92,7 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -262,7 +266,7 @@ namespace EventsExpress.Controllers
 
             await _userService.ChangeAvatar(user.Id, newAva);
 
-            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+            var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
 
             return Ok(updatedPhoto);
         }
@@ -314,7 +318,7 @@ namespace EventsExpress.Controllers
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<ProfileViewModel>(_userService.GetProfileById(id, user.Id));
+            var res = _mapper.Map<ProfileDto, ProfileViewModel>(_userService.GetProfileById(id, user.Id));
 
             return Ok(res);
         }
