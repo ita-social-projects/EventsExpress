@@ -37,7 +37,7 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                         <Route
+                        <Route
                             exact
                             path="/home"
                             render={() => (
@@ -49,16 +49,16 @@ export default class App extends Component {
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin" component={Admin} />                        
+                        <Route path="/admin" component={Admin} />
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={Chat} />
-                        <Route path="/contactUs" component={ContactUsWrapper} />                        
+                        <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
-                                               
+
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>

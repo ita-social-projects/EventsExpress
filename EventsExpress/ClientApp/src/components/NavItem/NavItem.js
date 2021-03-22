@@ -1,6 +1,5 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import './NavItem.css';
 
 export const NavItem = ({ to, icon, text, my_icon }) => {
     return (
