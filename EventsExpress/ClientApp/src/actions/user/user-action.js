@@ -42,7 +42,7 @@ export function block_user(id) {
     return async dispatch => {
         dispatch(setBlockUserPending(true));
 
-        let response = api_serv.setUserBlock(id);
+        let response = await api_serv.setUserBlock(id);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
