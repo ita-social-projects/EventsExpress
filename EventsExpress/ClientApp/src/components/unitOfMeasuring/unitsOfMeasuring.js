@@ -12,7 +12,7 @@ class UnitsOfMeasuring extends Component {
     render() {
         const { unitsOfMeasuring } = this.props;
         return <div>
-            <table className="table w-75 m-auto">
+            <table className="table w-100 m-auto">
                 <tbody>
                     <UnitOfMeasuringAddWrapper
                         item={{ id: "00000000-0000-0000-0000-000000000000", unitName: "", shortName: "" }}
