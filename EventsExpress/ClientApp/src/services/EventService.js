@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class EventService {
 
-    getEvent = id => baseService.getResource(`event/${id}`);
+    getEvent = id => baseService.getResourceNew(`event/${id}`);
 
     getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
 
@@ -39,9 +39,6 @@ export default class EventService {
             file.append('Location.OnlineMeeting', data.location.onlineMeeting);
         }
 
-
-
-
         file.append('Title', data.title);
         file.append('Description', data.description);
         file.append('User.Id', data.user_id);
@@ -70,69 +67,34 @@ export default class EventService {
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = async (data) =>
+    setEventFromParent = data =>
         this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
 
     editEvent = data => this.setEventTemplate(data, `event/${data.id}/edit`);
 
-    setEventStatus = async (data) => {
-        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setEventStatus = data =>  baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
 
-    setUserToEvent = async (data) => {
-        const res = await baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserToEvent = data => baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
 
-    setUserFromEvent = async (data) => {
-        const res = await baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserFromEvent = data => baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
 
-    setApprovedUser = async (data) => {
-        const res = data.buttonAction
-            ? await baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
-            : await baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setApprovedUser = data => data.buttonAction
+            ?  baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
+            :  baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
 
-    onDeleteFromOwners = async (data) => {
-        const res = await baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    onDeleteFromOwners = data => baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
 
-    onPromoteToOwner = async (data) => {
-        const res = await baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    onPromoteToOwner = data => baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
 
-    setRate = async (data) => {
-        const res = await baseService.setResource('event/setrate', {
+    setRate = data =>  baseService.setResource('event/setrate', {
             rate: Number(data.rate),
             userId: data.userId,
             eventId: data.eventId
         });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
 
-    getCurrentRate = eventId => baseService.getResource(`event/${eventId}/GetCurrentRate`);
+    getCurrentRate = eventId => baseService.getResourceNew(`event/${eventId}/GetCurrentRate`);
 
-    getAverageRate = eventId => baseService.getResource(`event/${eventId}/GetAverageRate`);
+    getAverageRate = eventId => baseService.getResourceNew(`event/${eventId}/GetAverageRate`);
     
     getFutureEvents = async (id, page) =>
         baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);

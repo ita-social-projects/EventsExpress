@@ -1,7 +1,7 @@
 import initialState from '../store/initialState';
 import {
-    GET_CHAT_ERROR, GET_CHAT_PENDING, GET_CHAT_SUCCESS, RESET_CHAT, CONCAT_NEW_MSG, RECEIVE_SEEN_MESSAGE
-} from '../actions/chat';
+    GET_CHAT_PENDING, GET_CHAT_SUCCESS, RESET_CHAT, CONCAT_NEW_MSG, RECEIVE_SEEN_MESSAGE
+} from '../actions/chat/chat-action';
 
 export const reducer = (
     state = initialState.chat,
@@ -37,12 +37,6 @@ export const reducer = (
                     ...state.data,
                     messages: new_msg
                 }
-            }
-        case GET_CHAT_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
             }
         case GET_CHAT_PENDING:
             return {

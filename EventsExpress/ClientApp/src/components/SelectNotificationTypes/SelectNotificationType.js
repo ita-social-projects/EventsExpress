@@ -3,8 +3,10 @@ import { Field, reduxForm } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import CheckboxGroup from './CheckboxGroup';
 import momentLocaliser from 'react-widgets-moment';
+import ErrorMessages from '../shared/errorMessage';
 import moment from 'moment';
 momentLocaliser(moment);
+
 class SelectNotificationType extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +20,7 @@ class SelectNotificationType extends Component {
    
 
     render() {
-        const { handleSubmit, submitting, items } = this.props;
+        const { handleSubmit, submitting, items, error } = this.props;
         return (
 
             <div >
@@ -27,6 +29,10 @@ class SelectNotificationType extends Component {
                         component={CheckboxGroup}
                         options={items}                        
                     />
+                    {
+                         error &&
+                        <ErrorMessages error={error} className="text-center" />
+                    }
                     <div>
                         <Button
                             type="submit"

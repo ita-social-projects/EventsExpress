@@ -1,11 +1,12 @@
-import { event } from '../actions/event-item-view';
+
+import { event } from '../actions/event/event-item-view-action';
 import initialState from '../store/initialState';
 import {
     SET_EVENTS_PENDING,
     GET_EVENTS_SUCCESS,
     RESET_EVENTS,
     UPDATE_EVENTS_FILTERS
-} from '../actions/event-list-action';
+} from '../actions/event/event-list-action';
 
 export const reducer = (state = initialState.events, action) => {
     switch (action.type) {

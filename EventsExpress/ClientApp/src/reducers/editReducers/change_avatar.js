@@ -1,4 +1,4 @@
-import { changeAvatar } from '../../actions/EditProfile/change-avatar';
+import { changeAvatar } from '../../actions/editProfile/avatar-change-action';
 import initialState from '../../store/initialState';
 
 export const reducer = (
@@ -13,11 +13,6 @@ export const reducer = (
         case changeAvatar.SUCCESS:
             return Object.assign({}, state, {
                 isSuccess: action.payload
-            });
-
-        case changeAvatar.ERROR:
-            return Object.assign({}, state, {
-                Error: action.payload
             });
             
         default:

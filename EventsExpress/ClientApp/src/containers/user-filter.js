@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UsersFilters from '../components/users/UsersFilters';
-import { get_users } from '../actions/users';
+import { get_users } from '../actions/users/users-action';
 import history from '../history';
 class UsersFilterWrapper extends Component {
-   
+
     onSubmit = (filters) => {
         var search_string = '?page=1';
         if (filters != null) {
@@ -29,12 +29,11 @@ class UsersFilterWrapper extends Component {
         }
         this.props.search(search_string);
         history.push(window.location.pathname + search_string);
-
     }
 
     render() {
         return <>
-            <UsersFilters onSubmit={this.onSubmit} />    
+            <UsersFilters onSubmit={this.onSubmit} />
         </>
     }
 }
@@ -48,4 +47,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-        export default connect(mapStateToProps, mapDispatchToProps)(UsersFilterWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(UsersFilterWrapper);
