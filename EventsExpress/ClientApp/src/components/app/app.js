@@ -22,6 +22,8 @@ import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import AddEventWrapper from '../../containers/add-event';
 import Admin from '../admin';
+import DraftEditWrapper from '../../containers/draft-edit-wrapper';
+import EventDraftListWrapper from '../../containers/event-draft-list'
 
 export default class App extends Component {
     render() {
@@ -58,7 +60,8 @@ export default class App extends Component {
                         <Route path="/chat/:chatId" component={Chat} />
                         <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
-
+                        <Route path='/editEvent/:id/' component={DraftEditWrapper} />
+                        <Route path='/drafts' component={EventDraftListWrapper} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
