@@ -49,7 +49,7 @@ function HorizontalLinearStepper(props) {
 
     if (props.event && props.event.eventStatus === 3) {
         formSteps.push({
-            case: 5,
+            part: 5,
             name: "publish"
         });
     }
@@ -79,18 +79,17 @@ function HorizontalLinearStepper(props) {
             case formSteps[4].part:
                 return <Part5 />;
             case formSteps[5].part:
-                return <form onSubmit={onPublish}>
-                <div>
+                return  <div>
                     <Button
                         className="border"
                         fullWidth={true}
                         color="primary"
                         type="submit"
+                        onClick={onPublish}
                     >
                         Publish
                         </Button>
                     </div>
-                </form>
             default:
                 return 'Unknown step';
         }
