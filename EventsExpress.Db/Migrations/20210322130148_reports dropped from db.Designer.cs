@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210322130148_reports dropped from db")]
+    partial class Reportsdroppedfromdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,17 +343,17 @@ namespace EventsExpress.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 2,
+                            Id = 1,
                             Name = "Own Event Change"
                         },
                         new
                         {
-                            Id = 1,
+                            Id = 0,
                             Name = "Profile Change"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 2,
                             Name = "Visited Event Change"
                         });
                 });

@@ -27,14 +27,9 @@ namespace EventsExpress.Db.Entities
         public int MaxParticipants { get; set; }
 
         [Track]
-        public Guid? PhotoId { get; set; }
-
-        [Track]
         public Guid EventLocationId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
-
-        public virtual Photo Photo { get; set; }
 
         public virtual EventLocation EventLocation { get; set; }
 
