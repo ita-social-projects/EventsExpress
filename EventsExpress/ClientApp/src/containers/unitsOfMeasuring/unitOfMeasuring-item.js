@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import UnitOfMeasuringItem from "../../components/unitOfMeasuring/unitOfMeasuring-item";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
-import { add_unitOfMeasuring } from "../../actions/unitOfMeasuring/add-unitOfMeasuring";
-import { delete_unitOfMeasuring } from "../../actions/unitOfMeasuring/delete-unitOfMeasuring";
-import { set_edited_unitOfMeasuring } from "../../actions/unitOfMeasuring/add-unitOfMeasuring";
+import { add_unitOfMeasuring, set_edited_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
+import { delete_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-delete-action";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -15,14 +14,14 @@ class UnitOfMeasuringItemWrapper extends Component {
             values.shortName === this.props.item.shortName) {
             this.props.edit_cancel();
         } else {
-            this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
+           return this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
         }
     };
 
     componentWillUpdate = () => {
-        const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
+        const {isUnitOfMeasuringSuccess } = this.props.status;
 
-        if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
+        if (isUnitOfMeasuringSuccess) {
             this.props.edit_cancel();
         }
     }
@@ -54,10 +53,9 @@ class UnitOfMeasuringItemWrapper extends Component {
             {(this.props.item.id === this.props.editedUnitOfMeasuring)
                 ? <UnitOfMeasuringEdit
                     key={this.props.item.id + this.props.editedUnitOfMeasuring}
-                    item={this.props.item}
-                    callback={this.save}
+                    initialValues={this.props.item}
+                    onSubmit={this.save}
                     cancel={edit_cancel}
-                    message={this.props.status.unitOfMeasuringError}
                 />
                 : <UnitOfMeasuringItem
                     item={this.props.item}

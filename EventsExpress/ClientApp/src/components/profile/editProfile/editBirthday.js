@@ -2,8 +2,7 @@
 import { Field, reduxForm } from "redux-form";
 import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
-
-
+import ErrorMessages from '../../shared/errorMessage';
 
 const { validate, renderMyDatePicker } = Module;
 const EditBirthday = props => {
@@ -21,9 +20,11 @@ const EditBirthday = props => {
                         shrink: true
                     }}
                 />
+                {
+                    props.error &&
+                    <ErrorMessages error={props.error} className="text-center" />
+                }
             </div>
-            
-
             <div>
                 <Button type="submit" color="primary" disabled={pristine || submitting}>
                     Submit

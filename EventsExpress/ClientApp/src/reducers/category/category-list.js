@@ -1,18 +1,12 @@
 ﻿
 import initialState from '../../store/initialState';
 import {
-    SET_CATEGORIES_ERROR, SET_CATEGORIES_PENDING, GET_CATEGORIES_SUCCESS
-} from '../../actions/category/category-list';
-import { SET_CATEGORY_EDITED } from '../../actions/category/add-category'
+    SET_CATEGORIES_PENDING, GET_CATEGORIES_SUCCESS
+} from '../../actions/category/category-list-action';
+import { SET_CATEGORY_EDITED } from '../../actions/category/category-add-action'
 
 export const reducer = (state = initialState.categories, action) => {
     switch (action.type) {
-        case SET_CATEGORIES_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case SET_CATEGORIES_PENDING:
             return {
                 ...state,

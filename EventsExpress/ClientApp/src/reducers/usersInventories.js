@@ -1,15 +1,9 @@
 import initialState from '../store/initialState';
-import { SET_USERSINVENTORIES_ERROR, SET_USERSINVENTORIES_PENDING, GET_USERSINVENTORIES_SUCCESS } from '../actions/usersInventories';
+import { SET_USERSINVENTORIES_PENDING, GET_USERSINVENTORIES_SUCCESS } from '../actions/users/users-inventories-action';
 
 
 export const reducer = (state = initialState.usersInventories, action) => {
     switch (action.type) {
-        case SET_USERSINVENTORIES_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            };
         case SET_USERSINVENTORIES_PENDING:
             return {
                 ...state,
