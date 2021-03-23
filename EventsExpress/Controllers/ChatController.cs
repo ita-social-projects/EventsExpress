@@ -18,18 +18,15 @@ namespace EventsExpress.Controllers
         private readonly IMapper _mapper;
         private readonly IMessageService _messageService;
         private readonly IAuthService _authService;
-        private readonly IPhotoService _photoService;
 
         public ChatController(
             IMessageService messageService,
             IAuthService authService,
-            IMapper mapper,
-            IPhotoService photoService)
+            IMapper mapper)
         {
             _authService = authService;
             _messageService = messageService;
             _mapper = mapper;
-            _photoService = photoService;
         }
 
         /// <summary>
@@ -42,7 +39,7 @@ namespace EventsExpress.Controllers
         public IActionResult All()
         {
             var currentUser = _authService.GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<IEnumerable<ChatRoom>, IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
+            var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
             return Ok(res);
         }
 
@@ -63,7 +60,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            return Ok(_mapper.Map<ChatRoom, ChatViewModel>(chat));
+            return Ok(_mapper.Map<ChatViewModel>(chat));
         }
 
         /// <summary>

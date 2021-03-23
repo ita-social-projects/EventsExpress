@@ -11,14 +11,14 @@ namespace EventsExpress.ValueResolvers
 {
     public class CommentDtoToViewModelResolver : IValueResolver<CommentDto, CommentViewModel, string>
     {
-        private IPhotoService photoService;
+        private readonly IPhotoService photoService;
 
         public CommentDtoToViewModelResolver(IPhotoService photoService)
         {
             this.photoService = photoService;
         }
 
-        public string Resolve(CommentDto dto, CommentViewModel viewModel, string dest, ResolutionContext context) =>
-            photoService.GetPhotoFromAzureBlob($"users/{dto.UserId}/photo.png").Result;
+        public string Resolve(CommentDto source, CommentViewModel destination, string destMember, ResolutionContext context) =>
+            photoService.GetPhotoFromAzureBlob($"users/{source.UserId}/photo.png").Result;
     }
 }

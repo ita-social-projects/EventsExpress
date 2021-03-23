@@ -11,14 +11,14 @@ namespace EventsExpress.ValueResolvers
 {
     public class UserDtoToPreviewResolver : IValueResolver<UserDto, UserPreviewViewModel, string>
     {
-        private IPhotoService photoService;
+        private readonly IPhotoService photoService;
 
         public UserDtoToPreviewResolver(IPhotoService photoService)
         {
             this.photoService = photoService;
         }
 
-        public string Resolve(UserDto userDto, UserPreviewViewModel userPreviewViewModel, string dest, ResolutionContext context) =>
-            photoService.GetPhotoFromAzureBlob($"users/{userDto.Id}/photo.png").Result;
+        public string Resolve(UserDto source, UserPreviewViewModel destination, string destMember, ResolutionContext context) =>
+            photoService.GetPhotoFromAzureBlob($"users/{source.Id}/photo.png").Result;
     }
 }

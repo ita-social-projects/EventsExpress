@@ -11,26 +11,26 @@ namespace EventsExpress.ValueResolvers
 {
     public class EventDtoToViewModelResolver : IValueResolver<EventDto, EventViewModel, string>
     {
-        private IPhotoService photoService;
+        private readonly IPhotoService photoService;
 
         public EventDtoToViewModelResolver(IPhotoService photoService)
         {
             this.photoService = photoService;
         }
 
-        public string Resolve(EventDto dto, EventViewModel viewModel, string dest, ResolutionContext context)
+        public string Resolve(EventDto source, EventViewModel destination, string destMember, ResolutionContext context)
         {
-            foreach (var u in viewModel.Owners)
+            foreach (var u in destination.Owners)
             {
                 u.PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
             }
 
-            foreach (var u in viewModel.Visitors)
+            foreach (var u in destination.Visitors)
             {
                 u.PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
             }
 
-            return photoService.GetPhotoFromAzureBlob($"events/{dto.Id}/full.png").Result;
+            return photoService.GetPhotoFromAzureBlob($"events/{source.Id}/full.png").Result;
         }
     }
 }

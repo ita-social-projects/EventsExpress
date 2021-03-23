@@ -18,16 +18,13 @@ namespace EventsExpress.Controllers
     {
         private readonly IEventScheduleService _eventScheduleService;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
 
         public EventScheduleController(
             IEventScheduleService eventScheduleService,
-            IMapper mapper,
-            IPhotoService photoService)
+            IMapper mapper)
         {
             _eventScheduleService = eventScheduleService;
             _mapper = mapper;
-            _photoService = photoService;
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace EventsExpress.Controllers
             {
                 var viewModel = new IndexViewModel<PreviewEventScheduleViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<EventScheduleDto>, IEnumerable<PreviewEventScheduleViewModel>>(
+                    Items = _mapper.Map<IEnumerable<PreviewEventScheduleViewModel>>(
                         _eventScheduleService.GetAll()),
                 };
                 return Ok(viewModel);
@@ -123,6 +120,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{eventScheduleId:Guid}")]
         public IActionResult Get(Guid eventScheduleId) =>
-            Ok(_mapper.Map<EventScheduleDto, EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId)));
+            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId)));
     }
 }

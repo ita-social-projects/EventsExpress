@@ -30,7 +30,7 @@ namespace EventsExpress.Mapping
                     Edited = x.Edited,
                     Text = x.Text,
                 })))
-                .ForMember(dest => dest.Users, opts => opts.MapFrom<ChatRoomToChatViewModelResolver>())
+                .ForMember(dest => dest.Users, opts => opts.MapFrom<ChatRoomToUserChatViewModelResolver>())
                 .ForMember(dest => dest.LastMessage, opts => opts.Ignore())
                 .ForMember(dest => dest.LastMessageTime, opts => opts.Ignore());
 

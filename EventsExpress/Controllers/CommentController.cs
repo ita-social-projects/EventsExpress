@@ -16,16 +16,13 @@ namespace EventsExpress.Controllers
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
 
         public CommentController(
             ICommentService commentService,
-            IMapper mapper,
-            IPhotoService photoService)
+            IMapper mapper)
         {
             _commentService = commentService;
             _mapper = mapper;
-            _photoService = photoService;
         }
 
         /// <summary>
@@ -44,7 +41,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDto>(model));
+            await _commentService.Create(_mapper.Map<CommentDto>(model));
 
             return Ok();
         }
@@ -77,11 +74,11 @@ namespace EventsExpress.Controllers
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            var res = _mapper.Map<IEnumerable<CommentDto>, IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count));
+            var res = _mapper.Map<IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {
-                com.Children = _mapper.Map<IEnumerable<CommentViewModel>, IEnumerable<CommentViewModel>>(com.Children);
+                com.Children = _mapper.Map<IEnumerable<CommentViewModel>>(com.Children);
             }
 
             var viewModel = new IndexViewModel<CommentViewModel>
