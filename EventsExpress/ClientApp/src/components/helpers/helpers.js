@@ -179,6 +179,11 @@ export const validateEventForm = values => {
 }
 
 
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
+    minValue = new Date().getFullYear() - 115;
+    maxValue = new Date().getFullYear() - 15;
+
     return <DatePicker
         onChange={onChange}
         selected={new Date(value) || new Date()}
