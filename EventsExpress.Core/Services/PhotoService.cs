@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        private static BlobContainerClient _blobContainerClient;
+        private readonly BlobContainerClient _blobContainerClient;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
         private readonly Lazy<HttpClient> _client;
 
