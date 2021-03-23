@@ -3,7 +3,7 @@ import CategoryAddWrapper from '../../containers/categories/category-add';
 import CategoryListWrapper from '../../containers/categories/category-list';
 import Spinner from '../spinner';
 
-import get_categories from '../../actions/category/category-list';
+import get_categories from '../../actions/category/category-list-action';
 
 import { connect } from 'react-redux';
 class Categories extends Component{

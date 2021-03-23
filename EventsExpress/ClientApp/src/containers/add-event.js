@@ -5,7 +5,7 @@ import { getFormValues, reset } from 'redux-form';
 import add_event,
     { setEventPending, setEventSuccess } from '../actions/event-add-action';
 import { setAlert } from '../actions/alert-action';
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 import { validateEventForm } from '../components/helpers/helpers';
 import { enumLocationType } from '../constants/EventLocationType';
 

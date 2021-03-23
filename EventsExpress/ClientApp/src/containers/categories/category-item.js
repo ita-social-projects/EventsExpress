@@ -5,9 +5,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
 
-import { add_category } from "../../actions/category/add-category";
-import { delete_category } from "../../actions/category/delete-category";
-import { set_edited_category } from "../../actions/category/add-category";
+import { add_category, set_edited_category } from "../../actions/category/category-add-action";
+import { delete_category } from "../../actions/category/category-delete-action";
 
 
 class CategoryItemWrapper extends Component {
@@ -21,9 +20,9 @@ class CategoryItemWrapper extends Component {
     };
 
     componentWillUpdate = () => {
-        const {categoryError, isCategorySuccess } = this.props.status;
+        const {isCategorySuccess } = this.props.status;
         
-        if (!categoryError && isCategorySuccess){
+        if (isCategorySuccess){
             this.props.edit_cansel();
         }
     }
@@ -37,7 +36,6 @@ class CategoryItemWrapper extends Component {
                         item={this.props.item} 
                         callback={this.save} 
                         cancel={edit_cansel} 
-                        message={this.props.status.categoryError}
                     />
                     : <CategoryItem 
                         item={this.props.item} 

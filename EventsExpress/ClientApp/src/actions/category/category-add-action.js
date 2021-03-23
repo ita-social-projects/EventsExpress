@@ -1,42 +1,33 @@
 ﻿import { CategoryService } from '../../services';
-import get_categories from './category-list';
-
+import get_categories from './category-list-action';
+import { SubmissionError, reset } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_CATEGORY_PENDING = "SET_CATEGORY_PENDING";
 export const SET_CATEGORY_SUCCESS = "SET_CATEGORY_SUCCESS";
-export const SET_CATEGORY_ERROR = "SET_CATEGORY_ERROR";
 export const SET_CATEGORY_EDITED = "SET_CATEGORY_EDITED";
 
 const api_serv = new CategoryService();
 
-
 export function add_category(data) {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setCategoryPending(true));
-
-        let res;
-        if  (data.id) {
-            res = api_serv.editCategory(data);
-        } else {
-            res = api_serv.setCategory(data);
+        let response = await api_serv.setCategory(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
         }
-
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setCategorySuccess(true));
-                dispatch(get_categories());
-            } else {
-                dispatch(setCategoryError(response.error));
-            }
-        });
+        dispatch(setCategorySuccess(true));
+        dispatch(get_categories());
+        dispatch(set_edited_category(null));
+        dispatch(reset('add-form'));
     }
+    return Promise.resolve();
 }
-
 
 export function set_edited_category(id) {
     return dispatch => {
         dispatch(setCategoryError(null));
-        dispatch(setCategoryEdited(id));     
+        dispatch(setCategoryEdited(id));
     }
 }
 
@@ -61,10 +52,4 @@ export function setCategorySuccess(data) {
     };
 }
 
-export function setCategoryError(data) {
-    return {
-        type: SET_CATEGORY_ERROR,
-        payload: data
-    };
-}
 

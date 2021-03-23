@@ -5,7 +5,7 @@ import { getFormValues, reset } from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event } from '../actions/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
 
 class EditEventWrapper extends Component {
