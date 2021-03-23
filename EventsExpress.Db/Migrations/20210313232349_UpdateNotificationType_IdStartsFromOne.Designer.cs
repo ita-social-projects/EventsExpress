@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210313232349_UpdateNotificationType_IdStartsFromOne")]
+    partial class UpdateNotificationType_IdStartsFromOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,23 +118,25 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateFrom")
+                    b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
-                    b.Property<DateTime?>("DateTo")
+                    b.Property<DateTime>("DateTo")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventLocationId")
+                    b.Property<Guid>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsPublic")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MaxParticipants")
-                        .HasColumnType("int");
+                    b.Property<int>("MaxParticipants")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2147483647);
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
@@ -702,7 +706,9 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
-                        .HasForeignKey("EventLocationId");
+                        .HasForeignKey("EventLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
                         .WithMany()

@@ -12,7 +12,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import moment from "moment";
 import './helpers.css'
+
 export const radioButton = ({ input, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
@@ -176,6 +178,38 @@ export const validateEventForm = values => {
     return values;
 }
 
+
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+    />
+}
+
+export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
+
+    if (value !== null && value !== undefined && value !== '') {
+        if (new Date(value) < new Date(minValue)) {
+            onChange(moment(minValue).format('L'))
+        }
+    }
+
+    return <TextField
+        type="date"
+        label={label}
+        selected={moment(value).format('L')}
+        value={moment(value).format('YYYY-MM-DD')}
+        onChange={onChange}
+        inputProps={{
+            min: moment(minValue).format('YYYY-MM-DD')
+        }}
+    />
+}
 
 export const maxLength = max => value =>
     value && value.length > max
@@ -346,7 +380,7 @@ export const renderSelectField = ({
             >
                 {children}
             </Select>
-            {renderErrorsFromHelper({ touched, error })}
+            {renderFromHelper({ touched, error })}
         </FormControl>
     )
 

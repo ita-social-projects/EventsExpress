@@ -20,7 +20,7 @@ import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
 import { createBrowserHistory } from 'history';
-
+import "./event-form.css";
 momentLocaliser(moment);
 const history = createBrowserHistory({ forceRefresh: true });
 
@@ -33,7 +33,7 @@ class EventForm extends Component {
         this.setState(state => ({
             checked: !state.checked,
         }));
-  
+
     }
     handleClick = () => {
         history.push(`/`);
@@ -53,7 +53,6 @@ class EventForm extends Component {
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
-
                     <Field
                         id="image-field"
                         name="photo"
@@ -116,18 +115,20 @@ class EventForm extends Component {
                             label="Public"
                         />
                     </div>
-                    <div className="meta-wrap m-2">
-                        <span>From
+                    <div className="meta-wrap">
+                        <span >
                             <Field
                                 name='dateFrom'
+                                label='From'
                                 component={renderDatePicker}
                                 disabled={disabledDate ? true : false}
                             />
                         </span>
                         {values && values.dateFrom &&
-                            <span>To
+                            <span className="retreat">
                                 <Field
                                     name='dateTo'
+                                    label='To'
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
                                     disabled={disabledDate ? true : false}
