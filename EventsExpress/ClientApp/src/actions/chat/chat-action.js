@@ -59,7 +59,9 @@ export function initialConnection() {
                 }));
             });
         }
-        catch { (err => console.log('Error while establishing connection :(')); }
+        catch (err) {
+            console.log('Error while establishing connection :(');
+        }
 
         dispatch({
             type: INITIAL_CONNECTION,
@@ -105,13 +107,6 @@ export function ReceiveMsg(data) {
     return {
         type: RECEIVE_MESSAGE,
         payload: data
-    }
-}
-
-export function reset_hub() {
-    return {
-        type: RESET_CHAT,
-        payload: {}
     }
 }
 

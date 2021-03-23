@@ -15,8 +15,7 @@ export default class UserService {
     setAvatar = async(data) => {
         let file = new FormData();
         file.append('newAva', data.image.file);
-        let res = await baseService.setResourceWithData('users/changeAvatar', file);
-        return res;
+        await baseService.setResourceWithData('users/changeAvatar', file);
     }
 
     setChangeUserRole = (userId, newRoleId) =>

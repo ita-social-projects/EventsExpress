@@ -30,11 +30,11 @@ export function delete_users_inventory(data) {
         dispatch(setUsersInventoriesPending(true));
 
         let response = await api_serv.setUsersInventoryDelete(data);
+        dispatch(get_users_inventories_by_event_id(data.eventId));
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
-        }
-        dispatch(get_users_inventories_by_event_id(data.eventId));
+        }        
         return Promise.resolve();
     }
 }
