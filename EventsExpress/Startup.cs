@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -151,6 +152,12 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
+
+            services.AddAzureClients(builder =>
+            {
+                // Add a storage account client
+                builder.AddBlobServiceClient(Configuration.GetConnectionString("AzureBlobConnection"));
+            });
 
             services.AddMvc().AddFluentValidation(options =>
             {
