@@ -44,15 +44,11 @@ namespace EventsExpress.Db.EF
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 
-        public DbSet<Report> Reports { get; set; }
-
         public DbSet<Comments> Comments { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<ChatRoom> ChatRoom { get; set; }
-
-        public DbSet<Photo> Photos { get; set; }
 
         public DbSet<Message> Message { get; set; }
 
