@@ -4,7 +4,7 @@ import HeaderProfile from '../components/header-profile';
 import logout from '../actions/logout-action';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
 import { setLoginPending, setLoginSuccess } from '../actions/login-action';
-import add_event from '../actions/event-add-action';
+import add_event, { add_wizard } from '../actions/event-add-action';
 
 class HeaderProfileWrapper extends Component {
   logout_reset = () => {
@@ -16,6 +16,10 @@ class HeaderProfileWrapper extends Component {
         return this.props.add_event({ user_id: this.props.user.id });
     }
 
+    onWizard = (values) => {
+        return this.props.add_wizard({ user_id: this.props.user.id });
+    }
+
     render() {
     return <HeaderProfile
         user={this.props.user}
@@ -24,6 +28,7 @@ class HeaderProfileWrapper extends Component {
         reset={this.props.reset}
         notification={this.props.notification.events.length}
         onSubmit={this.onSubmit}
+        onWizard={this.onWizard}
     />;
   }
 }
@@ -41,6 +46,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         add_event: (data) => dispatch(add_event(data)),
+        add_wizard: (data) => dispatch(add_wizard(data)),
     logout: () => { dispatch(logout()) },
     reset: () => {
       dispatch(setRegisterPending(true));

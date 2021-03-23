@@ -277,6 +277,82 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
+        public async Task<Guid> Part1(EventDto e)
+        {
+            var ev = Context.Events
+                .Include(e => e.Categories)
+                    .ThenInclude(c => c.Category)
+                .FirstOrDefault(x => x.Id == e.Id);
+            ev.Title = e.Title;
+            ev.Description = e.Description;
+            ev.DateFrom = e.DateFrom;
+            ev.DateTo = e.DateTo;
+            var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
+                .ToList();
+
+            ev.Categories = eventCategories;
+            await Context.SaveChangesAsync();
+
+            return ev.Id;
+        }
+
+        public async Task<Guid> Part2(EventDto e)
+        {
+            var ev = Context.Events
+                .Include(e => e.Photo)
+                .FirstOrDefault(x => x.Id == e.Id);
+            if (e.Photo != null)
+            {
+                if (ev.Photo != null)
+                {
+                    await _photoService.Delete(ev.Photo.Id);
+                }
+
+                try
+                {
+                    ev.Photo = await _photoService.AddPhoto(e.Photo);
+                }
+                catch (ArgumentException)
+                {
+                    throw new EventsExpressException("Invalid file");
+                }
+            }
+
+            await Context.SaveChangesAsync();
+
+            return ev.Id;
+        }
+
+        public async Task<Guid> Part3(EventDto e)
+        {
+            var ev = Context.Events
+                .Include(e => e.EventLocation)
+                .FirstOrDefault(x => x.Id == e.Id);
+
+            if (e.OnlineMeeting != null || e.Point != null)
+            {
+                var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
+                var locationId = await _locationService.AddLocationToEvent(locationDTO);
+                ev.EventLocationId = locationId;
+            }
+
+            await Context.SaveChangesAsync();
+
+            return ev.Id;
+        }
+
+        public async Task<Guid> Part5(EventDto e)
+        {
+            var ev = Context.Events
+                .FirstOrDefault(x => x.Id == e.Id);
+            ev.MaxParticipants = e.MaxParticipants;
+            ev.IsPublic = e.IsPublic;
+
+            await Context.SaveChangesAsync();
+
+            return ev.Id;
+        }
+
         public async Task<Guid> Publish(Guid eventId)
         {
             var ev = Context.Events

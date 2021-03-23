@@ -102,11 +102,7 @@ const initialState = {
         isPending: true,
         cancelationModalStatus: false,
         cancelation: {},
-        data: {
-            dateFrom: null,
-            dateTo: null,
-            photoUrl: null,
-        }
+        data: null,
     },
     eventSchedule: {
         isPending: true,

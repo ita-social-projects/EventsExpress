@@ -16,6 +16,14 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> Edit(EventDto e);
 
+        Task<Guid> Part1(EventDto e);
+
+        Task<Guid> Part2(EventDto e);
+
+        Task<Guid> Part3(EventDto e);
+
+        Task<Guid> Part5(EventDto e);
+
         Task<Guid> Publish(Guid eventId);
 
         EventDto EventById(Guid eventId);

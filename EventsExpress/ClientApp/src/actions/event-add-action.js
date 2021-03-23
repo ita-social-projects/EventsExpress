@@ -25,10 +25,76 @@ export default function add_event(data) {
     }
 }
 
+export function add_wizard(data) {
+    return async dispatch => {
+        dispatch(setEventPending(true));
+        let response = await api_serv.setEvent(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setEventSuccess(true));
+        const event = await response.json();
+        dispatch(history.push(`/editWizard/${event.id}`));
+        return Promise.resolve();
+    }
+}
+
 export function edit_event(data) {
     return async dispatch => {
         dispatch(setEventPending(true));
         let response = await api_serv.editEvent(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+        return Promise.resolve();
+    }
+}
+
+export function edit_event_part1(data) {
+    return async dispatch => {
+        dispatch(setEventPending(true));
+        let response = await api_serv.part1(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+        return Promise.resolve();
+    }
+}
+
+export function edit_event_part2(data) {
+    return async dispatch => {
+        dispatch(setEventPending(true));
+        let response = await api_serv.part2(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+        return Promise.resolve();
+    }
+}
+
+export function edit_event_part3(data) {
+    return async dispatch => {
+        dispatch(setEventPending(true));
+        let response = await api_serv.part3(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(setEventSuccess(true));
+        dispatch(get_event(data.id));
+        return Promise.resolve();
+    }
+}
+
+export function edit_event_part5(data) {
+    return async dispatch => {
+        dispatch(setEventPending(true));
+        let response = await api_serv.part5(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }

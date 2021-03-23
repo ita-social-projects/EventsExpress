@@ -1,7 +1,7 @@
 ﻿import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Spinner from '../components/spinner';
-import EventDraftWrapper from './event-draft';
+import WizardFormWrapper from './Wizard-form-wrapper';
 import get_event, { 
     resetEvent, 
     approveUser, 
@@ -31,7 +31,7 @@ class DraftEditWrapper extends Component{
         const { isPending } = this.props.event;
         return isPending
             ? <Spinner />
-            : <EventDraftWrapper/>
+            : <WizardFormWrapper/>
     }
 }
 

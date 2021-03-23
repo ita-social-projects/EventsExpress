@@ -176,6 +176,52 @@ export const validateEventForm = values => {
     return values;
 }
 
+export const validateEventFormPart1 = values => {
+
+    if (!values)
+        return values;
+
+    if (!values.dateFrom) {
+        values.dateFrom = new Date(Date.now());
+    }
+
+    if (!values.dateTo) {
+        values.dateTo = new Date(values.dateFrom);
+    }
+
+    return values;
+}
+
+export const validateEventFormPart2 = values => {
+
+    if (!values)
+        return values;
+
+    return values;
+}
+
+export const validateEventFormPart3 = values => {
+
+    if (!values)
+        return values;
+
+    return values;
+}
+
+export const validateEventFormPart5 = values => {
+
+    if (!values)
+        return values;
+    
+    if (!values.isPublic) {
+        values.isPublic = false;
+    }
+
+    if (!values.maxParticipants) {
+        values.maxParticipants = 2147483647;
+    }
+    return values;
+}
 
 export const maxLength = max => value =>
     value && value.length > max

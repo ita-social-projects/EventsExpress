@@ -105,6 +105,94 @@ namespace EventsExpress.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an edited event.</returns>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Part1(Guid eventId, [FromForm] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.Part1(_mapper.Map<EventDto>(model));
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an edited event.</returns>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Part2(Guid eventId, [FromForm] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.Part2(_mapper.Map<EventDto>(model));
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an edited event.</returns>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Part3(Guid eventId, [FromForm] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.Part3(_mapper.Map<EventDto>(model));
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// This method is for edit and create events.
+        /// </summary>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event's properties.</param>
+        /// <returns>The method returns an edited event.</returns>
+        /// <response code="200">Edit event proces success.</response>
+        /// <response code="400">If Edit process failed.</response>
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Part5(Guid eventId, [FromForm] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.Part5(_mapper.Map<EventDto>(model));
+
+            return Ok(result);
+        }
+
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Publish(Guid eventId)

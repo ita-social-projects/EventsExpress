@@ -18,6 +18,10 @@ export default class HeaderProfile extends Component {
         this.props.onSubmit(null);
         
     }
+    handleWizardClick = () => {
+        this.props.onWizard(null);
+
+    }
 
     render() {
         const { id, name, photoUrl, rating } = this.props.user;
@@ -68,6 +72,12 @@ export default class HeaderProfile extends Component {
                                     <button className="btn btn-outline-secondary" onClick={this.handleClick}>
                                         <i className="fas fa-plus mr-1"></i>
                                     add event
+
+                                    </button>
+
+                                    <button className="btn btn-outline-secondary" onClick={this.handleWizardClick}>
+                                        <i className="fas fa-plus mr-1"></i>
+                                    wizard form
 
                                     </button>
                                 </div>

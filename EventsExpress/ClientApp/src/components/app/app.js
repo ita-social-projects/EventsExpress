@@ -27,6 +27,7 @@ import LoginTwitter from '../../containers/TwitterLogin';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import AddEventWrapper from '../../containers/add-event';
 import DraftEditWrapper from '../../containers/draft-edit-wrapper';
+import WizardFormWrapper from '../../containers/Wizard-form-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list'
 
 export default class App extends Component {
@@ -68,6 +69,7 @@ export default class App extends Component {
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
                         <Route path='/editEvent/:id/' component={DraftEditWrapper} />
+                        <Route path='/editWizard/:id/' component={WizardFormWrapper} />
                         <Route path='/drafts' component={EventDraftListWrapper} />
                         <Route component={NotFound} />
                     </Switch>
