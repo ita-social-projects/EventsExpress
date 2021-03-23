@@ -41,6 +41,7 @@ class EventFilter extends Component {
     render() {
         const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
+        
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -55,19 +56,19 @@ class EventFilter extends Component {
                     {this.state.viewMore &&
                         <>
                             <div className="form-group">
-                                <div>From</div>
                                 <Field
-                                    name='dateFrom'
-                                    component={renderDatePicker}
+                                name='dateFrom'
+                                label='From'
+                                minValue={new Date()}                               
+                                component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
-                                <div>To</div>
                                 <Field
-                                    name='dateTo'
-                                    defaultValue={values.dateFrom}
-                                    minValue={values.dateFrom}
-                                    component={renderDatePicker}
+                                name='dateTo'
+                                label='To'
+                                minValue={new Date(values.dateFrom)}
+                                component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
