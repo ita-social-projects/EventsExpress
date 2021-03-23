@@ -1,6 +1,8 @@
 import InventoryService from '../../services/InventoryService';
 import { get_inventories_by_event_id } from '../inventory/inventory-list-action';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const GET_USERSINVENTORIES_SUCCESS = 'GET_USERSINVENTORIES_SUCCESS';
 export const SET_USERSINVENTORIES_PENDING = 'SET_USERSINVENTORIES_PENDING';
@@ -44,8 +46,7 @@ export function edit_users_inventory(data) {
         let response = await api_serv.setUsersInventory(data);
         dispatch(get_users_inventories_by_event_id(data.eventId));
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(await buildValidationState(response));
         }
         let jsonRes = await response.json();
         dispatch(getUsersInventoriesSuccess(jsonRes));
