@@ -31,9 +31,9 @@ export default class InventoryService {
     getUsersInventories = eventId => baseService.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 
 
-    setUsersInventoryDelete = data => {
+    setUsersInventoryDelete = async data => {
         data.quantity = 1;
-        baseService.setResource(`UserEventInventory/Delete`, data);
+        await baseService.setResource(`UserEventInventory/Delete`, data);
     }
 
     setUsersInventory = data => baseService.setResource(`UserEventInventory/Edit`, data);

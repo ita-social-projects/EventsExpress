@@ -15,7 +15,7 @@ class SelectNotificationTypesWrapper extends Component {
     }
 
     handleSubmit(event) {
-       return this.props.setUserNotificationTypes({
+        this.props.setUserNotificationTypes({
             notificationTypes: event.notificationTypes
         });
         event.notificationTypes = [];

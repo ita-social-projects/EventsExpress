@@ -1,7 +1,6 @@
 import { UserService } from "../services";
 import { setSuccessAllert } from './alert-action';
-import { reset } from 'redux-form';
-import { SubmissionError } from 'redux-form';
+import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../components/helpers/action-helpers';
 
 export const contactUs = {

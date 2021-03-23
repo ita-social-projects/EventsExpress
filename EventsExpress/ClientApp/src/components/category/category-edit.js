@@ -1,5 +1,4 @@
 ﻿import React, { Component } from "react";
-import { connect } from 'react-redux';
 import { Field, reduxForm } from "redux-form";
 import { renderTextField } from '../helpers/helpers';
 import ErrorMessages from '../shared/errorMessage';
