@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
+using System.Text;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -10,6 +12,7 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Event;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Moq;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
@@ -19,6 +22,7 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class EventServiceTest : TestInitializer
     {
+        private static Mock<IEventService> mockEventService;
         private static Mock<IPhotoService> mockPhotoService;
         private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
@@ -34,6 +38,11 @@ namespace EventsExpress.Test.ServiceTests
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
+        private PaginationViewModel model = new PaginationViewModel
+        {
+            PageSize = 3,
+            Page = 1,
+        };
 
         private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
         {
@@ -112,6 +121,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
+            mockEventService = new Mock<IEventService>();
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
@@ -288,13 +298,27 @@ namespace EventsExpress.Test.ServiceTests
             dto.Id = Guid.Empty;
 
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
+            mockPhotoService.Verify(x => x.AddEventPhoto(It.IsAny<IFormFile>(), dto.Id), Times.Once);
         }
 
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Edit Event")]
         public void EditEvent_ValidEvent_Success(EventDto eventDto)
         {
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            eventDto.Photo = file;
+
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
+            mockPhotoService.Verify(x => x.AddEventPhoto(eventDto.Photo, eventDto.Id));
         }
 
         [Test]
@@ -368,6 +392,49 @@ namespace EventsExpress.Test.ServiceTests
                 userId,
                 eventId,
                 UserStatusEvent.Approved));
+        }
+
+        [Test]
+        [Category("Future events by user id")]
+        public void FutureEventsByUserId_ReturnEvents()
+        {
+            var events = service.FutureEventsByUserId(Guid.NewGuid(), model);
+            Assert.That(events, Is.Not.Null);
+        }
+
+        [Test]
+        [Category("Past events by user id")]
+        public void PastEventsByUserId_ReturnEvents()
+        {
+            var events = service.PastEventsByUserId(Guid.NewGuid(), model);
+            Assert.That(events, Is.Not.Null);
+        }
+
+        [Test]
+        [Category("Visited events by user id")]
+        public void VisitedEventsByUserId_ReturnEvents()
+        {
+            var events = service.VisitedEventsByUserId(Guid.NewGuid(), model);
+            Assert.That(events, Is.Not.Null);
+        }
+
+        [Test]
+        [Category("Events to go by user id")]
+        public void EventsToGoByUserId_ReturnEvents()
+        {
+            var events = service.EventsToGoByUserId(Guid.NewGuid(), model);
+            Assert.That(events, Is.Not.Null);
+        }
+
+        private string GetContentType(string fileName)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return contentType;
         }
     }
 }
