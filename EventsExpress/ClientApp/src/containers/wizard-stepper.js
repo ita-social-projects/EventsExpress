@@ -14,7 +14,7 @@ import Part2 from '../components/Draft/WizardFormPart2';
 import Part3 from '../components/Draft/WizardFormPart3';
 import Part4 from '../components/Draft/WizardFormPart4';
 import Part5 from '../components/Draft/WizardFormPart5';
-import Test from '../components/Draft/WizardFormTest';
+import Publish from '../components/Draft/WizardFromPublish';
 import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event-add-action';
 
 
@@ -39,18 +39,19 @@ function HorizontalLinearStepper(props) {
     const [skipped, setSkipped] = React.useState(new Set());
     //if you need to add new step use formSteps.push orr refaktor already existing fromSteps
     const formSteps = [
-        { part: 0, Stepname: "1" },
-        { part: 1, Stepname: "2" },
-        { part: 2, Stepname: "3" },
-        { part: 3, Stepname: "4" },
-        { part: 4, Stepname: "5" },
+        { part: 0, Stepname: "1", component: <Part1 />},
+        { part: 1, Stepname: "2", component: <Part2 />},
+        { part: 2, Stepname: "3", component: <Part3 />},
+        { part: 3, Stepname: "4", component: <Part4 />},
+        { part: 4, Stepname: "5", component: <Part5 />},
 
     ];
 
     if (props.event && props.event.eventStatus === 3) {
         formSteps.push({
             part: 5,
-            name: "publish"
+            Stepname: "publish",
+            component: <Publish/>,
         });
     }
 
@@ -65,41 +66,19 @@ function HorizontalLinearStepper(props) {
     
 
     
-     //if you need to add new step add new switch case with new step index
+
     const getStepContent = (step, props) => {
-        switch (step) {
-            case formSteps[0].part:
-                return <Part1 />;
-            case formSteps[1].part:
-                return <Part2 />;
-            case formSteps[2].part:
-                return <Part3 />;
-            case formSteps[3].part:
-                return <Part4 />;
-            case formSteps[4].part:
-                return <Part5 />;
-            case formSteps[5].part:
-                return  <div>
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit"
-                        onClick={onPublish}
-                    >
-                        Publish
-                        </Button>
-                    </div>
-            default:
-                return 'Unknown step';
+        const curStep = formSteps.filter(pair => pair.part === step);
+        if (curStep && curStep[0].component && curStep[0].part != null && curStep[0].Stepname) {
+            return curStep[0].component;
+        }
+        else {
+            return 'Unknown step';
         }
     }
 
     const steps = getSteps();
 
-    const onPublish = (values) => {
-        return props.publish(props.event.id);
-    }
     const isStepFailed = (step) => {
         return step === 1;
     };
