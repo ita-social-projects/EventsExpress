@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class NewCreate : Migration
+    public partial class ImplementDraft : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,15 +11,17 @@ namespace EventsExpress.Db.Migrations
                 name: "FK_Events_EventLocations_EventLocationId",
                 table: "Events");
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "IsPublic",
+            migrationBuilder.AlterColumn<int>(
+                name: "MaxParticipants",
                 table: "Events",
                 nullable: true,
-                oldClrType: typeof(bool),
-                oldType: "bit");
+                defaultValue: 2147483647,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldDefaultValue: 2147483647);
 
             migrationBuilder.AlterColumn<bool>(
-                name: "IsBlocked",
+                name: "IsPublic",
                 table: "Events",
                 nullable: true,
                 oldClrType: typeof(bool),
@@ -48,12 +50,6 @@ namespace EventsExpress.Db.Migrations
                 oldClrType: typeof(DateTime),
                 oldType: "date");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDraft",
-                table: "Events",
-                nullable: false,
-                defaultValue: false);
-
             migrationBuilder.AddForeignKey(
                 name: "FK_Events_EventLocations_EventLocationId",
                 table: "Events",
@@ -69,20 +65,18 @@ namespace EventsExpress.Db.Migrations
                 name: "FK_Events_EventLocations_EventLocationId",
                 table: "Events");
 
-            migrationBuilder.DropColumn(
-                name: "IsDraft",
-                table: "Events");
+            migrationBuilder.AlterColumn<int>(
+                name: "MaxParticipants",
+                table: "Events",
+                type: "int",
+                nullable: false,
+                defaultValue: 2147483647,
+                oldClrType: typeof(int),
+                oldNullable: true,
+                oldDefaultValue: 2147483647);
 
             migrationBuilder.AlterColumn<bool>(
                 name: "IsPublic",
-                table: "Events",
-                type: "bit",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<bool>(
-                name: "IsBlocked",
                 table: "Events",
                 type: "bit",
                 nullable: false,

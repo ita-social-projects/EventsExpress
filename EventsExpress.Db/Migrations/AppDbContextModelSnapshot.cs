@@ -132,7 +132,9 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("MaxParticipants")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2147483647);
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
