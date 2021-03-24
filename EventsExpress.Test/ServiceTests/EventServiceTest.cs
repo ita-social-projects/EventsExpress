@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -8,6 +9,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Event;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -25,6 +27,7 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
         private static Mock<IHttpContextAccessor> httpContextAccessor;
+        private static Mock<IValidator<Event>> mockValidationService;
 
         private EventService service;
         private List<Event> events;
@@ -116,6 +119,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
+            mockValidationService = new Mock<IValidator<Event>>();
             httpContextAccessor = new Mock<IHttpContextAccessor>();
             httpContextAccessor.SetupGet(x => x.HttpContext)
                 .Returns(new Mock<HttpContext>().Object);
@@ -131,7 +135,8 @@ namespace EventsExpress.Test.ServiceTests
                 mockLocationService.Object,
                 mockAuthService.Object,
                 httpContextAccessor.Object,
-                mockEventScheduleService.Object);
+                mockEventScheduleService.Object,
+                mockValidationService.Object);
 
             eventLocationMap = new EventLocation
             {
@@ -161,6 +166,13 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = GetEventExistingId.FirstEventId,
+                    EventSchedule = new EventSchedule
+                    {
+                        IsActive = true,
+                        Frequency = 1,
+                        Periodicity = Periodicity.Weekly,
+                        NextRun = DateTime.Today.AddDays(7),
+                    },
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
@@ -177,6 +189,14 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Active,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -188,7 +208,7 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new EventOwner
                         {
-                            UserId = Guid.NewGuid(),
+                            UserId = userId,
                         },
                     },
                     PhotoId = Guid.NewGuid(),
@@ -197,6 +217,14 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -216,6 +244,14 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = false,
                     Categories = null,
                     MaxParticipants = 1,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Active,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                     Visitors = new List<UserEvent>()
                     {
                         new UserEvent
@@ -286,6 +322,15 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsNull(result);
         }
 
+        [Test]
+        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
+        public void EditNextEvent_Work_Plug(EventDto eventDto)
+        {
+            var result = service.EditNextEvent(eventDto);
+
+            Assert.IsNotNull(result);
+        }
+
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Create Event")]
         public void CreateEvent_ValidEvent_Success(EventDto eventDto)
@@ -296,11 +341,13 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
         }
 
+        [Test]
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Edit Event")]
         public void EditEvent_ValidEvent_Success(EventDto eventDto)
         {
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
+            Assert.IsNull(eventDto.Photo);
         }
 
         [Test]
@@ -374,6 +421,80 @@ namespace EventsExpress.Test.ServiceTests
                 userId,
                 eventId,
                 UserStatusEvent.Approved));
+        }
+
+        [Test]
+
+        public void CreateDraft_Works()
+        {
+            service.CreateDraft();
+            Assert.AreEqual(4, Context.Events.Count());
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InvalidId_Throw()
+        {
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(Guid.NewGuid()));
+            Assert.That(ex.Message, Contains.Substring("Not found"));
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_ValidEvent_Works()
+        {
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
+            Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
+            var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
+            Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
+        }
+
+        [Test]
+        [Category("Publish Event")]
+        public void Publish_InValidEvent_Throws()
+        {
+            var validationResultMock = new Mock<FluentValidation.Results.ValidationResult>();
+            validationResultMock
+                .SetupGet(x => x.IsValid)
+                .Returns(() => false);
+
+            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.SecondEventId));
+            Assert.That(ex.Message, Contains.Substring("validation failed"));
+        }
+
+        [Test]
+        [Category("Get all drafts")]
+
+        public void GetAllDrafts_Works()
+        {
+            int x = 1;
+            MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
+                .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
+            httpContextAccessor.SetupGet(x => x.HttpContext)
+                .Returns(new Mock<HttpContext>().Object);
+            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
+                .Returns(new UserDto { Id = userId });
+            var result = service.GetAllDraftEvents(1, 1, out x);
+            Assert.AreEqual(1, result.Count());
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task CreateNextEvent_WorksAsync()
+        {
+            mockEventScheduleService.Setup(e => e.EventScheduleByEventId(GetEventExistingId.FirstEventId)).Returns(new EventScheduleDto()
+            {
+                IsActive = true,
+                Frequency = 1,
+                Periodicity = Periodicity.Weekly,
+                NextRun = DateTime.Today.AddDays(7),
+            });
+            var result = await service.CreateNextEvent(GetEventExistingId.FirstEventId);
+
+            Assert.AreNotEqual(Guid.Empty, result);
+            var test = Context.Events.Find(result);
+            Assert.IsNotNull(test);
+            Assert.AreEqual(DateTime.Today.AddDays(7), test.DateFrom);
         }
     }
 }
