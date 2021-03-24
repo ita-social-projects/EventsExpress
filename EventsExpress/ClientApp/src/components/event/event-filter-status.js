@@ -17,6 +17,7 @@ class EventFilterStatus extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
         input.value = input.value.StatusHistory || input.value;
+
         return options.map((option, index) => {
             return (
                 <div className="checkbox" key={index}>

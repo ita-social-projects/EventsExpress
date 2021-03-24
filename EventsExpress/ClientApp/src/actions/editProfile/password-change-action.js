@@ -1,4 +1,5 @@
 ﻿import { AuthenticationService } from '../../services';
+import { reset } from 'redux-form';
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';

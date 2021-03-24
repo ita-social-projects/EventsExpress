@@ -34,7 +34,8 @@ export function delete_users_inventory(data) {
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
-        }        
+        }
+        dispatch(get_users_inventories_by_event_id(data.eventId));
         return Promise.resolve();
     }
 }
