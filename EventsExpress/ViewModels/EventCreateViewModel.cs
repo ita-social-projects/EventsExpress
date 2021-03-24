@@ -10,7 +10,7 @@ namespace EventsExpress.ViewModels
     {
         public IFormFile Photo { get; set; }
 
-        public Guid PhotoId { get; set; }
+        public Guid? PhotoId { get; set; }
 
         public EventStatus EventStatus { get; set; }
 

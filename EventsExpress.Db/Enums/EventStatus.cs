@@ -5,5 +5,6 @@
         Active,
         Blocked,
         Canceled,
+        Draft,
     }
 }
