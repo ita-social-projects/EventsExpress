@@ -8,6 +8,8 @@ export default class EventService {
 
     getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
 
+    getAllDrafts = (page) => baseService.getResourceNew(`event/AllDraft/${page}`);
+          
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
     setEventTemplate = (data, path) => {
@@ -16,8 +18,8 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
+        if (data.photo != null) {
+            file.append('Photo', data.photo.file);
         }
 
         if (data.isReccurent) {
@@ -30,14 +32,17 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
-        file.append('Location.Type', data.location.type)
-        if (data.location.selectedPos) {
-            file.append('Location.Latitude', data.location.selectedPos.lat);
-            file.append('Location.Longitude', data.location.selectedPos.lng);
+        if (data.location) {
+            file.append('Location.Type', data.location.type)
+            if (data.location.selectedPos) {
+                file.append('Location.Latitude', data.location.selectedPos.lat);
+                file.append('Location.Longitude', data.location.selectedPos.lng);
+            }
+            if (data.location.onlineMeeting) {
+                file.append('Location.OnlineMeeting', data.location.onlineMeeting);
+            }
         }
-        if (data.location.onlineMeeting) {
-            file.append('Location.OnlineMeeting', data.location.onlineMeeting);
-        }
+       
 
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -56,9 +61,12 @@ export default class EventService {
         }
 
         let i = 0;
-        data.categories.map(x => {
-            return file.append(`Categories[${i++}].Id`, x.id);
-        });
+        if (data.categories != null) {
+            data.categories.map(x => {
+                return file.append(`Categories[${i++}].Id`, x.id);
+            });
+        }
+           
         return baseService.setResourceWithData(path, file);
     }
 
@@ -69,8 +77,13 @@ export default class EventService {
 
     setEventFromParent = data =>
         this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
-
-    editEvent = data => this.setEventTemplate(data, `event/${data.id}/edit`);
+    
+    editEvent = async (data) => {
+        return this.setEventTemplate(data,`event/${data.id}/edit`)
+    }
+    publishEvent = (id) => {
+       return baseService.setResource(`event/${id}/publish`)
+    }
 
     setEventStatus = data =>  baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
 

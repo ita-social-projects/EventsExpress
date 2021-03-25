@@ -15,22 +15,22 @@ namespace EventsExpress.Db.Entities
         public string Description { get; set; }
 
         [Track]
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
         [Track]
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
         [Track]
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         [Track]
-        public int MaxParticipants { get; set; }
+        public int? MaxParticipants { get; set; }
 
         [Track]
         public Guid? PhotoId { get; set; }
 
         [Track]
-        public Guid EventLocationId { get; set; }
+        public Guid? EventLocationId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
 

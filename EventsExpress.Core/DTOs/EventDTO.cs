@@ -17,11 +17,11 @@ namespace EventsExpress.Core.DTOs
 
         public string Description { get; set; }
 
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
-        public int MaxParticipants { get; set; }
+        public int? MaxParticipants { get; set; }
 
         public int Frequency { get; set; }
 
@@ -31,11 +31,11 @@ namespace EventsExpress.Core.DTOs
 
         public string PhotoUrl { get; set; }
 
-        public Guid PhotoId { get; set; }
+        public Guid? PhotoId { get; set; }
 
         public Photo PhotoBytes { get; set; }
 
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         public Point Point { get; set; }
 

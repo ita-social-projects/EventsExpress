@@ -374,7 +374,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Photo, Is.Null);
             Assert.That(resEven.Visitors, Is.Null);
             Assert.That(resEven.Categories, Is.Null);
-            Assert.That(resEven.EventLocationId, Is.EqualTo(default(Guid)));
+            Assert.That(resEven.EventLocationId, Is.Null);
             Assert.That(resEven.EventLocation, Is.Null);
             Assert.That(resEven.EventSchedule, Is.Null);
             Assert.That(resEven.Rates, Is.Null);

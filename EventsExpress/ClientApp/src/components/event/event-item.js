@@ -3,9 +3,6 @@ import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
 
 import 'moment-timezone';
-import './event-item.css';
-
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
@@ -14,7 +11,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
 
@@ -23,25 +19,11 @@ import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../helpers/eventStatusEnum';
+import { useStyle } from '../event/CardStyle'
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        maxHeight: 200,
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    avatar: {
-        backgroundColor: red[500],
-    }
-}));
+const useStyles = useStyle;
 
-export default class Event extends Component {
+export default class EventCard extends Component {
     constructor(props) {
         super(props);
 
@@ -78,7 +60,7 @@ export default class Event extends Component {
             countVisitor,
             owners
         } = this.props.item;
-        const INT32_MAX_VALUE = 2147483647;
+        const INT32_MAX_VALUE = null;
         const { anchorEl } = this.state;
 
         const PrintMenuItems = owners.map(x => (
@@ -174,18 +156,21 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                            <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                {description.substr(0, 128)}
-                            </Typography>
-                        </Tooltip>
+                        {description &&
+                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                                <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                    {description.substr(0, 128)}
+                                </Typography>
+                            </Tooltip>
+                        } 
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
-                            <DisplayLocation
-                                location={this.props.item.location}
-                            />
-
+                            {this.props.item.location &&
+                                <DisplayLocation
+                                    location={this.props.item.location}
+                                />
+                            }
                             <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
