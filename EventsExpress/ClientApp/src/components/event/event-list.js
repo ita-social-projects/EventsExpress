@@ -4,7 +4,7 @@ import { reset_events, updateEventsFilters } from '../../actions/event/event-lis
 import RenderList from './RenderList'
 import EventCard from './event-item';
 import { change_event_status } from '../../actions/event/event-item-view-action';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventList extends Component {
     handlePageChange = (page) => {

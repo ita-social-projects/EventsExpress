@@ -18,7 +18,7 @@ import SocialShareMenu from './share/SocialShareMenu';
 import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 
 const useStyles = useStyle;
