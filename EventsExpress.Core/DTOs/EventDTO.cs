@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Azure.Storage.Blobs;
+using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
@@ -28,12 +33,6 @@ namespace EventsExpress.Core.DTOs
         public Periodicity Periodicity { get; set; }
 
         public IFormFile Photo { get; set; }
-
-        public string PhotoUrl { get; set; }
-
-        public Guid? PhotoId { get; set; }
-
-        public Photo PhotoBytes { get; set; }
 
         public bool? IsPublic { get; set; }
 

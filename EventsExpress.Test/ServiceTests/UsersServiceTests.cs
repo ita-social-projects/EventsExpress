@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
@@ -8,6 +10,8 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -313,6 +317,41 @@ namespace EventsExpress.Test.ServiceTests
         public void Block_AllIsValid_ReturnFalse()
         {
             Assert.DoesNotThrowAsync(async () => await service.Block(existingUser.Id));
+        }
+
+        [Test]
+        public void ChangeAvatar_UserInDbNotFound_Throws()
+        {
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<FormFile>()));
+        }
+
+        [Test]
+        public void ChangeAvatar_UserInDbFound_Success()
+        {
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+
+            Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
+            mockPhotoService.Verify(x => x.AddUserPhoto(file, userId));
+        }
+
+        private string GetContentType(string fileName)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return contentType;
         }
     }
 }
