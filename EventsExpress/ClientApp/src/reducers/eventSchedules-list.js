@@ -3,7 +3,7 @@ import {
     SET_EVENTS_SCHEDULE_PENDING,
     GET_EVENTS_SCHEDULE_SUCCESS,
     RESET_EVENTS_SCHEDULE,
-} from '../actions/eventSchedule-list-action';
+} from '../actions/eventSchedule/eventSchedule-list-action';
 
 export const reducer = (state = initialState.eventSchedules, action) => {
     switch (action.type) {

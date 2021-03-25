@@ -2,7 +2,7 @@
 
 import {
     SET_CANCEL_NEXT_EVENT_PENDING, SET_CANCEL_NEXT_EVENT_SUCCESS
-}from '../actions/eventSchedule-cancel-next-action';
+} from '../actions/eventSchedule/eventSchedule-cancel-next-action';
 
 export const reducer = (state = initialState.cancel_next_eventSchedule, action) => {
 

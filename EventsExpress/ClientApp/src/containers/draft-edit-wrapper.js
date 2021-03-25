@@ -6,7 +6,7 @@ import get_event, {
     resetEvent, 
     approveUser, 
     }
-from '../actions/event-item-view';
+    from '../actions/event/event-item-view-action';
 
 class DraftEditWrapper extends Component{
     EventItemViewWrapperNew
