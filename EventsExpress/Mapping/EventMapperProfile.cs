@@ -105,6 +105,11 @@ namespace EventsExpress.Mapping
 
         private static LocationViewModel MapLocation(EventDto eventDto)
         {
+            if (eventDto.OnlineMeeting == null && eventDto.Point == null)
+            {
+                return null;
+            }
+
             return eventDto.Type == LocationType.Map ?
               new LocationViewModel
               {
@@ -125,13 +130,13 @@ namespace EventsExpress.Mapping
 
         private static Uri OnlineMeetingOrNullEdit(EventEditViewModel eventEditViewModel)
         {
-            return eventEditViewModel.Location.Type == LocationType.Online ?
+            return eventEditViewModel.Location?.Type == LocationType.Online ?
                  new Uri(eventEditViewModel.Location.OnlineMeeting) : null;
         }
 
         private static Point PointOrNullEdit(EventEditViewModel editViewModel)
         {
-            return editViewModel.Location.Type == LocationType.Map ?
+            return editViewModel.Location?.Type == LocationType.Map ?
                  new Point(editViewModel.Location.Latitude.Value, editViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
         }
 

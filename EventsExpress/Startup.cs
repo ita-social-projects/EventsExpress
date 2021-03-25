@@ -162,7 +162,7 @@ namespace EventsExpress
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
-                ValidatorOptions.PropertyNameResolver = (_, memberInfo, expression) =>
+                ValidatorOptions.Global.PropertyNameResolver = (_, memberInfo, expression) =>
                     CamelCasePropertyNameResolver.ResolvePropertyName(memberInfo, expression);
             }).AddJsonOptions(options =>
             {

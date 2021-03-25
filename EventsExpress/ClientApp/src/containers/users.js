@@ -6,8 +6,9 @@ import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
 import BadRequest from '../components/Route guard/400'
 import Unauthorized from '../components/Route guard/401';
-import Forbidden from '../components/Route guard/403'
-import { Redirect } from 'react-router'
+import Forbidden from '../components/Route guard/403';
+import { Redirect } from 'react-router';
+
 class UsersWrapper extends Component{
     componentDidUpdate(prevProps, prevState) {
         if (this.props.users.isError.ErrorCode == '500') {

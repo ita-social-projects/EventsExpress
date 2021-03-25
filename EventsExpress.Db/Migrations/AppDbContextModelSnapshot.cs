@@ -116,22 +116,22 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateFrom")
+                    b.Property<DateTime?>("DateFrom")
                         .HasColumnType("date");
 
-                    b.Property<DateTime>("DateTo")
+                    b.Property<DateTime?>("DateTo")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("EventLocationId")
+                    b.Property<Guid?>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsPublic")
+                    b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaxParticipants")
+                    b.Property<int?>("MaxParticipants")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
@@ -341,17 +341,17 @@ namespace EventsExpress.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 2,
                             Name = "Own Event Change"
                         },
                         new
                         {
-                            Id = 0,
+                            Id = 1,
                             Name = "Profile Change"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 3,
                             Name = "Visited Event Change"
                         });
                 });

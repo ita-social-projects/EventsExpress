@@ -1,9 +1,11 @@
 ---
 name: User Story
-about: Create an issue to help us design
-summary: 'As a <role> I can <capability>, so that <receive benefit>'
+about: Create a story to help us improve
+summary: ''
 labels: story
 assignees: ''
+
+---
 
 **As a** <...> **I want to** <....> **so that** <...>
 

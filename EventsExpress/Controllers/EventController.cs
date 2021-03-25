@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -72,21 +73,15 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
-        /// <param name="model">Param model provides access to event's properties.</param>
         /// <returns>The method returns a created event.</returns>
         /// <response code="200">Create event proces success.</response>
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromForm] EventCreateViewModel model)
+        public IActionResult Create()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var result = _eventService.CreateDraft();
 
-            var result = await _eventService.Create(_mapper.Map<EventDto>(model));
-
-            return Ok(result);
+            return Ok(new { id = result });
         }
 
         /// <summary>
@@ -109,6 +104,15 @@ namespace EventsExpress.Controllers
             var result = await _eventService.Edit(_mapper.Map<EventDto>(model));
 
             return Ok(result);
+        }
+
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Publish(Guid eventId)
+        {
+            var result = await _eventService.Publish(eventId);
+
+            return Ok(new { id = result });
         }
 
         /// <summary>
@@ -149,6 +153,34 @@ namespace EventsExpress.Controllers
                     Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
                         _eventService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// This method have to return all events.
+        /// </summary>
+        /// <returns>The method returns filltered events.</returns>
+        /// <param name="page">Param page defines page count.</param>
+        /// <response code="200">Return IEnumerable EventPreviewDto.</response>
+        /// <response code="400">If return failed.</response>
+        [Authorize]
+        [HttpGet("[action]/{page:int}")]
+        public IActionResult AllDraft(int page = 1)
+        {
+            try
+            {
+                int pageSize = 5;
+                var result = _eventService.GetAllDraftEvents(page, pageSize, out int count);
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(result),
+                    PageViewModel = new PageViewModel(count, page, pageSize),
                 };
                 return Ok(viewModel);
             }
