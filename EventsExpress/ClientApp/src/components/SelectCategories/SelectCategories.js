@@ -2,6 +2,7 @@
 import { Field, reduxForm } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import { renderMultiselect } from '../helpers/helpers'
+import ErrorMessages from '../shared/errorMessage';
 
 class SelectCategories extends Component {
     constructor(props) {
@@ -15,11 +16,11 @@ class SelectCategories extends Component {
     }
 
     render() {
-        const { handleSubmit, submitting, items } = this.props;
+        const { handleSubmit, submitting, items, error } = this.props;
 
         return (
             <div >
-                <form onSubmit={handleSubmit}>
+                <form name = "SelectCategories" onSubmit={handleSubmit}>
                     <Field
                         name="categories"
                         component={renderMultiselect}
@@ -28,6 +29,10 @@ class SelectCategories extends Component {
                         textField={"name"}
                         className="form-control mt-2"
                     />
+                    {
+                        error &&
+                        <ErrorMessages error={error} className="text-center" />
+                    }
                     <div>
                         <Button
                             type="submit"

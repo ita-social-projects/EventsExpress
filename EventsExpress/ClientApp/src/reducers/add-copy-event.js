@@ -2,7 +2,7 @@
 
 import {
     SET_COPY_EVENT_PENDING, SET_COPY_EVENT_SUCCESS
-} from '../actions/event-copy-without-edit-action';
+} from '../actions/event/event-copy-without-edit-action';
 
 export const reducer = (state = initialState.add_copy_event, action) => {
 

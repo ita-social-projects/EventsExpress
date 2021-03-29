@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
-import logout from '../actions/logout-action';
+import logout from '../actions/login/logout-action';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
-import { setLoginPending, setLoginSuccess } from '../actions/login-action';
-import add_event from '../actions/event-add-action';
+import { setLoginPending, setLoginSuccess } from '../actions/login/login-action';
+import add_event from '../actions/event/event-add-action';
 
 class HeaderProfileWrapper extends Component {
   logout_reset = () => {

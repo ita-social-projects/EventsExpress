@@ -7,7 +7,7 @@ import add_copy_event, {
     setCopyEventPending,
     setCopyEventSuccess
 }
-    from '../actions/event-copy-without-edit-action';
+    from '../actions/event/event-copy-without-edit-action';
 
 class AddFromParentEventWrapper extends Component {
     constructor() {

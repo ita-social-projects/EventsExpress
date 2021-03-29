@@ -1,18 +1,11 @@
 import initialState from '../../store/initialState';
 import {
-    SET_UNITS_OF_MEASURING_ERROR, SET_UNITS_OF_MEASURING_PENDING, GET_UNITS_OF_MEASURING_SUCCESS
-} from '../../actions/unitOfMeasuring/unitsOfMeasuring-list';
-import { SET_UNIT_OF_MEASURING_EDITED } from '../../actions/unitOfMeasuring/add-unitOfMeasuring'
+    SET_UNITS_OF_MEASURING_PENDING, GET_UNITS_OF_MEASURING_SUCCESS
+} from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
+import { SET_UNIT_OF_MEASURING_EDITED } from '../../actions/unitOfMeasuring/unitOfMeasuring-add-action'
 
 export const reducer = (state = initialState.unitsOfMeasuring, action) => {
-    switch (action.type) {        
-        case SET_UNITS_OF_MEASURING_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                
-                isError: action.payload
-            }
+    switch (action.type) {
         case SET_UNITS_OF_MEASURING_PENDING:
             return {
                 ...state,
