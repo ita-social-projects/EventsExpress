@@ -37,50 +37,38 @@ export function initialConnection() {
     return async dispatch => {
         const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/chatroom`,
             { accessTokenFactory: () => (localStorage.getItem('token')) }).build();
-        const retries = 3; // attemps to retry the operation
         try {
-            await checkHubConnection(hubConnection)
+            await hubConnection.start();
+
+            hubConnection.on('ReceiveMessage', (data) => {
+                dispatch(ReceiveMsg(data));
+                if (data.senderId != localStorage.getItem('id')) {
+                    dispatch(setAlert({ variant: 'info', message: "You have a new message", autoHideDuration: 5000 }));
+                }
+            });
+            hubConnection.on('wasSeen', (data) => {
+                dispatch(ReceiveSeenMsg(data));
+            });
+
+            hubConnection.on('ReceivedNewEvent', (data) => {
+                dispatch(receivedNewEvent(data));
+                dispatch(setAlert({
+                    variant: 'info',
+                    message: `The event was created which could interested you.`,
+                    autoHideDuration: 5000
+                }));
+            });
         }
         catch (err) {
-            if (retries > 0) {
-                retries--;
-                return initialConnection();
-            }
-            else
-                console.log('Error while establishing connection :(');
+            console.log('Error while establishing connection :(');
         }
+
         dispatch({
             type: INITIAL_CONNECTION,
             payload: hubConnection
         });
     }
 }
-
-async function checkHubConnection(hubConnection) {
-    return async dispatch => {
-        await hubConnection.start();
-
-        hubConnection.on('ReceiveMessage', (data) => {
-            dispatch(ReceiveMsg(data));
-            if (data.senderId != localStorage.getItem('id')) {
-                dispatch(setAlert({ variant: 'info', message: "You have a new message", autoHideDuration: 5000 }));
-            }
-        });
-        hubConnection.on('wasSeen', (data) => {
-            dispatch(ReceiveSeenMsg(data));
-        });
-
-        hubConnection.on('ReceivedNewEvent', (data) => {
-            dispatch(receivedNewEvent(data));
-            dispatch(setAlert({
-                variant: 'info',
-                message: `The event was created which could interested you.`,
-                autoHideDuration: 5000
-            }));
-        });
-    }
-}
-
 
 function receivedNewEvent(data) {
     return {
