@@ -14,8 +14,8 @@ import CategoryEdit from "../../components/category/category-edit";
 class CategoryAddWrapper extends React.Component {
 
     submit = values => {
-      return this.props.add({ ...values });
-    };
+        return this.props.add({ ...values });
+    }
 
     componentWillUpdate = () => {
         const { isCategorySuccess } = this.props.status;

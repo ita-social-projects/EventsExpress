@@ -1,10 +1,8 @@
 ﻿import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import IconButton from "@material-ui/core/IconButton";
 import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
-
 import add_category, { set_edited_category } from "../../actions/category/category-add-action";
 import { delete_category } from "../../actions/category/category-delete-action";
 
@@ -15,7 +13,7 @@ class CategoryItemWrapper extends Component {
         if (values.name === this.props.item.name) {
             this.props.edit_cansel();
         } else {
-          return this.props.save_category({ ...values, id: this.props.item.id });
+            return this.props.save_category({ ...values, id: this.props.item.id });
         }
     };
 
@@ -49,7 +47,6 @@ class CategoryItemWrapper extends Component {
                     </IconButton>
                 </div>
             </td>
-
         </tr>
     };
 }

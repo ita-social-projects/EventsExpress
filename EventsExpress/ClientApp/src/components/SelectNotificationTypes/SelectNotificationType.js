@@ -17,22 +17,20 @@ class SelectNotificationType extends Component {
             notificationTypes: this.props.initialValues.notificationTypes
         });
     }
-   
 
     render() {
         const { handleSubmit, submitting, items, error } = this.props;
         return (
-
             <div >
                 <form onSubmit={handleSubmit}>
-                    <Field name="notificationTypes"
+                    <Field
+                        name="notificationTypes"
                         component={CheckboxGroup}
-                        options={items}                        
+                        options={items}
                     />
-                    {
-                         error &&
-                        <ErrorMessages error={error} className="text-center" />
-                    }
+
+                    {error && <ErrorMessages error={error} className="text-center" />}
+
                     <div>
                         <Button
                             type="submit"
