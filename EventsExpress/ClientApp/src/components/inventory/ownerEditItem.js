@@ -3,13 +3,14 @@ import { Field, reduxForm } from 'redux-form';
 import { renderTextField, renderSelectField } from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
 import Module from '../helpers';
+import ErrorMessages from '../shared/errorMessage';
 
 const { validate } = Module;
 
 class OwnerEditItemForm extends Component {
 
     render() {
-        const { initialValues, unitOfMeasuringState, alreadyGet } = this.props;
+        const { initialValues, unitOfMeasuringState, alreadyGet, error } = this.props;
         return (
             <form onSubmit={this.props.handleSubmit}  className="form-inline w-100">
                 <div className="col col-md-4 d-flex align-items-center">
@@ -40,6 +41,10 @@ class OwnerEditItemForm extends Component {
                         )} 
                     </Field>
                 </div>
+                {
+                    error &&
+                    <ErrorMessages error={error} className="text-center" />
+                }
                 <div className="col col-md-2">
                 <IconButton type="submit">
                     <i className = "fa-sm fas fa-check text-success"></i>

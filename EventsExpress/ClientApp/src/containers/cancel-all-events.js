@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown';
 import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal';
-import cancel_all_eventSchedules from '../actions/eventSchedule-cancel-all-action';
+import cancel_all_eventSchedules from '../actions/eventSchedule/eventSchedule-cancel-all-action';
 
 class CancelAllEventsWrapper extends Component {
     constructor() {

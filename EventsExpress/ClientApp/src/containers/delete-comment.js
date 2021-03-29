@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import CommentItem from "../components/comment/comment-item";
 import { connect } from "react-redux";
-import deleteComm from "../actions/comment-delete-action";
+import deleteComm from "../actions/comment/comment-delete-action";
 import Fab from '@material-ui/core/Fab';
 import '../components/comment/Comment.css';
 import CommentList from '../components/comment/comment-list';

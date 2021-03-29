@@ -1,50 +1,29 @@
 ﻿import React, { Component } from "react";
-import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from "redux-form";
-
-import { renderErrorMessage, renderTextField } from '../helpers/helpers';
-
+import { Field, reduxForm } from "redux-form";
+import { renderTextField } from '../helpers/helpers';
+import ErrorMessages from '../shared/errorMessage';
 import IconButton from "@material-ui/core/IconButton";
 
 
 class CategoryEdit extends Component {
 
-    componentDidMount = () => {
-        let obj = JSON.parse('{"category":"' + this.props.item.name + '"}')
-        this.props.initialize(obj)
-    }
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.callback({ name: this.props.newName });
-    }
-
-    renderError() {
-        if (!this.props.message) {
-            return null;
-        }
-        return renderErrorMessage(this.props.message, "name");
-    }
-
     render() {
-
         return <>
             <td className="align-middle" width="75%">
-                <form className="w-100" id="save-form" onSubmit={this.handleSubmit}>
+                <form className="w-100" id="save-form" onSubmit={this.props.handleSubmit}>
                     <div className="d-flex flex-column justify-content-around ">
                         <Field
                             className="form-control"
-                            autoFocus
-                            name="category"
+                            name="name"
                             label="Name"
-                            defaultValue={this.props.item.name}
                             component={renderTextField}
                         />
-                        {this.renderError()}
+                        {
+                            this.props.error &&
+                            <ErrorMessages error={this.props.error} className="text-center" />
+                        }
                     </div>
                 </form>
-
-
             </td>
             <td></td>
             <td></td>
@@ -61,19 +40,8 @@ class CategoryEdit extends Component {
             </td>
         </>
     }
-
 };
 
-const selector = formValueSelector("save-form")
-
-const mapStateToProps = (state, props) => {
-    return {
-        newName: selector(state, "category"),
-        initialValues: props.item.name
-    };
-};
-
-CategoryEdit = connect(mapStateToProps, null)(CategoryEdit);
 
 CategoryEdit = reduxForm({
     form: "save-form",

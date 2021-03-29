@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SelectCategories from '../../components/SelectCategories/SelectCategories';
-import setUserCategory from '../../actions/EditProfile/addUserCategory';
-import get_categories from '../../actions/category/category-list';
+import setUserCategory from '../../actions/editProfile/userCategory-add-action';
+import get_categories from '../../actions/category/category-list-action';
 
 class SelectCategoriesWrapper extends Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class SelectCategoriesWrapper extends Component {
     componentDidMount = () => this.props.get_categories();
 
     handleSubmit(event) {
-        this.props.setUserCategory({
+       return this.props.setUserCategory({
             categories: event.categories
         });
     }

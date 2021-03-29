@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reset_events, updateEventsFilters } from '../../actions/event-list-action';
+import { reset_events, updateEventsFilters } from '../../actions/event/event-list-action';
 import RenderList from './RenderList'
 import EventCard from './event-item';
-import { change_event_status } from '../../actions/event-item-view';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import { change_event_status } from '../../actions/event/event-item-view-action';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventList extends Component {
     handlePageChange = (page) => {
