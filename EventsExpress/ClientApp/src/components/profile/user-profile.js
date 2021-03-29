@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import 'moment-timezone';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,36 +18,42 @@ import Spinner from '../spinner';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import './User-profile.css';
+import FutureEvents from './events-routes/futureEvents';
+import ArchiveEvents from './events-routes/archiveEvents';
+import VisitedEvents from './events-routes/visitedEvents';
+import EventsToGo from './events-routes/eventsToGo';
+import App from '../app/app';
+import createBrowserHistory from 'history'
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+// function TabPanel(props) {
+//     const { children, value, index, ...other } = props;
 
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`scrollable-force-tabpanel-${index}`}
-            aria-labelledby={`scrollable-force-tab-${index}`}
-            {...other}
-        >
-            <Box p={3}>{children}</Box>
-        </Typography>
-    );
-}
+//     return (
+//         <Typography
+//             component="div"
+//             role="tabpanel"
+//             hidden={value !== index}
+//             id={`scrollable-force-tabpanel-${index}`}
+//             aria-labelledby={`scrollable-force-tab-${index}`}
+//             {...other}
+//         >
+//             <Box p={3}>{children}</Box>
+//         </Typography>
+//     );
+// }
 
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
+// TabPanel.propTypes = {
+//     children: PropTypes.node,
+//     index: PropTypes.any.isRequired,
+//     value: PropTypes.any.isRequired,
+// };
 
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
+// function a11yProps(index) {
+//     return {
+//         id: `full-width-tab-${index}`,
+//         'aria-controls': `full-width-tabpanel-${index}`,
+//     };
+// }
 
 export default class UserItemView extends Component {
     state = {
@@ -69,13 +75,13 @@ export default class UserItemView extends Component {
     renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
-    handleChange = (event, value) => {
-        this.setState({ value });
-        value === 0 && (this.props.onFuture())
-        value === 1 && (this.props.onPast())
-        value === 2 && (this.props.onVisited())
-        value === 3 && (this.props.onToGo())
-    };
+    // handleChange = (event, value) => {
+    //     this.setState({ value });
+    //     value === 0 && (this.props.onFuture())
+    //     value === 1 && (this.props.onPast())
+    //     value === 2 && (this.props.onVisited())
+    //     value === 3 && (this.props.onToGo())
+    // };
 
     render() {
         const {
@@ -89,6 +95,7 @@ export default class UserItemView extends Component {
             attitude,
             rating
         } = this.props.data;
+        const userId = this.props.data.id;
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
@@ -113,6 +120,31 @@ export default class UserItemView extends Component {
                 </div>
             </div>
         )
+
+        console.log("props match.path = " + this.props.match.path);
+        console.log("props match.params = " + this.props.match.params);
+        console.log("props history.location = " + this.props.history.location.pathname);
+
+        const tabNameToIndex = {
+            0: "FutureEvents",
+            1: "ArchiveEvents",
+            2: "VisitedEvents",
+            3: "EventsToGo"
+        };
+
+        const indexToTabName = {
+            "FutureEvents": 0,
+            "ArchiveEvents": 1,
+            "VisitedEvents": 2,
+            "EventsToGo": 3
+        };
+
+        const [selectedTab, setSelectedTab] = this.setState({indexToTabName[page]});
+
+        const handleChange = (event, newValue) => {
+            history.push(`/user/${userId}/${tabNameToIndex[newValue]}`);
+            setSelectedTab(newValue);
+        };
 
         return <>
             <div className="info">
@@ -166,7 +198,7 @@ export default class UserItemView extends Component {
                 <AppBar position="static" color="inherit">
                     <Tabs
                         className='w-100'
-                        value={this.state.value}
+                        value={this.selectedTab}
                         onChange={this.handleChange}
                         variant="fullWidth"
                         scrollButtons="on"
@@ -180,7 +212,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 0 ? '' : 'primary'}>
                                     <i className="far fa-calendar-alt"></i>
                                 </IconButton>}
-                            {...a11yProps(0)}
+                            component={Link}
+                            to={`/user/${userId}/FutureEvents`}
                         />
                         <Tab
                             label="Archive events"
@@ -189,7 +222,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 1 ? '' : 'primary'}>
                                     <i className="fas fa-archive"></i>
                                 </IconButton>}
-                            {...a11yProps(1)}
+                            component={Link}
+                            to={`/user/${userId}/ArchiveEvents`}
                         />
                         <Tab
                             label="Visited events"
@@ -198,7 +232,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 2 ? '' : 'primary'}>
                                     <i className="fas fa-history"></i>
                                 </IconButton>}
-                            {...a11yProps(2)}
+                            component={Link}
+                            to={`/user/${userId}/VisitedEvents`}
                         />
                         <Tab
                             label="Events to go"
@@ -207,13 +242,32 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 3 ? '' : 'primary'}>
                                     <i className="fas fa-map-marker-alt"></i>
                                 </IconButton>}
-                            {...a11yProps(3)}
+                            component={Link}
+                            to={`/user/${userId}/EventsToGo`}
                         />
-                        
-                        
                     </Tabs>
                 </AppBar>
-                <TabPanel value={this.state.value} index={0}>
+                {/* { selectedTab === 0 && <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 1 tab</div> }
+                { selectedTab === 1 && <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 2 tab</div> }
+                { selectedTab === 2 && <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 3 tab</div> }
+                { selectedTab === 3 && <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 4 tab</div> }
+                { selectedTab === 0 && <FutureEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />}
+                { selectedTab === 1 && <ArchiveEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />}
+                { selectedTab === 2 && <VisitedEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />}
+                { selectedTab === 3 && <EventsToGo {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} */}
+                <Switch>
+                    <Route path='/user/:id/FutureEvents' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 1 tab</div>} />
+                    <Route path='/user/:id/ArchiveEvents' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 2 tab</div>} />
+                    <Route path='/user/:id/VisitedEvents' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 3 tab</div>} />
+                    <Route path='/user/:id/EventsToGo' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 4 tab</div>} />
+                </Switch>
+                {/* <Switch>
+                    <Route path='/user/:id/FutureEvents' render={props => <FutureEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} />
+                    <Route path='/user/:id/ArchiveEvents' render={props => <ArchiveEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} />
+                    <Route path='/user/:id/VisitedEvents' render={props => <VisitedEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} />
+                    <Route path='/user/:id/EventsToGo' render={props => <EventsToGo {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} />
+                </Switch> */}
+                {/* <TabPanel value={this.state.value} index={0}>
                 </TabPanel>
                 <TabPanel value={this.state.value} index={1}>
                 </TabPanel>
@@ -237,7 +291,7 @@ export default class UserItemView extends Component {
                                 </div>
                             </div>}
                     </div>
-                }
+                } */}
             </div>
         </>
     }
