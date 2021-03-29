@@ -20,23 +20,23 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        private readonly IPhotoService _photoService;
 
         public AuthenticationController(
             IUserService userSrv,
+            IPhotoService photoService,
             IMapper mapper,
             IAuthService authSrv,
-            ITokenService tokenService,
-            IPhotoService photoService)
+            ITokenService tokenService)
         {
             _userService = userSrv;
+            _photoService = photoService;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
-            _photoService = photoService;
         }
 
         /// <summary>
@@ -99,8 +99,8 @@ namespace EventsExpress.Controllers
             {
                 var user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
-                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
-                user.PhotoId = user.Photo.Id;
+
+                await _photoService.AddPhotoByURL(userView.PhotoUrl, user.Id);
                 await _userService.Create(user);
             }
 
@@ -130,12 +130,12 @@ namespace EventsExpress.Controllers
 
             if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
             {
-                var user = _mapper.Map<UserViewModel, UserDto>(userView);
+                var user = _mapper.Map<UserDto>(userView);
                 user.Email = payload.Email;
                 user.EmailConfirmed = true;
                 user.Name = payload.Name;
-                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
-                user.PhotoId = user.Photo.Id;
+
+                await _photoService.AddPhotoByURL(userView.PhotoUrl, user.Id);
                 await _userService.Create(user);
             }
 
@@ -165,8 +165,8 @@ namespace EventsExpress.Controllers
             {
                 UserDto user = _mapper.Map<UserDto>(userView);
                 user.EmailConfirmed = true;
-                user.Photo = await _photoService.AddPhotoByURL(userView.PhotoUrl);
-                user.PhotoId = user.Photo.Id;
+
+                await _photoService.AddPhotoByURL(userView.PhotoUrl, user.Id);
                 await _userService.Create(user);
             }
 
@@ -181,11 +181,9 @@ namespace EventsExpress.Controllers
 
         private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
         {
-            if (userExisting != null && userExisting.Photo == null)
+            if (userExisting != null)
             {
-                userExisting.Photo = await _photoService.AddPhotoByURL(urlPhoto);
-                userExisting.PhotoId = userExisting.Photo.Id;
-                await _userService.Update(userExisting);
+                await _photoService.AddPhotoByURL(urlPhoto, userExisting.Id);
 
                 return true;
             }
@@ -263,7 +261,7 @@ namespace EventsExpress.Controllers
             await _userService.ConfirmEmail(cache);
 
             var user = _userService.GetById(cache.UserId);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
+            var userInfo = _mapper.Map<UserInfoViewModel>(user);
             var authResponseModel = await _authService.FirstAuthenticate(user);
             userInfo.Token = authResponseModel.JwtToken;
             await _userService.Update(user);

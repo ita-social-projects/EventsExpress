@@ -21,7 +21,6 @@ namespace EventsExpress.Test.ServiceTests
         private List<EventSchedule> eventSchedules;
         private EventScheduleDto esDTO;
         private Event evnt;
-        private Photo photo;
 
         private Guid validEventScheduleId = Guid.NewGuid();
         private Guid todayEventScheduleId = Guid.NewGuid();
@@ -45,21 +44,12 @@ namespace EventsExpress.Test.ServiceTests
                 authService.Object,
                 httpContextAccessor.Object);
 
-            photo = new Photo
-            {
-                Id = validPhotoId,
-                Thumb = new byte[0],
-                Img = new byte[0],
-            };
-
             evnt = new Event
             {
                 Id = validEventId,
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
-                PhotoId = validPhotoId,
-                Photo = photo,
             };
 
             eventSchedules = new List<EventSchedule>
@@ -99,7 +89,6 @@ namespace EventsExpress.Test.ServiceTests
                     EventId = validEventId,
             };
 
-            Context.Photos.Add(photo);
             Context.Events.Add(evnt);
             Context.EventSchedules.AddRange(eventSchedules);
             Context.SaveChanges();
