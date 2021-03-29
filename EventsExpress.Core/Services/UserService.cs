@@ -280,8 +280,6 @@ namespace EventsExpress.Core.Services
             try
             {
                 await _photoService.AddUserPhoto(avatar, user.Id);
-                Update(user);
-                await Context.SaveChangesAsync();
             }
             catch (ArgumentException)
             {

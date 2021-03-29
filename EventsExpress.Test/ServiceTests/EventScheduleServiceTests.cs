@@ -50,8 +50,6 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
-                /*PhotoId = validPhotoId,
-                Photo = photo,*/
             };
 
             eventSchedules = new List<EventSchedule>
@@ -91,7 +89,6 @@ namespace EventsExpress.Test.ServiceTests
                     EventId = validEventId,
             };
 
-            // Context.Photos.Add(photo);
             Context.Events.Add(evnt);
             Context.EventSchedules.AddRange(eventSchedules);
             Context.SaveChanges();

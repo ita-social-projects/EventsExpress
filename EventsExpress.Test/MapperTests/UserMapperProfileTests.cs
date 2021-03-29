@@ -1,21 +1,21 @@
-﻿namespace EventsExpress.Test.MapperTests
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Db.Entities;
-    using EventsExpress.Db.Enums;
-    using EventsExpress.Mapping;
-    using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
-    using EventsExpress.ViewModels;
-    using Microsoft.Extensions.DependencyInjection;
-    using Moq;
-    using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
+using EventsExpress.Mapping;
+using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
+using EventsExpress.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.MapperTests
+{
     [TestFixture]
     internal class UserMapperProfileTests : MapperTestInitializer<UserMapperProfile>
     {
