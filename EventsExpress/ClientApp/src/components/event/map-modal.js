@@ -44,6 +44,9 @@ class MapModal extends Component {
         this.setState({ open: true });
     };
     handleClose = () => {
+        if (this.props.values.selectedPos.lat == null) {
+            this.setState({ open: false });
+        }
         this.props.initialize({
             radius: this.props.initialValues.radius,
             selectedPos: this.props.initialValues.selectedPos != null ? this.props.initialValues.selectedPos : { lat: null, lng: null }
@@ -55,14 +58,11 @@ class MapModal extends Component {
 
     onClickCallBack = (coords) => {
         this.setState({ selectedPos: [coords.lat, coords.lng] });
-
     }
 
     onRadiusChange = (event) => {
         const { value } = event.target
         this.setState({ radius: value });
-
-
     }
 
     render() {
@@ -70,7 +70,7 @@ class MapModal extends Component {
             <div>
                 <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
                     Filter by location
-            </Button>
+                </Button>
 
                 <Dialog fullWidth={true} open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Filter by location</DialogTitle>
@@ -85,13 +85,9 @@ class MapModal extends Component {
                                         onChange={this.onRadiusChange}
                                         step="any"
                                         className="radius-slider"
-
                                     />
                                 </div>
-
-
                             </div>
-
                         }
                         <div>
                             {
@@ -132,7 +128,7 @@ class MapModal extends Component {
                             Cancel
                     </Button>
                         <Button onClick={this.handleFilter} color="primary">
-                            Filter
+                            Apply
                 </Button>
                     </DialogActions>
                 </Dialog>

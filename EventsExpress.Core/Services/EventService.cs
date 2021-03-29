@@ -15,6 +15,7 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.Services
 {
@@ -348,8 +349,19 @@ namespace EventsExpress.Core.Services
                 : events;
 
             events = (model.X != null && model.Y != null && model.Radius != null)
-                ? events.Where(x => Math.Pow(x.EventLocation.Point.X - (double)model.X, 2) + Math.Pow(x.EventLocation.Point.Y - (double)model.Y, 2) - Math.Pow((double)model.Radius, 2) <= 0)
+                ? events.Where(x => Math.Pow(x.EventLocation.Point.X - (double)model.X, 2) + Math.Pow(x.EventLocation.Point.Y - (double)model.Y, 2) - Math.Pow((double)model.Radius / 100, 2) <= 0)
                 : events;
+
+            events = (model.X != null && model.Y != null && model.Radius != null)
+               ? events.Where(x => x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) - ((double)model.Radius / 100) >= 0)
+               : events;
+
+            if (model.X != null)
+            {
+                var loc = new Point((double)model.X, (double)model.Y) { SRID = 4326 };
+                var loc1 = new Point((double)model.X * 2, (double)model.Y) { SRID = 4326 };
+                var res = loc1.Distance(loc);
+            }
 
             switch (model.Status)
             {

@@ -35,7 +35,7 @@ class EventForm extends Component {
         this.setState(state => ({
             checked: !state.checked,
         }));
-  
+
     }
     handleClick = () => {
         history.push(`/`);
@@ -44,13 +44,13 @@ class EventForm extends Component {
 
     render() {
         const { form_values, all_categories, isCreated, pristine,
-            submitting, disabledDate, onCancel } = this.props;
+            submitting, disabledDate, initialValues} = this.props;
         const { checked } = this.state;
         const { handleChange } = this;
 
-        let values = form_values || this.props.initialValues;
-        const photoUrl = this.props.initialValues ?
-            this.props.initialValues.photoUrl : null;
+        let values = form_values || initialValues;
+        const photoUrl = initialValues ?
+            initialValues.photoUrl : null;
 
         return (
             <form onSubmit={this.props.handleSubmit}
@@ -170,10 +170,11 @@ class EventForm extends Component {
                             <Field
                                 name='location.selectedPos'
                                 initialData={
-                                    this.props.initialValues &&
-                                    this.props.initialValues.location.selectedPos
+                                    initialValues &&
+                                    initialValues.location.selectedPos
                                 }
-
+                               initialValues={initialValues}
+                                radius={8}
                                 component={LocationMap}
                             />
                         </div>
@@ -189,7 +190,6 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
-
                             />
                         </div>
                     }

@@ -49,6 +49,10 @@ class AddEventWrapper extends Component {
         let initialValues = {
             location: {
                 type: enumLocationType.map
+            },
+            selectedPos: {
+                lat: 50.4547,
+                lng: 30.5238
             }
         };
 
