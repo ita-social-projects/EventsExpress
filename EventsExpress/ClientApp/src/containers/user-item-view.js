@@ -106,10 +106,7 @@ class UserItemViewWrapper extends Component {
                 onToGo={this.onToGo}
                 data={data}
                 current_user={this.props.current_user}
-                match={this.props.match}
                 history={this.props.history}
-                params={this.props.match.params}
-                page={this.props.match.params.page}
             />
             : null;
 
