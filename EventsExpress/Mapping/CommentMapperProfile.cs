@@ -2,7 +2,10 @@
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
@@ -18,11 +21,9 @@ namespace EventsExpress.Mapping
 
             CreateMap<CommentDto, CommentViewModel>()
                 .ForMember(
-                    dest => dest.UserPhoto,
-                    opts => opts.MapFrom(src => src.User.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(
                     dest => dest.UserName,
-                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
+                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))))
+                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom<CommentDtoToViewModelResolver>());
 
             CreateMap<CommentViewModel, CommentDto>()
                 .ForMember(dest => dest.User, opts => opts.Ignore());

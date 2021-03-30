@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     <PackageReference Include="FluentValidation" Version="9.5.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
     <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.9" />
     <PackageReference Include="Serilog" Version="2.9.0-dev-01119" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00811" />

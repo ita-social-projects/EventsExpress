@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210315140152_Photos Migrated To Azure Blob Storage")]
+    partial class PhotosMigratedToAzureBlobStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,22 +118,22 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateFrom")
+                    b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
-                    b.Property<DateTime?>("DateTo")
+                    b.Property<DateTime>("DateTo")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventLocationId")
+                    b.Property<Guid>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsPublic")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MaxParticipants")
+                    b.Property<int>("MaxParticipants")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
@@ -341,17 +343,17 @@ namespace EventsExpress.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 2,
+                            Id = 1,
                             Name = "Own Event Change"
                         },
                         new
                         {
-                            Id = 1,
+                            Id = 0,
                             Name = "Profile Change"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 2,
                             Name = "Visited Event Change"
                         });
                 });
@@ -453,6 +455,25 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserToId");
 
                     b.ToTable("Relationships");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Role", b =>
@@ -779,6 +800,15 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
                         .WithMany()
                         .HasForeignKey("UserToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Report", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
