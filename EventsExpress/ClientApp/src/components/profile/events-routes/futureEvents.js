@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Event from '../../event/event-item';
 import EventsForProfile from '../../event/events-for-profile';
-import Spinner from '../../spinner/spinner';
+import Spinner from '../../spinner';
 import 'moment-timezone';
 import '../User-profile.css';
 
@@ -15,8 +14,7 @@ export default class FutureEvents extends Component {
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 current_user={this.props.current_user}
-                callback={this.props.onFuture}
-            />
+                callback={this.props.typeOfEvents} />
             : null;
 
         return (

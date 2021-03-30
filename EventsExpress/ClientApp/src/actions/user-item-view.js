@@ -19,7 +19,6 @@ export default function get_user(id) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(getProfile(response));
-                dispatch(get_future_events(id));
 
             } else {
                 dispatch(getProfileError(response.error));

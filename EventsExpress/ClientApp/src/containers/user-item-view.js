@@ -75,10 +75,6 @@ class UserItemViewWrapper extends Component {
         this.props.get_events_togo(this.props.profile.data.id, page);
     }
 
-    onAddEvent = () => {
-        this.setState({ flag: true });
-    }
-
     render() {
         const { data, isPending, isError } = this.props.profile;
         const errorMessage = isError.ErrorCode == '403'
@@ -94,8 +90,6 @@ class UserItemViewWrapper extends Component {
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending && errorMessage === null
             ? <Profile
-                onAddEvent={this.onAddEvent}
-                add_event_flag={this.state.flag}
                 onLike={this.onLike}
                 onDislike={this.onDislike}
                 onReset={this.onReset}

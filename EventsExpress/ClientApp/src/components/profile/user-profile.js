@@ -1,18 +1,14 @@
 ﻿import React, { Component } from 'react';
-import { Link, Route, Switch, withRouter } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import 'moment-timezone';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
-import AddEventWrapper from '../../containers/add-event';
 import EventsForProfile from '../event/events-for-profile';
 import Spinner from '../spinner';
 import CustomAvatar from '../avatar/custom-avatar';
@@ -22,7 +18,6 @@ import FutureEvents from './events-routes/futureEvents';
 import ArchiveEvents from './events-routes/archiveEvents';
 import VisitedEvents from './events-routes/visitedEvents';
 import EventsToGo from './events-routes/eventsToGo';
-import App from '../app/app';
 
 class UserItemView extends Component {
     splitPath(path) {
@@ -58,6 +53,10 @@ class UserItemView extends Component {
 
     handleChange = (event, value) => {
         this.setState({ value });
+        value === 0 && (this.props.onFuture())
+        value === 1 && (this.props.onPast())
+        value === 2 && (this.props.onVisited())
+        value === 3 && (this.props.onToGo())
     };
 
     render() {
@@ -73,21 +72,6 @@ class UserItemView extends Component {
             rating
         } = this.props.data;
         const userId = this.props.data.id;
-        const { isPending, data } = this.props.events;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventsForProfile
-                data_list={data.items}
-                page={data.pageViewModel.pageNumber}
-                totalPages={data.pageViewModel.totalPages}
-                current_user={this.props.current_user}
-                callback={
-                    (this.state.value === 0) ? this.props.onFuture :
-                        (this.state.value === 1) ? this.props.onPast :
-                            (this.state.value === 2) ? this.props.onVisited :
-                                (this.state.value === 3) ? this.props.onToGo : null}
-            />
-            : null;
         const categories_list = this.renderCategories(categories);
         const render_prop = (propName, value) => (
             <div className='row mb-3 font-weight-bold'>
@@ -194,35 +178,39 @@ class UserItemView extends Component {
                             to={`/user/${userId}/EventsToGo`} />
                     </Tabs>
                 </AppBar>
-                {/* <Switch>
-                    <Route path='/user/:id/FutureEvents' render={props => <FutureEvents {...props} spinner={spinner} content={content} isPending={isPending} data={data} />} />
-                    <Route path='/user/:id/ArchiveEvents' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 2 tab</div>} />
-                    <Route path='/user/:id/VisitedEvents' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 3 tab</div>} />
-                    <Route path='/user/:id/EventsToGo' render={props => <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">here should be 4 tab</div>} />
-                </Switch> */}
                 <Switch>
-                    <Route path='/user/:id/FutureEvents' render={props => <FutureEvents {...props} events={this.props.events} current_user={this.props.current_user} onFuture={this.props.onFuture}/>} />
-                    <Route path='/user/:id/ArchiveEvents' render={props => <ArchiveEvents {...props} events={this.props.events} current_user={this.props.current_user} onFuture={this.props.onPast}/>} />
-                    <Route path='/user/:id/VisitedEvents' render={props => <VisitedEvents {...props} events={this.props.events} current_user={this.props.current_user} onFuture={this.props.onVisited}/>} />
-                    <Route path='/user/:id/EventsToGo' render={props => <EventsToGo {...props} events={this.props.events} current_user={this.props.current_user} onFuture={this.props.onToGo}/>} />
+                    {/* <Route
+                        exact
+                        path='/user/:id'
+                        render={() =>
+                            <Redirect to={`/user/${userId}/FutureEvents`} />} /> */}
+                    <Route
+                        path='/user/:id/FutureEvents'
+                        render={() => <FutureEvents
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onFuture} />} />
+
+                    <Route path='/user/:id/ArchiveEvents'
+                        render={() => <ArchiveEvents
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onPast} />} />
+
+                    <Route
+                        path='/user/:id/VisitedEvents'
+                        render={() => <VisitedEvents
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onVisited} />} />
+
+                    <Route
+                        path='/user/:id/EventsToGo'
+                        render={() => <EventsToGo
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onToGo} />} />
                 </Switch>
-                {/* {this.props.add_event_flag ?
-                    <div className="shadow mb-5 bg-white rounded">
-                        <AddEventWrapper onCreateCanceling={() => this.handleChange(null, 0)} />
-                    </div>
-                    :
-                    <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">
-                        {spinner}{content}
-                        {!isPending && !(data.items && data.items.length > 0) &&
-                            <div id="notfound" className="w-100">
-                                <div className="notfound">
-                                    <div className="notfound-404">
-                                        <div className="h1">No Results</div>
-                                    </div>
-                                </div>
-                            </div>}
-                    </div>
-                } */}
             </div>
         </>
     }

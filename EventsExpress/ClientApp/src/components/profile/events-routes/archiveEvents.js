@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import EventsForProfile from '../../event/events-for-profile';
-import Spinner from '../../spinner/spinner';
+import Spinner from '../../spinner';
 import 'moment-timezone';
 import '../User-profile.css';
 
@@ -14,8 +14,7 @@ export default class ArchiveEvents extends Component {
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 current_user={this.props.current_user}
-                callback={this.props.onArchive}
-            />
+                callback={this.props.typeOfEvents} />
             : null;
 
         return (
