@@ -653,9 +653,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
-                        .HasForeignKey("EventLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventLocationId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
