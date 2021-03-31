@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.IServices
@@ -11,21 +10,23 @@ namespace EventsExpress.Core.IServices
     {
         Task<AuthenticateResponseModel> Authenticate(string email, string password);
 
-        Task<AuthenticateResponseModel> FirstAuthenticate(Guid authLocalId, string token);
+        Task<UserDto> GetCurrentUserAsync(ClaimsPrincipal userClaims);
+
+        Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token);
 
         Task<Guid> Register(RegisterDto registerDto);
 
-        Task CompleteRegistration(CompleteRegistrationDto completeRegistrationDto);
+        Task RegisterComplete(RegisterCompleteDto registerCompleteDto);
 
-        Task ChangeRole(Guid userId, Guid roleId);
+        Task ChangeRole(Guid userId, Guid roleId); // to do
 
         Task PasswordRecover(string email);
 
         Task<bool> CanRegister(string email);
 
-        Task Block(Guid userId);
+        Task Block(Guid userId); // to do
 
-        Task Unblock(Guid userId);
+        Task Unblock(Guid userId); // to do
 
         Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword);
 

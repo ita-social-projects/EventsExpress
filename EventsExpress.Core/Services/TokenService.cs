@@ -54,10 +54,10 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public string GenerateAccessToken(Account account, string email)
+        public string GenerateAccessToken(Account account)
         {
             var lifeTime = _jwtOptions.Value.LifeTime;
-            var claims = GetClaims(account, email);
+            var claims = GetClaims(account);
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddSeconds(lifeTime),
@@ -92,7 +92,7 @@ namespace EventsExpress.Core.Services
             }
 
             // replace old refresh token with a new one and save
-            var newRefreshToken = GenerateRefreshToken(refreshToken.Email);
+            var newRefreshToken = GenerateRefreshToken();
             refreshToken.Revoked = DateTime.Now;
             refreshToken.RevokedByIp = IpAddress;
             refreshToken.ReplacedByToken = newRefreshToken.Token;
@@ -101,15 +101,19 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
 
             // generate new jwt
-            var jwtToken = GenerateAccessToken(account, refreshToken.Email);
+            var jwtToken = GenerateAccessToken(account);
             return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
         }
 
-        private Claim[] GetClaims(Account account, string email)
+        private Claim[] GetClaims(Account account)
         {
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, account.UserId.ToString()));
-            claims.Add(new Claim(ClaimTypes.Email, email));
+            if (account.UserId != null)
+            {
+            claims.Add(new Claim(ClaimTypes.Name, $"{account.UserId}"));
+            }
+
+            claims.Add(new Claim(ClaimTypes.Sid, $"{account.Id}"));
             var roles = account.AccountRoles.Select(ar => ar.Role);
             foreach (var role in roles)
             {
@@ -119,7 +123,7 @@ namespace EventsExpress.Core.Services
             return claims.ToArray();
         }
 
-        public RefreshToken GenerateRefreshToken(string email)
+        public RefreshToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();

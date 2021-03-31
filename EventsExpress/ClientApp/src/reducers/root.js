@@ -41,8 +41,10 @@ import * as Alert from './alert';
 import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
+import * as Account from './account';
 
 const rootReducers = {
+    account : Account.reducer,
     modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
@@ -83,8 +85,7 @@ const rootReducers = {
     alert: Alert.reducer,
     contactUs: ContactUs.reducer,
     notification: Notification.reducer,
-    notificationType: NotificationTypes.reducer
-
+    notificationType: NotificationTypes.reducer,
 
 };
 

@@ -17,7 +17,5 @@ namespace EventsExpress.Db.Entities
         public string CreatedByIp { get; set; }
 
         public string RevokedByIp { get; set; }
-
-        public string Email { get; set; }
     }
 }

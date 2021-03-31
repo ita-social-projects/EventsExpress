@@ -80,7 +80,7 @@ class LeftSidebar extends Component {
                                     />
                                 </>
                             }
-                            {this.props.user.role === "Admin" &&
+                            {this.props.user.roles.includes("Admin") &&
                                 <>
                                     <NavItem
                                         to={'/admin/categories/'}

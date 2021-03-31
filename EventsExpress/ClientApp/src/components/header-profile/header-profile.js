@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import IconButton from "@material-ui/core/IconButton";
@@ -36,7 +35,7 @@ export default class HeaderProfile extends Component {
                             <h4 className="user-name">{name}</h4>
                             <RatingAverage value={rating} direction='row' />
                             <div>
-                                <Link to={'/profile'}>
+                                <Link to={'/editProfile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
                                             <i className="fa fa-cog" aria-hidden="true"></i>

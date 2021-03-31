@@ -98,6 +98,34 @@ namespace EventsExpress.Core.Services
             return user;
         }
 
+        public async Task<UserDto> GetByIdAsync(Guid userId)
+        {
+            var user = Mapper.Map<UserDto>(
+                await Context.Users
+                .Include(u => u.Photo)
+                .Include(u => u.Events)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthExternal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AccountRoles)
+                        .ThenInclude(ar => ar.Role)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == userId));
+
+            if (user != null)
+            {
+                user.Rating = GetRating(user.Id);
+            }
+
+            return user;
+        }
+
         public UserDto GetByAuthLocalId(Guid authLocalId)
         {
             var user = Mapper.Map<UserDto>(
@@ -141,6 +169,9 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Photo)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AuthLocal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AccountRoles)
+                        .ThenInclude(ar => ar.Role)
                 .AsNoTracking();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
@@ -148,9 +179,10 @@ namespace EventsExpress.Core.Services
                     (x.Name != null && x.Name.Contains(model.KeyWord)))
                 : users;
 
-            // users = !string.IsNullOrEmpty(model.Role)
-            //    ? users.Where(x => x.Role.Name.Contains(model.Role))
-            //    : users;
+            users = !string.IsNullOrEmpty(model.Role)
+              ? users.Where(x => x.Account.AccountRoles.FirstOrDefault().Role.Name.Contains(model.Role))
+              : users;
+
             users = model.Blocked
                 ? users.Where(x => x.Account.IsBlocked == model.Blocked)
                 : users;

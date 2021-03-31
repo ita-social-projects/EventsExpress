@@ -1,14 +1,10 @@
 import { AuthenticationService } from '../services';
-import eventHelper from '../components/helpers/eventHelper';
-import { initialConnection } from './chat';
-import { getUnreadMessages } from './chats';
-import { updateEventsFilters } from './event-list-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../components/helpers/action-helpers';
+import { getUserInfo } from './authentication-action';
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
-export const SET_USER = "SET_USER";
 
 const api_serv = new AuthenticationService();
 
@@ -59,30 +55,12 @@ const loginResponseHandler = call => {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
         }
-        let jsonRes = await response.json();
-        const eventFilter = {
-            ...eventHelper.getDefaultEventFilter(),
-            categories: jsonRes.categories.map(item => item.id),
-        };
-
-        dispatch(setUser(jsonRes));
-        dispatch(updateEventsFilters(eventFilter));
-        dispatch(setLoginSuccess(true));
-
+        let jsonRes = await response.json(); 
         localStorage.setItem('token', jsonRes.token);
-        localStorage.setItem('id', jsonRes.id);
-
-        dispatch(initialConnection());
-        dispatch(getUnreadMessages(jsonRes.id));
+        dispatch (getUserInfo());
+        dispatch(setLoginSuccess(true));
         return Promise.resolve()
     }
-}
-
-export function setUser(data) {
-    return {
-        type: SET_USER,
-        payload: data
-    };
 }
 
 export function setLoginPending(isLoginPending) {

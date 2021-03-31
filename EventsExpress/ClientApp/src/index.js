@@ -6,12 +6,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
-import { setUser } from './actions/login-action';
-import { initialConnection } from './actions/chat';
-import { getUnreadMessages } from './actions/chats';
-import { updateEventsFilters } from './actions/event-list-action';
-import eventHelper from '../src/components/helpers/eventHelper';
-
+import { getUserInfo } from './actions/authentication-action';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -21,39 +16,14 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
-async function AuthUser(token) {
-    if (!token)
-        return;
+function loadUserIfAuthenticated() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-    const res = await fetch('api/Authentication/login_token', {
-        method: 'post',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }),
-    });
-
-    if (res.ok) {
-        const user = await res.json();
-        const eventFilter = {
-            ...eventHelper.getDefaultEventFilter(),
-            categories: user.categories.map(item => item.id),
-        }
-
-        store.dispatch(setUser(user));
-        store.dispatch(updateEventsFilters(eventFilter));
-        store.dispatch(initialConnection());
-        store.dispatch(getUnreadMessages(user.id));
-    } else {
-        localStorage.clear();
-    }
+    store.dispatch(getUserInfo());
 }
 
-const token = localStorage.getItem('token');
-
-if (token) {
-    AuthUser(token);
-}
+loadUserIfAuthenticated();
 
 const rootElement = document.getElementById('root');
 

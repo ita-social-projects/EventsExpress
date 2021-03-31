@@ -76,7 +76,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public IActionResult Get([FromQuery] UsersFilterViewModel filter)
+        public async Task<IActionResult> Get([FromQuery] UsersFilterViewModel filter)
         {
             if (filter.PageSize == 0)
             {
@@ -85,7 +85,7 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var user = GetCurrentUser(HttpContext.User);
+                var user = await _authService.GetCurrentUserAsync(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
@@ -98,6 +98,16 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
+
+            return Ok(userInfo);
         }
 
         /// <summary>

@@ -6,6 +6,8 @@ export default class AuthenticationService {
 
     auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
+    getUserInfo = () => baseService.getResourceNew('Users/GetUserInfo');
+
     setLogin = data => baseService.setResource('Authentication/Login', data);
 
     setGoogleLogin = data => baseService.setResource('Authentication/GoogleLogin', data);
@@ -23,12 +25,9 @@ export default class AuthenticationService {
             : await res.json();
     }
 
-    setRegister = async (data) => {
-        const res = await baseService.setResource('Authentication/registerBegin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setRegister = data => baseService.setResource('Authentication/RegisterBegin', data);
+
+    setRegisterComplete = data => baseService.setResource('Authentication/RegisterComplete', data)
 
     setChangePassword = async (data) => {
         const res = await baseService.setResource('Authentication/ChangePassword', data);

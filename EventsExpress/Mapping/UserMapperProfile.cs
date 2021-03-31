@@ -36,7 +36,7 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDto, UserInfoViewModel>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Account.AccountRoles.First().Role.Name))
+                .ForMember(dest => dest.Roles, opts => opts.MapFrom(src => src.Account.AccountRoles.Select(x => x.Role.Name)))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -48,9 +48,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.Token, opts => opts.Ignore())
-                .ForMember(dest => dest.AfterEmailConfirmation, opts => opts.Ignore());
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -58,12 +56,12 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked))
                 .ForMember(
-                    dest => dest.Role,
-                    opts => opts.MapFrom(src => new RoleViewModel
+                    dest => dest.Roles,
+                    opts => opts.MapFrom(src => src.Account.AccountRoles.Select(x => new RoleViewModel
                     {
-                        Id = src.Account.AccountRoles.First().Role.Id,
-                        Name = src.Account.AccountRoles.First().Role.Name,
-                    }))
+                        Id = x.Role.Id,
+                        Name = x.Role.Name,
+                    })))
                 .ForMember(
                     dest => dest.PhotoUrl,
                     opts => opts.MapFrom(src => src.Photo.Thumb.ToRenderablePictureString()));
@@ -100,16 +98,6 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
-
-            CreateMap<LoginViewModel, UserDto>()
-                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForAllOtherMembers(x => x.Ignore());
-
-            CreateMap<UserViewModel, UserDto>()
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
-                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

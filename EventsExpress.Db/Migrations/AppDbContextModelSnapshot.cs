@@ -528,9 +528,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("CreatedByIp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime2");
 

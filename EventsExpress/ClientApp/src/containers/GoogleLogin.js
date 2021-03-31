@@ -10,7 +10,7 @@ class LoginGoogle extends Component {
     render() {
         const responseGoogle = (response) => {
             if (typeof response.profileObj.email === 'undefined') {
-                this.props.login.loginError = " Please add email to your google account!"
+                this.props.login.loginError = "Please add email to your google account!"
             }
             this.props.loginGoogle(
                 response.tokenId,

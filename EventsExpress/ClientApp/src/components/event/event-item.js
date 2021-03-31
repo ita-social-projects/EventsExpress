@@ -208,7 +208,7 @@ export default class Event extends Component {
                                     </IconButton>
                                 </Link>
                                 {(this.props.current_user !== null
-                                    && this.props.current_user.role === "Admin")
+                                    && this.props.current_user.roles.includes("Admin"))
                                     ? <EventManagmentWrapper eventItem={this.props.item} />
                                     : null
                                 }

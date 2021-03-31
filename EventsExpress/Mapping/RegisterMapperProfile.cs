@@ -12,12 +12,12 @@ namespace EventsExpress.Mapping
         public RegisterMapperProfile()
         {
             CreateMap<LoginViewModel, RegisterDto>();
-            CreateMap<CompleteRegistrationViewModel, CompleteRegistrationDto>();
+            CreateMap<RegisterCompleteViewModel, RegisterCompleteDto>();
 
             CreateMap<RegisterDto, Account>()
                 .ForMember(dest => dest.AuthLocal, opts => opts.MapFrom(src => MapAuthLocal(src)));
 
-            CreateMap<CompleteRegistrationDto, UserDto>()
+            CreateMap<RegisterCompleteDto, UserDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Username));
         }
 

@@ -2,8 +2,7 @@
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind';
 import logout from '../../actions/logout-action';
-import { isOpen } from '../../actions/modalWind'
-import { setRegisterError } from '../../actions/register'
+import { isOpen } from '../../actions/modalWind';
 import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
 import { setEditGenderError } from '../../actions/EditProfile/EditGender'
 import { setEditBirthdayError } from '../../actions/EditProfile/editBirthday'
@@ -41,7 +40,6 @@ const mapDispatchToProps = (dispatch) => {
         setStatus: (data) => dispatch(TogleOpenWind(data)),
         resetError: () => {
             dispatch(isOpen(false));
-            dispatch(setRegisterError(null));
            dispatch(setEditUsernameError(null));
            dispatch(setEditGenderError(null));
            dispatch(setEditBirthdayError(null));

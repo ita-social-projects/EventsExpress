@@ -22,6 +22,8 @@ namespace EventsExpress.Core.IServices
 
         UserDto GetById(Guid userId);
 
+        Task<UserDto> GetByIdAsync(Guid userId);
+
         UserDto GetByAuthLocalId(Guid authLocalId);
 
         UserDto GetByEmail(string email);

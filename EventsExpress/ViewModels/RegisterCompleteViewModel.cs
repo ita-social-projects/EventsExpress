@@ -1,12 +1,10 @@
 ﻿using System;
 using EventsExpress.Db.Enums;
 
-namespace EventsExpress.Core.DTOs
+namespace EventsExpress.ViewModels
 {
-    public class CompleteRegistrationDto
+    public class RegisterCompleteViewModel
     {
-        public Guid AccountId { get; set; }
-
         public string Email { get; set; }
 
         public string Username { get; set; }
@@ -16,5 +14,7 @@ namespace EventsExpress.Core.DTOs
         public Gender Gender { get; set; }
 
         public string Phone { get; set; }
+
+        public Guid AccountId { get; set; }
     }
 }

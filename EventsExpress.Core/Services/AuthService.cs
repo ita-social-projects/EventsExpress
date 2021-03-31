@@ -46,6 +46,7 @@ namespace EventsExpress.Core.Services
         {
             var account = Context.Accounts
                 .Include(a => a.AuthExternal)
+                .Include(a => a.RefreshTokens)
                 .Include(a => a.AccountRoles)
                     .ThenInclude(ar => ar.Role)
                 .Where(a => a.AuthExternal.Any(x => x.Email == email && x.Type == type))
@@ -61,8 +62,8 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException($"Your account was blocked.");
             }
 
-            var jwtToken = _tokenService.GenerateAccessToken(account, email);
-            var refreshToken = _tokenService.GenerateRefreshToken(email);
+            var jwtToken = _tokenService.GenerateAccessToken(account);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             // save refresh token
             account.RefreshTokens.Add(refreshToken);
@@ -100,8 +101,8 @@ namespace EventsExpress.Core.Services
             }
 
             // authentication successful so generate jwt and refresh tokens
-            var jwtToken = _tokenService.GenerateAccessToken(account, email);
-            var refreshToken = _tokenService.GenerateRefreshToken(email);
+            var jwtToken = _tokenService.GenerateAccessToken(account);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             // save refresh token
             account.RefreshTokens.Add(refreshToken);
@@ -109,13 +110,13 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> FirstAuthenticate(Guid authLocalId, string token)
+        public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token)
         {
             var cache = new CacheDto { Token = token, AuthLocalId = authLocalId };
 
             var account = await ConfirmEmail(cache);
-            var jwtToken = _tokenService.GenerateAccessToken(account, account.AuthLocal.Email);
-            var refreshToken = _tokenService.GenerateRefreshToken(account.AuthLocal.Email);
+            var jwtToken = _tokenService.GenerateAccessToken(account);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
             // save refresh token
             account.RefreshTokens.Add(refreshToken);
@@ -161,7 +162,7 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public async Task CompleteRegistration(CompleteRegistrationDto profileData)
+        public async Task RegisterComplete(RegisterCompleteDto profileData)
         {
             await _userService.Create(Mapper.Map<UserDto>(profileData));
 
@@ -178,6 +179,18 @@ namespace EventsExpress.Core.Services
             }
 
             return _userService.GetById(userId);
+        }
+
+        public async Task<UserDto> GetCurrentUserAsync(ClaimsPrincipal userClaims)
+        {
+            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
+
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                return null;
+            }
+
+            return await _userService.GetByIdAsync(userId);
         }
 
         public Task ChangeRole(Guid userId, Guid roleId)
@@ -251,6 +264,8 @@ namespace EventsExpress.Core.Services
                 .Include(al => al.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
+                .Include(al => al.Account)
+                    .ThenInclude(a => a.RefreshTokens)
                 .FirstOrDefault(al => al.Id == cacheDto.AuthLocalId);
             if (authLocal == null)
             {

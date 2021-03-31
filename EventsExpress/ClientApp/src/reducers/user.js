@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { SET_USER } from '../actions/login-action';
+import { SET_USER } from '../actions/authentication-action';
 import { SET_LOGOUT } from '../actions/logout-action';
 import { addUserCategory } from '../actions/EditProfile/addUserCategory';
 import { addUserNotificationType } from '../actions/EditProfile/addUserNotificationType';

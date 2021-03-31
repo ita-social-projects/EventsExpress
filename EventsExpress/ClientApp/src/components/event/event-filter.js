@@ -82,7 +82,7 @@ class EventFilter extends Component {
                                     placeholder='#hashtags'
                                 />
                             </div>
-                            {current_user.role === "Admin" && (
+                            {current_user.roles.includes("Admin") && (
                                 <div className="form-group">
                                     <Field name="status" component={radioButton}>
                                         <Radio value="true" label="All" />

@@ -25,36 +25,22 @@ namespace EventsExpress.Controllers
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IPhotoService _photoService;
+        private readonly IAccountService _accountService;
 
         public AuthenticationController(
             IUserService userSrv,
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
-            IPhotoService photoService)
+            IPhotoService photoService,
+            IAccountService accountService)
         {
             _userService = userSrv;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
             _photoService = photoService;
-        }
-
-        /// <summary>
-        /// This method to refresh user status using only jwt access token.
-        /// </summary>
-        /// <returns>The method performs Login operation.</returns>
-        /// <response code="200">Return UserInfo model.</response>
-        /// <response code="401">If token is invalid.</response>
-        [Authorize]
-        [HttpPost("login_token")]
-        public IActionResult Login()
-        {
-            var user = _authService.GetCurrentUser(HttpContext.User);
-            return
-            user == null
-               ? (IActionResult)Unauthorized()
-               : Ok(_mapper.Map<UserInfoViewModel>(user));
+            _accountService = accountService;
         }
 
         /// <summary>
@@ -69,18 +55,10 @@ namespace EventsExpress.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> Login(LoginViewModel authRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var authResponseModel = await _authService.Authenticate(authRequest.Email, authRequest.Password);
-            var user = _userService.GetByEmail(authRequest.Email);
-            var userInfo = _mapper.Map<UserInfoViewModel>(user);
-            userInfo.Token = authResponseModel.JwtToken;
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
-            return Ok(userInfo);
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         /// <summary>
@@ -92,22 +70,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> FacebookLogin(UserViewModel userView)
+        public async Task<IActionResult> FacebookLogin(AccountViewModel userView)
         {
-            UserDto userExisting = _userService.GetByEmail(userView.Email);
-
-            if (userExisting == null && !string.IsNullOrEmpty(userView.Email))
-            {
-                return BadRequest();
-            }
-
-            await SetPhoto(userExisting, userView.PhotoUrl);
+            await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Facebook);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email, AuthExternalType.Facebook);
-            var userInfo = _mapper.Map<UserInfoViewModel>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = authResponseModel.JwtToken;
+
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
-            return Ok(userInfo);
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         /// <summary>
@@ -119,24 +89,17 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> GoogleLogin([FromBody] UserViewModel userView)
+        public async Task<IActionResult> GoogleLogin([FromBody] AccountViewModel userView)
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(
                 userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
-            UserDto userExisting = _userService.GetByEmail(payload.Email);
 
-            if (userExisting == null && !string.IsNullOrEmpty(payload.Email))
-            {
-                return BadRequest();
-            }
-
-            await SetPhoto(userExisting, userView.PhotoUrl);
+            await _accountService.EnsureExternalAccountAsync(payload.Email, AuthExternalType.Google);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email, AuthExternalType.Google);
-            var userInfo = _mapper.Map<UserInfoViewModel>(_userService.GetByEmail(payload.Email));
-            userInfo.Token = authResponseModel.JwtToken;
+
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
-            return Ok(userInfo);
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         /// <summary>
@@ -148,22 +111,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> TwitterLogin([FromBody] UserViewModel userView)
+        public async Task<IActionResult> TwitterLogin([FromBody] AccountViewModel userView)
         {
-            UserDto userExisting = _userService.GetByEmail(userView.Email);
-
-            if (!(userExisting is null) && !string.IsNullOrEmpty(userView.Email))
-            {
-                return BadRequest();
-            }
-
-            await SetPhoto(userExisting, userView.PhotoUrl);
+            await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Twitter);
             var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email, AuthExternalType.Twitter);
-            UserInfoViewModel userInfo = _mapper.Map<UserInfoViewModel>(_userService.GetByEmail(userView.Email));
-            userInfo.Token = authResponseModel.JwtToken;
+
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
-            return Ok(userInfo);
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
@@ -193,7 +148,7 @@ namespace EventsExpress.Controllers
         {
             if (!await _authService.CanRegister(authRequest.Email))
             {
-                return BadRequest();
+                throw new EventsExpressException("This email is already in use");
             }
 
             var accountNew = _mapper.Map<RegisterDto>(authRequest);
@@ -202,15 +157,17 @@ namespace EventsExpress.Controllers
             return Ok(new { Id = accountId });
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpPost("[action]")]
-        public async Task<IActionResult> CompleteRegistration(CompleteRegistrationViewModel authRequest)
+        public async Task<IActionResult> RegisterComplete(RegisterCompleteViewModel authRequest)
         {
-            var profileData = _mapper.Map<CompleteRegistrationDto>(authRequest);
+            var profileData = _mapper.Map<RegisterCompleteDto>(authRequest);
 
-            await _authService.CompleteRegistration(profileData);
+            await _authService.RegisterComplete(profileData);
+            var refreshToken = Request.Cookies["refreshToken"];
+            var authResponseModel = await _tokenService.RefreshToken(refreshToken);
 
-            return Ok();
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         /// <summary>
@@ -251,14 +208,11 @@ namespace EventsExpress.Controllers
                 throw new EventsExpressException("User not found");
             }
 
-            var authResponseModel = await _authService.FirstAuthenticate(id, token);
-            var user = _userService.GetByAuthLocalId(id);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
-            userInfo.Token = authResponseModel.JwtToken;
-            userInfo.AfterEmailConfirmation = true;
+            var authResponseModel = await _authService.EmailConfirmAndAuthenticate(id, token);
+
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
-            return Ok(userInfo);
+            return Ok(new { Token = authResponseModel.JwtToken });
         }
 
         /// <summary>

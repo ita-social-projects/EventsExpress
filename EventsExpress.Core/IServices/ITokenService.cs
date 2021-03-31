@@ -7,9 +7,9 @@ namespace EventsExpress.Core.IServices
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(Account account, string email);
+        string GenerateAccessToken(Account account);
 
-        RefreshToken GenerateRefreshToken(string email);
+        RefreshToken GenerateRefreshToken();
 
         ClaimsPrincipal GetPrincipalFromJwt(string token);
 

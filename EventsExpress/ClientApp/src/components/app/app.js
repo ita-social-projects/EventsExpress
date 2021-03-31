@@ -17,7 +17,6 @@ import EventSchedulesListWrapper from '../../containers/eventSchedules-list';
 import Layout from '../layout';
 import SearchUserWrapper from '../../containers/UserSearchWrapper';
 import NotFound from '../Route guard/404';
-import EventsForAdmin from '../../components/event/EventsForAdmin';
 import Authentication from '../Authentication/authentication';
 import Chat from '../chat';
 import UserChats from '../chat/user_chats';
@@ -26,6 +25,8 @@ import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import AddEventWrapper from '../../containers/add-event';
+import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
+import RegisterSuccess from '../register/register-success';
 
 export default class App extends Component {
     render() {
@@ -48,7 +49,8 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                        <Route path="/profile/" component={Profile} />
+                        <Route path='/registerComplete' component={RegisterCompleteWrapper} />
+                        <Route path="/editProfile/" component={Profile} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
@@ -60,13 +62,13 @@ export default class App extends Component {
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
-                        <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
+                        <Route path="/authentication/twitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={Chat} />
                         <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
+                        <Route path='/registerSuccess' component={RegisterSuccess} />
                         
-
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
