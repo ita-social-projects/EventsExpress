@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import EventsForProfile from '../../event/events-for-profile';
-import Spinner from '../../spinner';
+import EventsForProfile from '../event/events-for-profile';
+import Spinner from '../spinner';
 import 'moment-timezone';
-import '../User-profile.css';
+import './User-profile.css';
 
-export default class VisitedEvents extends Component {
+export default class Events extends Component {
     render() {
         const { isPending, data } = this.props.events;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventsForProfile
+        const content =  <EventsForProfile
                 data_list={data.items}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 current_user={this.props.current_user}
-                callback={this.props.typeOfEvents} />
-            : null;
+                callback={this.props.typeOfEvents} />;
 
         return (
             <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">

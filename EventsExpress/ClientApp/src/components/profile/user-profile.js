@@ -9,15 +9,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
-import EventsForProfile from '../event/events-for-profile';
-import Spinner from '../spinner';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import './User-profile.css';
-import FutureEvents from './events-routes/futureEvents';
-import ArchiveEvents from './events-routes/archiveEvents';
-import VisitedEvents from './events-routes/visitedEvents';
-import EventsToGo from './events-routes/eventsToGo';
+import Events from './events';
 
 class UserItemView extends Component {
     splitPath(path) {
@@ -51,7 +46,7 @@ class UserItemView extends Component {
     renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
-    handleChange = (event, value) => {
+    handleChange = (value) => {
         this.setState({ value });
         value === 0 && (this.props.onFuture())
         value === 1 && (this.props.onPast())
@@ -179,34 +174,34 @@ class UserItemView extends Component {
                     </Tabs>
                 </AppBar>
                 <Switch>
-                    {/* <Route
+                    <Route
                         exact
                         path='/user/:id'
                         render={() =>
-                            <Redirect to={`/user/${userId}/FutureEvents`} />} /> */}
+                            <Redirect to={`/user/${userId}/FutureEvents`} />} />
                     <Route
                         path='/user/:id/FutureEvents'
-                        render={() => <FutureEvents
+                        render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
                             typeOfEvents={this.props.onFuture} />} />
 
                     <Route path='/user/:id/ArchiveEvents'
-                        render={() => <ArchiveEvents
+                        render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
                             typeOfEvents={this.props.onPast} />} />
 
                     <Route
                         path='/user/:id/VisitedEvents'
-                        render={() => <VisitedEvents
+                        render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
                             typeOfEvents={this.props.onVisited} />} />
 
                     <Route
                         path='/user/:id/EventsToGo'
-                        render={() => <EventsToGo
+                        render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
                             typeOfEvents={this.props.onToGo} />} />

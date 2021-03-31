@@ -19,7 +19,6 @@ export default function get_user(id) {
         res.then(response => {
             if (response.error == null) {
                 dispatch(getProfile(response));
-
             } else {
                 dispatch(getProfileError(response.error));
             }
