@@ -46,7 +46,7 @@ class UserItemView extends Component {
     renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
     renderEvents = arr => arr.map(item => <div className="col-4"><Event key={item.id} item={item} /></div>)
 
-    handleChange = (value) => {
+    handleChange = (event, value) => {
         this.setState({ value });
         value === 0 && (this.props.onFuture())
         value === 1 && (this.props.onPast())
