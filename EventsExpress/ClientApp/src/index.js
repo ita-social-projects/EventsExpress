@@ -11,6 +11,7 @@ import { initialConnection } from './actions/chat/chat-action';
 import { getUnreadMessages } from './actions/chat/chats-action';
 import { updateEventsFilters } from './actions/event/event-list-action';
 import eventHelper from '../src/components/helpers/eventHelper';
+import UserItemView from './components/profile/user-profile';
 
 
 // Create browser history to use in the Redux store

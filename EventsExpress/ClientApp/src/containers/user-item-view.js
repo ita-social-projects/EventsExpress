@@ -72,17 +72,11 @@ class UserItemViewWrapper extends Component {
         this.props.get_events_togo(this.props.profile.data.id, page);
     }
 
-    onAddEvent = () => {
-        this.setState({ flag: true });
-    }
-
     render() {
         const { data, isPending } = this.props.profile;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
             ? <Profile
-                onAddEvent={this.onAddEvent}
-                add_event_flag={this.state.flag}
                 onLike={this.onLike}
                 onDislike={this.onDislike}
                 onReset={this.onReset}
@@ -93,6 +87,7 @@ class UserItemViewWrapper extends Component {
                 onToGo={this.onToGo}
                 data={data}
                 current_user={this.props.current_user}
+                history={this.props.history}
             />
             : null;
 
