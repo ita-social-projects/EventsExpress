@@ -29,11 +29,14 @@ namespace EventsExpress.Test.ServiceTests
         private EventService service;
         private List<Event> events;
         private EventLocation eventLocationMap;
+        private EventLocation eventLocationMapSecond;
         private EventLocation eventLocationOnline;
         private Guid userId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
+        private Guid eventLocationIdMapSecond = Guid.NewGuid();
+        private double radius = 8;
 
         private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
         {
@@ -140,6 +143,13 @@ namespace EventsExpress.Test.ServiceTests
                 Point = new Point(10.45, 12.34),
                 Type = LocationType.Map,
             };
+
+            eventLocationMapSecond = new EventLocation
+            {
+                Id = eventId,
+                Point = new Point(50.45, 30.34),
+                Type = LocationType.Map,
+            };
             eventLocationOnline = new EventLocation
             {
                 Id = eventLocationIdOnline,
@@ -182,6 +192,27 @@ namespace EventsExpress.Test.ServiceTests
                 },
                 new Event
                 {
+                    Id = GetEventExistingId.ThirdEventId,
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "test event",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = Guid.NewGuid(),
+                        },
+                    },
+                    PhotoId = Guid.NewGuid(),
+                    EventLocationId = eventLocationIdMapSecond,
+                    Title = "any title",
+                    IsBlocked = false,
+                    IsPublic = true,
+                    Categories = null,
+                    MaxParticipants = 8,
+                },
+                new Event
+                {
                     Id = GetEventExistingId.SecondEventId,
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
@@ -199,7 +230,7 @@ namespace EventsExpress.Test.ServiceTests
                     IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
-                    MaxParticipants = 2147483647,
+                    MaxParticipants = 25,
                 },
                 new Event
                 {
@@ -235,6 +266,7 @@ namespace EventsExpress.Test.ServiceTests
             };
 
             Context.EventLocations.Add(eventLocationMap);
+            Context.EventLocations.Add(eventLocationMapSecond);
             Context.EventLocations.Add(eventLocationOnline);
             Context.Events.AddRange(events);
             Context.SaveChanges();
@@ -288,6 +320,21 @@ namespace EventsExpress.Test.ServiceTests
             var result = service.EventById(Guid.NewGuid());
 
             Assert.IsNull(result);
+        }
+
+        [Test]
+        [Category("Get All")]
+        public void GetAll_ValidEvent_Success()
+        {
+            EventFilterViewModel eventFilterViewModel = new EventFilterViewModel()
+            {
+                X = eventLocationMapSecond.Point.X,
+                Y = eventLocationMapSecond.Point.Y,
+                Radius = radius,
+            };
+            var count = events.Count;
+            service.GetAll(eventFilterViewModel, out count);
+            Assert.AreEqual(count, 1);
         }
 
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]

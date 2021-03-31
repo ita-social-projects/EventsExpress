@@ -44,13 +44,15 @@ class MapModal extends Component {
         this.setState({ open: true });
     };
     handleClose = () => {
-        if (this.props.values.selectedPos.lat == null) {
-            this.setState({ open: false });
-        }
-        this.props.initialize({
-            radius: this.props.initialValues.radius,
-            selectedPos: this.props.initialValues.selectedPos != null ? this.props.initialValues.selectedPos : { lat: null, lng: null }
+        const startValue = this.props.initialize({
+            radius: 8,
+            selectedPos: {lat: null, lng: null}
         })
+        {
+            this.props.values.selectedPos.lat == null
+                ? startValue && this.setState({ open: false })
+                : startValue
+        }
     };
     handleFilter = () => {
         this.setState({ open: false });
@@ -81,7 +83,7 @@ class MapModal extends Component {
                                     <label>Radius is {this.props.values.radius} km</label>
                                     <Field name="radius" component="input"
                                         type="range"
-                                        min="0" max="10000" value={this.props.values.radius}
+                                        min="1" max="10000" value={this.props.values.radius}
                                         onChange={this.onRadiusChange}
                                         step="any"
                                         className="radius-slider"
