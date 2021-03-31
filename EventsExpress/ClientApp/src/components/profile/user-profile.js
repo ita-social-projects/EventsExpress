@@ -31,6 +31,14 @@ class UserItemView extends Component {
         value: this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
     };
 
+    componentDidMount = () => {
+        this.state.value = this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
+    }
+
+    componentDidUpdate = () => {
+        this.state.value = this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
+    }
+
     getAge = birthday => {
         let today = new Date();
         let birthDate = new Date(birthday);
