@@ -4,11 +4,10 @@ import { reset } from 'redux-form';
 import IconButton from "@material-ui/core/IconButton";
 import {
     add_unitOfMeasuring,
-    setUnitOfMeasuringError,
     setUnitOfMeasuringPending,
     setUnitOfMeasuringSuccess,
     set_edited_unitOfMeasuring
-} from "../../actions/unitOfMeasuring/add-unitOfMeasuring";
+} from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
 
 const pStyle = {
@@ -17,20 +16,19 @@ const pStyle = {
 
 class UnitOfMeasuringAddWrapper extends React.Component {
     submit = values => {
-        this.props.add({ ...values });
+        return this.props.add({ ...values });
     };
 
     componentWillUpdate = () => {
-        const { unitOfMeasuringError, isUnitOfMeasuringSuccess } = this.props.status;
+        const {isUnitOfMeasuringSuccess } = this.props.status;
 
-        if (!unitOfMeasuringError && isUnitOfMeasuringSuccess) {
+        if (isUnitOfMeasuringSuccess) {
             this.props.reset();
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         }
     }
 
     render() {
-        console.log(this.props.status);
         return (
             this.props.item.id !== this.props.editedUnitOfMeasuring)
             ? <tr>
@@ -49,9 +47,8 @@ class UnitOfMeasuringAddWrapper extends React.Component {
             : <tr>
                 <UnitOfMeasuringEdit
                     item={this.props.item}
-                    callback={this.submit}
-                    cancel={this.props.edit_cansel}
-                    message={this.props.status.unitOfMeasuringError}
+                    onSubmit={this.submit}
+                    cancel={this.props.edit_cancel}
                 />
                 <td></td>
             </tr>
@@ -70,15 +67,13 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_unitOfMeasuring(data)),
         set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
-        edit_cansel: () => {
+        edit_cancel: () => {
             dispatch(set_edited_unitOfMeasuring(null));
-            dispatch(setUnitOfMeasuringError(null));
         },
         reset: () => {
             dispatch(reset('add-form'));
             dispatch(setUnitOfMeasuringPending(false));
             dispatch(setUnitOfMeasuringSuccess(false));
-            dispatch(setUnitOfMeasuringError(null));
         }
     };
 };

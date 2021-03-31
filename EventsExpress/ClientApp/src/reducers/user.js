@@ -1,12 +1,12 @@
 import initialState from '../store/initialState';
-import { SET_USER } from '../actions/login-action';
-import { SET_LOGOUT } from '../actions/logout-action';
-import { addUserCategory } from '../actions/EditProfile/addUserCategory';
-import { addUserNotificationType } from '../actions/EditProfile/addUserNotificationType';
-import { editBirthday } from '../actions/EditProfile/editBirthday';
-import { editGender } from '../actions/EditProfile/EditGender';
-import { editUsername } from '../actions/EditProfile/editUsername';
-import { changeAvatar } from '../actions/EditProfile/change-avatar';
+import { SET_USER } from '../actions/login/login-action';
+import { SET_LOGOUT } from '../actions/login/logout-action';
+import { addUserCategory } from '../actions/editProfile/userCategory-add-action';
+import { addUserNotificationType } from '../actions/editProfile/userNotificationType-add-action';
+import { editBirthday } from '../actions/editProfile/birthday-edit-action';
+import { editGender } from '../actions/editProfile/gender-edit-action';
+import { editUsername } from '../actions/editProfile/userName-edit-action';
+import { changeAvatar } from '../actions/editProfile/avatar-change-action';
 import { authenticate } from '../actions/authentication-action';
 
 export const reducer = (state = initialState.user, action) => {
@@ -41,7 +41,6 @@ export const reducer = (state = initialState.user, action) => {
                 ...state,
                 name: action.payload.UserName
             }
-
         case editGender.UPDATE:
             return {
                 ...state,
@@ -51,7 +50,6 @@ export const reducer = (state = initialState.user, action) => {
             return {
                 ...state,
                 photoUrl: action.payload
-
             }
         default:
             return state;

@@ -31,10 +31,6 @@ namespace EventsExpress.Core.DTOs
 
         public virtual Role Role { get; set; }
 
-        public virtual Guid? PhotoId { get; set; }
-
-        public virtual Photo Photo { get; set; }
-
         public double Rating { get; set; }
 
         public byte Attitude { get; set; }

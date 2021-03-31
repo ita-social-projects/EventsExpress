@@ -9,7 +9,7 @@ import {
 import eventHelper from '../helpers/eventHelper';
 import './event-filter.css';
 import EventFilterStatus from './event-filter-status';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {

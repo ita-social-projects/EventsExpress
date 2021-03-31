@@ -1,17 +1,11 @@
 
 import initialState from '../../store/initialState';
 import {
-    SET_NOTIFICATION_TYPES_ERROR, SET_NOTIFICATION_TYPES_PENDING, GET_NOTIFICATION_TYPES_SUCCESS
-} from '../../actions/notificationType/notificationType-list';
+    SET_NOTIFICATION_TYPES_PENDING, GET_NOTIFICATION_TYPES_SUCCESS
+} from '../../actions/notificationType/notificationType-list-action';
 
 export const reducer = (state = initialState.notificationTypes, action) => {
     switch (action.type) {
-        case SET_NOTIFICATION_TYPES_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case SET_NOTIFICATION_TYPES_PENDING:
             return {
                 ...state,

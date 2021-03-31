@@ -2,7 +2,7 @@
 import CommentForm from '../components/comment/comment-form';
 import { connect } from "react-redux";
 import addComment,
-    { setCommentPending, setCommentSuccess } from "../actions/comment-add-action";
+{ setCommentPending, setCommentSuccess } from "../actions/comment/comment-add-action";
 import { reset } from 'redux-form';
 
 class CommentWrapper extends React.Component {

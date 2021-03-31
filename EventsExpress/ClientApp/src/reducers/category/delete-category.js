@@ -2,8 +2,7 @@
 import {
     SET_CATEGORY_DELETE_PENDING,
     SET_CATEGORY_DELETE_SUCCESS,
-    SET_CATEGORY_DELETE_ERROR
-} from "../../actions/category/delete-category";
+} from "../../actions/category/category-delete-action";
 
 export const reducer = (state = initialState.add_category, action) => { 
     switch (action.type) {
@@ -16,11 +15,6 @@ export const reducer = (state = initialState.add_category, action) => {
         case SET_CATEGORY_DELETE_SUCCESS:
             return Object.assign({}, state, {
                 isCategoryDeleteSuccess: action.isCategoryDeleteSuccess
-            });
-
-        case SET_CATEGORY_DELETE_ERROR:
-            return Object.assign({}, state, {
-                categoryDeleteError: action.categoryDeleteError
             });
 
         default:

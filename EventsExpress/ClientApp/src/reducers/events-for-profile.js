@@ -1,7 +1,7 @@
 ﻿import initialState from '../store/initialState';
 import {
     SET_EVENTS_PROFILE_PENDING, GET_EVENTS_PROFILE_SUCCESS
-} from '../actions/events-for-profile-action';
+} from '../actions/events/events-for-profile-action';
 
 export const reducer = (state = initialState.events_for_profile, action) => {
     switch (action.type) {

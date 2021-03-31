@@ -45,7 +45,6 @@ namespace EventsExpress.Test.ControllerTests
             {
                 Id = _idUser,
                 Email = _userEmal,
-                Photo = new Photo { Id = Guid.NewGuid(), Img = new byte[8], Thumb = new byte[8] },
             };
         }
 
