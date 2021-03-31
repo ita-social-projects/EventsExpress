@@ -1,18 +1,11 @@
 ﻿import React from "react";
 import CommentForm from '../components/comment/comment-form';
 import { connect } from "react-redux";
-import add from "../actions/add-comment";
+import addComment,
+{ setCommentPending, setCommentSuccess } from "../actions/comment/comment-add-action";
 import { reset } from 'redux-form';
-import { setCommentPending, setCommentSuccess } from '../actions/add-comment';
-class CommentWrapper extends React.Component {
 
-    componentDidUpdate = () => {
-        const { isCommentPending, isCommentSuccess, commentError } = this.props.addCommentStatus
-        if (this.props.addCommentStatus && !commentError && isCommentSuccess && !isCommentPending) {
-            this.props.reset();
-            this.props.resetCommentStatus();
-        }
-    }
+class CommentWrapper extends React.Component {
 
     submit = values => {
         return this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId, commentsId: this.props.parentId });
@@ -38,7 +31,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    add: (data) => dispatch(add(data)),
+    add: (data) => dispatch(addComment(data)),
     reset: () => {
         dispatch(reset('add-comment'));
     },

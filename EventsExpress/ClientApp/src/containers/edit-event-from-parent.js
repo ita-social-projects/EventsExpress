@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import edit_event_from_parent from '../actions/edit-event-from-parent';
 import { connect } from 'react-redux';
-import { setAlert } from '../actions/alert';
+import { setAlert } from '../actions/alert-action';
 import { reset } from 'redux-form';
-import {
-    setEventFromParentError,
+import edit_event_from_parent, {
     setEventFromParentPending,
     setEventFromParentSuccess
 }
-    from '../actions/edit-event-from-parent';
+    from '../actions/event/event-copy-with-edit-action';
 import * as moment from 'moment';
 import { validateEventForm } from '../components/helpers/helpers'
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 
 class EditFromParentEventWraper extends Component {
 
@@ -50,11 +48,9 @@ class EditFromParentEventWraper extends Component {
         return <>
             <EventForm
                 all_categories={this.props.all_categories}
-                cities={this.props.cities.data}
                 onChangeCountry={this.onChangeCountry}
                 onCancel={this.props.onCancelEditing}
                 onSubmit={this.onSubmit}
-                countries={this.props.countries.data}
                 initialValues={initialValues}
                 haveReccurentCheckBox={false}
                 haveMapCheckBox={true}
@@ -82,7 +78,6 @@ const mapDispatchToProps = (dispatch) => {
         reset: () => {
             dispatch(setEventFromParentPending(true));
             dispatch(setEventFromParentSuccess(false));
-            dispatch(setEventFromParentError(null));
         }
     }
 };

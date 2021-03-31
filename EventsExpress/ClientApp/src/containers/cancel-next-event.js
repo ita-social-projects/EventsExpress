@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import cancel_next_eventSchedule from '../actions/cancel-next-eventSchedule';
 import { connect } from 'react-redux';
-import Dropdown from 'react-bootstrap/Dropdown'
-import { reset } from 'redux-form';
-import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
-import {
-    setCancelNextEventSchedulePending,
-    setCancelNextEventScheduleError,
-    setCancelNextEventScheduleSuccess
-}
-    from '../actions/cancel-next-eventSchedule';
+import Dropdown from 'react-bootstrap/Dropdown';
+import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal';
+import cancel_next_eventSchedule from '../actions/eventSchedule/eventSchedule-cancel-next-action';
 
 class CancelNextEventWrapper extends Component {
     constructor() {
@@ -19,14 +12,6 @@ class CancelNextEventWrapper extends Component {
         };
         this.cancelHandler = this.cancelHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
-    }
-
-    componentDidUpdate = () => {
-        if (!this.props.cancel_next_eventSchedule_status.cancelNextEventScheduleError &&
-            this.props.cancel_next_eventSchedule_status.isCancelNextEventScheduleSuccess) {
-            this.props.resetEvent();
-            this.props.reset();
-        }
     }
 
     cancelHandler = () => {
@@ -70,12 +55,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         cancel_next_eventSchedule: (data) => dispatch(cancel_next_eventSchedule(data)),
-        resetEvent: () => dispatch(reset('event-form')),
-        reset: () => {
-            dispatch(setCancelNextEventSchedulePending(true));
-            dispatch(setCancelNextEventScheduleSuccess(false));
-            dispatch(setCancelNextEventScheduleError(null));
-        }
     }
 };
 

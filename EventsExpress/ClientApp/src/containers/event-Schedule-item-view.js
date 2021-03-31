@@ -2,10 +2,10 @@
 import { connect } from 'react-redux';
 import EventScheduleItemView from '../components/eventSchedule/eventSchedule-item-view';
 import Spinner from '../components/spinner';
-import getEventSchedule from '../actions/eventSchedule-item-view';
-import get_event from '../actions/event-item-view';
-import { resetEventSchedule } from '../actions/eventSchedule-item-view';
-import { resetEvent } from '../actions/event-item-view';
+import getEventSchedule, {
+    resetEventSchedule
+} from '../actions/eventSchedule/eventSchedule-item-view-action';
+import get_event from '../actions/event/event-item-view-action';
 
 class EventScheduleItemViewWrapper extends Component {
     componentWillMount() {
@@ -41,6 +41,5 @@ const mapDispatchToProps = (dispatch) => ({
     getEventSchedule: (id) => dispatch(getEventSchedule(id)),
     reset: () => dispatch(resetEventSchedule())
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemViewWrapper);

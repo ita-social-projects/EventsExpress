@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
 import {
     renderTextField,
     renderDatePicker,
-    renderMultiselect,
-    radioButton
+    renderMultiselect
 } from '../helpers/helpers';
 import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
+import EventFilterStatus from './event-filter-status';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class EventFilter extends Component {
                 dateFrom: initialValues.dateFrom,
                 dateTo: initialValues.dateTo,
                 categories: initialValues.categories,
-                status: initialValues.status,
+                statuses: initialValues.statuses,
                 radius: initialValues.radius,
                 selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { lat: null, lng: null },
 
@@ -47,6 +47,7 @@ class EventFilter extends Component {
     render() {
         const { all_categories, form_values, current_user} = this.props;
         let values = form_values || {};
+        
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -61,19 +62,19 @@ class EventFilter extends Component {
                     {this.state.viewMore &&
                         <>
                             <div className="form-group">
-                                <div>From</div>
                                 <Field
-                                    name='dateFrom'
-                                    component={renderDatePicker}
+                                name='dateFrom'
+                                label='From'
+                                minValue={new Date()}                               
+                                component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
-                                <div>To</div>
                                 <Field
-                                    name='dateTo'
-                                    defaultValue={values.dateFrom}
-                                    minValue={values.dateFrom}
-                                    component={renderDatePicker}
+                                name='dateTo'
+                                label='To'
+                                minValue={new Date(values.dateFrom)}
+                                component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
@@ -87,15 +88,14 @@ class EventFilter extends Component {
                                     placeholder='#hashtags'
                                 />
                             </div>
-                            {current_user.role === "Admin" && (
-                                <div className="form-group">
-                                    <Field name="status" component={radioButton}>
-                                        <Radio value="true" label="All" />
-                                        <Radio value="true" label="Active" />
-                                        <Radio value="true" label="Blocked" />
-                                    </Field>
-                                </div>
-                            )}
+                            <div className="form-group">
+                                {current_user.role === "Admin" &&
+                                    <Field name="statuses"
+                                        component={EventFilterStatus}
+                                        options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}
+                                    />
+                                }
+                            </div>
 
                             <div>
                                 <MapModal initialize={this.props.initialize} initialValues={this.props.initialFormValues} values={values} reset={this.props.onReset} />
@@ -156,11 +156,12 @@ class EventFilter extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            disabled={this.props.pristine || this.props.submitting}
+                            disabled={this.props.submitting}
                         >
                             Search
                         </Button>
                     </div>
+
                 </form>
             </div>
         </>

@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import { get_events } from '../actions/event-list';
-import InternalServerError from '../components/Route guard/500';
-import BadRequest from '../components/Route guard/400';
-import Unauthorized from '../components/Route guard/401';
-import Forbidden from '../components/Route guard/403';
+import { get_events } from '../actions/event/event-list-action';
 import history from '../history';
 import eventHelper from '../components/helpers/eventHelper';
 
@@ -54,19 +50,10 @@ class EventListWrapper extends Component {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending, isError } = this.props.events;
+        const { data, isPending } = this.props.events;
         const { items } = this.props.events.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <InternalServerError />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
+        const content = !isPending
             ? <EventList
                 current_user={current_user}
                 data_list={items}
@@ -75,12 +62,8 @@ class EventListWrapper extends Component {
                 totalPages={data.pageViewModel.totalPages}
             />
             : null;
-
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
-            }
+            {spinner || content}
         </>
     }
 }

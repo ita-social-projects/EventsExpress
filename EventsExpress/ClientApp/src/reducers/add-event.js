@@ -1,19 +1,12 @@
 ﻿import initialState from '../store/initialState';
 
 import {
-    SET_EVENT_ERROR, SET_EVENT_PENDING, SET_EVENT_SUCCESS
-}from '../actions/add-event';
+    SET_EVENT_PENDING, SET_EVENT_SUCCESS
+} from '../actions/event/event-add-action';
 
 export const reducer = (state = initialState.add_event, action) => {
 
     switch(action.type){
-        
-        case SET_EVENT_ERROR:
-            return {
-                ...state,
-                isEventPending: false,
-                eventError: action.payload
-            };
         case SET_EVENT_PENDING:
             return {
                 ...state,

@@ -1,62 +1,25 @@
-import EventsExpressService from './EventsExpressService'
+import EventsExpressService from './EventsExpressService';
 
 const baseService = new EventsExpressService();
 
 export default class AuthenticationService {
 
-    auth = async (data) => {
-        const res = await baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res.json();
-    }
+    auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
-    setLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/Login', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setLogin = data => baseService.setResource('Authentication/Login', data);
 
-    setGoogleLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/GoogleLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setGoogleLogin = data => baseService.setResource('Authentication/GoogleLogin', data);
 
-    setFacebookLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/FacebookLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setFacebookLogin = data => baseService.setResource('Authentication/FacebookLogin', data);
 
-    setTwitterLogin = async (data) => {
-        const res = await baseService.setResource('Authentication/TwitterLogin', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setTwitterLogin = data => baseService.setResource('Authentication/TwitterLogin', data);
 
-    setRecoverPassword = async (data) => {
-        const res = await baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    revokeToken = () => baseService.setResource('token/revoke-token');
 
-    setRegister = async (data) => {
-        const res = await baseService.setResource('Authentication/register', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setRecoverPassword = data => baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
 
-    setChangePassword = async (data) => {
-        const res = await baseService.setResource('Authentication/ChangePassword', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setRegister = data => baseService.setResource('Authentication/register', data);
+
+    setChangePassword = data =>  baseService.setResource('Authentication/ChangePassword', data);
+
 }

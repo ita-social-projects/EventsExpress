@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment';
+
 import 'moment-timezone';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import { Button, Menu, MenuItem } from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,43 +11,19 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
+
 import SocialShareMenu from './share/SocialShareMenu';
-import EventManagmentWrapper from '../../containers/event-managment';
+import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
-import './event-item.css';
+import eventStatusEnum from '../../constants/eventStatusEnum';
+import { useStyle } from '../event/CardStyle'
 
-const useStyles = makeStyles(theme => ({
-    card: {
-        maxWidth: 345,
-        maxHeight: 200,
-        backgroundColor: theme.palette.primary.dark
-    },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
-    avatar: {
-        backgroundColor: red[500],
-    },
-    button: {
-    }
-}));
+const useStyles = useStyle;
 
-export default class Event extends Component {
+export default class EventCard extends Component {
     constructor(props) {
         super(props);
 
@@ -78,13 +54,13 @@ export default class Event extends Component {
             description,
             isPublic,
             maxParticipants,
+            eventStatus,
             photoUrl,
             categories,
             countVisitor,
-            isBlocked,
             owners
         } = this.props.item;
-        const INT32_MAX_VALUE = 2147483647;
+        const INT32_MAX_VALUE = null;
         const { anchorEl } = this.state;
 
         const PrintMenuItems = owners.map(x => (
@@ -110,8 +86,12 @@ export default class Event extends Component {
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Card
-                    className={classes.card}
-                    style={{ backgroundColor: (isBlocked) ? "gold" : "" }}
+                    className={classes.cardCanceled}
+                    style={{
+                        backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
+                        opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
+
+                    }}
                 >
                     <Menu
                         id="simple-menu"
@@ -176,18 +156,21 @@ export default class Event extends Component {
                         </CardContent>
                     }
                     <CardContent>
-                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                            <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                {description.substr(0, 128)}
-                            </Typography>
-                        </Tooltip>
+                        {description &&
+                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                                <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                    {description.substr(0, 128)}
+                                </Typography>
+                            </Tooltip>
+                        } 
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
-                            <DisplayLocation
-                                location={this.props.item.location}
-                            />
-
+                            {this.props.item.location &&
+                                <DisplayLocation
+                                    location={this.props.item.location}
+                                />
+                            }
                             <br />
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
@@ -203,15 +186,21 @@ export default class Event extends Component {
                                     </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
-                                    <IconButton className={classes.button} aria-label="view">
-                                        <i className="fa fa-eye"></i>
-                                    </IconButton>
+                                    <Tooltip title="View">
+                                        <IconButton aria-label="view">
+                                            <i className="fa fa-eye"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 </Link>
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
-                                    ? <EventManagmentWrapper eventItem={this.props.item} />
-                                    : null
-                                }
+                                    && <EventActiveStatus
+                                    key={this.props.item.id + this.props.item.eventStatus}
+                                    eventStatus={this.props.item.eventStatus}
+                                    eventId={this.props.item.id}
+                                    onBlock = {this.props.onBlock}
+                                    onUnBlock = {this.props.onUnBlock}/>
+                                }                        
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>

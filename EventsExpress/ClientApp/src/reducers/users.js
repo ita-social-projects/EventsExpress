@@ -1,6 +1,6 @@
 import initialState from '../store/initialState';
-import { GET_USERS_ERROR, GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users';
-import { blockUser, unBlockUser, changeUserRole } from '../actions/user';
+import { GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users-action';
+import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user-action';
 
 export const reducer = (state = initialState.users, action) => {
     switch(action.type) {
@@ -17,13 +17,9 @@ export const reducer = (state = initialState.users, action) => {
                 isPending: action.payload
             }
 
-        case GET_USERS_ERROR:
-            return {
-                ...state,
-                isError: action.payload
-            }
         case RESET_USERS:
             return initialState.users;
+
         case blockUser.UPDATE: {
             let newState = { ...state };
             newState.data.items = state.data.items.map((item) => {

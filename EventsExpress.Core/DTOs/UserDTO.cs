@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Google.Apis;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -32,10 +30,6 @@ namespace EventsExpress.Core.DTOs
         public virtual Guid RoleId { get; set; }
 
         public virtual Role Role { get; set; }
-
-        public virtual Guid? PhotoId { get; set; }
-
-        public virtual Photo Photo { get; set; }
 
         public double Rating { get; set; }
 

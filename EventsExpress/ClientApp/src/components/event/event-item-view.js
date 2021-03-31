@@ -6,7 +6,6 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
-import EventCancelModal from './event-cancel-modal';
 import SimpleModal from './simple-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
@@ -18,12 +17,10 @@ import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
 import Tooltip from '@material-ui/core/Tooltip';
+import userStatusEnum from '../../constants/userStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
+import EventChangeStatusModal from './event-change-status-modal';
 
-const userStatus = {
-    APPROVED: 0,
-    DENIED: 1,
-    PENDING: 2
-};
 
 export default class EventItemView extends Component {
     constructor() {
@@ -56,8 +53,7 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                id={x.id}
-                                action={this.props.onDeleteFromOwners}
+                                action={() => this.props.onDeleteFromOwners(x.id)}
                                 data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
                                 button={
                                     <Tooltip title="Delete from owners">
@@ -212,19 +208,19 @@ export default class EventItemView extends Component {
     getUserEventStatus = visitor => {
         if (visitor !== undefined) {
             switch (visitor.userStatusEvent) {
-                case userStatus.APPROVED:
+                case userStatusEnum.APPROVED:
                     return (
                         <span className="alert alert-success shadow" role="alert">
                             You are gonna visit.
                         </span>
                     );
-                case userStatus.DENIED:
+                case userStatusEnum.DENIED:
                     return (
                         <span className="alert alert-danger shadow" role="alert">
                             Denied participation.
                         </span>
                     );
-                case userStatus.PENDING:
+                case userStatusEnum.PENDING:
                     return (
                         <span className="alert alert-warning shadow" role="alert">
                             Wait until admin approve your request.
@@ -254,6 +250,7 @@ export default class EventItemView extends Component {
             dateTo,
             description,
             isPublic,
+            eventStatus,
             maxParticipants,
             visitors,
             owners
@@ -265,20 +262,16 @@ export default class EventItemView extends Component {
             deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
             pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
         };
-        const userStatus = {
-            APPROVED: 0,
-            DENIED: 1,
-            PENDING: 2
-        };
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
         let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
-        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
-        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
-        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === eventStatusEnum.Active;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null && eventStatus === eventStatusEnum.Active;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== eventStatusEnum.Canceled;
+        let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === eventStatusEnum.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
 
         return <>
@@ -319,18 +312,23 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <DisplayLocation
-                                    location={this.props.event.data.location}
-                                />
-
+                                {this.props.event.data.location &&
+                                    <DisplayLocation
+                                        location={this.props.event.data.location}
+                                    />
+                                }                                                                 
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel &&
-                                    <EventCancelModal
-                                        submitCallback={this.props.onCancel}
-                                        cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Cancel</button>}
+                                    submitCallback={this.props.onCancel}           
+                                    />}
+                                {(canUncancel) && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Undo cancel</button>}
+                                    submitCallback={this.props.onUnCancel}
+                                />}
                             </div>
                         </div>
                         {this.state.edit
@@ -350,6 +348,14 @@ export default class EventItemView extends Component {
                                     </div>
                                 }
                                 <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    {(eventStatus === eventStatusEnum.Canceled) &&
+                                        <div className="text-center text-uppercase cancel-text">
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <span> This event is canceled </span>
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <br />
+                                        </div>
+                                    }
                                     {description}
                                 </div>
                                 <div className="shadow p-3 mb-5 mt-2 bg-white rounded">

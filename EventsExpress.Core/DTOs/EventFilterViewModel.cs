@@ -30,6 +30,6 @@ namespace EventsExpress.Core.DTOs
 
         public SortBy SortBy { get; set; }
 
-        public EventStatus Status { get; set; } = EventStatus.Active;
+        public List<EventStatus> Statuses { get; set; }
     }
 }

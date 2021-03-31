@@ -4,18 +4,10 @@ const baseService = new EventsExpressService();
 
 export default class ChatService {
 
-    getChat = async (chatId) => {
-        const res = await baseService.getResource(`chat/${chatId}`);
-        return res;
-    }
+    getChat = chatId => baseService.getResourceNew(`chat/${chatId}`);
 
-    getChats = async () => {
-        const res = await baseService.getResource('chat/All');
-        return res;
-    }
+    getChats = () => baseService.getResourceNew('chat/All');
 
-    getUnreadMessages = async (userId) => {
-        const res = await baseService.getResource(`chat/GetUnreadMessages/?userId=${userId}`);
-        return res;
-    }
+    getUnreadMessages = userId =>
+        baseService.getResource(`chat/GetUnreadMessages/?userId=${userId}`);
 }

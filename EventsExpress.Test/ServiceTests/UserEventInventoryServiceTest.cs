@@ -50,8 +50,6 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
-                PhotoId = Guid.NewGuid(),
-                Photo = new Photo(),
             };
 
             user = new User

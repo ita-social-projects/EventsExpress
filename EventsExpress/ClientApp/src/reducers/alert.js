@@ -1,4 +1,4 @@
-import{ _alert} from '../actions/alert';
+import{ _alert} from '../actions/alert-action';
 import  initialState  from '../store/initialState';
 
 export const reducer=(state = initialState.alert, action)=>{

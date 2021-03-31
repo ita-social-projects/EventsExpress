@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TwitterLogin from 'react-twitter-login';
 import { connect } from 'react-redux';
 import config from '../config';
-import { loginTwitter } from '../actions/login';
+import { loginTwitter } from '../actions/login/login-action';
 import './css/Auth.css';
 import oauth from 'oauth-sign';
 import uuid from 'uuid';

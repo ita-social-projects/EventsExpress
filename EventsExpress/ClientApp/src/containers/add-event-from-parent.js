@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import add_copy_event from '../actions/add-copy-event';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { reset } from 'redux-form';
 import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
-import {
-    setCopyEventError,
+import add_copy_event, {
     setCopyEventPending,
     setCopyEventSuccess
 }
-    from '../actions/add-copy-event';
+    from '../actions/event/event-copy-without-edit-action';
 
 class AddFromParentEventWrapper extends Component {
     constructor() {
@@ -75,7 +73,6 @@ const mapDispatchToProps = (dispatch) => {
         reset: () => {
             dispatch(setCopyEventPending(true));
             dispatch(setCopyEventSuccess(false));
-            dispatch(setCopyEventError(null));
         }
     }
 };

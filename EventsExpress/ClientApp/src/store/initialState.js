@@ -29,7 +29,6 @@ const initialState = {
     },
     login: {
         isLoginSuccess: false,
-        loginError: null
     },
     register: {
         isRegisterPending: false,
@@ -38,7 +37,6 @@ const initialState = {
     },
     unitsOfMeasuring: {
         isPending: true,
-        isError: false,
         units: [],
         editedUnitOfMeasuring: null,
         isAdded: false,
@@ -47,36 +45,29 @@ const initialState = {
     add_unitOfMeasuring: {
         isUnitOfMeasuringPending: false,
         isUnitOfMeasuringSuccess: false,
-        unitOfMeasuringError: null
     },
     change_avatar: {
         isPending: false,
         isSuccess: false,
-        Error: {}
     },
     editUsername: {
         isEditUsernamePending: false,
         isEditUsernameSuccess: false,
-        EditUsernameError: {}
     },
     SelectCategories: {
         IsSelectCategoriesSeccess: false,
-        IsSelectCategoriesError: null
     },
     add_category: {
         isCategoryPending: false,
         isCategorySuccess: false,
-        categoryError: null
     },
     categories: {
         isPending: false,
-        isError: false,
         editedCategory: null,
         data: []
     },
     users: {
         isPending: true,
-        isError: false,
         editedUser: null,
         userSearchFilter: null,
         data: {
@@ -87,11 +78,9 @@ const initialState = {
     add_comment: {
         isCommentPending: false,
         isCommentSuccess: false,
-        commentError: null
     },
     comments: {
         isPending: false,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -100,11 +89,9 @@ const initialState = {
     delete_comment: {
         isCommentDeletePending: false,
         isCommentDeleteSuccess: false,
-        commentDeleteError: null
     },
     event: {
         isPending: true,
-        isError: false,
         cancelationModalStatus: false,
         cancelation: {},
         data: {
@@ -115,7 +102,6 @@ const initialState = {
     },
     eventSchedule: {
         isPending: true,
-        isError: false,
         cancelationModalStatus: false,
         cancelation: {},
         data: {
@@ -126,36 +112,25 @@ const initialState = {
     add_event: {
         isEventPending: false,
         isEventSuccess: false,
-        eventError: null
     },
     add_copy_event: {
         isCopyEventPending: false,
         isCopyEventSuccess: false,
-        copyEventError: null
     },
     edit_event_from_parent: {
         isEventFromParentPending: false,
         isEventFromParentSuccess: false,
-        eventFromParentError: null
-    },
-    add_eventSchedule: {
-        isEventSchedulePending: false,
-        isEventScheduleSuccess: false,
-        eventScheduleError: null
     },
     cancel_next_eventSchedule: {
         isCancelNextEventSchedulePending: false,
         isCancelNextEventScheduleSuccess: false,
-        cancelNextEventScheduleError: null
     },
     cancel_eventSchedules: {
         isCancelEventSchedulesPending: false,
         isCancelEventSchedulesSuccess: false,
-        cancelEventSchedulesError: null
     },
     events: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -164,30 +139,24 @@ const initialState = {
     },
     inventories: {
         isPending: true,
-        listInventoriesErrorMessage: false,
-        setItemErrorMessage: null,
         items: []
     },
     usersInventories: {
         isPending: true,
-        isError: false,
         data: []
     },
     eventSchedules: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
         },
     },
     profile: {
         isPending: true,
-        isError: false,
         data: null
     },
     events_for_profile: {
         isPending: true,
-        isError: false,
         data: {
             items: [],
             pageViewModel: {},
@@ -195,25 +164,21 @@ const initialState = {
     },
     changePassword: {
         isPending: false,
-        isError: false,
         data: []
     },
     recoverPassword: {
         isPending: false,
-        isError: false,
         isSucces: null,
     },
     authenticate: {
         isPending: false,
         isSucces: false,
-        isError: null,
         data: []
     },
     hubConnection: null,
     chat: {
         isPending: false,
         isSuccess: false,
-        isError: null,
         data: {
             messages: [],
             users: [],
@@ -223,7 +188,6 @@ const initialState = {
     chats: {
         isPending: false,
         isSuccess: false,
-        isError: null,
         data: []
     },
     alert: {
@@ -232,15 +196,9 @@ const initialState = {
         autoHideDuration: null,
         open: false
     },
-    dialog: {
-        title: null,
-        message: null,
-        open: false
-    },
     contactUs: {
         isPending: false,
         isSuccess: false,
-        isError: null
     },
     notification:
     {
@@ -250,7 +208,6 @@ const initialState = {
     },
     notificationTypes: {
         isPending: false,
-        isError: false,
         data: []
     }
 };
