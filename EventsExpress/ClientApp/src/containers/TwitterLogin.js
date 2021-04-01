@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { loginTwitter } from '../actions/login-action';
+import { loginTwitter } from '../actions/login/login-action';
 import TwitterLoginBase from './linked-auths/twitter-login-base';
 
 class LoginTwitter extends TwitterLoginBase {

@@ -3,8 +3,8 @@
     public enum EventStatus
     {
         Active,
-        All,
         Blocked,
-        Cancelled,
+        Canceled,
+        Draft,
     }
 }

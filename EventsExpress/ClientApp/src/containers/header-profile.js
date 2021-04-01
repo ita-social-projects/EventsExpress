@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
-import logout from '../actions/logout-action';
+import logout from '../actions/login/logout-action';
 import { setRegisterPending, setRegisterSuccess } from '../actions/register/register-action';
-import { setLoginPending, setLoginSuccess } from '../actions/login-action';
+import { setLoginPending, setLoginSuccess } from '../actions/login/login-action';
+import add_event from '../actions/event/event-add-action';
 
 class HeaderProfileWrapper extends Component {
   logout_reset = () => {
@@ -11,13 +12,18 @@ class HeaderProfileWrapper extends Component {
     this.props.logout();
   }
 
-  render() {
+    onSubmit = (values) => {
+        return this.props.add_event({ user_id: this.props.user.id });
+    }
+
+    render() {
     return <HeaderProfile
-      user={this.props.user}
-      filter={this.props.events.filter}
-      onClick={this.logout_reset}
-      reset={this.props.reset}
-      notification={this.props.notification.events.length}
+        user={this.props.user}
+        filter={this.props.events.filter}
+        onClick={this.logout_reset}
+        reset={this.props.reset}
+        notification={this.props.notification.events.length}
+        onSubmit={this.onSubmit}
     />;
   }
 }
@@ -33,7 +39,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
+    return {
+        add_event: (data) => dispatch(add_event(data)),
     logout: () => { dispatch(logout()) },
     reset: () => {
       dispatch(setRegisterPending(true));

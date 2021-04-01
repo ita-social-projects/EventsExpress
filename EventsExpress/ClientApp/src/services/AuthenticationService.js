@@ -18,21 +18,12 @@ export default class AuthenticationService {
 
     revokeToken = () => baseService.setResource('token/revoke-token');
 
-    setRecoverPassword = async (data) => {
-        const res = await baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
-    }
+    setRecoverPassword = data => baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
 
     setRegister = data => baseService.setResource('Authentication/RegisterBegin', data);
 
     setRegisterComplete = data => baseService.setResource('Authentication/RegisterComplete', data)
 
-    setChangePassword = async (data) => {
-        const res = await baseService.setResource('Authentication/ChangePassword', data);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setChangePassword = data =>  baseService.setResource('Authentication/ChangePassword', data);
+
 }

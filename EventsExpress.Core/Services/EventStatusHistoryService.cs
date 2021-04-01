@@ -25,12 +25,12 @@ namespace EventsExpress.Core.Services
             AppDbContext context)
              : base(context)
         {
+            _mediator = mediator;
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
-            _mediator = mediator;
         }
 
-        public async Task CancelEvent(Guid eventId, string reason)
+        public async Task SetStatusEvent(Guid eventId, string reason, EventStatus eventStatus)
         {
             var uEvent = Context.Events.Find(eventId);
             if (uEvent == null)
@@ -38,11 +38,12 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Invalid event id");
             }
 
-            var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
+            var record = CreateEventStatusRecord(uEvent, reason, eventStatus);
             Insert(record);
 
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new CancelEventMessage(eventId));
+
+            await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
         }
 
         private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)

@@ -4,10 +4,12 @@ const baseService = new EventsExpressService();
 
 export default class EventService {
 
-    getEvent = id => baseService.getResource(`event/${id}`);
+    getEvent = id => baseService.getResourceNew(`event/${id}`);
 
     getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
 
+    getAllDrafts = (page) => baseService.getResourceNew(`event/AllDraft/${page}`);
+          
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
     setEventTemplate = (data, path) => {
@@ -16,8 +18,8 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.image != null) {
-            file.append('Photo', data.image.file);
+        if (data.photo != null) {
+            file.append('Photo', data.photo.file);
         }
 
         if (data.isReccurent) {
@@ -30,17 +32,17 @@ export default class EventService {
             file.append('PhotoId', data.photoId);
         }
 
-        file.append('Location.Type', data.location.type)
-        if (data.location.selectedPos) {
-            file.append('Location.Latitude', data.location.selectedPos.lat);
-            file.append('Location.Longitude', data.location.selectedPos.lng);
+        if (data.location) {
+            file.append('Location.Type', data.location.type)
+            if (data.location.selectedPos) {
+                file.append('Location.Latitude', data.location.selectedPos.lat);
+                file.append('Location.Longitude', data.location.selectedPos.lng);
+            }
+            if (data.location.onlineMeeting) {
+                file.append('Location.OnlineMeeting', data.location.onlineMeeting);
+            }
         }
-        if (data.location.onlineMeeting) {
-            file.append('Location.OnlineMeeting', data.location.onlineMeeting);
-        }
-
-
-
+       
 
         file.append('Title', data.title);
         file.append('Description', data.description);
@@ -59,9 +61,12 @@ export default class EventService {
         }
 
         let i = 0;
-        data.categories.map(x => {
-            return file.append(`Categories[${i++}].Id`, x.id);
-        });
+        if (data.categories != null) {
+            data.categories.map(x => {
+                return file.append(`Categories[${i++}].Id`, x.id);
+            });
+        }
+           
         return baseService.setResourceWithData(path, file);
     }
 
@@ -70,84 +75,40 @@ export default class EventService {
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = async (data) =>
+    setEventFromParent = data =>
         this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
-
-    editEvent = data => this.setEventTemplate(data, `event/${data.id}/edit`);
-
-    setEventCancel = async (data) => {
-        const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/Cancel`, data);
-        return !res.ok
-            ? { error: await res.text() }
-            : await res.json();
+    
+    editEvent = async (data) => {
+        return this.setEventTemplate(data,`event/${data.id}/edit`)
+    }
+    publishEvent = (id) => {
+       return baseService.setResource(`event/${id}/publish`)
     }
 
-    setUserToEvent = async (data) => {
-        const res = await baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setEventStatus = data =>  baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
 
-    setUserFromEvent = async (data) => {
-        const res = await baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserToEvent = data => baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
 
-    setApprovedUser = async (data) => {
-        const res = data.buttonAction
-            ? await baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
-            : await baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setUserFromEvent = data => baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
 
-    onDeleteFromOwners = async (data) => {
-        const res = await baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    setApprovedUser = data => data.buttonAction
+            ?  baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
+            :  baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
 
-    onPromoteToOwner = async (data) => {
-        const res = await baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
+    onDeleteFromOwners = data => baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
 
-    setRate = async (data) => {
-        const res = await baseService.setResource('event/setrate', {
+    onPromoteToOwner = data => baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
+
+    setRate = data =>  baseService.setResource('event/setrate', {
             rate: Number(data.rate),
             userId: data.userId,
             eventId: data.eventId
         });
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
 
-    getCurrentRate = eventId => baseService.getResource(`event/${eventId}/GetCurrentRate`);
+    getCurrentRate = eventId => baseService.getResourceNew(`event/${eventId}/GetCurrentRate`);
 
-    getAverageRate = eventId => baseService.getResource(`event/${eventId}/GetAverageRate`);
-
-    setEventBlock = async (id) => {
-        const res = await baseService.setResource(`Event/${id}/Block`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
-    setEventUnblock = async (id) => {
-        const res = await baseService.setResource(`event/${id}/Unblock`);
-        return !res.ok
-            ? { error: await res.text() }
-            : res;
-    }
-
+    getAverageRate = eventId => baseService.getResourceNew(`event/${eventId}/GetAverageRate`);
+    
     getFutureEvents = async (id, page) =>
         baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);
 

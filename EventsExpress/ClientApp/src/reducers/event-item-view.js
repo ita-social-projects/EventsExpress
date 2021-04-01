@@ -1,10 +1,9 @@
 
 import initialState from '../store/initialState';
 import {
-    GET_EVENT_ERROR, GET_EVENT_PENDING, GET_EVENT_SUCCESS, RESET_EVENT
-} from '../actions/event-item-view';
-import { getRate, getAverageRate } from '../actions/rating'
-import { cancelEvent } from '../actions/event-item-view';
+    GET_EVENT_PENDING, GET_EVENT_SUCCESS, RESET_EVENT, event
+} from '../actions/event/event-item-view-action';
+import { getRate, getAverageRate } from '../actions/rating-action'
 
 
 export const reducer = (
@@ -12,12 +11,6 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case GET_EVENT_PENDING:
             return {
                 ...state,
@@ -29,6 +22,11 @@ export const reducer = (
                 isPending: false,
                 data: action.payload
             }
+        case event.CHANGE_STATUS:
+            let stateChangeEvent = { ...state };
+            stateChangeEvent.data.eventStatus = action.payload.eventStatus;
+            return stateChangeEvent;
+
         case RESET_EVENT:
             return {
                 ...initialState.event
@@ -44,28 +42,6 @@ export const reducer = (
                 ...state,
                 averageRate: action.payload
             }
-
-        case cancelEvent.SET_EVENT_CANCELATION_MODAL_STATUS:
-            return {
-                ...state,
-                cancelationModalStatus: action.payload
-            }
-        case cancelEvent.ERROR:
-            return {
-                ...state,
-                cancelation: {errorMessage: action.payload, success: false, pending: false}
-            }
-        case cancelEvent.SUCCESS:
-            return {
-                ...state,
-                cancelation: { errorMessage: null, success: true, pending: false }
-            }
-        case cancelEvent.PENDING:
-            return {
-                ...state,
-                cancelation: { errorMessage: null, success: false, pending: true }
-            }
-
         default:
             return state;
     }

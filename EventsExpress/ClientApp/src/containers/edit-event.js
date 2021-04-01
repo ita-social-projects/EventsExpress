@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event } from '../actions/event-add-action';
-import { validateEventForm } from '../components/helpers/helpers'
-import { resetEvent } from '../actions/event-item-view';
-import get_categories from '../actions/category/category-list';
+import { setEventPending, setEventSuccess, edit_event} from '../actions/event/event-add-action';
+import { validate, validateEventForm  } from '../components/helpers/helpers'
+import { resetEvent } from '../actions/event/event-item-view-action';
+import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
+import Button from "@material-ui/core/Button";
 
 class EditEventWrapper extends Component {
 
@@ -31,28 +32,50 @@ class EditEventWrapper extends Component {
     render() {
         let initialValues = {
             ...this.props.event,
-            location: {
+            location: this.props.event.location !== null ? {
                 selectedPos: L.latLng(
+
                     this.props.event.location.latitude,
-                    this.props.event.location.longitude),
+                    this.props.event.location.longitude
+                ),
                 onlineMeeting: this.props.event.location.onlineMeeting,
                 type: String(this.props.event.location.type)
-            },
+            } : null,
         }
 
         return <>
             <EventForm
+                validate={validate}
                 all_categories={this.props.all_categories}
                 onCancel={this.props.onCancelEditing}
+                onPublish={this.onPublish}
                 onSubmit={this.onSubmit}
                 initialValues={initialValues}
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
-                haveMapCheckBox={true}
-                haveOnlineLocationCheckBox={true}
                 disabledDate={false}
-                isCreated={true} />
+                isCreated={true}>
+                <div className="col">
+                    <Button
+                        className="border"
+                        fullWidth={true}
+                        color="primary"
+                        type="submit"
+                    >
+                        Save
+                        </Button>
+                </div>
+                <div className="col">
+                    <Button
+                        className="border"
+                        fullWidth={true}
+                        color="primary"
+                        onClick={this.handleClick}>
+                        Cancel
+                        </Button>
+                </div>
+            </EventForm>
         </>
     }
 }
@@ -79,3 +102,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);
+

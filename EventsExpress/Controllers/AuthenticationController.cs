@@ -21,25 +21,25 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        private readonly IPhotoService _photoService;
         private readonly IAccountService _accountService;
 
         public AuthenticationController(
             IUserService userSrv,
+            IPhotoService photoService,
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
-            IPhotoService photoService,
             IAccountService accountService)
         {
             _userService = userSrv;
+            _photoService = photoService;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
-            _photoService = photoService;
             _accountService = accountService;
         }
 
@@ -123,11 +123,9 @@ namespace EventsExpress.Controllers
 
         private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
         {
-            if (userExisting != null && userExisting.Photo == null)
+            if (userExisting != null)
             {
-                userExisting.Photo = await _photoService.AddPhotoByURL(urlPhoto);
-                userExisting.PhotoId = userExisting.Photo.Id;
-                await _userService.Update(userExisting);
+                await _photoService.AddPhotoByURL(urlPhoto, userExisting.Id);
 
                 return true;
             }

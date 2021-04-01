@@ -3,7 +3,7 @@ import CategoryAddWrapper from '../../containers/categories/category-add';
 import CategoryListWrapper from '../../containers/categories/category-list';
 import Spinner from '../spinner';
 
-import get_categories from '../../actions/category/category-list';
+import get_categories from '../../actions/category/category-list-action';
 
 import { connect } from 'react-redux';
 class Categories extends Component{
@@ -14,7 +14,7 @@ class Categories extends Component{
     render() {
         const { isPending, data} = this.props.categories;
         return <div>
-                <table className="table w-75 m-auto">
+                <table className="table w-100 m-auto">
                     <tbody>
                         <CategoryAddWrapper 
                             item={{name: "", id: "00000000-0000-0000-0000-000000000000"}} 

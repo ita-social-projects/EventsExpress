@@ -22,7 +22,6 @@ namespace EventsExpress.Core.Services
             var res = Context.ChatRoom
                 .Include(c => c.Users)
                     .ThenInclude(u => u.User)
-                        .ThenInclude(u => u.Photo)
                 .Include(c => c.Messages)
                 .Where(x => x.Users.Any(u => u.UserId == userId));
             return res.AsEnumerable();
@@ -53,7 +52,6 @@ namespace EventsExpress.Core.Services
             var res = Context.ChatRoom
                 .Include(c => c.Users)
                     .ThenInclude(u => u.User)
-                        .ThenInclude(u => u.Photo)
                 .Include(c => c.Messages)
                 .FirstOrDefault(x => x.Id == chat.Id);
 

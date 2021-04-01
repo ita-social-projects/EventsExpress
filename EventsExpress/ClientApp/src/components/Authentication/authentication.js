@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { loginAfterEmailConfirmation } from '../../actions/login-action';
+import { loginAfterEmailConfirmation } from '../../actions/login/login-action';
 
 class Authentication extends Component {
     componentWillMount = () => {

@@ -10,6 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { makeStyles } from "@material-ui/core/styles";
 import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
+import ErrorMessages from '../../shared/errorMessage';
 
 const renderTextField = ({
     input,
@@ -101,6 +102,10 @@ const ChangePassword = (props) => {
                                 />
 
                             </div>
+                            {
+                                props.error &&
+                                <ErrorMessages error={props.error} className="text-center" />
+                            }
 
                             <div className='mt-5'>
                                 <Button type="submit" color="primary" disabled={pristine || submitting}>

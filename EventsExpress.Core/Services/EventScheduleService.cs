@@ -32,7 +32,6 @@ namespace EventsExpress.Core.Services
                     .Include(es => es.Event)
                         .ThenInclude(e => e.Owners)
                     .Include(es => es.Event)
-                        .ThenInclude(e => e.Photo)
                     .Where(opt => opt.IsActive &&
                         opt.Event.Owners.Any(o => o.UserId == CurrentUser().Id))
                     .ToList());
@@ -42,7 +41,6 @@ namespace EventsExpress.Core.Services
         {
             var res = Context.EventSchedules
                 .Include(es => es.Event)
-                    .ThenInclude(e => e.Photo)
                 .Include(es => es.Event)
                     .ThenInclude(e => e.Owners)
                         .ThenInclude(d => d.User)

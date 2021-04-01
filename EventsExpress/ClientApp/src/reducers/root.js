@@ -30,7 +30,6 @@ import * as EventsForProfile from './events-for-profile';
 import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
 import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring';
 import * as Inventory from './inventory-list';
-import * as Inventar from './inventar';
 import * as UsersInventories from './usersInventories';
 import * as Chats from './chats';
 import * as Chat from './chat';

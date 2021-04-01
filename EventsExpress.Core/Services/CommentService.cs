@@ -26,9 +26,7 @@ namespace EventsExpress.Core.Services
             var comments = Context.Comments
                 .Include(c => c.Children)
                     .ThenInclude(c => c.User)
-                        .ThenInclude(u => u.Photo)
                 .Include(c => c.User)
-                    .ThenInclude(u => u.Photo)
                 .Where(x => x.EventId == id && x.CommentsId == null)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

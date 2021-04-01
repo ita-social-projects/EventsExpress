@@ -1,12 +1,14 @@
 ﻿import React from "react";
 import { Field, reduxForm } from "redux-form";
+import MenuItem from "material-ui/MenuItem";
 import Button from "@material-ui/core/Button";
 import { renderSelectField } from '../../helpers/form-helpers'
+import ErrorMessages from '../../shared/errorMessage';
 
-const EditGender = props => {
+let EditGender = props => {
     const { handleSubmit, pristine, submitting } = props;
     return (
-        <form onSubmit={handleSubmit}>
+        <form name= "EditGender" onSubmit={handleSubmit}>
             <div>
                 <Field
                     name="gender"
@@ -18,8 +20,12 @@ const EditGender = props => {
                     <option value="1">Male</option>
                     <option value="2">Female</option>
                 </Field>
+                {
+                    props.error &&
+                    <ErrorMessages error={props.error} className="text-center" />
+                }
             </div>
-
+            
             <div>
                 <Button type="submit" color="primary" disabled={pristine || submitting}>
                     Submit

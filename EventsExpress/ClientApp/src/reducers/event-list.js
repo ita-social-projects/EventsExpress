@@ -1,11 +1,11 @@
-import { blockEvent, unBlockEvent } from '../actions/event-item-view';
+import { event } from '../actions/event/event-item-view-action';
 import initialState from '../store/initialState';
 import {
     SET_EVENTS_PENDING,
     GET_EVENTS_SUCCESS,
     RESET_EVENTS,
     UPDATE_EVENTS_FILTERS
-} from '../actions/event-list-action';
+} from '../actions/event/event-list-action';
 
 export const reducer = (state = initialState.events, action) => {
     switch (action.type) {
@@ -20,28 +20,17 @@ export const reducer = (state = initialState.events, action) => {
                 isPending: false,
                 data: action.payload
             };
-        case blockEvent.UPDATE:
-            let stateBlockEvent = { ...state };
-            stateBlockEvent.data.items = state.data.items.map((item) => {
-                if (item.id === action.payload) {
+        case event.CHANGE_STATUS:
+            let stateChangeEvent = { ...state };
+            stateChangeEvent.data.items = state.data.items.map((item) => {
+                if (item.id === action.payload.eventId) {
                     let updatedItem = item;
-                    updatedItem.isBlocked = true;
+                    updatedItem.eventStatus = action.payload.eventStatus;
                     return updatedItem;
                 }
                 return item;
             });
-            return stateBlockEvent;
-        case unBlockEvent.UPDATE:
-            let stateUnBlockEvent = { ...state };
-            stateUnBlockEvent.data.items = state.data.items.map((item) => {
-                if (item.id === action.payload) {
-                    let updatedItem = item;
-                    updatedItem.isBlocked = false;
-                    return updatedItem;
-                }
-                return item;
-            });
-            return stateUnBlockEvent;
+            return stateChangeEvent;
         case RESET_EVENTS:
             return initialState.events;
         case UPDATE_EVENTS_FILTERS:

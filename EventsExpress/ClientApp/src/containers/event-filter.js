@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
-import { updateEventsFilters } from '../actions/event-list-action';
-import get_categories from '../actions/category/category-list';
+import { updateEventsFilters } from '../actions/event/event-list-action';
+import get_categories from '../actions/category/category-list-action';
 import eventHelper from '../components/helpers/eventHelper';
 
 class EventFilterWrapper extends Component {
@@ -38,6 +38,9 @@ class EventFilterWrapper extends Component {
                     break;
                 case 'categories':
                     this.props.events.filter[key] = value.map(item => item.id);
+                    break;
+                case 'statuses':
+                    this.props.events.filter[key] = value;
                     break;
                 default:
                     this.props.events.filter[key] = value;

@@ -1,54 +1,44 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { block_user, unblock_user } from '../actions/user'
-import UserInfo from '../components/user-info'
-import { UserBlock } from '../components/user-info/user-block'
-import UserRoleWrapper from '../containers/user-role'
+import { block_user, unblock_user } from '../actions/user/user-action';
+import UserInfo from '../components/user-info';
+import { UserBlock } from '../components/user-info/user-block';
+import UserRoleWrapper from '../containers/user-role';
 
 
 class UserInfoWpapper extends Component {
     constructor(props) {
         super(props);
 
-        this.isCurrentUser = props.user.id === props.currentUser 
+        this.isCurrentUser = props.user.id === props.currentUser
     }
-
     block = () => this.props.block(this.props.user.id);
-        
-    
-
-    unblock = () =>  this.props.unblock(this.props.user.id)
-
+    unblock = () => this.props.unblock(this.props.user.id)
 
     render() {
         const { user, editedUser } = this.props;
-        
+
         return (
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo key={user.id} user={user} />
 
                 <UserRoleWrapper 
-                    key={user.id /* + user.role.id*/} 
+                    key={user.id /* + user.role.id*/} //toDo: add role change rerender
                     user={user} 
                     isCurrentUser={this.isCurrentUser} 
                     isEdit={user.id === editedUser}
                 />
-                
-                <UserBlock 
+
+                <UserBlock
                     user={user}
                     isCurrentUser={this.isCurrentUser}
                     block={this.block}
                     unblock={this.unblock}
-                    
                 />
-
-
             </tr>
         )
     }
 }
-
-
 
 const mapStateToProps = (state) => ({
     currentUser: state.user.id,
@@ -58,10 +48,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-       block: (id) => dispatch(block_user(id)),
-       unblock: (id) => dispatch(unblock_user(id)),
-       
-       
+        block: (id) => dispatch(block_user(id)),
+        unblock: (id) => dispatch(unblock_user(id)),
     };
 }
 
