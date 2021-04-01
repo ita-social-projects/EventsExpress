@@ -116,3 +116,7 @@
 .user-profile-avatar:hover{
     opacity: 0.5;
 }
+
+.mb-5, .my-5 {
+    margin-top: 3rem!important;
+}

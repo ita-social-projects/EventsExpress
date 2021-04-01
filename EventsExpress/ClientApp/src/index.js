@@ -12,7 +12,6 @@ import { getUnreadMessages } from './actions/chat/chats-action';
 import { updateEventsFilters } from './actions/event/event-list-action';
 import eventHelper from '../src/components/helpers/eventHelper';
 
-
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const history = createBrowserHistory({ basename: baseUrl });
