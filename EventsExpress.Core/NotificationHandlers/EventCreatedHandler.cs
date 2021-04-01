@@ -18,12 +18,12 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _messageService;
 
         public EventCreatedHandler(
             IEmailService sender,
             IUserService userSrv,
-            IEmailMessageService messageService)
+            INotificationTemplateService messageService)
         {
             _sender = sender;
             _userService = userSrv;
@@ -37,7 +37,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
 
-                var message = await _messageService.GetByNotificationTypeAsync("EventCreated");
+                var notificationTemplate = await _messageService.GetByNotificationTypeAsync("EventCreated");
 
                 foreach (var userEmail in usersEmails)
                 {
@@ -51,9 +51,9 @@ namespace EventsExpress.Core.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(message.Subject, pattern),
+                        Subject = _messageService.PerformReplacement(notificationTemplate.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(message.MessageText, pattern),
+                        MessageText = _messageService.PerformReplacement(notificationTemplate.MessageText, pattern),
                     });
                 }
             }

@@ -16,14 +16,14 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _messageService;
 
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public UnblockedUserHandler(
             IEmailService sender,
             IUserService userService,
-            IEmailMessageService messageService)
+            INotificationTemplateService messageService)
         {
             _sender = sender;
             _userService = userService;

@@ -1,8 +1,8 @@
 ﻿namespace EventsExpress.Db.Entities
 {
-    public class EmailMessage : BaseEntity
+    public class NotificationTemplate : BaseEntity
     {
-        public string NotificationType { get; set; }
+        public string Title { get; set; }
 
         public string Subject { get; set; }
 

@@ -20,14 +20,14 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly ITrackService _trackService;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _messageService;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
             IUserService userService,
             ITrackService trackService,
-            IEmailMessageService messageService)
+            INotificationTemplateService messageService)
         {
             _logger = logger;
             _sender = sender;

@@ -74,21 +74,21 @@ namespace EventsExpress.Db.DbInitialize
 
             dbContext.Categories.AddRange(categories);
 
-            var emailMessages = new EmailMessage[]
+            var emailMessages = new NotificationTemplate[]
             {
-                new EmailMessage { NotificationType = "BlockedUser", Subject = "Your account was blocked", MessageText = "Dear (UserName), your account was blocked for some reason!" },
-                new EmailMessage { NotificationType = "CreateEventVerification", Subject = "Approve your recurrent event!", MessageText = "Follow the <a href='(link)'>link</a> to create the recurrent event." },
-                new EmailMessage { NotificationType = "EventCreated", Subject = "New event for you!", MessageText = "The <a href='(link)'>event</a> was created which could interested you." },
-                new EmailMessage { NotificationType = "EventStatusCanceled", Subject = "The event you have been joined was canceled",  MessageText = "Dear (UserName), the event you have been joined was CANCELED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
-                new EmailMessage { NotificationType = "EventStatusBlocked", Subject = "The event you have been joined was blocked",  MessageText = "Dear (UserName), the event you have been joined was BLOCKED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
-                new EmailMessage { NotificationType = "EventStatusActivated", Subject = "The event you have been joined was activated",  MessageText = "Dear (UserName), the event you have been joined was ACTIVATED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
-                new EmailMessage { NotificationType = "ParticipationApproved", Subject = "Approving participation", MessageText = "Dear (UserName), you have been approved to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</>\"" },
-                new EmailMessage { NotificationType = "ParticipationDenied", Subject = "Denying participation", MessageText = "Dear (UserName), you have been denied to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</>\"" },
-                new EmailMessage { NotificationType = "RegisterVerification", Subject = "EventExpress registration", MessageText = "For confirm your email please follow the <a href='(link)'>link</a>" },
-                new EmailMessage { NotificationType = "UnblockedUser", Subject = "Your account was Unblocked", MessageText = "Dear (UserName), congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress" },
+                new NotificationTemplate { Title = "BlockedUser", Subject = "Your account was blocked", MessageText = "Dear (UserName), your account was blocked for some reason!" },
+                new NotificationTemplate { Title = "CreateEventVerification", Subject = "Approve your recurrent event!", MessageText = "Follow the <a href='(link)'>link</a> to create the recurrent event." },
+                new NotificationTemplate { Title = "EventCreated", Subject = "New event for you!", MessageText = "The <a href='(link)'>event</a> was created which could interested you." },
+                new NotificationTemplate { Title = "EventStatusCanceled", Subject = "The event you have been joined was canceled",  MessageText = "Dear (UserName), the event you have been joined was CANCELED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
+                new NotificationTemplate { Title = "EventStatusBlocked", Subject = "The event you have been joined was blocked",  MessageText = "Dear (UserName), the event you have been joined was BLOCKED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
+                new NotificationTemplate { Title = "EventStatusActivated", Subject = "The event you have been joined was activated",  MessageText = "Dear (UserName), the event you have been joined was ACTIVATED. The reason is: (reason) \"<a href='(link)'>(title)</>\"" },
+                new NotificationTemplate { Title = "ParticipationApproved", Subject = "Approving participation", MessageText = "Dear (UserName), you have been approved to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</>\"" },
+                new NotificationTemplate { Title = "ParticipationDenied", Subject = "Denying participation", MessageText = "Dear (UserName), you have been denied to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</>\"" },
+                new NotificationTemplate { Title = "RegisterVerification", Subject = "EventExpress registration", MessageText = "For confirm your email please follow the <a href='(link)'>link</a>" },
+                new NotificationTemplate { Title = "UnblockedUser", Subject = "Your account was Unblocked", MessageText = "Dear (UserName), congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress" },
             };
 
-            dbContext.EmailMessages.AddRange(emailMessages);
+            dbContext.NotificationTemplates.AddRange(emailMessages);
 
             dbContext.SaveChanges();
         }

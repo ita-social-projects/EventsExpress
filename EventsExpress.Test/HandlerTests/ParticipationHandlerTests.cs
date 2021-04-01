@@ -17,6 +17,7 @@ namespace EventsExpress.Test.HandlerTests
     {
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<INotificationTemplateService> _notificationTemplateService;
         private ParticipationHandler _participationHandler;
         private Guid _idUser = Guid.NewGuid();
         private string _emailUser = "user@gmail.com";
@@ -33,7 +34,8 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _participationHandler = new ParticipationHandler(_emailService.Object, _userService.Object);
+            _notificationTemplateService = new Mock<INotificationTemplateService>();
+            _participationHandler = new ParticipationHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
             _user = new User
             {
                 Id = _idUser,

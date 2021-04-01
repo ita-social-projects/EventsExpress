@@ -19,13 +19,13 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _messageService;
 
         public EventStatusHandler(
             IEmailService sender,
             IUserService userSrv,
             IEventService eventService,
-            IEmailMessageService messageService)
+            INotificationTemplateService messageService)
         {
             _sender = sender;
             _userService = userSrv;
@@ -63,7 +63,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = _messageService.PerformReplacement(message.Subject, pattern),
                         RecepientEmail = email,
-                        MessageText = _messageService.PerformReplacement(message.NotificationType, pattern),
+                        MessageText = _messageService.PerformReplacement(message.Title, pattern),
                     });
                 }
             }

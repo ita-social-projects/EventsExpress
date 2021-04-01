@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EventsExpress.Db.Configurations
 {
-    public class EmailMessageConfiguration : IEntityTypeConfiguration<EmailMessage>
+    public class NotificationTemplateConfiguration : IEntityTypeConfiguration<NotificationTemplate>
     {
-        public void Configure(EntityTypeBuilder<EmailMessage> builder)
+        public void Configure(EntityTypeBuilder<NotificationTemplate> builder)
         {
-            builder.HasIndex(e => e.NotificationType)
+            builder.HasIndex(e => e.Title)
                 .IsUnique();
         }
     }

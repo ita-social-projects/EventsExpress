@@ -135,7 +135,7 @@ namespace EventsExpress
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
-            services.AddScoped<IEmailMessageService, EmailMessageService>();
+            services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

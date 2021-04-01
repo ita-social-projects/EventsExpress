@@ -4,11 +4,11 @@ using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Mapping
 {
-    public class EmailMapperProfile : Profile
+    public class NotificationTemplateMapperProfile : Profile
     {
-        public EmailMapperProfile()
+        public NotificationTemplateMapperProfile()
         {
-            CreateMap<EmailDto, EmailMessage>()
+            CreateMap<NotificationTemplateDto, NotificationTemplate>()
                 .ReverseMap();
         }
     }

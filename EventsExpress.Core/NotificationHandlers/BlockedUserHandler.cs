@@ -15,18 +15,18 @@ namespace EventsExpress.Core.NotificationHandlers
     public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
     {
         private readonly IEmailService _sender;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _notificationTemplateServiceService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public BlockedUserHandler(
             IEmailService sender,
             IUserService userService,
-            IEmailMessageService messageService)
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userService;
-            _messageService = messageService;
+            _notificationTemplateServiceService = notificationTemplateService;
         }
 
         public async Task Handle(BlockedUserMessage notification, CancellationToken cancellationToken)
@@ -42,13 +42,13 @@ namespace EventsExpress.Core.NotificationHandlers
                         { "(UserName)", userEmail },
                     };
 
-                    var emailMessage = await _messageService.GetByNotificationTypeAsync("BlockedUser");
+                    var emailMessage = await _notificationTemplateServiceService.GetByNotificationTypeAsync("BlockedUser");
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(emailMessage.Subject, pattern),
+                        Subject = _notificationTemplateServiceService.PerformReplacement(emailMessage.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(emailMessage.MessageText, pattern),
+                        MessageText = _notificationTemplateServiceService.PerformReplacement(emailMessage.MessageText, pattern),
                     });
                 }
             }

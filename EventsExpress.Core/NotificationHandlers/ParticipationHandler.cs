@@ -18,12 +18,12 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.VisitedEvent;
-        private readonly IEmailMessageService _messageService;
+        private readonly INotificationTemplateService _messageService;
 
         public ParticipationHandler(
             IEmailService sender,
             IUserService userSrv,
-            IEmailMessageService messageService)
+            INotificationTemplateService messageService)
         {
             _sender = sender;
             _userService = userSrv;

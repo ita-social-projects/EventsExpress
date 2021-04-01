@@ -68,7 +68,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<UserNotificationType> UserNotificationTypes { get; set; }
 
-        public DbSet<EmailMessage> EmailMessages { get; set; }
+        public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
