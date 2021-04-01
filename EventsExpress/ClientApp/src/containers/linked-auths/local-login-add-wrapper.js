@@ -22,7 +22,10 @@ class LocalLoginAdd extends Component {
         this.setState({isOpen:false})
     }
 
-    submit = values => this.props.localLoginAdd(values.email, values.password)
+    submit = async values => {
+        await this.props.localLoginAdd(values.email, values.password);
+        this.handleClose();
+    }
 
     render() {
         return (

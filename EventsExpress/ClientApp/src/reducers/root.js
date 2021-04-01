@@ -24,12 +24,11 @@ import * as EventScheduleView from './eventSchedule-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
-import * as RecoverPassword from './editReducers/recoverPasswordReducer'
-import * as Auth from './authenticationReducer';
+import * as RecoverPassword from './editReducers/recoverPasswordReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
-import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring'
+import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring';
 import * as Inventory from './inventory-list';
 import * as Inventar from './inventar';
 import * as UsersInventories from './usersInventories';
@@ -78,7 +77,6 @@ const rootReducers = {
     profile: Profile.reducer,
     events_for_profile: EventsForProfile.reducer,
     recoverPassword: RecoverPassword.reducer,
-    authenticate: Auth.reducer,
     chats: Chats.reducer,
     chat: Chat.reducer,
     hubConnection: Hub.reducer,

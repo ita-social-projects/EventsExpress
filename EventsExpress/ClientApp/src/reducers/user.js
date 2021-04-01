@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { SET_USER } from '../actions/authentication-action';
+import { SET_USER } from '../actions/login-action';
 import { SET_LOGOUT } from '../actions/logout-action';
 import { addUserCategory } from '../actions/EditProfile/addUserCategory';
 import { addUserNotificationType } from '../actions/EditProfile/addUserNotificationType';
@@ -7,15 +7,10 @@ import { editBirthday } from '../actions/EditProfile/editBirthday';
 import { editGender } from '../actions/EditProfile/EditGender';
 import { editUsername } from '../actions/EditProfile/editUsername';
 import { changeAvatar } from '../actions/EditProfile/change-avatar';
-import { authenticate } from '../actions/authentication-action';
 
 export const reducer = (state = initialState.user, action) => {
     switch (action.type) {
         case SET_USER:
-            return action.payload;
-
-        case authenticate.SET_AUTHENTICATE:
-            localStorage.setItem("token", action.payload.token);
             return action.payload;
 
         case SET_LOGOUT:
