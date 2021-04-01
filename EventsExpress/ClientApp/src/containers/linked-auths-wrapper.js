@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LinkedAuths from '../components/profile/editProfile/linked-auths';
 import getLinkedAuths from '../actions/EditProfile/linked-auths-action';
-import GoogleLoginAdd from './linked-auths/google-login-add-wrapper';
-import FacebookLoginAdd from './linked-auths/facebook-login-add-wrapper';
-import TwitterLoginAdd from './linked-auths/twitter-login-add-wrapper';
-
+import {
+    GoogleLoginAdd,
+    FacebookLoginAdd,
+    TwitterLoginAdd,
+    LocalLoginAdd,
+} from './linked-auths';
+import config from '../config';
 import './css/linked-auths.css';
 
 class LinkedAuthsWrapper extends Component {
@@ -16,20 +19,21 @@ class LinkedAuthsWrapper extends Component {
     render() {
         const { linkedAuths } = this.props.data;
         return <>
-            {linkedAuths.map(item => <LinkedAuths  item={item} />)
+            {linkedAuths.map(item => <LinkedAuths item={item} />)
             }
-             <h6><span>Add more:</span></h6>
+            <h6><span>Add more:</span></h6>
             <div className="d-flex justify-content-around mb-3">
-               <GoogleLoginAdd/> 
-               <FacebookLoginAdd/>
-               <TwitterLoginAdd/>
+                <GoogleLoginAdd />
+                <FacebookLoginAdd />
+                {config.TWITTER_LOGIN_ENABLED && <TwitterLoginAdd />}
+                <LocalLoginAdd />
             </div>
         </>
     }
 }
 
 const mapStateToProps = (state) => ({
-    data : state.account,
+    data: state.account,
 });
 
 const mapDispatchToProps = (dispatch) => ({

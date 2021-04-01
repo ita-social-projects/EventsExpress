@@ -30,6 +30,6 @@ const EditGender = props => {
 };
 
 export default reduxForm({
-    form: "EditGender" // a unique identifier for this form
+    form: "EditGender"
     
 })(EditGender);

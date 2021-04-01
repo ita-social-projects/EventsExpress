@@ -180,7 +180,7 @@ namespace EventsExpress.Core.Services
                 : users;
 
             users = !string.IsNullOrEmpty(model.Role)
-              ? users.Where(x => x.Account.AccountRoles.FirstOrDefault().Role.Name.Contains(model.Role))
+              ? users.Where(x => x.Account.AccountRoles.Any(ar => ar.Role.Name == model.Role))
               : users;
 
             users = model.Blocked

@@ -58,7 +58,6 @@ class Login extends Component {
 }
 
 Login = reduxForm({
-  // a unique name for the form
   form: "login-form",
   validate
 })(Login);

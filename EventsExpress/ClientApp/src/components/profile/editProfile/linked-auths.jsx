@@ -20,9 +20,9 @@ const LinkedAuths = props => {
 const renderType = type => {
     switch(type){
         case externalLoginTypeEnum.Google:
-            return <i class="fab fa-goodreads"></i>;
+            return <i class="fab fa-google"></i>;
         case externalLoginTypeEnum.Facebook:
-            return <i class="fab fa-facebook-square"></i>
+            return <i class="fab fa-facebook"></i>
         case externalLoginTypeEnum.Twitter:
             return <i class="fab fa-twitter"></i>
         default :

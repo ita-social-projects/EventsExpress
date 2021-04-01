@@ -1,15 +1,23 @@
 import { AccountService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
 import getLinkedAuths from './linked-auths-action';
+import { buildValidationState } from '../../components/helpers/action-helpers';
+import { SubmissionError } from 'redux-form';
 
 const api_serv = new AccountService();
 
 export function localLoginAdd(email, password) {
-    const call = () => api_serv.setLocalLoginAdd({
-        Email: email,
-        Password: password
-    });
-    return loginResponseHandler(call);
+    return async dispatch => {
+        let response = await api_serv.setLocalLoginAdd({
+            Email: email,
+            Password: password
+        });
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(getLinkedAuths());
+        return Promise.resolve();
+    }
 }
 
 export function googleLoginAdd(tokenId, email) {

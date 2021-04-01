@@ -24,8 +24,8 @@ class GoogleLoginAdd extends Component {
                 <GoogleLogin
                     clientId={config.GOOGLE_CLIENT_ID}
                     render={renderProps => (
-                        <button className="btnGoogle"onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            <i className="fab fa-google fa-lg"></i>
+                        <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                            <i className="fab fa-google blue fa-lg"></i>
                             <span>Log in</span>
                         </button>
                     )}
