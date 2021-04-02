@@ -43,6 +43,7 @@ class MapModal extends Component {
     handleClickOpen = () => {
         this.setState({ open: true });
     };
+
     handleClose = () => {
         const startValue = this.props.initialize({
             radius: 8,
@@ -54,6 +55,7 @@ class MapModal extends Component {
                 : startValue
         }
     };
+
     handleFilter = () => {
         this.setState({ open: false });
     }

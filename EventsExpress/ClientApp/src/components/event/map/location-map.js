@@ -32,8 +32,8 @@ class LocationMap extends Component {
                 value = { lat: this.props.selectedPos[0], lng: this.props.selectedPos[1] };
                 start = [this.props.selectedPos[0], this.props.selectedPos[1]];
             }
-
         }
+
         this.state = {
             startPosition: start,
             selectedPos: value,
@@ -62,6 +62,7 @@ class LocationMap extends Component {
         let defaultZoom = 8;
         return this.map.leafletElement != undefined ? this.map.leafletElement._zoom : defaultZoom;
     }
+
     getRadiusScale(radius) {
         let resZoom = this.getCurrentZoom();
         if (radius >= 100 && radius < 1000) {
@@ -75,16 +76,20 @@ class LocationMap extends Component {
         }
         return (1.0083 * Math.pow(radius / 1, 0.5716) * (resZoom / 2)) * 1000;
     }
+
     getStartPosition() {
         let start = [50.4547, 30.5238];
-        if (this.props.initialValues.selectedPos.lat != null && this.props.initialValues.selectedPos.lng != null) {
-            start = [this.props.initialValues.selectedPos.lat, this.props.initialValues.selectedPos.lng];
+        if (this.props.initialValues.selectedPos != undefined) {
+            if (this.props.initialValues.selectedPos.lat != null && this.props.initialValues.selectedPos.lng != null) {
+                start = [this.props.initialValues.selectedPos.lat, this.props.initialValues.selectedPos.lng];
+            }
         }
         return start;
     }
     render() {
         const { error, touched, invalid } = this.props.meta;
-        let { circle, radius } = this.props;
+        let { circle, radius, is_add_event_map_location } = this.props;
+        const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
         let start = this.getStartPosition();
         let resZoom = this.getCurrentZoom();
         let scaleRadius = this.getRadiusScale(radius);
@@ -113,18 +118,31 @@ class LocationMap extends Component {
                         openSearchOnLoad={false}
                         onChange={this.handleSearch}
                     />
-                    {this.props.initialValues.selectedPos &&
-                        <Marker position={this.props.initialValues.selectedPos}
+
+                    {is_add_event_map_location == true
+                        ? marker &&
+                        <Marker position={marker}
                             draggable={true}>
-                            <Popup position={this.props.initialValues.selectedPos}>
+                            <Popup position={marker}>
                                 <pre>
-                                    {JSON.stringify(this.props.initialValues.selectedPos, null, 2)}
+                                    {JSON.stringify(marker, null, 2)}
                                 </pre>
                             </Popup>
                         </Marker>
-                    }
-                    {circle && radius &&
-                        <Circle center={start} pathOptions={{ color: 'blue' }} radius={scaleRadius} />
+
+                        : this.props.initialValues.selectedPos &&
+                            <Marker position={this.props.initialValues.selectedPos}
+                                draggable={true}>
+                                <Popup position={this.props.initialValues.selectedPos}>
+                                    <pre>
+                                        {JSON.stringify(this.props.initialValues.selectedPos, null, 2)}
+                                    </pre>
+                                </Popup>
+                            </Marker>
+
+                            ? circle && radius &&
+                            <Circle center={start} pathOptions={{ color: 'blue' }} radius={scaleRadius} />
+                            : null
                     }
                 </Map>
                 <span className="error-text">

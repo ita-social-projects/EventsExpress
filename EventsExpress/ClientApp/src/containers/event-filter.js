@@ -70,9 +70,9 @@ class EventFilterWrapper extends Component {
                 filter.categories.some(filterItem => filterItem === item.id)
             );
         }
-
         return values;
     };
+
     render() {
         const initialFormValues = this.buildInitialFormValues();
         return <>

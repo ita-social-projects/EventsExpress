@@ -46,7 +46,7 @@ namespace EventsExpress.Test.ServiceTests
         private double radius = 8;
         private PaginationViewModel model = new PaginationViewModel
         {
-            PageSize = 3,
+            PageSize = 6,
             Page = 1,
         };
 
@@ -219,6 +219,7 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = GetEventExistingId.ThirdEventId,
+
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "test event",
@@ -229,13 +230,19 @@ namespace EventsExpress.Test.ServiceTests
                             UserId = Guid.NewGuid(),
                         },
                     },
-                    PhotoId = Guid.NewGuid(),
                     EventLocationId = eventLocationIdMapSecond,
                     Title = "any title",
-                    IsBlocked = false,
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 8,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Blocked,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
                 },
                 new Event
                 {
@@ -360,12 +367,12 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Get All")]
-        public void GetAll_ValidEvent_Success()
+        public void GetAll_GetEventByLocation_Success()
         {
             EventFilterViewModel eventFilterViewModel = new EventFilterViewModel()
             {
-                X = eventLocationMapSecond.Point.X,
-                Y = eventLocationMapSecond.Point.Y,
+                X = eventLocationMap.Point.X,
+                Y = eventLocationMap.Point.Y,
                 Radius = radius,
             };
             var count = events.Count;
@@ -530,11 +537,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-
         public void CreateDraft_Works()
         {
             service.CreateDraft();
-            Assert.AreEqual(4, Context.Events.Count());
+            Assert.AreEqual(5, Context.Events.Count());
         }
 
         [Test]

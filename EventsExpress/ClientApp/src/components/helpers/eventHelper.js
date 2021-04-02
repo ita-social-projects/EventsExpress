@@ -34,7 +34,7 @@ const eventHelper = (function () {
                 dateFrom: undefined,
                 dateTo: undefined,
                 categories: [],
-                statuses: [0,1,2]
+                statuses: [],
                 selectedPos: null,
                 radius: 8,
                 x: null,

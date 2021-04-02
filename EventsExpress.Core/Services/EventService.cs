@@ -379,8 +379,8 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
                 : events;
 
-             events = (model.VisitorId != null)
-                ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
+            events = (model.X != null && model.Y != null && model.Radius != null)
+                ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
 
             events = (model.Statuses != null)

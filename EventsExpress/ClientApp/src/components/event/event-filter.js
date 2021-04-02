@@ -24,6 +24,7 @@ class EventFilter extends Component {
 
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
+
         if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
@@ -34,20 +35,17 @@ class EventFilter extends Component {
                 statuses: initialValues.statuses,
                 radius: initialValues.radius,
                 selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { lat: null, lng: null },
-
             });
             this.setState({
                 ['needInitializeValues']: false
             });
         }
     }
-    ResetData = () => {
-        this.props.onReset();
-    }
+
     render() {
-        const { all_categories, form_values, current_user} = this.props;
+        const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
-        
+
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -63,18 +61,18 @@ class EventFilter extends Component {
                         <>
                             <div className="form-group">
                                 <Field
-                                name='dateFrom'
-                                label='From'
-                                minValue={new Date()}                               
-                                component={renderDatePicker}
+                                    name='dateFrom'
+                                    label='From'
+                                    minValue={new Date()}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
                                 <Field
-                                name='dateTo'
-                                label='To'
-                                minValue={new Date(values.dateFrom)}
-                                component={renderDatePicker}
+                                    name='dateTo'
+                                    label='To'
+                                    minValue={new Date(values.dateFrom)}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
@@ -98,7 +96,11 @@ class EventFilter extends Component {
                             </div>
 
                             <div>
-                                <MapModal initialize={this.props.initialize} initialValues={this.props.initialFormValues} values={values} reset={this.props.onReset} />
+                                <MapModal
+                                    initialize={this.props.initialize}
+                                    initialValues={this.props.initialFormValues}
+                                    values={values}
+                                    reset={this.props.onReset} />
                             </div>
 
                             <div className="d-flex">
@@ -113,11 +115,11 @@ class EventFilter extends Component {
                                         <p>
                                             Location:
                                         </p>
-                                        <DisplayMap location={{ latitude: values.selectedPos.lat, longitude: values.selectedPos.lng }} />
+                                        <DisplayMap
+                                            location={{ latitude: values.selectedPos.lat, longitude: values.selectedPos.lng }}
+                                        />
                                     </div>
-
                                 }
-
                             </div>
                         </>
                     }
@@ -161,7 +163,6 @@ class EventFilter extends Component {
                             Search
                         </Button>
                     </div>
-
                 </form>
             </div>
         </>

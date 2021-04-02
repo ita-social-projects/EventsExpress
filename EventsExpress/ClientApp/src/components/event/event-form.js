@@ -28,7 +28,6 @@ class EventForm extends Component {
 
     state = { checked: false };
 
-
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
@@ -38,11 +37,12 @@ class EventForm extends Component {
     handleClick = () => {
         history.push(`/`);
     }
-
+    onClickCallBack = (coords) => {
+        this.setState({ selectedPos: [coords.lat, coords.lng] });
+    }
 
     render() {
-        const { form_values, all_categories, isCreated, pristine,
-            submitting, disabledDate, initialValues} = this.props;
+        const { form_values, all_categories, isCreated, disabledDate, initialValues } = this.props;
         const { checked } = this.state;
         const { handleChange } = this;
 
@@ -158,7 +158,6 @@ class EventForm extends Component {
                     <div>
                     </div>
 
-
                     <Field name="location.type" component={radioLocationType} />
                     {(this.props.form_values == undefined
                         || (this.props.form_values.location
@@ -169,11 +168,12 @@ class EventForm extends Component {
                             <Field
                                 name='location.selectedPos'
                                 initialData={
-                                    initialValues &&
-                                    initialValues.location.selectedPos
+                                    this.props.initialValues &&
+                                    this.props.initialValues.location &&
+                                    this.props.initialValues.location.selectedPos
                                 }
-                               initialValues={initialValues}
-                                radius={8}
+                                initialValues={initialValues}
+                                is_add_event_map_location={true}
                                 component={LocationMap}
                             />
                         </div>
