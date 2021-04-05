@@ -27,6 +27,11 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
+        public Task ChangeRole(Guid userId, Guid roleId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddAuth(Guid accountId, string email, AuthExternalType type)
         {
             var exist = await Context.AuthExternal.AnyAsync(ae => ae.Email == email && ae.Type == type);
@@ -114,6 +119,32 @@ namespace EventsExpress.Core.Services
 
             var auths = await authE.Union(authL).ToListAsync();
             return auths;
+        }
+
+        public async Task Unblock(Guid userId)
+        {
+            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
+            if (account == null)
+            {
+                throw new EventsExpressException("Invalid user Id");
+            }
+
+            account.IsBlocked = false;
+            await Context.SaveChangesAsync();
+            await _mediator.Publish(new UnblockedAccountMessage(account));
+        }
+
+        public async Task Block(Guid userId)
+        {
+            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
+            if (account == null)
+            {
+                throw new EventsExpressException("Invalid user Id");
+            }
+
+            account.IsBlocked = true;
+            await Context.SaveChangesAsync();
+            await _mediator.Publish(new BlockedAccountMessage(account));
         }
     }
 }

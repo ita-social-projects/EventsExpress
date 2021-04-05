@@ -80,7 +80,9 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name })));
+                        src.NotificationTypes.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
+                .ForMember(
+                    dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked));
 
             CreateMap<ProfileDto, ProfileViewModel>()
                 .ForMember(

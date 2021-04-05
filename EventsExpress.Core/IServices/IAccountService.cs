@@ -18,5 +18,11 @@ namespace EventsExpress.Core.IServices
         Task EnsureExternalAccountAsync(string email, AuthExternalType type);
 
         Task<IEnumerable<AuthDto>> GetLinkedAuth(Guid accountId);
+
+        Task ChangeRole(Guid userId, Guid roleId);
+
+        Task Block(Guid userId);
+
+        Task Unblock(Guid userId);
     }
 }

@@ -13,16 +13,16 @@ namespace EventsExpress.Test.HandlerTests
 {
     internal class BlockedUserHandlerTests
     {
+        private readonly NotificationChange _notificationChange = NotificationChange.Profile;
+        private readonly string _emailUser = "user@gmail.com";
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
         private BlockedUserHandler _blockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
-        private string _emailUser = "user@gmail.com";
-        private User _user;
         private UserDto _userDto;
         private BlockedAccountMessage _blockedUserMessage;
-        private NotificationChange _notificationChange = NotificationChange.Profile;
         private Guid[] _usersIds;
+        private Account _account;
 
         [SetUp]
         public void Initialize()
@@ -30,17 +30,16 @@ namespace EventsExpress.Test.HandlerTests
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object);
-            _user = new User
+            _account = new Account
             {
-                Id = _idUser,
-                Email = _emailUser,
+                UserId = _idUser,
             };
             _userDto = new UserDto
             {
                 Id = _idUser,
                 Email = _emailUser,
             };
-            _blockedUserMessage = new BlockedAccountMessage(_user);
+            _blockedUserMessage = new BlockedAccountMessage(_account);
             _usersIds = new Guid[] { _idUser };
             _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
         }

@@ -24,10 +24,6 @@ namespace EventsExpress.Core.IServices
 
         Task<UserDto> GetByIdAsync(Guid userId);
 
-        UserDto GetByAuthLocalId(Guid authLocalId);
-
-        UserDto GetByEmail(string email);
-
         ProfileDto GetProfileById(Guid userId, Guid fromId);
 
         IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id);

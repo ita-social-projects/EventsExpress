@@ -124,42 +124,6 @@ namespace EventsExpress.Core.Services
             return user;
         }
 
-        public UserDto GetByAuthLocalId(Guid authLocalId)
-        {
-            var user = Mapper.Map<UserDto>(
-                Context.Users
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .FirstOrDefault(u => u.Account.AuthLocal.Id == authLocalId));
-
-            return user;
-        }
-
-        public UserDto GetByEmail(string email)
-        {
-            var user = Mapper.Map<UserDto>(
-                 Context.Users
-                .Include(u => u.Events)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
-                .Include(u => u.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(n => n.NotificationType)
-                .AsNoTracking()
-                .FirstOrDefault(o => o.Email == email));
-
-            if (user != null)
-            {
-                user.CanChangePassword = !string.IsNullOrEmpty(user.Account?.AuthLocal?.PasswordHash);
-                user.Rating = GetRating(user.Id);
-            }
-
-            return user;
-        }
-
         public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id)
         {
             var users = Context.Users

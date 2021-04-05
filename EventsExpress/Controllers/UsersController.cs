@@ -115,38 +115,6 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to block user.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <returns>The method returns unblocked user.</returns>
-        /// <response code="200">Block is succesful.</response>
-        /// <response code="400">Block process failed.</response>
-        [HttpPost("{userId}/[action]")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Unblock(Guid userId)
-        {
-            await _authService.Unblock(userId);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// This method is to unblock event.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <returns>The method returns blocked user.</returns>
-        /// <response code="200">Unblock is succesful.</response>
-        /// <response code="400">Unblock process failed.</response>
-        [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Block(Guid userId)
-        {
-            await _authService.Block(userId);
-
-            return Ok();
-        }
-
-        /// <summary>
         /// This method is to edit username.
         /// </summary>
         /// <param name="userName">Param userName defines the username.</param>

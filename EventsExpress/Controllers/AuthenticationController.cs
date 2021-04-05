@@ -21,7 +21,6 @@ namespace EventsExpress.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
@@ -29,14 +28,12 @@ namespace EventsExpress.Controllers
 
         public AuthenticationController(
             IUserService userSrv,
-            IPhotoService photoService,
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
             IAccountService accountService)
         {
             _userService = userSrv;
-            _photoService = photoService;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
@@ -73,7 +70,7 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> FacebookLogin(AccountViewModel userView)
         {
             await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Facebook);
-            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email, AuthExternalType.Facebook);
+            var authResponseModel = await _authService.Authenticate(userView.Email, AuthExternalType.Facebook);
 
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -95,7 +92,7 @@ namespace EventsExpress.Controllers
                 userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
 
             await _accountService.EnsureExternalAccountAsync(payload.Email, AuthExternalType.Google);
-            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(payload.Email, AuthExternalType.Google);
+            var authResponseModel = await _authService.Authenticate(payload.Email, AuthExternalType.Google);
 
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -114,23 +111,11 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> TwitterLogin([FromBody] AccountViewModel userView)
         {
             await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Twitter);
-            var authResponseModel = await _authService.AuthenticateUserFromExternalProvider(userView.Email, AuthExternalType.Twitter);
+            var authResponseModel = await _authService.Authenticate(userView.Email, AuthExternalType.Twitter);
 
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
             return Ok(new { Token = authResponseModel.JwtToken });
-        }
-
-        private async Task<bool> SetPhoto(UserDto userExisting, string urlPhoto)
-        {
-            if (userExisting != null)
-            {
-                await _photoService.AddPhotoByURL(urlPhoto, userExisting.Id);
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>

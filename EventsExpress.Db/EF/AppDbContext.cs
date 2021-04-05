@@ -80,10 +80,6 @@ namespace EventsExpress.Db.EF
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            // user config
-            modelBuilder.Entity<User>()
-                .Property(u => u.Birthday).HasColumnType("date");
         }
 
         public void SaveTracks()

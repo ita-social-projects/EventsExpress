@@ -18,7 +18,7 @@ namespace EventsExpress.Test.HandlerTests
         private UnblockedUserHandler _unBlockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
         private string _emailUser = "user@gmail.com";
-        private User _user;
+        private Account _account;
         private UserDto _userDto;
         private UnblockedAccountMessage _unBlockedUserMessage;
         private NotificationChange _notificationChange = NotificationChange.Profile;
@@ -30,17 +30,16 @@ namespace EventsExpress.Test.HandlerTests
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _unBlockedUserHandler = new UnblockedUserHandler(_emailService.Object, _userService.Object);
-            _user = new User
+            _account = new Account
             {
-                Id = _idUser,
-                Email = _emailUser,
+                UserId = _idUser,
             };
             _userDto = new UserDto
             {
                 Id = _idUser,
                 Email = _emailUser,
             };
-            _unBlockedUserMessage = new UnblockedAccountMessage(_user);
+            _unBlockedUserMessage = new UnblockedAccountMessage(_account);
             _usersIds = new Guid[] { _idUser };
             _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
         }

@@ -42,7 +42,7 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
-        public async Task<AuthenticateResponseModel> AuthenticateUserFromExternalProvider(string email, AuthExternalType type)
+        public async Task<AuthenticateResponseModel> Authenticate(string email, AuthExternalType type)
         {
             var account = Context.Accounts
                 .Include(a => a.AuthExternal)
@@ -133,15 +133,14 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Invalid user");
             }
 
-            if (VerifyPassword(userDto.Account.AuthLocal, oldPassword))
+            if (!VerifyPassword(userDto.Account.AuthLocal, oldPassword))
             {
-                authLocal.Salt = PasswordHasher.GenerateSalt();
-                authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
-                await Context.SaveChangesAsync();
-                return;
+                throw new EventsExpressException("Invalid password");
             }
 
-            throw new EventsExpressException("Invalid password");
+            authLocal.Salt = PasswordHasher.GenerateSalt();
+            authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
+            await Context.SaveChangesAsync();
         }
 
         public async Task<bool> CanRegister(string email)
@@ -165,8 +164,6 @@ namespace EventsExpress.Core.Services
         public async Task RegisterComplete(RegisterCompleteDto profileData)
         {
             await _userService.Create(Mapper.Map<UserDto>(profileData));
-
-            return;
         }
 
         public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
@@ -193,11 +190,6 @@ namespace EventsExpress.Core.Services
             return await _userService.GetByIdAsync(userId);
         }
 
-        public Task ChangeRole(Guid userId, Guid roleId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task PasswordRecover(string email)
         {
             var authLocal = Context.AuthLocal.FirstOrDefault(al => al.Email == email);
@@ -219,32 +211,6 @@ namespace EventsExpress.Core.Services
             });
         }
 
-        public async Task Unblock(Guid userId)
-        {
-            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
-            if (account == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            account.IsBlocked = false;
-            await Context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedAccountMessage(account));
-        }
-
-        public async Task Block(Guid userId)
-        {
-            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
-            if (account == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            account.IsBlocked = true;
-            await Context.SaveChangesAsync();
-            await _mediator.Publish(new BlockedAccountMessage(account));
-        }
-
         private static bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
            authLocal.PasswordHash == PasswordHasher.GenerateHash(actualPassword, authLocal.Salt);
 
@@ -255,7 +221,8 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Token is null or empty");
             }
 
-            if (cacheDto.Token != _cacheHelper.GetValue(cacheDto.AuthLocalId).Token)
+            var cachedDto = _cacheHelper.GetValue(cacheDto.AuthLocalId);
+            if (cachedDto == null || cachedDto.Token != cacheDto.Token)
             {
                 throw new EventsExpressException("Validation failed");
             }

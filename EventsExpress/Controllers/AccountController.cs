@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.IServices;
@@ -100,6 +101,38 @@ namespace EventsExpress.Controllers
             var user = await _authService.GetCurrentUserAsync(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// This method is to unblock user.
+        /// </summary>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns unblocked user.</returns>
+        /// <response code="200">Block is succesful.</response>
+        /// <response code="400">Block process failed.</response>
+        [HttpPost("{userId}/[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Unblock(Guid userId)
+        {
+            await _accountService.Unblock(userId);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// This method is to block user.
+        /// </summary>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns blocked user.</returns>
+        /// <response code="200">Unblock is succesful.</response>
+        /// <response code="400">Unblock process failed.</response>
+        [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Block(Guid userId)
+        {
+            await _accountService.Block(userId);
 
             return Ok();
         }
