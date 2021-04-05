@@ -55,16 +55,6 @@ class MapModal extends Component {
             return startValue && this.setState({ open: false })     
     };
 
-    handleClose = () => {
-        const startValue = this.props.initialize({
-            radius: 8,
-            selectedPos: { lat: null, lng: null }
-        })
-        this.props.values.selectedPos.lat != null
-            ? startValue
-            : startValue && this.setState({ open: false })
-    };
-
     handleFilter = () => {
         this.setState({ open: false });
     }
