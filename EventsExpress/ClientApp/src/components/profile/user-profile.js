@@ -1,58 +1,43 @@
 ﻿import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import 'moment-timezone';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import genders from '../../constants/GenderConstants';
 import Event from '../event/event-item';
-import AddEventWrapper from '../../containers/add-event';
-import EventsForProfile from '../event/events-for-profile';
-import Spinner from '../spinner';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import './User-profile.css';
+import Events from './events';
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+class UserItemView extends Component {
+    splitPath(path) {
+        var n = path.toLowerCase().split("/");
+        return n[n.length - 1];
+    }
 
-    return (
-        <Typography
-            component="div"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`scrollable-force-tabpanel-${index}`}
-            aria-labelledby={`scrollable-force-tab-${index}`}
-            {...other}
-        >
-            <Box p={3}>{children}</Box>
-        </Typography>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
+    indexToTabName = {
+        "futureevents": 0,
+        "archiveevents": 1,
+        "visitedevents": 2,
+        "eventstogo": 3
     };
-}
 
-export default class UserItemView extends Component {
     state = {
-        value: 0
+        value: this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
     };
+
+    componentDidMount = () => {
+        this.state.value = this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
+    }
+
+    componentDidUpdate = () => {
+        this.state.value = this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
+    }
 
     getAge = birthday => {
         let today = new Date();
@@ -89,21 +74,7 @@ export default class UserItemView extends Component {
             attitude,
             rating
         } = this.props.data;
-        const { isPending, data } = this.props.events;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventsForProfile
-                data_list={data.items}
-                page={data.pageViewModel.pageNumber}
-                totalPages={data.pageViewModel.totalPages}
-                current_user={this.props.current_user}
-                callback={
-                    (this.state.value === 0) ? this.props.onFuture :
-                        (this.state.value === 1) ? this.props.onPast :
-                            (this.state.value === 2) ? this.props.onVisited :
-                                (this.state.value === 3) ? this.props.onToGo : null}
-            />
-            : null;
+        const userId = this.props.data.id;
         const categories_list = this.renderCategories(categories);
         const render_prop = (propName, value) => (
             <div className='row mb-3 font-weight-bold'>
@@ -171,8 +142,7 @@ export default class UserItemView extends Component {
                         variant="fullWidth"
                         scrollButtons="on"
                         indicatorColor="primary"
-                        textColor="primary"
-                    >
+                        textColor="primary" >
                         <Tab
                             label="Future events"
                             icon={
@@ -180,8 +150,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 0 ? '' : 'primary'}>
                                     <i className="far fa-calendar-alt"></i>
                                 </IconButton>}
-                            {...a11yProps(0)}
-                        />
+                            component={Link}
+                            to={`/user/${userId}/FutureEvents`} />
                         <Tab
                             label="Archive events"
                             icon={
@@ -189,8 +159,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 1 ? '' : 'primary'}>
                                     <i className="fas fa-archive"></i>
                                 </IconButton>}
-                            {...a11yProps(1)}
-                        />
+                            component={Link}
+                            to={`/user/${userId}/ArchiveEvents`} />
                         <Tab
                             label="Visited events"
                             icon={
@@ -198,8 +168,8 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 2 ? '' : 'primary'}>
                                     <i className="fas fa-history"></i>
                                 </IconButton>}
-                            {...a11yProps(2)}
-                        />
+                            component={Link}
+                            to={`/user/${userId}/VisitedEvents`} />
                         <Tab
                             label="Events to go"
                             icon={
@@ -207,38 +177,46 @@ export default class UserItemView extends Component {
                                     color={this.state.value === 3 ? '' : 'primary'}>
                                     <i className="fas fa-map-marker-alt"></i>
                                 </IconButton>}
-                            {...a11yProps(3)}
-                        />
-                        
-                        
+                            component={Link}
+                            to={`/user/${userId}/EventsToGo`} />
                     </Tabs>
                 </AppBar>
-                <TabPanel value={this.state.value} index={0}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={1}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={2}>
-                </TabPanel>
-                <TabPanel value={this.state.value} index={3}>
-                </TabPanel>
-                {this.props.add_event_flag ?
-                    <div className="shadow mb-5 bg-white rounded">
-                        <AddEventWrapper onCreateCanceling={() => this.handleChange(null, 0)} />
-                    </div>
-                    :
-                    <div className="shadow pl-2 pr-2 pb-2 mb-5 bg-white rounded">
-                        {spinner}{content}
-                        {!isPending && !(data.items && data.items.length > 0) &&
-                            <div id="notfound" className="w-100">
-                                <div className="notfound">
-                                    <div className="notfound-404">
-                                        <div className="h1">No Results</div>
-                                    </div>
-                                </div>
-                            </div>}
-                    </div>
-                }
+                <Switch>
+                    <Route
+                        exact
+                        path='/user/:id'
+                        render={() =>
+                            <Redirect to={`/user/${userId}/FutureEvents`} />} />
+                    <Route
+                        path='/user/:id/FutureEvents'
+                        render={() => <Events
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onFuture} />} />
+
+                    <Route path='/user/:id/ArchiveEvents'
+                        render={() => <Events
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onPast} />} />
+
+                    <Route
+                        path='/user/:id/VisitedEvents'
+                        render={() => <Events
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onVisited} />} />
+
+                    <Route
+                        path='/user/:id/EventsToGo'
+                        render={() => <Events
+                            events={this.props.events}
+                            current_user={this.props.current_user}
+                            typeOfEvents={this.props.onToGo} />} />
+                </Switch>
             </div>
         </>
     }
 }
+
+export default withRouter(UserItemView);

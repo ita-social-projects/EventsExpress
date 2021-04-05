@@ -1,25 +1,19 @@
-import{contactUs} from '../actions/contact-us';
+import { contactUs } from '../actions/contact-us-action';
 import initialState from '../store/initialState';
 
 
-export const reducer=(state=initialState.contactUs, action)=>{
-    switch(action.type){
+export const reducer = (state = initialState.contactUs, action) => {
+    switch (action.type) {
         case contactUs.PENDING:
-            return{...state, isPending:true}
+            return { ...state, isPending: true }
         case contactUs.SUCCESS:
-            return{
+            return {
                 ...state,
                 isPending: false,
                 isSucces: true,
                 isError: false
             }
-        case contactUs.ERROR:
-            return{
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }    
         default:
-            return state; 
+            return state;
     }
 }

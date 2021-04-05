@@ -7,9 +7,11 @@ import {
     renderMultiselect
 } from '../helpers/helpers';
 import eventHelper from '../helpers/eventHelper';
+import MapModal from './map-modal';
 import './event-filter.css';
+import DisplayMap from '../event/map/display-map';
 import EventFilterStatus from './event-filter-status';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
     constructor(props) {
@@ -31,6 +33,8 @@ class EventFilter extends Component {
                 dateTo: initialValues.dateTo,
                 categories: initialValues.categories,
                 statuses: initialValues.statuses,
+                radius: initialValues.radius,
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { lat: null, lng: null },
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -41,7 +45,7 @@ class EventFilter extends Component {
     render() {
         const { all_categories, form_values, current_user } = this.props;
         let values = form_values || {};
-        
+
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
@@ -57,18 +61,18 @@ class EventFilter extends Component {
                         <>
                             <div className="form-group">
                                 <Field
-                                name='dateFrom'
-                                label='From'
-                                minValue={new Date()}                               
-                                component={renderDatePicker}
+                                    name='dateFrom'
+                                    label='From'
+                                    minValue={new Date()}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
                                 <Field
-                                name='dateTo'
-                                label='To'
-                                minValue={new Date(values.dateFrom)}
-                                component={renderDatePicker}
+                                    name='dateTo'
+                                    label='To'
+                                    minValue={new Date(values.dateFrom)}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group">
@@ -88,6 +92,33 @@ class EventFilter extends Component {
                                         component={EventFilterStatus}
                                         options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}
                                     />
+                                }
+                            </div>
+
+                            <div>
+                                <MapModal
+                                    initialize={this.props.initialize}
+                                    initialValues={this.props.initialFormValues}
+                                    values={values}
+                                    reset={this.props.onReset} />
+                            </div>
+
+                            <div className="d-flex">
+
+                                {values.selectedPos &&
+                                    values.selectedPos.lat &&
+                                    <div>
+                                        <p>
+                                            Radius:
+                                {values.radius} km
+                                        </p>
+                                        <p>
+                                            Location:
+                                        </p>
+                                        <DisplayMap
+                                            location={{ latitude: values.selectedPos.lat, longitude: values.selectedPos.lng }}
+                                        />
+                                    </div>
                                 }
                             </div>
                         </>
@@ -132,7 +163,6 @@ class EventFilter extends Component {
                             Search
                         </Button>
                     </div>
-
                 </form>
             </div>
         </>

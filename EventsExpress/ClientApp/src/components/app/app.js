@@ -22,6 +22,8 @@ import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import AddEventWrapper from '../../containers/add-event';
 import Admin from '../admin';
+import DraftEditWrapper from '../../containers/draft-edit-wrapper';
+import EventDraftListWrapper from '../../containers/event-draft-list'
 
 export default class App extends Component {
     render() {
@@ -37,7 +39,7 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                         <Route
+                        <Route
                             exact
                             path="/home"
                             render={() => (
@@ -49,16 +51,17 @@ export default class App extends Component {
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin" component={Admin} />                        
+                        <Route path="/admin" component={Admin} />
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={Chat} />
-                        <Route path="/contactUs" component={ContactUsWrapper} />                        
+                        <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
-                                               
+                        <Route path='/editEvent/:id/' component={DraftEditWrapper} />
+                        <Route path='/drafts' component={EventDraftListWrapper} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>

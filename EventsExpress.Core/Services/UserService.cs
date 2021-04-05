@@ -132,7 +132,6 @@ namespace EventsExpress.Core.Services
         {
             var user = Mapper.Map<UserDto>(
                 Context.Users
-                .Include(u => u.Photo)
                 .Include(u => u.Events)
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
@@ -150,7 +149,6 @@ namespace EventsExpress.Core.Services
         {
             var user = Mapper.Map<UserDto>(
                  Context.Users
-                .Include(u => u.Photo)
                 .Include(u => u.Events)
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
@@ -172,7 +170,6 @@ namespace EventsExpress.Core.Services
         public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id)
         {
             var users = Context.Users
-                .Include(u => u.Photo)
                 .Include(u => u.Role)
                 .AsNoTracking()
                 .AsEnumerable();
@@ -235,7 +232,6 @@ namespace EventsExpress.Core.Services
             var categoryIds = categories.Select(x => x.Id).ToList();
 
             var users = Context.Users
-                .Include(u => u.Photo)
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
@@ -274,7 +270,6 @@ namespace EventsExpress.Core.Services
         public async Task ChangeAvatar(Guid userId, IFormFile avatar)
         {
             var user = Context.Users
-                .Include(u => u.Photo)
                 .FirstOrDefault(u => u.Id == userId);
 
             if (user == null)
@@ -282,16 +277,9 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found");
             }
 
-            if (user.Photo != null)
-            {
-                await _photoService.Delete(user.Photo.Id);
-            }
-
             try
             {
-                user.Photo = await _photoService.AddPhoto(avatar);
-                Update(user);
-                await Context.SaveChangesAsync();
+                await _photoService.AddUserPhoto(avatar, user.Id);
             }
             catch (ArgumentException)
             {

@@ -20,7 +20,7 @@ export default class Admin extends Component {
                         <ul className="list-unstyled">
                             <nav id="sub-nav">
                                 <div>
-                                    <NavItem                                                                               
+                                    <NavItem
                                         to={'/admin/categories/'}
                                         icon={'fa fa-hashtag'}
                                         text={"Categories"}
@@ -43,10 +43,10 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">                        
-                            <Route path="/admin/categories/" component={Category} />
-                            <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                            <Route path="/admin/users" component={UserPWrapper} />                    
+                    <div className="col-sm-9 offset-sm-1">
+                        <Route path="/admin/categories/" component={Category} />
+                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                        <Route path="/admin/users" component={UserPWrapper} />
                     </div>
                 </div>
             </>

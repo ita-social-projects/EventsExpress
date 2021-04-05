@@ -1,12 +1,11 @@
-﻿import React, { Component } from 'react';
+﻿
+import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
-import Module from '../helpers';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
@@ -23,13 +22,11 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import { createBrowserHistory } from 'history';
 import "./event-form.css";
 momentLocaliser(moment);
-const { validate } = Module;
 const history = createBrowserHistory({ forceRefresh: true });
 
 class EventForm extends Component {
 
     state = { checked: false };
-
 
     handleChange = () => {
         this.setState(state => ({
@@ -40,17 +37,18 @@ class EventForm extends Component {
     handleClick = () => {
         history.push(`/`);
     }
-
+    onClickCallBack = (coords) => {
+        this.setState({ selectedPos: [coords.lat, coords.lng] });
+    }
 
     render() {
-        const { form_values, all_categories, isCreated, pristine,
-            submitting, disabledDate, onCancel } = this.props;
+        const { form_values, all_categories, isCreated, disabledDate, initialValues } = this.props;
         const { checked } = this.state;
         const { handleChange } = this;
 
-        let values = form_values || this.props.initialValues;
-        const photoUrl = this.props.initialValues ?
-            this.props.initialValues.photoUrl : null;
+        let values = form_values || initialValues;
+        const photoUrl = initialValues ?
+            initialValues.photoUrl : null;
 
         return (
             <form onSubmit={this.props.handleSubmit}
@@ -58,7 +56,7 @@ class EventForm extends Component {
                 <div className="text text-2 pl-md-4">
                     <Field
                         id="image-field"
-                        name="image"
+                        name="photo"
                         component={DropZoneField}
                         type="file"
                         crop={true}
@@ -160,7 +158,6 @@ class EventForm extends Component {
                     <div>
                     </div>
 
-
                     <Field name="location.type" component={radioLocationType} />
                     {(this.props.form_values == undefined
                         || (this.props.form_values.location
@@ -172,9 +169,11 @@ class EventForm extends Component {
                                 name='location.selectedPos'
                                 initialData={
                                     this.props.initialValues &&
+                                    this.props.initialValues.location &&
                                     this.props.initialValues.location.selectedPos
                                 }
-
+                                initialValues={initialValues}
+                                isAddEventMapLocation={true}
                                 component={LocationMap}
                             />
                         </div>
@@ -190,32 +189,13 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
-
                             />
                         </div>
                     }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">
-                    <div className="col">
-                        <Button
-                            className="border"
-                            fullWidth={true}
-                            type="submit"
-                            color="primary"
-                            disabled={pristine || submitting}>
-                            Save
-                        </Button>
-                    </div>
-                    <div className="col">
-                        <Button
-                            className="border"
-                            fullWidth={true}
-                            color="primary"
-                            onClick={this.handleClick}>
-                            Cancel
-                        </Button>
-                    </div>
+                    {this.props.children}
                 </div>
             </form>
         );
@@ -232,6 +212,5 @@ EventForm = connect(
 
 export default reduxForm({
     form: 'event-form',
-    validate: validate,
     enableReinitialize: true
 })(EventForm);

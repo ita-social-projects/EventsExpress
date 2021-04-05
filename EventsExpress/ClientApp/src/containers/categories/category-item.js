@@ -1,13 +1,10 @@
 ﻿import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import IconButton from "@material-ui/core/IconButton";
 import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
-
-import { add_category } from "../../actions/category/add-category";
-import { delete_category } from "../../actions/category/delete-category";
-import { set_edited_category } from "../../actions/category/add-category";
+import add_category, { set_edited_category } from "../../actions/category/category-add-action";
+import { delete_category } from "../../actions/category/category-delete-action";
 
 
 class CategoryItemWrapper extends Component {
@@ -16,52 +13,50 @@ class CategoryItemWrapper extends Component {
         if (values.name === this.props.item.name) {
             this.props.edit_cansel();
         } else {
-            this.props.save_category({ ...values, id: this.props.item.id });
+            return this.props.save_category({ ...values, id: this.props.item.id });
         }
     };
 
     componentWillUpdate = () => {
-        const {categoryError, isCategorySuccess } = this.props.status;
-        
-        if (!categoryError && isCategorySuccess){
+        const { isCategorySuccess } = this.props.status;
+
+        if (isCategorySuccess) {
             this.props.edit_cansel();
         }
     }
     render() {
-        const { delete_category, set_category_edited, edit_cansel} = this.props;
-        
+        const { delete_category, set_category_edited, edit_cansel } = this.props;
+
         return <tr>
-                {(this.props.item.id === this.props.editedCategory)
-                    ? <CategoryEdit 
-                        key={this.props.item.id + this.props.editedCategory}
-                        item={this.props.item} 
-                        callback={this.save} 
-                        cancel={edit_cansel} 
-                        message={this.props.status.categoryError}
-                    />
-                    : <CategoryItem 
-                        item={this.props.item} 
-                        callback={set_category_edited} 
-                    />
-                }
-                <td className="align-middle align-items-stretch">
-                    <div className="d-flex align-items-center justify-content-center">
-                        <IconButton className="text-danger" size="small" onClick={delete_category}>
-                            <i className="fas fa-trash"></i>
-                        </IconButton>
-                    </div>
-                </td>
-                
-            </tr>
+            {(this.props.item.id === this.props.editedCategory)
+                ? <CategoryEdit
+                    key={this.props.item.id + this.props.editedCategory}
+                    initialValues={this.props.item}
+                    onSubmit={this.save}
+                    cancel={edit_cansel}
+                />
+                : <CategoryItem
+                    item={this.props.item}
+                    callback={set_category_edited}
+                />
+            }
+            <td className="align-middle align-items-stretch">
+                <div className="d-flex align-items-center justify-content-center">
+                    <IconButton className="text-danger" size="small" onClick={delete_category}>
+                        <i className="fas fa-trash"></i>
+                    </IconButton>
+                </div>
+            </td>
+        </tr>
     };
 }
 
-const mapStateToProps = state => { 
-    return{        
+const mapStateToProps = state => {
+    return {
         status: state.add_category,
         editedCategory: state.categories.editedCategory
     }
-    
+
 };
 
 const mapDispatchToProps = (dispatch, props) => {

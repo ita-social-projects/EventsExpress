@@ -17,8 +17,8 @@ import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
 import Tooltip from '@material-ui/core/Tooltip';
-import userStatusEnum from '../helpers/userStatusEnum';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import userStatusEnum from '../../constants/userStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
 
 
@@ -312,9 +312,11 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <DisplayLocation
-                                    location={this.props.event.data.location}
-                                />
+                                {this.props.event.data.location &&
+                                    <DisplayLocation
+                                        location={this.props.event.data.location}
+                                    />
+                                }                                                                 
                                 {categories_list}
                             </div>
                             <div className="button-block">

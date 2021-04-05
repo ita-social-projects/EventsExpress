@@ -4,9 +4,9 @@ import OwnerSeeItem from '../components/inventory/ownerSeeItem';
 import OwnerEditItemForm from '../components/inventory/ownerEditItem';
 import VisitorSeeItem from '../components/inventory/VisitorSeeItem';
 import VisitorEditItemForm from '../components/inventory/visitorTakeItem';
-import { get_inventories_by_event_id }  from '../actions/inventory-list';
-import { delete_users_inventory, edit_users_inventory }  from '../actions/usersInventories';
-import { delete_item, edit_item, add_item, want_to_take } from '../actions/inventar';
+import { get_inventories_by_event_id } from '../actions/inventory/inventory-list-action';
+import { delete_users_inventory, edit_users_inventory } from '../actions/users/users-inventories-action';
+import { delete_item, edit_item, add_item, want_to_take } from '../actions/inventory/inventar-action';
 
 class InventoryItemWrapper extends Component {
 
@@ -51,20 +51,20 @@ class InventoryItemWrapper extends Component {
     }
     
     onSubmit = values => {
+        this.setState({
+            isEdit: false
+        })
+        this.props.changeDisableEdit(false);
+
         if (!values.id) {
-            this.props.add_item(values, this.props.eventId);
+            return this.props.add_item(values, this.props.eventId);
         }
         else {
             values.unitOfMeasuring = {
                 id: values.unitOfMeasuring.id
             };
-            this.props.edit_item(values, this.props.eventId);
-        }
-
-        this.setState({
-            isEdit: false
-        })
-        this.props.changeDisableEdit(false);
+            return this.props.edit_item(values, this.props.eventId);
+        }   
     }
 
     onCancel = inventar => {
