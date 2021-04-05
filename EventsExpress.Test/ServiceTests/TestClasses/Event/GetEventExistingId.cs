@@ -7,6 +7,7 @@
     {
         private static Guid firstEventId = Guid.NewGuid();
         private static Guid secondEventId = Guid.NewGuid();
+        private static Guid thirdEventId = Guid.NewGuid();
 
         public static Guid FirstEventId
         {
@@ -18,10 +19,16 @@
             get => secondEventId;
         }
 
+        public static Guid ThirdEventId
+        {
+            get => thirdEventId;
+        }
+
         public IEnumerator GetEnumerator()
         {
             yield return new object[] { FirstEventId };
             yield return new object[] { SecondEventId };
+            yield return new object[] { ThirdEventId };
         }
     }
 }
