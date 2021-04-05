@@ -88,7 +88,7 @@ class LocationMap extends Component {
     }
     render() {
         const { error, touched, invalid } = this.props.meta;
-        let { circle, radius, is_add_event_map_location } = this.props;
+        let { radius, isAddEventMapLocation } = this.props;
         const marker = this.state.selectedPos ? this.state.selectedPos : this.props.initialData;
         let start = this.getStartPosition();
         let resZoom = this.getCurrentZoom();
@@ -119,7 +119,7 @@ class LocationMap extends Component {
                         onChange={this.handleSearch}
                     />
 
-                    {is_add_event_map_location == true
+                    {isAddEventMapLocation
                         ? marker &&
                         <Marker position={marker}
                             draggable={true}>
@@ -138,11 +138,9 @@ class LocationMap extends Component {
                                         {JSON.stringify(this.props.initialValues.selectedPos, null, 2)}
                                     </pre>
                                 </Popup>
-                            </Marker>
-
-                            ? circle && radius &&
+                        </Marker>
+                        &&
                             <Circle center={start} pathOptions={{ color: 'blue' }} radius={scaleRadius} />
-                            : null
                     }
                 </Map>
                 <span className="error-text">

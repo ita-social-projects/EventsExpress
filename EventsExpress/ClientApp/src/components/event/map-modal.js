@@ -47,13 +47,22 @@ class MapModal extends Component {
     handleClose = () => {
         const startValue = this.props.initialize({
             radius: 8,
-            selectedPos: {lat: null, lng: null}
+            selectedPos: { lat: null, lng: null }
         })
-        {
-            this.props.values.selectedPos.lat == null
-                ? startValue && this.setState({ open: false })
-                : startValue
-        }
+        if (this.props.values.selectedPos.lat != null)
+            return startValue;
+        else 
+            return startValue && this.setState({ open: false })     
+    };
+
+    handleClose = () => {
+        const startValue = this.props.initialize({
+            radius: 8,
+            selectedPos: { lat: null, lng: null }
+        })
+        this.props.values.selectedPos.lat != null
+            ? startValue
+            : startValue && this.setState({ open: false })
     };
 
     handleFilter = () => {

@@ -173,7 +173,7 @@ class EventForm extends Component {
                                     this.props.initialValues.location.selectedPos
                                 }
                                 initialValues={initialValues}
-                                is_add_event_map_location={true}
+                                isAddEventMapLocation={true}
                                 component={LocationMap}
                             />
                         </div>
