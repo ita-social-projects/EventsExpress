@@ -36,14 +36,17 @@ namespace EventsExpress.Test.ServiceTests
         private EventService service;
         private List<Event> events;
         private EventLocation eventLocationMap;
+        private EventLocation eventLocationMapSecond;
         private EventLocation eventLocationOnline;
         private Guid userId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
+        private Guid eventLocationIdMapSecond = Guid.NewGuid();
+        private double radius = 8;
         private PaginationViewModel model = new PaginationViewModel
         {
-            PageSize = 3,
+            PageSize = 6,
             Page = 1,
         };
 
@@ -153,6 +156,13 @@ namespace EventsExpress.Test.ServiceTests
                 Point = new Point(10.45, 12.34),
                 Type = LocationType.Map,
             };
+
+            eventLocationMapSecond = new EventLocation
+            {
+                Id = eventId,
+                Point = new Point(50.45, 30.34),
+                Type = LocationType.Map,
+            };
             eventLocationOnline = new EventLocation
             {
                 Id = eventLocationIdOnline,
@@ -208,6 +218,34 @@ namespace EventsExpress.Test.ServiceTests
                 },
                 new Event
                 {
+                    Id = GetEventExistingId.ThirdEventId,
+
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "test event",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = Guid.NewGuid(),
+                        },
+                    },
+                    EventLocationId = eventLocationIdMapSecond,
+                    Title = "any title",
+                    IsPublic = true,
+                    Categories = null,
+                    MaxParticipants = 8,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Blocked,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
+                },
+                new Event
+                {
                     Id = GetEventExistingId.SecondEventId,
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
@@ -223,7 +261,7 @@ namespace EventsExpress.Test.ServiceTests
                     Title = "SLdndsndj",
                     IsPublic = true,
                     Categories = null,
-                    MaxParticipants = 2147483647,
+                    MaxParticipants = 25,
                     StatusHistory = new List<EventStatusHistory>()
                     {
                         new EventStatusHistory
@@ -273,6 +311,7 @@ namespace EventsExpress.Test.ServiceTests
             };
 
             Context.EventLocations.Add(eventLocationMap);
+            Context.EventLocations.Add(eventLocationMapSecond);
             Context.EventLocations.Add(eventLocationOnline);
             Context.Events.AddRange(events);
             Context.SaveChanges();
@@ -327,6 +366,20 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        [Category("Get All")]
+        public void GetAll_GetEventByLocation_Success()
+        {
+            EventFilterViewModel eventFilterViewModel = new EventFilterViewModel()
+            {
+                X = eventLocationMap.Point.X,
+                Y = eventLocationMap.Point.Y,
+                Radius = radius,
+            };
+            var count = events.Count;
+            service.GetAll(eventFilterViewModel, out count);
+            Assert.AreEqual(count, 1);
+        }
+
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         public void EditNextEvent_Work_Plug(EventDto eventDto)
         {
@@ -484,11 +537,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-
         public void CreateDraft_Works()
         {
             service.CreateDraft();
-            Assert.AreEqual(4, Context.Events.Count());
+            Assert.AreEqual(5, Context.Events.Count());
         }
 
         [Test]

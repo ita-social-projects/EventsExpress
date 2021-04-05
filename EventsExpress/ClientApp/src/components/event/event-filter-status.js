@@ -16,8 +16,9 @@ function eventStatusHistoryReadingString(option) {
 class EventFilterStatus extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
+        if (input.value == "")
+            input.value = options
 
-        input.value = input.value.StatusHistory || input.value;
         return options.map((option, index) => {
             return (
                 <div className="checkbox" key={index}>
@@ -47,7 +48,6 @@ class EventFilterStatus extends Component {
             </div>
         )
     }
-    
 }
 export default EventFilterStatus;
 
