@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
+    using System;
+
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
     [ApiController]
@@ -30,15 +31,22 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public IActionResult All(TrackFilterViewModel filter)
         {
-            filter.PageSize = 40;
-            //var viewModel = _mapper.Map<IEnumerable<TrackDTO>>(_trackService.GetAllTracks(filter, out int count));
-            var viewModel = new IndexViewModel<TrackDTO>
+            filter.PageSize = 10;
+
+            try
             {
-                Items = _mapper.Map<IEnumerable<TrackDTO>>(
-                    _trackService.GetAllTracks(filter, out int count)),
-                PageViewModel = new PageViewModel(count, filter.Page.Value, filter.PageSize.Value),
-            };
-            return Ok(viewModel);
+                var viewModel = new IndexViewModel<TrackDTO>
+                {
+                    Items = _mapper.Map<IEnumerable<TrackDTO>>(
+                        _trackService.GetAllTracks(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

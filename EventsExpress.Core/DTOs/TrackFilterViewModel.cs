@@ -6,9 +6,9 @@ namespace EventsExpress.Core.DTOs
 {
     public class TrackFilterViewModel
     {
-        public int? Page { get; set; }
+        public int Page { get; set; }
 
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
 
         public List<string> EntityName { get; set; }
 

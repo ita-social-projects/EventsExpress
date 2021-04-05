@@ -242,7 +242,7 @@ export const renderSelectPeriodicityField = ({
                 id: 'age-native-simple'
             }}
         >
-            <option value=""></option>
+            <option value="" />
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
         {renderFromHelper({ touched, error })}

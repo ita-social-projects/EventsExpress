@@ -93,6 +93,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
+        /// <param name="eventId">Required.</param>
         /// <param name="model">Required.</param>
         /// <response code="200">Edit event proces success.</response>
         /// <response code="400">If Edit process failed.</response>

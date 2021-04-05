@@ -1,6 +1,6 @@
 import initialState from '../../store/initialState';
 import {
-    SET_TRACKS_ERROR, SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, SET_ENTITY_FILTER
+    SET_TRACKS_ERROR, SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, SET_ENTITY_FILTER, GET_ENTITY_NAMES
 } from '../../actions/tracks/track-list';
 
 export const reducer = (state = initialState.tracks, action) => {
@@ -21,6 +21,11 @@ export const reducer = (state = initialState.tracks, action) => {
                 ...state,
                 isPending: false,
                 data: action.payload
+            }
+        case GET_ENTITY_NAMES:
+            return {
+                ...state.data.items.entityNames,
+                entityNames: action.payload
             }
         case SET_ENTITY_FILTER:{
             return Object.assign({},state, {

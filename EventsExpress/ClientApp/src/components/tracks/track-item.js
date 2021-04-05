@@ -91,7 +91,7 @@ export default class TrackItem extends Component {
                         data = {this.getChangesTypeText(changesType, propertyChangesText).data}
                         button = {
                             <IconButton aria-label="delete">
-                                <i className="fas fa-info-circle"></i>
+                                <i className="fas fa-info-circle"/>
                             </IconButton>
                         }
                     />

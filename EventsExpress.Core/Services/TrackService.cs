@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EventsExpress.Core.Services
 {
@@ -25,7 +19,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<TrackDTO> GetAllTracks(TrackFilterViewModel model, out int count)
         {
             var tracks = _mapper.Map<List<TrackDTO>>(
-               _context.ChangeInfos
+                _context.ChangeInfos
                     .Select(x => new TrackDTO
                     {
                         Id = x.Id,
@@ -34,7 +28,7 @@ namespace EventsExpress.Core.Services
                         EntityKeys = x.EntityKeys,
                         PropertyChangesText = x.PropertyChangesText,
                         Time = x.Time,
-                        User = _context.Users.Where(c => c.Id == x.UserId).FirstOrDefault(),
+                        User = _context.Users.FirstOrDefault(c => c.Id == x.UserId),
                     }));
 
             tracks = model.EntityName.Any()
@@ -44,7 +38,25 @@ namespace EventsExpress.Core.Services
                 ? tracks.Where(x => model.ChangesType.Contains(x.ChangesType)).ToList()
                 : tracks;
             count = tracks.Count();
-            return tracks;
+
+            var result = tracks.OrderBy(x => x.Time)
+                .Skip((model.Page - 1) * model.PageSize)
+                .Take(model.PageSize)
+                .ToList();
+
+            return _mapper.Map<IEnumerable<TrackDTO>>(result);
+        }
+
+        public IEnumerable<TrackDTO> GetEntityNames()
+        {
+            var entityNames = _mapper.Map<List<TrackDTO>>(
+                _context.ChangeInfos
+                    .Select(x => new TrackDTO
+                    {
+                        Name = x.EntityName,
+                    }).Distinct());
+
+            return _mapper.Map<IEnumerable<TrackDTO>>(entityNames);
         }
     }
 }

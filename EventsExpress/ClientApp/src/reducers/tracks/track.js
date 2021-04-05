@@ -1,6 +1,5 @@
-const initialState = { isReqested: false, log: "", error: "" };
+const initialState = { isRequested: false, log: "", error: "" };
 
 export const reducer = (state = initialState, action) => {
-
     return state;
 };
