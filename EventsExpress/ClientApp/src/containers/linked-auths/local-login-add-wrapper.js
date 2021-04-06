@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Register from "../../components/register";
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { localLoginAdd } from '../../actions/EditProfile/linked-auths-add-action';
+import { localLoginAdd } from '../../actions/editProfile/linked-auths-add-action';
 import '../css/Auth.css';
 
 class LocalLoginAdd extends Component {

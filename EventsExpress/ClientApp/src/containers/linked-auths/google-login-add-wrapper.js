@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
-import { googleLoginAdd } from '../../actions/EditProfile/linked-auths-add-action';
+import { googleLoginAdd } from '../../actions/editProfile/linked-auths-add-action';
 import config from '../../config';
 import { withRouter } from 'react-router-dom';
 import { setErrorAllert } from '../../actions/alert-action';

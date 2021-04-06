@@ -1,7 +1,7 @@
 import initialState from '../store/initialState';
 import {
     GET_LINKED_AUTHS_SUCCESS,
-} from '../actions/EditProfile/linked-auths-action';
+} from '../actions/editProfile/linked-auths-action';
 
 export const reducer = (state = initialState.account, action) => {
     switch (action.type) {

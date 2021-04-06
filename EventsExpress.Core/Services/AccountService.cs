@@ -27,9 +27,21 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
-        public Task ChangeRole(Guid userId, Guid roleId)
+        public async Task ChangeRole(Guid userId, IEnumerable<AccountRole> roles)
         {
-            throw new NotImplementedException();
+            var a = Context.Accounts
+                .Include(a => a.AccountRoles)
+                .Single(a => a.UserId == userId);
+
+            var newRoles = roles
+                .Select(ar => new AccountRole { AccountId = a.Id, RoleId = ar.RoleId })
+                .ToList();
+
+            a.AccountRoles = newRoles;
+
+            Update(a);
+
+            await Context.SaveChangesAsync();
         }
 
         public async Task AddAuth(Guid accountId, string email, AuthExternalType type)
@@ -121,19 +133,6 @@ namespace EventsExpress.Core.Services
             return auths;
         }
 
-        public async Task Unblock(Guid userId)
-        {
-            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
-            if (account == null)
-            {
-                throw new EventsExpressException("Invalid user Id");
-            }
-
-            account.IsBlocked = false;
-            await Context.SaveChangesAsync();
-            await _mediator.Publish(new UnblockedAccountMessage(account));
-        }
-
         public async Task Block(Guid userId)
         {
             var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
@@ -145,6 +144,19 @@ namespace EventsExpress.Core.Services
             account.IsBlocked = true;
             await Context.SaveChangesAsync();
             await _mediator.Publish(new BlockedAccountMessage(account));
+        }
+
+        public async Task Unblock(Guid userId)
+        {
+            var account = Context.Accounts.FirstOrDefault(a => a.UserId == userId);
+            if (account == null)
+            {
+                throw new EventsExpressException("Invalid user Id");
+            }
+
+            account.IsBlocked = false;
+            await Context.SaveChangesAsync();
+            await _mediator.Publish(new UnblockedAccountMessage(account));
         }
     }
 }

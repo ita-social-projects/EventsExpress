@@ -19,7 +19,7 @@ namespace EventsExpress.Core.IServices
 
         Task<IEnumerable<AuthDto>> GetLinkedAuth(Guid accountId);
 
-        Task ChangeRole(Guid userId, Guid roleId);
+        Task ChangeRole(Guid userId, IEnumerable<AccountRole> roles);
 
         Task Block(Guid userId);
 

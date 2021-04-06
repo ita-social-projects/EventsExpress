@@ -182,7 +182,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCaseSource(typeof(ConfirmEmail), nameof(ConfirmEmail.TestCases))] // todo Rename Class
+        [TestCaseSource(typeof(ConfirmEmail), nameof(ConfirmEmail.TestCases))]
         public void ConfirmEmail_CachingFailed_Throws(Guid id, string token)
         {
             CacheDto cache = new CacheDto()

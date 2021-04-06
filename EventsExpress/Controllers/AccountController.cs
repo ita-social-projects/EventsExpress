@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
 using Google.Apis.Auth;
@@ -133,6 +135,20 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Block(Guid userId)
         {
             await _accountService.Block(userId);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// This method allows admin to change user roles.
+        /// </summary>
+        [HttpPost("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeRoles(ChangeRoleWiewModel model)
+        {
+            var newRoles = _mapper.Map<IEnumerable<AccountRole>>(model.Roles);
+
+            await _accountService.ChangeRole(model.UserId, newRoles);
 
             return Ok();
         }
