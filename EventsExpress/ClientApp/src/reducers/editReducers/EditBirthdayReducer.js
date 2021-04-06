@@ -1,4 +1,4 @@
-﻿import { editBirthday } from '../../actions/editProfile/birthday-edit-action';
+﻿import { editBirthday } from '../../actions/redactProfile/birthday-edit-action';
 
 export const reducer = (
     state = {

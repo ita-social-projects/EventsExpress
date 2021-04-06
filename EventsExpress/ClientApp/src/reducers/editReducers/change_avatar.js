@@ -1,4 +1,4 @@
-import { changeAvatar } from '../../actions/editProfile/avatar-change-action';
+import { changeAvatar } from '../../actions/redactProfile/avatar-change-action';
 import initialState from '../../store/initialState';
 
 export const reducer = (
