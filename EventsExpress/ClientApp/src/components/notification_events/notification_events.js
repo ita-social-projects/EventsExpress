@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import get_events from '../../actions/notification_events';
+import { eventsForNotification } from '../../actions/events/events-for-notification-action'; 
 import EventList from '../event/events-for-profile';
 import Spinner from '../spinner';
-import BadRequest from '../Route guard/400';
-import Unauthorized from '../Route guard/401';
-import Forbidden from '../Route guard/403';
 
 class NotificationEvents extends Component {
     componentWillMount = () => {
@@ -14,21 +10,11 @@ class NotificationEvents extends Component {
     }
 
     render() {
-        const { current_user, events, notification } = this.props;
-        const { data, isPending, isError } = this.props.events;
+        const { current_user } = this.props;
+        const { data, isPending } = this.props.events;
         const { items } = this.props.events.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <Redirect from="*" to="/home/events" />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
-
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
+        const content = !isPending
             ? <EventList
                 current_user={current_user}
                 notification_events={this.props.notification.events}
@@ -57,7 +43,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_events: (eventIds, page) => dispatch(get_events(eventIds, page))
+        get_events: (eventIds, page) => dispatch(eventsForNotification(eventIds, page))
     }
 };
 

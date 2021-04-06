@@ -1,26 +1,33 @@
-#main-content{
+#main-content {
     margin-left: 16.66667%;
 }
 
-.box{
+.box {
     margin:10px;
 }
 
-.text-box{
+.text-box {
     max-height: 300px;
     scroll-behavior: auto;
 }
 
-.h-15{
+.h-15 {
     height: 15%;
 }
 
-input{
+input {
     margin-bottom: 10px;
 }
 
-.preview-container{
-    border: 1px solid rgba(114, 113, 113, 0.329);
+.preview-container {
     border-radius: 15px;
     padding: 10px;
+}
+
+.preview-container.valid {
+    border: 1px solid rgba(114, 113, 113, 0.329);
+}
+
+.preview-container.invalid {
+    border: 1px solid #f44336;
 }

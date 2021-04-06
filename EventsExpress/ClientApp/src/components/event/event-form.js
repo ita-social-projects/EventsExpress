@@ -1,129 +1,68 @@
-﻿import React, { Component } from 'react';
+﻿
+import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
-import Module from '../helpers';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
-    renderSelectLocationField,
     renderTextArea,
     renderSelectPeriodicityField,
     renderCheckbox,
     renderTextField,
-    renderDatePicker
+    renderDatePicker,
+    radioLocationType
 } from '../helpers/helpers';
 import Inventory from '../inventory/inventory';
-
+import LocationMap from './map/location-map';
+import { enumLocationType } from '../../constants/EventLocationType';
+import { createBrowserHistory } from 'history';
+import "./event-form.css";
 momentLocaliser(moment);
-const imageIsRequired = value => (!value ? "Required" : undefined);
-const { validate } = Module;
+const history = createBrowserHistory({ forceRefresh: true });
 
 class EventForm extends Component {
-    state = { imagefile: [], checked: false };
 
-    handleFile(fieldName, event) {
-        event.preventDefault();
-        const files = [...event.target.files];
-    }
-
-    handleOnDrop = (newImageFile, onChange) => {
-        if (newImageFile.length > 0) {
-            const imagefile = {
-                file: newImageFile[0],
-                name: newImageFile[0].name,
-                preview: URL.createObjectURL(newImageFile[0]),
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] }, () => onChange(imagefile));
-        }
-    };
-
-    componentDidMount = () => {
-        let values = this.props.initialValues || this.props.data;
-
-        if (this.props.isCreated) {
-            const imagefile = {
-                file: '',
-                name: '',
-                preview: values.photoUrl,
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] });
-        }
-    }
-
-    componentDidUpdate = () => {
-        let status = this.props.addEventStatus;
-        if (status && status.isEventSuccess) {
-            this.resetForm();
-        }
-    }
-
-    componentWillUnmount() {
-        this.resetForm();
-    }
-
-    isSaveButtonDisabled = false;
-
-    disableSaveButton = () => {
-        if (this.props.valid) {
-            this.isSaveButtonDisabled = true;
-        }
-    }
+    state = { checked: false };
 
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
         }));
-    }
 
-    resetForm = () => {
-        this.isSaveButtonDisabled = false;
-        this.setState({ imagefile: [] });
     }
-
-    renderLocations = (arr) => {
-        return arr.map((item) => {
-            return <option value={item.id}>{item.name}</option>;
-        });
+    handleClick = () => {
+        history.push(`/`);
     }
-
-    componentWillMount() {
-        this.resetForm();
+    onClickCallBack = (coords) => {
+        this.setState({ selectedPos: [coords.lat, coords.lng] });
     }
 
     render() {
+        const { form_values, all_categories, isCreated, disabledDate, initialValues } = this.props;
+        const { checked } = this.state;
+        const { handleChange } = this;
 
-        const { countries, form_values, all_categories, data, isCreated } = this.props;
-        let values = form_values || this.props.initialValues;
+        let values = form_values || initialValues;
+        const photoUrl = initialValues ?
+            initialValues.photoUrl : null;
 
         return (
-            <form onSubmit={this.props.handleSubmit} encType="multipart/form-data" autoComplete="off" >
+            <form onSubmit={this.props.handleSubmit}
+                encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
                     <Field
-                        ref={(x) => { this.image = x; }}
                         id="image-field"
-                        name="image"
+                        name="photo"
                         component={DropZoneField}
                         type="file"
-                        imagefile={this.state.imagefile}
-                        handleOnDrop={this.handleOnDrop}
-                        validate={(this.state.imagefile[0] == null) ? [imageIsRequired] : null}
+                        crop={true}
+                        cropShape='rect'
+                        photoUrl={photoUrl}
                     />
-                    <Button
-                        type="button"
-                        color="primary"
-                        disabled={this.props.submitting}
-                        onClick={this.resetForm}
-                        style={{ float: "right" }}
-                    >
-                        Clear
-                    </Button>
                     <div className="mt-2">
                         <Field name='title'
                             component={renderTextField}
@@ -148,11 +87,11 @@ class EventForm extends Component {
                                 label="Recurrent Event"
                                 name='isReccurent'
                                 component={renderCheckbox}
-                                checked={this.state.checked}
-                                onChange={this.handleChange} />
+                                checked={checked}
+                                onChange={handleChange} />
                         </div>
                     }
-                    {this.state.checked &&
+                    {checked &&
                         <div>
                             <div className="mt-2">
                                 <Field
@@ -177,21 +116,23 @@ class EventForm extends Component {
                             label="Public"
                         />
                     </div>
-                    <div className="meta-wrap m-2">
-                        <span>From
+                    <div className="meta-wrap">
+                        <span >
                             <Field
                                 name='dateFrom'
+                                label='From'
                                 component={renderDatePicker}
-                                disabled={this.props.disabledDate ? true : false}
+                                disabled={disabledDate ? true : false}
                             />
                         </span>
                         {values && values.dateFrom &&
-                            <span>To
+                            <span className="retreat">
                                 <Field
                                     name='dateTo'
+                                    label='To'
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
-                                    disabled={this.props.disabledDate ? true : false}
+                                    disabled={disabledDate ? true : false}
                                 />
                             </span>
                         }
@@ -214,47 +155,47 @@ class EventForm extends Component {
                             className="form-control mt-2"
                             placeholder='#hashtags' />
                     </div>
-                    <div className="mt-2">
-                        <Field onChange={this.props.onChangeCountry}
-                            name='countryId'
-                            data={countries}
-                            text='Country'
-                            component={renderSelectLocationField}
-                        />
+                    <div>
                     </div>
-                    {values && values.countryId &&
+
+                    <Field name="location.type" component={radioLocationType} />
+                    {(this.props.form_values == undefined
+                        || (this.props.form_values.location
+                            && this.props.form_values.location.type === enumLocationType.map))
+                        &&
+
                         <div className="mt-2">
                             <Field
-                                name='cityId'
-                                data={this.props.cities}
-                                text='City'
-                                component={renderSelectLocationField}
+                                name='location.selectedPos'
+                                initialData={
+                                    this.props.initialValues &&
+                                    this.props.initialValues.location &&
+                                    this.props.initialValues.location.selectedPos
+                                }
+                                initialValues={initialValues}
+                                isAddEventMapLocation={true}
+                                component={LocationMap}
+                            />
+                        </div>
+                    }
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type === enumLocationType.online &&
+
+                        <div className="mt-2">
+                            <label for="url">Enter an https:// URL:</label>
+                            <Field
+                                name='location.onlineMeeting'
+                                component={renderTextField}
+                                type="url"
+                                label="Url"
                             />
                         </div>
                     }
                     {isCreated ? null : <Inventory />}
                 </div>
                 <div className="row pl-md-4">
-                    <div className="col">
-                        <Button 
-                            className="border"
-                            fullWidth={true}
-                            type="submit"
-                            color="primary"
-                            onClick={this.disableSaveButton}
-                            disabled={this.isSaveButtonDisabled}>
-                            Save
-                        </Button>
-                    </div>
-                    <div className="col">
-                        <Button
-                            className="border"
-                            fullWidth={true}
-                            color="primary"
-                            onClick={this.props.onCancel}>
-                            Cancel
-                        </Button>
-                    </div>
+                    {this.props.children}
                 </div>
             </form>
         );
@@ -271,6 +212,5 @@ EventForm = connect(
 
 export default reduxForm({
     form: 'event-form',
-    validate: validate,
     enableReinitialize: true
 })(EventForm);

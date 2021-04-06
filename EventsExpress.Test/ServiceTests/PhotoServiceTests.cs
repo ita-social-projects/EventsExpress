@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
-using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
@@ -19,11 +24,9 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class PhotoServiceTests : TestInitializer
     {
-        private Guid photoId = Guid.NewGuid();
-
         public PhotoService PhotoService { get; set; }
 
-        private Photo Photo { get; set; }
+        private Mock<BlobClient> BlobClientMock { get; set; }
 
         private Mock<HttpMessageHandler> HttpMessageHandlerMock { get; set; }
 
@@ -34,9 +37,9 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
 
-            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
-            mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
-            mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
+            var mockBlobServiceClient = new Mock<BlobServiceClient>();
+            var mockBlobContainer = new Mock<BlobContainerClient>();
+            BlobClientMock = new Mock<BlobClient>();
 
             HttpClientFactoryMock = new Mock<IHttpClientFactory>();
             HttpMessageHandlerMock = new Mock<HttpMessageHandler>();
@@ -45,18 +48,19 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns(new HttpClient((HttpMessageHandler)HttpMessageHandlerMock.Object))
                 .Verifiable();
 
-            PhotoService = new PhotoService(
-                Context, mockOpt.Object, HttpClientFactoryMock.Object);
+            var mockOpt = new Mock<IOptions<ImageOptionsModel>>();
+            mockOpt.Setup(opt => opt.Value.Thumbnail).Returns(400);
+            mockOpt.Setup(opt => opt.Value.Image).Returns(1200);
 
-            Photo = new Photo
-            {
-                Id = photoId,
-                Thumb = new byte[0],
-                Img = new byte[0],
-            };
+            mockBlobServiceClient
+                .Setup(s => s.GetBlobContainerClient(It.IsAny<string>()))
+                .Returns(mockBlobContainer.Object);
 
-            Context.Photos.Add(Photo);
-            Context.SaveChanges();
+            mockBlobContainer
+                .Setup(c => c.GetBlobClient(It.IsAny<string>()))
+                .Returns(BlobClientMock.Object);
+
+            PhotoService = new PhotoService(mockOpt.Object, HttpClientFactoryMock.Object, mockBlobServiceClient.Object);
         }
 
         private void SetUpHttpHandlerMock(HttpStatusCode statusCode)
@@ -77,37 +81,83 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void AddPhoto_ValidFormFile_DoesNotThrows()
+        public void AddEventPhoto_ValidFormFile_DoesNotThrows()
         {
-            using (var stream = File.OpenRead(@"./Images/valid-image.jpg"))
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
-                var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(@"./Images/valid-image.jpg"))
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(Path.GetFileName(@"./Images/valid-image.jpg")),
-                };
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
 
-                Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhoto(file));
-            }
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddEventPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
 
         [Test]
         [TestCase(@"./Images/invalidFile.txt")]
         [TestCase(@"./Images/invalidFile.html")]
         [TestCase(@"./Images/tooSmallImage.jpg")]
-        public void AddPhoto_InValidFormFile_WillThrows(string testFilePath)
+        public void AddEventPhoto_InValidFormFile_WillThrows(string testFilePath)
         {
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
             string fileName = Path.GetFileName(testFilePath);
-
-            using (var stream = File.OpenRead(testFilePath))
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
-                var file = new FormFile(stream, 0, stream.Length, null, fileName)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = GetContentType(fileName),
-                };
-                Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhoto(file));
-            }
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddEventPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Test]
+        public void AddUserPhoto_ValidFormFile_DoesNotThrows()
+        {
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
+
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddUserPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        [TestCase(@"./Images/invalidFile.txt")]
+        [TestCase(@"./Images/invalidFile.html")]
+        [TestCase(@"./Images/tooSmallImage.jpg")]
+        public void AddUserPhoto_InValidFormFile_WillThrows(string testFilePath)
+        {
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddUserPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -116,7 +166,10 @@ namespace EventsExpress.Test.ServiceTests
             SetUpHttpHandlerMock(HttpStatusCode.OK);
 
             string url = "https://google.com";
-            Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhotoByURL(url));
+            Guid id = Guid.NewGuid();
+
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhotoByURL(url, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -125,13 +178,17 @@ namespace EventsExpress.Test.ServiceTests
             SetUpHttpHandlerMock(HttpStatusCode.BadRequest);
 
             string url = "https://google.com";
-            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhotoByURL(url));
+            Guid id = Guid.NewGuid();
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhotoByURL(url, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
-        public void Delete_DoesNotThrows()
+        public void GetPhotoFromBlob_DoesNotThrows()
         {
-            Assert.DoesNotThrowAsync(async () => await PhotoService.Delete(photoId));
+            Assert.DoesNotThrowAsync(async () => await PhotoService.GetPhotoFromAzureBlob($"events/{Guid.NewGuid()}/preview.png"));
+            BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
         }
 
         private string GetContentType(string fileName)

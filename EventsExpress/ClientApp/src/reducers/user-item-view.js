@@ -1,20 +1,14 @@
 ﻿
 import initialState from '../store/initialState';
 import {
-    GET_PROFILE_ERROR, GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, RESET_USER
-} from '../actions/user-item-view';
+    GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, RESET_USER
+} from '../actions/user/user-item-view-action';
 
 export const reducer = (
     state = initialState.profile,
     action
 ) => {
     switch (action.type) {
-        case GET_PROFILE_ERROR:
-            return {
-                ...state,
-                isPending: false,
-                isError: action.payload
-            }
         case GET_PROFILE_PENDING:
             return {
                 ...state,

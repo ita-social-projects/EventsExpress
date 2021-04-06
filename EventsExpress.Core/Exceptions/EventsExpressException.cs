@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EventsExpress.Core.Exceptions
 {
-    [Serializable]
     public class EventsExpressException : Exception
     {
         public EventsExpressException()
@@ -18,5 +18,13 @@ namespace EventsExpress.Core.Exceptions
             : base(message, inner)
         {
         }
+
+        public EventsExpressException(string message, Dictionary<string, string> customData)
+            : base(message)
+        {
+            ValidationErrors = customData;
+        }
+
+        public Dictionary<string, string> ValidationErrors { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> AuthenticateUserFromExternalProvider(string email)
         {
-            UserDTO user = _userService.GetByEmail(email);
+            UserDto user = _userService.GetByEmail(email);
 
             if (user == null)
             {
@@ -79,7 +79,7 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> FirstAuthenticate(UserDTO userDto)
+        public async Task<AuthenticateResponseModel> FirstAuthenticate(UserDto userDto)
         {
             if (userDto == null)
             {
@@ -97,17 +97,20 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public Task ChangePasswordAsync(UserDTO userDto, string oldPassword, string newPassword)
+        public async Task ChangePasswordAsync(UserDto userDto, string oldPassword, string newPassword)
         {
             if (VerifyPassword(userDto, oldPassword))
             {
-                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword);
+                userDto.Salt = PasswordHasher.GenerateSalt();
+                userDto.PasswordHash = PasswordHasher.GenerateHash(newPassword, userDto.Salt);
+                await _userService.Update(userDto);
+                return;
             }
 
             throw new EventsExpressException("Invalid password");
         }
 
-        public UserDTO GetCurrentUser(ClaimsPrincipal userClaims)
+        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
         {
             Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
 
@@ -119,7 +122,7 @@ namespace EventsExpress.Core.Services
             return _userService.GetByEmail(emailClaim.Value);
         }
 
-        private static bool VerifyPassword(UserDTO user, string actualPassword) =>
-            user.PasswordHash == PasswordHasher.GenerateHash(actualPassword);
+        private static bool VerifyPassword(UserDto user, string actualPassword) =>
+            user.PasswordHash == PasswordHasher.GenerateHash(actualPassword, user.Salt);
     }
 }

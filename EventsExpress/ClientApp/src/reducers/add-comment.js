@@ -2,7 +2,7 @@
 
 import {
     SET_COMMENT_PENDING, SET_COMMENT_SUCCESS
-} from '../actions/add-comment';
+} from '../actions/comment/comment-add-action';
 
 
 

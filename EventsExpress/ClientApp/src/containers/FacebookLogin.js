@@ -2,7 +2,7 @@
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import config from '../config';
-import { loginFacebook } from '../actions/login';
+import { loginFacebook } from '../actions/login/login-action';
 import './css/Auth.css';
 
 class LoginFacebook extends Component {

@@ -28,9 +28,9 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method have to return all events.
+        /// This method have to return all event schedules.
         /// </summary>
-        /// <returns>AllEvents.</returns>
+        /// <returns>The method returns event schedules.</returns>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]
@@ -53,17 +53,18 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is for edit and create events.
+        /// This method is for edit event schedule.
         /// </summary>
-        /// <param name="eventId">Required.</param>
-        /// <param name="model">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="model">Param model provides access to event schedule properties.</param>
+        /// <returns>The method returns edited event.</returns>
         /// <response code="200">Edit/Create event proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
-            var result = await _eventScheduleService.Edit(_mapper.Map<EventScheduleDTO>(model));
+            var result = await _eventScheduleService.Edit(_mapper.Map<PreviewEventScheduleViewModel, EventScheduleDto>(model));
 
             return Ok(result);
         }
@@ -71,11 +72,12 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns canceled all event schedules.</returns>
         /// <response code="200">Cancel All Events proces success.</response>
         /// <response code="400">Cancel All Events process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CancelAllEvents(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -91,11 +93,12 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create events.
         /// </summary>
-        /// <param name="eventId">Required.</param>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <returns>The method returns canceled next event schedule.</returns>
         /// <response code="200">Cancel Next Event event proces success.</response>
         /// <response code="400">Cancel Next Event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> CancelNextEvent(Guid eventId)
         {
             if (!ModelState.IsValid)
@@ -111,8 +114,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return event.
         /// </summary>
-        /// <param name="eventScheduleId">Required.</param>
-        /// <returns>Event.</returns>
+        /// <param name="eventScheduleId">Param eventScheduleId defines the event schedule identifier.</param>
+        /// <returns>The method returns event schedule by identifier.</returns>
         /// <response code="200">Return UserInfo model.</response>
         [AllowAnonymous]
         [HttpGet("{eventScheduleId:Guid}")]

@@ -7,7 +7,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface IEventStatusHistoryService
     {
-        Task CancelEvent(Guid eventId, string reason);
+        Task SetStatusEvent(Guid eventId, string reason, EventStatus eventStatus);
 
         EventStatusHistory GetLastRecord(Guid eventId, EventStatus status);
     }

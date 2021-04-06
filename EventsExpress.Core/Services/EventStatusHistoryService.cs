@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -25,23 +26,25 @@ namespace EventsExpress.Core.Services
             AppDbContext context)
              : base(context)
         {
+            _mediator = mediator;
             _httpContextAccessor = httpContextAccessor;
             _authService = authService;
         }
 
-        public async Task CancelEvent(Guid eventId, string reason)
+        public async Task SetStatusEvent(Guid eventId, string reason, EventStatus eventStatus)
         {
-            var uEvent = _context.Events.Find(eventId);
+            var uEvent = Context.Events.Find(eventId);
             if (uEvent == null)
             {
                 throw new EventsExpressException("Invalid event id");
             }
 
-            var record = CreateEventStatusRecord(uEvent, reason, EventStatus.Cancelled);
+            var record = CreateEventStatusRecord(uEvent, reason, eventStatus);
             Insert(record);
 
-            await _context.SaveChangesAsync();
-            await _mediator.Publish(new CancelEventMessage(eventId));
+            await Context.SaveChangesAsync();
+
+            await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
         }
 
         private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
@@ -59,7 +62,9 @@ namespace EventsExpress.Core.Services
 
         public EventStatusHistory GetLastRecord(Guid eventId, EventStatus status)
         {
-            return GetLastRecord(eventId, status);
+            return Context.EventStatusHistory
+                .Where(e => e.EventId == eventId && e.EventStatus == status)
+                .LastOrDefault();
         }
     }
 }

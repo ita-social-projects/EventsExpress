@@ -4,8 +4,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -24,24 +26,27 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IEmailService emailService)
+            IEmailService emailService,
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
+            _photoService = photoService;
         }
 
         /// <summary>
         /// This method seach Users with filter.
         /// </summary>
-        /// <param name="filter">Required.</param>
-        /// <returns>Users.</returns>
+        /// <param name="filter">Param filter defines UsersFilterViewModel.</param>
+        /// <returns>The method returns found user.</returns>
         /// <response code="200">Return IEnumerable UserManageDto models.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
@@ -69,8 +74,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This metod have to return UserDto for Admin.
         /// </summary>
-        /// <param name="filter">Required.</param>
-        /// <returns>Users.</returns>
+        /// <param name="filter">Param filter defines UsersFilterViewModel.</param>
+        /// <returns>The method returns all users.</returns>
         /// <response code="200">Return  UserManageDto model.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
@@ -87,7 +92,7 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -102,8 +107,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to change role of user.
         /// </summary>
-        /// <param name="userId">Required.</param>
-        /// <param name="roleId">UserRoleId.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <param name="roleId">Param roleId defines the role identifier.</param>
+        /// <returns>The method changes role for users.</returns>
         /// <response code="200">Change role success.</response>
         /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
@@ -118,7 +124,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to block user.
         /// </summary>
-        /// <param name="userId">Required.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns unblocked user.</returns>
         /// <response code="200">Block is succesful.</response>
         /// <response code="400">Block process failed.</response>
         [HttpPost("{userId}/[action]")]
@@ -133,7 +140,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to unblock event.
         /// </summary>
-        /// <param name="userId">Required.</param>
+        /// <param name="userId">Param userId defines the user identifier.</param>
+        /// <returns>The method returns blocked user.</returns>
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
@@ -148,7 +156,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit username.
         /// </summary>
-        /// <param name="userName">Required.</param>
+        /// <param name="userName">Param userName defines the username.</param>
+        /// <returns>The method returns edited username.</returns>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
@@ -169,7 +178,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit date of birthday.
         /// </summary>
-        /// <param name="userBirthday">Required.</param>
+        /// <param name="userBirthday">Param userBirthday defines the user Birthday.</param>
+        /// <returns>The method returns edited birthday.</returns>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
@@ -190,7 +200,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit gender.
         /// </summary>
-        /// <param name="userGender">Required.</param>
+        /// <param name="userGender">Param userGender defines the user gender.</param>
+        /// <returns>The method returns edited gender.</returns>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
@@ -211,7 +222,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to edit user categories.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param model defines EditUserCategoriesViewModel model.</param>
+        /// <returns>The method returns edited categories for user.</returns>
         /// <response code="200">Edit is succesful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
@@ -238,6 +250,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This metod is to change user avatar.
         /// </summary>
+        /// <returns>The method returns edited profile photo.</returns>
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]")]
@@ -253,7 +266,7 @@ namespace EventsExpress.Controllers
 
             await _userService.ChangeAvatar(user.Id, newAva);
 
-            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+            var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
 
             return Ok(updatedPhoto);
         }
@@ -261,7 +274,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method help to contact users with admins.
         /// </summary>
-        /// <param name="model">ContactModel.</param>
+        /// <param name="model">Param model defines ContactUsViewModel model.</param>
+        /// <returns>The method sends message to admin mail.</returns>
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
@@ -277,7 +291,7 @@ namespace EventsExpress.Controllers
             {
                 foreach (var admin in admins)
                 {
-                    await _emailService.SendEmailAsync(new EmailDTO
+                    await _emailService.SendEmailAsync(new EmailDto
                     {
                         Subject = model.Type,
                         RecepientEmail = admin.Email,
@@ -296,8 +310,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for get user.
         /// </summary>
-        /// <param name="id">UserId.</param>
-        /// <returns>User.</returns>
+        /// <param name="id">Param id defines the user identifier.</param>
+        /// <returns>The method returns user profile.</returns>
         /// <response code="200">Return profileDto.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
@@ -312,6 +326,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to set attitide t user.
         /// </summary>
+        /// <param name="attitude">Param attitude defines the attitude.</param>
+        /// <returns>The method returns the specified attitude.</returns>
         /// <response code="200">Attitude set success.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpPost("[action]")]
@@ -322,7 +338,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userService.SetAttitude(_mapper.Map<AttitudeDTO>(attitude));
+            await _userService.SetAttitude(_mapper.Map<AttitudeDto>(attitude));
 
             return Ok();
         }
@@ -332,7 +348,36 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method help to get current user from JWT.
         /// </summary>
+        /// <returns>The method returns current user.</returns>
         [NonAction]
-        private UserDTO GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+
+        /// <summary>
+        /// This method is to edit user notificatin types.
+        /// </summary>
+        /// <param name="model">Param model defines EditUserNotificationTypesViewModel model.</param>
+        /// <returns>The method returns edited notification types for user.</returns>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditUserNotificationType(EditUserNotificationTypesViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = GetCurrentUser(HttpContext.User);
+            if (user == null)
+            {
+                throw new EventsExpressException("Null object");
+            }
+
+            var newNotificationTypes = _mapper.Map<IEnumerable<NotificationType>>(model.NotificationTypes);
+
+            var result = await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
+
+            return Ok(result);
+        }
     }
 }

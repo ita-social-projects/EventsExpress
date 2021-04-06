@@ -16,6 +16,7 @@ import SelectCategoriesWrapper from '../../containers/categories/SelectCategorie
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 import './profile.css';
+import SelectNotificationTypesWrapper from '../../containers/notificationTypes/SelectNotificationTypes'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +52,7 @@ const Profile = (props) => {
                     <Typography className={classes.heading}>Change Avatar</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
+                    <Typography className="w-100">
                         <MuiThemeProvider>
                             <ChangeAvatarWrapper />
                         </MuiThemeProvider>
@@ -125,6 +126,25 @@ const Profile = (props) => {
                     <Typography>
                         <MuiThemeProvider>
                             <SelectCategoriesWrapper />
+                        </MuiThemeProvider>
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel5bh-content"
+                    id="panel5bh-header"
+                >
+                    <Typography className={classes.heading}>Manage notifications</Typography>
+                    <Typography className={classes.secondaryHeading}>
+                        {props.notificationTypes.map(notificatin => <div key={notificatin.id}>{notificatin.name}</div>)}
+                    </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography>
+                        <MuiThemeProvider>
+                            <SelectNotificationTypesWrapper />
                         </MuiThemeProvider>
                     </Typography>
                 </ExpansionPanelDetails>

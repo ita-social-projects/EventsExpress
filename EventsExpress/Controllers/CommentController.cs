@@ -28,7 +28,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for edit and create comments.
         /// </summary>
-        /// <param name="model">Required.</param>
+        /// <param name="model">Param defines CommentViewModel model.</param>
+        /// <returns>The method returns edited comment.</returns>
         /// <response code="200">Edit/Create comment proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
         [AllowAnonymous]
@@ -40,7 +41,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDTO>(model));
+            await _commentService.Create(_mapper.Map<CommentDto>(model));
 
             return Ok();
         }
@@ -48,7 +49,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for delete comment.
         /// </summary>
-        /// <param name="id">Required.</param>
+        /// <param name="id">Param id defines comment identifier.</param>
+        /// <returns>The method returns deleted comment.</returns>
         /// <response code="200">Delete comment proces success.</response>
         /// <response code="400">If delete process failed.</response>
         [AllowAnonymous]
@@ -63,18 +65,16 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method have to return all comments.
         /// </summary>
-        /// <param name="id">Required.</param>
-        /// <param name="page">CountPages.</param>
-        /// <returns>AllComments.</returns>
+        /// <param name="id">Param id defines comment identifier.</param>
+        /// <param name="page">Param page defines page count.</param>
+        /// <returns>The method returns all comments.</returns>
         /// <response code="200">Return CommentDto model.</response>
         [AllowAnonymous]
         [HttpGet("[action]/{id}/")]
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            var res = _mapper.Map<IEnumerable<CommentViewModel>>(
-                _commentService
-                    .GetCommentByEventId(id, page, pageSize, out int count));
+            var res = _mapper.Map<IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {

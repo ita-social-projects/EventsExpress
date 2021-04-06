@@ -5,9 +5,9 @@ import CommentService from './CommentService'
 import EventService from './EventService'
 import EventScheduleService from './EventScheduleService'
 import InventoryService from './InventoryService'
-import LocationService from './LocationService'
 import RoleService from './RoleService'
 import UserService from './UserService'
+import NotificationTypeService from './NotificationTypeService'
 import TrackService from './TrackService'
 
 export {
@@ -18,8 +18,8 @@ export {
     EventService, 
     EventScheduleService,
     InventoryService,
-    LocationService,
     RoleService,
     UserService,
-    TrackService
+    NotificationTypeService,
+	TrackService
 };

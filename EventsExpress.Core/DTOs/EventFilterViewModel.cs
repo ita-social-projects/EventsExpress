@@ -20,10 +20,16 @@ namespace EventsExpress.Core.DTOs
 
         public Guid? OwnerId { get; set; }
 
+        public double? X { get; set; }
+
+        public double? Y { get; set; }
+
+        public double? Radius { get; set; }
+
         public List<string> Categories { get; set; }
 
         public SortBy SortBy { get; set; }
 
-        public EventStatus Status { get; set; } = EventStatus.Active;
+        public List<EventStatus> Statuses { get; set; }
     }
 }

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class EventDTO
+    public class EventDto
     {
         public Guid Id { get; set; }
-
-        public bool IsBlocked { get; set; }
 
         public bool IsReccurent { get; set; }
 
@@ -18,11 +17,11 @@ namespace EventsExpress.Core.DTOs
 
         public string Description { get; set; }
 
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
-        public int MaxParticipants { get; set; }
+        public int? MaxParticipants { get; set; }
 
         public int Frequency { get; set; }
 
@@ -30,26 +29,24 @@ namespace EventsExpress.Core.DTOs
 
         public IFormFile Photo { get; set; }
 
-        public string PhotoUrl { get; set; }
+        public bool? IsPublic { get; set; }
 
-        public Guid PhotoId { get; set; }
+        public Point Point { get; set; }
 
-        public Photo PhotoBytes { get; set; }
+        public LocationType Type { get; set; }
+
+        public Uri OnlineMeeting { get; set; }
+
+        public IEnumerable<CategoryDto> Categories { get; set; }
+
+        public EventStatus EventStatus { get; set; }
+
+        public IEnumerable<UserEvent> Visitors { get; set; }
+
+        public IEnumerable<InventoryDto> Inventories { get; set; }
 
         public IEnumerable<Guid> OwnerIds { get; set; }
 
         public IEnumerable<User> Owners { get; set; }
-
-        public Guid CityId { get; set; }
-
-        public City City { get; set; }
-
-        public bool IsPublic { get; set; }
-
-        public IEnumerable<CategoryDTO> Categories { get; set; }
-
-        public IEnumerable<UserEvent> Visitors { get; set; }
-
-        public IEnumerable<InventoryDTO> Inventories { get; set; }
     }
 }

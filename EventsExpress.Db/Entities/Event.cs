@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
@@ -8,37 +9,29 @@ namespace EventsExpress.Db.Entities
     public class Event : BaseEntity
     {
         [Track]
-        public bool IsBlocked { get; set; }
-
-        [Track]
         public string Title { get; set; }
 
         [Track]
         public string Description { get; set; }
 
         [Track]
-        public DateTime DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
         [Track]
-        public DateTime DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
         [Track]
-        public bool IsPublic { get; set; }
+        public bool? IsPublic { get; set; }
 
         [Track]
-        public Guid CityId { get; set; }
-
-        public virtual City City { get; set; }
+        public int? MaxParticipants { get; set; }
 
         [Track]
-        public int MaxParticipants { get; set; }
-
-        [Track]
-        public Guid? PhotoId { get; set; }
+        public Guid? EventLocationId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
 
-        public virtual Photo Photo { get; set; }
+        public virtual EventLocation EventLocation { get; set; }
 
         public virtual ICollection<EventOwner> Owners { get; set; }
 

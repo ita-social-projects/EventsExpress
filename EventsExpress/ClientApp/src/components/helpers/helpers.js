@@ -12,6 +12,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import moment from "moment";
+import './helpers.css'
 
 export const radioButton = ({ input, labels, ...rest }) => (
     <FormControl>
@@ -20,6 +22,16 @@ export const radioButton = ({ input, labels, ...rest }) => (
             <FormControlLabel value="active" control={<Radio />} label="Active" />
             <FormControlLabel value="all" control={<Radio />} label="All" />
         </RadioGroup>
+    </FormControl>
+)
+export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) => (
+    <FormControl>
+
+        <RadioGroup {...input} {...rest}>
+            <FormControlLabel value="0" control={<Radio />} label="Map" />
+            <FormControlLabel value="1" control={<Radio />} label="Online" />
+        </RadioGroup>
+        {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 )
 
@@ -45,7 +57,8 @@ export const validate = values => {
         'itemName',
         'needQuantity',
         'unitOfMeasuring',
-        'willTake'
+        'willTake',
+        'image'
     ];
 
     requiredFields.forEach(field => {
@@ -70,7 +83,7 @@ export const validate = values => {
             if (item.itemName && item.itemName.length > 30) {
                 inventoriesErrors.itemName = 'Invalid length: 1 - 30 symbols';
                 inventoriesArrayErrors[index] = inventoriesErrors;
-            }            
+            }
             if (!item || !item.needQuantity) {
                 inventoriesErrors.needQuantity = 'Required';
                 inventoriesArrayErrors[index] = inventoriesErrors;
@@ -88,7 +101,18 @@ export const validate = values => {
         if (inventoriesArrayErrors.length) {
             errors.inventories = inventoriesArrayErrors;
         }
-    }  
+    }
+
+    if (values.image != null && values.image.file != null && values.image.file.size < 4096)
+        errors.image = "Image is too small";
+
+    if (values.categories != null && values.categories.length == 0) {
+        errors.categories = "Required";
+    }
+
+    if (!values.selectedPos || values.selectedPos == "") {
+        errors.selectedPos = "Required";
+    }
 
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;
@@ -130,7 +154,10 @@ export const validate = values => {
     return errors;
 }
 
-export const validateEventForm = values =>{
+export const validateEventForm = values => {
+
+    if (!values)
+        return values;
 
     if (!values.isPublic) {
         values.isPublic = false;
@@ -151,6 +178,7 @@ export const validateEventForm = values =>{
     return values;
 }
 
+
 export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
     value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
     minValue = new Date().getFullYear() - 115;
@@ -168,15 +196,23 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
     />
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, defaultValue, minValue, showTime, disabled }) => {
-    value = value || defaultValue || new Date();
-    minValue = minValue || new Date();
+export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
 
-    return <DatePicker
+    if (value !== null && value !== undefined && value !== '') {
+        if (new Date(value) < new Date(minValue)) {
+            onChange(moment(minValue).format('L'))
+        }
+    }
+
+    return <TextField
+        type="date"
+        label={label}
+        selected={moment(value).format('L')}
+        value={moment(value).format('YYYY-MM-DD')}
         onChange={onChange}
-        minDate={new Date(minValue)}
-        selected={new Date(value) || new Date()}
-        disabled={disabled}
+        inputProps={{
+            min: moment(minValue).format('YYYY-MM-DD')
+        }}
     />
 }
 
@@ -193,33 +229,8 @@ export const minLength = min => value =>
 export const maxLength15 = maxLength(15);
 export const minLength2 = minLength(6);
 export const minLength3 = minLength(4);
-
-export const renderSelectLocationField = ({
-    input,
-    label,
-    text,
-    data,
-    meta: { touched, invalid, error },
-    children,
-    ...custom
-}) =>
-    <FormControl error={touched && error}>
-        <InputLabel htmlFor="age-native-simple">{text}</InputLabel>
-        <Select
-            native
-            {...input}
-            onBlur={() => input.onBlur()}
-            {...custom}
-            inputProps={{
-                name: text.toLowerCase() + 'Id',
-                id: 'age-native-simple'
-            }}
-        >
-            <option value=""></option>
-            {data.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
-        </Select>
-        {renderFromHelper({ touched, error })}
-    </FormControl>
+export const minLength5 = minLength(5);
+export const required = value => value ? undefined : 'Field is required'
 
 export const renderSelectPeriodicityField = ({
     input,
@@ -245,7 +256,7 @@ export const renderSelectPeriodicityField = ({
             <option value="" />
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
-        {renderFromHelper({ touched, error })}
+        {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 
 
@@ -260,7 +271,7 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
             textField={textField}
             placeholder={placeholder}
         />
-        {renderFromHelper({ touched, error })}
+        {renderErrorsFromHelper({ touched, error })}
     </>
 
 export const renderTextArea = ({
@@ -308,6 +319,7 @@ export const renderTextField = ({
         />
     )
 
+
 export const renderSelectField = ({
     input,
     label,
@@ -335,11 +347,11 @@ export const renderSelectField = ({
         </FormControl>
     )
 
-const renderFromHelper = ({ touched, error }) => {
+const renderErrorsFromHelper = ({ touched, error }) => {
     if (!(touched && error)) {
         return;
     } else {
-        return <FormHelperText className="text-danger">{touched && error}</FormHelperText>;
+        return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
     }
 }
 
@@ -360,17 +372,17 @@ export const renderCheckbox = ({ input, label }) => (
 export const renderErrorMessage = (responseData, key) => {
     let response;
     response = JSON.parse(responseData)["errors"];
-        if(response[key]){
-            return (<div className="text-danger">
-                {response[key].map(item =>
+    if (response[key]) {
+        return (<div className="text-danger">
+            {response[key].map(item =>
                 <div>
                     {item}
                 </div>
-                )}
-            </div>
-            )
-        }
+            )}
+        </div>
+        )
     }
+}
 
 export const buildValidationState = (responseData) => {
     let response;

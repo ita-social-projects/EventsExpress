@@ -32,7 +32,7 @@ namespace EventsExpress.Core.NotificationHandlers
             var token = Guid.NewGuid().ToString();
             string theEmailLink = $"<a \" target=\"_blank\" href=\"{AppHttpContext.AppBaseUrl}/authentication/{notification.User.Id}/{token}\">link</a>";
 
-            _cacheHepler.Add(new CacheDTO
+            _cacheHepler.Add(new CacheDto
             {
                 UserId = notification.User.Id,
                 Token = token,
@@ -40,14 +40,14 @@ namespace EventsExpress.Core.NotificationHandlers
 
             try
             {
-                await _sender.SendEmailAsync(new EmailDTO
+                await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = "EventExpress registration",
                     RecepientEmail = notification.User.Email,
                     MessageText = $"For  confirm your email please follow the {theEmailLink}   ",
                 });
 
-                var x = _cacheHepler.GetValue(notification.User.Id);
+                _cacheHepler.GetValue(notification.User.Id);
             }
             catch (Exception ex)
             {

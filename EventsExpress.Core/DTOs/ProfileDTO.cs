@@ -5,7 +5,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class ProfileDTO
+    public class ProfileDto
     {
         public Guid Id { get; set; }
 
@@ -23,11 +23,11 @@ namespace EventsExpress.Core.DTOs
 
         public byte Attitude { get; set; }
 
-        public string UserPhoto { get; set; }
-
         public double Rating { get; set; }
 
-        public IEnumerable<CategoryDTO> Categories { get; set; }
+        public IEnumerable<CategoryDto> Categories { get; set; }
+
+        public IEnumerable<NotificationTypeDto> NotificationTypes { get; set; }
 
         public IEnumerable<Rate> MyRates { get; set; }
     }

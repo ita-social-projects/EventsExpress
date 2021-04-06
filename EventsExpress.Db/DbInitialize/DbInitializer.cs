@@ -19,18 +19,18 @@ namespace EventsExpress.Db.DbInitialize
                 return; // DB has been seeded
             }
 
-            dbContext.Countries.AddRange(LocationParser.GetCountries());
-
             Role adminRole = new Role { Name = "Admin" };
             Role userRole = new Role { Name = "User" };
             dbContext.Roles.AddRange(new Role[] { adminRole, userRole });
 
+            var saltDef = PasswordHasher.GenerateSalt();
             var users = new User[]
             {
                  new User
                  {
                      Name = "Admin",
-                     PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz"),
+                     PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                     Salt = saltDef,
                      Email = "admin@gmail.com",
                      EmailConfirmed = true,
                      Phone = "+380974293583",
@@ -43,7 +43,8 @@ namespace EventsExpress.Db.DbInitialize
                  new User
                   {
                       Name = "UserTest",
-                      PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz"),
+                      PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                      Salt = saltDef,
                       Email = "user@gmail.com",
                       EmailConfirmed = true,
                       Phone = "+380970101013",

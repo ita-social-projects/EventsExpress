@@ -1,8 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TogleOpenWind } from '../../actions/modalWind';
-import logout from '../../actions/logout';
-import { isOpen } from '../../actions/modalWind'
+import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
+import logout from '../../actions/login/logout-action';
 import { setRegisterError } from '../../actions/register'
 import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
 import { setEditGenderError } from '../../actions/EditProfile/EditGender'
@@ -15,7 +14,6 @@ import { setCategoryError } from '../../actions/category/add-category'
 import { getUsersError } from '../../actions/users'
 import { getEventError } from '../../actions/event-item-view'
 import { setRolesError } from '../../actions/roles'
-
 
  class Unauthorized extends Component {
      componentWillMount = () => {

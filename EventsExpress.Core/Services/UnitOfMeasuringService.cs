@@ -21,41 +21,73 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<Guid> Create(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
-            var result = Insert(_mapper.Map<UnitOfMeasuringDTO, UnitOfMeasuring>(unitOfMeasuringDTO));
-            await _context.SaveChangesAsync();
-
-            return result.Id;
+            if (unitOfMeasuringDTO == null)
+            {
+                throw new EventsExpressException("Null object");
+            }
+            else
+            {
+                var result = Insert(Mapper.Map<UnitOfMeasuringDto, UnitOfMeasuring>(unitOfMeasuringDTO));
+                await Context.SaveChangesAsync();
+                return result.Id;
+            }
         }
 
-        public async Task<Guid> Edit(UnitOfMeasuringDTO unitOfMeasuringDTO)
+        public async Task<Guid> Edit(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
-            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
-            if (entity == null)
+            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
+            if (entity == null || entity.IsDeleted)
             {
                 throw new EventsExpressException("Object not found");
             }
 
             entity.ShortName = unitOfMeasuringDTO.ShortName;
             entity.UnitName = unitOfMeasuringDTO.UnitName;
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             return entity.Id;
         }
 
-        public IEnumerable<UnitOfMeasuringDTO> GetAll()
-        {
-            var entities = _context.UnitOfMeasurings.AsEnumerable();
+        public IEnumerable<UnitOfMeasuringDto> GetAll() => Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(
+                    Context.UnitOfMeasurings.Where(item => !item.IsDeleted)
+                                            .OrderBy(unit => unit.UnitName)
+                                            .ThenBy(unit => unit.ShortName));
 
-            return _mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDTO>>(entities);
+        public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
+        {
+            var unitOfMeasuring = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
+            {
+                throw new EventsExpressException("Not found");
+            }
+
+            return new UnitOfMeasuringDto
+            {
+                Id = unitOfMeasuring.Id,
+                UnitName = unitOfMeasuring.UnitName,
+                ShortName = unitOfMeasuring.ShortName,
+                IsDeleted = unitOfMeasuring.IsDeleted,
+            };
         }
 
-        public UnitOfMeasuringDTO GetById(Guid unitOfMeasuringId)
+        public async Task Delete(Guid id)
         {
-            var entity = _context.UnitOfMeasurings.Find(unitOfMeasuringId);
+            var unitOfMeasuring = Context.UnitOfMeasurings.Find(id);
+            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
+            {
+                return;
+            }
 
-            return _mapper.Map<UnitOfMeasuring, UnitOfMeasuringDTO>(entity);
+            unitOfMeasuring.IsDeleted = true;
+
+            await Context.SaveChangesAsync();
+        }
+
+        public bool ExistsByName(string unitName, string shortName)
+        {
+          return Context.UnitOfMeasurings.Any(x => ((!x.IsDeleted) && (x.UnitName == unitName) && (x.ShortName == shortName)));
         }
     }
 }

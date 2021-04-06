@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Field, FieldArray, getFormSyncErrors } from 'redux-form';
 import { renderTextField, renderSelectField } from '../helpers/helpers';
 import { connect } from 'react-redux';
-import  get_unitsOfMeasuring  from '../../actions/unitsOfMeasuring';
+import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import './inventory.css';
+import ErrorMessages from '../shared/errorMessage';
+
 
 const renderInventories = ({ fields, unitOfMeasuringState }) => {
 
@@ -47,6 +49,10 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
                             )} 
                         </Field>
                     </div>
+                    {
+                        props.error &&
+                        <ErrorMessages error={props.error} className="text-center" />
+                    }
                     <button type="button" title="Remove item" class="p-2 btn btn-circle clear-backgroud align-self-end" onClick={() => fields.remove(index)}>
                         <i class="fas fa-trash text-danger"></i>
                     </button>

@@ -1,23 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
 import HeaderProfileWrapper from '../../containers/header-profile';
 import './left-sidebar.css';
+import { NavItem } from '../NavItem/NavItem';
 
-const NavItem = ({ to, icon, text, my_icon }) => {
-    return (
-        <li className="sidebar-header">
-            <Link to={to} className="active">
-                <span className="link">
-                    <i className={icon + ' nav-item-icon'}></i>
-                    {my_icon}
-                    <span className="nav-item-text">&nbsp;{text}</span>
-                    <strong></strong>
-                </span>
-            </Link>
-        </li>
-    );
-}
 
 class LeftSidebar extends Component {
     constructor(props) {
@@ -53,11 +39,16 @@ class LeftSidebar extends Component {
                                 text={"Home"}
                             />
                             {this.props.user.id &&
-                                <>
+                                    <>
                                     <NavItem
                                         to={'/user/' + this.props.user.id}
                                         icon={'fa fa-user'}
                                         text={"Profile"}
+                                    />
+                                    <NavItem
+                                         to={'/drafts'}
+                                         icon={'fa fa-edit'}
+                                         text={"Draft"}
                                     />
                                     <NavItem
                                         to={'/search/users?page=1'}
@@ -73,7 +64,7 @@ class LeftSidebar extends Component {
                                         to={'/user_chats'}
                                         my_icon={
                                             <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                                <i className="fa fa-envelope"></i>
+                                                <i className="fas fa-comments"></i>
                                             </Badge>
                                         }
                                         text={"Comuna"}
@@ -83,15 +74,10 @@ class LeftSidebar extends Component {
                             {this.props.user.role === "Admin" &&
                                 <>
                                     <NavItem
-                                        to={'/admin/categories/'}
-                                        icon={'fa fa-hashtag'}
-                                        text={"Categories"}
-                                    />
-                                    <NavItem
-                                        to={'/admin/users?page=1'}
-                                        icon={'fa fa-users'}
-                                        text={"Users"}
-                                    />
+                                        to={'/admin/'}
+                                        icon={'fa fa-user-secret'}
+                                        text={"Admin"}
+                                    />                               
                                     <NavItem
                                         to={'/admin/tracks/'}
                                         icon={'fa fa-server'}

@@ -1,8 +1,8 @@
 ﻿
 import initialState from '../store/initialState';
 import {
-    SET_COMMENTS_ERROR, SET_COMMENTS_PENDING, GET_COMMENTS_SUCCESS
-} from '../actions/comment-list';
+    SET_COMMENTS_PENDING, GET_COMMENTS_SUCCESS
+} from '../actions/comment/comment-list-action';
 
 export const reducer = (
     state = initialState.comments,

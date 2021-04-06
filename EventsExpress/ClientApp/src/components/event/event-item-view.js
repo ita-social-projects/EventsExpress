@@ -6,7 +6,6 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
-import EventCancelModal from './event-cancel-modal';
 import SimpleModal from './simple-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
@@ -16,15 +15,14 @@ import EventVisitors from './event-visitors';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
+import DisplayLocation from './map/display-location';
+import Tooltip from '@material-ui/core/Tooltip';
+import userStatusEnum from '../../constants/userStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
+import EventChangeStatusModal from './event-change-status-modal';
 
-const userStatus = {
-    APPROVED: 0,
-    DENIED: 1,
-    PENDING: 2
-};
 
 export default class EventItemView extends Component {
-
     constructor() {
         super();
 
@@ -46,8 +44,8 @@ export default class EventItemView extends Component {
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                                 <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
+                                    <h5>{x.username}</h5>
+                                    {'Age: ' + this.getAge(x.birthday)}
                                 </div>
                             </div>
                         </Link>
@@ -55,13 +53,14 @@ export default class EventItemView extends Component {
                     {(isMyEvent && x.id != current_user_id) &&
                         <div>
                             <SimpleModal
-                                id = {x.id} 
-                                action = {this.props.onDeleteFromOwners}
-                                data = {'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
-                                button = {
-                                    <IconButton aria-label="delete">
-                                        <i className="far fa-trash-alt"></i>
-                                    </IconButton>
+                                action={() => this.props.onDeleteFromOwners(x.id)}
+                                data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
+                                button={
+                                    <Tooltip title="Delete from owners">
+                                        <IconButton aria-label="delete">
+                                            <i className="far fa-trash-alt"></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
@@ -80,8 +79,8 @@ export default class EventItemView extends Component {
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                                 <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
+                                    <h5>{x.username}</h5>
+                                    {'Age: ' + this.getAge(x.birthday)}
                                 </div>
                             </div>
                         </Link>
@@ -89,27 +88,29 @@ export default class EventItemView extends Component {
                     {(isMyEvent) &&
                         <div>
                             <SimpleModal
-                                id = {x.id} 
-                                action = {this.props.onPromoteToOwner}
-                                data = {'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                                button = {
-                                    <IconButton aria-label="delete">
-                                        <i className="fas fa-plus-circle"></i>
-                                    </IconButton>
+                                id={x.id}
+                                action={this.props.onPromoteToOwner}
+                                data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
+                                button={
+                                    <Tooltip title="Approve as an owner">
+                                        <IconButton aria-label="delete">
+                                            <i className="fas fa-plus-circle" ></i>
+                                        </IconButton>
+                                    </Tooltip>
                                 }
                             />
                         </div>
                     }
                 </div>
                 {isMyPrivateEvent &&
-                        <Button
-                            onClick={() => this.props.onApprove(x.id, false)}
-                            variant="outlined"
-                            color="success"
-                            >
-                                Delete from event
+                    <Button
+                        onClick={() => this.props.onApprove(x.id, false)}
+                        variant="outlined"
+                        color="success"
+                    >
+                        Delete from event
                         </Button>
-                    }
+                }
             </div>
         ));
     }
@@ -122,31 +123,31 @@ export default class EventItemView extends Component {
                         <div className="d-flex align-items-center border-bottom">
                             <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                             <div>
-                            <h5>{x.username}</h5>
-                            {'Age: ' + this.getAge(x.birthday)}
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
                             </div>
                         </div>
                     </Link>
                 </div>
                 {(isMyEvent) &&
                     <div>
-                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
                 }
                 <div>
                     <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={() => this.props.onApprove(x.id, true)}
+                        variant="outlined"
+                        color="success"
+                        onClick={() => this.props.onApprove(x.id, true)}
                     >
                         Approve
                         </Button>
                     <Button
-                    onClick={() => this.props.onApprove(x.id, false)}
-                    variant="outlined"
-                    color="danger"
+                        onClick={() => this.props.onApprove(x.id, false)}
+                        variant="outlined"
+                        color="danger"
                     >
                         Deny
                         </Button>
@@ -163,15 +164,15 @@ export default class EventItemView extends Component {
                         <div className="d-flex align-items-center border-bottom">
                             <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                             <div>
-                            <h5>{x.username}</h5>
-                            {'Age: ' + this.getAge(x.birthday)}
+                                <h5>{x.username}</h5>
+                                {'Age: ' + this.getAge(x.birthday)}
                             </div>
                         </div>
                     </Link>
                 </div>
                 {(isMyEvent) &&
                     <div>
-                        <IconButton aria-label="delete" onClick = {() => this.props.onPromoteToOwner(x.id)}>
+                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
@@ -180,8 +181,8 @@ export default class EventItemView extends Component {
                     onClick={() => this.props.onApprove(x.id, true)}
                     variant="outlined"
                     color="success"
-                    >
-                        Add to event
+                >
+                    Add to event
                 </Button>
             </div>)
         );
@@ -207,31 +208,31 @@ export default class EventItemView extends Component {
     getUserEventStatus = visitor => {
         if (visitor !== undefined) {
             switch (visitor.userStatusEvent) {
-                case userStatus.APPROVED:
+                case userStatusEnum.APPROVED:
                     return (
                         <span className="alert alert-success shadow" role="alert">
                             You are gonna visit.
-                            </span>
-                            );
-                case userStatus.DENIED:
+                        </span>
+                    );
+                case userStatusEnum.DENIED:
                     return (
                         <span className="alert alert-danger shadow" role="alert">
                             Denied participation.
-                            </span>
-                            );
-                case userStatus.PENDING:
+                        </span>
+                    );
+                case userStatusEnum.PENDING:
                     return (
                         <span className="alert alert-warning shadow" role="alert">
                             Wait until admin approve your request.
-                            </span>
-                            );
+                        </span>
+                    );
             }
         }
         return (
             <span className="alert alert-secondary shadow" role="alert">
                 You are not in event yet.
-                </span>
-                );
+            </span>
+        );
     }
 
     onEdit = () => {
@@ -249,23 +250,17 @@ export default class EventItemView extends Component {
             dateTo,
             description,
             isPublic,
+            eventStatus,
             maxParticipants,
             visitors,
-            country,
-            city,
             owners
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
-            approvedUsers: visitors.filter(x => x.userStatusEvent == 0), 
+            approvedUsers: visitors.filter(x => x.userStatusEvent == 0),
             deniedUsers: visitors.filter(x => x.userStatusEvent == 1),
             pendingUsers: visitors.filter(x => x.userStatusEvent == 2)
-        };
-        const userStatus = {
-            APPROVED: 0,
-            DENIED: 1,
-            PENDING: 2
         };
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
@@ -273,9 +268,10 @@ export default class EventItemView extends Component {
         let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let canEdit = isFutureEvent && isMyEvent;
-        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent;
-        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null;
-        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === eventStatusEnum.Active;
+        let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null && eventStatus === eventStatusEnum.Active;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== eventStatusEnum.Canceled;
+        let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === eventStatusEnum.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
 
         return <>
@@ -293,8 +289,14 @@ export default class EventItemView extends Component {
                                 }
                                 <br />
                                 {(maxParticipants < INT32_MAX_VALUE)
-                                    ? <span className="maxParticipants">{visitorsEnum.approvedUsers.length}/{maxParticipants} Participants</span>
-                                    : <span className="maxParticipants">{visitorsEnum.approvedUsers.length} Participants</span>
+                                    ? <span className="maxParticipants">
+                                        {visitorsEnum.approvedUsers.length}/{maxParticipants}
+                                        <span className="pl-2">Participants</span>
+                                    </span>
+                                    : <span className="maxParticipants">
+                                        {visitorsEnum.approvedUsers.length}
+                                        <span className="pl-2">Participants</span>
+                                    </span>
                                 }
                                 <br />
                                 <span>
@@ -310,19 +312,29 @@ export default class EventItemView extends Component {
                                     }
                                 </span>
                                 <br />
-                                <span>{country.name} {city.name}</span>
-                                <br />
+                                {this.props.event.data.location &&
+                                    <DisplayLocation
+                                        location={this.props.event.data.location}
+                                    />
+                                }                                                                 
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
-                                {canCancel && <EventCancelModal submitCallback={this.props.onCancel} cancelationStatus={this.props.event.cancelation} />}
+                                {canCancel && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Cancel</button>}
+                                    submitCallback={this.props.onCancel}           
+                                    />}
+                                {(canUncancel) && <EventChangeStatusModal
+                                    button={<button className="btn btn-edit">Undo cancel</button>}
+                                    submitCallback={this.props.onUnCancel}
+                                />}
                             </div>
                         </div>
                         {this.state.edit
                             ? <div className="row shadow mt-5 p-5 mb-5 bg-white rounded">
-                                <EditEventWrapper 
-                                    onCancelEditing={() => this.setState({edit:false})}
+                                <EditEventWrapper
+                                    onCancelEditing={() => this.setState({ edit: false })}
                                 />
                             </div>
                             : <>
@@ -335,14 +347,22 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-                                <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    {(eventStatus === eventStatusEnum.Canceled) &&
+                                        <div className="text-center text-uppercase cancel-text">
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <span> This event is canceled </span>
+                                            <i className="fas fa-exclamation-triangle text-warning"></i>
+                                            <br />
+                                        </div>
+                                    }
                                     {description}
                                 </div>
                                 <div className="shadow p-3 mb-5 mt-2 bg-white rounded">
-                                    <InventoryList 
-                                        eventId={id}/>
+                                    <InventoryList
+                                        eventId={id} />
                                 </div>
-                                
+
                                 <div className="overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
@@ -351,13 +371,13 @@ export default class EventItemView extends Component {
                     </div>
 
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">
-                        {(!isMyEvent) && 
+                        {(!isMyEvent) &&
                             <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                 <div className="d-flex justify-content-center">
                                     {this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}
                                 </div>
                                 <br />
-                                {canJoin && 
+                                {canJoin &&
                                     <button onClick={this.props.onJoin}
                                         type="button"
                                         className="btn btn-success join-leave"
@@ -365,22 +385,22 @@ export default class EventItemView extends Component {
                                     >
                                         Join
                                     </button>}
-                                {canLeave && 
+                                {canLeave &&
                                     <EventLeaveModal data={{}}
-                                        submitLeave={this.props.onLeave} 
-                                        status={false}/>}
+                                        submitLeave={this.props.onLeave}
+                                        status={false} />}
                             </div>
                         }
                         <EventVisitors data={{}}
-                            admins = {owners}
-                            renderOwners = {this.renderOwners}
-                            visitors = {visitorsEnum}
-                            renderApprovedUsers = {this.renderApprovedUsers}
-                            isMyPrivateEvent = {isMyPrivateEvent}
-                            isMyEvent = {isMyEvent}
-                            current_user_id = {current_user.id}
-                            renderPendingUsers = {this.renderPendingUsers}
-                            renderDeniedUsers = {this.renderDeniedUsers}
+                            admins={owners}
+                            renderOwners={this.renderOwners}
+                            visitors={visitorsEnum}
+                            renderApprovedUsers={this.renderApprovedUsers}
+                            isMyPrivateEvent={isMyPrivateEvent}
+                            isMyEvent={isMyEvent}
+                            current_user_id={current_user.id}
+                            renderPendingUsers={this.renderPendingUsers}
+                            renderDeniedUsers={this.renderDeniedUsers}
                         />
                     </div>
                 </div>

@@ -22,15 +22,18 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is for event cancelation.
+        /// This method is for change event status.
         /// </summary>
-        /// <response code="200">Cancelation succesful.</response>
-        /// <response code="400">Cancelation failed.</response>
+        /// <param name="eventId">Param eventId defines the event identifier.</param>
+        /// <param name="eventStatus">Param eventStatus defines the event status.</param>
+        /// <returns>The method returns event with new status.</returns>
+        /// <response code="200">Status changing succesful.</response>
+        /// <response code="400">Status changing failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilter]
-        public async Task<IActionResult> Cancel(Guid eventId, [FromBody]EventStatusHistoryViewModel eventStatus)
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> SetStatus(Guid eventId, EventStatusHistoryViewModel eventStatus)
         {
-            await _eventStatusHistoryService.CancelEvent(eventStatus.EventId, eventStatus.Reason);
+            await _eventStatusHistoryService.SetStatusEvent(eventStatus.EventId, eventStatus.Reason, eventStatus.EventStatus);
 
             return Ok(eventStatus);
         }

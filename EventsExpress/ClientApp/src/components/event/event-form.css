@@ -13,6 +13,10 @@
     color: grey !important;
 }
 
+.MuiRadio-colorSecondary.Mui-checked {
+    color: grey !important;
+}
+
 .pic-container {
     cursor: pointer;
     overflow: hidden;
@@ -138,4 +142,12 @@
 
 .select-style select:focus {
     outline: none;
+}
+
+.react-datepicker-popper {
+    z-index: 460;
+}
+
+.retreat {
+    padding-left: 15px;
 }

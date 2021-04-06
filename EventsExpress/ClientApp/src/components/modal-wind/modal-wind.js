@@ -11,7 +11,8 @@ import Typography from "@material-ui/core/Typography";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
 import { connect } from 'react-redux';
-import { TogleOpenWind } from '../../actions/modalWind';
+import { TogleOpenWind } from '../../actions/modalWind-action';
+import Modalwind2 from '../recoverPassword/modalwind2';
 import Modalwind2 from '../recoverPassword/modalwind2';
 
 function TabContainer(props) {

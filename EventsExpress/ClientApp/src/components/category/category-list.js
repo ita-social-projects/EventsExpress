@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import CategoryItemWrapper from '../../containers/categories/category-item';
 
-
 export default class CategoryList extends Component {
 
     renderItems = arr => arr.map(item => <CategoryItemWrapper
@@ -21,6 +20,6 @@ export default class CategoryList extends Component {
 
                 </tr>
                 {this.renderItems(data_list)}
-          </>);
+            </>);
     }
 }

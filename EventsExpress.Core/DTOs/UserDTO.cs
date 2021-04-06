@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Google.Apis;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
 
         public string PasswordHash { get; set; }
+
+        public string Salt { get; set; }
 
         public string Email { get; set; }
 
@@ -31,17 +31,13 @@ namespace EventsExpress.Core.DTOs
 
         public virtual Role Role { get; set; }
 
-        public virtual Guid? PhotoId { get; set; }
-
-        public virtual Photo Photo { get; set; }
-
         public double Rating { get; set; }
 
         public byte Attitude { get; set; }
 
         public bool CanChangePassword { get; set; }
 
-        public IEnumerable<EventDTO> Events { get; set; }
+        public IEnumerable<EventDto> Events { get; set; }
 
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
 
@@ -50,5 +46,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<RefreshToken> RefreshTokens { get; set; }
+
+        public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }
 }

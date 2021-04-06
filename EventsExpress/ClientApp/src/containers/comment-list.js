@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import CommentList from '../components/comment/comment-list';
 import Spinner from '../components/spinner';
-import get_comments from '../actions/comment-list';
+import getComments from '../actions/comment/comment-list-action';
 
 
 
@@ -10,11 +10,10 @@ class CommentListWrapper extends Component {
 
     componentWillMount() {
         const { page } = this.props.match.params; 
-        this.getComments(this.props.eventId, page);
+        this.props.getComments(this.props.eventId, page);
    
     }
-    getComments = (value, page) => this.props.get_comments(value,page);
-    
+
     render() {
 
         const { data, isPending } = this.props.comments;
@@ -26,7 +25,7 @@ class CommentListWrapper extends Component {
                 data_list={data.items} 
                 page={data.pageViewModel.pageNumber} 
                 totalPages={data.pageViewModel.totalPages} 
-                callback={this.getComments} 
+                callback={this.props.getComments} 
             /> 
             : null;
 
@@ -43,7 +42,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    get_comments: (data, page) => dispatch(get_comments(data, page))
+    getComments: (data, page) => dispatch(getComments(data, page))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommentListWrapper);

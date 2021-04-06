@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -24,7 +23,7 @@ export default class SimpleModal extends Component {
     }
 
     onConfirm = () => {
-        this.props.action(this.props.id)
+        this.props.action()
         this.setState({ isOpen: false });
     }
 
