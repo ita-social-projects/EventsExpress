@@ -1,4 +1,4 @@
-﻿import { changePassword } from '../../actions/editProfile/password-change-action';
+﻿import { changePassword } from '../../actions/redactProfile/password-change-action';
 
 export const reducer = (
     state = {
