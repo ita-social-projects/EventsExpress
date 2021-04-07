@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Moq;
@@ -22,18 +20,13 @@ namespace EventsExpress.Test.ServiceTests
     internal class UsersServiceTests : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
-        private static Mock<IMediator> mockMediator;
-        private static Mock<IEmailService> mockEmailService;
-        private static Mock<ICacheHelper> mockCacheHelper;
         private UserService service;
 
         private UserDto existingUserDTO;
         private User existingUser;
 
-        private Guid roleId = Guid.NewGuid();
         private Guid userId = Guid.NewGuid();
         private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
-        private NotificationType notificationType;
         private UserNotificationType userNotificationType;
         private string name = "existingName";
         private string existingEmail = "existingEmail@gmail.com";
@@ -42,18 +35,12 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
-            mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
-            mockEmailService = new Mock<IEmailService>();
-            mockCacheHelper = new Mock<ICacheHelper>();
 
             service = new UserService(
                 Context,
                 MockMapper.Object,
-                mockPhotoService.Object,
-                mockMediator.Object,
-                mockCacheHelper.Object,
-                mockEmailService.Object);
+                mockPhotoService.Object);
 
             existingUser = new User
             {
@@ -69,11 +56,6 @@ namespace EventsExpress.Test.ServiceTests
                 Email = existingEmail,
             };
 
-            notificationType = new NotificationType
-            {
-                Id = notificationTypeId,
-                Name = notificationTypeId.ToString(),
-            };
             userNotificationType = new UserNotificationType
             {
                 UserId = userId,
