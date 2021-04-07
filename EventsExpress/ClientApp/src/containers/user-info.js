@@ -23,7 +23,7 @@ class UserInfoWpapper extends Component {
                 <UserInfo key={user.id} user={user} />
 
                 <UserRoleWrapper 
-                    key={user.id /* + user.role.id*/} //toDo: add role change rerender
+                    key={this.props.key}
                     user={user} 
                     isCurrentUser={this.isCurrentUser} 
                     isEdit={user.id === editedUser}

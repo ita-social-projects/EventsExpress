@@ -146,7 +146,7 @@ namespace EventsExpress.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRoles(ChangeRoleWiewModel model)
         {
-            var newRoles = _mapper.Map<IEnumerable<AccountRole>>(model.Roles);
+            var newRoles = _mapper.Map<IEnumerable<Db.Entities.Role>>(model.Roles);
 
             await _accountService.ChangeRole(model.UserId, newRoles);
 

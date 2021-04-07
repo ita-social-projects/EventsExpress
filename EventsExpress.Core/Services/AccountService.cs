@@ -27,14 +27,14 @@ namespace EventsExpress.Core.Services
             _mediator = mediator;
         }
 
-        public async Task ChangeRole(Guid userId, IEnumerable<AccountRole> roles)
+        public async Task ChangeRole(Guid userId, IEnumerable<Db.Entities.Role> roles)
         {
             var a = Context.Accounts
                 .Include(a => a.AccountRoles)
                 .Single(a => a.UserId == userId);
 
             var newRoles = roles
-                .Select(ar => new AccountRole { AccountId = a.Id, RoleId = ar.RoleId })
+                .Select(ar => new AccountRole { AccountId = a.Id, RoleId = ar.Id })
                 .ToList();
 
             a.AccountRoles = newRoles;
