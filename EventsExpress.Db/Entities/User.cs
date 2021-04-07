@@ -8,25 +8,15 @@ namespace EventsExpress.Db.Entities
     {
         public string Name { get; set; }
 
-        public string PasswordHash { get; set; }
-
-        public string Salt { get; set; }
+        public Account Account { get; set; }
 
         public string Email { get; set; }
-
-        public bool EmailConfirmed { get; set; }
 
         public string Phone { get; set; }
 
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }
-
-        public bool IsBlocked { get; set; }
-
-        public Guid RoleId { get; set; }
-
-        public virtual Role Role { get; set; }
 
         public IEnumerable<EventOwner> Events { get; set; }
 
@@ -41,8 +31,6 @@ namespace EventsExpress.Db.Entities
         public virtual IEnumerable<UserChat> Chats { get; set; }
 
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
-
-        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
 
         public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }

@@ -2,6 +2,7 @@
 {
     public enum Gender : byte
     {
+        Undefined = 0,
         Male,
         Female,
         Other,

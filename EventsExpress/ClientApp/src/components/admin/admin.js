@@ -43,7 +43,7 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">
+                    <div className="col-sm-10">
                         <Route path="/admin/categories/" component={Category} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path="/admin/users" component={UserPWrapper} />

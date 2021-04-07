@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import _authenticate from '../../actions/authentication-action';
+import { loginAfterEmailConfirmation } from '../../actions/login/login-action';
 
 class Authentication extends Component {
     componentWillMount = () => {
@@ -23,7 +23,7 @@ const mapStateToProps = state => (state.user);
 
 const mapDispatchToProps = dispatch => {
     return {
-        auth: (data) => dispatch(_authenticate(data))
+        auth: (data) => dispatch(loginAfterEmailConfirmation(data))
     };
 };
 

@@ -1,43 +1,34 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, formValueSelector, Field  } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import get_roles from '../../actions/roles'
 import IconButton from "@material-ui/core/IconButton";
+import { renderMultiselect } from '../helpers/form-helpers';
 
 class UserRoleEdit extends Component {
     componentDidMount = () => {
         this.props.get_roles();
-        let obj = JSON.parse('{"role-for-' + this.props.user.id + '":"' + this.props.user.role.id + '"}')
-        this.props.initialize(obj)   
     }
-
-    renderRolesOptions = (arr) => {
-        return arr.map((item) => {
-            return <option key={item.id} value={item.id}>{item.name}</option>;
-        });
-    }
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        var newRole = this.props.roles.find(r => r.id === this.props.newRoleId);
-        this.props.callback(newRole);
-    }
-
 
     render() {
 
         return (<>
             <td className="align-middle">
-                <form onSubmit={this.handleSubmit} id="user-role"> 
-                    <Field className="form-control" name={"role-for-"+ this.props.user.id} component="select">
-                        {this.renderRolesOptions(this.props.roles)}
-                    </Field>
+                <form onSubmit={this.props.handleSubmit} id="user-role">
+                    <Field
+                        className="form-control"
+                        name="roles"
+                        component={renderMultiselect}
+                        data={this.props.roles}
+                        valueField={"id"}
+                        textField={"name"}
+                    />
                 </form>
             </td>
 
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center">
-                    <IconButton  className="text-success" size="small" type="submit" form='user-role' >
+                    <IconButton className="text-success" size="small" type="submit" form='user-role' >
                         <i className="fas fa-check"></i>
                     </IconButton>
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
@@ -49,12 +40,9 @@ class UserRoleEdit extends Component {
     }
 }
 
-const selector = formValueSelector("user-role")
-
-const mapStateToProps = (state, props) => {
+const mapStateToProps = state => {
     return {
         roles: state.roles.data,
-        newRoleId: selector(state, "role-for-" + props.user.id)
     };
 };
 
