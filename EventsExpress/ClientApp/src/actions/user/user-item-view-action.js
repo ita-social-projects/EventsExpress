@@ -1,5 +1,4 @@
-﻿import { UserService } from '../../services';
-import { get_future_events } from '../events/events-for-profile-action';
+﻿﻿import { UserService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
 
 export const GET_PROFILE_PENDING = "GET_PROFILE_PENDING";
@@ -19,7 +18,6 @@ export default function get_user(id) {
         }
         let jsonRes = await response.json();
         dispatch(getProfile(jsonRes));
-        dispatch(get_future_events(id));
         return Promise.resolve();
     }
 }
