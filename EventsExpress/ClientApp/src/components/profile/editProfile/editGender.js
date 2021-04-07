@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import { Field, reduxForm } from "redux-form";
-import MenuItem from "material-ui/MenuItem";
 import Button from "@material-ui/core/Button";
 import { renderSelectField } from '../../helpers/form-helpers'
 import ErrorMessages from '../../shared/errorMessage';
@@ -29,13 +28,12 @@ let EditGender = props => {
             <div>
                 <Button type="submit" color="primary" disabled={pristine || submitting}>
                     Submit
-        </Button>
+                </Button>
             </div>
         </form>
     );
 };
 
 export default reduxForm({
-    form: "EditGender"
-    
+    form: "EditGender"    
 })(EditGender);

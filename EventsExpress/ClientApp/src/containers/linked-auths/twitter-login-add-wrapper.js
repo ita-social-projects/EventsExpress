@@ -19,7 +19,7 @@ class TwitterLoginAdd extends TwitterLoginBase {
         authData.image_url = authData.image_url.replace(/_normal/i, '');
         this.props.twitterLoginAdd(authData.email);
     }
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
     twitterLoginAdd: email => dispatch(twitterLoginAdd(email)),

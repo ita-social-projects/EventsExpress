@@ -31,7 +31,7 @@ export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) 
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </FormControl>
 )
 
@@ -258,7 +258,7 @@ export const renderSelectPeriodicityField = ({
             <option value=""></option>
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </FormControl>
 
 
@@ -273,7 +273,7 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
             textField={textField}
             placeholder={placeholder}
         />
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </>
 
 export const renderTextArea = ({
@@ -345,17 +345,9 @@ export const renderSelectField = ({
             >
                 {children}
             </Select>
-            {renderErrorsFromHelper({ touched, error })}
+            {renderFieldError({ touched, error })}
         </FormControl>
     )
-
-const renderErrorsFromHelper = ({ touched, error }) => {
-    if (!(touched && error)) {
-        return;
-    } else {
-        return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
-    }
-}
 
 export const renderCheckbox = ({ input, label }) => (
     <div>
@@ -386,6 +378,7 @@ export const renderErrorMessage = (responseData, key) => {
     }
 }
 
+// deprecated
 export const buildValidationState = (responseData) => {
     let response;
     response = JSON.parse(responseData)["errors"];

@@ -12,6 +12,6 @@ export const reducer = (state = initialState.account, action) => {
             };
         default:
             break;
-    };
+    }
     return state;
 }

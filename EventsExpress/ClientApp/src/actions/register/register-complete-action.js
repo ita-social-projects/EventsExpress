@@ -1,7 +1,7 @@
 import { AuthenticationService } from '../../services';
 import { createBrowserHistory } from 'history';
 import { setSuccessAllert } from '../alert-action';
-import { buildValidationState } from '../../components/helpers/helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 import { SubmissionError } from 'redux-form';
 
 const api_serv = new AuthenticationService();

@@ -19,7 +19,7 @@ export const changeUserRole = {
     SUCCESS: 'SUCCESS_CHANGE_ROLE',
     UPDATE: 'UPDATE_CHANGE_ROLE'
 }
-const api_serv = new UserService();
+const api_serv = new UserService(); //todo
 
 // ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {
@@ -64,7 +64,7 @@ export function change_user_role(userId, newRoles) {
             return Promise.reject();
         }
         dispatch(setChangeUserRoleSuccess());
-        dispatch(updateChangeUserRoles({ userId: userId, newRoles: newRoles })); // todo
+        dispatch(updateChangeUserRoles({ userId: userId, newRoles: newRoles }));
         return Promise.resolve();
     }
 }

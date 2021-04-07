@@ -19,23 +19,14 @@ namespace EventsExpress.Core.Services
     public class UserService : BaseService<User>, IUserService
     {
         private readonly IPhotoService _photoService;
-        private readonly IMediator _mediator;
-        private readonly ICacheHelper _cacheHelper;
-        private readonly IEmailService _emailService;
 
         public UserService(
             AppDbContext context,
             IMapper mapper,
-            IPhotoService photoSrv,
-            IMediator mediator,
-            ICacheHelper cacheHelper,
-            IEmailService emailService)
+            IPhotoService photoSrv)
             : base(context, mapper)
         {
             _photoService = photoSrv;
-            _mediator = mediator;
-            _cacheHelper = cacheHelper;
-            _emailService = emailService;
         }
 
         public async Task Create(UserDto userDto)

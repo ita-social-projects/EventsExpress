@@ -51,7 +51,7 @@ class LocalLoginAdd extends Component {
             </div>
         );
     }
-};
+}
 
 const mapDispatchToProps = dispatch => ({
     localLoginAdd: (email, password) => dispatch(localLoginAdd(email, password))

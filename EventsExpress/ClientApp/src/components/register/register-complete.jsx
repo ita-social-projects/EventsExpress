@@ -34,7 +34,7 @@ const validate = values => {
 class RegisterComplete extends Component {
 
     render() {
-        const { pristine, reset, submitting, handleSubmit } = this.props;
+        const { pristine, submitting, handleSubmit } = this.props;
         return (
             <>
                 <div className="row">
@@ -89,9 +89,9 @@ class RegisterComplete extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            <Button fullWidth={true} type="submit" color="primary">
+                            <Button fullWidth={true} type="submit" color="primary" disabled={pristine || submitting}>
                                 Complete
-                    </Button>
+                            </Button>
                         </div>
                     </form>
                 </div>

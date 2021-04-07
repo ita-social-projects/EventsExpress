@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, formValueSelector, Field } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import get_roles from '../../actions/roles'
 import IconButton from "@material-ui/core/IconButton";
 import { renderMultiselect } from '../helpers/form-helpers';

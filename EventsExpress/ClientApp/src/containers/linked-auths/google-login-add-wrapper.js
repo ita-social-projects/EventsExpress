@@ -35,7 +35,7 @@ class GoogleLoginAdd extends Component {
             </div>
         );
     }
-};
+}
 
 const mapDispatchToProps = dispatch => ({
     googleLoginAdd: (tokenId, email) => dispatch(googleLoginAdd(tokenId, email)),

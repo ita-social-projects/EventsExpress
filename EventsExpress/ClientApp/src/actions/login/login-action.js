@@ -61,7 +61,7 @@ export function loginAfterEmailConfirmation(data) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        return await setUserInfo(response, dispatch);
+        return setUserInfo(response, dispatch);
     }
 }
 
@@ -122,7 +122,7 @@ function loginResponseHandler(call) {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
         }
-        return await setUserInfo(response, dispatch);
+        return setUserInfo(response, dispatch);
     }
 }
 

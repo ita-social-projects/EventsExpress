@@ -66,7 +66,7 @@ export default class TwitterLoginBase extends Component {
             }
         });
 
-        return res.ok ? await res.json() : undefined;
+        return res.ok ? res.json() : undefined;
     };
 
     getOAuthAuthorizationHeader = params => {
@@ -88,4 +88,4 @@ export default class TwitterLoginBase extends Component {
             </div>
         );
     }
-};
+}

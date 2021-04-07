@@ -20,20 +20,17 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
 
         public AuthenticationController(
-            IUserService userSrv,
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
             IAccountService accountService)
         {
-            _userService = userSrv;
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;

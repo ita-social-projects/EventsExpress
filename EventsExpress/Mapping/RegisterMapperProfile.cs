@@ -31,23 +31,5 @@ namespace EventsExpress.Mapping
                 PasswordHash = PasswordHasher.GenerateHash(src.Password, salt),
             };
         }
-
-    // .ForMember(dest => dest.AuthExternal, opts => opts.MapFrom(src => MapAuthExternal(src)))
-    //    private static IEnumerable<AuthExternal> MapAuthExternal(RegisterDto src)
-    //    {
-    //        if (src.AuthType.HasValue)
-    //        {
-    //            return new[]
-    //            {
-    //                new AuthExternal
-    //                {
-    //                    Email = src.Email,
-    //                    Type = src.AuthType.Value,
-    //                },
-    //            };
-    //        }
-
-    // return null;
-    //    }
     }
 }

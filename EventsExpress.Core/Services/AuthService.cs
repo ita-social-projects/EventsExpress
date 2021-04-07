@@ -161,9 +161,9 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public async Task RegisterComplete(RegisterCompleteDto profileData)
+        public async Task RegisterComplete(RegisterCompleteDto registerCompleteDto)
         {
-            await _userService.Create(Mapper.Map<UserDto>(profileData));
+            await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
         }
 
         public UserDto GetCurrentUser(ClaimsPrincipal userClaims)

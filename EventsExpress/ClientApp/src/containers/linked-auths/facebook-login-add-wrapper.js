@@ -30,7 +30,7 @@ class LoginFacebook extends Component {
             </div>
         );
     }
-};
+}
 
 const mapDispatchToProps = dispatch => ({
     facebookLoginAdd: email => dispatch(facebookLoginAdd(email)),
