@@ -1,26 +1,9 @@
 ﻿import React from "react";
 import { Field, reduxForm } from "redux-form";
-import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Button from "@material-ui/core/Button";
+import { renderSelectField } from '../../helpers/form-helpers'
 import ErrorMessages from '../../shared/errorMessage';
-
-const renderSelectField = ({
-    input,
-    label,
-    meta: { touched, error },
-    children,
-    ...custom
-}) => (
-        <SelectField
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            onChange={(event, index, value) => input.onChange(value)}
-            children={children}
-            {...custom}
-        />
-    );
 
 let EditGender = props => {
     const { handleSubmit, pristine, submitting } = props;
@@ -28,13 +11,14 @@ let EditGender = props => {
         <form name= "EditGender" onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="Gender"
+                    name="gender"
                     component={renderSelectField}
-                    label="Chose Gender"
+                    label="Gender"
                 >
-                    <MenuItem value="0" primaryText="Other" />
-                    <MenuItem value="1" primaryText="Male" />
-                    <MenuItem value="2" primaryText="Female" />
+                    <option aria-label="None" value="" />
+                    <option value="0">Other</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
                 </Field>
                 {
                     props.error &&
@@ -52,6 +36,6 @@ let EditGender = props => {
 };
 
 export default reduxForm({
-    form: "EditGender" // a unique identifier for this form
+    form: "EditGender"
     
 })(EditGender);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
 import logout from '../actions/login/logout-action';
-import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
+import { setRegisterPending, setRegisterSuccess } from '../actions/register/register-action';
 import { setLoginPending, setLoginSuccess } from '../actions/login/login-action';
 import add_event from '../actions/event/event-add-action';
 
@@ -45,7 +45,6 @@ const mapDispatchToProps = dispatch => {
     reset: () => {
       dispatch(setRegisterPending(true));
       dispatch(setRegisterSuccess(false));
-      dispatch(setRegisterError(null));
       dispatch(setLoginPending(true));
       dispatch(setLoginSuccess(false));
     }

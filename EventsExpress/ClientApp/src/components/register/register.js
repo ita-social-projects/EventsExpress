@@ -56,7 +56,6 @@ const { validate, renderTextField } = Module;
 }
 
 Register = reduxForm({
-  // a unique name for the form
   form: "register-form",
   validate
 })(Register);

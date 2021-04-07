@@ -8,7 +8,7 @@ namespace EventsExpress.Mapping
     {
         public RoleMapperProfile()
         {
-            CreateMap<Role, RoleViewModel>();
+            CreateMap<Role, RoleViewModel>().ReverseMap();
         }
     }
 }

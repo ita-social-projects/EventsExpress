@@ -7,11 +7,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import { renderFieldError } from './form-helpers';
 import moment from "moment";
 import './helpers.css'
 
@@ -178,22 +178,24 @@ export const validateEventForm = values => {
     return values;
 }
 
-
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue, label }) => {
     value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
     minValue = new Date().getFullYear() - 115;
     maxValue = new Date().getFullYear() - 15;
 
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-        peekNextMonth
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-    />
+    return <>
+        <InputLabel>{label}</InputLabel>
+        <DatePicker
+            onChange={onChange}
+            selected={new Date(value) || new Date()}
+            minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+            maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+        />
+    </>
 }
 
 export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
@@ -343,7 +345,7 @@ export const renderSelectField = ({
             >
                 {children}
             </Select>
-            {renderFromHelper({ touched, error })}
+            {renderErrorsFromHelper({ touched, error })}
         </FormControl>
     )
 
