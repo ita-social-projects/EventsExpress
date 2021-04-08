@@ -16,7 +16,8 @@ import SelectCategoriesWrapper from '../../containers/categories/SelectCategorie
 import genders from '../../constants/GenderConstants';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 import './profile.css';
-import SelectNotificationTypesWrapper from '../../containers/notificationTypes/SelectNotificationTypes'
+import SelectNotificationTypesWrapper from '../../containers/notificationTypes/SelectNotificationTypes';
+import LinkedAuthsWrapper from '../../containers/linked-auths-wrapper';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -149,7 +150,23 @@ const Profile = (props) => {
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
-            {props.canChangePassword ? <ChangePasswordContainer /> : null}
+            <ExpansionPanel expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel6bh-content"
+                    id="panel6bh-header"
+                >
+                    <Typography className={classes.heading}>Linked accounts</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Typography>
+                        <MuiThemeProvider>
+                            <LinkedAuthsWrapper />
+                        </MuiThemeProvider>
+                    </Typography>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            {props.canChangePassword && <ChangePasswordContainer /> }
         </div>
     );
 }

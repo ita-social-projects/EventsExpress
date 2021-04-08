@@ -21,7 +21,9 @@ import NotificationEvents from '../notification_events';
 import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
 import AddEventWrapper from '../../containers/add-event';
+import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
+import RegisterSuccess from '../register/register-success';
 import DraftEditWrapper from '../../containers/draft-edit-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list'
 
@@ -46,7 +48,8 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                        <Route path="/profile/" component={Profile} />
+                        <Route path='/registerComplete' component={RegisterCompleteWrapper} />
+                        <Route path="/editProfile/" component={Profile} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
@@ -56,10 +59,12 @@ export default class App extends Component {
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
-                        <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
+                        <Route path="/authentication/twitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={Chat} />
                         <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/event/createEvent' component={AddEventWrapper} />
+                        <Route path='/registerSuccess' component={RegisterSuccess} />
+                        
                         <Route path='/editEvent/:id/' component={DraftEditWrapper} />
                         <Route path='/drafts' component={EventDraftListWrapper} />
                         <Route component={NotFound} />

@@ -11,13 +11,7 @@ namespace EventsExpress.Core.DTOs
 
         public string Name { get; set; }
 
-        public string PasswordHash { get; set; }
-
-        public string Salt { get; set; }
-
         public string Email { get; set; }
-
-        public bool EmailConfirmed { get; set; }
 
         public string Phone { get; set; }
 
@@ -25,17 +19,15 @@ namespace EventsExpress.Core.DTOs
 
         public Gender Gender { get; set; }
 
-        public bool IsBlocked { get; set; }
-
-        public virtual Guid RoleId { get; set; }
-
-        public virtual Role Role { get; set; }
-
         public double Rating { get; set; }
 
         public byte Attitude { get; set; }
 
         public bool CanChangePassword { get; set; }
+
+        public Guid AccountId { get; set; }
+
+        public Account Account { get; set; }
 
         public IEnumerable<EventDto> Events { get; set; }
 
@@ -44,8 +36,6 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<UserCategory> Categories { get; set; }
 
         public IEnumerable<Rate> MyRates { get; set; }
-
-        public IEnumerable<RefreshToken> RefreshTokens { get; set; }
 
         public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
     }

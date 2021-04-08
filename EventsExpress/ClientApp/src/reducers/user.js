@@ -7,15 +7,10 @@ import { editBirthday } from '../actions/editProfile/birthday-edit-action';
 import { editGender } from '../actions/editProfile/gender-edit-action';
 import { editUsername } from '../actions/editProfile/userName-edit-action';
 import { changeAvatar } from '../actions/editProfile/avatar-change-action';
-import { authenticate } from '../actions/authentication-action';
 
 export const reducer = (state = initialState.user, action) => {
     switch (action.type) {
         case SET_USER:
-            return action.payload;
-
-        case authenticate.SET_AUTHENTICATE:
-            localStorage.setItem("token", action.payload.token);
             return action.payload;
 
         case SET_LOGOUT:
