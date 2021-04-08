@@ -17,13 +17,9 @@ namespace EventsExpress.ViewModels
 
         public byte Gender { get; set; }
 
-        public string Role { get; set; }
+        public IEnumerable<string> Roles { get; set; }
 
         public string PhotoUrl { get; set; }
-
-        public string Token { get; set; }
-
-        public bool AfterEmailConfirmation { get; set; } = false;
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 

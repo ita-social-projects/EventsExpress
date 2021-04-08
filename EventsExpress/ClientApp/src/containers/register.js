@@ -1,7 +1,7 @@
 import React from "react";
 import Register from "../components/register";
 import { connect } from "react-redux";
-import register from "../actions/register";
+import register from "../actions/register/register-action";
 
 
 class RegisterWrapper extends React.Component {
