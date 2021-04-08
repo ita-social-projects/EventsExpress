@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import EditUsername from "../../components/profile/editProfile/editUsername";
 import { connect } from "react-redux";
-import editUsername from "../../actions/editProfile/userName-edit-action";
+import editUsername from "../../actions/redactProfile/userName-edit-action";
 
 class EditUsernameContainer extends React.Component {
     submit = value => {
