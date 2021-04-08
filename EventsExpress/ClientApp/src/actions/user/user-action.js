@@ -1,5 +1,7 @@
 ﻿import { UserService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',
@@ -60,8 +62,7 @@ export function change_user_role(userId, newRoles) {
 
         let response = await api_serv.setChangeUserRole({userId: userId,roles: newRoles});
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setChangeUserRoleSuccess());
         dispatch(updateChangeUserRoles({ userId: userId, newRoles: newRoles }));

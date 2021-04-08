@@ -1,9 +1,11 @@
 ﻿import React, { Component } from 'react';
+import { compose } from 'redux'
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import get_roles from '../../actions/roles'
 import IconButton from "@material-ui/core/IconButton";
 import { renderMultiselect } from '../helpers/form-helpers';
+import ErrorMessages from '../shared/errorMessage';
 
 class UserRoleEdit extends Component {
     componentDidMount = () => {
@@ -11,10 +13,10 @@ class UserRoleEdit extends Component {
     }
 
     render() {
-
+        let { pristine, submitting, handleSubmit, error } = this.props
         return (<>
             <td className="align-middle">
-                <form onSubmit={this.props.handleSubmit} id="user-role">
+                <form onSubmit={handleSubmit} id="user-role">
                     <Field
                         className="form-control"
                         name="roles"
@@ -23,12 +25,13 @@ class UserRoleEdit extends Component {
                         valueField={"id"}
                         textField={"name"}
                     />
+                    {error && <ErrorMessages error={error} />}
                 </form>
             </td>
 
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center">
-                    <IconButton className="text-success" size="small" type="submit" form='user-role' >
+                    <IconButton className="text-success" size="small" type="submit" form='user-role' disabled={pristine || submitting} >
                         <i className="fas fa-check"></i>
                     </IconButton>
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
@@ -40,23 +43,15 @@ class UserRoleEdit extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        roles: state.roles.data,
-    };
-};
+const mapStateToProps = state => ({
+    roles: state.roles.data,
+});
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        get_roles: () => dispatch(get_roles())
-    }
-};
+const mapDispatchToProps = dispatch => ({
+    get_roles: () => dispatch(get_roles())
+});
 
-UserRoleEdit = connect(mapStateToProps, mapDispatchToProps)(UserRoleEdit);
-
-UserRoleEdit = reduxForm({
-    form: "user-role",
-    enableReinitialize: true
-})(UserRoleEdit);
-
-export default UserRoleEdit;
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    reduxForm({ form: "user-role" })
+)(UserRoleEdit)
