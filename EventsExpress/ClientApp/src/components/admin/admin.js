@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
+import withAuthRedirect from '../../hoc/withAuthRedirect';
+import UsersPWrapper from '../../containers/UserSearchWrapper';
+import { connect } from 'react-redux';
 
 export default class Admin extends Component {
-
     render() {
-
         return (
             <>
                 <div className="admin-panel row">
@@ -44,6 +45,11 @@ export default class Admin extends Component {
                         </ul>
                     </div>
                     <div className="col-sm-9 offset-sm-1">
+                        <Route
+                            exact
+                            path='/admin'
+                            render={() =>
+                                <Redirect to={`/admin/categories`} />} />
                         <Route path="/admin/categories/" component={Category} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path="/admin/users" component={UserPWrapper} />

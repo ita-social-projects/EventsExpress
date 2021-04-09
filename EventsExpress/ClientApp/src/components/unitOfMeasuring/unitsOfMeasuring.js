@@ -4,6 +4,8 @@ import Spinner from '../spinner';
 import UnitOfMeasuringListWrapper from '../../containers/unitsOfMeasuring/UnitOfMeasuringListWrapper';
 import { connect } from 'react-redux';
 import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
+import withAuthRedirect from '../../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 class UnitsOfMeasuring extends Component {
 
@@ -35,10 +37,11 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UnitsOfMeasuring);
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuthRedirect
+)(UnitsOfMeasuring)
 
 
 

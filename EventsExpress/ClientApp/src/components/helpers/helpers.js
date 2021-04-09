@@ -343,7 +343,7 @@ export const renderSelectField = ({
             >
                 {children}
             </Select>
-            {renderFromHelper({ touched, error })}
+            {renderErrorsFromHelper({ touched, error })}
         </FormControl>
     )
 

@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
+import { Redirect } from 'react-router';
+import withAuthRedirect from '../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 class UsersWrapper extends Component {
-
     componentDidMount() {
         this.getUsers(this.props.params);
     }
@@ -54,4 +56,7 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersWrapper);
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuthRedirect
+)(UsersWrapper)

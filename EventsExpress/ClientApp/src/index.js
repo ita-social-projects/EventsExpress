@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
-import { setUser } from './actions/login/login-action';
+import { setLoginPending, setLoginSuccess, setUser } from './actions/login/login-action';
 import { initialConnection } from './actions/chat/chat-action';
 import { getUnreadMessages } from './actions/chat/chats-action';
 import { updateEventsFilters } from './actions/event/event-list-action';
@@ -38,7 +38,7 @@ async function AuthUser(token) {
             ...eventHelper.getDefaultEventFilter(),
             categories: user.categories.map(item => item.id),
         }
-
+        
         store.dispatch(setUser(user));
         store.dispatch(updateEventsFilters(eventFilter));
         store.dispatch(initialConnection());
@@ -59,7 +59,7 @@ const rootElement = document.getElementById('root');
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <App />
+            <App/>
         </ConnectedRouter>
     </Provider>,
     rootElement);

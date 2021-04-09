@@ -23,7 +23,9 @@ import LoginTwitter from '../../containers/TwitterLogin';
 import AddEventWrapper from '../../containers/add-event';
 import Admin from '../admin';
 import DraftEditWrapper from '../../containers/draft-edit-wrapper';
-import EventDraftListWrapper from '../../containers/event-draft-list'
+import EventDraftListWrapper from '../../containers/event-draft-list';
+import Unauthorized from '../Route guard/401';
+import Forbidden from '../Route guard/403';
 
 export default class App extends Component {
     render() {
@@ -62,6 +64,8 @@ export default class App extends Component {
                         <Route path='/event/createEvent' component={AddEventWrapper} />
                         <Route path='/editEvent/:id/' component={DraftEditWrapper} />
                         <Route path='/drafts' component={EventDraftListWrapper} />
+                        <Route path='/unauthorized' component={Unauthorized} />
+                        <Route path='/forbidden' component={Forbidden} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
@@ -69,4 +73,3 @@ export default class App extends Component {
         );
     }
 }
-
