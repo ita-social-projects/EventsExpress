@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import RecoverPassword from "../../components/recoverPassword/recoverPassword";
 import { connect } from "react-redux";
-import recover_Password from "../../actions/editProfile/password-recover-action";
+import recover_Password from "../../actions/redactProfile/password-recover-action";
 
 class RecoverPasswordContainer extends React.Component {
     componentDidUpdate(prevOps, prevState) {
