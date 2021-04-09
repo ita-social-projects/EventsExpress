@@ -4,7 +4,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class TrackDTO
+    public class TrackDto
     {
         public Guid Id { get; set; }
 

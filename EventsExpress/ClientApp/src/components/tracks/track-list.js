@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Button from "@material-ui/core/Button";
 import Radio from '@material-ui/core/Radio';
-import {reduxForm, Field} from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import PagePagination from '../shared/pagePagination';
 import TrackItem from './track-item';
 import {
@@ -12,7 +12,7 @@ import {
 import Multiselect from 'react-widgets/lib/Multiselect';
 
 class TrackList extends Component {
-    
+
     handlePageChange = (page) => {
         this.props.onSearch(page);
     };
@@ -24,10 +24,10 @@ class TrackList extends Component {
             />
         ));
     }
-    
+
     render() {
-        const {data_list, entityNames} = this.props;
-        
+        const { data_list, entityNames } = this.props;
+
         return (<>
             <tr>
                 <td className="text-center">Entity Name</td>
@@ -36,60 +36,32 @@ class TrackList extends Component {
                 <td className="text-center">Changes type</td>
                 <td></td>
                 <td rowSpan="4">
-                    {!Object.keys(entityNames).length == 0 &&
-                    <form className="box" onSubmit={() => this.props.onSubmit(arguments)}>
-                        {/* <Field name="status" component={radioButton} labels={'', ''}>
-                                <Radio value="true" label="AG" />
-                                <Radio value="true" label="Active" />
-                                <Radio value="true" label="Blocked" />
-                            </Field>
-                            <div>From</div>
-                            <Field
-                                name='dateFrom'
-                                component={renderDatePicker}
-                            />
-                            <div>To</div>
-                            <Field
-                                name='dateTo'
-                                defaultValue={values.dateFrom}
-                                minValue={values.dateFrom}
-                                component={renderDatePicker}
-                            /> */}
-                        <div className="form-group">
-                            {/* <Field
-                                    name="entityName"
-                                    component={renderMultiselect}
-                                    data={data_list.items}
+                    {entityNames && entityNames.length !== 0 &&
+                        <form className="box" onSubmit={() => this.props.onSubmit(arguments)}>
+                            <div className="form-group">
+                                <Multiselect
+                                    data={entityNames}
                                     valueField={"id"}
-                                    textField={"name"}
-                                    
-                                    // onChange={(items) => { 
-                                    //     var x = items
-                                    // }}
-                                /> */}
-                            <Multiselect
-                                data={entityNames}
-                                valueField={"id"}
-                                textField={"name"}
-                                className="form-control mt-2"
-                                placeholder='Entity name'
-                                onChange={(items) => {
-                                    this.props.onEntitiesSelected(items.map(x => x.name))
-                                }}
-                            />
-                        </div>
+                                    textField={"entityName"}
+                                    className="form-control mt-2"
+                                    placeholder='Entity name'
+                                    onChange={(items) => {
+                                        this.props.onEntitiesSelected(items.map(x => x.name))
+                                    }}
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <Button
-                                fullWidth={true}
-                                color="primary"
-                                disabled={this.props.pristine || this.props.submitting}
-                                onClick={() => this.props.onSearch(1) }
-                            >
-                                Search
+                            <div className="form-group">
+                                <Button
+                                    fullWidth={true}
+                                    color="primary"
+                                    disabled={this.props.pristine || this.props.submitting}
+                                    onClick={() => this.props.onSearch(1)}
+                                >
+                                    Search
                             </Button>
-                        </div>
-                    </form>
+                            </div>
+                        </form>
                     }
                 </td>
             </tr>
@@ -104,11 +76,11 @@ class TrackList extends Component {
                 </div>}
 
             {data_list.pageViewModel.totalPages > 1 &&
-            <PagePagination
-                currentPage={data_list.pageViewModel.pageNumber}
-                totalPages={data_list.pageViewModel.totalPages}
-                callback={this.handlePageChange}
-            />
+                <PagePagination
+                    currentPage={data_list.pageViewModel.pageNumber}
+                    totalPages={data_list.pageViewModel.totalPages}
+                    callback={this.handlePageChange}
+                />
             }
         </>);
     }

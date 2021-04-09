@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import Home from '../home';
 import Profile from '../profile';
-import UserPWrapper from '../../containers/UsersWrapper';
-import Track from '../tracks/track';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
 import EventScheduleViewWrapper from '../../containers/event-Schedule-item-view';
@@ -53,8 +51,7 @@ export default class App extends Component {
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin/users" component={UserPWrapper} />
-                        <Route path="/admin/tracks" component={Track} />
+                        <Route path="/admin" component={Admin} />                        
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />

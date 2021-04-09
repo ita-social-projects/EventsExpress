@@ -6,16 +6,6 @@ using FluentValidation.Internal;
 
 namespace EventsExpress.Validation
 {
-<<<<<<< HEAD
-    public class CamelCasePropertyNameResolver
-    {
-        public static string ResolvePropertyName(Type type, MemberInfo memberInfo, LambdaExpression expression)
-        {
-            return ToCamelCase(DefaultPropertyNameResolver(type, memberInfo, expression));
-        }
-
-        private static string DefaultPropertyNameResolver(Type type, MemberInfo memberInfo, LambdaExpression expression)
-=======
     public static class CamelCasePropertyNameResolver
     {
         public static string ResolvePropertyName(MemberInfo memberInfo, LambdaExpression expression)
@@ -24,7 +14,6 @@ namespace EventsExpress.Validation
         }
 
         private static string DefaultPropertyNameResolver(MemberInfo memberInfo, LambdaExpression expression)
->>>>>>> development
         {
             if (expression != null)
             {
@@ -35,12 +24,7 @@ namespace EventsExpress.Validation
                 }
             }
 
-            if (memberInfo != null)
-            {
-                return memberInfo.Name;
-            }
-
-            return null;
+            return memberInfo != null ? memberInfo.Name : null;
         }
 
         private static string ToCamelCase(string s)

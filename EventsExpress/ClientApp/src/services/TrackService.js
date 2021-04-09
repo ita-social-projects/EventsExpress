@@ -9,7 +9,6 @@ export default class TrackService {
     }
     
     getEntityNames = async () => {
-        return await baseService.getResource(`tracks/getEntityNames`);
+        return await baseService.getResourceNew(`tracks/getEntityNames`);
     }
-    
 }

@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import TrackList from './track-list';
 import Spinner from '../spinner';
-import getAllTracks, {getEntityNames, setFilterEntities} from '../../actions/tracks/track-list';
+import getAllTracks, {getEntityNames, setFilterEntities} from '../../actions/tracks/track-list-action';
 import {connect} from 'react-redux';
 
 class Tracks extends Component {
 
     componentDidMount = () => {
         this.props.getAllTracks(this.props.tracks.filter);
-        // this.props.getEntityNames(this.props.tracks.data.items.entityNames);
+        this.props.getEntityNames();
     }
 
     handleSubmit = (values) => {
@@ -17,9 +17,9 @@ class Tracks extends Component {
 
     render() {
         const that = this;
-        const {isPending, data} = this.props.tracks;
+        const {isPending, data, entityNames} = this.props.tracks;
         return <div>
-            <table className="table w-75 m-auto">
+            <table className="table w-100 m-auto">
                 <tbody>
                 {!isPending &&
                 data?.items ?
@@ -36,7 +36,7 @@ class Tracks extends Component {
                                 })
                             }
                         }
-                        entityNames={this.props.tracks.data.items}
+                        entityNames={entityNames}
                     />
                     : null
                 }
@@ -56,7 +56,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllTracks: (filter) => dispatch(getAllTracks(filter)),
-        getEntityNames: (names) => dispatch(getEntityNames(names)),
+        getEntityNames: () => dispatch(getEntityNames()),
         setFilterEntities: (names) => dispatch(setFilterEntities(names)),
     }
 };

@@ -5,12 +5,11 @@ import SimpleModal from '../event/simple-modal';
 
 export default class TrackItem extends Component {
     getChangesTypeText = (changesType, propertyChangesText) => {
-        
+
         let changesTypeText = '';
         let test = JSON.parse(propertyChangesText);
         let data;
-        switch(changesType)
-        {
+        switch (changesType) {
             case 0:
                 changesTypeText = 'Undefined';
                 data = test.map(x => (
@@ -87,11 +86,11 @@ export default class TrackItem extends Component {
                 </td>
                 <td className="text-center">
                     <SimpleModal
-                        id = {user.id}
-                        data = {this.getChangesTypeText(changesType, propertyChangesText).data}
-                        button = {
+                        id={user.id}
+                        data={this.getChangesTypeText(changesType, propertyChangesText).data}
+                        button={
                             <IconButton aria-label="delete">
-                                <i className="fas fa-info-circle"/>
+                                <i className="fas fa-info-circle" />
                             </IconButton>
                         }
                     />

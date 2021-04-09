@@ -35,9 +35,15 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var viewModel = new IndexViewModel<TrackDTO>
+                /*var viewModel = new IndexViewModel<TrackViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<TrackDTO>>(
+                    Items = _mapper.Map<IEnumerable<TrackDto>, IEnumerable<TrackViewModel>>(
+                        _trackService.GetAllTracks(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
+                };*/
+                var viewModel = new IndexViewModel<TrackDto>
+                {
+                    Items = _mapper.Map<IEnumerable<TrackDto>>(
                         _trackService.GetAllTracks(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
@@ -48,5 +54,9 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("[action]")]
+        public IActionResult GetEntityNames() =>
+            Ok(_mapper.Map<IEnumerable<EntityNamesViewModel>>(_trackService.GetDistinctNames()));
     }
 }

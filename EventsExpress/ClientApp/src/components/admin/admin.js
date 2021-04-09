@@ -5,6 +5,7 @@ import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
+import Track from '../tracks/track';
 
 export default class Admin extends Component {
 
@@ -40,13 +41,21 @@ export default class Admin extends Component {
                                         text={"Users"}
                                     />
                                 </div>
+                                <div>
+                                    <NavItem
+                                        to={'/admin/tracks/'}
+                                        icon={'fa fa-server'}
+                                        text={"Tracks"}
+                                    />
+                                </div>
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">
+                    <div className="col-sm-10">
                         <Route path="/admin/categories/" component={Category} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path="/admin/users" component={UserPWrapper} />
+                        <Route path="/admin/tracks" component={Track} />
                     </div>
                 </div>
             </>

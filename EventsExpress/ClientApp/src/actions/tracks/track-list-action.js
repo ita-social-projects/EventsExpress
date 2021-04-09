@@ -1,8 +1,8 @@
 import {TrackService} from '../../services';
+import {setErrorAllertFromResponse} from "../alert-action";
 
 export const SET_TRACKS_PENDING = "SET_TRACKS_PENDING";
 export const GET_TRACKS_SUCCESS = "GET_TRACKS_SUCCESS";
-export const SET_TRACKS_ERROR = "SET_TRACKS_ERROR";
 export const SET_ENTITY_FILTER = "SET_ENTITY_FILTER";
 export const GET_ENTITY_NAMES = "GET_ENTITY_NAMES";
 
@@ -13,7 +13,7 @@ export default function getAllTracks(filter) {
         dispatch(setTracksPending(true));
         let response = await api_serv.getAll(filter);
         if (!response.ok) {
-            dispatch(setTracksError(response.error));
+            dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
@@ -22,10 +22,11 @@ export default function getAllTracks(filter) {
     }
 }
 
-export function getEntityNames(names) {
+export function getEntityNames() {
     return async dispatch => {
-        let response = await api_serv.getEntityNames(names);
+        let response = await api_serv.getEntityNames();
         if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
@@ -48,8 +49,4 @@ function setTracksPending(data) {
 
 function getTracks(data) {
     return {type: GET_TRACKS_SUCCESS, payload: data}
-}
-
-function setTracksError(data) {
-    return {type: SET_TRACKS_ERROR, payload: data}
 }

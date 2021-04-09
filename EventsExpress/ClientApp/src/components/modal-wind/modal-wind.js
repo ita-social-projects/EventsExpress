@@ -13,7 +13,6 @@ import RegisterWrapper from "../../containers/register";
 import { connect } from 'react-redux';
 import { TogleOpenWind } from '../../actions/modalWind-action';
 import Modalwind2 from '../recoverPassword/modalwind2';
-import Modalwind2 from '../recoverPassword/modalwind2';
 
 function TabContainer(props) {
   return (
