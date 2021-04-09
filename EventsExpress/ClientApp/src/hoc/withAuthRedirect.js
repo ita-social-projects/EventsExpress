@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 const withAuthRedirect = (allowedRoles) =>
-    ({ Component }) => {
-
+    (Component) => {
         let mapStateToPropsRedirect = (state) => ({
             user: state.user,
             login: state.login
@@ -12,8 +11,8 @@ const withAuthRedirect = (allowedRoles) =>
 
         class RedirectComponent extends React.Component {
             render() {
-                console.log("my hoc");
-                if (this.props.login.isLoginSuccess) return <Redirect to='/unauthorized' />
+                console.log(this.props.login.isLoginSuccess);
+                if (!this.props.login.isLoginSuccess) return <Redirect to='/unauthorized' />
                 else if (!allowedRoles.includes(this.props.user.role)) return <Redirect to='/forbidden' />
 
                 return <Component {...this.props} />

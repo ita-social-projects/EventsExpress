@@ -52,7 +52,7 @@ export default class Admin extends Component {
                                 <Redirect to={`/admin/categories`} />} />
                         <Route path="/admin/categories/" component={withAuthRedirect(['Admin'])(Category)} />
                         <Route path='/admin/unitsOfMeasuring' component={withAuthRedirect(['Admin'])(UnitOfMeasuring)} />
-                        <Route path="/admin/users" component={withAuthRedirect(['Admin'])(UsersPWrapper)} />
+                        <Route path="/admin/users" component={withAuthRedirect(['Admin'])(UserPWrapper)} />
                     </div>
                 </div>
             </>
