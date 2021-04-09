@@ -50,9 +50,9 @@ export default class Admin extends Component {
                             path='/admin'
                             render={() =>
                                 <Redirect to={`/admin/categories`} />} />
-                        <Route path="/admin/categories/" component={Category} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                        <Route path="/admin/users" component={UserPWrapper} />
+                        <Route path="/admin/categories/" component={withAuthRedirect(['Admin'])(Category)} />
+                        <Route path='/admin/unitsOfMeasuring' component={withAuthRedirect(['Admin'])(UnitOfMeasuring)} />
+                        <Route path="/admin/users" component={withAuthRedirect(['Admin'])(UsersPWrapper)} />
                     </div>
                 </div>
             </>

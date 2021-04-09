@@ -5,10 +5,10 @@ import logout from '../../actions/login/logout-action';
 import { setRegisterError } from '../../actions/register'
 import { setRolesError } from '../../actions/roles'
 
- class Unauthorized extends Component {
+class Unauthorized extends Component {
      componentWillMount = () => {
          this.props.resetError();
-         this.props.logout();
+         // this.props.logout();
          this.props.setStatus(true);
     }
     render() {
@@ -28,7 +28,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logout: () => { dispatch(logout()) },
+        // logout: () => { dispatch(logout()) },
         setStatus: (data) => dispatch(TogleOpenWind(data)),
         resetError: () => {
             dispatch(isOpen(false));

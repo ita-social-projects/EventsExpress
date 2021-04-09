@@ -26,6 +26,7 @@ import DraftEditWrapper from '../../containers/draft-edit-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list';
 import Unauthorized from '../Route guard/401';
 import Forbidden from '../Route guard/403';
+import withAuthRedirect from '../../hoc/withAuthRedirect';
 
 export default class App extends Component {
     render() {
@@ -53,7 +54,7 @@ export default class App extends Component {
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin" component={Admin} />
+                        <Route path="/admin" component={withAuthRedirect(['Admin'])(Admin)} />
                         <Route path="/search/users" component={SearchUserWrapper} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />

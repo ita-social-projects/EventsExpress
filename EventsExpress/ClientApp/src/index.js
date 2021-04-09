@@ -43,6 +43,7 @@ async function AuthUser(token) {
         store.dispatch(updateEventsFilters(eventFilter));
         store.dispatch(initialConnection());
         store.dispatch(getUnreadMessages(user.id));
+        store.dispatch(setLoginSuccess(true));
     } else {
         localStorage.clear();
     }
