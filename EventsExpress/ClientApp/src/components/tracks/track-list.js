@@ -73,7 +73,7 @@ class TrackList extends Component {
                                 className="form-control mt-2"
                                 placeholder='Entity name'
                                 onChange={(items) => {
-                                    this.props.onEntitiesSelected(items.map(x => x.name))
+                                    this.props.onEntitiesSelected(items.map(x => x.entityName))
                                 }}
                             />
                         </div>
