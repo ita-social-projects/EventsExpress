@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import './helpers.css'
+
 export const radioButton = ({ input, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
@@ -22,13 +23,14 @@ export const radioButton = ({ input, ...rest }) => (
         </RadioGroup>
     </FormControl>
 )
-export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) => (
+export const radioLocationType = ({ input, meta: { error, touched, warning }, ...rest }) => (
     <FormControl>
 
         <RadioGroup {...input} {...rest}>
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
+        {renderWarningsFromHelper2({ warning })}
         {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 )
@@ -266,29 +268,39 @@ export const renderSelectPeriodicityField = ({
         {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 
-
-export const renderMultiselect = ({ input, data, valueField, textField, placeholder,
-    meta: { touched, invalid, error } }) =>
-    <>
+export const renderMultiselect = ({ input, data, valueField, textField, placeholder, 
+    meta: { touched, invalid, error, warning, pristine, submitting } }) => (
+    <div>
         <Multiselect {...input}
             onBlur={() => input.onBlur()}
             value={input.value || []}
             data={data}
+            error={touched && (invalid || warning)}
             valueField={valueField}
             textField={textField}
             placeholder={placeholder}
         />
+
+        {categoryWarn({ input, submitting, touched, warning })}
         {renderErrorsFromHelper({ touched, error })}
-    </>
+    </div>)
+
+const categoryWarn = ({ input, touched, submitting }) => {
+    if ((touched || submitting) && (input.value.length === 0) ) {
+        
+        return <span class="text-danger">select at least 1 category</span>;
+    }
+};
 
 export const renderTextArea = ({
     label,
     defaultValue,
     input,
     rows,
-    meta: { touched, invalid, error },
+    meta: { touched, invalid, error, warning, pristine  },
     ...custom
 }) => (
+    <div>
         <TextField
             label={label}
             defaultValue={defaultValue}
@@ -296,10 +308,17 @@ export const renderTextArea = ({
             rows="4"
             fullWidth
             {...input}
-            error={touched && invalid}
+            error={touched && (invalid || warning)}
             helperText={touched && error}
             variant="outlined"
-        />)
+        />
+        {changes({ pristine })}
+        { renderWarningsFromHelper({ touched, warning })}
+        </div>
+    )
+const changes = ({ pristine }) => {
+    if (!pristine) { return <span class="text-danger">changed</span>; } ;
+}
 
 export const renderTextField = ({
     label,
@@ -308,22 +327,25 @@ export const renderTextField = ({
     inputProps,
     rows,
     fullWidth,
-    meta: { touched, invalid, error },
+    meta: { touched, invalid, error, warning, pristine },
     ...custom
 }) => (
+        <div>
         <TextField
-            rows={rows}
-            fullWidth={fullWidth === undefined ? true : false}
-            label={label}
-            placeholder={label}
-            error={touched && invalid}
-            defaultValue={defaultValue}
-            value={defaultValue}
-            inputProps={inputProps}
-            helperText={touched && error}
-            {...input}
-            {...custom}
-        />
+                rows={rows}
+                fullWidth={fullWidth === undefined ? true : false}
+                label={label}
+                placeholder={label}
+                error={touched && (invalid || warning)}
+                defaultValue={defaultValue}
+                value={defaultValue}
+                inputProps={inputProps}
+                helperText={(touched && error)}
+                {...input}
+                {...custom}
+            />
+        {renderWarningsFromHelper({ touched, warning })}
+        </div>
     )
 
 export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
@@ -401,6 +423,21 @@ const renderErrorsFromHelper = ({ touched, error }) => {
         return;
     } else {
         return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
+    }
+}
+
+const renderWarningsFromHelper = ({ touched, warning }) => {
+    if (!(touched && warning)) {
+        return;
+    } else {
+        return <span class="text-danger">{warning}</span>;
+    }
+}
+const renderWarningsFromHelper2 = ({ warning }) => {
+    if (!(warning)) {
+        return;
+    } else {
+        return <span class="text-danger">{warning}</span>;
     }
 }
 

@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
-import { getFormValues, reset, isPristine } from 'redux-form';
+import { getFormValues, reset, isPristine, submit } from 'redux-form';
 import { validateEventForm } from '../components/helpers/helpers'
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -15,6 +15,7 @@ import Part3 from '../components/Draft/WizardFormPart3';
 import Part4 from '../components/Draft/WizardFormPart4';
 import Part5 from '../components/Draft/WizardFormPart5';
 import Publish from '../components/Draft/WizardFromPublish';
+import RSB from '../components/Draft/RemoteSubmitButton'
 import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event-add-action';
 
 
@@ -31,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
     },
 }));
-
+ 
 
 function HorizontalLinearStepper(props) {
+
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
@@ -72,16 +74,40 @@ function HorizontalLinearStepper(props) {
         if (curStep && curStep[0].component && curStep[0].part != null && curStep[0].Stepname) {
             return curStep[0].component;
         }
-        else {
             return 'Unknown step';
-        }
     }
 
     const steps = getSteps();
 
-    const isStepFailed = (step) => {
-        return step === 1;
+    const errorStep = [];
+    const renderErrors = (error) => {
+        const keys = Object.keys(error);
+        let i = 0;
+        while (i < keys.length) {
+            if (keys[i] === "title" || keys[i] === "description" || keys[i] === "dateFrom" || keys[i] === "dateTo" || keys[i] === "categories") {
+                errorStep.push(0);
+            }
+            if (keys[i] === "photoId" || keys[i] === "photo") {
+                errorStep.push(1);
+            }
+            if (keys[i] === "eventLocation" || keys[i] ==="location.type") {
+                errorStep.push(2);
+            }
+            if (keys[i] === "maxParticipants") {
+                errorStep.push(4);
+            }
+            i++;
+        }
     };
+    const isStepFailed = (step) => {
+        let j = 0;
+        while (j < errorStep.length) {
+            if (step === errorStep[j]) {
+                return step === errorStep[j];
+            }
+            j++;
+        }
+    }; 
 
     const isStepOptional = (step) => {
         return false;
@@ -92,6 +118,7 @@ function HorizontalLinearStepper(props) {
     };
 
     const handleNext = () => {
+        console.log("start2")
         let newSkipped = skipped;
         if (isStepSkipped(activeStep)) {
             newSkipped = new Set(newSkipped.values());
@@ -100,6 +127,7 @@ function HorizontalLinearStepper(props) {
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
+        console.log("end2")
     };
 
     const handleBack = () => {
@@ -131,6 +159,9 @@ function HorizontalLinearStepper(props) {
                 {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = {};
+                    <ul>
+                        {renderErrors(props.errors)}
+                    </ul>
                     if (isStepOptional(index)) {
                         labelProps.optional = <Typography variant="caption">Optional</Typography>;
                     }
@@ -181,16 +212,7 @@ function HorizontalLinearStepper(props) {
                                         Skip
                                     </Button>
                                 )}
-
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleNext}
-                                    type=""
-                                    className={classes.button}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                </Button>
+                                <RSB callBack={handleNext}></RSB>
                             </div>
                         </div>
                     )}
@@ -202,6 +224,7 @@ const mapStateToProps = (state) => ({
     user_id: state.user.id,
     form_values: getFormValues('event-form')(state),
     event: state.event.data,
+    errors: state.publishErrors.data
 });
 const mapDispatchToProps = (dispatch) => {
     return {

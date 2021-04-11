@@ -3,9 +3,10 @@ import { reduxForm, Field, getFormValues, reset, isPristine } from 'redux-form';
 import { connect } from 'react-redux';
 import { setEventPending, setEventSuccess, edit_event_part2 } from '../../actions/event-add-action';
 import { validateEventFormPart2 } from '../helpers/helpers'
-import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import DropZoneField from '../helpers/DropZoneField';
+import { compose } from 'redux'
+import submit from './submit2';
 
 class Part2 extends Component {
 
@@ -30,17 +31,6 @@ class Part2 extends Component {
                         cropShape='rect'
                         photoUrl={photoUrl}
                     />
-                </div>
-
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit"
-                    >
-                        Save
-                        </Button>
                 </div>
             </form >
         );
@@ -70,12 +60,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-Part2 = connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    reduxForm({ form: 'Part2', onSubmit: submit })
 )(Part2);
-
-export default reduxForm({
-    form: 'Part2',
-    enableReinitialize: true
-})(Part2);

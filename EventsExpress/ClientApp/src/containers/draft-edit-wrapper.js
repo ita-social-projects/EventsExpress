@@ -9,7 +9,6 @@ import get_event, {
 from '../actions/event-item-view';
 
 class DraftEditWrapper extends Component{
-    EventItemViewWrapperNew
     componentWillMount(){    
         const { id } = this.props.match.params;        
         this.props.get_event(id);

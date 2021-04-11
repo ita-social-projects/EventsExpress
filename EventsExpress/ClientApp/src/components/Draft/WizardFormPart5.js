@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { compose } from 'redux'
 import { reduxForm, Field, getFormValues, } from 'redux-form';
 import { connect } from 'react-redux';
 import { setEventPending, setEventSuccess, publish_event, edit_event_part5 } from '../../actions/event-add-action';
@@ -8,6 +9,7 @@ import {
     renderCheckbox,
     renderTextField,
 } from '../helpers/helpers'
+import submit from './submit5';
 
 class Part5 extends Component {
 
@@ -49,16 +51,6 @@ class Part5 extends Component {
                         label="Max Count Of Participants"
                     />
                 </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit"
-                    >
-                        Save
-                        </Button>
-                </div>
             </form >
         );
 
@@ -87,13 +79,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-Part5 = connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    reduxForm({ form: 'Part5', onSubmit: submit })
 )(Part5);
-
-export default reduxForm({
-    form: 'Part5',
-    enableReinitialize: true
-})(Part5);
-

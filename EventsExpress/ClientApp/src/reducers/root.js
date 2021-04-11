@@ -41,6 +41,7 @@ import * as Alert from './alert';
 import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
+import * as PublishErrors from './publish-draft-event';
 
 const rootReducers = {
     modal: ModalWind.reducer,
@@ -70,6 +71,7 @@ const rootReducers = {
     event: EventView.reducer,
     eventSchedule: EventScheduleView.reducer,
     add_comment: AddComment.reducer,
+    publishErrors: PublishErrors.reducer,
     comments: Comments.reducer,
     roles: Roles.reducer,
     delete_comment: DeleteComment.reducer,

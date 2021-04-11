@@ -7,6 +7,7 @@ import { createBrowserHistory } from 'history';
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
 export const EVENT_WAS_CREATED = "EVENT_WAS_CREATED";
+export const PUBLISH_EVENT = "PUBLISH_EVENT";
 
 const api_serv = new EventService();
 const history = createBrowserHistory({ forceRefresh: true });
@@ -110,12 +111,12 @@ export function publish_event(data) {
         let response = await api_serv.publishEvent(data);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(get_event(data.id));
-            dispatch(eventWasCreated(data.id));
+            dispatch(get_event(data));
+            dispatch(eventWasCreated(data));
             return Promise.resolve();
         }
         else {
-            throw new SubmissionError(await buildValidationState(response));
+            dispatch(publishEventErrors( await buildValidationState(response)));
         }
     }
 }
@@ -141,4 +142,10 @@ export function setEventPending(data) {
     };
 }
 
+export function publishEventErrors(data) {
+    return {
+        type: PUBLISH_EVENT,
+        payload: data
+    };
+}
 

@@ -117,6 +117,9 @@ const initialState = {
         isEventPending: false,
         isEventSuccess: false,
     },
+    publishErrors: {
+        data: {}
+    },
     add_copy_event: {
         isCopyEventPending: false,
         isCopyEventSuccess: false,

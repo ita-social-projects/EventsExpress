@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
+import { compose } from 'redux';
 import { getFormValues, reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { setEventPending, setEventSuccess, publish_event, edit_event_part3 } from '../../actions/event-add-action';
-import Button from "@material-ui/core/Button";
 import 'react-widgets/dist/css/react-widgets.css'
 import {
     renderTextField,
@@ -10,27 +10,26 @@ import {
 } from '../helpers/helpers';
 import LocationMap from '../event/map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
-import { validateEventFormPart3 } from '../helpers/helpers'
+import submit from './submit3';
+import { warn } from './Validator3';
 
 class Part3 extends Component {
 
 
-    onSubmit = () => {
-        return this.props.add_event({ ...validateEventFormPart3(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-    }
 
     initializeIfNeed() {
         if (this.props.event) {
              let initialValues = {
                 location: this.props.event.location !== null ? {
-                    selectedPos: L.latLng(
+                           
+                 } : null,
+                 selectedPos: L.latLng(
 
-                        this.props.event.location.latitude,
-                        this.props.event.location.longitude
-                    ),
-                    onlineMeeting: this.props.event.location.onlineMeeting,
-                    type: String(this.props.event.location.type)
-                } : null,
+                     this.props.event.location.latitude,
+                     this.props.event.location.longitude
+                 ),
+                 onlineMeeting: this.props.event.location.onlineMeeting,     
+                 type: String(this.props.event.location.type)
             }
             this.props.initialize(initialValues);
             this.setState({ initialized: true });
@@ -46,30 +45,31 @@ class Part3 extends Component {
 
         let initialValues = {
             location: this.props.event.location !== null ? {
-                selectedPos: L.latLng(
-
-                    this.props.event.location.latitude,
-                    this.props.event.location.longitude
-                ),
-                onlineMeeting: this.props.event.location.onlineMeeting,
-                type: String(this.props.event.location.type)
+                
             } : null,
-          }
+            selectedPos: L.latLng(
+
+                this.props.event.location.latitude,
+                this.props.event.location.longitude
+            ),
+            onlineMeeting: this.props.event.location.onlineMeeting,
+            type: String(this.props.event.location.type)
+        }
+        const { handleSubmit } = this.props;
         return (
             
-            <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
-                <Field name="location.type" component={radioLocationType} />
+            <form onSubmit={handleSubmit}>
+                <Field name="type" component={radioLocationType} />
                 {(this.props.form_values == undefined
-                    || (this.props.form_values.location
-                        && this.props.form_values.location.type === enumLocationType.map))
+                    || ( this.props.form_values.type === enumLocationType.map))
                     &&
                     <div className="mt-2">
                         <Field
-                            name='location.selectedPos'
+                            name='selectedPos'
                             initialData={
                                 initialValues &&
                                 initialValues.location &&
-                                initialValues.location.selectedPos
+                                initialValues.selectedPos
                             }
 
                             component={LocationMap}
@@ -77,13 +77,12 @@ class Part3 extends Component {
                     </div>
                 }
                 {this.props.form_values
-                    && this.props.form_values.location
-                    && this.props.form_values.location.type === enumLocationType.online &&
+                    && this.props.form_values.type === enumLocationType.online &&
 
                     <div className="mt-2">
                         <label for="url">Enter an https:// URL:</label>
                         <Field
-                            name='location.onlineMeeting'
+                            name='onlineMeeting'
                             component={renderTextField}
                             type="url"
                             label="Url"
@@ -91,16 +90,6 @@ class Part3 extends Component {
                         />
                     </div>
                 }
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit"
-                    >
-                        Save
-                        </Button>
-                </div>
             </form >
         );
 
@@ -129,13 +118,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-Part3 = connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    reduxForm({ form: 'Part3', warn, onSubmit: submit })
 )(Part3);
-
-export default reduxForm({
-    form: 'Part3',
-    enableReinitialize: true
-})(Part3);
-

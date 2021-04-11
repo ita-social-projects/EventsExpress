@@ -78,18 +78,9 @@ export default class EventService {
         if (data.id != null) {
             file.append('Id', data.id);
         }
-        // to do -remove this after initial values implement
-        if (data.title === undefined) {
-            data.title = null;
-        }
-        if (data.description === undefined) {
-            data.description = null;
-        }
-        if (data.dateFrom === undefined) {
-            data.dateFrom = null;
-        }
-        if (data.dateTo === undefined) {
-            data.dateTo = null;
+        if (data.isReccurent) {
+            file.append('IsReccurent', data.isReccurent);
+            file.append('Periodicity', data.periodicity);
         }
        
 
@@ -139,13 +130,13 @@ export default class EventService {
         }
 
         if (data.location) {
-            file.append('Location.Type', data.location.type)
-            if (data.location.selectedPos) {
-                file.append('Location.Latitude', data.location.selectedPos.lat);
-                file.append('Location.Longitude', data.location.selectedPos.lng);
+            file.append('Location.Type', data.type)
+            if (data.selectedPos) {
+                file.append('Location.Latitude', data.selectedPos.lat);
+                file.append('Location.Longitude', data.selectedPos.lng);
             }
-            if (data.location.onlineMeeting) {
-                file.append('Location.OnlineMeeting', data.location.onlineMeeting);
+            if (data.onlineMeeting) {
+                file.append('Location.OnlineMeeting', data.onlineMeeting);
             }
         }
 

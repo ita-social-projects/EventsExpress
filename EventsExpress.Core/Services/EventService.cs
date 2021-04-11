@@ -292,6 +292,10 @@ namespace EventsExpress.Core.Services
 
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
+            if (e.IsReccurent)
+            {
+                await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(e));
+            }
 
             return ev.Id;
         }

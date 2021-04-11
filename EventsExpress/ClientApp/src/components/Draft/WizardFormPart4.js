@@ -13,16 +13,6 @@ class Part4 extends Component {
                     <InventoryList
                         eventId={this.props.initialData.id} />
                 </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit"
-                    >
-                        Save
-                        </Button>
-                </div>
             </form >
         );
 

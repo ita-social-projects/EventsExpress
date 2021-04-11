@@ -1,52 +1,56 @@
 ﻿import { publish_event } from '../../actions/event-add-action';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, getFormValues, reset, isPristine, initialize } from 'redux-form';
+import { reduxForm, Field  } from 'redux-form';
 import Button from "@material-ui/core/Button";
-
-
+import { renderTextArea, } from '../helpers/helpers';
 
 class Publish extends Component {
-    onPublish = (values) => {
-        return this.props.publish(this.props.event.id);
+    handleClick = async () => {
+        try {
+           return await this.props.onSubmit(this.props.initialValues.id);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
-
-    render() {
+    renderErrors = (error) => {
+        const keys = Object.keys(error);
+        return keys.map(k => <div>{k}:{error[k][0]}</div>)
+    }
+        render() {
         return (
-            <form onSubmit={this.onPublish}>
                 <div>
                     <Button
                         className="border"
                         fullWidth={true}
-                        color="primary"
-                        type="submit"
+                    color="primary"
+                    onClick={this.handleClick}
                     >
-                        Publish
+                    Publish
                                 </Button>
-                </div>
-            </form>
+                <ul>
+                    {this.renderErrors(this.props.errors)}
+                </ul>   
+            </div>
+            
         )
     }
 } 
 
 const mapStateToProps = (state) => ({
-    initialData: state.event.data,
-    user_id: state.user.id,
-    event: state.event.data,
+    initialValues: state.event.data,
+    errors: state.publishErrors.data
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        publish: (data) => dispatch(publish_event(data)),
+        onSubmit: (data) => dispatch(publish_event(data)),
     }
 };
-
 Publish = connect(
     mapStateToProps,
     mapDispatchToProps,
 )(Publish);
+export default Publish;
 
-export default reduxForm({
-    form: 'Publish',
-    enableReinitialize: true
-})(Publish);
