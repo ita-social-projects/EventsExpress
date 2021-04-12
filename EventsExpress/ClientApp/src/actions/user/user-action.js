@@ -1,5 +1,7 @@
 ﻿import { UserService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { SubmissionError } from 'redux-form';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const blockUser = {
     PENDING: 'PENDING_BLOCK',
@@ -19,7 +21,7 @@ export const changeUserRole = {
     SUCCESS: 'SUCCESS_CHANGE_ROLE',
     UPDATE: 'UPDATE_CHANGE_ROLE'
 }
-const api_serv = new UserService();
+const api_serv = new UserService(); //todo
 
 // ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {
@@ -54,17 +56,16 @@ export function block_user(id) {
 }
 
 // ACTION CREATOR FOR CHANGE USER ROLE:
-export function change_user_role(userId, newRole) {
+export function change_user_role(userId, newRoles) {
     return async dispatch => {
         dispatch(setChangeUserRolePending(true));
 
-        let response = await api_serv.setChangeUserRole(userId, newRole.id);
+        let response = await api_serv.setChangeUserRole({userId: userId,roles: newRoles});
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setChangeUserRoleSuccess());
-        dispatch(updateChangeUserRole({ userId: userId, newRole: newRole }));
+        dispatch(updateChangeUserRoles({ userId: userId, newRoles: newRoles }));
         return Promise.resolve();
     }
 }
@@ -97,7 +98,7 @@ function setChangeUserRoleSuccess() {
     }
 }  
 
-function updateChangeUserRole(data) {
+function updateChangeUserRoles(data) {
     return {
         type: changeUserRole.UPDATE,
         payload: data

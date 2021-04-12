@@ -3,6 +3,9 @@
 import eventHelper from '../components/helpers/eventHelper';
 
 const initialState = {
+    account:{
+        linkedAuths:[],
+    },
     modalWind: {
         isOpen: false
     },
@@ -16,7 +19,7 @@ const initialState = {
         phone: null,
         birthday: null,
         gender: null,
-        role: null,
+        roles: [],
         photoUrl: null,
         token: null,
         categories: [],
@@ -209,7 +212,7 @@ const initialState = {
     notificationTypes: {
         isPending: false,
         data: []
-    }
+    },
 };
 
 export default initialState;
