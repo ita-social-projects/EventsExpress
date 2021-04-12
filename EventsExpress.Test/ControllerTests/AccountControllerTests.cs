@@ -9,6 +9,7 @@ using AutoMapper;
 using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -28,14 +29,20 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IAuthService> _authService;
         private Mock<IMapper> _mapper;
         private Mock<IAccountService> _accountService;
+        private Mock<IGoogleSignatureVerificator> _googleSignatureVerificator;
 
         [SetUp]
         public void Initialize()
         {
+            _mapper = new Mock<IMapper>();
             _authService = new Mock<IAuthService>();
             _accountService = new Mock<IAccountService>();
-            _mapper = new Mock<IMapper>();
-            _accountController = new AccountController(_mapper.Object, _authService.Object, _accountService.Object);
+            _googleSignatureVerificator = new Mock<IGoogleSignatureVerificator>();
+            _accountController = new AccountController(
+                _mapper.Object,
+                _authService.Object,
+                _accountService.Object,
+                _googleSignatureVerificator.Object);
         }
 
         [Test]

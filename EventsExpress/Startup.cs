@@ -122,6 +122,7 @@ namespace EventsExpress
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
+            services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -24,15 +25,18 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
+        private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
 
         public AccountController(
             IMapper mapper,
             IAuthService authSrv,
-            IAccountService accountService)
+            IAccountService accountService,
+            IGoogleSignatureVerificator googleSignatureVerificator)
         {
             _mapper = mapper;
             _authService = authSrv;
             _accountService = accountService;
+            _googleSignatureVerificator = googleSignatureVerificator;
         }
 
         /// <summary>
@@ -55,10 +59,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddGoogleLogin(AuthGoogleViewModel model)
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            await _googleSignatureVerificator.Verify(model.TokenId);
 
-            await GoogleJsonWebSignature.ValidateAsync(
-                model.TokenId, new GoogleJsonWebSignature.ValidationSettings());
+            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Google);
 

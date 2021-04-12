@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
-using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +24,20 @@ namespace EventsExpress.Controllers
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
+        private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
 
         public AuthenticationController(
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
-            IAccountService accountService)
+            IAccountService accountService,
+            IGoogleSignatureVerificator googleSignatureVerificator)
         {
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
             _accountService = accountService;
+            _googleSignatureVerificator = googleSignatureVerificator;
         }
 
         /// <summary>
@@ -77,16 +80,15 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with google account.
         /// </summary>
-        /// <param name="userView">Param userView defines UserViewModel.</param>
+        /// <param name="model">Param userView defines AccountViewModel.</param>
         /// <returns>The method performs Google Login operation.</returns>
         /// /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> GoogleLogin([FromBody] AccountViewModel userView)
+        public async Task<IActionResult> GoogleLogin(AccountViewModel model)
         {
-            var payload = await GoogleJsonWebSignature.ValidateAsync(
-                userView.TokenId, new GoogleJsonWebSignature.ValidationSettings());
+            var payload = await _googleSignatureVerificator.Verify(model.TokenId);
 
             await _accountService.EnsureExternalAccountAsync(payload.Email, AuthExternalType.Google);
             var authResponseModel = await _authService.Authenticate(payload.Email, AuthExternalType.Google);
@@ -99,16 +101,16 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to login with twitter account.
         /// </summary>
-        /// <param name="userView">Param userView defines UserViewModel.</param>
+        /// <param name="model">Param userView defines AccountViewModel.</param>
         /// <returns>The method performs Twitter Login operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If login process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> TwitterLogin([FromBody] AccountViewModel userView)
+        public async Task<IActionResult> TwitterLogin([FromBody] AccountViewModel model)
         {
-            await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Twitter);
-            var authResponseModel = await _authService.Authenticate(userView.Email, AuthExternalType.Twitter);
+            await _accountService.EnsureExternalAccountAsync(model.Email, AuthExternalType.Twitter);
+            var authResponseModel = await _authService.Authenticate(model.Email, AuthExternalType.Twitter);
 
             _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
 
@@ -144,6 +146,8 @@ namespace EventsExpress.Controllers
             var profileData = _mapper.Map<RegisterCompleteDto>(authRequest);
 
             await _authService.RegisterComplete(profileData);
+
+            // need to refresh user JWT because of the new userID claim has been added
             var refreshToken = Request.Cookies["refreshToken"];
             var authResponseModel = await _tokenService.RefreshToken(refreshToken);
 
@@ -163,7 +167,7 @@ namespace EventsExpress.Controllers
         {
             if (string.IsNullOrEmpty(email))
             {
-                return BadRequest();
+                throw new EventsExpressException("Incorrect email");
             }
 
             await _authService.PasswordRecover(email);
