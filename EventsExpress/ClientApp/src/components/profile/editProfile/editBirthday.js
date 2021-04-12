@@ -38,6 +38,6 @@ const EditBirthday = props => {
 };
 
 export default reduxForm({
-    form: "EditBirthday", // a unique identifier for this form
+    form: "EditBirthday",
     validate
 })(EditBirthday);

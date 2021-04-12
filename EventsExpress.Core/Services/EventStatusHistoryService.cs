@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
