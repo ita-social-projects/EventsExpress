@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
-
+import Zoom from '@material-ui/core/Zoom';
 
 export default class EventItemView extends Component {
     constructor() {
@@ -70,23 +70,51 @@ export default class EventItemView extends Component {
         ));
     }
 
+
+    getClassName = (attitude) => {
+        switch (attitude) {
+            case 0:
+                return "attitude-like";
+            case 1:
+                return "attitude-dislike";
+            default:
+                return '';
+        }
+    }
+
     renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
         return arr.map(x => (
             <div>
-                <div className="d-flex align-items-center border-bottom w-100">
-                    <div className="flex-grow-1">
+                <div className={"d-flex align-items-center border-bottom w-100 " + this.getClassName(x.attitude)} >
+                    <div className="flex-grow-1" >
                         <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
+                            <div className="d-flex align-items-center">
                                 <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
                                 <div>
                                     <h5>{x.username}</h5>
                                     {'Age: ' + this.getAge(x.birthday)}
                                 </div>
+                                {x.attitude === 0 &&
+                                    <Tooltip title="You like this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <div className="retraet">
+                                            <i class="far fa-thumbs-up cancel-text"></i>
+                                        </div>
+                                    </Tooltip>
+                                }
+                                {x.attitude === 1 &&
+                                    <Tooltip title="You dislike this user" placement="bottom" TransitionComponent={Zoom}>
+                                        <div className="retraet">
+                                            <i class="far fa-thumbs-down cancel-text"></i>
+                                        </div>
+                                    </Tooltip>
+                                }
                             </div>
                         </Link>
                     </div>
+                    
                     {(isMyEvent) &&
                         <div>
+                        
                             <SimpleModal
                                 id={x.id}
                                 action={() => this.props.onPromoteToOwner(x.id)}
@@ -253,7 +281,7 @@ export default class EventItemView extends Component {
             eventStatus,
             maxParticipants,
             visitors,
-            owners
+            owners,
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;

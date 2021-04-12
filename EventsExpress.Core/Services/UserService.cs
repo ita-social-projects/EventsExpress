@@ -147,14 +147,14 @@ namespace EventsExpress.Core.Services
 
         public UserDto GetByEmail(string email)
         {
-            var user = Mapper.Map<UserDto>(
-                 Context.Users
+            var user = Mapper.Map<UserDto>(Context.Users
                 .Include(u => u.Events)
                 .Include(u => u.Role)
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
                     .ThenInclude(n => n.NotificationType)
+                .Include(u => u.Relationships)
                 .AsNoTracking()
                 .FirstOrDefault(o => o.Email == email));
 
@@ -171,6 +171,7 @@ namespace EventsExpress.Core.Services
         {
             var users = Context.Users
                 .Include(u => u.Role)
+                .Include(u => u.Relationships)
                 .AsNoTracking()
                 .AsEnumerable();
 
@@ -201,16 +202,6 @@ namespace EventsExpress.Core.Services
                 .Take(model.PageSize).ToList();
 
             var result = Mapper.Map<IEnumerable<UserDto>>(users);
-
-            foreach (var u in result)
-            {
-                u.Rating = GetRating(u.Id);
-
-                var rel = Context.Relationships
-                    .FirstOrDefault(x => x.UserFromId == id && x.UserToId == u.Id);
-
-                u.Attitude = (rel != null) ? (byte)rel.Attitude : (byte)2;
-            }
 
             return result;
         }
@@ -407,6 +398,20 @@ namespace EventsExpress.Core.Services
             Update(user);
             await Context.SaveChangesAsync();
             return user.Id;
+        }
+
+        public User GetIdByEmail(string email)
+        {
+            return Context.Users
+                .Include(u => u.Events)
+                .Include(u => u.Role)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
+                .Include(u => u.Relationships)
+                .AsNoTracking()
+                .FirstOrDefault(o => o.Email == email);
         }
     }
 }

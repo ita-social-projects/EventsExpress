@@ -124,5 +124,17 @@ namespace EventsExpress.Core.Services
 
         private static bool VerifyPassword(UserDto user, string actualPassword) =>
             user.PasswordHash == PasswordHasher.GenerateHash(actualPassword, user.Salt);
+
+        public User GetCurrUserId(ClaimsPrincipal userClaims)
+        {
+            Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
+
+            if (string.IsNullOrEmpty(emailClaim?.Value))
+            {
+                return null;
+            }
+
+            return _userService.GetIdByEmail(emailClaim.Value);
+        }
     }
 }
