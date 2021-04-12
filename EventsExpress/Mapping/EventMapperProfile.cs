@@ -62,6 +62,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.Members, opts => opts.MapFrom<EventDtoToMembersResolver>())
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToPreviewResolver>());
 
             CreateMap<EventDto, EventViewModel>()
@@ -69,7 +70,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryViewModelFromInventoryDto(x))))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
-                .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x => MapUserEventToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.Visitors, opts => opts.MapFrom<EventDtoToVisitorsResolver>())
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
@@ -101,6 +102,9 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
+
+            // CreateMap<EventOwner, EventDto>()
+            //    .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.))
         }
 
         private static LocationViewModel MapLocation(EventDto eventDto)

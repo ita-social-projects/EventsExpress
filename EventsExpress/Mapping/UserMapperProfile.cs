@@ -19,8 +19,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
-                .ForMember(dest => dest.Rating, opts => opts.Ignore())
-                .ForMember(dest => dest.Attitude, opts => opts.Ignore())
+                .ForMember(dest => dest.Rating, opts => opts.MapFrom<UserToRatingResolver>())
+                .ForMember(dest => dest.Attitude, opts => opts.MapFrom<UserToAttitudeResolver>())
                 .ForMember(dest => dest.CanChangePassword, opts => opts.Ignore())
                 .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.RefreshTokens, opts => opts.MapFrom(src => src.RefreshTokens));
