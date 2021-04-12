@@ -14,7 +14,7 @@ export default class TrackItem extends Component {
                 changesTypeText = 'Undefined';
                 data = test.map(x => (
                     <tr>
-                        <td className="text-center">{x.Name}</td>
+                        <td className="text-center">{x.entityName}</td>
                         <td className="text-center">Old value: {x.OldValue}</td>
                         <td className="text-center">New value: {x.NewValue}</td>
                     </tr>
@@ -27,7 +27,7 @@ export default class TrackItem extends Component {
                 changesTypeText = 'Modified';
                 data = test.map(x => (
                     <tr>
-                        <td className="text-center">{x.Name}</td>
+                        <td className="text-center">{x.entityName}</td>
                         <td className="text-center">Old value: {x.OldValue}</td>
                         <td className="text-center">New value: {x.NewValue}</td>
                     </tr>
@@ -40,7 +40,7 @@ export default class TrackItem extends Component {
                 changesTypeText = 'Created';
                 data = test.map(x => (
                     <tr>
-                        <td className="text-center">{x.Name}</td>
+                        <td className="text-center">{x.entityName}</td>
                         <td className="text-center">New value: {x.NewValue}</td>
                     </tr>
                 ))
@@ -52,7 +52,7 @@ export default class TrackItem extends Component {
                 changesTypeText = 'Deleted';
                 data = test.map(x => (
                     <tr>
-                        <td className="text-center">{x.Name}</td>
+                        <td className="text-center">{x.entityName}</td>
                         <td className="text-center">Old value: {x.OldValue}</td>
                     </tr>
                 ))

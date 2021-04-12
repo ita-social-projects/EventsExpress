@@ -61,7 +61,12 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<EntityNamesDto> GetDistinctNames()
         {
-            var entityNames = Mapper.Map<List<EntityNamesDto>>(Context.ChangeInfos.Distinct());
+            var entityNames = Context.ChangeInfos
+                .Select(x => x.EntityName).Distinct().Select(x => new EntityNamesDto
+                {
+                    EntityName = x,
+                    Id = Guid.NewGuid(),
+                });
 
             return entityNames;
         }

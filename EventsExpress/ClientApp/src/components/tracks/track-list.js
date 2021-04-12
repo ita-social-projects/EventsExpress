@@ -71,6 +71,7 @@ class TrackList extends Component {
                                 valueField={"id"}
                                 textField={"entityName"}
                                 className="form-control mt-2"
+                                // selectedValues={this.state.selectedValue}
                                 placeholder='Entity name'
                                 onChange={(items) => {
                                     this.props.onEntitiesSelected(items.map(x => x.entityName))
