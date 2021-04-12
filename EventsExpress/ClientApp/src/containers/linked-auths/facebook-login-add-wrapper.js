@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
-import { facebookLoginAdd } from '../../actions/editProfile/linked-auths-add-action';
+import { facebookLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
 import config from '../../config';
 import { setErrorAllert } from '../../actions/alert-action';
 import '../css/Auth.css';

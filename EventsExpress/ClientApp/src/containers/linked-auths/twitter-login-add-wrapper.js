@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { twitterLoginAdd } from '../../actions/editProfile/linked-auths-add-action';
+import { twitterLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
 import { setErrorAllert } from '../../actions/alert-action';
 import TwitterLoginBase from './twitter-login-base';
 
