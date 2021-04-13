@@ -18,9 +18,7 @@ const withAuthRedirect = (allowedRoles) =>
             user: state.user
         });
 
-        let ConnectedRedirectComponent = connect(mapStateToProps)(RedirectComponent);
-
-        return ConnectedRedirectComponent;
+        return connect(mapStateToProps)(RedirectComponent);
     }
 
 export default withAuthRedirect;

@@ -5,12 +5,8 @@ import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
-import withAuthRedirect from '../../hoc/withAuthRedirect';
-import { connect } from 'react-redux';
 
 export default class Admin extends Component {
-    AdminRole = withAuthRedirect(['Admin']);
-
     render() {
         return (
             <>
