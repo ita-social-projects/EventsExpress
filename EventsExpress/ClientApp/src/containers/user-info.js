@@ -22,10 +22,10 @@ class UserInfoWpapper extends Component {
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo key={user.id} user={user} />
 
-                <UserRoleWrapper
-                    key={user.id + user.role.id}
-                    user={user}
-                    isCurrentUser={this.isCurrentUser}
+                <UserRoleWrapper 
+                    key={this.props.key}
+                    user={user} 
+                    isCurrentUser={this.isCurrentUser} 
                     isEdit={user.id === editedUser}
                 />
 

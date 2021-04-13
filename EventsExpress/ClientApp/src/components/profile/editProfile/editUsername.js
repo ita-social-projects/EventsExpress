@@ -42,5 +42,6 @@ const EditUsername = props => {
 };
 
 export default reduxForm({
-    form: 'EditUsername', // a unique identifier for this form   
+    form: 'EditUsername',
+    
 })(EditUsername);

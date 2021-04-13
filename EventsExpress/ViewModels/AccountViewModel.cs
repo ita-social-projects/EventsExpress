@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace EventsExpress.ViewModels
+﻿namespace EventsExpress.ViewModels
 {
-    public class UserViewModel
+    public class AccountViewModel
     {
-        public Guid Id { get; set; }
-
         public string TokenId { get; set; }
 
         public string Name { get; set; }
