@@ -20,41 +20,6 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
-async function AuthUser(token) {
-    if (!token)
-        return;
-
-    const res = await fetch('api/Authentication/login_token', {
-        method: 'post',
-        headers: new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        }),
-    });
-
-    if (res.ok) {
-        const user = await res.json();
-        const eventFilter = {
-            ...eventHelper.getDefaultEventFilter(),
-            categories: user.categories.map(item => item.id),
-        }
-        
-        store.dispatch(setUser(user));
-        store.dispatch(updateEventsFilters(eventFilter));
-        store.dispatch(initialConnection());
-        store.dispatch(getUnreadMessages(user.id));
-        store.dispatch(setLoginSuccess(true));
-    } else {
-        localStorage.clear();
-    }
-}
-
-const token = localStorage.getItem('token');
-
-if (token) {
-    AuthUser(token);
-}
-
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(

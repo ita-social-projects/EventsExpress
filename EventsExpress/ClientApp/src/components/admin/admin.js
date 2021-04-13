@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import withAuthRedirect from '../../hoc/withAuthRedirect';
-import UsersPWrapper from '../../containers/UserSearchWrapper';
 import { connect } from 'react-redux';
 
 export default class Admin extends Component {
+    AdminRole = withAuthRedirect(['Admin']);
+
     render() {
         return (
             <>
@@ -45,14 +46,16 @@ export default class Admin extends Component {
                         </ul>
                     </div>
                     <div className="col-sm-9 offset-sm-1">
-                        <Route
-                            exact
-                            path='/admin'
-                            render={() =>
-                                <Redirect to={`/admin/categories`} />} />
-                        <Route path="/admin/categories/" component={withAuthRedirect(['Admin'])(Category)} />
-                        <Route path='/admin/unitsOfMeasuring' component={withAuthRedirect(['Admin'])(UnitOfMeasuring)} />
-                        <Route path="/admin/users" component={withAuthRedirect(['Admin'])(UserPWrapper)} />
+                        <Switch>
+                            <Route
+                                exact
+                                path='/admin'
+                                render={() =>
+                                    <Redirect to={`/admin/categories`} />} />
+                            <Route path="/admin/categories/" component={this.AdminRole(Category)} />
+                            <Route path='/admin/unitsOfMeasuring' component={this.AdminRole(UnitOfMeasuring)} />
+                            <Route path="/admin/users" component={this.AdminRole(UserPWrapper)} />
+                        </Switch>
                     </div>
                 </div>
             </>

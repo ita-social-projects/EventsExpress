@@ -27,8 +27,14 @@ import EventDraftListWrapper from '../../containers/event-draft-list';
 import Unauthorized from '../Route guard/401';
 import Forbidden from '../Route guard/403';
 import withAuthRedirect from '../../hoc/withAuthRedirect';
+import { connect } from 'react-redux';
+import AuthUser from '../../actions/authUser';
 
-export default class App extends Component {
+class App extends Component {
+    componentWillMount() {
+        this.props.authUser();
+    }
+
     render() {
         return (
             <BrowserRouter>
@@ -54,8 +60,8 @@ export default class App extends Component {
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
                         <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin" component={withAuthRedirect(['Admin'])(Admin)} />
-                        <Route path="/search/users" component={SearchUserWrapper} />
+                        <Route path="/admin" component={Admin} />
+                        <Route path="/search/users" component={withAuthRedirect(['User'])(SearchUserWrapper)} />
                         <Route path="/user_chats" component={UserChats} />
                         <Route path="/notification_events" component={NotificationEvents} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
@@ -74,3 +80,11 @@ export default class App extends Component {
         );
     }
 }
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        authUser: () => dispatch(AuthUser())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(App);

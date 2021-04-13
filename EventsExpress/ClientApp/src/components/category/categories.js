@@ -4,12 +4,8 @@ import CategoryListWrapper from '../../containers/categories/category-list';
 import Spinner from '../spinner';
 import get_categories from '../../actions/category/category-list-action';
 import { connect } from 'react-redux';
-import withAuthRedirect from '../../hoc/withAuthRedirect';
-import { compose } from 'redux';
 
 class Categories extends Component{
-    
-    
     componentWillMount = () => this.props.get_categories();
 
     render() {
