@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Policy = "AllRolesPolicy")]
+    [Authorize]
     [ApiController]
     public class CommentController : ControllerBase
     {
