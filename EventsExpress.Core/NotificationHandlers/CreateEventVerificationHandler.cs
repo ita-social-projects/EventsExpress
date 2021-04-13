@@ -50,7 +50,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 var usersId = new[] { changeInfos.UserId };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersId).Select(x => x.Email).SingleOrDefault();
 
-                var message = await _messageService.GetByNotificationTypeAsync("CreateEventVerification");
+                var message = await _messageService.GetByTitleAsync("CreateEventVerification");
 
                 if (userEmail != null)
                 {

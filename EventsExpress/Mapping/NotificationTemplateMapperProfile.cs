@@ -8,7 +8,7 @@ namespace EventsExpress.Mapping
     {
         public NotificationTemplateMapperProfile()
         {
-            CreateMap<NotificationTemplateDto, NotificationTemplate>()
+            CreateMap<NotificationTemplateDTO, NotificationTemplate>()
                 .ReverseMap();
         }
     }

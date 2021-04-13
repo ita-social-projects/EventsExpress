@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Route } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
 import UserPWrapper from '../../containers/UsersWrapper';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
+import NotificationTemplateWrapper from "../../containers/notification-template/notification-template";
+import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
 
 export default class Admin extends Component {
 
@@ -40,13 +42,23 @@ export default class Admin extends Component {
                                         text={"Users"}
                                     />
                                 </div>
+                                <div>
+                                    <NavItem
+                                        to={'/admin/notificationTemplates?page=1&pageSize=20'}
+                                        icon={'fas fa-comment-alt'}
+                                        text={"Message Templates"}
+                                    />
+                                </div>
                             </nav>
+                            
                         </ul>
                     </div>
                     <div className="col-sm-9 offset-sm-1">
                         <Route path="/admin/categories/" component={Category} />
                         <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
                         <Route path="/admin/users" component={UserPWrapper} />
+                        <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
+                        <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
                     </div>
                 </div>
             </>

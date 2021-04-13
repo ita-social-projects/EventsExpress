@@ -42,7 +42,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 Token = token,
             });
 
-            var message = await _messageService.GetByNotificationTypeAsync("RegisterVerification");
+            var message = await _messageService.GetByTitleAsync("RegisterVerification");
 
             Dictionary<string, string> pattern = new Dictionary<string, string>
             {

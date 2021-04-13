@@ -24,6 +24,8 @@ import AddEventWrapper from '../../containers/add-event';
 import Admin from '../admin';
 import DraftEditWrapper from '../../containers/draft-edit-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list'
+import NotificationTemplateWrapper from "../../containers/notification-template/notification-template";
+import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
 
 export default class App extends Component {
     render() {
@@ -62,6 +64,7 @@ export default class App extends Component {
                         <Route path='/event/createEvent' component={AddEventWrapper} />
                         <Route path='/editEvent/:id/' component={DraftEditWrapper} />
                         <Route path='/drafts' component={EventDraftListWrapper} />
+                        
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
@@ -69,4 +72,3 @@ export default class App extends Component {
         );
     }
 }
-

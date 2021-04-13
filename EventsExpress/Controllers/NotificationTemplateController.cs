@@ -19,7 +19,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult> Add(NotificationTemplateDto notificationTemplateDto)
+        public async Task<ActionResult> Add(NotificationTemplateDTO notificationTemplateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -31,13 +31,13 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<NotificationTemplateDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<NotificationTemplateDTO>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            return Ok(await _notificationTemplateService.GetAllAsync());
+            return Ok(await _notificationTemplateService.GetAsync(page, pageSize));
         }
 
         [HttpGet("{id:Guid}/Get")]
-        public async Task<ActionResult<NotificationTemplateDto>> GetById(Guid id)
+        public async Task<ActionResult<NotificationTemplateDTO>> GetById(Guid id)
         {
             var notificationTemplate = await _notificationTemplateService.GetByIdAsync(id);
 
@@ -50,7 +50,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("{id:Guid}/Edit")]
-        public async Task<ActionResult> Update(Guid id, NotificationTemplateDto notificationTemplateDto)
+        public async Task<ActionResult> Update(Guid id, NotificationTemplateDTO notificationTemplateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -58,22 +58,7 @@ namespace EventsExpress.Controllers
             }
 
             await _notificationTemplateService.UpdateAsync(notificationTemplateDto);
-            return Ok();
-        }
-
-        [HttpPost("{id:Guid}/[action]")]
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            var notificationTemplate = await _notificationTemplateService.GetByIdAsync(id);
-
-            if (notificationTemplate == null)
-            {
-                return NotFound();
-            }
-
-            await _notificationTemplateService.DeleteByIdAsync(notificationTemplate.Id);
-
-            return Ok();
+            return Ok(notificationTemplateDto);
         }
     }
 }

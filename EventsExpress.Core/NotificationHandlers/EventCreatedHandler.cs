@@ -37,7 +37,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
 
-                var notificationTemplate = await _messageService.GetByNotificationTypeAsync("EventCreated");
+                var templateDto = await _messageService.GetByTitleAsync("EventCreated");
 
                 foreach (var userEmail in usersEmails)
                 {
@@ -51,9 +51,9 @@ namespace EventsExpress.Core.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(notificationTemplate.Subject, pattern),
+                        Subject = _messageService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(notificationTemplate.MessageText, pattern),
+                        MessageText = _messageService.PerformReplacement(templateDto.MessageText, pattern),
                     });
                 }
             }

@@ -45,7 +45,7 @@ namespace EventsExpress.Core.NotificationHandlers
                         "ParticipationApproved"
                         : "ParticipationDenied";
 
-                    var message = await _messageService.GetByNotificationTypeAsync(notificationType);
+                    var message = await _messageService.GetByTitleAsync(notificationType);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {

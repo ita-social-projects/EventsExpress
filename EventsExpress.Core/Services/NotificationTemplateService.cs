@@ -19,36 +19,54 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<NotificationTemplate> AddAsync(NotificationTemplateDto notificationTemplateDto)
+        public async Task<NotificationTemplateDTO> AddAsync(NotificationTemplateDTO notificationTemplateDto)
         {
             NotificationTemplate notificationTemplate = Mapper.Map<NotificationTemplate>(notificationTemplateDto);
             Insert(notificationTemplate);
             await Context.SaveChangesAsync();
 
-            return notificationTemplate;
+            notificationTemplateDto = await GetByTitleAsync(notificationTemplate.Title);
+
+            return notificationTemplateDto;
         }
 
         public async Task DeleteByIdAsync(Guid id)
         {
-            NotificationTemplate email = await GetByIdAsync(id);
-            Delete(email);
+            var template = Mapper.Map<NotificationTemplate>(GetByIdAsync(id));
+            Delete(template);
             await Context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<NotificationTemplate>> GetAllAsync()
+        public async Task<IEnumerable<NotificationTemplateDTO>> GetAllAsync()
         {
-            return await Entities.ToListAsync();
+            var templates = await Entities.ToListAsync();
+            return Mapper.Map<IEnumerable<NotificationTemplateDTO>>(templates);
         }
 
-        public async Task<NotificationTemplate> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<NotificationTemplateDTO>> GetAsync(int pageNumber, int pageSize)
         {
-            return await Context.NotificationTemplates.AsNoTracking()
+            var templates = await Entities.OrderBy(e => e.Title)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDTO>>(templates);
+
+            return templatesDto;
+        }
+
+        public async Task<NotificationTemplateDTO> GetByIdAsync(Guid id)
+        {
+            var template = await Context.NotificationTemplates.AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id.Equals(id));
+            return Mapper.Map<NotificationTemplateDTO>(template);
         }
 
-        public async Task<NotificationTemplate> GetByNotificationTypeAsync(string title)
+        public async Task<NotificationTemplateDTO> GetByTitleAsync(string title)
         {
-            return await Entities.FirstAsync(e => e.Title.Equals(title));
+            var template = await Entities.AsNoTracking()
+                .FirstAsync(e => e.Title.Equals(title));
+            return Mapper.Map<NotificationTemplateDTO>(template);
         }
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern)
@@ -56,13 +74,13 @@ namespace EventsExpress.Core.Services
             return pattern.Aggregate(text, (current, element) => current.Replace(element.Key, element.Value));
         }
 
-        public async Task<NotificationTemplate> UpdateAsync(NotificationTemplateDto notificationTemplateDto)
+        public async Task<NotificationTemplateDTO> UpdateAsync(NotificationTemplateDTO notificationTemplateDto)
         {
             NotificationTemplate notificationTemplate = Mapper.Map<NotificationTemplate>(notificationTemplateDto);
             notificationTemplate = Update(notificationTemplate);
             await Context.SaveChangesAsync();
 
-            return notificationTemplate;
+            return notificationTemplateDto;
         }
     }
 }

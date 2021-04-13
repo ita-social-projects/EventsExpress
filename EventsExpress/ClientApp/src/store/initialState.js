@@ -209,6 +209,15 @@ const initialState = {
     notificationTypes: {
         isPending: false,
         data: []
+    },
+    notificationTemplates: {
+        data: []
+    },
+    notificationTemplate: {
+        id: null,
+        title: null,
+        subject: null,
+        messageText: null  
     }
 };
 

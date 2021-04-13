@@ -51,7 +51,7 @@ namespace EventsExpress.Core.NotificationHandlers
                         _ => "EventStatusActivated"
                     };
 
-                    var message = await _messageService.GetByNotificationTypeAsync(notificationType);
+                    var templateDto = await _messageService.GetByTitleAsync(notificationType);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
@@ -61,9 +61,9 @@ namespace EventsExpress.Core.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(message.Subject, pattern),
+                        Subject = _messageService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = email,
-                        MessageText = _messageService.PerformReplacement(message.Title, pattern),
+                        MessageText = _messageService.PerformReplacement(templateDto.MessageText, pattern),
                     });
                 }
             }

@@ -40,6 +40,8 @@ import * as Alert from './alert';
 import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
+import * as NotificationTemplates from "./notification-templates/notification-templates";
+import * as NotificationTemplate from "./notification-templates/notification-template";
 
 const rootReducers = {
     modal: ModalWind.reducer,
@@ -82,9 +84,9 @@ const rootReducers = {
     alert: Alert.reducer,
     contactUs: ContactUs.reducer,
     notification: Notification.reducer,
-    notificationType: NotificationTypes.reducer
-
-
+    notificationType: NotificationTypes.reducer,
+    NotificationTemplates: NotificationTemplates.reducer,
+    NotificationTemplate: NotificationTemplate.reducer
 };
 
 export default rootReducers;
