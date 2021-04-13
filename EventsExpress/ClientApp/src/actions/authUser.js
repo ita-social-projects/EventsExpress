@@ -14,8 +14,6 @@ export default function AuthUser() {
 
         const res = await api_serv.setAuth();
 
-        console.log('response');
-
         if (res.ok) {
             const user = await res.json();
             const eventFilter = {
