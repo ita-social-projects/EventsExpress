@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SelectCategories from '../../components/SelectCategories/SelectCategories';
-import setUserCategory from '../../actions/editProfile/userCategory-add-action';
+import setUserCategory from '../../actions/redactProfile/userCategory-add-action';
 import get_categories from '../../actions/category/category-list-action';
 
 class SelectCategoriesWrapper extends Component {
