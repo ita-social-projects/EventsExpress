@@ -38,17 +38,35 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            {this.props.user.id &&
-                                    <>
+                            {this.props.user.role === "Admin" &&
+                                <>
+                                    <NavItem
+                                        to={'/user_chats'}
+                                        my_icon={
+                                            <Badge badgeContent={this.props.msg_for_read().length} color="primary">
+                                                <i className="fas fa-comments"></i>
+                                            </Badge>
+                                        }
+                                        text={"Comuna"}
+                                    />
+                                    <NavItem
+                                        to={'/admin/'}
+                                        icon={'fa fa-user-secret'}
+                                        text={"Admin"}
+                                    />
+                                </>
+                            }
+                            {this.props.user.role === "User" && this.props.user.id &&
+                                <>
                                     <NavItem
                                         to={'/user/' + this.props.user.id}
                                         icon={'fa fa-user'}
                                         text={"Profile"}
                                     />
                                     <NavItem
-                                         to={'/drafts'}
-                                         icon={'fa fa-edit'}
-                                         text={"Draft"}
+                                        to={'/drafts'}
+                                        icon={'fa fa-edit'}
+                                        text={"Draft"}
                                     />
                                     <NavItem
                                         to={'/search/users?page=1'}
@@ -69,19 +87,6 @@ class LeftSidebar extends Component {
                                         }
                                         text={"Comuna"}
                                     />
-                                </>
-                            }
-                            {this.props.user.role === "Admin" &&
-                                <>
-                                    <NavItem
-                                        to={'/admin/'}
-                                        icon={'fa fa-user-secret'}
-                                        text={"Admin"}
-                                    />                               
-                                </>
-                            }
-                            {this.props.user.role === "User" &&
-                                <>
                                     <NavItem
                                         to={'/contactUs'}
                                         icon={'fa fa-exclamation-circle'}

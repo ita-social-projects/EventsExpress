@@ -16,11 +16,11 @@ const history = createBrowserHistory({ forceRefresh: true });
 export default class HeaderProfile extends Component {
     handleClick = () => {
         this.props.onSubmit(null);
-        
+
     }
 
     render() {
-        const { id, name, photoUrl, rating } = this.props.user;
+        const { id, name, photoUrl, rating, role } = this.props.user;
         const { onClick } = this.props;
 
         return (
@@ -64,13 +64,14 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
 
                                 </Link>
-                                <div>
-                                    <button className="btn btn-outline-secondary" onClick={this.handleClick}>
-                                        <i className="fas fa-plus mr-1"></i>
-                                    add event
-
-                                    </button>
-                                </div>
+                                {id && role == 'User' && (
+                                    <div>
+                                        <button className="btn btn-outline-secondary" onClick={this.handleClick}>
+                                            <i className="fas fa-plus mr-1"></i>
+                                        add event
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}

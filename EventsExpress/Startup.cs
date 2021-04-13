@@ -17,11 +17,13 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
+using EventsExpress.Policies;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -75,6 +77,13 @@ namespace EventsExpress
 
             services
                 .AddMemoryCache()
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy("AdminPolicy", policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
+                    options.AddPolicy("UserPolicy", policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.UserRole)));
+                })
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -111,6 +120,7 @@ namespace EventsExpress
                         },
                     };
                 });
+            services.AddSingleton<IAuthorizationHandler, RoleHandler>();
 
             #endregion
 
