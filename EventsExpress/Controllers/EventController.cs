@@ -167,7 +167,6 @@ namespace EventsExpress.Controllers
         /// <param name="page">Param page defines page count.</param>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
-        [Authorize(Policy = "UserPolicy")]
         [HttpGet("[action]/{page:int}")]
         public IActionResult AllDraft(int page = 1)
         {

@@ -50,6 +50,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable UserManageDto models.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
             filter.PageSize = 12;
@@ -279,6 +280,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
@@ -315,6 +317,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return profileDto.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = "UserPolicy")]
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);

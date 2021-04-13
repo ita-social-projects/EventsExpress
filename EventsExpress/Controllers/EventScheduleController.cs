@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Policy = "UserPolicy")]
+    [Authorize]
     [ApiController]
     public class EventScheduleController : ControllerBase
     {
