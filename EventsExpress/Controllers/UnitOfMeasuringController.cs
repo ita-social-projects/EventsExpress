@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-
     [ApiController]
     public class UnitOfMeasuringController : Controller
     {
@@ -36,7 +35,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Create process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
@@ -55,7 +54,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Edit process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
         {
@@ -92,7 +91,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Return process  failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
@@ -109,7 +108,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If delete process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
