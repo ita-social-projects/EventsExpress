@@ -5,10 +5,8 @@ using AutoMapper;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
-using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     /// <summary>
-    /// AccountController is used to add several authorization methods to one account.
+    /// AccountController is used to add several authorization methods to one account,
+    /// change roles and block/unblock users.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -42,6 +41,9 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method looks for account-bound authorization methods.
         /// </summary>
+        /// <returns>The method returns all linked authorization methods.</returns>
+        /// <response code="200">Return List of linked auth.</response>
+        /// <response code="400">If authentication process failed.</response>
         [Authorize]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetLinkedAuth()
@@ -55,6 +57,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allow to add an Google-authorization method to an existing account.
         /// </summary>
+        /// <param name="model">Param model defines AuthGoogleViewModel.</param>
+        /// <returns>This method adds a google login to account.</returns>
+        /// <response code="200">Return Ok.</response>
+        /// <response code="400">If authentication process failed.</response>
         [Authorize]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddGoogleLogin(AuthGoogleViewModel model)
@@ -71,13 +77,17 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allow to add an Local-authorization method to an existing account.
         /// </summary>
+        /// <param name="model">Param model defines LoginViewModel.</param>
+        /// <returns>This method adds a local login to account.</returns>
+        /// <response code="200">Return Ok.</response>
+        /// <response code="400">If authentication process failed.</response>
         [Authorize]
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddLocalLogin(LoginViewModel loginViewModel)
+        public async Task<IActionResult> AddLocalLogin(LoginViewModel model)
         {
             var user = await _authService.GetCurrentUserAsync(HttpContext.User);
 
-            await _accountService.AddAuth(user.AccountId, loginViewModel.Email, loginViewModel.Password);
+            await _accountService.AddAuth(user.AccountId, model.Email, model.Password);
 
             return Ok();
         }
@@ -85,6 +95,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allow to add an Facebook-authorization method to an existing account.
         /// </summary>
+        /// <param name="model">Param model defines AuthExternalViewModel.</param>
+        /// <returns>This method adds a facebook login to account.</returns>
+        /// <response code="200">Return Ok.</response>
+        /// <response code="400">If authentication process failed.</response>
         [Authorize]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddFacebookLogin(AuthExternalViewModel model)
@@ -99,6 +113,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allow to add an Twitter-authorization method to an existing account.
         /// </summary>
+        /// <param name="model">Param model defines AuthExternalViewModel.</param>
+        /// <returns>This method adds a twitter login to account.</returns>
+        /// <response code="200">Return Ok.</response>
+        /// <response code="400">If authentication process failed.</response>
         [Authorize]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddTwitterLogin(AuthExternalViewModel model)
@@ -145,6 +163,10 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method allows admin to change user roles.
         /// </summary>
+        /// <param name="model">Param model defines ChangeRoleWiewModel.</param>
+        /// <returns>The method change user roles.</returns>
+        /// <response code="200">Change roles is succesful.</response>
+        /// <response code="400">Change roles is failed.</response>
         [HttpPost("[action]")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeRoles(ChangeRoleWiewModel model)

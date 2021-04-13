@@ -45,7 +45,6 @@ namespace EventsExpress.Test.ControllerTests
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
         private string _userName = "some name of user";
-        private Guid _idRole = Guid.NewGuid();
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;

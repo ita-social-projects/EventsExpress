@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { twitterLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
-import { setErrorAllert } from '../../actions/alert-action';
+import { setErrorAlert } from '../../actions/alert-action';
 import TwitterLoginBase from './twitter-login-base';
 
 class TwitterLoginAdd extends TwitterLoginBase {
     doWork = (accountCred, authData) => {
         if (typeof accountCred === 'undefined'
             || typeof accountCred.email === 'undefined') {
-            this.props.setErrorAllert(" Please add email to your twitter account!");
+            this.props.setErrorAlert(" Please add email to your twitter account!");
             return;
         }
         ({
@@ -23,7 +23,7 @@ class TwitterLoginAdd extends TwitterLoginBase {
 
 const mapDispatchToProps = (dispatch) => ({
     twitterLoginAdd: email => dispatch(twitterLoginAdd(email)),
-    setErrorAllert: msg => dispatch(setErrorAllert(msg))
+    setErrorAlert: msg => dispatch(setErrorAlert(msg))
 });
 
 export default connect(null, mapDispatchToProps)(TwitterLoginAdd);

@@ -3,6 +3,7 @@ import { createBrowserHistory } from 'history';
 import { setSuccessAllert } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { SubmissionError } from 'redux-form';
+import { constToken, constJsonwebtoken } from '../../constants/constants';
 
 const api_serv = new AuthenticationService();
 const history = createBrowserHistory({ forceRefresh: true });
@@ -17,7 +18,7 @@ export default function registerComplete(data) {
         }
 
         let jsonRes = await response.json();
-        localStorage.setItem('token', jsonRes.token);
+        localStorage.setItem(constToken, jsonRes.token);
         dispatch(setSuccessAllert('Your profile was updated'));
         dispatch(history.push('/home'))
         return Promise.resolve();
@@ -25,8 +26,8 @@ export default function registerComplete(data) {
 }
 
 export function getAccountIdFromJWT(){
-    var jwt = require('jsonwebtoken');
-    let token = localStorage.getItem('token');
+    var jwt = require(constJsonwebtoken);
+    let token = localStorage.getItem(constToken);
     let decoded = jwt.decode(token);
     return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
 }

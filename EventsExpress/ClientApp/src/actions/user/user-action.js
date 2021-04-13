@@ -21,7 +21,7 @@ export const changeUserRole = {
     SUCCESS: 'SUCCESS_CHANGE_ROLE',
     UPDATE: 'UPDATE_CHANGE_ROLE'
 }
-const api_serv = new UserService(); //todo
+const api_serv = new UserService();
 
 // ACTION CREATOR FOR USER UNBLOCK:
 export function unblock_user(id) {

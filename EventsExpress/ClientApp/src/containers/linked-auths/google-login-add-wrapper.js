@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { googleLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
 import config from '../../config';
 import { withRouter } from 'react-router-dom';
-import { setErrorAllert } from '../../actions/alert-action';
+import { setErrorAlert } from '../../actions/alert-action';
 import '../css/Auth.css';
 
 class GoogleLoginAdd extends Component {
     googleResponseHandler = response => {
         if (typeof response.profileObj.email === 'undefined') {
-            this.props.setErrorAllert("Please add email to your google account!")
+            this.props.setErrorAlert("Please add email to your google account!")
         }
         this.props.googleLoginAdd(
             response.tokenId,
@@ -39,7 +39,7 @@ class GoogleLoginAdd extends Component {
 
 const mapDispatchToProps = dispatch => ({
     googleLoginAdd: (tokenId, email) => dispatch(googleLoginAdd(tokenId, email)),
-    setErrorAllert: msg => dispatch(setErrorAllert(msg))
+    setErrorAlert: msg => dispatch(setErrorAlert(msg))
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(GoogleLoginAdd));

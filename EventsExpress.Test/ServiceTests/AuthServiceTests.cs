@@ -19,6 +19,8 @@ namespace EventsExpress.Test.ServiceTests
     internal class AuthServiceTests : TestInitializer
     {
         private static readonly Guid AuthLocalId = ConfirmEmail.AuthLocalId;
+        private readonly string name = "existingName";
+        private readonly string existingEmail = "existingEmail@gmail.com";
 
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
@@ -29,9 +31,6 @@ namespace EventsExpress.Test.ServiceTests
 
         private UserDto existingUserDTO;
         private User existingUser;
-
-        private string name = "existingName";
-        private string existingEmail = "existingEmail@gmail.com";
 
         [SetUp]
         protected override void Initialize()
@@ -185,12 +184,6 @@ namespace EventsExpress.Test.ServiceTests
         [TestCaseSource(typeof(ConfirmEmail), nameof(ConfirmEmail.TestCases))]
         public void ConfirmEmail_CachingFailed_Throws(Guid id, string token)
         {
-            CacheDto cache = new CacheDto()
-            {
-                AuthLocalId = existingUser.Id,
-                Token = "valid token",
-            };
-
             mockCacheHelper.Setup(u => u.GetValue(It.IsAny<Guid>()));
 
             AsyncTestDelegate methodInvoke = async () =>

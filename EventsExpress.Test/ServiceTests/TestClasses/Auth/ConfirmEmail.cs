@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests.TestClasses.Auth
 {
-    internal class ConfirmEmail
+    internal static class ConfirmEmail
     {
         internal static readonly Guid AuthLocalId = Guid.NewGuid();
 

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 {
-    public class GettingOkDeletingUnits
+    internal static class GettingOkDeletingUnits
     {
         private static Guid deletedUnitOfMeasuringId = EditingUnit.DeletedUnitOfMeasuringDTO.Id;
         private static Guid notExistedId = EditingUnit.UnitOfMeasuringDTONotExId.Id;
