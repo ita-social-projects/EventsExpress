@@ -36,6 +36,10 @@ class App extends Component {
         this.props.authUser();
     }
 
+    UserRoleSecurity = withAuthRedirect(['User']);
+    AdminRoleSecurity = withAuthRedirect(['Admin']);
+    AdminAndUserRoleSecurity = withAuthRedirect(['Admin', 'User']);
+
     render() {
         return (
             <BrowserRouter>
@@ -56,22 +60,22 @@ class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                        <Route path="/profile/" component={Profile} />
+                        <Route path="/profile/" component={this.AdminAndUserRoleSecurity(Profile)} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
-                        <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin" component={Admin} />
-                        <Route path="/search/users" component={withAuthRedirect(['User'])(SearchUserWrapper)} />
-                        <Route path="/user_chats" component={UserChats} />
-                        <Route path="/notification_events" component={NotificationEvents} />
+                        <Route path="/user/:id" component={this.UserRoleSecurity(UserItemViewWrapper)} />
+                        <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
+                        <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
+                        <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />
+                        <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
-                        <Route path="/chat/:chatId" component={Chat} />
-                        <Route path="/contactUs" component={ContactUsWrapper} />
-                        <Route path='/event/createEvent' component={AddEventWrapper} />
-                        <Route path='/editEvent/:id/' component={DraftEditWrapper} />
-                        <Route path='/drafts' component={EventDraftListWrapper} />
+                        <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
+                        <Route path="/contactUs" component={this.UserRoleSecurity(ContactUsWrapper)} />
+                        <Route path='/event/createEvent' component={this.UserRoleSecurity(AddEventWrapper)} />
+                        <Route path='/editEvent/:id/' component={this.UserRoleSecurity(DraftEditWrapper)} />
+                        <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
                         <Route path='/unauthorized' component={Unauthorized} />
                         <Route path='/forbidden' component={Forbidden} />
                         <Route component={NotFound} />

@@ -52,9 +52,9 @@ export default class Admin extends Component {
                                 path='/admin'
                                 render={() =>
                                     <Redirect to={`/admin/categories`} />} />
-                            <Route path="/admin/categories/" component={this.AdminRole(Category)} />
-                            <Route path='/admin/unitsOfMeasuring' component={this.AdminRole(UnitOfMeasuring)} />
-                            <Route path="/admin/users" component={this.AdminRole(UserPWrapper)} />
+                            <Route path="/admin/categories/" component={Category} />
+                            <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                            <Route path="/admin/users" component={UserPWrapper} />
                         </Switch>
                     </div>
                 </div>
