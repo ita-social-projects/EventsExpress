@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
@@ -11,10 +10,10 @@ namespace EventsExpress.Db.Migrations
                 name: "NotificationTemplates",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true),
-                    Subject = table.Column<string>(nullable: true),
-                    MessageText = table.Column<string>(nullable: true),
+                    Subject = table.Column<string>(nullable: false),
+                    MessageText = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {

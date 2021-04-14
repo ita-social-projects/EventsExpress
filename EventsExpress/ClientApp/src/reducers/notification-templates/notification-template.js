@@ -12,4 +12,4 @@ export const reducer = (state = initialState.notificationTemplate, action) => {
         default:
             return state;
     }
-};
+}

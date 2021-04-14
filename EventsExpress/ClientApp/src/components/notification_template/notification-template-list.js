@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import NotificationTemplateItem from './notification-template-item';
 
 export default class NotificationTemplates extends Component {
@@ -7,14 +6,6 @@ export default class NotificationTemplates extends Component {
     renderTemplates = (arr) => arr.map(
         template => <NotificationTemplateItem key={template.id} template={template} />
     );
-    
-    changeMessage = () => {
-        console.log('Hello, World!');
-    }
-
-    changeSubject = () => {
-        console.log('Change subject');
-    }
 
     render() {
         const { templates } = this.props; 

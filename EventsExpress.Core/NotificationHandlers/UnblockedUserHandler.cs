@@ -39,7 +39,7 @@ namespace EventsExpress.Core.NotificationHandlers
 
                 if (userEmail != null)
                 {
-                    var message = await _messageService.GetByTitleAsync("UnblockedUser");
+                    var message = await _messageService.GetByIdAsync(NotificationProfile.UnblockedUser);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {

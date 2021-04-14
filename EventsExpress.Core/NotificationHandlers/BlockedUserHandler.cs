@@ -42,7 +42,7 @@ namespace EventsExpress.Core.NotificationHandlers
                         { "(UserName)", userEmail },
                     };
 
-                    var emailMessage = await _notificationTemplateServiceService.GetByTitleAsync("BlockedUser");
+                    var emailMessage = await _notificationTemplateServiceService.GetByIdAsync(NotificationProfile.BlockedUser);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {

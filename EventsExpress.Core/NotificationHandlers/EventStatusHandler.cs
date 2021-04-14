@@ -44,14 +44,14 @@ namespace EventsExpress.Core.NotificationHandlers
                     var userEvent = _eventService.EventById(notification.EventId);
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.EventId}/1";
 
-                    string notificationType = notification.EventStatus switch
+                    var notificationTitle = notification.EventStatus switch
                     {
-                        EventStatus.Canceled => "EventStatusCanceled",
-                        EventStatus.Blocked => "EventStatusBlocked",
-                        _ => "EventStatusActivated"
+                        EventStatus.Canceled => NotificationProfile.EventStatusCanceled,
+                        EventStatus.Blocked => NotificationProfile.EventStatusBlocked,
+                        _ => NotificationProfile.EventStatusActivated
                     };
 
-                    var templateDto = await _messageService.GetByTitleAsync(notificationType);
+                    var templateDto = await _messageService.GetByIdAsync(notificationTitle);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {

@@ -41,11 +41,11 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
 
-                    string notificationType = notification.Status.Equals(UserStatusEvent.Approved) ?
-                        "ParticipationApproved"
-                        : "ParticipationDenied";
+                    var notificationTitle = notification.Status.Equals(UserStatusEvent.Approved) ?
+                        NotificationProfile.ParticipationApproved
+                        : NotificationProfile.ParticipationDenied;
 
-                    var message = await _messageService.GetByTitleAsync(notificationType);
+                    var message = await _messageService.GetByIdAsync(notificationTitle);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {

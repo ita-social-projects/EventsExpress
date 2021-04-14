@@ -1,7 +1,11 @@
-﻿namespace EventsExpress.Db.Entities
+﻿using EventsExpress.Db.Enums;
+
+namespace EventsExpress.Db.Entities
 {
-    public class NotificationTemplate : BaseEntity
+    public class NotificationTemplate
     {
+        public NotificationProfile Id { get; set; }
+
         public string Title { get; set; }
 
         public string Subject { get; set; }

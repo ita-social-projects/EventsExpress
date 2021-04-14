@@ -7,6 +7,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -42,7 +43,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 Token = token,
             });
 
-            var message = await _messageService.GetByTitleAsync("RegisterVerification");
+            var message = await _messageService.GetByIdAsync(NotificationProfile.RegisterVerification);
 
             Dictionary<string, string> pattern = new Dictionary<string, string>
             {

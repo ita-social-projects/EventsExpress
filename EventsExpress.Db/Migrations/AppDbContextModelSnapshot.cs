@@ -327,14 +327,15 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("MessageText")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

@@ -37,7 +37,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
 
-                var templateDto = await _messageService.GetByTitleAsync("EventCreated");
+                var templateDto = await _messageService.GetByIdAsync(NotificationProfile.EventCreated);
 
                 foreach (var userEmail in usersEmails)
                 {
