@@ -1,6 +1,7 @@
 import { AuthenticationService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
 import { createBrowserHistory } from 'history';
+
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
 

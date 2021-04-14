@@ -7,7 +7,7 @@ import configureStore from './store/configureStore';
 import App from './components/app';
 import registerServiceWorker from './registerServiceWorker';
 import { getUserInfo } from './actions/login/login-action';
-import { constToken } from './constants/constants'
+import { jwtStorageKey } from './constants/constants'
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -18,7 +18,7 @@ const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
 function loadUserIfAuthenticated() {
-    const token = localStorage.getItem(constToken);
+    const token = localStorage.getItem(jwtStorageKey);
     if (!token) return;
 
     store.dispatch(getUserInfo());

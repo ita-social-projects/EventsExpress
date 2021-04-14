@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -22,8 +23,9 @@ namespace EventsExpress.Core.Services
 
         public AccountService(
             AppDbContext context,
-            IMediator mediator)
-            : base(context)
+            IMediator mediator,
+            IMapper mapper)
+            : base(context, mapper)
         {
             _mediator = mediator;
         }
@@ -116,22 +118,15 @@ namespace EventsExpress.Core.Services
         {
             var authE = Context.AuthExternal
                 .Where(a => a.AccountId == accountId)
-                .Select(a => new AuthDto
-                {
-                    Email = a.Email,
-                    Type = a.Type,
-                });
+                .ProjectTo<AuthDto>(Mapper.ConfigurationProvider);
 
             var authL = Context.AuthLocal
                 .Where(a => a.AccountId == accountId)
-                .Select(a => new AuthDto
-                {
-                    Email = a.Email,
-                    Type = null,
-                });
+                .ProjectTo<AuthDto>(Mapper.ConfigurationProvider);
 
-            var auths = await authE.Union(authL).ToListAsync();
-            return auths;
+            var auths = authE.Union(authL);
+
+            return await auths.ToListAsync();
         }
 
         public async Task Block(Guid userId)
