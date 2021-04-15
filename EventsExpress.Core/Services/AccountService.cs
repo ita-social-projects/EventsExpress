@@ -6,6 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.EF;
@@ -32,9 +33,19 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangeRole(Guid userId, IEnumerable<Db.Entities.Role> roles)
         {
+            if (roles.IsNullOrEmpty())
+            {
+                throw new EventsExpressException("Invalid Roles");
+            }
+
             var a = Context.Accounts
                 .Include(a => a.AccountRoles)
-                .Single(a => a.UserId == userId);
+                .SingleOrDefault(a => a.UserId == userId);
+
+            if (a == null)
+            {
+                throw new EventsExpressException("Invalid user Id");
+            }
 
             var newRoles = roles
                 .Select(ar => new AccountRole { AccountId = a.Id, RoleId = ar.Id })
@@ -125,7 +136,6 @@ namespace EventsExpress.Core.Services
                 .ProjectTo<AuthDto>(Mapper.ConfigurationProvider);
 
             var auths = authE.Union(authL);
-
             return await auths.ToListAsync();
         }
 
