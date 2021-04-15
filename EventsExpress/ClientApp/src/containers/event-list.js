@@ -22,9 +22,9 @@ class EventListWrapper extends Component {
     }
 
     componentDidUpdate() {
-        if (window.location.search != this.prevQueryStringSearch) {
-            this.prevQueryStringSearch = window.location.search;
-            this.props.get_events(window.location.search);
+        if (this.props.history.location.search != this.prevQueryStringSearch) {
+            this.prevQueryStringSearch = this.props.history.location.search;
+            this.props.get_events(this.props.history.location.search);
         }
     }
 
