@@ -1,3 +1,5 @@
+import { jwtStorageKey } from '../constants/constants';
+
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
@@ -7,7 +9,7 @@ export default class EventsExpressService {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
             }),
         });
 
@@ -36,7 +38,7 @@ export default class EventsExpressService {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
             }),
         });
 
@@ -55,7 +57,7 @@ export default class EventsExpressService {
                 method: "post",
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
                 }),
                 body: JSON.stringify(data)
             }
@@ -77,7 +79,7 @@ export default class EventsExpressService {
             {
                 method: "post",
                 headers: new Headers({
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
                 }),
                 body: data
             }
@@ -102,7 +104,7 @@ export default class EventsExpressService {
             return false;
         }
         let rest = await response.json();
-        localStorage.setItem('token', rest.jwtToken);
+        localStorage.setItem(jwtStorageKey, rest.jwtToken);
         return true;
     }
 	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);

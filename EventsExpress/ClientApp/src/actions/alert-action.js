@@ -27,6 +27,13 @@ export function setSuccessAllert(msg) {
     }
 }
 
+export function setErrorAlert(msg) {
+    return dispatch => {
+        const alert = buildAllertWithError(msg);
+        dispatch(setAlert(alert));
+    }
+}
+
 export function setAlertOpen(data) {
     return {
         type: _alert.SETOPEN,
