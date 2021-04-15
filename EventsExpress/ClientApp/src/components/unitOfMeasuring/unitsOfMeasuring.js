@@ -35,10 +35,8 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UnitsOfMeasuring);
+
+export default connect(mapStateToProps, mapDispatchToProps)(UnitsOfMeasuring)
 
 
 
