@@ -136,7 +136,7 @@ function getEventPending(data) {
     }
 }
 
-function getEvent(data) {
+export function getEvent(data) {
     return {
         type: GET_EVENT_SUCCESS,
         payload: data
