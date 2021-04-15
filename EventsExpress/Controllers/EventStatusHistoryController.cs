@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using EventsExpress.Filters;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Policy = PolicyNames.UserPolicyName)]
     [ApiController]
     public class EventStatusHistoryController : ControllerBase
     {

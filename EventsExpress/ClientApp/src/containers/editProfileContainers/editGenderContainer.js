@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import EditGender from "../../components/profile/editProfile/editGender";
 import { connect } from "react-redux";
-import edit_Gender from "../../actions/editProfile/gender-edit-action";
+import edit_Gender from "../../actions/redactProfile/gender-edit-action";
 
 class EditGenderContainer extends React.Component {
     submit = value => {
