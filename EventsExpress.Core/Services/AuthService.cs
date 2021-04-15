@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
@@ -125,16 +126,16 @@ namespace EventsExpress.Core.Services
         private static bool VerifyPassword(UserDto user, string actualPassword) =>
             user.PasswordHash == PasswordHasher.GenerateHash(actualPassword, user.Salt);
 
-        public User GetCurrUserId(ClaimsPrincipal userClaims)
+        public Guid GetCurrUserId(ClaimsPrincipal userClaims)
         {
-            Claim emailClaim = userClaims.FindFirst(ClaimTypes.Email);
+            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
 
-            if (string.IsNullOrEmpty(emailClaim?.Value))
+            if (string.IsNullOrEmpty(guidClaim?.Value))
             {
-                return null;
+                return Guid.Empty;
             }
 
-            return _userService.GetIdByEmail(emailClaim.Value);
+            return Guid.Parse(guidClaim.Value);
         }
     }
 }

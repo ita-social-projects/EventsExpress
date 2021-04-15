@@ -69,11 +69,17 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToManageResolver>());
 
             CreateMap<UserDto, UserPreviewViewModel>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToPreviewResolver>())
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
+                .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => src.Rating))
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
+                .ForMember(dest => dest.Attitude, opts => opts.Ignore())
+                .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))

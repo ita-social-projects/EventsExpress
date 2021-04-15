@@ -31,7 +31,7 @@ namespace EventsExpress.ValueResolvers
         {
             var res = new List<UserPreviewViewModel>();
 
-            var currUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+            var currUser = _authService?.GetCurrentUser(_httpContextAccessor.HttpContext.User);
 
             foreach (var u in source.Visitors)
             {

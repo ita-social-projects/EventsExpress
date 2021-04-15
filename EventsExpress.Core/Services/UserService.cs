@@ -399,19 +399,5 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
             return user.Id;
         }
-
-        public User GetIdByEmail(string email)
-        {
-            return Context.Users
-                .Include(u => u.Events)
-                .Include(u => u.Role)
-                .Include(u => u.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(n => n.NotificationType)
-                .Include(u => u.Relationships)
-                .AsNoTracking()
-                .FirstOrDefault(o => o.Email == email);
-        }
     }
 }

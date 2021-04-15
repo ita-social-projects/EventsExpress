@@ -27,7 +27,7 @@ namespace EventsExpress.ValueResolvers
 
         public byte Resolve(User source, UserDto destination, byte destMember, ResolutionContext context)
         {
-            var att = source.Relationships?.FirstOrDefault(r => r.UserFromId == _authService.GetCurrUserId(_httpContextAccessor.HttpContext.User)?.Id)?.Attitude ?? Attitude.None;
+            var att = source.Relationships?.FirstOrDefault(r => r.UserFromId == _authService.GetCurrUserId(_httpContextAccessor.HttpContext.User))?.Attitude ?? Attitude.None;
 
             return (byte)att;
         }

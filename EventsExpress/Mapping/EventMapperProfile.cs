@@ -76,7 +76,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToViewModelResolver>());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToViewModelResolver>())
+                .ForMember(dest => dest.Members, opts => opts.Ignore());
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
@@ -102,9 +103,6 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
-
-            // CreateMap<EventOwner, EventDto>()
-            //    .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.))
         }
 
         private static LocationViewModel MapLocation(EventDto eventDto)
@@ -265,17 +263,6 @@ namespace EventsExpress.Mapping
                 Birthday = user.Birthday,
                 Id = user.Id,
                 Username = UserName(user),
-            };
-        }
-
-        private UserPreviewViewModel MapUserEventToUserPreviewViewModel(UserEvent userEvent)
-        {
-            return new UserPreviewViewModel
-            {
-                Id = userEvent.User.Id,
-                Username = UserName(userEvent.User),
-                Birthday = userEvent.User.Birthday,
-                UserStatusEvent = userEvent.UserStatusEvent,
             };
         }
     }
