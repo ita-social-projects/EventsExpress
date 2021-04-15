@@ -79,9 +79,9 @@ namespace EventsExpress
                 .AddMemoryCache()
                 .AddAuthorization(options =>
                 {
-                    options.AddPolicy("AdminPolicy", policy =>
+                    options.AddPolicy(PolicyNames.AdminPolicyName, policy =>
                         policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
-                    options.AddPolicy("UserPolicy", policy =>
+                    options.AddPolicy(PolicyNames.UserPolicyName, policy =>
                         policy.Requirements.Add(new RoleRequirement(PolicyNames.UserRole)));
                 })
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

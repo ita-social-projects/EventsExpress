@@ -26,7 +26,7 @@ import DraftEditWrapper from '../../containers/draft-edit-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list';
 import Unauthorized from '../Route guard/401';
 import Forbidden from '../Route guard/403';
-import withAuthRedirect from '../../hoc/withAuthRedirect';
+import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/authUser';
 

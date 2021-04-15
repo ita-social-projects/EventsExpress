@@ -20,12 +20,12 @@ namespace EventsExpress.Test.PoliciesTests
                 services.AddSingleton<IAuthorizationHandler>(handler);
                 services.AddAuthorization(options =>
                 {
-                    options.AddPolicy("AdminPolicy", policy => policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
+                    options.AddPolicy(PolicyNames.AdminPolicyName, policy => policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
                 });
             });
 
             // Act
-            var allowed = await authorizationService.AuthorizeAsync(new ClaimsPrincipal(), "AdminPolicy");
+            var allowed = await authorizationService.AuthorizeAsync(new ClaimsPrincipal(), PolicyNames.AdminPolicyName);
 
             // Assert
             Assert.False(allowed.Succeeded);
