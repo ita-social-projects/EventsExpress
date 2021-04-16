@@ -33,7 +33,7 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangeRole(Guid userId, IEnumerable<Db.Entities.Role> roles)
         {
-            if (roles.IsNullOrEmpty())
+            if (roles.CollectionIsNullOrEmpty())
             {
                 throw new EventsExpressException("Invalid Roles");
             }

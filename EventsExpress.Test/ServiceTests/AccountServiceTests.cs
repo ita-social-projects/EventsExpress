@@ -196,7 +196,7 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.DoesNotThrowAsync(async () => await
                 service.EnsureExternalAccountAsync("someEmail", newAuthType));
-            Assert.True(Context.AuthExternal.FirstOrDefault(ae => ae.Email == "someEmail").Account != null);
+            Assert.That(Context.AuthExternal.FirstOrDefault(ae => ae.Email == "someEmail").Account != null);
         }
 
         [Test]

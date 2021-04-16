@@ -1,12 +1,12 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { block_user, unblock_user } from '../actions/user/user-action';
 import UserInfo from '../components/user-info';
 import { UserBlock } from '../components/user-info/user-block';
-import UserRoleWrapper from '../containers/user-role';
+import UserRoleWrapper from './user-role';
 
 
-class UserInfoWpapper extends Component {
+class UserInfoWrapper extends Component {
     constructor(props) {
         super(props);
 
@@ -22,7 +22,7 @@ class UserInfoWpapper extends Component {
             <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
                 <UserInfo key={user.id} user={user} />
 
-                <UserRoleWrapper 
+                <UserRoleWrapper
                     key={this.props.key}
                     user={user} 
                     isCurrentUser={this.isCurrentUser} 
@@ -53,4 +53,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserInfoWpapper);
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfoWrapper);

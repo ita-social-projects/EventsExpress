@@ -9,9 +9,6 @@ const initialState = {
     modalWind: {
         isOpen: false
     },
-    resetError: {
-        isError: false,
-    },
     user: {
         id: null,
         name: null,
@@ -27,7 +24,6 @@ const initialState = {
     },
     roles: {
         isPending: false,
-        isError: false,
         data: []
     },
     login: {
@@ -36,7 +32,6 @@ const initialState = {
     register: {
         isRegisterPending: false,
         isRegisterSuccess: false,
-        registerError: null
     },
     unitsOfMeasuring: {
         isPending: true,

@@ -59,7 +59,7 @@ namespace EventsExpress.Core.Services
 
             if (account.IsBlocked)
             {
-                throw new EventsExpressException($"Your account was blocked.");
+                throw new EventsExpressException($"Your account was blocked");
             }
 
             var jwtToken = _tokenService.GenerateAccessToken(account);

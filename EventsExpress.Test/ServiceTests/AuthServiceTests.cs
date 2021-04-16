@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
@@ -69,6 +71,174 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        [Category("Authenticate With External Provider")]
+        public void Authenticate_AccountNotFound_ThrowException()
+        {
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate("InvalidEmail", Db.Enums.AuthExternalType.Google);
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("Account not found"));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With External Provider")]
+        public void Authenticate_AccountIsBlocked_ThrowException()
+        {
+            var existingAccount = new Account
+            {
+                IsBlocked = true,
+                AuthExternal = new[]
+                {
+                    new AuthExternal
+                    {
+                        Email = existingEmail,
+                        Type = Db.Enums.AuthExternalType.Google,
+                    },
+                },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate(existingEmail, Db.Enums.AuthExternalType.Google);
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("Your account was blocked"));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With External Provider")]
+        public async Task Authenticate_AllIsOk_DoesNotThrow()
+        {
+            var existingAccount = new Account
+            {
+                AuthExternal = new[]
+                {
+                    new AuthExternal
+                    {
+                        Email = existingEmail,
+                        Type = Db.Enums.AuthExternalType.Google,
+                    },
+                },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+
+            var res = await service.Authenticate(existingEmail, Db.Enums.AuthExternalType.Google);
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<AuthenticateResponseModel>(res);
+        }
+
+        [Test]
+        [Category("Authenticate With Local Provider")]
+        public void AuthenticateLocal_AccountNotFound_ThrowException()
+        {
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate("InvalidEmail", "InvalidPassword");
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("Incorrect login or password"));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With Local Provider")]
+        public void AuthenticateLocal_AccountIsBloked_ThrowException()
+        {
+            var existingAccount = new Account
+            {
+                IsBlocked = true,
+                AuthLocal = new AuthLocal { Email = existingEmail },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate(existingEmail, "anyPassword");
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("Your account was blocked."));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With Local Provider")]
+        public void AuthenticateLocal_EmailNotConfirmed_ThrowException()
+        {
+            var existingAccount = new Account
+            {
+                AuthLocal = new AuthLocal { Email = existingEmail, EmailConfirmed = false },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate(existingEmail, "anyPassword");
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains($"{existingEmail} is not confirmed, please confirm"));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With Local Provider")]
+        public void AuthenticateLocal_InvalidPassword_ThrowException()
+        {
+            var existingAccount = new Account
+            {
+                AuthLocal = new AuthLocal
+                {
+                    Email = existingEmail,
+                    EmailConfirmed = true,
+                    Salt = PasswordHasher.GenerateSalt(),
+                },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            AsyncTestDelegate methodInvoke = async () =>
+                await service.Authenticate(existingEmail, "IncorrectPassword");
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("Incorrect login or password1"));
+            mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
+        }
+
+        [Test]
+        [Category("Authenticate With Local Provider")]
+        public async Task AuthenticateLocal_AllIsValid_DoesNotThrow()
+        {
+            var correctPassword = "CorrectPassword";
+            var salt = PasswordHasher.GenerateSalt();
+            var existingAccount = new Account
+            {
+                AuthLocal = new AuthLocal
+                {
+                    Email = existingEmail,
+                    EmailConfirmed = true,
+                    Salt = salt,
+                    PasswordHash = PasswordHasher.GenerateHash(correctPassword, salt),
+                },
+            };
+            Context.Accounts.Add(existingAccount);
+            Context.SaveChanges();
+
+            mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+
+            var res = await service.Authenticate(existingEmail, correctPassword);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<AuthenticateResponseModel>(res);
+        }
+
+        [Test]
         public void ChangePasswordAsync_InvalidUserClaims_Throws()
         {
             var userDtoWithoutAuthLocal = new UserDto
@@ -134,6 +304,81 @@ namespace EventsExpress.Test.ServiceTests
                 await service.ChangePasswordAsync(GetClaimsPrincipal(), validPassword, "newPassword");
 
             Assert.DoesNotThrowAsync(methodInvoke);
+        }
+
+        [Test]
+        [Category("CanRegister")]
+        public async Task CanRegister_AccountExist_ReturnFalse()
+        {
+            var existAuthLocal = new AuthLocal { Email = existingEmail };
+            Context.AuthLocal.Add(existAuthLocal);
+            Context.SaveChanges();
+
+            var res = await service.CanRegister(existingEmail);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.That(res == false);
+        }
+
+        [Test]
+        [Category("CanRegister")]
+        public async Task CanRegister_AccountNotExist_ReturnTrue()
+        {
+            var res = await service.CanRegister(existingEmail);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.That(res == true);
+        }
+
+        [Test]
+        [Category("Register")]
+        public void Register_InvalidModel_ThrowException()
+        {
+            MockMapper.Setup(s => s.Map<Account>(It.IsAny<RegisterDto>())).Throws<EventsExpressException>();
+
+            Assert.ThrowsAsync<EventsExpressException>(() =>
+                service.Register(new RegisterDto()));
+        }
+
+        [Test]
+        [Category("Register")]
+        public async Task Register_AllIsOk_DoesNotThrow()
+        {
+            var accountId = Guid.NewGuid();
+            var registerDto = new RegisterDto
+            {
+                Email = "SomeEmail",
+                Password = "somePassword",
+            };
+            var newAccount = new Account { Id = accountId };
+
+            MockMapper.Setup(s => s.Map<Account>(It.IsAny<RegisterDto>())).Returns(newAccount);
+            var res = await service.Register(registerDto);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.That(res == accountId);
+        }
+
+        [Test]
+        [Category("GetCurrentUserAsync")]
+        public async Task GetCurrentUserAsync_UserIsNotExist_ReturnNull()
+        {
+            var claims = new ClaimsPrincipal();
+
+            Assert.That(await service.GetCurrentUserAsync(claims) == null);
+        }
+
+        [Test]
+        [Category("GetCurrentUserAsync")]
+        public async Task GetCurrentUserAsync_UserExist_UserId()
+        {
+            var claims = GetClaimsPrincipal();
+
+            mockUserService.Setup(s => s.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new UserDto());
+
+            var res = await service.GetCurrentUserAsync(claims);
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<UserDto>(res);
         }
 
         [Test]

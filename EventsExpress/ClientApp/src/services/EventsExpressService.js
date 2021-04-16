@@ -3,36 +3,6 @@ import { jwtStorageKey } from '../constants/constants';
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
-    // Obsolete
-    getResource = async (url) => {
-        const call = (url) => fetch(this._baseUrl + url, {
-            method: "get",
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
-            }),
-        });
-
-        let res = await call(url);
-
-        if (res.status === 401 && await this.refreshHandler()) {
-            // one more try:
-            res = await call(url);
-        }
-
-        if (res.ok) {
-            return await res.json();
-        }
-        else {
-            return {
-                error: {
-                    ErrorCode: res.status,
-                    massage: await res.statusText
-                }
-            };
-        }
-    }
-
     getResourceNew = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
             method: "get",
