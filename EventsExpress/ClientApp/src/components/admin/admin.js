@@ -41,7 +41,7 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">
+                    <div className="col-sm-10">
                         <Switch>
                             <Route
                                 exact

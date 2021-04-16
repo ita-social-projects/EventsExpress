@@ -9,5 +9,5 @@ export default class ChatService {
     getChats = () => baseService.getResourceNew('chat/All');
 
     getUnreadMessages = userId =>
-        baseService.getResource(`chat/GetUnreadMessages/?userId=${userId}`);
+        baseService.getResourceNew(`chat/GetUnreadMessages/?userId=${userId}`);
 }
