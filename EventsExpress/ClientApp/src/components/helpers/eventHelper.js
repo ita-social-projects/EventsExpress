@@ -35,21 +35,24 @@ const eventHelper = (function () {
                 dateTo: undefined,
                 categories: [],
                 statuses: [],
-                selectedPos: null,
+                selectedPos: undefined,
                 radius: 8,
-                x: null,
-                y: null
+                x: undefined,
+                y: undefined
             }
         },
+
         getQueryStringByEventFilter: function (filter) {
             return `?${queryStringStringify(
                 filter,
                 { arrayFormat: 'index' }
             )}`;
         },
+
         trimUndefinedKeys: function (eventFilter) {
-            return JSON.parse(JSON.stringify(eventFilter));
+            return JSON.parse(JSON.stringify(eventFilter, (key, value) => value === null ? undefined : value));
         },
+
     }
 }());
 
