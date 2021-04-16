@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import './event-item-header.css';
 
 
-class EventHeader extends Component {
+export default class EventHeader extends Component {
     constructor(props) {
         super(props);
 
@@ -185,4 +185,3 @@ class EventHeader extends Component {
     }
 }
 
-export default EventHeader;
