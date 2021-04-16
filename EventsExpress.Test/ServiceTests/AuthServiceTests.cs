@@ -317,7 +317,7 @@ namespace EventsExpress.Test.ServiceTests
             var res = await service.CanRegister(existingEmail);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.That(res == false);
+            Assert.False(res);
         }
 
         [Test]
@@ -327,7 +327,7 @@ namespace EventsExpress.Test.ServiceTests
             var res = await service.CanRegister(existingEmail);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.That(res == true);
+            Assert.True(res);
         }
 
         [Test]
@@ -365,7 +365,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             var claims = new ClaimsPrincipal();
 
-            Assert.That(await service.GetCurrentUserAsync(claims) == null);
+            Assert.Null(await service.GetCurrentUserAsync(claims));
         }
 
         [Test]

@@ -4,11 +4,11 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
-    getUserById = id => baseService.getResourceNew(`users/GetUserProfileById?id=${id}`);
+    getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 
-    getUsers = filter => baseService.getResourceNew(`users/get${filter}`);
+    getUsers = filter => baseService.getResource(`users/get${filter}`);
 
-    getSearchUsers = filter => baseService.getResourceNew(`users/searchUsers${filter}`);
+    getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
     setContactUs = data => baseService.setResource('users/ContactAdmins', data);
 

@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class CategoryService {
 
-    getAllCategories = () => baseService.getResourceNew('category/all');
+    getAllCategories = () => baseService.getResource('category/all');
 
     setCategory = data => baseService.setResource('category/create', {
         name: data.name

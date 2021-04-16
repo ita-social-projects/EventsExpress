@@ -8,7 +8,7 @@ export default class AuthenticationService {
 
     auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
-    getUserInfo = () => baseService.getResourceNew('Users/GetUserInfo');
+    getUserInfo = () => baseService.getResource('Users/GetUserInfo');
 
     setLogin = data => baseService.setResource('Authentication/Login', data);
 

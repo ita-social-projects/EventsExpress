@@ -4,10 +4,10 @@ const baseService = new EventsExpressService();
 
 export default class ChatService {
 
-    getChat = chatId => baseService.getResourceNew(`chat/${chatId}`);
+    getChat = chatId => baseService.getResource(`chat/${chatId}`);
 
-    getChats = () => baseService.getResourceNew('chat/All');
+    getChats = () => baseService.getResource('chat/All');
 
     getUnreadMessages = userId =>
-        baseService.getResourceNew(`chat/GetUnreadMessages/?userId=${userId}`);
+        baseService.getResource(`chat/GetUnreadMessages/?userId=${userId}`);
 }

@@ -3,7 +3,7 @@ import { jwtStorageKey } from '../constants/constants';
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
-    getResourceNew = async url => {
+    getResource = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
             method: "get",
             headers: new Headers({
@@ -80,5 +80,5 @@ export default class EventsExpressService {
 	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
 
-    getUsersInventories = eventId => this.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+    getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 }

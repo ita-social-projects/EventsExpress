@@ -4,11 +4,11 @@ const baseService = new EventsExpressService();
 
 export default class EventService {
 
-    getEvent = id => baseService.getResourceNew(`event/${id}`);
+    getEvent = id => baseService.getResource(`event/${id}`);
 
-    getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
+    getAllEvents = filters => baseService.getResource(`event/all${filters}`);
 
-    getAllDrafts = (page) => baseService.getResourceNew(`event/AllDraft/${page}`);
+    getAllDrafts = (page) => baseService.getResource(`event/AllDraft/${page}`);
           
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
@@ -105,19 +105,19 @@ export default class EventService {
             eventId: data.eventId
         });
 
-    getCurrentRate = eventId => baseService.getResourceNew(`event/${eventId}/GetCurrentRate`);
+    getCurrentRate = eventId => baseService.getResource(`event/${eventId}/GetCurrentRate`);
 
-    getAverageRate = eventId => baseService.getResourceNew(`event/${eventId}/GetAverageRate`);
+    getAverageRate = eventId => baseService.getResource(`event/${eventId}/GetAverageRate`);
     
     getFutureEvents = async (id, page) =>
-        baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);
+        baseService.getResource(`event/futureEvents?id=${id}&page=${page}`);
 
     getPastEvents = (id, page) =>
-        baseService.getResourceNew(`event/pastEvents?id=${id}&page=${page}`);
+        baseService.getResource(`event/pastEvents?id=${id}&page=${page}`);
 
     getEventsToGo = (id, page) =>
-        baseService.getResourceNew(`event/EventsToGo?id=${id}&page=${page}`);
+        baseService.getResource(`event/EventsToGo?id=${id}&page=${page}`);
 
     getVisitedEvents = (id, page) =>
-        baseService.getResourceNew(`event/visitedEvents?id=${id}&page=${page}`);
+        baseService.getResource(`event/visitedEvents?id=${id}&page=${page}`);
 }

@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class AccountService {
 
-    getLinkedAuths = () => baseService.getResourceNew('Account/GetLinkedAuth');
+    getLinkedAuths = () => baseService.getResource('Account/GetLinkedAuth');
 
     setGoogleLoginAdd = data => baseService.setResource('Account/AddGoogleLogin', data);
 
