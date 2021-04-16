@@ -5,14 +5,21 @@ import { AuthenticationService } from '../services';
 
 const api_serv = new AuthenticationService();
 
+const usersHaveAnyOfRoles = (userInfo, rolesList) =>
+    userInfo.roles.some((role) => rolesList.includes(role));
+
 const withAuthRedirect = (allowedRoles) =>
     (Component) => {
         class RedirectComponent extends React.Component {
             token = api_serv.getCurrentToken();
             render() {
-                if (!this.token && this.props.user.id === null) return <Redirect to='/unauthorized' />
+                const { user } = this.props;
+                if (!this.token && user.id === null)
+                    return <Redirect to='/unauthorized' />
 
-                if (this.token && this.props.user.id !== null && !allowedRoles.includes(this.props.user.role)) return <Redirect to='/forbidden' />
+                if (this.token && user.id !== null
+                    && !usersHaveAnyOfRoles(user, allowedRoles))
+                    return <Redirect to='/forbidden' />
 
                 return <Component {...this.props} />
             }

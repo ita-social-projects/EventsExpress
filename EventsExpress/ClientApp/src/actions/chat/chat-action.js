@@ -1,6 +1,7 @@
 import { ChatService } from '../../services';
 import * as SignalR from '@aspnet/signalr';
 import { setErrorAllertFromResponse, setAlert } from '../alert-action';
+import { jwtStorageKey } from '../../constants/constants';
 
 export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
 export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
@@ -36,7 +37,7 @@ export default function get_chat(chatId) {
 export function initialConnection() {
     return async dispatch => {
         const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/chatroom`,
-            { accessTokenFactory: () => (localStorage.getItem('token')) }).build();
+            { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
         try {
             await hubConnection.start();
 

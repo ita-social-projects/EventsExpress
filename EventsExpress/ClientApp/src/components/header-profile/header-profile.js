@@ -19,7 +19,7 @@ export default class HeaderProfile extends Component {
     }
 
     render() {
-        const { id, name, photoUrl, rating, role } = this.props.user;
+        const { id, name, photoUrl, rating } = this.props.user;
         const { onClick } = this.props;
 
         return (
@@ -34,7 +34,7 @@ export default class HeaderProfile extends Component {
                             <h4 className="user-name">{name}</h4>
                             <RatingAverage value={rating} direction='row' />
                             <div>
-                                <Link to={'/profile'}>
+                                <Link to={'/editProfile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
                                             <i className="fa fa-cog" aria-hidden="true"></i>
