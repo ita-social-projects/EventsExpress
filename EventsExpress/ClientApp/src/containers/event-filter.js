@@ -67,8 +67,7 @@ class EventFilterWrapper extends Component {
     }
 
     trimRadiusFromQueryString = (queryString) => {
-        let trimQueryString = queryString.toString().replace("&radius=8", "");
-        return trimQueryString;
+        return queryString.toString().replace("&radius=8", "");
     }
 
     buildInitialFormValues = () => {
