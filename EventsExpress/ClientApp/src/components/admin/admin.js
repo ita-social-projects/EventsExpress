@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route, Switch} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
@@ -9,9 +9,7 @@ import NotificationTemplateWrapper from "../../containers/notification-template/
 import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
 
 export default class Admin extends Component {
-
     render() {
-
         return (
             <>
                 <div className="admin-panel row">
@@ -54,11 +52,18 @@ export default class Admin extends Component {
                         </ul>
                     </div>
                     <div className="col-sm-9 offset-sm-1">
-                        <Route path="/admin/categories/" component={Category} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                        <Route path="/admin/users" component={UserPWrapper} />
-                        <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
-                        <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
+                        <Switch>
+                            <Route
+                                exact
+                                path='/admin'
+                                render={() =>
+                                    <Redirect to={`/admin/categories`} />} />
+                            <Route path="/admin/categories/" component={Category} />
+                            <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                            <Route path="/admin/users" component={UserPWrapper} />
+                            <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
+                            <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
+                        </Switch>
                     </div>
                 </div>
             </>
