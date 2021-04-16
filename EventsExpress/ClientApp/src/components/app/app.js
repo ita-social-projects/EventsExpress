@@ -30,7 +30,7 @@ import Unauthorized from '../Route guard/401';
 import Forbidden from '../Route guard/403';
 import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
-import AuthUser from '../../actions/authUser';
+import AuthUser from '../../actions/login/auth-user-action';
 
 class App extends Component {
     constructor(props){

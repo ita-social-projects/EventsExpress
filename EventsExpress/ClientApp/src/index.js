@@ -17,15 +17,6 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
-function loadUserIfAuthenticated() {
-    const token = localStorage.getItem(jwtStorageKey);
-    if (!token) return;
-
-    store.dispatch(getUserInfo());
-}
-
-loadUserIfAuthenticated();
-
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(

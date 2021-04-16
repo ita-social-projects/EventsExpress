@@ -1,11 +1,10 @@
 import EventsExpressService from './EventsExpressService';
+import { jwtStorageKey } from '../constants/constants'
 
 const baseService = new EventsExpressService();
 
 export default class AuthenticationService {
-    getCurrentToken = () => localStorage.getItem('token');
-    
-    setAuth = () => baseService.setResource('Authentication/login_token');
+    getCurrentToken = () => localStorage.getItem(jwtStorageKey);
 
     auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
