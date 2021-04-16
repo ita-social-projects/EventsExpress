@@ -62,7 +62,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
-                .ForMember(dest => dest.Members, opts => opts.MapFrom<EventDtoToMembersResolver>())
+                .ForMember(dest => dest.Members, opts => opts.MapFrom<EventDtoToVisitorsResolver>())
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToPreviewResolver>());
 
             CreateMap<EventDto, EventViewModel>()

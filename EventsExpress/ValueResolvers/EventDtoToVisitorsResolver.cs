@@ -7,11 +7,12 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.ValueResolvers
 {
-    public class EventDtoToVisitorsResolver : IValueResolver<EventDto, EventViewModel, IEnumerable<UserPreviewViewModel>>
+    public class EventDtoToVisitorsResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
@@ -27,7 +28,7 @@ namespace EventsExpress.ValueResolvers
             _userService = userService;
         }
 
-        public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModel destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
+        public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModelBase destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();
 
