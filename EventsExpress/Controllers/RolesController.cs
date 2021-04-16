@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using EventsExpress.Core.IServices;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Policy = PolicyNames.AdminPolicyName)]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -25,7 +27,6 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <returns>The method returns all roles.</returns>
         /// <response code="200">Return IEnumerable RoleDto model.</response>
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult All()
         {

@@ -4,7 +4,7 @@ import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
 import logout from '../../actions/login/logout-action';
 import { setRolesError } from '../../actions/roles'
 
- class Unauthorized extends Component {
+class Unauthorized extends Component {
      componentWillMount = () => {
          this.props.resetError();
          this.props.logout();

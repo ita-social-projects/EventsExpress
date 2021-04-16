@@ -3,6 +3,9 @@ import EventsExpressService from './EventsExpressService';
 const baseService = new EventsExpressService();
 
 export default class AuthenticationService {
+    getCurrentToken = () => localStorage.getItem('token');
+    
+    setAuth = () => baseService.setResource('Authentication/login_token');
 
     auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
 
@@ -25,5 +28,4 @@ export default class AuthenticationService {
     setRegisterComplete = data => baseService.setResource('Authentication/RegisterComplete', data)
 
     setChangePassword = data =>  baseService.setResource('Authentication/ChangePassword', data);
-
 }

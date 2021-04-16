@@ -6,6 +6,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -136,7 +137,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Block is succesful.</response>
         /// <response code="400">Block process failed.</response>
         [HttpPost("{userId}/[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Unblock(Guid userId)
         {
             await _accountService.Unblock(userId);
@@ -152,7 +153,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Block(Guid userId)
         {
             await _accountService.Block(userId);
@@ -168,7 +169,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Change roles is succesful.</response>
         /// <response code="400">Change roles is failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> ChangeRoles(ChangeRoleWiewModel model)
         {
             var newRoles = _mapper.Map<IEnumerable<Db.Entities.Role>>(model.Roles);

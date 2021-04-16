@@ -8,6 +8,7 @@ import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 import config from '../../config';
+import { Redirect } from "react-router";
 
 const { validate, renderTextField } = Module;
 
@@ -41,6 +42,7 @@ class Login extends Component {
                             </Button >
                             <Button fullWidth={true} type="submit" value="Login" color="primary">
                                 Sign In
+                                <Redirect to='/home' />
                             </Button>
                         </DialogActions>
                     </div>

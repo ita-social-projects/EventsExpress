@@ -5,6 +5,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-
     [ApiController]
     public class UnitOfMeasuringController : Controller
     {
@@ -36,7 +36,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Create process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
         {
@@ -55,7 +55,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Edit process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
         {
@@ -92,7 +92,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If Return process  failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpGet("[action]")]
         public IActionResult GetById(Guid id)
         {
@@ -109,7 +109,7 @@ namespace EventsExpress.Controllers
         /// <response code="401">If user isn't authorized.</response>
         /// <response code="403">If user's role isn't admin.</response>
         /// <response code="400">If delete process failed.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpPost("[action]/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
