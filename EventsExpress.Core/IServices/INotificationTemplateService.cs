@@ -13,7 +13,7 @@ namespace EventsExpress.Core.IServices
 
         public Task<NotificationTemplateDTO> GetByIdAsync(NotificationProfile id);
 
-        public Task<NotificationTemplateDTO> UpdateAsync(NotificationTemplateDTO notificationTemplateDto);
+        public Task UpdateAsync(NotificationTemplateDTO notificationTemplateDto);
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern);
     }

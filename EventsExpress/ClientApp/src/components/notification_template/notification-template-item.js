@@ -12,7 +12,7 @@ export default class NotificationTemplateItem extends Component {
                 <td>{template.id}</td>
                 <td>{template.title}</td>
                 <td>{template.subject}</td>
-                <td>{template.messageText}</td>
+                <td>{template.message}</td>
                 <td>
                     <Link to={"/admin/notificationTemplate/" + template.id}>
                         <IconButton className="text-info" size="small">

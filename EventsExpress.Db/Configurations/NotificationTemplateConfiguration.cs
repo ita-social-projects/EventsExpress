@@ -9,8 +9,9 @@ namespace EventsExpress.Db.Configurations
         public void Configure(EntityTypeBuilder<NotificationTemplate> builder)
         {
             builder.HasIndex(e => e.Title).IsUnique();
+            builder.Property(e => e.Title).IsRequired();
             builder.Property(e => e.Subject).IsRequired();
-            builder.Property(e => e.MessageText).IsRequired();
+            builder.Property(e => e.Message).IsRequired();
         }
     }
 }

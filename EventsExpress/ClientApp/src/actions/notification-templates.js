@@ -3,7 +3,6 @@ import { setErrorAllertFromResponse } from './alert-action';
 
 export const GET_TEMPLATES_SUCCESS = 'GET_TEMPLATES_SUCCESS';
 export const GET_TEMPLATE_SUCCESS = 'GET_TEMPLATE_SUCCESS';
-export const SET_TEMPLATE_SUCCESS = 'SET_TEMPLATE_SUCCESS';
 
 const api_serv = new NotificationTemplateService();
 
@@ -40,8 +39,6 @@ export function update_template(template) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        const jsonRes = await response.json();
-        dispatch(setTemplate(jsonRes));
         return Promise.resolve();
     }
 }
@@ -56,13 +53,6 @@ function getTemplates(data) {
 function getTemplate(data) {
     return {
         type: GET_TEMPLATE_SUCCESS,
-        payload: data
-    }
-}
-
-function setTemplate(data) {
-    return {
-        type: SET_TEMPLATE_SUCCESS,
         payload: data
     }
 }

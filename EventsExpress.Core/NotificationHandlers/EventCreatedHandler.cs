@@ -53,7 +53,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = _messageService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(templateDto.MessageText, pattern),
+                        MessageText = _messageService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }

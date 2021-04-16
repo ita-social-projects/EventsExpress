@@ -56,7 +56,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 {
                     Subject = _messageService.PerformReplacement(message.Subject, pattern),
                     RecepientEmail = notification.User.Email,
-                    MessageText = _messageService.PerformReplacement(message.MessageText, pattern),
+                    MessageText = _messageService.PerformReplacement(message.Message, pattern),
                 });
 
                 _cacheHepler.GetValue(notification.User.Id);

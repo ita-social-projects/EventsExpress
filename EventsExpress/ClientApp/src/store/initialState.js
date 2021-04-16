@@ -217,7 +217,7 @@ const initialState = {
         id: null,
         title: null,
         subject: null,
-        messageText: null  
+        message: null  
     }
 };
 

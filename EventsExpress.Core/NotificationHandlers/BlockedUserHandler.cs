@@ -48,7 +48,7 @@ namespace EventsExpress.Core.NotificationHandlers
                     {
                         Subject = _notificationTemplateServiceService.PerformReplacement(emailMessage.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateServiceService.PerformReplacement(emailMessage.MessageText, pattern),
+                        MessageText = _notificationTemplateServiceService.PerformReplacement(emailMessage.Message, pattern),
                     });
                 }
             }

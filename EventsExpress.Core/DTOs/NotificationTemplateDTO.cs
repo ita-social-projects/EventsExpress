@@ -10,6 +10,6 @@ namespace EventsExpress.Core.DTOs
 
         public string Subject { get; set; }
 
-        public string MessageText { get; set; }
+        public string Message { get; set; }
     }
 }

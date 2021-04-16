@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210414092510_AddNotificationTemplate")]
-    partial class AddNotificationTemplate
+    [Migration("20210416093335_AddNotificationTempalate")]
+    partial class AddNotificationTempalate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -332,7 +332,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("MessageText")
+                    b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -341,13 +341,13 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Title")
-                        .IsUnique()
-                        .HasFilter("[Title] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("NotificationTemplates");
                 });

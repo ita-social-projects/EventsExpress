@@ -1,12 +1,10 @@
 ﻿using EventsExpress.Db.Enums;
 
-namespace EventsExpress.Db.Entities
+namespace EventsExpress.ViewModels
 {
-    public class NotificationTemplate
+    public class EditNotificationTemplateViewModel
     {
         public NotificationProfile Id { get; set; }
-
-        public string Title { get; set; }
 
         public string Subject { get; set; }
 

@@ -39,16 +39,19 @@ namespace EventsExpress.Core.Services
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern)
         {
-            return pattern.Aggregate(text, (current, element) => current.Replace(element.Key, element.Value));
+            return pattern.Aggregate(text, (current, element) => current
+                .Replace(element.Key, element.Value));
         }
 
-        public async Task<NotificationTemplateDTO> UpdateAsync(NotificationTemplateDTO notificationTemplateDto)
+        public async Task UpdateAsync(NotificationTemplateDTO notificationTemplateDto)
         {
-            NotificationTemplate notificationTemplate = Mapper.Map<NotificationTemplate>(notificationTemplateDto);
+            var notificationTemplate = await Context.NotificationTemplates
+                .FirstOrDefaultAsync(e => e.Id.Equals(notificationTemplateDto.Id));
+
+            Mapper.Map(notificationTemplateDto, notificationTemplate);
+
             Update(notificationTemplate);
             await Context.SaveChangesAsync();
-
-            return notificationTemplateDto;
         }
     }
 }
