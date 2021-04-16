@@ -337,6 +337,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(i => i.UnitOfMeasuring)
                 .Include(e => e.Visitors)
                     .ThenInclude(v => v.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .FirstOrDefault(x => x.Id == eventId));
 
@@ -353,6 +354,8 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
+                    .ThenInclude(v => v.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .AsNoTracking()
                 .AsQueryable();
@@ -404,7 +407,8 @@ namespace EventsExpress.Core.Services
 
             count = events.Count();
 
-            var result = events.OrderBy(x => x.DateFrom)
+            var result = events
+                .OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize)
                 .ToList();

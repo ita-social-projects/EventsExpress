@@ -17,6 +17,7 @@ using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
 using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NetTopologySuite.Geometries;
@@ -39,6 +40,7 @@ namespace EventsExpress.Test.MapperTests
         private Guid idInventory = Guid.NewGuid();
         private Guid idUnitOfMeasuring = Guid.NewGuid();
         private Guid idEventEditViewModel = Guid.NewGuid();
+        private Guid idUserFrom = Guid.NewGuid();
         private string categoryName = "category name";
         private string photoUrl = "http://basin.example.com/#branch";
 
@@ -52,6 +54,15 @@ namespace EventsExpress.Test.MapperTests
                     Name = "User",
                     Email = "user@gmail.com",
                     Birthday = DateTime.Now,
+                    Relationships = new List<Relationship>
+                     {
+                        new Relationship
+                        {
+                            UserFromId = idUserFrom,
+                            UserToId = idUser,
+                            Attitude = Attitude.Like,
+                        },
+                     },
                 },
             };
         }
@@ -312,7 +323,16 @@ namespace EventsExpress.Test.MapperTests
 
             IServiceCollection services = new ServiceCollection();
             var mock = new Mock<IPhotoService>();
-            services.AddTransient<IPhotoService>(sp => mock.Object);
+            var mockAuth = new Mock<IAuthService>();
+            var mockUser = new Mock<IUserService>();
+            var mockHttpAccessor = new Mock<IHttpContextAccessor>();
+
+            mockHttpAccessor.Setup(o => o.HttpContext.User);
+
+            services.AddTransient(sp => mock.Object);
+            services.AddTransient(sp => mockAuth.Object);
+            services.AddTransient(sp => mockUser.Object);
+            services.AddTransient(sp => mockHttpAccessor.Object);
 
             services.AddAutoMapper(typeof(EventMapperProfile));
             services.AddAutoMapper(typeof(UserMapperProfile));
@@ -407,6 +427,14 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Location.Longitude, Is.EqualTo(firstEventDto.Point.Y));
             Assert.That(resEven.CountVisitor, Is.EqualTo(visitorCount));
             Assert.That(resEven.MaxParticipants, Is.EqualTo(firstEventDto.MaxParticipants));
+            Assert.That(resEven.Members, Has.All.Matches<UserPreviewViewModel>(ex =>
+                                                      firstEventDto.Visitors
+                                                      .All(f =>
+                                                          ex.Id == f.User.Id &&
+                                                          ex.Username == f.User.Name &&
+                                                          ex.Birthday == f.User.Birthday &&
+                                                          ex.PhotoUrl == "test" &&
+                                                          ex.UserStatusEvent == f.UserStatusEvent)));
             Assert.That(resEven.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                        firstEventDto.Owners
                                                        .All(f =>
