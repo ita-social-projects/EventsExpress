@@ -10,6 +10,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -50,6 +51,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable UserManageDto models.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
             filter.PageSize = 12;
@@ -79,7 +81,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return  UserManageDto model.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public IActionResult Get([FromQuery] UsersFilterViewModel filter)
         {
             if (filter.PageSize == 0)
@@ -113,7 +115,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Change role success.</response>
         /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
             await _userService.ChangeRole(userId, roleId);
@@ -129,7 +131,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Block is succesful.</response>
         /// <response code="400">Block process failed.</response>
         [HttpPost("{userId}/[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Unblock(Guid userId)
         {
             await _userService.Unblock(userId);
@@ -145,7 +147,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Block(Guid userId)
         {
             await _userService.Block(userId);
@@ -279,6 +281,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
@@ -315,6 +318,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return profileDto.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);

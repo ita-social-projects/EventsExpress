@@ -21,18 +21,15 @@ Steps to be fulfilled before test:
 2. Authorize as ...
 3. Open ...
 
-**Steps to Test**
-Steps to test the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. ...
+**Test Cases**
+|      S#     |    Action   |  Test Data  | Expected Result | Actual Result |     P/F     |  Automated  |
+|:-----------:|:-----------:|:-----------:|:---------------:|:-------------:|:-----------:|:-----------:|
+|    <br>     |    <br>     |    <br>     |      <br>       |     <br>      |    <br>     |    <br>     |
+|    <br>     |    <br>     |    <br>     |      <br>       |     <br>      |    <br>     |    <br>     |
+|    <br>     |    <br>     |    <br>     |      <br>       |     <br>      |    <br>     |    <br>     |
+|    <br>     |    <br>     |    <br>     |      <br>       |     <br>      |    <br>     |    <br>     |
+|    <br>     |    <br>     |    <br>     |      <br>       |     <br>      |    <br>     |    <br>     |
 
-**Expected result**
-A clear and concise description of what you expected to happen.
-
-**Test Data**
-The set of Test data.
 
 **Screenshots**
 If applicable, add screenshots to help explain your test.

@@ -6,6 +6,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Policy = PolicyNames.UserPolicyName)]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -167,7 +168,6 @@ namespace EventsExpress.Controllers
         /// <param name="page">Param page defines page count.</param>
         /// <response code="200">Return IEnumerable EventPreviewDto.</response>
         /// <response code="400">If return failed.</response>
-        [Authorize]
         [HttpGet("[action]/{page:int}")]
         public IActionResult AllDraft(int page = 1)
         {
