@@ -3,6 +3,7 @@ import TrackList from './track-list';
 import Spinner from '../spinner';
 import getAllTracks, {getEntityNames, setFilterEntities} from '../../actions/tracks/track-list-action';
 import {connect} from 'react-redux';
+import {formValueSelector} from 'redux-form';
 
 class Tracks extends Component {
 
@@ -11,8 +12,12 @@ class Tracks extends Component {
         this.props.getEntityNames();
     }
 
-    handleSubmit = (values) => {
-        this.props.getAllTracks(values)
+    handleSubmit = async (values) => {
+        // this.props.getAllTracks(values)
+        await this.props.getAllTracks({
+            entityName: values.entityNames.map(x => x.entityName),
+            page: 1
+        })
     }
 
     render() {
@@ -24,9 +29,9 @@ class Tracks extends Component {
                 {!isPending &&
                 data?.items ?
                     <TrackList
-                        onEntitiesSelected={(names) => {
+                        /*onEntitiesSelected={(names) => {
                             that.props.setFilterEntities(names);
-                        }}
+                        }}*/
                         data_list={data}
                         onSearch={
                             (page) => {
@@ -37,6 +42,7 @@ class Tracks extends Component {
                             }
                         }
                         entityNames={entityNames}
+                        onSubmit={ this.handleSubmit }
                     />
                     : null
                 }
@@ -47,19 +53,23 @@ class Tracks extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    tracks: state.tracks,
-    filter: state.tracks.filter
-});
+const mapStateToProps = (state) => {
+    const selector = formValueSelector('track-list-form');
+    const entityNames = selector(state, 'entityNames');
 
+    return {
+        tracks: state.tracks,
+        filter: state.tracks.filter,
+        entityNames
+    }
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllTracks: (filter) => dispatch(getAllTracks(filter)),
         getEntityNames: () => dispatch(getEntityNames()),
-        setFilterEntities: (names) => dispatch(setFilterEntities(names)),
+        // setFilterEntities: (names) => dispatch(setFilterEntities(names)),
     }
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tracks);

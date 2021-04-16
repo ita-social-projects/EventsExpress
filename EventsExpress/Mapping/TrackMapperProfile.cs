@@ -9,7 +9,8 @@ namespace EventsExpress.Mapping
     {
         public TrackMapperProfile()
         {
-            CreateMap<ChangeInfo, TrackDto>();
+            CreateMap<ChangeInfo, TrackDto>()
+                .ForMember(e => e.Name, opts => opts.MapFrom(e => e.EntityName));
             CreateMap<TrackDto, TrackViewModel>();
         }
     }

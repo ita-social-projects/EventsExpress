@@ -35,12 +35,6 @@ namespace EventsExpress.Controllers
 
             try
             {
-                /*var viewModel = new IndexViewModel<TrackViewModel>
-                {
-                    Items = _mapper.Map<IEnumerable<TrackDto>, IEnumerable<TrackViewModel>>(
-                        _trackService.GetAllTracks(filter, out int count)),
-                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
-                };*/
                 var viewModel = new IndexViewModel<TrackDto>
                 {
                     Items = _mapper.Map<IEnumerable<TrackDto>>(

@@ -1,15 +1,10 @@
 import React, {Component} from 'react';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
-import {reduxForm, Field} from 'redux-form';
+import {Field, reduxForm, formValueSelector} from 'redux-form';
 import PagePagination from '../shared/pagePagination';
 import TrackItem from './track-item';
-import {
-    radioButton,
-    renderDatePicker,
-    renderMultiselect
-} from '../helpers/helpers';
 import Multiselect from 'react-widgets/lib/Multiselect';
+import {renderMultiselect} from "../helpers/helpers";
 
 class TrackList extends Component {
 
@@ -38,7 +33,7 @@ class TrackList extends Component {
                             <th scope="col" className="text-center">User name</th>
                             <th scope="col" className="text-center">Date</th>
                             <th scope="col" className="text-center">Changes type</th>
-                            <th />
+                            <th/>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,26 +59,37 @@ class TrackList extends Component {
                 </div>
                 <div className="w-25">
                     {entityNames && entityNames.length !== 0 &&
-                    <form className="box" onSubmit={() => this.props.onSubmit(arguments)}>
+                    <form className="box" onSubmit={this.props.handleSubmit}>
                         <div className="form-group">
-                            <Multiselect
+                            {/*<Multiselect
                                 data={entityNames}
                                 valueField={"id"}
                                 textField={"entityName"}
                                 className="form-control mt-2"
                                 // selectedValues={this.state.selectedValue}
+                                // hideSelectedOptions={false}
                                 placeholder='Entity name'
                                 onChange={(items) => {
                                     this.props.onEntitiesSelected(items.map(x => x.entityName))
                                 }}
+                                 <for button> onClick={() => this.props.onSearch(1)}
+                            />*/}
+                            <Field
+                                data={entityNames}
+                                component={renderMultiselect}
+                                name="entityNames"
+                                valueField={"id"}
+                                textField={"entityName"}
+                                className="form-control mt-2"
+                                placeholder='Entity name'
                             />
                         </div>
                         <div className="form-group">
                             <Button
                                 fullWidth={true}
+                                type="submit"
                                 color="primary"
                                 disabled={this.props.pristine || this.props.submitting}
-                                onClick={() => this.props.onSearch(1)}
                             >
                                 Search
                             </Button>
@@ -95,5 +101,7 @@ class TrackList extends Component {
         </>);
     }
 }
+
+TrackList = reduxForm({form: 'track-list-form', enableReinitialize: true})(TrackList);
 
 export default TrackList;
