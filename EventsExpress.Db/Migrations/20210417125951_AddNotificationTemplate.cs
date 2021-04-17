@@ -13,7 +13,7 @@ namespace EventsExpress.Db.Migrations
                     Id = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
-                    Message = table.Column<string>(nullable: false)
+                    Message = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -21,7 +21,7 @@ namespace EventsExpress.Db.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_NotificationTemplates_Title",
+                name: "UIX_NotificationTemplates_Title",
                 table: "NotificationTemplates",
                 column: "Title",
                 unique: true);
