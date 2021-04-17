@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210416093335_AddNotificationTempalate")]
-    partial class AddNotificationTempalate
+    [Migration("20210417125951_AddNotificationTemplate")]
+    partial class AddNotificationTemplate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

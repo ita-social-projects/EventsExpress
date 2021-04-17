@@ -18,16 +18,16 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
-        private readonly INotificationTemplateService _messageService;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         public EventCreatedHandler(
             IEmailService sender,
             IUserService userSrv,
-            INotificationTemplateService messageService)
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userSrv;
-            _messageService = messageService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
 
-                var templateDto = await _messageService.GetByIdAsync(NotificationProfile.EventCreated);
+                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
 
                 foreach (var userEmail in usersEmails)
                 {
@@ -51,9 +51,9 @@ namespace EventsExpress.Core.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(templateDto.Subject, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(templateDto.Message, pattern),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }

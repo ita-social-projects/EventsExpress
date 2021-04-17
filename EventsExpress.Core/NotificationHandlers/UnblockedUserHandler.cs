@@ -16,18 +16,18 @@ namespace EventsExpress.Core.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly INotificationTemplateService _messageService;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public UnblockedUserHandler(
             IEmailService sender,
             IUserService userService,
-            INotificationTemplateService messageService)
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userService;
-            _messageService = messageService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(UnblockedUserMessage notification, CancellationToken cancellationToken)
@@ -39,7 +39,7 @@ namespace EventsExpress.Core.NotificationHandlers
 
                 if (userEmail != null)
                 {
-                    var message = await _messageService.GetByIdAsync(NotificationProfile.UnblockedUser);
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.UnblockedUser);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
@@ -48,9 +48,9 @@ namespace EventsExpress.Core.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(message.Subject, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _messageService.PerformReplacement(message.Message, pattern),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }

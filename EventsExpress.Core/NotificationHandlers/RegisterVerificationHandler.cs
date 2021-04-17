@@ -18,18 +18,18 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly ICacheHelper _cacheHepler;
         private readonly ILogger<RegisterVerificationHandler> _logger;
-        private readonly INotificationTemplateService _messageService;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         public RegisterVerificationHandler(
             IEmailService sender,
             ICacheHelper cacheHepler,
             ILogger<RegisterVerificationHandler> logger,
-            INotificationTemplateService messageService)
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _cacheHepler = cacheHepler;
             _logger = logger;
-            _messageService = messageService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 Token = token,
             });
 
-            var message = await _messageService.GetByIdAsync(NotificationProfile.RegisterVerification);
+            var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.RegisterVerification);
 
             Dictionary<string, string> pattern = new Dictionary<string, string>
             {
@@ -54,9 +54,9 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 await _sender.SendEmailAsync(new EmailDto
                 {
-                    Subject = _messageService.PerformReplacement(message.Subject, pattern),
+                    Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                     RecepientEmail = notification.User.Email,
-                    MessageText = _messageService.PerformReplacement(message.Message, pattern),
+                    MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                 });
 
                 _cacheHepler.GetValue(notification.User.Id);

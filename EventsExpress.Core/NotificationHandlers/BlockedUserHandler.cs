@@ -15,7 +15,7 @@ namespace EventsExpress.Core.NotificationHandlers
     public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
     {
         private readonly IEmailService _sender;
-        private readonly INotificationTemplateService _notificationTemplateServiceService;
+        private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
@@ -26,7 +26,7 @@ namespace EventsExpress.Core.NotificationHandlers
         {
             _sender = sender;
             _userService = userService;
-            _notificationTemplateServiceService = notificationTemplateService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(BlockedUserMessage notification, CancellationToken cancellationToken)
@@ -42,13 +42,13 @@ namespace EventsExpress.Core.NotificationHandlers
                         { "(UserName)", userEmail },
                     };
 
-                    var emailMessage = await _notificationTemplateServiceService.GetByIdAsync(NotificationProfile.BlockedUser);
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.BlockedUser);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _notificationTemplateServiceService.PerformReplacement(emailMessage.Subject, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateServiceService.PerformReplacement(emailMessage.Message, pattern),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }

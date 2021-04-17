@@ -19,18 +19,18 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
-        private readonly INotificationTemplateService _messageService;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         public EventStatusHandler(
             IEmailService sender,
             IUserService userSrv,
             IEventService eventService,
-            INotificationTemplateService messageService)
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userSrv;
             _eventService = eventService;
-            _messageService = messageService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(EventStatusMessage notification, CancellationToken cancellationToken)
@@ -44,26 +44,27 @@ namespace EventsExpress.Core.NotificationHandlers
                     var userEvent = _eventService.EventById(notification.EventId);
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.EventId}/1";
 
-                    var notificationTitle = notification.EventStatus switch
+                    var templateId = notification.EventStatus switch
                     {
                         EventStatus.Canceled => NotificationProfile.EventStatusCanceled,
                         EventStatus.Blocked => NotificationProfile.EventStatusBlocked,
                         _ => NotificationProfile.EventStatusActivated
                     };
 
-                    var templateDto = await _messageService.GetByIdAsync(notificationTitle);
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
                         { "(UserName)", email },
                         { "(link)", eventLink },
+                        { "(title)", userEvent.Title },
                     };
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _messageService.PerformReplacement(templateDto.Subject, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = email,
-                        MessageText = _messageService.PerformReplacement(templateDto.Message, pattern),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }
