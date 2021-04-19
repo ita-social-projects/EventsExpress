@@ -3,9 +3,9 @@ import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import add_event,
-    { setEventPending, setEventSuccess } from '../actions/event-add-action';
+{ setEventPending, setEventSuccess } from '../actions/event/event-add-action';
 import { setAlert } from '../actions/alert-action';
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 import { validateEventForm } from '../components/helpers/helpers';
 import { enumLocationType } from '../constants/EventLocationType';
 
@@ -49,6 +49,10 @@ class AddEventWrapper extends Component {
         let initialValues = {
             location: {
                 type: enumLocationType.map
+            },
+            selectedPos: {
+                lat: 50.4547,
+                lng: 30.5238
             }
         };
 

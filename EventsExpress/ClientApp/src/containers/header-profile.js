@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
-import logout from '../actions/logout-action';
+import logout from '../actions/login/logout-action';
 import { setRegisterPending, setRegisterSuccess, setRegisterError } from '../actions/register';
-import { setLoginPending, setLoginSuccess } from '../actions/login-action';
+import { setLoginPending, setLoginSuccess } from '../actions/login/login-action';
+import add_event from '../actions/event/event-add-action';
 import add_event, { add_wizard } from '../actions/event-add-action';
 
 class HeaderProfileWrapper extends Component {
@@ -29,7 +30,7 @@ class HeaderProfileWrapper extends Component {
         notification={this.props.notification.events.length}
         onSubmit={this.onSubmit}
         onWizard={this.onWizard}
-    />;
+      onSubmit={this.onSubmit} />
   }
 }
 
@@ -47,6 +48,7 @@ const mapDispatchToProps = dispatch => {
     return {
         add_event: (data) => dispatch(add_event(data)),
         add_wizard: (data) => dispatch(add_wizard(data)),
+    add_event: (data) => dispatch(add_event(data)),
     logout: () => { dispatch(logout()) },
     reset: () => {
       dispatch(setRegisterPending(true));

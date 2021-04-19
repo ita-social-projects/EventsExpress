@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class EventService {
 
-    getEvent = id => baseService.getResource(`event/${id}`);
+    getEvent = id => baseService.getResourceNew(`event/${id}`);
 
     getAllEvents = filters => baseService.getResourceNew(`event/all${filters}`);
 
@@ -42,9 +42,6 @@ export default class EventService {
                 file.append('Location.OnlineMeeting', data.location.onlineMeeting);
             }
         }
-
-
-
 
 
         file.append('Title', data.title);
@@ -171,53 +168,59 @@ export default class EventService {
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = async (data) =>
+    setEventFromParent = data =>
         this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
-
+    
     editEvent = async (data) => {
-        return this.setEventTemplate(data, `event/${data.id}/edit`)
+        return this.setEventTemplate(data,`event/${data.id}/edit`)
+    }
+    publishEvent = (id) => {
+       return baseService.setResource(`event/${id}/publish`)
     }
 
+    setEventStatus = data =>  baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
+
+    setUserToEvent = data => baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
+
+    setUserFromEvent = data => baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
     part1 = async (data) => {
         return this.setPart1Template(data, `event/${data.id}/part1`)
     }
 
+    setApprovedUser = data => data.buttonAction
+            ?  baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
+            :  baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
     part2 = async (data) => {
         return this.setPart2Template(data, `event/${data.id}/part2`)
     }
 
+    onDeleteFromOwners = data => baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
     part3 = async (data) => {
         return this.setPart3Template(data, `event/${data.id}/part3`)
     }
 
+    onPromoteToOwner = data => baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
     part5 = async (data) => {
         return this.setPart5Template(data, `event/${data.id}/part5`)
     }
 
+    setRate = data =>  baseService.setResource('event/setrate', {
+            rate: Number(data.rate),
+            userId: data.userId,
+            eventId: data.eventId
+        });
         publishEvent = (id) => {
             return baseService.setResource(`event/${id}/publish`)
         }
 
-        setEventStatus = async (data) => {
-            const res = await baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);
-            return !res.ok
-                ? { error: await res.text() }
-                : await res.json();
-        }
 
-        setUserToEvent = async (data) => {
-            const res = await baseService.setResource(`event/${data.eventId}/AddUserToEvent?userId=${data.userId}`);
-            return !res.ok
-                ? { error: await res.text() }
-                : res;
-        }
+    getCurrentRate = eventId => baseService.getResourceNew(`event/${eventId}/GetCurrentRate`);
 
-        setUserFromEvent = async (data) => {
-            const res = await baseService.setResource(`event/${data.eventId}/DeleteUserFromEvent?userId=${data.userId}`);
-            return !res.ok
-                ? { error: await res.text() }
-                : res;
-        }
+
+    getAverageRate = eventId => baseService.getResourceNew(`event/${eventId}/GetAverageRate`);
+    
+    getFutureEvents = async (id, page) =>
+        baseService.getResourceNew(`event/futureEvents?id=${id}&page=${page}`);
 
         setApprovedUser = async (data) => {
             const res = data.buttonAction

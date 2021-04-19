@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { set_rating, get_currrent_rating, get_average_rating } from'../actions/rating'
+import { set_rating, get_currrent_rating, get_average_rating } from'../actions/rating-action'
 import RatingAverage from '../components/rating/rating-average'
 import RatingSetter from '../components/rating/rating-setter'
 

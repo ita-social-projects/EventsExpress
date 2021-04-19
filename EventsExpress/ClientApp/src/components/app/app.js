@@ -7,9 +7,6 @@ import {
 } from 'react-router-dom';
 import Home from '../home';
 import Profile from '../profile';
-import Category from '../category/categories';
-import UsersWrapper from '../../containers/users';
-import UserPWrapper from '../../containers/UsersWrapper';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
 import EventScheduleViewWrapper from '../../containers/event-Schedule-item-view';
@@ -17,20 +14,34 @@ import EventSchedulesListWrapper from '../../containers/eventSchedules-list';
 import Layout from '../layout';
 import SearchUserWrapper from '../../containers/UserSearchWrapper';
 import NotFound from '../Route guard/404';
-import EventsForAdmin from '../../components/event/EventsForAdmin';
 import Authentication from '../Authentication/authentication';
 import Chat from '../chat';
 import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
 import ContactUsWrapper from '../../containers/contactUs';
 import LoginTwitter from '../../containers/TwitterLogin';
-import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import AddEventWrapper from '../../containers/add-event';
+import Admin from '../admin';
+
+import Unauthorized from '../Route guard/401';
+import Forbidden from '../Route guard/403';
+import withAuthRedirect from '../../security/withAuthRedirect';
+import { connect } from 'react-redux';
+import AuthUser from '../../actions/authUser';
 import DraftEditWrapper from '../../containers/draft-edit-wrapper';
 import WizardFormWrapper from '../../containers/Wizard-form-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list'
 
-export default class App extends Component {
+class App extends Component {
+    constructor(props){
+        super(props);
+        this.props.authUser();
+    }
+
+    UserRoleSecurity = withAuthRedirect(['User']);
+    AdminRoleSecurity = withAuthRedirect(['Admin']);
+    AdminAndUserRoleSecurity = withAuthRedirect(['Admin', 'User']);
+
     render() {
         return (
             <BrowserRouter>
@@ -44,33 +55,32 @@ export default class App extends Component {
                                 <Redirect to="/home/events" />
                             )}
                         />
-                         <Route
+                        <Route
                             exact
                             path="/home"
                             render={() => (
                                 <Redirect to="/home/events" />
                             )}
                         />
-                        <Route path="/profile/" component={Profile} />
+                        <Route path="/profile/" component={this.AdminAndUserRoleSecurity(Profile)} />
                         <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                         <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                         <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
-                        <Route path="/user/:id" component={UserItemViewWrapper} />
-                        <Route path="/admin/categories/" component={Category} />
-                        <Route path="/admin/users" component={UserPWrapper} />
-                        <Route path="/search/users" component={SearchUserWrapper} />
-                        <Route path="/admin/users" component={UsersWrapper} />
-                        <Route path="/user_chats" component={UserChats} />
-                        <Route path="/notification_events" component={NotificationEvents} />
+                        <Route path="/user/:id" component={this.UserRoleSecurity(UserItemViewWrapper)} />
+                        <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
+                        <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
+                        <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />
+                        <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
-                        <Route path="/chat/:chatId" component={Chat} />
-                        <Route path="/contactUs" component={ContactUsWrapper} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                        <Route path='/event/createEvent' component={AddEventWrapper} />
-                        <Route path='/editEvent/:id/' component={DraftEditWrapper} />
-                        <Route path='/editWizard/:id/' component={WizardFormWrapper} />
-                        <Route path='/drafts' component={EventDraftListWrapper} />
+                        <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
+                        <Route path="/contactUs" component={this.UserRoleSecurity(ContactUsWrapper)} />
+                        <Route path='/event/createEvent' component={this.UserRoleSecurity(AddEventWrapper)} />
+                        <Route path='/editEvent/:id/' component={this.UserRoleSecurity(DraftEditWrapper)} />
+                        <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
+                        <Route path='/unauthorized' component={Unauthorized} />
+                        <Route path='/forbidden' component={Forbidden} />
+                        <Route path='/editWizard/:id/' component={this.UserRoleSecurity(WizardFormWrapper)} />
                         <Route component={NotFound} />
                     </Switch>
                 </Layout>
@@ -78,3 +88,11 @@ export default class App extends Component {
         );
     }
 }
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        authUser: () => dispatch(AuthUser())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(App);

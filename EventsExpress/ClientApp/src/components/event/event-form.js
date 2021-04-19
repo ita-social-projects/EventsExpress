@@ -20,7 +20,7 @@ import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
 import { createBrowserHistory } from 'history';
-
+import "./event-form.css";
 momentLocaliser(moment);
 const history = createBrowserHistory({ forceRefresh: true });
 
@@ -28,32 +28,32 @@ class EventForm extends Component {
 
     state = { checked: false };
 
-
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
         }));
-  
+
     }
     handleClick = () => {
         history.push(`/`);
     }
-
+    onClickCallBack = (coords) => {
+        this.setState({ selectedPos: [coords.lat, coords.lng] });
+    }
 
     render() {
-        const { form_values, all_categories, isCreated, disabledDate,} = this.props;
+        const { form_values, all_categories, isCreated, disabledDate, initialValues } = this.props;
         const { checked } = this.state;
         const { handleChange } = this;
 
-        let values = form_values || this.props.initialValues;
-        const photoUrl = this.props.initialValues ?
-            this.props.initialValues.photoUrl : null;
+        let values = form_values || initialValues;
+        const photoUrl = initialValues ?
+            initialValues.photoUrl : null;
 
         return (
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
-
                     <Field
                         id="image-field"
                         name="photo"
@@ -116,18 +116,20 @@ class EventForm extends Component {
                             label="Public"
                         />
                     </div>
-                    <div className="meta-wrap m-2">
-                        <span>From
+                    <div className="meta-wrap">
+                        <span >
                             <Field
                                 name='dateFrom'
+                                label='From'
                                 component={renderDatePicker}
                                 disabled={disabledDate ? true : false}
                             />
                         </span>
                         {values && values.dateFrom &&
-                            <span>To
+                            <span className="retreat">
                                 <Field
                                     name='dateTo'
+                                    label='To'
                                     minValue={values.dateFrom}
                                     component={renderDatePicker}
                                     disabled={disabledDate ? true : false}
@@ -156,7 +158,6 @@ class EventForm extends Component {
                     <div>
                     </div>
 
-
                     <Field name="location.type" component={radioLocationType} />
                     {(this.props.form_values == undefined
                         || (this.props.form_values.location
@@ -171,7 +172,8 @@ class EventForm extends Component {
                                     this.props.initialValues.location &&
                                     this.props.initialValues.location.selectedPos
                                 }
-
+                                initialValues={initialValues}
+                                isAddEventMapLocation={true}
                                 component={LocationMap}
                             />
                         </div>
@@ -187,7 +189,6 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
-
                             />
                         </div>
                     }

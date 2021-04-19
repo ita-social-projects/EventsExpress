@@ -1,57 +1,51 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
 import { reset } from 'redux-form';
-
 import IconButton from "@material-ui/core/IconButton";
-
-import {
-    add_category, 
-    setCategoryError, 
-    setCategoryPending, 
-    setCategorySuccess } from '../../actions/category/add-category';
-import { 
-    set_edited_category } from "../../actions/category/add-category";
-
+import add_category,
+{
+    setCategoryPending,
+    setCategorySuccess,
+    set_edited_category
+} from '../../actions/category/category-add-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
 class CategoryAddWrapper extends React.Component {
 
     submit = values => {
-        this.props.add({ ...values });
-    };
+        return this.props.add({ ...values });
+    }
 
     componentWillUpdate = () => {
-        const {categoryError, isCategorySuccess } = this.props.status;
-        
-        if (!categoryError && isCategorySuccess){
+        const { isCategorySuccess } = this.props.status;
+
+        if (isCategorySuccess) {
             this.props.reset();
-            this.props.edit_cansel();
+            this.props.edit_cancel();
         }
     }
 
     render() {
-        return (this.props.item.id !== this.props.editedCategory) 
+        return (this.props.item.id !== this.props.editedCategory)
             ? <tr>
                 <td className="align-middle align-items-stretch" width="20%">
                     <div className="d-flex align-items-center justify-content-center">
-                        <IconButton 
-                            className="text-info" 
+                        <IconButton
+                            className="text-info"
                             onClick={this.props.set_category_edited}
                         >
                             <i className="fas fa-plus-circle"></i>
-                        </IconButton> 
+                        </IconButton>
                     </div>
                 </td>
                 <td width="55%"></td>
-
             </tr>
             : <tr>
-                <CategoryEdit 
+                <CategoryEdit
                     item={this.props.item}
-                    callback={this.submit} 
-                    cancel={this.props.edit_cansel}
-                    message={this.props.status.categoryError}
+                    onSubmit={this.submit}
+                    cancel={this.props.edit_cancel}
                 />
                 <td></td>
             </tr>
@@ -59,7 +53,7 @@ class CategoryAddWrapper extends React.Component {
 }
 
 
-const mapStateToProps = state => { 
+const mapStateToProps = state => {
     return {
         status: state.add_category,
         editedCategory: state.categories.editedCategory
@@ -70,15 +64,13 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_category(data)),
         set_category_edited: () => dispatch(set_edited_category(props.item.id)),
-        edit_cansel: () => {
+        edit_cancel: () => {
             dispatch(set_edited_category(null));
-            dispatch(setCategoryError(null));
         },
         reset: () => {
             dispatch(reset('add-form'));
             dispatch(setCategoryPending(false));
             dispatch(setCategorySuccess(false));
-            dispatch(setCategoryError(null));
         }
     };
 };

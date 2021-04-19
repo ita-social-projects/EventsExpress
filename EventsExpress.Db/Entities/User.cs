@@ -28,10 +28,6 @@ namespace EventsExpress.Db.Entities
 
         public virtual Role Role { get; set; }
 
-        public Guid? PhotoId { get; set; }
-
-        public virtual Photo Photo { get; set; }
-
         public IEnumerable<EventOwner> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }

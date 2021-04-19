@@ -1,4 +1,4 @@
-﻿import { editBirthday } from '../../actions/EditProfile/editBirthday';
+﻿import { editBirthday } from '../../actions/redactProfile/birthday-edit-action';
 
 export const reducer = (
     state = {
@@ -16,11 +16,6 @@ export const reducer = (
         case editBirthday.SUCCESS:
             return Object.assign({}, state, {
                 isEditBirthdaySuccess: action.isEditBirthdaySuccess
-            });
-
-        case editBirthday.ERROR:
-            return Object.assign({}, state, {
-                EditBirthdayError: action.EditBirthdayError
             });
 
         default:

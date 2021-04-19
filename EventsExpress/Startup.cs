@@ -17,11 +17,13 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
+using EventsExpress.Policies;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -74,6 +77,13 @@ namespace EventsExpress
 
             services
                 .AddMemoryCache()
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy(PolicyNames.AdminPolicyName, policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
+                    options.AddPolicy(PolicyNames.UserPolicyName, policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.UserRole)));
+                })
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -110,6 +120,7 @@ namespace EventsExpress
                         },
                     };
                 });
+            services.AddSingleton<IAuthorizationHandler, RoleHandler>();
 
             #endregion
 
@@ -151,6 +162,12 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
+
+            services.AddAzureClients(builder =>
+            {
+                // Add a storage account client
+                builder.AddBlobServiceClient(Configuration.GetConnectionString("AzureBlobConnection"));
+            });
 
             services.AddMvc().AddFluentValidation(options =>
             {

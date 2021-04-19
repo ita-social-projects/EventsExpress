@@ -16,6 +16,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.Services
 {
@@ -171,22 +172,6 @@ namespace EventsExpress.Core.Services
 
             ev.Owners.Add(new EventOwner() { UserId = CurrentUser().Id, EventId = eventDTO.Id });
 
-            if (eventDTO.Photo == null)
-            {
-                ev.PhotoId = eventDTO.PhotoId;
-            }
-            else
-            {
-                try
-                {
-                    ev.Photo = await _photoService.AddPhoto(eventDTO.Photo);
-                }
-                catch (ArgumentException)
-                {
-                    throw new EventsExpressException("Invalid file");
-                }
-            }
-
             var eventCategories = eventDTO.Categories?
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
@@ -195,6 +180,15 @@ namespace EventsExpress.Core.Services
             var result = Insert(ev);
 
             eventDTO.Id = result.Id;
+
+            try
+            {
+                await _photoService.AddEventPhoto(eventDTO.Photo, eventDTO.Id);
+            }
+            catch (ArgumentException)
+            {
+                throw new EventsExpressException("Invalid file");
+            }
 
             await Context.SaveChangesAsync();
 
@@ -233,21 +227,16 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Edit(EventDto e)
         {
             var ev = Context.Events
-                .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .FirstOrDefault(x => x.Id == e.Id);
+
             if (e.Photo != null)
             {
-                if (ev.Photo != null)
-                {
-                   await _photoService.Delete(ev.Photo.Id);
-                }
-
                 try
                 {
-                    ev.Photo = await _photoService.AddPhoto(e.Photo);
+                    await _photoService.AddEventPhoto(e.Photo, e.Id);
                 }
                 catch (ArgumentException)
                 {
@@ -303,14 +292,10 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Part2(EventDto e)
         {
             var ev = Context.Events
-                .Include(e => e.Photo)
                 .FirstOrDefault(x => x.Id == e.Id);
             if (e.Photo != null)
             {
-                if (ev.Photo != null)
-                {
-                    await _photoService.Delete(ev.Photo.Id);
-                }
+                
 
                 try
                 {
@@ -360,7 +345,6 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Publish(Guid eventId)
         {
             var ev = Context.Events
-               .Include(e => e.Photo)
                .Include(e => e.EventLocation)
                .Include(e => e.StatusHistory)
                .Include(e => e.Categories)
@@ -420,18 +404,15 @@ namespace EventsExpress.Core.Services
         {
             var res = Mapper.Map<EventDto>(
                 Context.Events
-                .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
-                .ThenInclude(o => o.User)
-                .ThenInclude(c => c.Photo)
+                    .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
-                .ThenInclude(c => c.Category)
+                    .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
-                .ThenInclude(i => i.UnitOfMeasuring)
+                    .ThenInclude(i => i.UnitOfMeasuring)
                 .Include(e => e.Visitors)
-                .ThenInclude(v => v.User)
-                .ThenInclude(u => u.Photo)
+                    .ThenInclude(v => v.User)
                 .Include(e => e.StatusHistory)
                 .FirstOrDefault(x => x.Id == eventId));
 
@@ -441,12 +422,10 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
         {
             var events = Context.Events
-                .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
-                        .ThenInclude(c => c.Photo)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
@@ -474,6 +453,10 @@ namespace EventsExpress.Core.Services
 
             events = (model.VisitorId != null)
                 ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
+                : events;
+
+            events = (model.X != null && model.Y != null && model.Radius != null)
+                ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
 
             events = (model.Statuses != null)
@@ -508,12 +491,10 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, out int count)
         {
             var events = Context.Events
-                .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
-                        .ThenInclude(c => c.Photo)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
@@ -536,11 +517,11 @@ namespace EventsExpress.Core.Services
                 PageSize = paginationViewModel.PageSize,
             };
 
-            var evnts = this.GetAll(filter, out int count);
+            var events = this.GetAll(filter, out int count);
 
             paginationViewModel.Count = count;
 
-            return evnts;
+            return events;
         }
 
         public IEnumerable<EventDto> PastEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -553,11 +534,11 @@ namespace EventsExpress.Core.Services
                 PageSize = paginationViewModel.PageSize,
             };
 
-            var evnts = this.GetAll(filter, out int count);
+            var events = this.GetAll(filter, out int count);
 
             paginationViewModel.Count = count;
 
-            return evnts;
+            return events;
         }
 
         public IEnumerable<EventDto> VisitedEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -570,11 +551,11 @@ namespace EventsExpress.Core.Services
                 PageSize = paginationViewModel.PageSize,
             };
 
-            var evnts = this.GetAll(filter, out int count);
+            var events = this.GetAll(filter, out int count);
 
             paginationViewModel.Count = count;
 
-            return evnts;
+            return events;
         }
 
         public IEnumerable<EventDto> EventsToGoByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -587,21 +568,19 @@ namespace EventsExpress.Core.Services
                 PageSize = paginationViewModel.PageSize,
             };
 
-            var evnts = this.GetAll(filter, out int count);
+            var events = this.GetAll(filter, out int count);
 
             paginationViewModel.Count = count;
 
-            return evnts;
+            return events;
         }
 
         public IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = Context.Events
-                .Include(e => e.Photo)
                 .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
-                        .ThenInclude(c => c.Photo)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)

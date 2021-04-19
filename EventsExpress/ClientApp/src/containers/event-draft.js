@@ -3,11 +3,19 @@ import { createBrowserHistory } from 'history';
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset , isPristine} from 'redux-form';
+<<<<<<< HEAD
 import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event-item-view';
 import Button from "@material-ui/core/Button";
 import get_categories from '../actions/category/category-list';
+=======
+import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event/event-add-action';
+import { validateEventForm } from '../components/helpers/helpers'
+import { resetEvent } from '../actions/event/event-item-view-action';
+import Button from "@material-ui/core/Button";
+import get_categories from '../actions/category/category-list-action';
+>>>>>>> origin/development
 import L from 'leaflet';
 
 const history = createBrowserHistory({ forceRefresh: true });

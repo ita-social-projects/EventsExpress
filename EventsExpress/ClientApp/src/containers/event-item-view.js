@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
-import eventStatusEnum from '../components/helpers/eventStatusEnum';
+import eventStatusEnum from '../constants/eventStatusEnum';
 import Spinner from '../components/spinner';
 import get_event, { 
     join, 
@@ -12,7 +12,7 @@ import get_event, {
     deleteFromOwners, 
     promoteToOwner
     }
-from '../actions/event-item-view';
+    from '../actions/event/event-item-view-action';
 
 class EventItemViewWrapper extends Component{
     componentWillMount(){    

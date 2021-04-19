@@ -1,23 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
 import HeaderProfileWrapper from '../../containers/header-profile';
 import './left-sidebar.css';
+import { NavItem } from '../NavItem/NavItem';
+import AuthComponent from '../../security/authComponent';
+import { Roles } from '../../constants/userRoles';
 
-const NavItem = ({ to, icon, text, my_icon }) => {
-    return (
-        <li className="sidebar-header">
-            <Link to={to} className="active">
-                <span className="link">
-                    <i className={icon + ' nav-item-icon'}></i>
-                    {my_icon}
-                    <span className="nav-item-text">&nbsp;{text}</span>
-                    <strong></strong>
-                </span>
-            </Link>
-        </li>
-    );
-}
 
 class LeftSidebar extends Component {
     constructor(props) {
@@ -52,67 +40,58 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            {this.props.user.id &&
-                                    <>
-                                    <NavItem
-                                        to={'/user/' + this.props.user.id}
-                                        icon={'fa fa-user'}
-                                        text={"Profile"}
-                                    />
-                                    <NavItem
-                                         to={'/drafts'}
-                                         icon={'fa fa-edit'}
-                                         text={"Draft"}
-                                    />
-                                    <NavItem
-                                        to={'/search/users?page=1'}
-                                        icon={'fa fa-users'}
-                                        text={"Search Users"}
-                                    />
-                                    <NavItem
-                                        to={'/eventSchedules'}
-                                        my_icon={<i className="fa fa-clone"></i>}
-                                        text={"Recurrent Events"}
-                                    />
-                                    <NavItem
-                                        to={'/user_chats'}
-                                        my_icon={
-                                            <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                                <i className="fas fa-comments"></i>
-                                            </Badge>
-                                        }
-                                        text={"Comuna"}
-                                    />
-                                </>
-                            }
-                            {this.props.user.role === "Admin" &&
-                                <>
-                                    <NavItem
-                                        to={'/admin/categories/'}
-                                        icon={'fa fa-hashtag'}
-                                        text={"Categories"}
-                                    />
-                                    <NavItem
-                                        to={'/admin/unitsOfMeasuring/'}
-                                        icon={'fa fa-plus'}
-                                        text={"UnitsOfMeasuring"}
-                                    />
-                                    <NavItem
-                                        to={'/admin/users?page=1'}
-                                        icon={'fa fa-users'}
-                                        text={"Users"}
-                                    />
-                                </>
-                            }
-                            {this.props.user.role === "User" &&
-                                <>
-                                    <NavItem
-                                        to={'/contactUs'}
-                                        icon={'fa fa-exclamation-circle'}
-                                        text={'Contact us'}
-                                    />
-                                </>
-                            }
+                            <AuthComponent roleMatch={Roles.Admin}>
+                                <NavItem
+                                    to={'/user_chats'}
+                                    my_icon={
+                                        <Badge badgeContent={this.props.msg_for_read().length} color="primary">
+                                            <i className="fas fa-comments"></i>
+                                        </Badge>
+                                    }
+                                    text={"Comuna"}
+                                />
+                                <NavItem
+                                    to={'/admin/'}
+                                    icon={'fa fa-user-secret'}
+                                    text={"Admin"}
+                                />
+                            </AuthComponent>
+                            <AuthComponent roleMatch={Roles.User}>
+                                <NavItem
+                                    to={'/user/' + this.props.user.id}
+                                    icon={'fa fa-user'}
+                                    text={"Profile"}
+                                />
+                                <NavItem
+                                    to={'/drafts'}
+                                    icon={'fa fa-edit'}
+                                    text={"Draft"}
+                                />
+                                <NavItem
+                                    to={'/search/users?page=1'}
+                                    icon={'fa fa-users'}
+                                    text={"Search Users"}
+                                />
+                                <NavItem
+                                    to={'/eventSchedules'}
+                                    my_icon={<i className="fa fa-clone"></i>}
+                                    text={"Recurrent Events"}
+                                />
+                                <NavItem
+                                    to={'/user_chats'}
+                                    my_icon={
+                                        <Badge badgeContent={this.props.msg_for_read().length} color="primary">
+                                            <i className="fas fa-comments"></i>
+                                        </Badge>
+                                    }
+                                    text={"Comuna"}
+                                />
+                                <NavItem
+                                    to={'/contactUs'}
+                                    icon={'fa fa-exclamation-circle'}
+                                    text={'Contact us'}
+                                />
+                            </AuthComponent>
                         </ul>
                     </nav>
                 </div>

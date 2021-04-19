@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -32,7 +33,6 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns edited comment.</returns>
         /// <response code="200">Edit/Create comment proces success.</response>
         /// <response code="400">If Edit/Create process failed.</response>
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<IActionResult> Edit(CommentViewModel model)
         {
@@ -41,7 +41,7 @@ namespace EventsExpress.Controllers
                 return BadRequest();
             }
 
-            await _commentService.Create(_mapper.Map<CommentViewModel, CommentDto>(model));
+            await _commentService.Create(_mapper.Map<CommentDto>(model));
 
             return Ok();
         }
@@ -53,7 +53,6 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns deleted comment.</returns>
         /// <response code="200">Delete comment proces success.</response>
         /// <response code="400">If delete process failed.</response>
-        [AllowAnonymous]
         [HttpPost("{id}/[action]")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -74,9 +73,7 @@ namespace EventsExpress.Controllers
         public IActionResult All(Guid id, int page = 1)
         {
             int pageSize = 5;
-            var res = _mapper.Map<IEnumerable<CommentViewModel>>(
-                _commentService
-                    .GetCommentByEventId(id, page, pageSize, out int count));
+            var res = _mapper.Map<IEnumerable<CommentViewModel>>(_commentService.GetCommentByEventId(id, page, pageSize, out int count));
 
             foreach (var com in res)
             {

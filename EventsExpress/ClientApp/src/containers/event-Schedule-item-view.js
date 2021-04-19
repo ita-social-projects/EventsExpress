@@ -4,8 +4,8 @@ import EventScheduleItemView from '../components/eventSchedule/eventSchedule-ite
 import Spinner from '../components/spinner';
 import getEventSchedule, {
     resetEventSchedule
-} from '../actions/eventSchedule-item-view-action';
-import get_event from '../actions/event-item-view';
+} from '../actions/eventSchedule/eventSchedule-item-view-action';
+import get_event from '../actions/event/event-item-view-action';
 
 class EventScheduleItemViewWrapper extends Component {
     componentWillMount() {
@@ -41,6 +41,5 @@ const mapDispatchToProps = (dispatch) => ({
     getEventSchedule: (id) => dispatch(getEventSchedule(id)),
     reset: () => dispatch(resetEventSchedule())
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemViewWrapper);

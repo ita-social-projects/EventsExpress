@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Policy = PolicyNames.UserPolicyName)]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -125,6 +126,15 @@ namespace EventsExpress.Controllers
             var result = await _eventService.Part1(_mapper.Map<EventDto>(model));
 
             return Ok(result);
+        }
+
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> Publish(Guid eventId)
+        {
+            var result = await _eventService.Publish(eventId);
+
+            return Ok(new { id = result });
         }
 
         /// <summary>

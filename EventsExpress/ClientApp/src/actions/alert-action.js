@@ -20,7 +20,6 @@ export function setErrorAllertFromResponse(responsePromise) {
     }
 }
 
-
 export function setSuccessAllert(msg) {
     return dispatch => {
         const alert = buildAllertWithSuccess(msg);

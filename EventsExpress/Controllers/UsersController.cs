@@ -7,8 +7,10 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,17 +27,20 @@ namespace EventsExpress.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
+        private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IEmailService emailService)
+            IEmailService emailService,
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -46,6 +51,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return IEnumerable UserManageDto models.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
             filter.PageSize = 12;
@@ -75,7 +81,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return  UserManageDto model.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public IActionResult Get([FromQuery] UsersFilterViewModel filter)
         {
             if (filter.PageSize == 0)
@@ -88,7 +94,7 @@ namespace EventsExpress.Controllers
                 var user = GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -109,7 +115,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Change role success.</response>
         /// <response code="400">Change role failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
         {
             await _userService.ChangeRole(userId, roleId);
@@ -125,7 +131,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Block is succesful.</response>
         /// <response code="400">Block process failed.</response>
         [HttpPost("{userId}/[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Unblock(Guid userId)
         {
             await _userService.Unblock(userId);
@@ -141,7 +147,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Unblock is succesful.</response>
         /// <response code="400">Unblock process failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<IActionResult> Block(Guid userId)
         {
             await _userService.Block(userId);
@@ -262,7 +268,7 @@ namespace EventsExpress.Controllers
 
             await _userService.ChangeAvatar(user.Id, newAva);
 
-            var updatedPhoto = _userService.GetById(user.Id).Photo.Thumb.ToRenderablePictureString();
+            var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
 
             return Ok(updatedPhoto);
         }
@@ -275,6 +281,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
@@ -311,6 +318,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return profileDto.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult GetUserProfileById(Guid id)
         {
             var user = GetCurrentUser(HttpContext.User);

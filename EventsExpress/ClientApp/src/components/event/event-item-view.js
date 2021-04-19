@@ -17,8 +17,8 @@ import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
 import Tooltip from '@material-ui/core/Tooltip';
-import userStatusEnum from '../helpers/userStatusEnum';
-import eventStatusEnum from '../helpers/eventStatusEnum';
+import userStatusEnum from '../../constants/userStatusEnum';
+import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
 
 
@@ -89,7 +89,7 @@ export default class EventItemView extends Component {
                         <div>
                             <SimpleModal
                                 id={x.id}
-                                action={this.props.onPromoteToOwner}
+                                action={() => this.props.onPromoteToOwner(x.id)}
                                 data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
                                 button={
                                     <Tooltip title="Approve as an owner">

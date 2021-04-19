@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import CommentList from '../components/comment/comment-list';
 import Spinner from '../components/spinner';
-import getComments from '../actions/comment-list-action';
+import getComments from '../actions/comment/comment-list-action';
 
 
 

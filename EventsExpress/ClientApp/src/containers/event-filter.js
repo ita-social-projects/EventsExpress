@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import EventFilter from '../components/event/event-filter';
-import { updateEventsFilters } from '../actions/event-list-action';
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 import eventHelper from '../components/helpers/eventHelper';
+import { withRouter } from "react-router";
 
 class EventFilterWrapper extends Component {
     componentWillMount() {
@@ -13,7 +13,7 @@ class EventFilterWrapper extends Component {
 
     onReset = () => {
         this.props.reset_filters();
-        this.props.updateEventsFilters(eventHelper.getDefaultEventFilter());
+        this.props.history.push(this.props.history.location.pathname + "?page=1")
     }
 
     onLoadUserDefaults = () => {
@@ -22,32 +22,52 @@ class EventFilterWrapper extends Component {
             ...eventHelper.getDefaultEventFilter(),
             categories: this.props.current_user.categories.map(item => item.id),
         };
-
-        this.props.updateEventsFilters(defaultFilter);
+        const favoriteFilter = eventHelper.getQueryStringByEventFilter(defaultFilter);
+        this.props.history.push(this.props.history.location.pathname + this.trimRadiusFromQueryString(favoriteFilter));
     }
 
     onSubmit = (filters) => {
         filters = eventHelper.trimUndefinedKeys(filters);
+        var filterCopy = { ...this.props.events.filter };
         Object.entries(filters).forEach(function ([key, value]) {
             switch (key) {
                 case 'page':
-                    this.props.events.filter[key] = 1;
+                    filterCopy[key] = value;
                 case 'dateFrom':
                 case 'dateTo':
-                    this.props.events.filter[key] = new Date(value).toDateString();
+                    filterCopy[key] = new Date(value).toDateString();
                     break;
                 case 'categories':
-                    this.props.events.filter[key] = value.map(item => item.id);
+                    filterCopy[key] = value.map(item => item.id);
                     break;
                 case 'statuses':
-                    this.props.events.filter[key] = value;
+                    filterCopy[key] = value;
+                    break;
+                case 'radius':
+                    filterCopy[key] = value;
+                    break;
+                case 'selectedPos':
+                    var x = value.lat;
+                    var y = value.lng;
+                    filterCopy['x'] = x;
+                    filterCopy['y'] = y;
+                    filterCopy[key] = undefined;
                     break;
                 default:
-                    this.props.events.filter[key] = value;
+                    filterCopy[key] = value;
+                    break;
             }
         }.bind(this));
+        const queryString = eventHelper.getQueryStringByEventFilter(filterCopy);
 
-        this.props.updateEventsFilters(this.props.events.filter);
+        if (filterCopy.x !== undefined && filterCopy.y !== undefined)
+            this.props.history.push(this.props.history.location.pathname + queryString);
+        else
+            this.props.history.push(this.props.history.location.pathname + this.trimRadiusFromQueryString(queryString))
+    }
+
+    trimRadiusFromQueryString = (queryString) => {
+        return queryString.toString().replace("&radius=8", "");
     }
 
     buildInitialFormValues = () => {
@@ -59,7 +79,6 @@ class EventFilterWrapper extends Component {
                 filter.categories.some(filterItem => filterItem === item.id)
             );
         }
-
         return values;
     };
 
@@ -88,15 +107,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateEventsFilters: (value) => dispatch(updateEventsFilters(value)),
         get_categories: () => dispatch(get_categories()),
-        reset_filters: () => {
-            dispatch(reset('event-filter-form'));
-        },
+        reset_filters: () => dispatch(reset('event-filter-form')),
     }
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(EventFilterWrapper);
+)(EventFilterWrapper));

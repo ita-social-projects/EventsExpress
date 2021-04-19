@@ -21,6 +21,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.EventLocation).NotEmpty().OverridePropertyName("location.type").WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Incorrect quantity of participants!");
+            RuleFor(x => x.Categories).NotEmpty().WithMessage("Sellect at least 1 category");
         }
     }
 }

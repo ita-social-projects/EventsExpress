@@ -1,72 +1,51 @@
 import React, { Component } from 'react';
+import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
-import { get_events } from '../actions/event-list-action';
-import InternalServerError from '../components/Route guard/500';
-import BadRequest from '../components/Route guard/400';
-import Unauthorized from '../components/Route guard/401';
-import Forbidden from '../components/Route guard/403';
-import history from '../history';
+import { get_events } from '../actions/event/event-list-action';
 import eventHelper from '../components/helpers/eventHelper';
+import { withRouter } from "react-router";
 
 class EventListWrapper extends Component {
     constructor(props) {
         super(props);
         this.objCurrentQueryParams = Object.create(null);
+        this.prevQueryStringSearch = "";
     }
 
     componentDidMount() {
-        this.setSearchParamsToEventFilter(this.props.location.search);
-        this.executeSearchEvents();
+        this.setSearchParamsToEventFilter(this.props.history.location.search);
+        const queryString = eventHelper.getQueryStringByEventFilter(this.objCurrentQueryParams);
+        this.props.get_events(queryString);
     }
 
-    componentDidUpdate(prevProps) {
-        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
-        if (this.hasUpdateSearchParams(objFilterParams)) {
-            this.objCurrentQueryParams = objFilterParams;
-            this.executeSearchEvents();
+    componentDidUpdate() {
+        if (this.props.history.location.search != this.prevQueryStringSearch) {
+            this.prevQueryStringSearch = this.props.history.location.search;
+            this.props.get_events(this.props.history.location.search);
         }
     }
 
-    hasUpdateSearchParams = objFilterParams => {
-        return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
-    }
-
-    executeSearchEvents = () => {
-        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
-        this.props.get_events(queryString);
-        history.push(`${this.props.location.pathname}${queryString}`);
-    }
-
     setSearchParamsToEventFilter = search => {
+        var filterCopy = { ...this.props.events.filter };
         this.objCurrentQueryParams = queryStringParse(search);
 
         Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
-            this.props.events.filter[key] = value;
+            filterCopy[key] = value;
         }.bind(this));
-
-        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(filterCopy);
     }
 
     render() {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending, isError } = this.props.events;
+        const { data, isPending } = this.props.events;
         const { items } = this.props.events.data;
-        const errorMessage = isError.ErrorCode == '403'
-            ? <Forbidden />
-            : isError.ErrorCode == '500'
-                ? <InternalServerError />
-                : isError.ErrorCode == '401'
-                    ? <Unauthorized />
-                    : isError.ErrorCode == '400'
-                        ? <BadRequest />
-                        : null;
         const spinner = isPending ? <Spinner /> : null;
-        const content = !errorMessage
+        const content = !isPending
             ? <EventList
                 current_user={current_user}
                 data_list={items}
@@ -75,12 +54,8 @@ class EventListWrapper extends Component {
                 totalPages={data.pageViewModel.totalPages}
             />
             : null;
-
         return <>
-            {!errorMessage
-                ? spinner || content
-                : errorMessage
-            }
+            {spinner || content}
         </>
     }
 }
@@ -88,7 +63,8 @@ class EventListWrapper extends Component {
 const mapStateToProps = (state) => {
     return {
         events: state.events,
-        current_user: state.user
+        current_user: state.user,
+        form_values: getFormValues('event-filter-form')(state),
     }
 };
 
@@ -98,7 +74,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(EventListWrapper);
+)(EventListWrapper));
