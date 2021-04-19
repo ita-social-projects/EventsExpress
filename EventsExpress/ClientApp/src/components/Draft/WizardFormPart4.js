@@ -10,8 +10,10 @@ class Part4 extends Component {
             <form onSubmit={this.props.handleSubmit}
                 encType="multipart/form-data" autoComplete="off" >
                 <div className="text text-2 pl-md-4">
-                    <InventoryList
-                        eventId={this.props.initialData.id} />
+                    {(this.props.initialData &&
+                        <InventoryList
+                            eventId={this.props.initialData.id} />
+                    )}
                 </div>
             </form >
         );

@@ -30,7 +30,7 @@ export const radioLocationType = ({ input, meta: { error, touched, warning }, ..
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
-        {renderWarningsFromHelper2({ warning })}
+        {renderWarningsFromHelper({ touched, warning })}
         {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 )
@@ -312,7 +312,6 @@ export const renderTextArea = ({
             helperText={touched && error}
             variant="outlined"
         />
-        {changes({ pristine })}
         { renderWarningsFromHelper({ touched, warning })}
         </div>
     )

@@ -10,25 +10,12 @@ import {
     renderTextField,
 } from '../helpers/helpers'
 import submit from './submit5';
+import { warn } from './Validator5';
 
 class Part5 extends Component {
 
     onSubmit = () => {
         return this.props.add_event({ ...validateEventFormPart5(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-    }
-    initializeIfNeed() {
-        if (this.props.event) {
-            let initialValues = {
-                isPublic: this.props.event.isPublic,
-                maxParticipants: this.props.event.maxParticipants,
-            }
-            this.props.initialize(initialValues);
-            this.setState({ initialized: true });
-        }
-    }
-
-    componentDidMount() {
-        this.initializeIfNeed();
     }
 
     render() {
@@ -81,5 +68,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    reduxForm({ form: 'Part5', onSubmit: submit })
+    reduxForm({ form: 'Part5', warn, onSubmit: submit })
 )(Part5);

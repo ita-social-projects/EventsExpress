@@ -82,10 +82,15 @@ export default class EventService {
             file.append('IsReccurent', data.isReccurent);
             file.append('Periodicity', data.periodicity);
         }
-       
 
-        file.append('Title', data.title);
-        file.append('Description', data.description);
+        if (data.title !== undefined) {
+            file.append('Title', data.title);
+        }
+        if (data.description !== undefined) {
+            file.append('Description', data.description);
+        }
+        
+        
         file.append('User.Id', data.user_id);
         file.append('DateFrom', new Date(data.dateFrom).toDateString());
         file.append('DateTo', new Date(data.dateTo).toDateString());
@@ -125,12 +130,14 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.location === undefined) {
-            data.location = null;
+        if (data === undefined) {
+            data = null;
         }
 
-        if (data.location) {
-            file.append('Location.Type', data.type)
+        if (data) {
+            if (data.type) {
+                file.append('Location.Type', data.type)
+            }
             if (data.selectedPos) {
                 file.append('Location.Latitude', data.selectedPos.lat);
                 file.append('Location.Longitude', data.selectedPos.lng);
@@ -148,16 +155,13 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.isPublic === undefined) {
-            data.isPublic = null;
+        if (data.isPublic !== undefined) {
+            file.append('IsPublic', data.isPublic);
         }
 
-        if (data.maxParticipants === undefined) {
-            data.maxParticipants = null;
+        if (data.maxParticipants !== undefined) {
+            file.append('MaxParticipants', data.maxParticipants);
         }
-
-        file.append('IsPublic', data.isPublic);
-        file.append('MaxParticipants', data.maxParticipants);
 
         return baseService.setResourceWithData(path, file);
     }

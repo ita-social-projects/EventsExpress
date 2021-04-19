@@ -16,53 +16,64 @@ import { warn } from './Validator3';
 class Part3 extends Component {
 
 
-
     initializeIfNeed() {
-        if (this.props.event) {
-             let initialValues = {
+        if (this.props.event && !this.state.initialized && this.props.event.location) {
+            let initialValues = {
                 location: this.props.event.location !== null ? {
-                           
-                 } : null,
-                 selectedPos: L.latLng(
 
-                     this.props.event.location.latitude,
-                     this.props.event.location.longitude
-                 ),
-                 onlineMeeting: this.props.event.location.onlineMeeting,     
-                 type: String(this.props.event.location.type)
+                } : null,
+                selectedPos: L.latLng(
+
+                    this.props.event.location.latitude,
+                    this.props.event.location.longitude
+                ),
+                onlineMeeting: this.props.event.location.onlineMeeting,
+                type: String(this.props.event.location.type)
             }
             this.props.initialize(initialValues);
             this.setState({ initialized: true });
         }
-       
-    }
 
-    componentDidMount() {
+    }
+    
+    componentDidUpdate() {
+        console.log(this.props.event);
         this.initializeIfNeed();
     }
+    componentDidMount() {
+        console.log(this.props.event);
+        this.initializeIfNeed();
+    }
+    state = { initialized: false };
+
+    
     
     render() {
 
-        let initialValues = {
-            location: this.props.event.location !== null ? {
-                
-            } : null,
-            selectedPos: L.latLng(
+        {
+            if (this.props.event && this.props.event.location) {
+                var initialValues = {
+                    location: this.props.event.location !== null ? {
 
-                this.props.event.location.latitude,
-                this.props.event.location.longitude
-            ),
-            onlineMeeting: this.props.event.location.onlineMeeting,
-            type: String(this.props.event.location.type)
+                    } : null,
+                    selectedPos: L.latLng(
+
+                        this.props.event.location.latitude,
+                        this.props.event.location.longitude
+                    ),
+                    onlineMeeting: this.props.event.location.onlineMeeting,
+                    type: String(this.props.event.location.type)
+                }
+            }
         }
+
         const { handleSubmit } = this.props;
         return (
             
             <form onSubmit={handleSubmit}>
                 <Field name="type" component={radioLocationType} />
-                {(this.props.form_values == undefined
-                    || ( this.props.form_values.type === enumLocationType.map))
-                    &&
+                {this.props.form_values
+                    && this.props.form_values.type === enumLocationType.map &&
                     <div className="mt-2">
                         <Field
                             name='selectedPos'
@@ -120,5 +131,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    reduxForm({ form: 'Part3', warn, onSubmit: submit })
+    reduxForm({ form: 'Part3', warn, enableReinitialize: true, onSubmit: submit })
 )(Part3);

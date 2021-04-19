@@ -18,10 +18,10 @@ import {
 } from '../helpers/helpers';
 import { warn } from './Validator';
 
- 
+
 
 class Part1 extends Component {
-
+    
     
     constructor(props) {
         super(props)
@@ -30,7 +30,7 @@ class Part1 extends Component {
 
     state = { checked:false };
 
-
+    
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
@@ -38,22 +38,6 @@ class Part1 extends Component {
 
     }
 
-    
-
-    state = { initialized:false };
-
-    renderErrors = (error) => {
-        const keys = Object.keys(error);
-        let i = 0;
-        const part1Errors = [];
-        while (i < keys.length) {
-            if (keys[i] === "title" || keys[i] === "description" || keys[i] === "dateFrom" || keys[i] === "dateTo" || keys[i] === "categories") {
-                part1Errors.push(keys[i]);
-            }
-            i++;
-        }
-        return part1Errors.map(k => <div className="text-warning">{k}:{error[k][0]}</div>)
-    }
 
     initializeIfNeed() {
         if (this.props.event && !this.state.initialized) {
@@ -68,25 +52,43 @@ class Part1 extends Component {
             this.setState({ initialized: true });
         }
     }
-
+    state = { initialized: false };
     componentDidUpdate() {
         this.initializeIfNeed();
+
     }
     componentDidMount() {
-        this.initializeIfNeed();
+        this.initializeIfNeed();  
     }
+
+    renderErrors = (error) => {
+        const keys = Object.keys(error);
+        let i = 0;
+        const part1Errors = [];
+        while (i < keys.length) {
+            if (keys[i] === "title" || keys[i] === "description" || keys[i] === "dateFrom" || keys[i] === "dateTo" || keys[i] === "categories") {
+                part1Errors.push(keys[i]);
+            }
+            i++;
+        }
+        return part1Errors.map(k => <div className="text-warning">{k}:{error[k][0]}</div>)
+    }
+
+    
 
     onSubmit = (values) => {
         return this.props.add_event({ ...validateEventFormPart1(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
-   
+
+    
     render() {
 
         
+
         const { checked } = this.state;
         
-        const { form_values, all_categories, disabledDate, } = this.props;
+        const { test ,form_values, all_categories, disabledDate, } = this.props;
         
         let values = form_values || this.props.initialValues;
         const { error, handleSubmit, pristine } = this.props;
@@ -103,6 +105,7 @@ class Part1 extends Component {
                             inputProps={{ maxLength: 60 }}
                         />
                     </div>
+                    
                     <div className="meta-wrap m-2">
                         <span>From
                             <Field
@@ -149,6 +152,7 @@ class Part1 extends Component {
                             </div>
                         </div>
                     }
+
                     <div className="mt-2">
                         <Field
                             name='description'
@@ -167,14 +171,6 @@ class Part1 extends Component {
                             className="form-control mt-2"
                             placeholder='#hashtags' />
                     </div>
-                    {error && <strong>{error}</strong>}
-                    {this.props.errors &&
-                        <ul>
-                            {this.renderErrors(this.props.errors)}
-                        </ul>
-                    }
-
-                    {/*{!pristine && <strong>pristine</strong> }*/}
                 </div>
          </form>
         );

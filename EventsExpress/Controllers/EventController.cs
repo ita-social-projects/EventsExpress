@@ -183,11 +183,6 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Part5(Guid eventId, [FromForm] EventEditViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var result = await _eventService.Part5(_mapper.Map<EventDto>(model));
 
             return Ok(result);
