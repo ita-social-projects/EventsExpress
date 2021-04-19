@@ -464,5 +464,35 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(1));
         }
+
+        [Test]
+        [Category("GetUserInfo")]
+        public void GetUserInfo_Success()
+        {
+            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _mapper.Setup(m => m.Map<UserDto, UserInfoViewModel>(_userDto))
+                .Returns(new UserInfoViewModel { Email = _userDto.Email });
+
+            var res = _usersController.GetUserInfo();
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<OkObjectResult>(res);
+            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Once);
+            Assert.That((res as OkObjectResult).Value != null);
+        }
+
+        [Test]
+        [Category("GetUserInfo")]
+        public void GetUserInfo_NullResult()
+        {
+            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+
+            var res = _usersController.GetUserInfo();
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<OkObjectResult>(res);
+            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Once);
+            Assert.That((res as OkObjectResult).Value == null);
+        }
     }
 }
