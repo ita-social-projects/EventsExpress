@@ -51,7 +51,7 @@ namespace EventsExpress.Test.ControllerTests
         public void GetLinkedAuth_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.GetLinkedAuth());
@@ -67,7 +67,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
             _accountService.Setup(s =>
                 s.GetLinkedAuth(user.AccountId)).ReturnsAsync(new List<AuthDto>());
             _mapper.Setup(s =>
@@ -110,7 +110,7 @@ namespace EventsExpress.Test.ControllerTests
             _googleSignatureVerificator.Setup(s =>
                 s.Verify(model.TokenId)).ReturnsAsync(new GoogleJsonWebSignature.Payload());
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Google)).Returns(Task.CompletedTask);
 
@@ -127,7 +127,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddFacebookLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddFacebookLogin(new AuthExternalViewModel()));
@@ -149,7 +149,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook)).Returns(Task.CompletedTask);
 
@@ -166,7 +166,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddTwitterLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddTwitterLogin(new AuthExternalViewModel()));
@@ -188,7 +188,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter)).Returns(Task.CompletedTask);
 
@@ -205,7 +205,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddLocalLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddLocalLogin(new LoginViewModel()));
@@ -228,7 +228,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, model.Password)).Returns(Task.CompletedTask);
 

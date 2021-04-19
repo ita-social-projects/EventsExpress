@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -49,7 +51,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetLinkedAuth()
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
             var res = await _accountService.GetLinkedAuth(user.AccountId);
 
             return Ok(_mapper.Map<IEnumerable<AuthViewModel>>(res));
@@ -68,7 +70,7 @@ namespace EventsExpress.Controllers
         {
             await _googleSignatureVerificator.Verify(model.TokenId);
 
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Google);
 
@@ -86,7 +88,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddLocalLogin(LoginViewModel model)
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, model.Password);
 
@@ -104,7 +106,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddFacebookLogin(AuthExternalViewModel model)
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook);
 
@@ -122,7 +124,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddTwitterLogin(AuthExternalViewModel model)
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = _authService.GetCurrentUser(HttpContext.User);
 
             await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter);
 

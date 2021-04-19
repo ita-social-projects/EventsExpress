@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { usersHaveAnyOfRoles } from './auth-utils';
 
 class AuthComponent extends Component {
     render() {
-        const {id, roles, roleMatch, children} = this.props;
+        const {id, roles, rolesMatch, children} = this.props;
 
-        if( id && (roleMatch ? roles.includes(roleMatch) : true )){
+        if( id && (rolesMatch ? usersHaveAnyOfRoles(roles, rolesMatch) : true )){
             return children;
         }
 

@@ -82,7 +82,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<IActionResult> Get([FromQuery] UsersFilterViewModel filter)
+        public IActionResult Get([FromQuery] UsersFilterViewModel filter)
         {
             if (filter.PageSize == 0)
             {
@@ -91,7 +91,7 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+                var user = _authService.GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
@@ -107,9 +107,9 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetUserInfo()
+        public IActionResult GetUserInfo()
         {
-            var user = await _authService.GetCurrentUserAsync(HttpContext.User);
+            var user = GetCurentUser(HttpContext.User);
             var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
 
             return Ok(userInfo);
@@ -342,6 +342,18 @@ namespace EventsExpress.Controllers
             var result = await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
 
             return Ok(result);
+        }
+
+        private UserDto GetCurentUser(ClaimsPrincipal userClaims)
+        {
+            try
+            {
+                return _authService.GetCurrentUser(userClaims);
+            }
+            catch (EventsExpressException)
+            {
+                return null;
+            }
         }
     }
 }

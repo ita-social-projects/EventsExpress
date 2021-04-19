@@ -15,21 +15,21 @@ export function setAlert(data) {
 export function setErrorAllertFromResponse(responsePromise) {
     return async dispatch => {
         const errorText = await getErrorMessege(responsePromise);
-        const alert = buildAllertWithError(errorText);
+        const alert = buildAlertWithError(errorText);
         dispatch(setAlert(alert));
     }
 }
 
 export function setSuccessAllert(msg) {
     return dispatch => {
-        const alert = buildAllertWithSuccess(msg);
+        const alert = buildAlertWithSuccess(msg);
         dispatch(setAlert(alert));
     }
 }
 
 export function setErrorAlert(msg) {
     return dispatch => {
-        const alert = buildAllertWithError(msg);
+        const alert = buildAlertWithError(msg);
         dispatch(setAlert(alert));
     }
 }
@@ -48,12 +48,12 @@ function setAlertInternal(data) {
     }
 }
 
-const buildAllertWithError = (msg) => ({
+const buildAlertWithError = (msg) => ({
     variant: 'error',
     message: msg,
 })
 
-const buildAllertWithSuccess = (msg) => ({
+const buildAlertWithSuccess = (msg) => ({
     variant: 'success',
     message: msg,
 })

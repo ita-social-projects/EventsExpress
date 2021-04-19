@@ -41,7 +41,7 @@ export default class HeaderProfile extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                <AuthComponent roleMatch={Roles.User}>
+                                <AuthComponent rolesMatch={[Roles.User]}>
                                     <Link to={'/notification_events'}>
                                         <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                             <IconButton>
@@ -65,7 +65,7 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
                                 </Link>
                             </div>
-                            <AuthComponent roleMatch={Roles.User}>
+                            <AuthComponent rolesMatch={[Roles.User]}>
                                 <button className="btn btn-outline-secondary" onClick={this.handleClick}>
                                     <i className="fas fa-plus mr-1"></i>
                                         add event

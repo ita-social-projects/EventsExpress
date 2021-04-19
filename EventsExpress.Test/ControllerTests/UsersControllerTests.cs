@@ -385,37 +385,37 @@ namespace EventsExpress.Test.ControllerTests
         [Category("Get")]
         public void Get_NotNull_Exception()
         {
-            _authService.Setup(a => a.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
-            Assert.ThrowsAsync<EventsExpressException>(async () => await _usersController.Get(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            Assert.Throws<EventsExpressException>(() => _usersController.Get(_usersFilterViewModel));
+            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
         }
 
         [Test]
         [Category("Get")]
-        public async Task Get_NotNull_BadRequestResult()
+        public void Get_NotNull_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
+            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
 
-            var res = await _usersController.Get(_usersFilterViewModel);
+            var res = _usersController.Get(_usersFilterViewModel);
 
             Assert.IsInstanceOf<BadRequestResult>(res);
             BadRequestResult badResult = res as BadRequestResult;
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(us => us.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
         }
 
         [Test]
         [Category("Get")]
-        public async Task Get_NotNull_OkObjectResult()
+        public void Get_NotNull_OkObjectResult()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(_userDto);
+            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>())).Returns(new UserDto[] { _userDto });
 
-            var res = await _usersController.Get(_usersFilterViewModel);
+            var res = _usersController.Get(_usersFilterViewModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
         }

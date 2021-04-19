@@ -83,30 +83,6 @@ namespace EventsExpress.Core.Services
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId));
 
-            user.Rating = GetRating(user.Id);
-
-            return user;
-        }
-
-        public async Task<UserDto> GetByIdAsync(Guid userId)
-        {
-            var user = Mapper.Map<UserDto>(
-                await Context.Users
-                .Include(u => u.Events)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AccountRoles)
-                        .ThenInclude(ar => ar.Role)
-                .Include(u => u.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(n => n.NotificationType)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == userId));
-
             if (user != null)
             {
                 user.Rating = GetRating(user.Id);

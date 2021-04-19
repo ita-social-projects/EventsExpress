@@ -168,26 +168,14 @@ namespace EventsExpress.Core.Services
 
         public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
         {
-            Claim emailClaim = userClaims.FindFirst(ClaimTypes.Name);
+            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
 
-            if (!Guid.TryParse(emailClaim.Value, out Guid userId))
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
             {
                 throw new EventsExpressException("User not found");
             }
 
             return _userService.GetById(userId);
-        }
-
-        public async Task<UserDto> GetCurrentUserAsync(ClaimsPrincipal userClaims)
-        {
-            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
-            {
-                return null;
-            }
-
-            return await _userService.GetByIdAsync(userId);
         }
 
         public async Task PasswordRecover(string email)

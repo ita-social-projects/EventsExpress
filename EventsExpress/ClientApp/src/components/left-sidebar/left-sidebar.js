@@ -40,7 +40,7 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            <AuthComponent roleMatch={Roles.User}>
+                            <AuthComponent rolesMatch={[Roles.User]}>
                                 <NavItem
                                     to={'/user/' + this.props.user.id}
                                     icon={'fa fa-user'}
@@ -78,7 +78,7 @@ class LeftSidebar extends Component {
                                     text={"Comuna"}
                                 />
                             </AuthComponent>
-                            <AuthComponent roleMatch={Roles.Admin}>
+                            <AuthComponent rolesMatch={[Roles.Admin]}>
                                 <NavItem
                                     to={'/admin/'}
                                     icon={'fa fa-user-secret'}

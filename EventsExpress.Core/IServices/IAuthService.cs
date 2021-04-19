@@ -25,7 +25,5 @@ namespace EventsExpress.Core.IServices
         Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword);
 
         UserDto GetCurrentUser(ClaimsPrincipal userClaims);
-
-        Task<UserDto> GetCurrentUserAsync(ClaimsPrincipal userClaims);
     }
 }

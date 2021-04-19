@@ -360,28 +360,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [Category("GetCurrentUserAsync")]
-        public async Task GetCurrentUserAsync_UserIsNotExist_ReturnNull()
-        {
-            var claims = new ClaimsPrincipal();
-
-            Assert.Null(await service.GetCurrentUserAsync(claims));
-        }
-
-        [Test]
-        [Category("GetCurrentUserAsync")]
-        public async Task GetCurrentUserAsync_UserExist_UserId()
-        {
-            var claims = GetClaimsPrincipal();
-
-            mockUserService.Setup(s => s.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new UserDto());
-
-            var res = await service.GetCurrentUserAsync(claims);
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<UserDto>(res);
-        }
-
-        [Test]
         [TestCase(null)]
         [TestCase("")]
         public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
