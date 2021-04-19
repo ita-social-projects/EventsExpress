@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import TrackList from './track-list';
+import TracksFilter from './tracks-filter';
 import Spinner from '../spinner';
-import getAllTracks, {getEntityNames, setFilterEntities} from '../../actions/tracks/track-list-action';
+import getAllTracks, {getEntityNames} from '../../actions/tracks/track-list-action';
 import {connect} from 'react-redux';
-import {formValueSelector} from 'redux-form';
 
 class Tracks extends Component {
 
@@ -13,39 +13,41 @@ class Tracks extends Component {
     }
 
     handleSubmit = async (values) => {
-        // this.props.getAllTracks(values)
         await this.props.getAllTracks({
             entityName: values.entityNames.map(x => x.entityName),
+            /*changesType: values.changesType.map(x => x.changesType),*/
             page: 1
         })
     }
 
     render() {
         const that = this;
-        const {isPending, data, entityNames} = this.props.tracks;
+        const {isPending, data, entityNames, filter} = this.props.tracks;
         return <div>
             <table className="table w-100 m-auto">
                 <tbody>
-                {!isPending &&
-                data?.items ?
-                    <TrackList
-                        /*onEntitiesSelected={(names) => {
-                            that.props.setFilterEntities(names);
-                        }}*/
-                        data_list={data}
-                        onSearch={
-                            (page) => {
-                                that.props.getAllTracks({
-                                    ...that.props.filter,
-                                    page: page
-                                })
-                            }
-                        }
-                        entityNames={entityNames}
-                        onSubmit={ this.handleSubmit }
-                    />
-                    : null
-                }
+                <div className="d-flex">
+                    {!isPending &&
+                    data?.items &&
+                        <div className="w-75">
+                            <TrackList
+                                data_list={data}
+                                onPagination={
+                                    (page) => {
+                                        that.props.getAllTracks({page: page})
+                                    }
+                                }
+                            />
+                        </div>
+                    }
+                    <div className="w-25">
+                        <TracksFilter
+                            entityNames={entityNames}
+                            changesType={filter.changesType}
+                            onSubmit={this.handleSubmit}
+                        />
+                    </div>
+                </div>
                 </tbody>
             </table>
             {isPending ? <Spinner/> : null}
@@ -54,21 +56,17 @@ class Tracks extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const selector = formValueSelector('track-list-form');
-    const entityNames = selector(state, 'entityNames');
-
+    console.log("data", state.tracks.data);
     return {
         tracks: state.tracks,
-        filter: state.tracks.filter,
-        entityNames
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        
         getAllTracks: (filter) => dispatch(getAllTracks(filter)),
         getEntityNames: () => dispatch(getEntityNames()),
-        // setFilterEntities: (names) => dispatch(setFilterEntities(names)),
     }
 };
 

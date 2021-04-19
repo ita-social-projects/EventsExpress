@@ -10,7 +10,7 @@ namespace EventsExpress.Controllers
 {
     using System;
 
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     [ApiController]
     public class TracksController : ControllerBase
@@ -28,7 +28,7 @@ namespace EventsExpress.Controllers
         /// This method have to return all tracks.
         /// </summary>
         /// <response code="200">Return IEnumerable ChangeInfo.</response>
-        [HttpPost("[action]")]
+        [HttpPost]
         public IActionResult All(TrackFilterViewModel filter)
         {
             filter.PageSize = 10;
@@ -49,7 +49,7 @@ namespace EventsExpress.Controllers
             }
         }
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public IActionResult GetEntityNames() =>
             Ok(_mapper.Map<IEnumerable<EntityNamesViewModel>>(_trackService.GetDistinctNames()));
     }

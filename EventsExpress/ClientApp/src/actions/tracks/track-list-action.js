@@ -3,7 +3,6 @@ import {setErrorAllertFromResponse} from "../alert-action";
 
 export const SET_TRACKS_PENDING = "SET_TRACKS_PENDING";
 export const GET_TRACKS_SUCCESS = "GET_TRACKS_SUCCESS";
-export const SET_ENTITY_FILTER = "SET_ENTITY_FILTER";
 export const GET_ENTITY_NAMES = "GET_ENTITY_NAMES";
 
 const api_serv = new TrackService();
@@ -37,10 +36,6 @@ export function getEntityNames() {
 
 function getNames(names) {
     return {type: GET_ENTITY_NAMES, payload: names}
-}
-
-export const setFilterEntities = (names) => {
-    return {type: SET_ENTITY_FILTER, payload: names}
 }
 
 function setTracksPending(data) {

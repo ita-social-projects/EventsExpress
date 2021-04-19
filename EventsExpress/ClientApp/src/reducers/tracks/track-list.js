@@ -1,6 +1,6 @@
 import initialState from '../../store/initialState';
 import {
-    SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, SET_ENTITY_FILTER, GET_ENTITY_NAMES
+    SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, GET_ENTITY_NAMES
 } from '../../actions/tracks/track-list-action';
 
 export const reducer = (state = initialState.tracks, action) => {
@@ -21,13 +21,6 @@ export const reducer = (state = initialState.tracks, action) => {
                 ...state,
                 entityNames: action.payload
             }
-        case SET_ENTITY_FILTER:{
-            return Object.assign({},state, {
-                filter: Object.assign({}, state.filter, {
-                    entityName: action.payload
-                })
-            })
-        }
         default:
             return state;
     }

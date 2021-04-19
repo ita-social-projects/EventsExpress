@@ -1,15 +1,11 @@
 import React, {Component} from 'react';
-import Button from "@material-ui/core/Button";
-import {Field, reduxForm, formValueSelector} from 'redux-form';
 import PagePagination from '../shared/pagePagination';
 import TrackItem from './track-item';
-import Multiselect from 'react-widgets/lib/Multiselect';
-import {renderMultiselect} from "../helpers/helpers";
 
 class TrackList extends Component {
 
     handlePageChange = (page) => {
-        this.props.onSearch(page);
+        this.props.onPagination(page);
     };
 
     renderItems = arr => {
@@ -21,7 +17,7 @@ class TrackList extends Component {
     }
 
     render() {
-        const {data_list, entityNames} = this.props;
+        const {data_list} = this.props;
 
         return (<>
             <div className="d-flex">
@@ -57,51 +53,9 @@ class TrackList extends Component {
                     />
                     }
                 </div>
-                <div className="w-25">
-                    {entityNames && entityNames.length !== 0 &&
-                    <form className="box" onSubmit={this.props.handleSubmit}>
-                        <div className="form-group">
-                            {/*<Multiselect
-                                data={entityNames}
-                                valueField={"id"}
-                                textField={"entityName"}
-                                className="form-control mt-2"
-                                // selectedValues={this.state.selectedValue}
-                                // hideSelectedOptions={false}
-                                placeholder='Entity name'
-                                onChange={(items) => {
-                                    this.props.onEntitiesSelected(items.map(x => x.entityName))
-                                }}
-                                 <for button> onClick={() => this.props.onSearch(1)}
-                            />*/}
-                            <Field
-                                data={entityNames}
-                                component={renderMultiselect}
-                                name="entityNames"
-                                valueField={"id"}
-                                textField={"entityName"}
-                                className="form-control mt-2"
-                                placeholder='Entity name'
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Button
-                                fullWidth={true}
-                                type="submit"
-                                color="primary"
-                                disabled={this.props.pristine || this.props.submitting}
-                            >
-                                Search
-                            </Button>
-                        </div>
-                    </form>
-                    }
-                </div>
             </div>
         </>);
     }
 }
-
-TrackList = reduxForm({form: 'track-list-form', enableReinitialize: true})(TrackList);
 
 export default TrackList;
