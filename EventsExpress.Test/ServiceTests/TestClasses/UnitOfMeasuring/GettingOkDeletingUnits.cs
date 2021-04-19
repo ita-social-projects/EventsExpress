@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections;
+using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 {
-    public class GettingOkDeletingUnits : IEnumerable
+    internal static class GettingOkDeletingUnits
     {
-        private Guid deletedUnitOfMeasuringId = EditingUnit.DeletedUnitOfMeasuringDTO.Id;
-        private Guid notExistedId = EditingUnit.UnitOfMeasuringDTONotExId.Id;
+        private static Guid deletedUnitOfMeasuringId = EditingUnit.DeletedUnitOfMeasuringDTO.Id;
+        private static Guid notExistedId = EditingUnit.UnitOfMeasuringDTONotExId.Id;
 
-        public IEnumerator GetEnumerator()
+        public static IEnumerable TestCases
         {
-            yield return new object[] { notExistedId };
-            yield return new object[] { deletedUnitOfMeasuringId };
+            get
+            {
+                yield return new TestCaseData(notExistedId)
+                    .SetName("Get_NotExistingId_Exception");
+                yield return new TestCaseData(deletedUnitOfMeasuringId)
+                    .SetName("Get_DeletedUnit_Exception");
+            }
         }
     }
 }

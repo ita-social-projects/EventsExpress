@@ -34,9 +34,7 @@ namespace EventsExpress.Test.ControllerTests
         private Guid _idUser = Guid.NewGuid();
         private string _userEmal = "user@gmail.com";
         private EditUserNotificationTypesViewModel editUserNotificationTypesView;
-        private EditUserNotificationTypesViewModel editUserNotificationTypesViewInValid;
         private NotificationTypeDto firstNotificationTypeDto;
-        private NotificationTypeDto firstNotificationTypeDtoInvalid;
         private AttitudeViewModel _attitudeViewModel;
         private AttitudeDto _attitudeDto;
         private EditUserCategoriesViewModel _editUserCategoriesViewModel;
@@ -47,7 +45,6 @@ namespace EventsExpress.Test.ControllerTests
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
         private string _userName = "some name of user";
-        private Guid _idRole = Guid.NewGuid();
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;
@@ -74,28 +71,19 @@ namespace EventsExpress.Test.ControllerTests
             .Returns((IEnumerable<AttitudeViewModel> e) => e.Select(item => new AttitudeDto { UserFromId = item.UserFromId, UserToId = item.UserToId, Attitude = item.Attitude }));
 
             _mapper.Setup(u => u.Map<IEnumerable<CategoryDto>, IEnumerable<Category>>(It.IsAny<IEnumerable<CategoryDto>>()))
-           .Returns((IEnumerable<CategoryDto> e) => e.Select(item => new Category { Id = item.Id, Name = item.Name }));
+            .Returns((IEnumerable<CategoryDto> e) => e.Select(item => new Category { Id = item.Id, Name = item.Name }));
 
             _mapper.Setup(u => u.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(It.IsAny<IEnumerable<UserDto>>()))
-          .Returns((IEnumerable<UserDto> e) => e.Select(item => new UserManageViewModel { Id = item.Id }));
+            .Returns((IEnumerable<UserDto> e) => e.Select(item => new UserManageViewModel { Id = item.Id }));
 
             firstNotificationTypeDto = new NotificationTypeDto
             {
                 Id = NotificationChange.OwnEvent,
                 Name = NotificationChange.OwnEvent.ToString(),
             };
-            firstNotificationTypeDtoInvalid = new NotificationTypeDto
-            {
-                Id = NotificationChange.OwnEvent,
-                Name = string.Empty,
-            };
             editUserNotificationTypesView = new EditUserNotificationTypesViewModel
             {
                 NotificationTypes = new NotificationTypeDto[] { firstNotificationTypeDto },
-            };
-            editUserNotificationTypesViewInValid = new EditUserNotificationTypesViewModel
-            {
-                NotificationTypes = new NotificationTypeDto[] { firstNotificationTypeDtoInvalid },
             };
             _attitudeViewModel = new AttitudeViewModel
             {
@@ -187,9 +175,9 @@ namespace EventsExpress.Test.ControllerTests
         {
             _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
             string roleName = "Admin";
-            Role role = new Role { Id = Guid.NewGuid(), Name = roleName };
-            UserDto firstAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
-            UserDto secondAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
+            UserDto firstAdmin = GetAdminAccount();
+            UserDto secondAdmin = GetAdminAccount();
+
             var admins = new UserDto[] { firstAdmin, secondAdmin };
             _userService.Setup(user => user.GetUsersByRole(roleName)).Returns(admins);
             ContactUsViewModel model = new ContactUsViewModel { Description = "some description", Type = "some type" };
@@ -201,6 +189,24 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(user => user.GetUsersByRole(roleName), Times.Exactly(1));
             _emailService.Verify(email => email.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(admins.Length));
+
+            static UserDto GetAdminAccount()
+            {
+                return new UserDto
+                {
+                    Id = Guid.NewGuid(),
+                    Account = new Account
+                    {
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Db.Enums.Role.Admin,
+                            },
+                        },
+                    },
+                };
+            }
         }
 
         [Test]
@@ -373,79 +379,6 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsInstanceOf<OkResult>(res);
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.Update(_userDto), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("Block")]
-        public void Block_CorrectIdUser_ThrowException()
-        {
-            Guid userId = _userDto.Id;
-            _userService.Setup(user => user.Block(It.IsAny<Guid>())).Throws<EventsExpressException>();
-            Assert.ThrowsAsync<EventsExpressException>(() => _usersController.Block(userId));
-        }
-
-        [Test]
-        [Category("Block")]
-        public async Task Block_CorrectIdUser_OkResultAsync()
-        {
-            Guid userId = _userDto.Id;
-            _userService.Setup(user => user.Block(userId));
-
-            var res = await _usersController.Block(userId);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkResult>(res);
-            _userService.Verify(us => us.Block(It.IsAny<Guid>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("UnBlock")]
-        public void UnBlock_CorrectIdUser_ThrowException()
-        {
-            _userService.Setup(user => user.Unblock(It.IsAny<Guid>())).Throws<EventsExpressException>();
-
-            Assert.ThrowsAsync<EventsExpressException>(() => _usersController.Unblock(It.IsAny<Guid>()));
-
-            _userService.Verify(us => us.Unblock(It.IsAny<Guid>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("UnBlock")]
-        public async Task UnBlock_CorrectIdUser_OkResultAsync()
-        {
-            Guid userId = _userDto.Id;
-            _userService.Setup(user => user.Unblock(userId));
-
-            var res = await _usersController.Unblock(userId);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkResult>(res);
-            _userService.Verify(us => us.Unblock(It.IsAny<Guid>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("ChangeRole")]
-        public void ChangeRole_IdUser_ThrowException()
-        {
-            _userService.Setup(user => user.ChangeRole(It.IsAny<Guid>(), It.IsAny<Guid>())).Throws<EventsExpressException>();
-
-            Assert.ThrowsAsync<EventsExpressException>(() => _usersController.ChangeRole(It.IsAny<Guid>(), It.IsAny<Guid>()));
-            _userService.Verify(us => us.ChangeRole(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("ChangeRole")]
-        public async Task ChangeRole_IdUser_OkResultAsync()
-        {
-            Guid idUser = _idUser;
-            Guid idRole = _idRole;
-            _userService.Setup(user => user.ChangeRole(idUser, idRole));
-
-            var res = await _usersController.ChangeRole(idUser, idRole);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkResult>(res);
-            _userService.Verify(us => us.ChangeRole(idUser, idRole), Times.Exactly(1));
         }
 
         [Test]

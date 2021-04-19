@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels
@@ -21,7 +22,7 @@ namespace EventsExpress.ViewModels
 
         public byte Attitude { get; set; }
 
-        public virtual RoleViewModel Role { get; set; }
+        public IEnumerable<RoleViewModel> Roles { get; set; }
 
         public double Rating { get; set; }
     }
