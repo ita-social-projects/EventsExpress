@@ -73,6 +73,9 @@ namespace EventsExpress.Core.Services
                 Context.Users
                 .Include(u => u.Events)
                 .Include(u => u.Account)
+                    .ThenInclude(a => a.AccountRoles)
+                        .ThenInclude(ar => ar.Role)
+                .Include(u => u.Account)
                     .ThenInclude(a => a.AuthLocal)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AuthExternal)

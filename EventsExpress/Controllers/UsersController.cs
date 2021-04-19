@@ -109,7 +109,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetUserInfo()
         {
-            var user = GetCurentUser(HttpContext.User);
+            var user = GetCurrentUserOrNull(HttpContext.User);
             var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
 
             return Ok(userInfo);
@@ -307,15 +307,6 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        // HELPERS:
-
-        /// <summary>
-        /// This method help to get current user from JWT.
-        /// </summary>
-        /// <returns>The method returns current user.</returns>
-        [NonAction]
-        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
-
         /// <summary>
         /// This method is to edit user notificatin types.
         /// </summary>
@@ -344,7 +335,21 @@ namespace EventsExpress.Controllers
             return Ok(result);
         }
 
-        private UserDto GetCurentUser(ClaimsPrincipal userClaims)
+        // HELPERS:
+
+        /// <summary>
+        /// This method help to get current user from JWT.
+        /// </summary>
+        /// <returns>The method returns current user.</returns>
+        [NonAction]
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+
+        /// <summary>
+        /// This method help to get logged in user from JWT.
+        /// </summary>
+        /// <returns>Current user or null when not exist.</returns>
+        [NonAction]
+        private UserDto GetCurrentUserOrNull(ClaimsPrincipal userClaims)
         {
             try
             {
