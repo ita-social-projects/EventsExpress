@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
@@ -34,7 +35,17 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
+            var templateId = NotificationProfile.EventCreated;
             _notificationTemplateService = new Mock<INotificationTemplateService>();
+
+            _notificationTemplateService
+                .Setup(s => s.GetByIdAsync(templateId))
+                .ReturnsAsync(new NotificationTemplateDTO { Id = templateId });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+
             _eventCreatedHandler = new EventCreatedHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
             _user = new User
             {

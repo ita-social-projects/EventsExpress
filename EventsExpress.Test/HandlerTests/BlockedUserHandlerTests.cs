@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -31,6 +32,15 @@ namespace EventsExpress.Test.HandlerTests
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
+
+            _notificationTemplateService
+                .Setup(service => service.GetByIdAsync(NotificationProfile.BlockedUser))
+                .ReturnsAsync(new NotificationTemplateDTO { Id = NotificationProfile.BlockedUser });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+
             _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
             _user = new User
             {

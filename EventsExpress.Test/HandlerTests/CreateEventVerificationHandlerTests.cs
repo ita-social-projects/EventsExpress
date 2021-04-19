@@ -40,8 +40,17 @@ namespace EventsExpress.Test.HandlerTests
             _logger = new Mock<ILogger<CreateEventVerificationHandler>>();
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _notificationTemplateService = new Mock<INotificationTemplateService>();
             _trackService = new Mock<ITrackService>();
+            _notificationTemplateService = new Mock<INotificationTemplateService>();
+
+            _notificationTemplateService
+                .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
+               .ReturnsAsync(new NotificationTemplateDTO { Id = It.IsAny<NotificationProfile>() });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+
             _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, _notificationTemplateService.Object);
             _eventScheduleDto = new EventScheduleDto
             {
