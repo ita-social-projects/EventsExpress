@@ -6,7 +6,6 @@ import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
 
 class UsersWrapper extends Component {
-
     componentDidMount() {
         this.getUsers(this.props.location.search);
     }
