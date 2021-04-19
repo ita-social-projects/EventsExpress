@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class NotificationTemplateService {
     
-    getAll = (pageNumber = 1, pageSize = 10) => baseService.getResourceNew(`NotificationTemplate/All?page=${pageNumber}&pageSize=${pageSize}`);
+    getAll = () => baseService.getResourceNew(`NotificationTemplate/All`);
     
     getByIdAsync = id => baseService.getResourceNew(`NotificationTemplate/${id}/Get`);
 

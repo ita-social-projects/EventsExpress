@@ -42,7 +42,7 @@ export default class Admin extends Component {
                                 </div>
                                 <div>
                                     <NavItem
-                                        to={'/admin/notificationTemplates?page=1&pageSize=20'}
+                                        to={'/admin/notificationTemplates'}
                                         icon={'fas fa-comment-alt'}
                                         text={"Notification Templates"}
                                     />

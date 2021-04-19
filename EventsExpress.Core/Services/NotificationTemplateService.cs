@@ -19,14 +19,9 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<IEnumerable<NotificationTemplateDTO>> GetAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<NotificationTemplateDTO>> GetAllAsync()
         {
-            var templates = await Entities.Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDTO>>(templates);
-
+            var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDTO>>(await Entities.ToListAsync());
             return templatesDto;
         }
 

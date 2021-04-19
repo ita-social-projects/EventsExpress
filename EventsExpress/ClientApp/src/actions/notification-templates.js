@@ -6,9 +6,9 @@ export const GET_TEMPLATE_SUCCESS = 'GET_TEMPLATE_SUCCESS';
 
 const api_serv = new NotificationTemplateService();
 
-export function get_all_templates(pageNumber, pageSize) {
+export function get_all_templates() {
     return async dispatch => {
-        const response = await api_serv.getAll(pageNumber, pageSize);
+        const response = await api_serv.getAll();
         if(!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();

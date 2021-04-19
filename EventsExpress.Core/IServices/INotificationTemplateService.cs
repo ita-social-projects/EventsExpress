@@ -9,7 +9,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface INotificationTemplateService : IBaseService<NotificationTemplate>
     {
-        public Task<IEnumerable<NotificationTemplateDTO>> GetAsync(int page, int pageSize);
+        public Task<IEnumerable<NotificationTemplateDTO>> GetAllAsync();
 
         public Task<NotificationTemplateDTO> GetByIdAsync(NotificationProfile id);
 

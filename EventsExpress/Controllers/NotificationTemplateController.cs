@@ -25,9 +25,9 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<NotificationTemplateDTO>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<IEnumerable<NotificationTemplateDTO>>> GetAll()
         {
-            return Ok(await _notificationTemplateService.GetAsync(page, pageSize));
+            return Ok(await _notificationTemplateService.GetAllAsync());
         }
 
         [HttpGet("{id:int}/Get")]
