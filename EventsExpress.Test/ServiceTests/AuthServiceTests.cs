@@ -21,8 +21,6 @@ namespace EventsExpress.Test.ServiceTests
     {
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
-        private Mock<IAuthService> mockAuthService;
-        private Mock<IHttpContextAccessor> accessor;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
 
@@ -33,9 +31,6 @@ namespace EventsExpress.Test.ServiceTests
 
             mockUserService = new Mock<IUserService>();
             mockTokenService = new Mock<ITokenService>();
-            mockAuthService = new Mock<IAuthService>();
-
-            accessor = new Mock<IHttpContextAccessor>();
 
             service = new AuthService(mockUserService.Object, mockTokenService.Object);
         }

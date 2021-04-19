@@ -24,7 +24,6 @@ namespace EventsExpress.Test.MapperTests
     {
         private UserDto firstUserDto;
 
-        private Guid idCurrUser = Guid.NewGuid();
         private Guid idUser = Guid.NewGuid();
         private Guid idRole = Guid.NewGuid();
         private User firstUser;
@@ -52,15 +51,6 @@ namespace EventsExpress.Test.MapperTests
             {
                 Id = idUser,
                 Name = "First user",
-                Relationships = new List<Relationship>
-                {
-                    new Relationship
-                    {
-                        UserFromId = idCurrUser,
-                        UserToId = idUser,
-                        Attitude = Attitude.Like,
-                    },
-                },
             };
         }
 
