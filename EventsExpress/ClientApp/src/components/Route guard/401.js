@@ -2,8 +2,6 @@
 import { connect } from 'react-redux';
 import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
 import logout from '../../actions/login/logout-action';
-import { setRegisterError } from '../../actions/register'
-import { setRolesError } from '../../actions/roles'
 
 class Unauthorized extends Component {
      componentWillMount = () => {
@@ -32,8 +30,6 @@ const mapDispatchToProps = (dispatch) => {
         setStatus: (data) => dispatch(TogleOpenWind(data)),
         resetError: () => {
             dispatch(isOpen(false));
-            dispatch(setRegisterError(null));
-            dispatch(setRolesError(false));
         }
     };
 }

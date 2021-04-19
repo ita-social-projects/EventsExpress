@@ -37,7 +37,12 @@
     opacity: 0.6;
 }
 
-.fa-google {
+.fa-google.blue {
+    color: #3b5998;
+    margin-right: 8px;
+}
+
+.fa-at.blue {
     color: #3b5998;
     margin-right: 8px;
 }

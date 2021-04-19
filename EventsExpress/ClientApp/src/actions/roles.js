@@ -1,9 +1,9 @@
 import { RoleService } from '../services';
+import { setErrorAllertFromResponse } from './alert-action';
 
 export const getRoles = {
     PENDING: 'ROLES_PENDING',
     SUCCESS: 'ROLES_SUCCESS',
-    ERROR: 'ROLES_ERROR',
 }
 
 
@@ -11,28 +11,28 @@ const api_serv = new RoleService();
 
 
 export default function get_roles() {
-    return dispatch => {
+    return async dispatch => {
         dispatch(setRolesPending(true));
+        const response = await api_serv.getRoles();
 
-        const res = api_serv.getRoles();
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        
+        let jsonRes = await response.json();
+        dispatch(setRolesSuccess(jsonRes));
+        return Promise.resolve();
 
-        res.then(response => {
-            if (response.error == null) {
-                dispatch(setRolesSuccess(response));
-            } else {
-                dispatch(setRolesError(response.error));
-            }
-        });
     }
 }
-
 
 function setRolesPending(data) {
     return {
         type: getRoles.PENDING,
         payload: data
     }
-}  
+}
 
 function setRolesSuccess(data) {
     return {
@@ -40,11 +40,3 @@ function setRolesSuccess(data) {
         payload: data
     }
 }
-
-export function setRolesError(data) {
-    return {
-        type: getRoles.ERROR,
-        payload: data
-    }
-} 
-
