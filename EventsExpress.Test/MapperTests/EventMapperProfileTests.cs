@@ -54,15 +54,6 @@ namespace EventsExpress.Test.MapperTests
                     Name = "User",
                     Email = "user@gmail.com",
                     Birthday = DateTime.Now,
-                    Relationships = new List<Relationship>
-                     {
-                        new Relationship
-                        {
-                            UserFromId = idUserFrom,
-                            UserToId = idUser,
-                            Attitude = Attitude.Like,
-                        },
-                     },
                 },
             };
         }

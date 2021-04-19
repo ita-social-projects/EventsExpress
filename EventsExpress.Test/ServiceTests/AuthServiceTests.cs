@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -19,6 +22,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
         private Mock<IAuthService> mockAuthService;
+        private Mock<IHttpContextAccessor> accessor;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
 
@@ -26,11 +30,13 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
-            IServiceCollection services = new ServiceCollection();
 
             mockUserService = new Mock<IUserService>();
             mockTokenService = new Mock<ITokenService>();
             mockAuthService = new Mock<IAuthService>();
+
+            accessor = new Mock<IHttpContextAccessor>();
+
             service = new AuthService(mockUserService.Object, mockTokenService.Object);
         }
 
@@ -85,11 +91,16 @@ namespace EventsExpress.Test.ServiceTests
                 Id = idUser,
             };
 
-            mockAuthService.Setup(a => a.GetCurrUserId(It.IsAny<ClaimsPrincipal>())).Returns(userDto.Id);
+            var claim = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userDto.Id.ToString()),
+            };
 
-            var res = mockAuthService.Object.GetCurrUserId(It.IsAny<ClaimsPrincipal>());
-
-            Assert.AreEqual(res, userDto.Id);
+            ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            string[] roles = { "user" };
+            GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
+            var res = service.GetCurrUserId(claimsObj);
+            Assert.That(res, Is.EqualTo(userDto.Id));
         }
     }
 }
