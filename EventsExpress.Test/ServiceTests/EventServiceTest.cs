@@ -350,7 +350,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCases))]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForGetEvent))]
         [Category("Get Event")]
         public void GetEvent_ExistingId_Success(Guid existingId)
         {
@@ -429,7 +429,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCases))]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForAddUserToEvent))]
         [Category("Add user to event")]
         public void AddUserToEvent_ReturnTrue(Guid id)
         {

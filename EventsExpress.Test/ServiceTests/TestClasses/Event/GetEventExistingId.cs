@@ -6,35 +6,33 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
 {
     internal static class GetEventExistingId
     {
-        private static Guid firstEventId = Guid.NewGuid();
-        private static Guid secondEventId = Guid.NewGuid();
-        private static Guid thirdEventId = Guid.NewGuid();
+        private static Guid[] eventIds = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 
         internal static Guid FirstEventId
         {
-            get => firstEventId;
+            get => eventIds[0];
         }
 
         internal static Guid SecondEventId
         {
-            get => secondEventId;
+            get => eventIds[1];
         }
 
         internal static Guid ThirdEventId
         {
-            get => thirdEventId;
+            get => eventIds[2];
         }
 
-        internal static IEnumerable TestCases
+        internal static IEnumerable TestCasesForGetEvent => GetTestCasesFor("GetEvent");
+
+        internal static IEnumerable TestCasesForAddUserToEvent => GetTestCasesFor("AddUserToEvent");
+
+        private static IEnumerable GetTestCasesFor(string caller)
         {
-            get
+            for (int i = 0; i < eventIds.Length; i++)
             {
                 yield return new TestCaseData(FirstEventId)
-                    .SetName("TestCaseWithFirstEventId");
-                yield return new TestCaseData(SecondEventId)
-                    .SetName("TestCaseWithSecondEventId");
-                yield return new TestCaseData(ThirdEventId)
-                    .SetName("TestCaseWithThirdEventId");
+                    .SetName($"{caller}_TestCase{i}");
             }
         }
     }
