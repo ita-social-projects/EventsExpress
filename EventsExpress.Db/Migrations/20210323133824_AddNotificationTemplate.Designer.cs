@@ -4,110 +4,23 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210323133824_AddNotificationTemplate")]
+    partial class AddNotificationTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AccountRole", b =>
-                {
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<short>("RoleId")
-                        .HasColumnType("smallint");
-
-                    b.HasKey("AccountId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AccountRoles");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AuthExternal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Type")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("AuthExternal");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AuthLocal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("AuthLocal");
-                });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
                 {
@@ -205,25 +118,28 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateFrom")
+                    b.Property<DateTime>("DateFrom")
                         .HasColumnType("date");
 
-                    b.Property<DateTime?>("DateTo")
+                    b.Property<DateTime>("DateTo")
                         .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("EventLocationId")
+                    b.Property<Guid>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsPublic")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MaxParticipants")
+                    b.Property<int>("MaxParticipants")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(2147483647);
+
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -231,6 +147,8 @@ namespace EventsExpress.Db.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventLocationId");
+
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("Events");
                 });
@@ -416,25 +334,24 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Message")
-                        .IsRequired()
+                    b.Property<string>("MessageText")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Title")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Title] IS NOT NULL");
 
                     b.ToTable("NotificationTemplates");
                 });
@@ -455,13 +372,13 @@ namespace EventsExpress.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "Profile Change"
+                            Id = 2,
+                            Name = "Own Event Change"
                         },
                         new
                         {
-                            Id = 2,
-                            Name = "Own Event Change"
+                            Id = 1,
+                            Name = "Profile Change"
                         },
                         new
                         {
@@ -482,6 +399,28 @@ namespace EventsExpress.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Photo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Img")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("ReportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Thumb")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReportId");
+
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
@@ -514,9 +453,6 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -538,9 +474,12 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -569,31 +508,37 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Relationships");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Reports");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Role", b =>
                 {
-                    b.Property<short>("Id")
-                        .HasColumnType("smallint");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = (short)0,
-                            Name = "User"
-                        },
-                        new
-                        {
-                            Id = (short)1,
-                            Name = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
@@ -632,16 +577,39 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<byte>("Gender")
                         .HasColumnType("tinyint");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Salt")
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PhotoId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -739,46 +707,6 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("UserNotificationTypes");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.User", "User")
-                        .WithOne("Account")
-                        .HasForeignKey("EventsExpress.Db.Entities.Account", "UserId");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AccountRole", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Account", "Account")
-                        .WithMany("AccountRoles")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.Role", "Role")
-                        .WithMany("Accounts")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AuthExternal", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Account", "Account")
-                        .WithMany("AuthExternal")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.AuthLocal", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Account", "Account")
-                        .WithOne("AuthLocal")
-                        .HasForeignKey("EventsExpress.Db.Entities.AuthLocal", "AccountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Comments", "Parent")
@@ -802,7 +730,13 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
-                        .HasForeignKey("EventLocationId");
+                        .HasForeignKey("EventLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -893,6 +827,13 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.Photo", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Report", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ReportId");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Event", "Event")
@@ -910,9 +851,9 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.Account", null)
+                    b.HasOne("EventsExpress.Db.Entities.User", null)
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
@@ -926,6 +867,28 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
                         .WithMany()
                         .HasForeignKey("UserToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Report", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
+
+                    b.HasOne("EventsExpress.Db.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
