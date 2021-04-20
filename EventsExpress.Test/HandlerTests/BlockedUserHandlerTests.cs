@@ -35,7 +35,7 @@ namespace EventsExpress.Test.HandlerTests
 
             _notificationTemplateService
                 .Setup(service => service.GetByIdAsync(NotificationProfile.BlockedUser))
-                .ReturnsAsync(new NotificationTemplateDTO { Id = NotificationProfile.BlockedUser });
+                .ReturnsAsync(new NotificationTemplateDto { Id = NotificationProfile.BlockedUser });
 
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))

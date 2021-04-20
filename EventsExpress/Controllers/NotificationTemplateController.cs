@@ -25,13 +25,13 @@ namespace EventsExpress.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<NotificationTemplateDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<NotificationTemplateDto>>> GetAll()
         {
             return Ok(await _notificationTemplateService.GetAllAsync());
         }
 
         [HttpGet("{id:int}/Get")]
-        public async Task<ActionResult<NotificationTemplateDTO>> GetById(NotificationProfile id)
+        public async Task<ActionResult<NotificationTemplateDto>> GetById(NotificationProfile id)
         {
             var notificationTemplate = await _notificationTemplateService.GetByIdAsync(id);
 
@@ -46,7 +46,7 @@ namespace EventsExpress.Controllers
         [HttpPost("Edit")]
         public async Task<ActionResult> Update(EditNotificationTemplateViewModel notificationTemplateViewModel)
         {
-            var notificationTemplateDto = _mapper.Map<NotificationTemplateDTO>(notificationTemplateViewModel);
+            var notificationTemplateDto = _mapper.Map<NotificationTemplateDto>(notificationTemplateViewModel);
             await _notificationTemplateService.UpdateAsync(notificationTemplateDto);
 
             return Ok();

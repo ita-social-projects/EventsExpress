@@ -1,3 +1,3 @@
-import NotificationTemplates from './notification-template-list';
+import NotificationTemplates from './notification-templates';
 
 export default NotificationTemplates;

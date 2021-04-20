@@ -18,17 +18,17 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task<IEnumerable<NotificationTemplateDTO>> GetAllAsync()
+        public async Task<IEnumerable<NotificationTemplateDto>> GetAllAsync()
         {
-            var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDTO>>(await Entities.ToListAsync());
+            var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDto>>(await Entities.ToListAsync());
             return templatesDto;
         }
 
-        public async Task<NotificationTemplateDTO> GetByIdAsync(NotificationProfile id)
+        public async Task<NotificationTemplateDto> GetByIdAsync(NotificationProfile id)
         {
             var template = await Context.NotificationTemplates.AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id.Equals(id));
-            return Mapper.Map<NotificationTemplateDTO>(template);
+            return Mapper.Map<NotificationTemplateDto>(template);
         }
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern)
@@ -37,7 +37,7 @@ namespace EventsExpress.Core.Services
                 .Replace(element.Key, element.Value));
         }
 
-        public async Task UpdateAsync(NotificationTemplateDTO notificationTemplateDto)
+        public async Task UpdateAsync(NotificationTemplateDto notificationTemplateDto)
         {
             var notificationTemplate = await Context.NotificationTemplates
                 .FirstOrDefaultAsync(e => e.Id.Equals(notificationTemplateDto.Id));

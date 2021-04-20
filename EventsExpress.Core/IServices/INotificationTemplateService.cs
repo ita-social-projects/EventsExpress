@@ -9,11 +9,11 @@ namespace EventsExpress.Core.IServices
 {
     public interface INotificationTemplateService : IBaseService<NotificationTemplate>
     {
-        public Task<IEnumerable<NotificationTemplateDTO>> GetAllAsync();
+        public Task<IEnumerable<NotificationTemplateDto>> GetAllAsync();
 
-        public Task<NotificationTemplateDTO> GetByIdAsync(NotificationProfile id);
+        public Task<NotificationTemplateDto> GetByIdAsync(NotificationProfile id);
 
-        public Task UpdateAsync(NotificationTemplateDTO notificationTemplateDto);
+        public Task UpdateAsync(NotificationTemplateDto notificationTemplateDto);
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern);
     }

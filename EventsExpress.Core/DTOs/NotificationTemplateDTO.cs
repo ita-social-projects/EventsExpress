@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.DTOs
 {
-    public class NotificationTemplateDTO
+    public class NotificationTemplateDto
     {
         public NotificationProfile Id { get; set; }
 

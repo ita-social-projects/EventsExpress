@@ -40,7 +40,7 @@ namespace EventsExpress.Test.HandlerTests
 
             _notificationTemplateService
                 .Setup(s => s.GetByIdAsync(templateId))
-                .ReturnsAsync(new NotificationTemplateDTO { Id = templateId });
+                .ReturnsAsync(new NotificationTemplateDto { Id = templateId });
 
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))

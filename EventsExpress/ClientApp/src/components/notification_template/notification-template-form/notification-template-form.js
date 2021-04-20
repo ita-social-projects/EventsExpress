@@ -18,7 +18,7 @@ class NotificationTemplateForm extends Component {
     );
 
     render() {
-        const { handleSubmit, reset, submitting, pristine } = this.props;
+        const { handleSubmit, submitting, pristine } = this.props;
 
         return (
             <form role="form" className="d-flex flex-column mt-3 ml-0" onSubmit={handleSubmit}>

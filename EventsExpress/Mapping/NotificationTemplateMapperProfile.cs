@@ -9,13 +9,13 @@ namespace EventsExpress.Mapping
     {
         public NotificationTemplateMapperProfile()
         {
-            CreateMap<NotificationTemplateDTO, NotificationTemplate>()
+            CreateMap<NotificationTemplateDto, NotificationTemplate>()
 
                 // A title is read-only, so we do not need to map this member from DTO, as a result, we save the last value of the title.
                 .ForMember(e => e.Title, opts => opts.Ignore())
                 .ReverseMap();
 
-            CreateMap<EditNotificationTemplateViewModel, NotificationTemplateDTO>()
+            CreateMap<EditNotificationTemplateViewModel, NotificationTemplateDto>()
                 .ReverseMap();
         }
     }
