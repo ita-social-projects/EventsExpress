@@ -208,6 +208,15 @@ const initialState = {
         isPending: false,
         data: []
     },
+    notificationTemplates: {
+        data: []
+    },
+    notificationTemplate: {
+        id: null,
+        title: null,
+        subject: null,
+        message: null  
+    },
 };
 
 export default initialState;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -17,13 +18,16 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         public EventCreatedHandler(
             IEmailService sender,
-            IUserService userSrv)
+            IUserService userSrv,
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userSrv;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
@@ -32,16 +36,26 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
+
+                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
+
                 foreach (var userEmail in usersEmails)
+                {
+                    string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Event.Id}/1";
+
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
-                        string link = $"{AppHttpContext.AppBaseUrl}/event/{notification.Event.Id}/1";
-                        await _sender.SendEmailAsync(new EmailDto
-                        {
-                            Subject = "New event for you!",
-                            RecepientEmail = userEmail,
-                            MessageText = $"The <a href='{link}'>event</a> was created which could interested you.",
-                        });
-                    }
+                        { "(UserName)", userEmail },
+                        { "(link)", link },
+                    };
+
+                    await _sender.SendEmailAsync(new EmailDto
+                    {
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
+                        RecepientEmail = userEmail,
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
+                    });
+                }
             }
             catch (Exception ex)
             {
