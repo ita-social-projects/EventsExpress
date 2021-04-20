@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { createBrowserHistory } from 'history';
 import EventForm from '../components/event/event-form';
+import EventChangeStatusModal from '../components/event/event-change-status-modal';
+import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues, reset , isPristine} from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
-import { resetEvent } from '../actions/event/event-item-view-action';
+import { resetEvent, change_event_status } from '../actions/event/event-item-view-action';
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
 
@@ -45,6 +48,10 @@ class EventDraftWrapper extends Component {
         return this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
     }
 
+    onDelete = async (reason) => {
+        await this.props.delete(this.props.event.id, reason);
+        history.push(`/drafts`);
+    }
     
     
 
@@ -64,12 +71,12 @@ class EventDraftWrapper extends Component {
         }
         console.log(this.props.form_values)
         return <>
-           
             <EventForm
                 all_categories={this.props.all_categories}
                 onCancel={this.props.onCancelEditing}
                 onSubmit={this.onPublish}
                 onPublish={this.onSave}
+                onDelete={this.onDelete}
                 initialValues={initialValues}
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
@@ -77,25 +84,23 @@ class EventDraftWrapper extends Component {
                 haveMapCheckBox={true}
                 haveOnlineLocationCheckBox={true}
                 disabledDate={false}
-                isCreated={true} ><div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.onSave}
-                    >
-                        Save
-                        </Button>
-                </div>
+                isCreated={true} >
                 <div className="col">
                     <Button
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        type="submit"
-                        >
+                        onClick={this.onSave}>
+                        Save
+                    </Button>
+                </div>
+                <div className="col">
+                    <Button
+                        className="border"
+                        fullWidth={true}
+                        color="primary">
                         Publish
-                        </Button>
+                    </Button>
                 </div>
                 <div className="col">
                     <Button
@@ -104,8 +109,21 @@ class EventDraftWrapper extends Component {
                         color="primary"
                         onClick={this.handleClick}>
                         Cancel
-                        </Button>
-                </div></EventForm>
+                    </Button>
+                </div>
+            </EventForm>
+            <div className="col">
+                <div className="d-flex align-items-center justify-content-center">
+                    <EventChangeStatusModal
+                        submitCallback={this.onDelete}
+                        button={
+                            <IconButton className="text-danger" size="medium">
+                                <i className="fas fa-trash"></i>
+                            </IconButton>
+                        }
+                    />
+                </div>
+            </div>
         </>
     }
 }   
@@ -122,6 +140,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         add_event: (data) => dispatch(edit_event(data)),
+        delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         resetEvent: () => dispatch(resetEvent()),
