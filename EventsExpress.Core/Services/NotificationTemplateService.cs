@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
@@ -28,11 +30,22 @@ namespace EventsExpress.Core.Services
         {
             var template = await Context.NotificationTemplates.AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id.Equals(id));
+
+            if (template == null)
+            {
+                throw new EventsExpressException("The notification template does not exist");
+            }
+
             return Mapper.Map<NotificationTemplateDto>(template);
         }
 
         public string PerformReplacement(string text, Dictionary<string, string> pattern)
         {
+            if (text == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             return pattern.Aggregate(text, (current, element) => current
                 .Replace(element.Key, element.Value));
         }
