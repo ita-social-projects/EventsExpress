@@ -1,4 +1,6 @@
-﻿using EventsExpress.Db.Entities;
+﻿using System.Linq;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +16,9 @@ namespace EventsExpress.Db.Configuration
                 .HasColumnType("date");
             builder.Property(c => c.MaxParticipants)
                 .HasDefaultValue(int.MaxValue);
+            builder.HasQueryFilter(e => e.StatusHistory
+                   .OrderBy(h => h.CreatedOn)
+                   .Last().EventStatus != EventStatus.Deleted);
         }
     }
 }
