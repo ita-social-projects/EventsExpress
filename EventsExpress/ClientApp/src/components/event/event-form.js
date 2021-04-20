@@ -51,9 +51,9 @@ class EventForm extends Component {
             initialValues.photoUrl : null;
 
         return (
-            <form onSubmit={this.props.handleSubmit}
+            <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
                 encType="multipart/form-data" autoComplete="off" >
-                <div className="text text-2 pl-md-4">
+                <div className="text text-2 pl-md-4 pt-md-2">
                     <Field
                         id="image-field"
                         name="photo"
