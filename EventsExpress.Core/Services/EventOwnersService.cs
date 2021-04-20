@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 

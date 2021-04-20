@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
-import UserPWrapper from '../../containers/UsersWrapper';
+import UsersWrapper from '../../containers/users';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import NotificationTemplateWrapper from "../../containers/notification-template/notification-template";
 import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
@@ -48,10 +48,9 @@ export default class Admin extends Component {
                                     />
                                 </div>
                             </nav>
-                            
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">
+                    <div className="col-sm-10">
                         <Switch>
                             <Route
                                 exact

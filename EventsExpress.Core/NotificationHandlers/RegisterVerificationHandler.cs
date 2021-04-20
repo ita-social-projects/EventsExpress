@@ -35,11 +35,11 @@ namespace EventsExpress.Core.NotificationHandlers
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
             var token = Guid.NewGuid().ToString();
-            string theEmailLink = $"<a \" target=\"_blank\" href=\"{AppHttpContext.AppBaseUrl}/authentication/{notification.User.Id}/{token}\">link</a>";
+            string theEmailLink = $"<a \" target=\"_blank\" href=\"{AppHttpContext.AppBaseUrl}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
 
             _cacheHepler.Add(new CacheDto
             {
-                UserId = notification.User.Id,
+                AuthLocalId = notification.AuthLocal.Id,
                 Token = token,
             });
 
@@ -55,11 +55,9 @@ namespace EventsExpress.Core.NotificationHandlers
                 await _sender.SendEmailAsync(new EmailDto
                 {
                     Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
-                    RecepientEmail = notification.User.Email,
+                    RecepientEmail = notification.AuthLocal.Email,
                     MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                 });
-
-                _cacheHepler.GetValue(notification.User.Id);
             }
             catch (Exception ex)
             {

@@ -24,12 +24,11 @@ import * as EventScheduleView from './eventSchedule-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
-import * as RecoverPassword from './editReducers/recoverPasswordReducer'
-import * as Auth from './authenticationReducer';
+import * as RecoverPassword from './editReducers/recoverPasswordReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
-import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring'
+import * as AddUnitOfMeasuring from './unitOfMeasuring/add-unitOfMeasuring';
 import * as Inventory from './inventory-list';
 import * as UsersInventories from './usersInventories';
 import * as Chats from './chats';
@@ -40,10 +39,12 @@ import * as Alert from './alert';
 import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
+import * as Account from './account';
 import * as NotificationTemplates from "./notification-templates/notification-templates";
 import * as NotificationTemplate from "./notification-templates/notification-template";
 
 const rootReducers = {
+    account : Account.reducer,
     modal: ModalWind.reducer,
     user: User.reducer,
     routing: routerReducer,
@@ -77,7 +78,6 @@ const rootReducers = {
     profile: Profile.reducer,
     events_for_profile: EventsForProfile.reducer,
     recoverPassword: RecoverPassword.reducer,
-    authenticate: Auth.reducer,
     chats: Chats.reducer,
     chat: Chat.reducer,
     hubConnection: Hub.reducer,

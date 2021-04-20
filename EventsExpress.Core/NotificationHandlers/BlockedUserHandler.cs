@@ -12,7 +12,7 @@ using MediatR;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
-    public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
+    public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
     {
         private readonly IEmailService _sender;
         private readonly INotificationTemplateService _notificationTemplateService;
@@ -29,11 +29,11 @@ namespace EventsExpress.Core.NotificationHandlers
             _notificationTemplateService = notificationTemplateService;
         }
 
-        public async Task Handle(BlockedUserMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(BlockedAccountMessage notification, CancellationToken cancellationToken)
         {
             try
             {
-                var userIds = new[] { notification.User.Id };
+                var userIds = new[] { notification.Account.UserId.Value };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
                 if (userEmail != null)
                 {

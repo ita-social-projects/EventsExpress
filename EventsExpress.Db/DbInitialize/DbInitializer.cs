@@ -19,40 +19,62 @@ namespace EventsExpress.Db.DbInitialize
                 return; // DB has been seeded
             }
 
-            Role adminRole = new Role { Name = "Admin" };
-            Role userRole = new Role { Name = "User" };
-            dbContext.Roles.AddRange(new Role[] { adminRole, userRole });
-
             var saltDef = PasswordHasher.GenerateSalt();
             var users = new User[]
             {
-                 new User
-                 {
-                     Name = "Admin",
-                     PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
-                     Salt = saltDef,
-                     Email = "admin@gmail.com",
-                     EmailConfirmed = true,
-                     Phone = "+380974293583",
-                     Birthday = DateTime.Parse("2000-01-01"),
-                     Gender = Gender.Male,
-                     IsBlocked = false,
-                     Role = adminRole,
-                 },
+                new User
+                {
+                    Name = "Admin",
+                    Email = "admin@gmail.com",
+                    Phone = "+380974293583",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.Admin,
+                            },
+                        },
+                    },
+                },
 
-                 new User
-                  {
-                      Name = "UserTest",
-                      PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
-                      Salt = saltDef,
-                      Email = "user@gmail.com",
-                      EmailConfirmed = true,
-                      Phone = "+380970101013",
-                      Birthday = DateTime.Parse("2000-01-01"),
-                      Gender = Gender.Male,
-                      IsBlocked = false,
-                      Role = userRole,
-                  },
+                new User
+                {
+                    Name = "User",
+                    Email = "user@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "user@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
             };
 
             dbContext.Users.AddRange(users);
