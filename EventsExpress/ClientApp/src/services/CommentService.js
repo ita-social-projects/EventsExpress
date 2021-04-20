@@ -17,5 +17,5 @@ export default class CommentService {
         });
 
     getAllComments = (data, page) =>
-        baseService.getResourceNew(`comment/all/${data}?page=${page}`);
+        baseService.getResource(`comment/all/${data}?page=${page}`);
 }

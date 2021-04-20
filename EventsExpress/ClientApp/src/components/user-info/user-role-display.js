@@ -3,8 +3,10 @@ import IconButton from "@material-ui/core/IconButton";
 
 export function UserRoleDisplay(props) {
 
+    let roles = props.user.roles.map(r => <div>{r.name}</div>)
+
     return (<>
-            <td className="align-middle">{props.user.role.name}</td>
+            <td className="align-middle">{roles}</td>
 
             <td className="align-middle">
                 { (!props.isCurrentUser) 

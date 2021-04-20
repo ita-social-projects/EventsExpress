@@ -4,11 +4,11 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
-    getUserById = id => baseService.getResourceNew(`users/GetUserProfileById?id=${id}`);
+    getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 
-    getUsers = filter => baseService.getResourceNew(`users/get${filter}`);
+    getUsers = filter => baseService.getResource(`users/get${filter}`);
 
-    getSearchUsers = filter => baseService.getResourceNew(`users/searchUsers${filter}`);
+    getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
     setContactUs = data => baseService.setResource('users/ContactAdmins', data);
 
@@ -18,8 +18,8 @@ export default class UserService {
         await baseService.setResourceWithData('users/changeAvatar', file);
     }
 
-    setChangeUserRole = (userId, newRoleId) =>
-        baseService.setResource(`users/ChangeRole/?userId=${userId}&roleId=${newRoleId}`);
+    setChangeUserRole = data =>
+        baseService.setResource('Account/ChangeRoles', data);
 
     setUsername = data => baseService.setResource('Users/EditUsername', {
         name: data.UserName
@@ -35,9 +35,9 @@ export default class UserService {
 
     setUserCategory = data => baseService.setResource('Users/EditUserCategory', data);
 
-    setUserBlock = id => baseService.setResource(`Users/Block/?userId=${id}`);
+    setUserBlock = id => baseService.setResource(`Account/Block/?userId=${id}`);
 
-    setUserUnblock = id => baseService.setResource(`Users/${id}/Unblock`);
+    setUserUnblock = id => baseService.setResource(`Account/${id}/Unblock`);
 
     setAttitude = data => baseService.setResource('users/SetAttitude', {
         userFromId: data.userFromId,

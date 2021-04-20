@@ -30,6 +30,16 @@ namespace EventsExpress.Test.MapperTests
         private Mock<IHttpContextAccessor> mockAccessor;
         private Mock<IUserService> mockUser;
 
+        private User GetUser()
+        {
+            List<User> users = GetListUsers();
+            return new User
+            {
+                Id = idUser,
+                Name = "First user",
+            };
+        }
+
         private List<User> GetListUsers()
         {
             return new List<User>()
@@ -44,16 +54,6 @@ namespace EventsExpress.Test.MapperTests
             };
         }
 
-        private User GetUser()
-        {
-            List<User> users = GetListUsers();
-            return new User
-            {
-                Id = idUser,
-                Name = "First user",
-            };
-        }
-
         private UserDto GetUserDto()
         {
             List<User> users = GetListUsers();
@@ -65,10 +65,22 @@ namespace EventsExpress.Test.MapperTests
                 Phone = "+38066666666",
                 Birthday = new DateTime(2001, 01, 01),
                 Gender = Gender.Male,
-                Role = new Role { Name = "admin", Users = new List<User> { } },
-                RoleId = Guid.NewGuid(),
+                Account = new Account
+                {
+                    AccountRoles = new[]
+                    {
+                        new AccountRole
+                        {
+                            Role = new Db.Entities.Role
+                            {
+                                Name = "Admin",
+                                Id = Db.Enums.Role.Admin,
+                            },
+                        },
+                    },
+                    IsBlocked = false,
+                },
                 Rating = 10.0,
-                IsBlocked = false,
                 Categories = new List<UserCategory>
                 {
                     new UserCategory
@@ -158,7 +170,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Birthday, Is.EqualTo(firstUserDto.Birthday));
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));
             Assert.That(resEven.Gender, Is.EqualTo((int)firstUserDto.Gender));
-            Assert.That(resEven.Role, Is.EqualTo(firstUserDto.Role.Name));
+            Assert.That(resEven.Roles.Count(), Is.EqualTo(firstUserDto.Account.AccountRoles.Count()));
             Assert.That(resEven.Categories, Has.All.Matches<CategoryViewModel>(x =>
                 firstUserDto.Categories
                 .All(c =>
@@ -184,7 +196,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Birthday, Is.EqualTo(firstUserDto.Birthday));
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));
             Assert.That((int)resEven.Gender, Is.EqualTo((int)firstUserDto.Gender));
-            Assert.That(resEven.IsBlocked, Is.EqualTo(firstUserDto.IsBlocked));
+            Assert.That(resEven.IsBlocked, Is.EqualTo(firstUserDto.Account.IsBlocked));
         }
     }
 }

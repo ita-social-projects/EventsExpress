@@ -125,7 +125,7 @@ export default class EventCard extends Component {
                                     </Tooltip>
                                 </Link>
                                 {(this.props.current_user !== null
-                                    && this.props.current_user.role === "Admin")
+                                    && this.props.current_user.roles.includes("Admin"))
                                     && <EventActiveStatus
                                     key={this.props.item.id + this.props.item.eventStatus}
                                     eventStatus={this.props.item.eventStatus}

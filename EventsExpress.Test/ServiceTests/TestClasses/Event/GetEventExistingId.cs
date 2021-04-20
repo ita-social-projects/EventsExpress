@@ -1,34 +1,39 @@
-﻿namespace EventsExpress.Test.ServiceTests.TestClasses.Event
+﻿using System;
+using System.Collections;
+using NUnit.Framework;
+
+namespace EventsExpress.Test.ServiceTests.TestClasses.Event
 {
-    using System;
-    using System.Collections;
-
-    public class GetEventExistingId : IEnumerable
+    internal static class GetEventExistingId
     {
-        private static Guid firstEventId = Guid.NewGuid();
-        private static Guid secondEventId = Guid.NewGuid();
-        private static Guid thirdEventId = Guid.NewGuid();
+        private static Guid[] eventIds = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 
-        public static Guid FirstEventId
+        internal static Guid FirstEventId
         {
-            get => firstEventId;
+            get => eventIds[0];
         }
 
-        public static Guid SecondEventId
+        internal static Guid SecondEventId
         {
-            get => secondEventId;
+            get => eventIds[1];
         }
 
-        public static Guid ThirdEventId
+        internal static Guid ThirdEventId
         {
-            get => thirdEventId;
+            get => eventIds[2];
         }
 
-        public IEnumerator GetEnumerator()
+        internal static IEnumerable TestCasesForGetEvent => GetTestCasesFor("GetEvent");
+
+        internal static IEnumerable TestCasesForAddUserToEvent => GetTestCasesFor("AddUserToEvent");
+
+        private static IEnumerable GetTestCasesFor(string caller)
         {
-            yield return new object[] { FirstEventId };
-            yield return new object[] { SecondEventId };
-            yield return new object[] { ThirdEventId };
+            for (int i = 0; i < eventIds.Length; i++)
+            {
+                yield return new TestCaseData(FirstEventId)
+                    .SetName($"{caller}_TestCase{i}");
+            }
         }
     }
 }

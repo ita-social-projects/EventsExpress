@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
-import UserPWrapper from '../../containers/UsersWrapper';
+import UsersWrapper from '../../containers/users';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 
 export default class Admin extends Component {
@@ -41,7 +41,7 @@ export default class Admin extends Component {
                             </nav>
                         </ul>
                     </div>
-                    <div className="col-sm-9 offset-sm-1">
+                    <div className="col-sm-10">
                         <Switch>
                             <Route
                                 exact
@@ -50,7 +50,7 @@ export default class Admin extends Component {
                                     <Redirect to={`/admin/categories`} />} />
                             <Route path="/admin/categories/" component={Category} />
                             <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                            <Route path="/admin/users" component={UserPWrapper} />
+                            <Route path="/admin/users" component={UsersWrapper} />
                         </Switch>
                     </div>
                 </div>

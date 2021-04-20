@@ -127,7 +127,7 @@ const ChangePassword = (props) => {
 };
 
 export default reduxForm({
-    form: "ChangePassword", // a unique identifier for this form
+    form: "ChangePassword",
     validate
 
 })(ChangePassword);
