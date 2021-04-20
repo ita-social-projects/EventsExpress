@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
-
+import UserView from './approved-users-view';
 
 export default class EventItemView extends Component {
     constructor() {
@@ -70,48 +70,16 @@ export default class EventItemView extends Component {
         ));
     }
 
+
+    
+
     renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
         return arr.map(x => (
-            <div>
-                <div className="d-flex align-items-center border-bottom w-100">
-                    <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                                <div>
-                                    <h5>{x.username}</h5>
-                                    {'Age: ' + this.getAge(x.birthday)}
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                    {(isMyEvent) &&
-                        <div>
-                            <SimpleModal
-                                id={x.id}
-                                action={() => this.props.onPromoteToOwner(x.id)}
-                                data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                                button={
-                                    <Tooltip title="Approve as an owner">
-                                        <IconButton aria-label="delete">
-                                            <i className="fas fa-plus-circle" ></i>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
-                            />
-                        </div>
-                    }
-                </div>
-                {isMyPrivateEvent &&
-                    <Button
-                        onClick={() => this.props.onApprove(x.id, false)}
-                        variant="outlined"
-                        color="success"
-                    >
-                        Delete from event
-                        </Button>
-                }
-            </div>
+            <UserView
+                user={x}
+                isMyEvent={isMyEvent}
+                isMyPrivateEvent={isMyPrivateEvent}
+            />
         ));
     }
 
@@ -253,7 +221,7 @@ export default class EventItemView extends Component {
             eventStatus,
             maxParticipants,
             visitors,
-            owners
+            owners,
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
