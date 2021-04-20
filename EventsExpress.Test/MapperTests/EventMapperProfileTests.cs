@@ -40,7 +40,6 @@ namespace EventsExpress.Test.MapperTests
         private Guid idInventory = Guid.NewGuid();
         private Guid idUnitOfMeasuring = Guid.NewGuid();
         private Guid idEventEditViewModel = Guid.NewGuid();
-        private Guid idUserFrom = Guid.NewGuid();
         private string categoryName = "category name";
         private string photoUrl = "http://basin.example.com/#branch";
 
