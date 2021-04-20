@@ -40,7 +40,7 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
-            _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object);
+            _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
             _account = new Account
             {
                 UserId = _idUser,

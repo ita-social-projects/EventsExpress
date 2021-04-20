@@ -59,7 +59,7 @@ export default class Admin extends Component {
                                     <Redirect to={`/admin/categories`} />} />
                             <Route path="/admin/categories/" component={Category} />
                             <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                            <Route path="/admin/users" component={UserPWrapper} />
+                            <Route path="/admin/users" component={UsersWrapper} />
                             <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
                             <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
                         </Switch>
