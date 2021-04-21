@@ -11,7 +11,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ControllerTests
 {
-    public class NotificationTemplateControllerTests : TestInitializer
+    [TestFixture]
+    internal class NotificationTemplateControllerTests : TestInitializer
     {
         private EditNotificationTemplateViewModel _templateViewModel;
         private Mock<INotificationTemplateService> _mockNotificationTemplateService;

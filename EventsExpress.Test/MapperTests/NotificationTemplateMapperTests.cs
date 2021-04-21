@@ -8,7 +8,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.MapperTests
 {
-    public class NotificationTemplateMapperTests : MapperTestInitializer<NotificationTemplateMapperProfile>
+    [TestFixture]
+    internal class NotificationTemplateMapperTests : MapperTestInitializer<NotificationTemplateMapperProfile>
     {
         private const NotificationProfile Id = NotificationProfile.BlockedUser;
         private const string Title = "title";

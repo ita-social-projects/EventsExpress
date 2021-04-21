@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
@@ -12,9 +13,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
-    using System;
-
-    public class NotificationTemplateServiceTests : TestInitializer
+    [TestFixture]
+    internal class NotificationTemplateServiceTests : TestInitializer
     {
         private static readonly object[] PerformReplacementTestCases =
         {
@@ -108,7 +108,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.IsInstanceOf<string>(result);
         }
 
-        [Test]
         [TestCaseSource(nameof(PerformReplacementTestCases))]
         public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, Dictionary<string, string> pattern)
         {
@@ -142,7 +141,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.AreEqual(templateDto.Message, updatedTemplate.Message);
         }
 
-        [Test]
         [TestCase(null)]
         public void UpdateAsync_ThrowsException(NotificationTemplateDto templateDto)
         {
