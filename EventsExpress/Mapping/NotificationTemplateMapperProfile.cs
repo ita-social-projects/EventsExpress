@@ -16,6 +16,7 @@ namespace EventsExpress.Mapping
                 .ReverseMap();
 
             CreateMap<EditNotificationTemplateViewModel, NotificationTemplateDto>()
+                .ForMember(dto => dto.Title, opts => opts.Ignore())
                 .ReverseMap();
         }
     }

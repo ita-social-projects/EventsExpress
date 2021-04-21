@@ -1,17 +1,16 @@
-﻿namespace EventsExpress.Test.ControllerTests
-{
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using EventsExpress.Controllers;
-    using EventsExpress.Core.DTOs;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Core.Services;
-    using EventsExpress.Db.Enums;
-    using EventsExpress.ViewModels;
-    using Microsoft.AspNetCore.Mvc;
-    using Moq;
-    using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using EventsExpress.Controllers;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
+using EventsExpress.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.ControllerTests
+{
     public class NotificationTemplateControllerTests : TestInitializer
     {
         private EditNotificationTemplateViewModel _templateViewModel;
