@@ -12,6 +12,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
+import './css/Draft.css';
 
 const history = createBrowserHistory({ forceRefresh: true });
 class EventDraftWrapper extends Component {
@@ -71,6 +72,26 @@ class EventDraftWrapper extends Component {
         }
         console.log(this.props.form_values)
         return <>
+            <header>
+                <div className="row pl-md-4">
+                    <div className="col-12 py-3">
+                        <div className="float-left">
+                            <h1>Edit event draft</h1>                  
+                        </div>
+                        <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                            <EventChangeStatusModal
+                                submitCallback={this.onDelete}
+                                button={
+                                    <IconButton className="text-danger" size="medium">
+                                        <i className="fas fa-trash"></i>
+                                    </IconButton>
+                                }
+                            />
+                        </div>
+                    </div>
+                </div>
+                <hr className="gradient ml-4 mt-0 mb-3"/>
+            </header>
             <EventForm
                 all_categories={this.props.all_categories}
                 onCancel={this.props.onCancelEditing}
@@ -112,18 +133,6 @@ class EventDraftWrapper extends Component {
                     </Button>
                 </div>
             </EventForm>
-            <div className="col">
-                <div className="d-flex align-items-center justify-content-center">
-                    <EventChangeStatusModal
-                        submitCallback={this.onDelete}
-                        button={
-                            <IconButton className="text-danger" size="medium">
-                                <i className="fas fa-trash"></i>
-                            </IconButton>
-                        }
-                    />
-                </div>
-            </div>
         </>
     }
 }   

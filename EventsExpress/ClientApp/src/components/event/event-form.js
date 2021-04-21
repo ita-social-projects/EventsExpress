@@ -194,7 +194,7 @@ class EventForm extends Component {
                     }
                     {isCreated ? null : <Inventory />}
                 </div>
-                <div className="row pl-md-4">
+                <div className="row pl-md-4 mb-4">
                     {this.props.children}
                 </div>
             </form>
