@@ -15,7 +15,7 @@ import { getUsersError } from '../../actions/users'
 import { getEventError } from '../../actions/event-item-view'
 import { setRolesError } from '../../actions/roles'
 
- class Unauthorized extends Component {
+class Unauthorized extends Component {
      componentWillMount = () => {
          this.props.resetError();
          this.props.logout();

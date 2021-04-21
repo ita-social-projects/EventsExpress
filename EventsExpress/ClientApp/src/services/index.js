@@ -8,6 +8,7 @@ import InventoryService from './InventoryService'
 import RoleService from './RoleService'
 import UserService from './UserService'
 import NotificationTypeService from './NotificationTypeService'
+import AccountService from './AccountService';
 import TrackService from './TrackService'
 
 export {
@@ -21,5 +22,6 @@ export {
     RoleService,
     UserService,
     NotificationTypeService,
+    AccountService,
 	TrackService
 };

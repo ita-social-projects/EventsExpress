@@ -89,7 +89,7 @@ export default class EventItemView extends Component {
                         <div>
                             <SimpleModal
                                 id={x.id}
-                                action={this.props.onPromoteToOwner}
+                                action={() => this.props.onPromoteToOwner(x.id)}
                                 data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
                                 button={
                                     <Tooltip title="Approve as an owner">

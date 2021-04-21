@@ -1,4 +1,4 @@
-﻿import { recoverPassword } from '../../actions/editProfile/password-recover-action';
+﻿import { recoverPassword } from '../../actions/redactProfile/password-recover-action';
 import initialState from './../../store/initialState'
 
 export const reducer = (state = initialState.recoverPassword, action) => {

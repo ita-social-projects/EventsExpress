@@ -1,15 +1,16 @@
 ﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
 {
     public class RegisterVerificationMessage : INotification
     {
-        public RegisterVerificationMessage(UserDto userDto)
+        public RegisterVerificationMessage(AuthLocal auth)
         {
-            User = userDto;
+            AuthLocal = auth;
         }
 
-        public UserDto User { get; }
+        public AuthLocal AuthLocal { get; }
     }
 }

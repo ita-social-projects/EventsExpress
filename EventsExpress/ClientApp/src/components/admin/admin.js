@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Route } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import './admin.css';
 import { NavItem } from '../NavItem/NavItem';
 import Category from '../category/categories';
-import UserPWrapper from '../../containers/UsersWrapper';
+import UsersWrapper from '../../containers/users';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import Track from '../tracks/track';
 
 export default class Admin extends Component {
-
     render() {
-
         return (
             <>
                 <div className="admin-panel row">
@@ -52,9 +50,16 @@ export default class Admin extends Component {
                         </ul>
                     </div>
                     <div className="col-sm-10">
-                        <Route path="/admin/categories/" component={Category} />
-                        <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
-                        <Route path="/admin/users" component={UserPWrapper} />
+                        <Switch>
+                            <Route
+                                exact
+                                path='/admin'
+                                render={() =>
+                                    <Redirect to={`/admin/categories`} />} />
+                            <Route path="/admin/categories/" component={Category} />
+                            <Route path='/admin/unitsOfMeasuring' component={UnitOfMeasuring} />
+                            <Route path="/admin/users" component={UsersWrapper} />
+                        </Switch>
                         <Route path="/admin/tracks" component={Track} />
                     </div>
                 </div>
