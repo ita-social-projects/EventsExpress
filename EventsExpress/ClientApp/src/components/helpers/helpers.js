@@ -12,7 +12,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import moment from "moment";
 import './helpers.css'
 
 export const radioButton = ({ input, ...rest }) => (
@@ -24,13 +23,14 @@ export const radioButton = ({ input, ...rest }) => (
         </RadioGroup>
     </FormControl>
 )
-export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) => (
+export const radioLocationType = ({ input, meta: { error, touched, warning }, ...rest }) => (
     <FormControl>
 
         <RadioGroup {...input} {...rest}>
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
+        {renderWarningsFromHelper({ touched, warning })}
         {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 )
@@ -178,42 +178,51 @@ export const validateEventForm = values => {
     return values;
 }
 
+export const validateEventFormPart1 = values => {
 
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
-    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
-    minValue = new Date().getFullYear() - 115;
-    maxValue = new Date().getFullYear() - 15;
+    if (!values)
+        return values;
 
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-        peekNextMonth
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-    />
-}
-
-export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
-
-    if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
-            onChange(moment(minValue).format('L'))
-        }
+    if (!values.dateFrom) {
+        values.dateFrom = new Date(Date.now());
     }
 
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        onChange={onChange}
-        inputProps={{
-            min: moment(minValue).format('YYYY-MM-DD')
-        }}
-    />
+    if (!values.dateTo) {
+        values.dateTo = new Date(values.dateFrom);
+    }
+
+    return values;
+}
+
+export const validateEventFormPart2 = values => {
+
+    if (!values)
+        return values;
+
+    return values;
+}
+
+export const validateEventFormPart3 = values => {
+
+    if (!values)
+        return values;
+
+    return values;
+}
+
+export const validateEventFormPart5 = values => {
+
+    if (!values)
+        return values;
+
+    if (!values.isPublic) {
+        values.isPublic = false;
+    }
+
+    if (!values.maxParticipants) {
+        values.maxParticipants = 2147483647;
+    }
+    return values;
 }
 
 export const maxLength = max => value =>
@@ -259,29 +268,39 @@ export const renderSelectPeriodicityField = ({
         {renderErrorsFromHelper({ touched, error })}
     </FormControl>
 
-
 export const renderMultiselect = ({ input, data, valueField, textField, placeholder,
-    meta: { touched, invalid, error } }) =>
-    <>
+    meta: { touched, invalid, error, warning, pristine, submitting } }) => (
+    <div>
         <Multiselect {...input}
             onBlur={() => input.onBlur()}
             value={input.value || []}
             data={data}
+            error={touched && (invalid || warning)}
             valueField={valueField}
             textField={textField}
             placeholder={placeholder}
         />
+
+        {categoryWarn({ input, submitting, touched, warning })}
         {renderErrorsFromHelper({ touched, error })}
-    </>
+    </div>)
+
+const categoryWarn = ({ input, touched, submitting }) => {
+    if ((touched || submitting) && (input.value.length === 0)) {
+
+        return <span class="text-danger">select at least 1 category</span>;
+    }
+};
 
 export const renderTextArea = ({
     label,
     defaultValue,
     input,
     rows,
-    meta: { touched, invalid, error },
+    meta: { touched, invalid, error, warning, pristine },
     ...custom
 }) => (
+    <div>
         <TextField
             label={label}
             defaultValue={defaultValue}
@@ -289,10 +308,16 @@ export const renderTextArea = ({
             rows="4"
             fullWidth
             {...input}
-            error={touched && invalid}
+            error={touched && (invalid || warning)}
             helperText={touched && error}
             variant="outlined"
-        />)
+        />
+        { renderWarningsFromHelper({ touched, warning })}
+    </div>
+)
+const changes = ({ pristine }) => {
+    if (!pristine) { return <span class="text-danger">changed</span>; };
+}
 
 export const renderTextField = ({
     label,
@@ -301,24 +326,69 @@ export const renderTextField = ({
     inputProps,
     rows,
     fullWidth,
-    meta: { touched, invalid, error },
+    meta: { touched, invalid, error, warning, pristine },
     ...custom
 }) => (
+    <div>
         <TextField
             rows={rows}
             fullWidth={fullWidth === undefined ? true : false}
             label={label}
             placeholder={label}
-            error={touched && invalid}
+            error={touched && (invalid || warning)}
             defaultValue={defaultValue}
             value={defaultValue}
             inputProps={inputProps}
-            helperText={touched && error}
+            helperText={(touched && error)}
             {...input}
             {...custom}
         />
-    )
+        {renderWarningsFromHelper({ touched, warning })}
+    </div>
+)
 
+export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
+    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
+    minValue = new Date().getFullYear() - 115;
+    maxValue = new Date().getFullYear() - 15;
+
+    return <DatePicker
+        onChange={onChange}
+        selected={new Date(value) || new Date()}
+        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
+        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
+        peekNextMonth
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+    />
+}
+
+export const renderDatePicker = ({
+    input: { onChange, value },
+    defaultValue,
+    minValue,
+    showTime,
+    disabled,
+    meta: { error, touched },
+}) => {
+    value = value || defaultValue || new Date();
+    minValue = minValue || new Date();
+    const containerClass = error ? "invalid" : "valid";
+
+    return (
+        <div>
+            <DatePicker
+                className={`m-0 ${containerClass}`}
+                onChange={onChange}
+                minDate={new Date(minValue)}
+                selected={new Date(value) || new Date()}
+                disabled={disabled}
+            />
+            {renderErrorsFromHelper({ touched, error })}
+        </div>
+    )
+}
 
 export const renderSelectField = ({
     input,
@@ -327,31 +397,46 @@ export const renderSelectField = ({
     children,
     ...custom
 }) => (
-        <FormControl error={touched && error}>
-            <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
-            <Select
-                fullWidth
-                native
-                error={touched && invalid}
-                helperText={touched && error}
-                {...input}
-                {...custom}
-                inputProps={{
-                    name: { label },
-                    id: 'age-native-simple'
-                }}
-            >
-                {children}
-            </Select>
-            {renderErrorsFromHelper({ touched, error })}
-        </FormControl>
-    )
+    <FormControl error={touched && error}>
+        <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
+        <Select
+            fullWidth
+            native
+            error={touched && invalid}
+            helperText={touched && error}
+            {...input}
+            {...custom}
+            inputProps={{
+                name: { label },
+                id: 'age-native-simple'
+            }}
+        >
+            {children}
+        </Select>
+        {renderErrorsFromHelper({ touched, error })}
+    </FormControl>
+)
 
 const renderErrorsFromHelper = ({ touched, error }) => {
     if (!(touched && error)) {
         return;
     } else {
         return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
+    }
+}
+
+const renderWarningsFromHelper = ({ touched, warning }) => {
+    if (!(touched && warning)) {
+        return;
+    } else {
+        return <span class="text-danger">{warning}</span>;
+    }
+}
+const renderWarningsFromHelper2 = ({ warning }) => {
+    if (!(warning)) {
+        return;
+    } else {
+        return <span class="text-danger">{warning}</span>;
     }
 }
 

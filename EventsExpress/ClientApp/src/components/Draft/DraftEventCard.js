@@ -39,7 +39,6 @@ export default class DraftEventCard extends Component {
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Link to={`/editEvent/${id}/`}>
                 <Card
-                <Card
                     className={classes.card}
                 >                 
                         <CardHeader

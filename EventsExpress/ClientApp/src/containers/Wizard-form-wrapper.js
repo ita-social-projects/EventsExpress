@@ -1,16 +1,21 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux'
+import { withRouter } from 'react-router-dom';
 import get_event, {
     resetEvent,
     approveUser,
 }
-    from '../actions/event-item-view';
+    from '../actions/event/event-item-view-action';
 import WizardStepper from './wizard-stepper';
 
 class WizardFormWrapper extends Component {
     componentWillMount() {
+        console.log(this.props)
         const { id } = this.props.match.params;
-        this.props.get_event(id);
+        if (this.props.event && this.props.event.data.id !== id) {
+            this.props.get_event(id);
+        }
     }
 
     componentWillUnmount() {
@@ -41,5 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
     reset: () => dispatch(resetEvent())
 });
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(WizardFormWrapper);
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withRouter
+)(WizardFormWrapper);

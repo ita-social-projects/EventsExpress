@@ -29,7 +29,6 @@ namespace EventsExpress.Db.Entities
         [Track]
         public Guid? EventLocationId { get; set; }
 
-
         public virtual EventSchedule EventSchedule { get; set; }
 
         public virtual EventLocation EventLocation { get; set; }

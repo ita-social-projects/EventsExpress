@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm, Field, getFormValues, reset, isPristine } from 'redux-form';
 import { connect } from 'react-redux';
-import { setEventPending, setEventSuccess, edit_event_part2 } from '../../actions/event-add-action';
+import { setEventPending, setEventSuccess, edit_event_part2 } from '../../actions/event/event-add-action';
 import { validateEventFormPart2 } from '../helpers/helpers'
 import 'react-widgets/dist/css/react-widgets.css'
 import DropZoneField from '../helpers/DropZoneField';

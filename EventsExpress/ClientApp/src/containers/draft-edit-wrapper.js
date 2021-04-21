@@ -9,7 +9,6 @@ import get_event, {
     from '../actions/event/event-item-view-action';
 
 class DraftEditWrapper extends Component{
-    EventItemViewWrapperNew
     componentWillMount(){    
         const { id } = this.props.match.params;        
         this.props.get_event(id);
@@ -31,7 +30,7 @@ class DraftEditWrapper extends Component{
         const { isPending } = this.props.event;
         return isPending
             ? <Spinner />
-            : <EventDraftWrapper/>
+            : <WizardFormWrapper/>
     }
 }
 

@@ -2,7 +2,7 @@
 import { compose } from 'redux'
 import { reduxForm, Field, getFormValues, } from 'redux-form';
 import { connect } from 'react-redux';
-import { setEventPending, setEventSuccess, publish_event, edit_event_part5 } from '../../actions/event-add-action';
+import { setEventPending, setEventSuccess, publish_event, edit_event_part5 } from '../../actions/event/event-add-action';
 import { validateEventFormPart5 } from '../helpers/helpers'
 import Button from "@material-ui/core/Button";
 import {

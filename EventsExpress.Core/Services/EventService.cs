@@ -295,11 +295,9 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.Id == e.Id);
             if (e.Photo != null)
             {
-                
-
                 try
                 {
-                    ev.Photo = await _photoService.AddPhoto(e.Photo);
+                     await _photoService.AddEventPhoto(e.Photo, e.Id);
                 }
                 catch (ArgumentException)
                 {

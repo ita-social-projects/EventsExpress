@@ -6,7 +6,7 @@ import { getFormValues, reset, isPristine, submit } from 'redux-form';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import get_categories from '../actions/category/category-list';
+import get_categories from '../actions/category/category-list-action';
 import Typography from '@material-ui/core/Typography'; 
 import Part1 from '../components/Draft/WizardFormPart1';
 import Part2 from '../components/Draft/WizardFormPart2';
@@ -14,8 +14,7 @@ import Part3 from '../components/Draft/WizardFormPart3';
 import Part4 from '../components/Draft/WizardFormPart4';
 import Part5 from '../components/Draft/WizardFormPart5';
 import Publish from '../components/Draft/WizardFromPublish';
-import RSB from '../components/Draft/RemoteSubmitButton'
-import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event-add-action';
+import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
 
 
 
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const formSteps = [
     { part: 0, Stepname: "1", component: <Part1 />, formName: 'Part1' },
-    { part: 1, Stepname: "2", component: <Part2 />, formName: 'Part2' },
+    { part: 1, Stepname: "2", component: <Part2 /> },
     { part: 2, Stepname: "3", component: <Part3 />, formName: 'Part3' },
     { part: 3, Stepname: "4", component: <Part4 /> },
     { part: 4, Stepname: "5", component: <Part5 />, formName: 'Part5' },

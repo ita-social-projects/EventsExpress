@@ -2,11 +2,7 @@
 import { connect } from 'react-redux';
 import DraftList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
-<<<<<<< HEAD
-import { get_drafts, reset_events } from '../actions/event-list-action';
-=======
 import { get_drafts, reset_events } from '../actions/event/event-list-action';
->>>>>>> origin/development
 import eventHelper from '../components/helpers/eventHelper';
 
 

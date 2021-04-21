@@ -1,8 +1,7 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import {getEvent} from './event-item-view-action';
+import get_event, {getEvent} from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
-import { createBrowserHistory } from 'history';
 import { createBrowserHistory } from 'history';
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
@@ -62,7 +61,7 @@ export function edit_event_part1(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
+        dispatch(getEvent(data));
         return Promise.resolve();
     }
 }
@@ -75,7 +74,7 @@ export function edit_event_part2(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
+        dispatch(getEvent(data));
         return Promise.resolve();
     }
 }
@@ -88,7 +87,7 @@ export function edit_event_part3(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
+        dispatch(getEvent(data));
         return Promise.resolve();
     }
 }
@@ -101,7 +100,7 @@ export function edit_event_part5(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
+        dispatch(getEvent(data));
         return Promise.resolve();
     }
 }
@@ -112,7 +111,7 @@ export function publish_event(data) {
         let response = await api_serv.publishEvent(data);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(get_event(data));
+            dispatch(getEvent(data));
             dispatch(eventWasCreated(data));
             return Promise.resolve();
         }

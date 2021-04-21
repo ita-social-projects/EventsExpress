@@ -190,32 +190,5 @@ namespace EventsExpress.Test.ValidatorTests
             // Assert
             result.ShouldNotHaveValidationErrorFor(e => e.EventLocation);
         }
-<<<<<<< HEAD
-
-        [Test]
-        public void Check_CorrectPhotoId_validation()
-        {
-            // Arrange
-
-            // Act
-            var result = validator.TestValidate(ev);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(e => e.PhotoId);
-        }
-
-        [Test]
-        public void Check_CorrectPhoto_validation()
-        {
-            // Arrange
-
-            // Act
-            var result = validator.TestValidate(ev);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(e => e.Photo);
-        }
-=======
->>>>>>> origin/development
     }
 }

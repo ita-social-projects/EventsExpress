@@ -1,4 +1,4 @@
-﻿import { publish_event } from '../../actions/event-add-action';
+﻿import { publish_event } from '../../actions/event/event-add-action';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field  } from 'redux-form';

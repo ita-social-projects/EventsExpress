@@ -20,8 +20,6 @@ import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
-import { useStyle } from '../event/CardStyle'
-
 const useStyles = useStyle;
 
 export default class EventCard extends Component {

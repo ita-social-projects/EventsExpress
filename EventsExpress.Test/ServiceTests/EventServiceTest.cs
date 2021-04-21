@@ -270,14 +270,6 @@ namespace EventsExpress.Test.ServiceTests
                             CreatedOn = DateTime.Today,
                         },
                     },
-                    StatusHistory = new List<EventStatusHistory>()
-                    {
-                        new EventStatusHistory
-                        {
-                            EventStatus = EventStatus.Draft,
-                            CreatedOn = DateTime.Today,
-                        },
-                    },
                 },
                 new Event
                 {

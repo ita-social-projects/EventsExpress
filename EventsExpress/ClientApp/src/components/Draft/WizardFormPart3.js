@@ -2,7 +2,7 @@
 import { compose } from 'redux';
 import { getFormValues, reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
-import { setEventPending, setEventSuccess, publish_event, edit_event_part3 } from '../../actions/event-add-action';
+import { setEventPending, setEventSuccess, publish_event, edit_event_part3 } from '../../actions/event/event-add-action';
 import 'react-widgets/dist/css/react-widgets.css'
 import {
     renderTextField,

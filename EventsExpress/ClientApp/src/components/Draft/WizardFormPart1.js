@@ -2,10 +2,10 @@
 import { reduxForm, Field, getFormValues, reset, Form, isPristine } from 'redux-form';
 import { compose } from 'redux'
 import { connect } from 'react-redux';
-import { setEventPending, setEventSuccess, publish_event, edit_event_part1 } from '../../actions/event-add-action';
+import { setEventPending, setEventSuccess, publish_event, edit_event_part1 } from '../../actions/event/event-add-action';
 import { validateEventFormPart1 } from '../helpers/helpers'
 import 'react-widgets/dist/css/react-widgets.css'
-import get_categories from '../../actions/category/category-list';
+import get_categories from '../../actions/category/category-list-action';
 import periodicity from '../../constants/PeriodicityConstants'
 import submit from './submit';
 import {

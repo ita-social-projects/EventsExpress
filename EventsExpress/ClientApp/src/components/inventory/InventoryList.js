@@ -52,8 +52,9 @@ class InventoryList extends Component {
     }
 
     render() {
-        const { inventories, event, user, usersInventories } = this.props;
-        let isMyEvent = event.owners.find(x => x.id === user.id) != undefined;
+        const { inventories, user, usersInventories } = this.props;
+        const { owners=[] } = this.props.event;
+        let isMyEvent = owners.find(x => x.id === user.id) != undefined;
         let updateList = [];
         if (inventories.items) {
             updateList = inventories.items.map(item => {

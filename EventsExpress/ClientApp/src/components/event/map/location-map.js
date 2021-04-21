@@ -20,7 +20,7 @@ class LocationMap extends Component {
         let value = null;
         let start = [50.4547, 30.5238];//start position by default
 
-        if (this.props.initialValues != undefined) {
+        if (this.props.initialValues != undefined ) {
             if (this.props.initialValues.x != undefined) {
                 value = { lat: this.props.initialValues.x, lng: this.props.initialValues.y };
                 start = [this.props.initialValues.x, this.props.initialValues.y];
@@ -79,7 +79,7 @@ class LocationMap extends Component {
 
     getStartPosition() {
         let start = [50.4547, 30.5238];
-        if (this.props.initialValues.selectedPos != undefined) {
+        if (this.props.initialValues  && this.props.initialValues.selectedPos != undefined) {
             if (this.props.initialValues.selectedPos.lat != null && this.props.initialValues.selectedPos.lng != null) {
                 start = [this.props.initialValues.selectedPos.lat, this.props.initialValues.selectedPos.lng];
             }

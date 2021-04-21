@@ -2,7 +2,7 @@
 
 import {
     PUBLISH_EVENT, 
-} from '../actions/event-add-action';
+} from '../actions/event/event-add-action';
 
 export const reducer = (state = initialState.publishErrors, action) => {
 
