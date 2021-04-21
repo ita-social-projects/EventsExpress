@@ -43,7 +43,7 @@ namespace EventsExpress.Core.Services
         {
             if (text == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(text), "parameter can't be null");
             }
 
             return pattern.Aggregate(text, (current, element) => current
