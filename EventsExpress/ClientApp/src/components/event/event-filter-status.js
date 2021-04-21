@@ -13,6 +13,21 @@ function eventStatusHistoryReadingString(option) {
     }
 }
 
+function trackChangesTypeReadingString(option) {
+    switch (option) {
+        case 0:
+            return " Undefined"
+        case 1:
+            return " Modified"
+        case 2:
+            return " Created"
+        case 3:
+            return " Deleted"
+        default:
+            return " Default status"
+    }
+}
+
 class EventFilterStatus extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
@@ -36,7 +51,10 @@ class EventFilterStatus extends Component {
                                 }
                                 return input.onChange(newValue);
                             }} />
-                        {eventStatusHistoryReadingString(option)}
+                        {options.length >= 4 
+                            ? trackChangesTypeReadingString(option) 
+                            : eventStatusHistoryReadingString(option) 
+                        }
                     </label>
                 </div>)
         });

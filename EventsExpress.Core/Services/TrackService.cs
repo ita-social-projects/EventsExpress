@@ -31,13 +31,21 @@ namespace EventsExpress.Core.Services
         public IEnumerable<TrackDto> GetAllTracks(TrackFilterViewModel model, out int count)
         {
             var tracks = Mapper.Map<List<TrackDto>>(Context.ChangeInfos.Include(e => e.User).ToList());
-
             tracks = model.EntityName != null && model.EntityName.Any()
                 ? tracks.Where(x => model.EntityName.Contains(x.Name)).ToList()
                 : tracks;
             tracks = model.ChangesType != null && model.ChangesType.Any()
                 ? tracks.Where(x => model.ChangesType.Contains(x.ChangesType)).ToList()
                 : tracks;
+
+            /*tracks = (model.DateFrom != DateTime.MinValue)
+                ? tracks.Where(x => x.DateFrom >= model.DateFrom)
+                : tracks;
+
+            tracks = (model.DateTo != DateTime.MinValue)
+                ? tracks.Where(x => x.DateTo <= model.DateTo)
+                : tracks;*/
+
             count = tracks.Count();
 
             var result = tracks.OrderBy(x => x.Time)

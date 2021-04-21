@@ -1,35 +1,56 @@
 ﻿import React, {Component} from 'react';
 import Button from "@material-ui/core/Button";
 import {Field, reduxForm} from 'redux-form';
-import {renderMultiselect} from "../helpers/helpers";
-
+import {renderDatePicker, renderMultiselect} from "../helpers/helpers";
+import changesTypeEnum from "../../constants/changesTypeEnum";
+import EventFilterStatus from "../event/event-filter-status";
 
 class TracksFilter extends Component {
     render() {
-        const {entityNames, changesType} = this.props;
+        const {entityNames, form_values} = this.props;
+        let values = form_values || {};
 
         return <>
             {entityNames && entityNames.length !== 0 &&
             <form className="box" onSubmit={this.props.handleSubmit}>
                 <div className="form-group">
-                    <Field
-                        data={entityNames}
-                        component={renderMultiselect}
-                        name="entityNames"
-                        valueField={"id"}
-                        textField={"entityName"}
-                        className="form-control mt-2"
-                        placeholder='Entity name'
-                    />
-                    <Field
-                        data={changesType}
-                        component={renderMultiselect}
-                        name="changesType"
-                        valueField={"id"}
-                        textField={"changesType"}
-                        className="form-control mt-2"
-                        placeholder='Changes type'
-                    />
+                    <div className="form-group">
+                        <Field
+                            data={entityNames}
+                            component={renderMultiselect}
+                            name="entityNames"
+                            valueField={"id"}
+                            textField={"entityName"}
+                            className="form-control mt-2"
+                            placeholder='Entity name'
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Field
+                            options={[changesTypeEnum.Undefined, changesTypeEnum.Modified,
+                                changesTypeEnum.Created, changesTypeEnum.Deleted]}
+                            component={EventFilterStatus}
+                            name="changesType"
+                            className="form-control mt-2"
+                            placeholder='Changes type'
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Field
+                            name='dateFrom'
+                            label='From'
+                            minValue={new Date()}
+                            component={renderDatePicker}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <Field
+                            name='dateTo'
+                            label='To'
+                            minValue={new Date(values.dateFrom)}
+                            component={renderDatePicker}
+                        />
+                    </div>
                 </div>
                 <div className="form-group">
                     <Button
