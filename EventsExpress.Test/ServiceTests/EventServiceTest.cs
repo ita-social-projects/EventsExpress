@@ -349,7 +349,8 @@ namespace EventsExpress.Test.ServiceTests
                 });
         }
 
-        [TestCaseSource(typeof(GetEventExistingId))]
+        [Test]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForGetEvent))]
         [Category("Get Event")]
         public void GetEvent_ExistingId_Success(Guid existingId)
         {
@@ -427,7 +428,8 @@ namespace EventsExpress.Test.ServiceTests
             Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
         }
 
-        [TestCaseSource(typeof(GetEventExistingId))]
+        [Test]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForAddUserToEvent))]
         [Category("Add user to event")]
         public void AddUserToEvent_ReturnTrue(Guid id)
         {
