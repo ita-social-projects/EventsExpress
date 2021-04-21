@@ -2,18 +2,6 @@
 import { connect } from 'react-redux';
 import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
 import logout from '../../actions/login/logout-action';
-import { setRegisterError } from '../../actions/register'
-import { setEditUsernameError } from '../../actions/EditProfile/editUsername'
-import { setEditGenderError } from '../../actions/EditProfile/EditGender'
-import { setEditBirthdayError } from '../../actions/EditProfile/editBirthday'
-import { setAvatarError } from '../../actions/EditProfile/change-avatar'
-import { setEventError } from '../../actions/add-event'
-import { getCityError } from '../../actions/cities'
-import { setCountryError } from '../../actions/countries'
-import { setCategoryError } from '../../actions/category/add-category'
-import { getUsersError } from '../../actions/users'
-import { getEventError } from '../../actions/event-item-view'
-import { setRolesError } from '../../actions/roles'
 
 class Unauthorized extends Component {
      componentWillMount = () => {
@@ -42,18 +30,6 @@ const mapDispatchToProps = (dispatch) => {
         setStatus: (data) => dispatch(TogleOpenWind(data)),
         resetError: () => {
             dispatch(isOpen(false));
-            dispatch(setRegisterError(null));
-           dispatch(setEditUsernameError(null));
-           dispatch(setEditGenderError(null));
-           dispatch(setEditBirthdayError(null));
-           dispatch(setEventError(false));
-           dispatch(setCountryError(false));
-           dispatch(getCityError(false));
-           dispatch(setCategoryError(false));
-           dispatch(getUsersError(false));
-           dispatch(getEventError(false));
-           dispatch(setAvatarError(false));
-           dispatch(setRolesError(false));
         }
     };
 }

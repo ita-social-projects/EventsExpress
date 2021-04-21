@@ -25,8 +25,7 @@ import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
 import * as Tracks from './tracks/track-list';
-import * as RecoverPassword from './editReducers/recoverPasswordReducer'
-import * as Auth from './authenticationReducer';
+import * as RecoverPassword from './editReducers/recoverPasswordReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
 import * as UnitsOfMeasuring from './unitOfMeasuring/unitsOfMeasuring';
