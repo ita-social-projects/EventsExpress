@@ -87,7 +87,7 @@ class EventFilter extends Component {
                                 />
                             </div>
                             <div className="form-group">
-                                {current_user.role === "Admin" &&
+                                {current_user.roles.includes("Admin") &&
                                     <Field name="statuses"
                                         component={EventFilterStatus}
                                         options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}

@@ -1,10 +1,14 @@
 import EventsExpressService from './EventsExpressService';
+import { jwtStorageKey } from '../constants/constants'
 
 const baseService = new EventsExpressService();
 
 export default class AuthenticationService {
+    getCurrentToken = () => localStorage.getItem(jwtStorageKey);
 
     auth = data => baseService.setResource(`Authentication/verify/${data.userId}/${data.token}`);
+
+    getUserInfo = () => baseService.getResource('Users/GetUserInfo');
 
     setLogin = data => baseService.setResource('Authentication/Login', data);
 
@@ -18,8 +22,9 @@ export default class AuthenticationService {
 
     setRecoverPassword = data => baseService.setResource(`Authentication/PasswordRecovery/?email=${data.email}`);
 
-    setRegister = data => baseService.setResource('Authentication/register', data);
+    setRegister = data => baseService.setResource('Authentication/RegisterBegin', data);
+
+    setRegisterComplete = data => baseService.setResource('Authentication/RegisterComplete', data)
 
     setChangePassword = data =>  baseService.setResource('Authentication/ChangePassword', data);
-
 }

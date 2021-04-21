@@ -15,13 +15,13 @@ namespace EventsExpress.Core.Infrastructure
         public bool Add(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Add(value.UserId.ToString(), value, DateTime.Now.AddDays(10));
+            return memoryCache.Add(value.AuthLocalId.ToString(), value, DateTime.Now.AddDays(10));
         }
 
         public void Update(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            memoryCache.Set(value.UserId.ToString(), value, DateTime.Now.AddDays(10));
+            memoryCache.Set(value.AuthLocalId.ToString(), value, DateTime.Now.AddDays(10));
         }
 
         public void Delete(Guid userId)

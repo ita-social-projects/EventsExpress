@@ -16,13 +16,6 @@ export const reducer = (state = initialState.roles, action) => {
                 data: action.payload
             }
 
-        case getRoles.ERROR:
-            return {
-                ...state,
-                isError: action.payload,
-                isPending: false
-            }
-
         default:
             return state;
     }

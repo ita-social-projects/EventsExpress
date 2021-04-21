@@ -17,11 +17,13 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
 using EventsExpress.Mapping;
+using EventsExpress.Policies;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,29 +41,15 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace EventsExpress
 {
-    /// <summary>
-    /// The Startup class configures services and the app's request pipeline.
-    /// </summary>
     public class Startup
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
-        /// </summary>
-        /// <param name="configuration">Param configuration defines application configuration properties.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        /// <summary>
-        /// Gets represents a set of key/value application configuration properties.
-        /// </summary>
         public IConfiguration Configuration { get; }
 
-        /// <summary>
-        ///  This method gets called by the runtime. Use this method to add services to the container.
-        /// </summary>
-        /// <param name="services">Param services defines application services in DI container.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             #region Authorization and Autontification configuring...
@@ -75,6 +63,13 @@ namespace EventsExpress
 
             services
                 .AddMemoryCache()
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy(PolicyNames.AdminPolicyName, policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
+                    options.AddPolicy(PolicyNames.UserPolicyName, policy =>
+                        policy.Requirements.Add(new RoleRequirement(PolicyNames.UserRole)));
+                })
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -111,6 +106,7 @@ namespace EventsExpress
                         },
                     };
                 });
+            services.AddSingleton<IAuthorizationHandler, RoleHandler>();
 
             #endregion
 
@@ -121,6 +117,7 @@ namespace EventsExpress
 
             #region Configure our services...
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventScheduleService, EventScheduleService>();
             services.AddScoped<IEventStatusHistoryService, EventStatusHistoryService>();
@@ -135,6 +132,7 @@ namespace EventsExpress
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
+            services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -228,11 +226,6 @@ namespace EventsExpress
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
         }
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        /// </summary>
-        /// <param name="app">Param app defines IApplicationBuilder object.</param>
-        /// <param name="env">Param env defines IWebHostEnvironment object.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
