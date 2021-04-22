@@ -21,7 +21,10 @@ import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 
+import PhotoService from '../../services/PhotoService';
+
 const useStyles = useStyle;
+const photoService = new PhotoService();
 
 export default class EventCard extends Component {
     constructor(props) {
@@ -81,7 +84,13 @@ export default class EventCard extends Component {
                     </div>
                 </div>
             </MenuItem>
-        ))
+        ));
+
+        const userPhoto = photoService.getUserPhoto(owners[0].id);
+        // `api/photo/GetUserPhoto?id=${owners[0].id}`
+        // const eventPreviewPhoto = photoService.getPreviewEventPhoto(id);
+
+        let img = document.createElement('img');
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -115,7 +124,7 @@ export default class EventCard extends Component {
                                 <Badge overlap="circle" badgeContent={owners.length} color="primary">
                                     <CustomAvatar
                                         className={classes.avatar}
-                                        photoUrl={owners[0].photoUrl}
+                                        photoUrl={userPhoto}
                                         name={owners[0].username}
                                     />
                                 </Badge>
@@ -141,7 +150,7 @@ export default class EventCard extends Component {
                         title={title}
                     >
                         <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                            <img src={photoService.getPreviewEventPhoto(id)} loading="lazy" className="w-100 eventPhoto" alt="Event" />
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
@@ -162,7 +171,7 @@ export default class EventCard extends Component {
                                     {description.substr(0, 128)}
                                 </Typography>
                             </Tooltip>
-                        } 
+                        }
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
@@ -195,12 +204,12 @@ export default class EventCard extends Component {
                                 {(this.props.current_user !== null
                                     && this.props.current_user.role === "Admin")
                                     && <EventActiveStatus
-                                    key={this.props.item.id + this.props.item.eventStatus}
-                                    eventStatus={this.props.item.eventStatus}
-                                    eventId={this.props.item.id}
-                                    onBlock = {this.props.onBlock}
-                                    onUnBlock = {this.props.onUnBlock}/>
-                                }                        
+                                        key={this.props.item.id + this.props.item.eventStatus}
+                                        eventStatus={this.props.item.eventStatus}
+                                        eventId={this.props.item.id}
+                                        onBlock={this.props.onBlock}
+                                        onUnBlock={this.props.onUnBlock} />
+                                }
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>

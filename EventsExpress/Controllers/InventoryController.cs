@@ -102,6 +102,7 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns inventory by event identifier.</returns>
         /// <response code="200">Return IEnumerable InventoryDto.</response>
         [HttpGet("{eventId:Guid}/[action]")]
+        [AllowAnonymous]
         public IActionResult GetInventar(Guid eventId)
         {
             if (eventId == Guid.Empty)

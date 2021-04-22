@@ -31,6 +31,24 @@ export default class EventsExpressService {
         }
     }
 
+    getPhoto = async url => {
+        const call = _url => fetch(this._baseUrl + _url, {
+            method: "get",
+            headers: new Headers({
+                'Content-Type': 'image/png'
+            }),
+        });
+
+        let res = await call(url);
+
+        if(res.ok){
+            return await res.blob();
+        }
+        else{
+            return null;
+        }
+    }
+
     getResourceNew = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
             method: "get",
@@ -105,7 +123,7 @@ export default class EventsExpressService {
         localStorage.setItem('token', rest.jwtToken);
         return true;
     }
-	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+    setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
 
     getUsersInventories = eventId => this.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);

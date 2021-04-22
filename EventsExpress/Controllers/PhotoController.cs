@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using EventsExpress.Core.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,31 +21,46 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPreviewEventPhoto(string id)
         {
-            string url = $"/events/{id}/preview.png";
+            string url = $"events/{id}/preview.png";
 
-            await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
 
-            return Ok();
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return File(photo, "image/png");
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetFullEventPhoto(string id)
         {
-            string url = $"/events/{id}/full.png";
+            string url = $"events/{id}/full.png";
 
-            await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
 
-            return Ok();
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return File(photo, "image/png");
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetUserPhoto(string id)
         {
-            string url = $"/users/{id}/preview.png";
+            string url = $"users/{id}/photo.png";
 
-            await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
 
-            return Ok();
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            return File(photo, "image/png");
         }
     }
 }
