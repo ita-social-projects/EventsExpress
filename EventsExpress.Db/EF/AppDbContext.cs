@@ -68,6 +68,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<UserNotificationType> UserNotificationTypes { get; set; }
 
+        public DbSet<ContactAdmin> ContactAdmin { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,12 +1,12 @@
 ﻿using EventsExpress.Db.Enums;
 
-namespace EventsExpress.ViewModels
+namespace EventsExpress.Core.DTOs
 {
-    public class ContactUsViewModel
+    public class ContactAdminDto
     {
-        public string Description { get; set; }
-
         public ContactAdminReason Subject { get; set; }
+
+        public string MessageText { get; set; }
 
         public string Title { get; set; }
 

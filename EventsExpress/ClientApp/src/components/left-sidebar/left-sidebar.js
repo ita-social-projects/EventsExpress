@@ -39,7 +39,7 @@ class LeftSidebar extends Component {
                                 to={'/'}
                                 icon={'fa fa-home'}
                                 text={"Home"}
-                            />
+                            />                          
                             <AuthComponent roleMatch={Roles.Admin}>
                                 <NavItem
                                     to={'/user_chats'}
@@ -54,6 +54,11 @@ class LeftSidebar extends Component {
                                     to={'/admin/'}
                                     icon={'fa fa-user-secret'}
                                     text={"Admin"}
+                                />
+                                <NavItem
+                                    to={'/issues'}
+                                    icon={'fa fa-exclamation-triangle'}
+                                    text={"Issues"}
                                 />
                             </AuthComponent>
                             <AuthComponent roleMatch={Roles.User}>
@@ -91,7 +96,7 @@ class LeftSidebar extends Component {
                                     icon={'fa fa-exclamation-circle'}
                                     text={'Contact us'}
                                 />
-                            </AuthComponent>
+                            </AuthComponent>      
                         </ul>
                     </nav>
                 </div>

@@ -28,19 +28,22 @@ namespace EventsExpress.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IPhotoService _photoService;
+        private readonly IContactAdminService _contactAdminService;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
             IEmailService emailService,
-            IPhotoService photoService)
+            IPhotoService photoService,
+            IContactAdminService contactAdminService)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
             _photoService = photoService;
+            _contactAdminService = contactAdminService;
         }
 
         /// <summary>
@@ -284,24 +287,20 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.UserPolicyName)]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+           // var user = _authService.GetCurrentUser(HttpContext.User);
 
-            var admins = _userService.GetUsersByRole("Admin");
-
-            var emailBody = $"New request from <a href='mailto:{user.Email}?subject=re:{model.Type}'>{user.Email}</a> : <br />{model.Description}. ";
+           // var admins = _userService.GetUsersByRole("Admin");
+            var emailTitle = $"New request from {model.Email} on subject: {model.Subject}";
 
             try
             {
-                foreach (var admin in admins)
+                await _contactAdminService.SendMessageToAdmin(new ContactAdminDto
                 {
-                    await _emailService.SendEmailAsync(new EmailDto
-                    {
-                        Subject = model.Type,
-                        RecepientEmail = admin.Email,
-                        MessageText = emailBody,
-                    });
-                }
-
+                    Subject = model.Subject,
+                    Email = model.Email,
+                    MessageText = model.Description,
+                    Title = emailTitle,
+                });
                 return Ok();
             }
             catch (Exception e)
