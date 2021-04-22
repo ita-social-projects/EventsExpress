@@ -119,7 +119,8 @@ class EventDraftWrapper extends Component {
                     <Button
                         className="border"
                         fullWidth={true}
-                        color="primary">
+                        color="primary"
+                        type="submit">
                         Publish
                     </Button>
                 </div>
