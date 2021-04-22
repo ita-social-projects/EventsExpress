@@ -4,7 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class InventoryService {
 
-    getInventoriesByEventId = eventId => baseService.getResourceNew(`inventory/${eventId}/GetInventar`);
+    getInventoriesByEventId = eventId => baseService.getResource(`inventory/${eventId}/GetInventar`);
 
     setItem = (item, eventId) =>
         baseService.setResource(`inventory/${eventId}/EditInventar`, {
@@ -24,11 +24,11 @@ export default class InventoryService {
     setItemDelete = (itemId, eventId) =>
         baseService.setResource(`inventory/${eventId}/DeleteInventar/?itemId=${itemId}`);
 
-    getUnitsOfMeasuring = () => baseService.getResourceNew('unitofmeasuring/all');
+    getUnitsOfMeasuring = () => baseService.getResource('unitofmeasuring/all');
 
     setWantToTake = data => baseService.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
-    getUsersInventories = eventId => baseService.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+    getUsersInventories = eventId => baseService.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 
 
     setUsersInventoryDelete = async data => {
