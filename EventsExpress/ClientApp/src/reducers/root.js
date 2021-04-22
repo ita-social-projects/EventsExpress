@@ -40,6 +40,8 @@ import * as ContactUs from './contact-us';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
 import * as Account from './account';
+import * as NotificationTemplates from "./notification-templates/notification-templates";
+import * as NotificationTemplate from "./notification-templates/notification-template";
 
 const rootReducers = {
     account : Account.reducer,
@@ -83,7 +85,8 @@ const rootReducers = {
     contactUs: ContactUs.reducer,
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer,
-
+    NotificationTemplates: NotificationTemplates.reducer,
+    NotificationTemplate: NotificationTemplate.reducer
 };
 
 export default rootReducers;

@@ -23,6 +23,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IEventStatusHistoryService> _blockEventStatusHistoryService;
         private Mock<IEventStatusHistoryService> _unblockEventStatusHistoryService;
         private Mock<IUserService> _userService;
+        private Mock<INotificationTemplateService> _notificationTemplateService;
         private EventStatusHandler _cancelEventHandler;
         private EventStatusHandler _blockEventHandler;
         private EventStatusHandler _unblockEventHandler;
@@ -59,6 +60,7 @@ namespace EventsExpress.Test.HandlerTests
             _emailService = new Mock<IEmailService>();
             _eventService = new Mock<IEventService>();
             _userService = new Mock<IUserService>();
+            _notificationTemplateService = new Mock<INotificationTemplateService>();
             _cancelEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _blockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _unblockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
@@ -108,6 +110,15 @@ namespace EventsExpress.Test.HandlerTests
 
             _eventService.Setup(e => e.EventById(_idEvent)).Returns(_eventDto);
             _userService.Setup(item => item.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>())).Returns(new UserDto[] { firstUserDto, secondUserDto, thirdUserDto });
+
+            _notificationTemplateService
+                .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
+                .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+
             _eventStatusHistoryCanceled = new EventStatusHistory
             {
                 Reason = _reason,
@@ -129,9 +140,9 @@ namespace EventsExpress.Test.HandlerTests
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
             AppHttpContext.Configure(httpContext.Object);
-            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
-            _blockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
-            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object);
+            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
+            _blockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
+            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
         }
 
         [Test]
