@@ -8,9 +8,9 @@ namespace EventsExpress.Db.Configuration
     {
         public void Configure(EntityTypeBuilder<Relationship> builder)
         {
-            builder.HasOne(r => r.UserFrom)
+            builder.HasOne(r => r.UserTo)
                 .WithMany(u => u.Relationships)
-                .HasForeignKey(r => r.UserFromId)
+                .HasForeignKey(r => r.UserToId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
