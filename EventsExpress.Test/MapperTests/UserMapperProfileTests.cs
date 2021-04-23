@@ -56,7 +56,6 @@ namespace EventsExpress.Test.MapperTests
 
         private UserDto GetUserDto()
         {
-            List<User> users = GetListUsers();
             return new UserDto
             {
                 Id = idUser,

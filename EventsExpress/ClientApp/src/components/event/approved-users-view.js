@@ -5,7 +5,6 @@ import CustomAvatar from '../avatar/custom-avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import './approved-users-view.css';
-import * as moment from 'moment';
 
 export default class UserView extends Component{
     constructor() {
