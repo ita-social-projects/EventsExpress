@@ -52,7 +52,7 @@ class EventForm extends Component {
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
-                encType="multipart/form-data" autoComplete="off" >
+                encType="multipart/form-data" autoComplete="off">
                 <div className="text text-2 pl-md-4 pt-md-2">
                     <Field
                         id="image-field"
@@ -137,7 +137,7 @@ class EventForm extends Component {
                             </span>
                         }
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-3">
                         <Field
                             name='description'
                             component={renderTextArea}
@@ -189,6 +189,7 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
+                                className="mb-4"
                             />
                         </div>
                     }
