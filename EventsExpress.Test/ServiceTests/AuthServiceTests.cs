@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -30,6 +31,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IEmailService> mockEmailService;
         private Mock<IMediator> mockMediator;
         private AuthService service;
+        private Guid idUser = Guid.NewGuid();
 
         private UserDto existingUserDTO;
         private User existingUser;
@@ -38,6 +40,7 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
+
             mockUserService = new Mock<IUserService>();
             mockTokenService = new Mock<ITokenService>();
             mockCacheHelper = new Mock<ICacheHelper>();
@@ -434,6 +437,26 @@ namespace EventsExpress.Test.ServiceTests
             Context.SaveChanges();
 
             Assert.DoesNotThrowAsync(async () => await service.PasswordRecover(existingUserDTO.Email));
+        }
+
+        [Test]
+        public void GetCurrentUserId_OK()
+        {
+            UserDto userDto = new UserDto
+            {
+                Id = idUser,
+            };
+
+            var claim = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, userDto.Id.ToString()),
+            };
+
+            ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            string[] roles = { "user" };
+            GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
+            var res = service.GetCurrUserId(claimsObj);
+            Assert.That(res, Is.EqualTo(userDto.Id));
         }
 
         private ClaimsPrincipal GetClaimsPrincipal()

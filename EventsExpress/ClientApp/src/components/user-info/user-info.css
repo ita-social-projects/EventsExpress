@@ -4,3 +4,12 @@
 .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
+
+.retreat {
+    padding-top: 2rem;
+    padding-right: 2rem;
+}
+
+.Size {
+    font-size: 32px;
+}

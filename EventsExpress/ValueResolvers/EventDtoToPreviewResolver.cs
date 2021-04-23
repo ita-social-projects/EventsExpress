@@ -25,6 +25,11 @@ namespace EventsExpress.ValueResolvers
                 u.PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
             }
 
+            foreach (var u in destination.Members)
+            {
+                u.PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.Id}/photo.png").Result;
+            }
+
             return photoService.GetPhotoFromAzureBlob($"events/{source.Id}/preview.png").Result;
         }
     }

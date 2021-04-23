@@ -62,6 +62,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.Members, opts => opts.MapFrom<EventDtoToVisitorsResolver>())
                 .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToPreviewResolver>());
 
             CreateMap<EventDto, EventViewModel>()
@@ -69,13 +70,14 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryViewModelFromInventoryDto(x))))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
-                .ForMember(dest => dest.Visitors, opts => opts.MapFrom(src => src.Visitors.Select(x => MapUserEventToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.Visitors, opts => opts.MapFrom<EventDtoToVisitorsResolver>())
                 .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToViewModelResolver>());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<EventDtoToViewModelResolver>())
+                .ForMember(dest => dest.Members, opts => opts.Ignore());
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
@@ -261,17 +263,6 @@ namespace EventsExpress.Mapping
                 Birthday = user.Birthday,
                 Id = user.Id,
                 Username = UserName(user),
-            };
-        }
-
-        private UserPreviewViewModel MapUserEventToUserPreviewViewModel(UserEvent userEvent)
-        {
-            return new UserPreviewViewModel
-            {
-                Id = userEvent.User.Id,
-                Username = UserName(userEvent.User),
-                Birthday = userEvent.User.Birthday,
-                UserStatusEvent = userEvent.UserStatusEvent,
             };
         }
     }
