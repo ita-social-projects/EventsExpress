@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -31,8 +32,14 @@ namespace EventsExpress.ValueResolvers
         public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModelBase destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();
-
-            var currUser = _authService?.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+            UserDto currUser = null;
+            try
+            {
+                currUser = _authService?.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+            }
+            catch (EventsExpressException)
+            {
+            }
 
             foreach (var u in source.Visitors)
             {

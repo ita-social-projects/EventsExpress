@@ -16,7 +16,9 @@ import EventActiveStatus from './event-active-status';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle';
+import AuthComponent from "../../security/authComponent";
 import EventHeader from './event-item-header';
+import { Roles } from '../../constants/userRoles';
 
 const useStyles = useStyle;
 
@@ -61,13 +63,13 @@ export default class EventCard extends Component {
 
                     }}
                 >
-                    <EventHeader 
+                    <EventHeader
                         members={members}
                         countVisitor={countVisitor}
                         owners={owners}
                         dateFrom={dateFrom}
                         title={title}
-                        />
+                    />
                     <CardMedia
                         className={classes.media}
                         title={title}
@@ -94,7 +96,7 @@ export default class EventCard extends Component {
                                     {description.substr(0, 128)}
                                 </Typography>
                             </Tooltip>
-                        } 
+                        }
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
@@ -124,15 +126,16 @@ export default class EventCard extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                {(this.props.current_user !== null
-                                    && this.props.current_user.roles.includes("Admin"))
-                                    && <EventActiveStatus
-                                    key={this.props.item.id + this.props.item.eventStatus}
-                                    eventStatus={this.props.item.eventStatus}
-                                    eventId={this.props.item.id}
-                                    onBlock = {this.props.onBlock}
-                                    onUnBlock = {this.props.onUnBlock}/>
-                                }                        
+                                {
+                                    <AuthComponent rolesMatch={[Roles.Admin]}>
+                                        <EventActiveStatus
+                                            key={this.props.item.id + this.props.item.eventStatus}
+                                            eventStatus={this.props.item.eventStatus}
+                                            eventId={this.props.item.id}
+                                            onBlock={this.props.onBlock}
+                                            onUnBlock={this.props.onUnBlock} />
+                                    </AuthComponent >
+                                }
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>

@@ -21,6 +21,7 @@ import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
 import UserView from './approved-users-view';
+import * as moment from 'moment';
 
 export default class EventItemView extends Component {
     constructor() {
@@ -70,16 +71,39 @@ export default class EventItemView extends Component {
         ));
     }
 
-
-    
-
     renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
         return arr.map(x => (
             <UserView
                 user={x}
-                isMyEvent={isMyEvent}
                 isMyPrivateEvent={isMyPrivateEvent}
-            />
+                getAge={this.getAge}
+            >
+                {(isMyEvent) &&
+                    <div>
+                        <SimpleModal
+                            id={x.id}
+                            action={() => this.props.onPromoteToOwner(x.id)}
+                            data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
+                            button={
+                                <Tooltip title="Approve as an owner">
+                                    <IconButton aria-label="delete">
+                                        <i className="fas fa-plus-circle" ></i>
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                        />
+                    </div>
+                }
+                {isMyPrivateEvent &&
+                    <Button
+                        onClick={() => this.props.onApprove(user.id, false)}
+                        variant="outlined"
+                        color="success"
+                    >
+                        Delete from event
+                    </Button>
+                }
+            </UserView>
         ));
     }
 
@@ -158,13 +182,9 @@ export default class EventItemView extends Component {
 
     getAge = birthday => {
         let today = new Date();
-        let birthDate = new Date(birthday);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        let m = today.getMonth() - birthDate.getMonth();
-
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age = age - 1;
-        }
+        var date = moment(today);
+        var birthDate = moment(birthday);
+        let age = date.diff(birthDate, 'years');
 
         if (age >= 100) {
             age = "---";
