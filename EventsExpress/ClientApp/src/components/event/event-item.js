@@ -22,17 +22,25 @@ import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 
 import PhotoService from '../../services/PhotoService';
+import EventsExpressService from '../../services/EventsExpressService';
+import { get_event_preview_photo } from '../../actions/photo-action';
+import { connect } from 'react-redux';
+import AuthComponent from '../../security/authComponent';
+import { eventImage } from '../../constants/eventImage';
 
 const useStyles = useStyle;
+const baseService = new EventsExpressService();
 const photoService = new PhotoService();
 
-export default class EventCard extends Component {
+class EventCard extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             anchorEl: null
         }
+
+        photoService.getPreviewEventPhoto(this.props.item.id);
     }
 
     renderCategories = (arr) => {
@@ -73,7 +81,7 @@ export default class EventCard extends Component {
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
-                                    photoUrl={x.photoUrl}
+                                    photoUrl={`api/photo/GetUserPhoto?id=${owners[0].id}`}
                                     name={x.username}
                                 />
                                 <div>
@@ -86,11 +94,10 @@ export default class EventCard extends Component {
             </MenuItem>
         ));
 
-        const userPhoto = photoService.getUserPhoto(owners[0].id);
+        // const userPhoto = photoService.getUserPhoto(owners[0].id);
         // `api/photo/GetUserPhoto?id=${owners[0].id}`
+        // const eventPreviewPhoto = this.props.eventPreviewPhoto(id);
         // const eventPreviewPhoto = photoService.getPreviewEventPhoto(id);
-
-        let img = document.createElement('img');
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -124,12 +131,10 @@ export default class EventCard extends Component {
                                 <Badge overlap="circle" badgeContent={owners.length} color="primary">
                                     <CustomAvatar
                                         className={classes.avatar}
-                                        photoUrl={userPhoto}
-                                        name={owners[0].username}
-                                    />
+                                        photoUrl={`api/photo/GetUserPhoto?id=${owners[0].id}`}
+                                        name={owners[0].username}/>
                                 </Badge>
                             </Button>
-
                         }
 
                         action={
@@ -147,10 +152,12 @@ export default class EventCard extends Component {
                     />
                     <CardMedia
                         className={classes.media}
-                        title={title}
-                    >
-                        <Link to={`/event/${id}/1`}>
-                            <img src={photoService.getPreviewEventPhoto(id)} loading="lazy" className="w-100 eventPhoto" alt="Event" />
+                        title={title}>
+                        <Link to={`/event/${id}/1`} id="LinkToEvent">
+                            <img src={`api/photo/GetPreviewEventPhoto?id=${id}`}
+                                id="eventPreviewPhotoImg" alt="Event"
+                                onError={(e) => { e.target.onerror = null; e.target.src = `${eventImage}` }}
+                                className="w-100 eventPhoto" />
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
@@ -201,15 +208,14 @@ export default class EventCard extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                {(this.props.current_user !== null
-                                    && this.props.current_user.roles.includes("Admin"))
-                                    && <EventActiveStatus
+                                <AuthComponent rolesMatch={['Admin']}>
+                                    <EventActiveStatus
                                         key={this.props.item.id + this.props.item.eventStatus}
                                         eventStatus={this.props.item.eventStatus}
                                         eventId={this.props.item.id}
                                         onBlock={this.props.onBlock}
                                         onUnBlock={this.props.onUnBlock} />
-                                }
+                                </AuthComponent>
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
@@ -219,3 +225,11 @@ export default class EventCard extends Component {
         );
     }
 }
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        eventPreviewPhoto: (id) => dispatch(get_event_preview_photo(id))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(EventCard);

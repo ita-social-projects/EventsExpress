@@ -20,6 +20,36 @@ export default class EventsExpressService {
         return res;
     }
 
+    getPhoto = async (url, id) => {
+        // const call = _url => fetch(this._baseUrl + url);
+
+        // let res = await call(url);
+        // if (res.status === 401 && await this.refreshHandler()) {
+        //     // one more try:
+        //     res = await call(url);
+        // }
+
+        // return res;
+
+        let xhr = new XMLHttpRequest();
+        let urlWithParams = new URL('https://localhost:44344/' + this._baseUrl + url);
+        urlWithParams.searchParams.set('id', id);
+        xhr.open('GET', urlWithParams);
+        xhr.responseType = 'blob';
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if(xhr.status != 200){
+                return null;
+            }
+            else if (xhr.readyState == 4 && xhr.status == 200){
+                // console.log(xhr.response);
+                // document.getElementById("eventPreviewPhotoImg").src = URL.createObjectURL(xhr.response);
+                return xhr.response;
+            }
+        }
+    }
+
     setResource = async (url, data) => {
         const call = (url, data) => fetch(
             this._baseUrl + url,
