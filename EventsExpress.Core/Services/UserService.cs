@@ -86,10 +86,20 @@ namespace EventsExpress.Core.Services
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId));
 
-            if (user != null)
-            {
-                user.Rating = GetRating(user.Id);
-            }
+            return user;
+        }
+
+        public UserDto GetByEmail(string email)
+        {
+            var user = Mapper.Map<UserDto>(Context.Users
+                .Include(u => u.Events)
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
+                .Include(u => u.Relationships)
+                .AsNoTracking()
+                .FirstOrDefault(o => o.Email == email));
 
             return user;
         }
@@ -102,6 +112,7 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
+                .Include(u => u.Relationships)
                 .AsNoTracking();
 
             users = !string.IsNullOrEmpty(model.KeyWord)
@@ -131,16 +142,6 @@ namespace EventsExpress.Core.Services
                 .Take(model.PageSize).ToList();
 
             var result = Mapper.Map<IEnumerable<UserDto>>(usersList);
-
-            foreach (var u in result)
-            {
-                u.Rating = GetRating(u.Id);
-
-                var rel = Context.Relationships
-                    .FirstOrDefault(x => x.UserFromId == id && x.UserToId == u.Id);
-
-                u.Attitude = (rel != null) ? (byte)rel.Attitude : (byte)2;
-            }
 
             return result;
         }

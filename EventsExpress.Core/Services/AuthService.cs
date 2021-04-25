@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -231,6 +232,18 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
             _cacheHelper.Delete(cacheDto.AuthLocalId);
             return authLocal.Account;
+        }
+
+        public Guid GetCurrUserId(ClaimsPrincipal userClaims)
+        {
+            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
+
+            if (string.IsNullOrEmpty(guidClaim?.Value))
+            {
+                return Guid.Empty;
+            }
+
+            return Guid.Parse(guidClaim.Value);
         }
     }
 }
