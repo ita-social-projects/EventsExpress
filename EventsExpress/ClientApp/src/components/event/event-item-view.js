@@ -75,7 +75,6 @@ export default class EventItemView extends Component {
         return arr.map(x => (
             <UserView
                 user={x}
-                isMyPrivateEvent={isMyPrivateEvent}
                 getAge={this.getAge}
             >
                 {(isMyEvent) &&
@@ -110,24 +109,18 @@ export default class EventItemView extends Component {
     renderPendingUsers = (arr, isMyEvent) => {
         return arr.map(x => (
             <div>
-                <div className="flex-grow-1">
-                    <Link to={'/user/' + x.id} className="btn-custom">
-                        <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                            <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
-                            </div>
-                        </div>
-                    </Link>
-                </div>
+                <UserView
+                    user={x}
+                    getAge={this.getAge}
+                >
                 {(isMyEvent) &&
                     <div>
                         <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
-                }
+                    }
+                </UserView>
                 <div>
                     <Button
                         variant="outlined"
@@ -151,24 +144,18 @@ export default class EventItemView extends Component {
     renderDeniedUsers = (arr, isMyEvent) => {
         return arr.map(x => (
             <div>
-                <div className="flex-grow-1">
-                    <Link to={'/user/' + x.id} className="btn-custom">
-                        <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                            <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
-                            </div>
-                        </div>
-                    </Link>
-                </div>
+                <UserView
+                    user={x}
+                    getAge={this.getAge}
+                >
                 {(isMyEvent) &&
                     <div>
                         <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </div>
-                }
+                    }
+                </UserView>
                 <Button
                     onClick={() => this.props.onApprove(x.id, true)}
                     variant="outlined"

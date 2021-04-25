@@ -126,16 +126,14 @@ export default class EventCard extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                {
-                                    <AuthComponent rolesMatch={[Roles.Admin]}>
-                                        <EventActiveStatus
-                                            key={this.props.item.id + this.props.item.eventStatus}
-                                            eventStatus={this.props.item.eventStatus}
-                                            eventId={this.props.item.id}
-                                            onBlock={this.props.onBlock}
-                                            onUnBlock={this.props.onUnBlock} />
-                                    </AuthComponent >
-                                }
+                                <AuthComponent rolesMatch={[Roles.Admin]}>
+                                    <EventActiveStatus
+                                        key={this.props.item.id + this.props.item.eventStatus}
+                                        eventStatus={this.props.item.eventStatus}
+                                        eventId={this.props.item.id}
+                                        onBlock={this.props.onBlock}
+                                        onUnBlock={this.props.onUnBlock} />
+                                </AuthComponent >
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
