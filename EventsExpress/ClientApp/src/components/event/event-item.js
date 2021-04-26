@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom'
 import Moment from 'react-moment';
 
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import {Button, Menu, MenuItem} from '@material-ui/core'
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,7 +19,9 @@ import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import { useStyle } from '../event/CardStyle'
+import {useStyle} from './CardStyle';
+import AuthComponent from "../../security/authComponent";
+import {Roles} from '../../constants/userRoles';
 
 const useStyles = useStyle;
 
@@ -38,11 +40,11 @@ export default class EventCard extends Component {
     }
 
     handleClick = (event) => {
-        this.setState({ anchorEl: event.currentTarget });
+        this.setState({anchorEl: event.currentTarget});
     }
 
     handleClose = () => {
-        this.setState({ anchorEl: null });
+        this.setState({anchorEl: null});
     }
 
     render() {
@@ -61,7 +63,7 @@ export default class EventCard extends Component {
             owners
         } = this.props.item;
         const INT32_MAX_VALUE = null;
-        const { anchorEl } = this.state;
+        const {anchorEl} = this.state;
 
         const PrintMenuItems = owners.map(x => (
             <MenuItem onClick={this.handleClose}>
@@ -134,74 +136,75 @@ export default class EventCard extends Component {
                         }
                         title={title}
                         subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
-                        classes={{ title: 'title' }}
+                        classes={{title: 'title'}}
                     />
                     <CardMedia
                         className={classes.media}
                         title={title}
                     >
                         <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                            <img src={photoUrl} className="w-100" alt="Event"/>
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
-                        <CardContent>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                            >
-                                {countVisitor}/{maxParticipants} Participants
-                            </Typography>
-                        </CardContent>
+                    <CardContent>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {countVisitor}/{maxParticipants} Participants
+                        </Typography>
+                    </CardContent>
                     }
                     <CardContent>
                         {description &&
-                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                                <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                    {description.substr(0, 128)}
-                                </Typography>
-                            </Tooltip>
-                        } 
+                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')}
+                                 classes={{tooltip: 'description-tooltip'}}>
+                            <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                {description.substr(0, 128)}
+                            </Typography>
+                        </Tooltip>
+                        }
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.props.item.location &&
-                                <DisplayLocation
-                                    location={this.props.item.location}
-                                />
+                            <DisplayLocation
+                                location={this.props.item.location}
+                            />
                             }
-                            <br />
+                            <br/>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
-                                    <Tooltip title="Private event">
-                                        <IconButton>
-                                            <Badge color="primary">
-                                                <i className="fa fa-key"></i>
-                                            </Badge>
-                                        </IconButton>
-                                    </Tooltip>
+                                <Tooltip title="Private event">
+                                    <IconButton>
+                                        <Badge color="primary">
+                                            <i className="fa fa-key"/>
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">
                                         <IconButton aria-label="view">
-                                            <i className="fa fa-eye"></i>
+                                            <i className="fa fa-eye"/>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                {(this.props.current_user !== null
-                                    && this.props.current_user.roles.includes("Admin"))
-                                    && <EventActiveStatus
-                                    key={this.props.item.id + this.props.item.eventStatus}
-                                    eventStatus={this.props.item.eventStatus}
-                                    eventId={this.props.item.id}
-                                    onBlock = {this.props.onBlock}
-                                    onUnBlock = {this.props.onUnBlock}/>
-                                }                        
-                                <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
+                                <AuthComponent rolesMatch={[Roles.Admin]}>
+                                    <EventActiveStatus
+                                        key={this.props.item.id + this.props.item.eventStatus}
+                                        eventStatus={this.props.item.eventStatus}
+                                        eventId={this.props.item.id}
+                                        onBlock={this.props.onBlock}
+                                        onUnBlock={this.props.onUnBlock}/>
+                                </AuthComponent>
+                                <SocialShareMenu
+                                    href={`${window.location.protocol}//${window.location.host}/event/${id}/1`}/>
                             </div>
                         </div>
                     </CardActions>

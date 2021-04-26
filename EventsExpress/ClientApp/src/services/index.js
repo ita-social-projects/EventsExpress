@@ -24,6 +24,6 @@ export {
     UserService,
     NotificationTypeService,
     AccountService,
-	TrackService
+	TrackService,
     NotificationTemplateService
 };
