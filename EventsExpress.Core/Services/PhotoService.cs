@@ -13,6 +13,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 
@@ -138,6 +139,21 @@ namespace EventsExpress.Core.Services
                 BlobClient blobClient = _blobContainerClient.GetBlobClient(url);
                 await blobClient.DownloadToAsync(previewMS);
                 return previewMS.ToArray().ToRenderablePictureString();
+            }
+            catch (Azure.RequestFailedException)
+            {
+                return null;
+            }
+        }
+
+        public async Task<byte[]> GetRealPhotoFromAzureBlob(string url)
+        {
+            try
+            {
+                using var previewMS = new MemoryStream();
+                BlobClient blobClient = _blobContainerClient.GetBlobClient(url);
+                await blobClient.DownloadToAsync(previewMS);
+                return previewMS.ToArray();
             }
             catch (Azure.RequestFailedException)
             {
