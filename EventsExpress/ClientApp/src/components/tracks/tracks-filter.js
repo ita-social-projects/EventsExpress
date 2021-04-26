@@ -1,7 +1,7 @@
 ﻿import React, {Component} from 'react';
 import Button from "@material-ui/core/Button";
 import {Field, reduxForm} from 'redux-form';
-import {renderDatePicker, renderMultiselect} from "../helpers/helpers";
+import {renderTracksDatePicker, renderMultiselect} from "../helpers/helpers";
 import changesTypeEnum from "../../constants/changesTypeEnum";
 import EventFilterStatus from "../event/event-filter-status";
 
@@ -40,7 +40,7 @@ class TracksFilter extends Component {
                             name='dateFrom'
                             label='From'
                             minValue={new Date()}
-                            component={renderDatePicker}
+                            component={renderTracksDatePicker}
                         />
                     </div>
                     <div className="form-group">
@@ -48,7 +48,7 @@ class TracksFilter extends Component {
                             name='dateTo'
                             label='To'
                             minValue={new Date(values.dateFrom)}
-                            component={renderDatePicker}
+                            component={renderTracksDatePicker}
                         />
                     </div>
                 </div>

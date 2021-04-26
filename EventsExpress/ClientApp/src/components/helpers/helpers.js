@@ -218,6 +218,16 @@ export const renderDatePicker = ({ input: { onChange, value }, minValue, label }
     />
 }
 
+export const renderTracksDatePicker = ({ input: { onChange, value }, label }) => {
+    return <TextField
+        type="date"
+        label={label}
+        selected={moment(value).format('L')}
+        value={moment(value).format('YYYY-MM-DD')}
+        onChange={onChange}
+    />
+}
+
 export const maxLength = max => value =>
     value && value.length > max
         ? `Must be ${max} characters or less`
