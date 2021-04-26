@@ -15,7 +15,8 @@ class Tracks extends Component {
 
     handleSubmit = async (filters) => {
         await this.props.getAllTracks({
-            entityName: filters.entityNames.map(x => x.entityName),
+            // entityName: filters.entityNames != null ? filters.entityNames.map(x => x.entityName) : null,
+            entityName: !!filters.entityNames && filters.entityNames.map(x => x.entityName),
             changesType: filters.changesType,
             dateFrom: filters.dateFrom,
             dateTo: filters.dateTo,
