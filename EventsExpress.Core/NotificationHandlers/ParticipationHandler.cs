@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -17,13 +18,16 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.VisitedEvent;
+        private readonly INotificationTemplateService _notificationTemplateService;
 
         public ParticipationHandler(
             IEmailService sender,
-            IUserService userSrv)
+            IUserService userSrv,
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userSrv;
+            _notificationTemplateService = notificationTemplateService;
         }
 
         public async Task Handle(ParticipationMessage notification, CancellationToken cancellationToken)
@@ -32,23 +36,28 @@ namespace EventsExpress.Core.NotificationHandlers
             {
                 var usersIds = new[] { notification.UserId };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersIds).Select(x => x.Email).SingleOrDefault();
+
                 if (userEmail != null)
                 {
                     string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.Id}/1";
-                    string message = notification.Status == UserStatusEvent.Approved
-                        ? "you have been approved to join to this event."
-                        : "you have been denied to join to this event.";
+
+                    var templateId = notification.Status.Equals(UserStatusEvent.Approved) ?
+                        NotificationProfile.ParticipationApproved
+                        : NotificationProfile.ParticipationDenied;
+
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
+
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
+                    {
+                        { "(UserName)", userEmail },
+                        { "(link)", eventLink },
+                    };
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = notification.Status == UserStatusEvent.Approved
-                            ? "Approving participation"
-                            : "Denying participation",
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = $"Dear {userEmail}, " +
-                        message +
-                        $"To check it, please, visit " +
-                        $"\"<a href='{eventLink}'>EventExpress</>\"",
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }
