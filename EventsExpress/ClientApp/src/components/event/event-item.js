@@ -22,8 +22,6 @@ import eventStatusEnum from '../../constants/eventStatusEnum';
 import {useStyle} from './CardStyle';
 import AuthComponent from "../../security/authComponent";
 import {Roles} from '../../constants/userRoles';
-import AuthComponent from "../../security/authComponent";
-import { Roles } from '../../constants/userRoles';
 
 const useStyles = useStyle;
 
