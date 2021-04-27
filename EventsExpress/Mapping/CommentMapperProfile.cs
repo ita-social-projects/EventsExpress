@@ -23,7 +23,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.UserName,
                     opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom<CommentDtoToViewModelResolver>());
+                .ForMember(dest => dest.UserPhoto, opts => opts.Ignore());
 
             CreateMap<CommentViewModel, CommentDto>()
                 .ForMember(dest => dest.User, opts => opts.Ignore());

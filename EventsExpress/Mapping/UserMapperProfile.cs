@@ -48,7 +48,7 @@ namespace EventsExpress.Mapping
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToInfoResolver>());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -62,7 +62,7 @@ namespace EventsExpress.Mapping
                         Id = x.Role.Id,
                         Name = x.Role.Name,
                     })))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToManageResolver>());
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore());
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(
