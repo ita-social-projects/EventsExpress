@@ -1,8 +1,9 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import {getEvent} from './event-item-view-action';
+import { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
+
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
@@ -44,7 +45,7 @@ export function publish_event(data) {
         let response = await api_serv.publishEvent(data);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(get_event(data.id));
+            dispatch(getEvent(data));
             dispatch(eventWasCreated(data.id));
             return Promise.resolve();
         }

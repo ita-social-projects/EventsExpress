@@ -50,6 +50,10 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
+                StatusHistory = new List<EventStatusHistory>
+                {
+                    new EventStatusHistory { EventStatus = EventStatus.Active },
+                },
             };
 
             user = new User
