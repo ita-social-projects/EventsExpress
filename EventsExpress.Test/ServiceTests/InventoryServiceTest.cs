@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Moq;
 using NUnit.Framework;
 
@@ -74,6 +75,10 @@ namespace EventsExpress.Test.ServiceTests
                     IsPublic = true,
                     Categories = null,
                     MaxParticipants = 2147483647,
+                    StatusHistory = new List<EventStatusHistory>
+                    {
+                        new EventStatusHistory { EventStatus = EventStatus.Active },
+                    },
                 },
                 new Event
                 {
@@ -86,6 +91,10 @@ namespace EventsExpress.Test.ServiceTests
                     Categories = null,
                     MaxParticipants = 2147483647,
                     Visitors = new List<UserEvent>(),
+                    StatusHistory = new List<EventStatusHistory>
+                    {
+                        new EventStatusHistory { EventStatus = EventStatus.Active },
+                    },
                 },
             };
 
