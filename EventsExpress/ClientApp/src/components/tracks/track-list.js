@@ -3,7 +3,7 @@ import PagePagination from '../shared/pagePagination';
 import TrackItem from './track-item';
 
 class TrackList extends Component {
-    
+
     renderItems = arr => {
         return arr.map(item => (
             <TrackItem

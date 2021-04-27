@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -8,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
-    using System;
-
     [Route("api/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     [ApiController]

@@ -64,8 +64,7 @@ namespace EventsExpress.Core.Services
             var entityNames = Context.ChangeInfos
                 .Select(x => x.EntityName).Distinct().Select(x => new EntityNamesDto
                 {
-                    EntityName = x,
-                    Id = Guid.NewGuid(),
+                    EntityName = x, Id = Guid.NewGuid(),
                 });
 
             return entityNames;

@@ -3,7 +3,7 @@ import TrackList from './track-list';
 import TracksFilter from './tracks-filter';
 import Spinner from '../spinner';
 import getAllTracks, {getEntityNames} from '../../actions/tracks/track-list-action';
-import { getFormValues, reset } from 'redux-form';
+import {getFormValues, reset} from 'redux-form';
 import {connect} from 'react-redux';
 
 class Tracks extends Component {
@@ -15,7 +15,6 @@ class Tracks extends Component {
 
     handleSubmit = async (filters) => {
         await this.props.getAllTracks({
-            // entityName: filters.entityNames != null ? filters.entityNames.map(x => x.entityName) : null,
             entityName: !!filters.entityNames && filters.entityNames.map(x => x.entityName),
             changesType: filters.changesType,
             dateFrom: filters.dateFrom,
@@ -23,7 +22,7 @@ class Tracks extends Component {
             page: 1
         })
     }
-    
+
     handlePageChange = async (page) => {
         await this.props.getAllTracks({
             entityName: !!this.props.form_values.entityNames && this.props.form_values.entityNames.map(x => x.entityName),
@@ -42,12 +41,12 @@ class Tracks extends Component {
                 <div className="d-flex">
                     {!isPending &&
                     data?.items &&
-                        <div className="w-75">
-                            <TrackList
-                                data_list={data}
-                                handlePageChange={this.handlePageChange}
-                            />
-                        </div>
+                    <div className="w-75">
+                        <TrackList
+                            data_list={data}
+                            handlePageChange={this.handlePageChange}
+                        />
+                    </div>
                     }
                     <div className="w-25">
                         <TracksFilter
@@ -65,8 +64,8 @@ class Tracks extends Component {
 }
 
 const mapStateToProps = (state) => ({
-        tracks: state.tracks,
-        form_values: getFormValues('tracks-filter-form')(state)
+    tracks: state.tracks,
+    form_values: getFormValues('tracks-filter-form')(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
