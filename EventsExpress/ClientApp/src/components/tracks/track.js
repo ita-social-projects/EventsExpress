@@ -23,9 +23,18 @@ class Tracks extends Component {
             page: 1
         })
     }
+    
+    handlePageChange = async (page) => {
+        await this.props.getAllTracks({
+            entityName: !!this.props.form_values.entityNames && this.props.form_values.entityNames.map(x => x.entityName),
+            changesType: this.props.form_values.changesType,
+            dateFrom: this.props.form_values.dateFrom,
+            dateTo: this.props.form_values.dateTo,
+            page: page
+        })
+    }
 
     render() {
-        const that = this;
         const {isPending, data, entityNames} = this.props.tracks;
         return <div>
             <table className="table w-100 m-auto">
@@ -36,11 +45,7 @@ class Tracks extends Component {
                         <div className="w-75">
                             <TrackList
                                 data_list={data}
-                                onPagination={
-                                    (page) => {
-                                        that.props.getAllTracks({page: page})
-                                    }
-                                }
+                                handlePageChange={this.handlePageChange}
                             />
                         </div>
                     }

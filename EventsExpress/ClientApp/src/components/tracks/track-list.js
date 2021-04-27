@@ -3,11 +3,7 @@ import PagePagination from '../shared/pagePagination';
 import TrackItem from './track-item';
 
 class TrackList extends Component {
-
-    handlePageChange = (page) => {
-        this.props.onPagination(page);
-    };
-
+    
     renderItems = arr => {
         return arr.map(item => (
             <TrackItem
@@ -17,7 +13,7 @@ class TrackList extends Component {
     }
 
     render() {
-        const {data_list} = this.props;
+        const {data_list, handlePageChange} = this.props;
 
         return (<>
             <div className="d-flex">
@@ -49,7 +45,7 @@ class TrackList extends Component {
                     <PagePagination
                         currentPage={data_list.pageViewModel.pageNumber}
                         totalPages={data_list.pageViewModel.totalPages}
-                        callback={this.handlePageChange}
+                        callback={handlePageChange}
                     />
                     }
                 </div>
