@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Moq;
 using NUnit.Framework;
 
@@ -38,6 +40,10 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
+                StatusHistory = new List<EventStatusHistory>
+                {
+                    new EventStatusHistory { EventStatus = EventStatus.Active },
+                },
             };
 
             existingComment = new Comments
@@ -103,7 +109,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 Id = commentId,
                 UserId = userId,
-                EventId = default,
+                EventId = Guid.NewGuid(),
                 Text = "Text",
             };
 

@@ -47,7 +47,6 @@ class EditEventWrapper extends Component {
             <EventForm
                 validate={validate}
                 all_categories={this.props.all_categories}
-                onCancel={this.props.onCancelEditing}
                 onPublish={this.onPublish}
                 onSubmit={this.onSubmit}
                 initialValues={initialValues}
@@ -71,7 +70,7 @@ class EditEventWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.handleClick}>
+                        onClick={this.props.onCancelEditing}>
                         Cancel
                         </Button>
                 </div>
