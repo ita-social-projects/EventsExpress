@@ -11,6 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './card-style-const'
+import {eventImage} from "../../constants/eventImage";
 
 
 export default class EventSchedule extends Component {
@@ -43,7 +44,9 @@ export default class EventSchedule extends Component {
                         title={title}
                     >
                         <Link to={`/eventSchedule/${id}`}>
-                            <img src={photoUrl} className="w-100" />
+                            <img src={eventImage}
+                                 id="eventPreviewPhotoImg" alt="EventSchedule"
+                                 className="w-100" />
                         </Link>
                     </CardMedia>
                     <CardContent>

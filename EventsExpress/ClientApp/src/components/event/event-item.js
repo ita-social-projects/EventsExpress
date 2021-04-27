@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+﻿import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,27 +19,27 @@ import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import { useStyle } from '../event/CardStyle'
+import { useStyle } from '../event/CardStyle';
 
 import PhotoService from '../../services/PhotoService';
 import EventsExpressService from '../../services/EventsExpressService';
-import { get_event_preview_photo } from '../../actions/photo-action';
 import { connect } from 'react-redux';
 import AuthComponent from '../../security/authComponent';
 import { eventImage } from '../../constants/eventImage';
 
 const useStyles = useStyle;
-const baseService = new EventsExpressService();
 const photoService = new PhotoService();
 
-class EventCard extends Component {
+export default class EventCard extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             anchorEl: null
         }
+    }
 
+    componentDidMount() {
         photoService.getPreviewEventPhoto(this.props.item.id);
     }
 
@@ -81,7 +81,7 @@ class EventCard extends Component {
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
-                                    photoUrl={`api/photo/GetUserPhoto?id=${owners[0].id}`}
+                                    userId={owners[0].id}
                                     name={x.username}
                                 />
                                 <div>
@@ -93,11 +93,6 @@ class EventCard extends Component {
                 </div>
             </MenuItem>
         ));
-
-        // const userPhoto = photoService.getUserPhoto(owners[0].id);
-        // `api/photo/GetUserPhoto?id=${owners[0].id}`
-        // const eventPreviewPhoto = this.props.eventPreviewPhoto(id);
-        // const eventPreviewPhoto = photoService.getPreviewEventPhoto(id);
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -131,7 +126,7 @@ class EventCard extends Component {
                                 <Badge overlap="circle" badgeContent={owners.length} color="primary">
                                     <CustomAvatar
                                         className={classes.avatar}
-                                        photoUrl={`api/photo/GetUserPhoto?id=${owners[0].id}`}
+                                        userId={owners[0].id}
                                         name={owners[0].username}/>
                                 </Badge>
                             </Button>
@@ -154,10 +149,9 @@ class EventCard extends Component {
                         className={classes.media}
                         title={title}>
                         <Link to={`/event/${id}/1`} id="LinkToEvent">
-                            <img src={`api/photo/GetPreviewEventPhoto?id=${id}`}
+                            <img src={eventImage}
                                 id="eventPreviewPhotoImg" alt="Event"
-                                onError={(e) => { e.target.onerror = null; e.target.src = `${eventImage}` }}
-                                className="w-100 eventPhoto" />
+                                className="w-100" />
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
@@ -225,11 +219,3 @@ class EventCard extends Component {
         );
     }
 }
-
-let mapDispatchToProps = (dispatch) => {
-    return {
-        eventPreviewPhoto: (id) => dispatch(get_event_preview_photo(id))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(EventCard);

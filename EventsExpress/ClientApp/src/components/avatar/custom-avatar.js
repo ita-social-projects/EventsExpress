@@ -6,7 +6,7 @@ export default class CustomAvatar extends Component {
 
     render() {
 
-        const { photoUrl, name } = this.props;
+        const { userId, name } = this.props;
 
         let size = `${this.props.size}Avatar`;
 
@@ -20,13 +20,9 @@ export default class CustomAvatar extends Component {
             <>
                 <Avatar
                     alt={name.charAt(0).toUpperCase()}
-                    src={photoUrl}
+                    src={`api/photo/GetUserPhoto?id=${userId}`}
                     className={size}
-                    imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}>
-                    <div className={`${firstLetterSize} text-light`}>
-                        {name.charAt(0).toUpperCase()}
-                    </div>
-                </Avatar>
+                    imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
             </>
         );
     }

@@ -64,7 +64,6 @@ class UserItemView extends Component {
 
     render() {
         const {
-            userPhoto,
             name,
             email,
             birthday,
@@ -92,7 +91,7 @@ class UserItemView extends Component {
                     <div className="col-4 user">
                         <div className='d-flex flex-column justify-content-center align-items-center'>
                             <div className="user-profile-avatar">
-                                <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                <CustomAvatar size="big" name={name} userId={userId} />
                             </div>
                             <RatingAverage value={rating} direction='row' />
 

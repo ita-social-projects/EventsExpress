@@ -10,7 +10,7 @@ export default class UserInfo extends Component {
         return (
             <>
                 <td className="align-middle">
-                    <CustomAvatar photoUrl={user.photoUrl} name={user.username} />                                        
+                    <CustomAvatar userId={user.id} name={user.username} />
                 </td>
 
                 <td className="align-middle">
