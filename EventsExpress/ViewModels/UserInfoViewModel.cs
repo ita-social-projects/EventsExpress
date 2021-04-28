@@ -19,8 +19,6 @@ namespace EventsExpress.ViewModels
 
         public IEnumerable<string> Roles { get; set; }
 
-        public string PhotoUrl { get; set; }
-
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
         public IEnumerable<NotificationTypeViewModel> NotificationTypes { get; set; }

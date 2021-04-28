@@ -47,8 +47,7 @@ class EventForm extends Component {
         const { handleChange } = this;
 
         let values = form_values || initialValues;
-        const photoUrl = initialValues ?
-            initialValues.photoUrl : null;
+        const photoUrl = `api/photo/GetFullEventPhoto?id=${this.props.eventId}`;
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
