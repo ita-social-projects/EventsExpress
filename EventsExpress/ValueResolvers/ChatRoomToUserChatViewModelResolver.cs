@@ -30,7 +30,6 @@ namespace EventsExpress.ValueResolvers
                     Id = u.UserId,
                     Birthday = u.User.Birthday,
                     Username = u.User.Name ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
-                    PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.UserId}/photo.png").Result,
                 });
             }
 
