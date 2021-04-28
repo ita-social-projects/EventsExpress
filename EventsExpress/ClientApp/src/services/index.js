@@ -9,6 +9,7 @@ import RoleService from './RoleService'
 import UserService from './UserService'
 import NotificationTypeService from './NotificationTypeService'
 import AccountService from './AccountService';
+import NotificationTemplateService from "./NotificationTemplateService";
 
 export {
     AuthenticationService,
@@ -22,4 +23,5 @@ export {
     UserService,
     NotificationTypeService,
     AccountService,
+    NotificationTemplateService
 };
