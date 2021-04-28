@@ -1,8 +1,9 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import {getEvent} from './event-item-view-action';
+import { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
+
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";

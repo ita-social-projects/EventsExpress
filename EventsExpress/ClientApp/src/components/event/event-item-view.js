@@ -329,7 +329,7 @@ export default class EventItemView extends Component {
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {canEdit && <button onClick={this.onEdit} className="btn btn-edit">Edit</button>}
+                                {canEdit && <button onClick={this.onEdit} className="btn btn-edit mb-1">Edit</button>}
                                 {canCancel && <EventChangeStatusModal
                                     button={<button className="btn btn-edit">Cancel</button>}
                                     submitCallback={this.props.onCancel}           
@@ -348,7 +348,7 @@ export default class EventItemView extends Component {
                             </div>
                             : <>
                                 {!isFutureEvent &&
-                                    <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                    <div className="text-box overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                                         <RatingWrapper
                                             iWillVisitIt={iWillVisitIt}
                                             eventId={id}
@@ -356,7 +356,7 @@ export default class EventItemView extends Component {
                                         />
                                     </div>
                                 }
-                                <div className="text-box-big overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                                     {(eventStatus === eventStatusEnum.Canceled) &&
                                         <div className="text-center text-uppercase cancel-text">
                                             <i className="fas fa-exclamation-triangle text-warning"></i>
@@ -367,12 +367,12 @@ export default class EventItemView extends Component {
                                     }
                                     {description}
                                 </div>
-                                <div className="shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                                     <InventoryList
                                         eventId={id} />
                                 </div>
 
-                                <div className="overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
+                                <div className="overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                                     <Comment match={this.props.match} />
                                 </div>
                             </>

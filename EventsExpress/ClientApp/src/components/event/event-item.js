@@ -19,12 +19,13 @@ import EventActiveStatus from './event-active-status';
 import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import { useStyle } from '../event/CardStyle';
+import { useStyle } from '../event/CardStyle'
+import AuthComponent from "../../security/authComponent";
+import { Roles } from '../../constants/userRoles';
 
 import PhotoService from '../../services/PhotoService';
 import EventsExpressService from '../../services/EventsExpressService';
 import { connect } from 'react-redux';
-import AuthComponent from '../../security/authComponent';
 import { eventImage } from '../../constants/eventImage';
 
 const useStyles = useStyle;
