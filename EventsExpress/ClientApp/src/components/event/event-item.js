@@ -146,8 +146,8 @@ export default class EventCard extends Component {
                         title={title}>
                         <Link to={`/event/${id}/1`} id="LinkToEvent">
                             <img src={eventDefaultImage}
-                                id="eventPreviewPhotoImg" alt="Event"
-                                className="w-100" />
+                                id={"eventPreviewPhotoImg" + id} alt="Event"
+                                className="w-100"/>
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&

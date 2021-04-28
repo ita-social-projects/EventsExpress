@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
 import { deleteSeenMsgNotification } from '../../actions/chat/chat-action';
 import './msg.css';
 import { getTimeDifferenceFromNull } from '../helpers/TimeHelper';
-import {userDefaultImage} from "../../constants/userDefaultImage";
 import CustomAvatar from "../avatar/custom-avatar";
 
 class Msg extends Component {

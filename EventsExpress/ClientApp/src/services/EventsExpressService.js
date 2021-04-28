@@ -27,7 +27,9 @@ export default class EventsExpressService {
 
         if(res.ok){
             let blob = await res.blob();
-            document.getElementById(imgTagId).src = URL.createObjectURL(blob);
+            if(document.getElementById(imgTagId) !== null){
+                document.getElementById(imgTagId).src = URL.createObjectURL(blob);
+            }
         }
     }
 

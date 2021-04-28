@@ -250,7 +250,6 @@ export default class EventItemView extends Component {
         const { current_user } = this.props;
         const {
             id,
-            photoUrl,
             categories,
             title,
             dateFrom,
@@ -287,7 +286,7 @@ export default class EventItemView extends Component {
                     <div className="col-9">
                         <div className="col-12">
                             <img src={eventDefaultImage}
-                                 id="eventFullPhotoImg" alt="Event"
+                                 id={"eventFullPhotoImg" + id} alt="Event"
                                  className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span>

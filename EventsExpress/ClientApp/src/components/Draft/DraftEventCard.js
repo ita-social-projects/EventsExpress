@@ -17,6 +17,7 @@ import { useStyle } from '../event/CardStyle'
 import IconButton from "@material-ui/core/IconButton";
 import EventChangeStatusModal from '../event/event-change-status-modal';
 import PhotoService from "../../services/PhotoService";
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
 
 const useStyles = useStyle;
 const photoService = new PhotoService();
@@ -67,9 +68,10 @@ export default class DraftEventCard extends Component {
                         />
                         <CardMedia
                             className={classes.media + ' d-flex justify-content-center'}
-                            title={title}
-                        >
-                            <img id="eventPreviewPhotoImg" className="w-100" alt="Event" />
+                            title={title}>
+                            <img src={eventDefaultImage}
+                                 id={"eventPreviewPhotoImg" + id} alt="Event"
+                                 className="w-100"/>
                         </CardMedia>
                         <CardContent className="py-2">
                             {description &&

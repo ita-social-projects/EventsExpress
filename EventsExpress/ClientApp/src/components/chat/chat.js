@@ -5,10 +5,8 @@ import Button from "@material-ui/core/Button";
 import { renderTextArea } from '../helpers/helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
 import Msg from './msg';
 import Spinner from '../spinner';
-import {userDefaultImage} from "../../constants/userDefaultImage";
 import CustomAvatar from "../avatar/custom-avatar";
 
 class Chat extends Component {

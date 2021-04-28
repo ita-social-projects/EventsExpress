@@ -451,7 +451,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resView.Frequency, Is.EqualTo(firstEventDto.Frequency));
             Assert.That(resView.Periodicity, Is.EqualTo(firstEventDto.Periodicity));
             Assert.That(resView.IsReccurent, Is.EqualTo(firstEventDto.IsReccurent));
-            Assert.That(resView.MaxParticipants, Is.Null);
+            Assert.That(resView.MaxParticipants, Is.EqualTo(firstEventDto.MaxParticipants));
         }
 
         [Test]

@@ -73,7 +73,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
-                .ForMember(dest => dest.MaxParticipants, opts => opts.Ignore());
+                .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants));
 
             CreateMap<EventEditViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))

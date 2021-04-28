@@ -44,7 +44,7 @@ export default class EventSchedule extends Component {
                     >
                         <Link to={`/eventSchedule/${id}`}>
                             <img src={eventDefaultImage}
-                                 id="eventPreviewPhotoImg" alt="EventSchedule"
+                                 id={"eventPreviewPhotoImg" + eventId} alt="EventSchedule"
                                  className="w-100" />
                         </Link>
                     </CardMedia>

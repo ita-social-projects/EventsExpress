@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import get_chats from '../../actions/chat/chats-action';
 import { connect } from 'react-redux';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
 import Spinner from '../spinner';
 import './user_chats.css';
-import {userDefaultImage} from "../../constants/userDefaultImage";
 import CustomAvatar from "../avatar/custom-avatar";
 
 class UserChats extends Component {

@@ -83,7 +83,7 @@ class EventScheduleItemView extends Component {
                             title={title}
                         >
                             <img src={eventDefaultImage}
-                                 id="eventPreviewPhotoImg" alt="Event"
+                                 id={"eventPreviewPhotoImg" + eventId} alt="Event"
                                  className="w-100" />
                         </CardMedia>
                         <div className="text-block">
