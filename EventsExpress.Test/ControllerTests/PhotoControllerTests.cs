@@ -21,79 +21,38 @@ namespace EventsExpress.Test.ControllerTests
         {
             service = new Mock<IPhotoService>();
 
+            service
+                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
+                .Returns(Task.FromResult(new byte[] { 0 }));
+
             controller = new PhotoController(service.Object);
         }
 
         [Test]
         public void GetPreviewEventPhoto_ReturnsFile()
         {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Returns(Task.FromResult(new byte[] { 1 }));
+            var result = controller.GetPreviewEventPhoto(Guid.NewGuid().ToString());
+            var fileResult = result.Result as FileResult;
 
-            IActionResult result = controller.GetPreviewEventPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<FileContentResult>();
-        }
-
-        [Test]
-        public void GetPreviewEventPhoto_ReturnsNull()
-        {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Throws(new RequestFailedException("photo not found"));
-
-            IActionResult result = controller.GetPreviewEventPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<NotFoundResult>();
+            Assert.That(fileResult, Is.TypeOf<FileContentResult>());
         }
 
         [Test]
         public void GetFullEventPhoto_ReturnsFile()
         {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Returns(Task.FromResult(new byte[] { 1, 2 }));
+            var result = controller.GetFullEventPhoto(Guid.NewGuid().ToString());
+            var fileResult = result.Result as FileResult;
 
-            IActionResult result = controller.GetFullEventPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<FileContentResult>();
-        }
-
-        [Test]
-        public void GetFullEventPhoto_ReturnsNull()
-        {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Throws(new RequestFailedException("photo not found"));
-
-            IActionResult result = controller.GetFullEventPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<NotFoundResult>();
+            Assert.That(fileResult, Is.TypeOf<FileContentResult>());
         }
 
         [Test]
         public void GetUserPhoto_ReturnsFile()
         {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Returns(Task.FromResult(new byte[] { 1, 2 }));
+            var result = controller.GetUserPhoto(Guid.NewGuid().ToString());
+            var fileResult = result.Result as FileResult;
 
-            IActionResult result = controller.GetUserPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<FileContentResult>();
-        }
-
-        [Test]
-        public void GetUserPhoto_ReturnsNull()
-        {
-            service
-                .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-                .Throws(new RequestFailedException("photo not found"));
-
-            IActionResult result = controller.GetUserPhoto(Guid.NewGuid().ToString()) as IActionResult;
-
-            Is.TypeOf<NotFoundResult>();
+            Assert.That(fileResult, Is.TypeOf<FileContentResult>());
         }
     }
 }
