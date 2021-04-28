@@ -23,7 +23,7 @@ namespace EventsExpress.Controllers
         {
             string url = $"events/{id}/preview.png";
 
-            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetPhotoFromAzureBlob(url);
 
             if (photo == null)
             {
@@ -38,7 +38,7 @@ namespace EventsExpress.Controllers
         {
             string url = $"events/{id}/full.png";
 
-            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetPhotoFromAzureBlob(url);
 
             if (photo == null)
             {
@@ -53,7 +53,7 @@ namespace EventsExpress.Controllers
         {
             string url = $"users/{id}/photo.png";
 
-            var photo = await _photoService.GetRealPhotoFromAzureBlob(url);
+            var photo = await _photoService.GetPhotoFromAzureBlob(url);
 
             if (photo == null)
             {

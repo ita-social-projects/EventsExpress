@@ -131,22 +131,7 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<string> GetPhotoFromAzureBlob(string url)
-        {
-            try
-            {
-                using var previewMS = new MemoryStream();
-                BlobClient blobClient = _blobContainerClient.GetBlobClient(url);
-                await blobClient.DownloadToAsync(previewMS);
-                return previewMS.ToArray().ToRenderablePictureString();
-            }
-            catch (Azure.RequestFailedException)
-            {
-                return null;
-            }
-        }
-
-        public async Task<byte[]> GetRealPhotoFromAzureBlob(string url)
+        public async Task<byte[]> GetPhotoFromAzureBlob(string url)
         {
             try
             {

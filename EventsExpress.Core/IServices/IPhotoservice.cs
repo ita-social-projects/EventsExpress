@@ -14,8 +14,6 @@ namespace EventsExpress.Core.IServices
 
         Task AddPhotoByURL(string url, Guid id);
 
-        Task<string> GetPhotoFromAzureBlob(string url);
-
-        Task<byte[]> GetRealPhotoFromAzureBlob(string url);
+        Task<byte[]> GetPhotoFromAzureBlob(string url);
     }
 }
