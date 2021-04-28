@@ -68,7 +68,7 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
+            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult(new byte[] { 1 }));
         }
 
         [Test]
@@ -90,8 +90,7 @@ namespace EventsExpress.Test.MapperTests
                 .All(u =>
                     x.Id == u.UserId &&
                     x.Birthday == u.User.Birthday &&
-                    x.Username == u.User.Name &&
-                    x.PhotoUrl == "test")));
+                    x.Username == u.User.Name)));
             Assert.That(res.Id, Is.EqualTo(chatRoom.Id));
         }
 
@@ -115,8 +114,7 @@ namespace EventsExpress.Test.MapperTests
                 .All(u =>
                     x.Id == u.UserId &&
                     x.Birthday == u.User.Birthday &&
-                    x.Username == u.User.Name &&
-                    x.PhotoUrl == "test")));
+                    x.Username == u.User.Name)));
             Assert.That(res.Id, Is.EqualTo(chatRoom.Id));
         }
     }

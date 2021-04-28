@@ -18,7 +18,7 @@ let ChangeAvatar = props => {
                 type="file"
                 crop={true}
                 cropShape='round'
-                photoUrl={props.initialValues.image}
+                photoUrl={`api/photo/GetUserPhoto?id=${props.initialValues.userId}`}
             />
             {
                 props.error &&
@@ -33,5 +33,5 @@ let ChangeAvatar = props => {
 
 export default reduxForm({
     form: "change-avatar",
-    validate: validate
+    enableReinitialize: true
 })(ChangeAvatar);

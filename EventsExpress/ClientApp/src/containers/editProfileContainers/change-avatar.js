@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import ChangeAvatar from '../../components/profile/editProfile/change-avatar';
 import change_avatar from '../../actions/redactProfile/avatar-change-action';
+import AuthComponent from "../../security/authComponent";
 
 class ChangeAvatarWrapper extends Component {
     submit = values => {
@@ -9,15 +10,17 @@ class ChangeAvatarWrapper extends Component {
     };
 
     render() {
-        return <ChangeAvatar
-            initialValues={{ image: this.props.current_photo }}
-            onSubmit={this.submit} />;
+        return <AuthComponent>
+            <ChangeAvatar
+            initialValues={{ userId: this.props.userId }}
+            onSubmit={this.submit} />
+        </AuthComponent>;
     }
 }
 
 const mapStateToProps = (state) => ({
-    current_photo: state.user.photoUrl
-})
+    userId: state.user.id
+});
 
 const mapDispatchToProps = dispatch => {
     return {
