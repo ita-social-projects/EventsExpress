@@ -1,6 +1,6 @@
 ﻿import React, { Component } from "react";
 import Avatar from '@material-ui/core/Avatar';
-import { userImage } from "../../constants/userImage";
+import { userDefaultImage } from "../../constants/userDefaultImage";
 export default class CustomAvatar extends Component {
 
 
@@ -13,10 +13,10 @@ export default class CustomAvatar extends Component {
         return (
             <>
                 <Avatar
-                    alt={name.charAt(0).toUpperCase()}
+                    alt={name + "avatar"}
                     src={`api/photo/GetUserPhoto?id=${userId}`}
                     className={size}
-                    imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
+                    imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userDefaultImage}` } }}/>
             </>
         );
     }

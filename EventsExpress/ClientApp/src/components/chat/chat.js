@@ -8,7 +8,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
 import Msg from './msg';
 import Spinner from '../spinner';
-import {userImage} from "../../constants/userImage";
+import {userDefaultImage} from "../../constants/userDefaultImage";
 import CustomAvatar from "../avatar/custom-avatar";
 
 class Chat extends Component {
@@ -87,9 +87,9 @@ class Chat extends Component {
                             <div className="d-flex bd-highlight">
                                 {sender != null &&
                                     <ButtonBase>
-                                        <Avatar className='SmallAvatar'
-                                                src={`api/photo/GetUserPhoto?id=${sender.id}`}
-                                                imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
+                                        <CustomAvatar size={"Small"}
+                                            userId={sender.id}
+                                            name={sender.name}/>
                                     </ButtonBase>
                                 }
                                 <div className="user_info">

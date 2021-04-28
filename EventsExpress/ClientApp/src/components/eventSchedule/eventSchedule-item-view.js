@@ -14,7 +14,7 @@ import { useStyles } from './card-style-const'
 import SelectiveForm from './selective-form'
 import '../layout/colorlib.css';
 import get_event from '../../actions/event/event-item-view-action';
-import {eventImage} from "../../constants/eventImage";
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
 
 class EventScheduleItemView extends Component {
 
@@ -64,7 +64,6 @@ class EventScheduleItemView extends Component {
             lastRun,
             nextRun,
             title,
-            photoUrl,
             eventId,
             owners
         } = this.props.eventSchedule.data;
@@ -83,7 +82,7 @@ class EventScheduleItemView extends Component {
                             className={classes.media}
                             title={title}
                         >
-                            <img src={eventImage}
+                            <img src={eventDefaultImage}
                                  id="eventPreviewPhotoImg" alt="Event"
                                  className="w-100" />
                         </CardMedia>

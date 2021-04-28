@@ -7,7 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { deleteSeenMsgNotification } from '../../actions/chat/chat-action';
 import './msg.css';
 import { getTimeDifferenceFromNull } from '../helpers/TimeHelper';
-import {userImage} from "../../constants/userImage";
+import {userDefaultImage} from "../../constants/userDefaultImage";
+import CustomAvatar from "../avatar/custom-avatar";
 
 class Msg extends Component {
     componentDidUpdate = () => {
@@ -24,9 +25,9 @@ class Msg extends Component {
                 <div className="d-flex justify-content-start mb-4">
                     <Link to={'/user/' + user.id}>
                         <ButtonBase>
-                            <Avatar className='SmallAvatar'
-                                    src={`api/photo/GetUserPhoto?id=${user.id}`}
-                                    imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
+                            <CustomAvatar size={"Small"}
+                                          userId={user.id}
+                                          name={user.name}/>
                         </ButtonBase>
                     </Link>
                     <div className="msg_cotainer">

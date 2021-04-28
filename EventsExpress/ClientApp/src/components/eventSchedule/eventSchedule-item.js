@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './card-style-const'
-import {eventImage} from "../../constants/eventImage";
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
 
 
 export default class EventSchedule extends Component {
@@ -27,7 +27,6 @@ export default class EventSchedule extends Component {
             lastRun,
             nextRun,
             title,
-            photoUrl,
             eventId} = this.props.item;
         const period = renderPeriod(periodicity, frequency);
         return (
@@ -44,7 +43,7 @@ export default class EventSchedule extends Component {
                         title={title}
                     >
                         <Link to={`/eventSchedule/${id}`}>
-                            <img src={eventImage}
+                            <img src={eventDefaultImage}
                                  id="eventPreviewPhotoImg" alt="EventSchedule"
                                  className="w-100" />
                         </Link>

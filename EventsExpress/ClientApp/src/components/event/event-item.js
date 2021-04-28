@@ -21,12 +21,8 @@ import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 import AuthComponent from "../../security/authComponent";
-import { Roles } from '../../constants/userRoles';
-
 import PhotoService from '../../services/PhotoService';
-import EventsExpressService from '../../services/EventsExpressService';
-import { connect } from 'react-redux';
-import { eventImage } from '../../constants/eventImage';
+import { eventDefaultImage } from '../../constants/eventDefaultImage';
 
 const useStyles = useStyle;
 const photoService = new PhotoService();
@@ -67,7 +63,6 @@ export default class EventCard extends Component {
             isPublic,
             maxParticipants,
             eventStatus,
-            photoUrl,
             categories,
             countVisitor,
             owners
@@ -150,7 +145,7 @@ export default class EventCard extends Component {
                         className={classes.media}
                         title={title}>
                         <Link to={`/event/${id}/1`} id="LinkToEvent">
-                            <img src={eventImage}
+                            <img src={eventDefaultImage}
                                 id="eventPreviewPhotoImg" alt="Event"
                                 className="w-100" />
                         </Link>

@@ -1,5 +1,4 @@
 import { jwtStorageKey } from '../constants/constants';
-import {userImage} from "../constants/userImage";
 
 export default class EventsExpressService {
     _baseUrl = 'api/';

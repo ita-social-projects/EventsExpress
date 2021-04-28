@@ -12,13 +12,6 @@ namespace EventsExpress.ValueResolvers
 {
     public class ChatRoomToUserChatViewModelResolver : IValueResolver<ChatRoom, UserChatViewModel, IEnumerable<UserPreviewViewModel>>
     {
-        private readonly IPhotoService photoService;
-
-        public ChatRoomToUserChatViewModelResolver(IPhotoService photoService)
-        {
-            this.photoService = photoService;
-        }
-
         public IEnumerable<UserPreviewViewModel> Resolve(ChatRoom source, UserChatViewModel destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();

@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
-import {eventImage} from "../../constants/eventImage";
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
 import PhotoService from "../../services/PhotoService";
 
 const photoService = new PhotoService();
@@ -286,7 +286,7 @@ export default class EventItemView extends Component {
                 <div className="row">
                     <div className="col-9">
                         <div className="col-12">
-                            <img src={eventImage}
+                            <img src={eventDefaultImage}
                                  id="eventFullPhotoImg" alt="Event"
                                  className="w-100" />
                             <div className="text-block">

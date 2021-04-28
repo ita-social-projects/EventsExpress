@@ -7,7 +7,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 export default class commentItem extends Component {
 
     render() {
-        const { text, userPhoto, date, userName, userId } = this.props.item;
+        const { text, date, userName, userId } = this.props.item;
         const { user } = this.props;
         return (
             <div>
