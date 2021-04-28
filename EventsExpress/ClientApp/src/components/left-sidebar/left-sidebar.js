@@ -39,8 +39,8 @@ class LeftSidebar extends Component {
                                 to={'/'}
                                 icon={'fa fa-home'}
                                 text={"Home"}
-                            />                          
-                            <AuthComponent roleMatch={Roles.Admin}>
+                            />
+                            <AuthComponent roleMatch={Roles.Admin} allowAnonymous={false}>
                                 <NavItem
                                     to={'/user_chats'}
                                     my_icon={
@@ -61,7 +61,7 @@ class LeftSidebar extends Component {
                                     text={"Issues"}
                                 />
                             </AuthComponent>
-                            <AuthComponent roleMatch={Roles.User}>
+                            <AuthComponent roleMatch={Roles.User} allowAnonymous={false}>
                                 <NavItem
                                     to={'/user/' + this.props.user.id}
                                     icon={'fa fa-user'}
@@ -96,7 +96,14 @@ class LeftSidebar extends Component {
                                     icon={'fa fa-exclamation-circle'}
                                     text={'Contact us'}
                                 />
-                            </AuthComponent>      
+                            </AuthComponent>
+                            <AuthComponent onlyAnonymous>
+                                <NavItem
+                                    to={'/contactUs'}
+                                    icon={'fa fa-exclamation-circle'}
+                                    text={'Contact us'}
+                                />
+                            </AuthComponent>
                         </ul>
                     </nav>
                 </div>

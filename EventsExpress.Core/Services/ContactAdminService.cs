@@ -29,23 +29,8 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> SendMessageToAdmin(ContactAdminDto contactAdminDto)
         {
-            var message = Context.ContactAdmin
-                .Find(_authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id);
-            if (message == null)
-            {
-                throw new EventsExpressException("Not found");
-            }
-
             var contactAdminEntity = Mapper.Map<ContactAdminDto, ContactAdmin>(contactAdminDto);
             var result = Insert(contactAdminEntity);
-
-            // var currentUser = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
-            // var message = Context.ContactAdmin.Find(currentUser.Id);
-            // message.SenderId = currentUser.Id;
-            // message.Subject = contactAdminDto.Subject;
-            // message.EmailBody = contactAdminDto.MessageText;
-            // message.Email = contactAdminDto.Email;
-            // message.Title = contactAdminDto.Title;
             await Context.SaveChangesAsync();
             return result.Id;
         }

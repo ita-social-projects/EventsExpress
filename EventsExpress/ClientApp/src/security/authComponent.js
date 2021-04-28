@@ -3,12 +3,19 @@ import { connect } from 'react-redux';
 
 class AuthComponent extends Component {
     render() {
-        if(this.props.roleMatch){
+        
+        if (this.props.roleMatch) {
             if (this.props.id && this.props.role == this.props.roleMatch) {
                 return this.props.children;
             }
         }
-        else{
+        else if (this.props.onlyAnonymous) {
+            if (!!this.props.onlyAnonymous && !this.props.id) {
+                return this.props.children;
+            }
+        }
+
+        else {
             if (this.props.id) {
                 return this.props.children;
             }

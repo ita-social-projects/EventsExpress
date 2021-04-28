@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, getFormValues } from 'redux-form';
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { renderTextArea, renderTextField } from '../helpers/helpers';
 import Module from '../helpers';
 import ErrorMessages from '../shared/errorMessage';
+import problemTypeEnum from '../../constants/ProblemTypeEnum ';
+
 
 const { validate } = Module;
 
 class ContactUs extends Component {
+
 
     render() {
         const { pristine, reset, submitting, error } = this.props;
@@ -17,24 +21,46 @@ class ContactUs extends Component {
                     <h1 className='f1'>{'Contact Us'}</h1>
                     <form className="notfound-404" onSubmit={this.props.handleSubmit}>
                         <div className="box text text-2 pl-md-4 " >
-                            <Field
-                                name="email"
-                                className="form-control"
-                                component={renderTextField}
-                                label="Your e-mail:"
-                            />
-
+                            {(this.props.user.role === "User")
+                                ? <Field
+                                    name="email"
+                                    className="form-control"
+                                    component={renderTextField}
+                                    value={this.props.email}
+                                    label="Your e-mail:"
+                                />
+                                : <Field
+                                    name="email"
+                                    className="form-control"
+                                    component={renderTextField}
+                                    label="Your e-mail:"
+                                />
+                            }
                             <p></p><p></p><p></p>
                             <div className="text-left mb-2">Problem Type</div>
                             <Field
-                                name='type'
+                                name='subject'
                                 className="form-control"
-                                component="select">
-                                <option value="newCategory">New Category</option>;
-                                <option value="bugReport">Bug Report</option>;
-                                <option value="badEvent">Bad Event</option>;
-                                <option value="bugUser">Bad User</option>;
+                                component="select"
+                                parse={value => Number(value)}
+                            >
+                                <option value={problemTypeEnum.NewCategory}>New Category</option>;
+                                <option value={problemTypeEnum.BugReport}>Bug Report</option>;
+                                <option value={problemTypeEnum.BadEvent}>Bad Event</option>;
+                                <option value={problemTypeEnum.BadUser}>Bad User</option>;
+                                <option value={problemTypeEnum.Other}>Other</option>;
                              </Field>
+
+
+                            {(this.props.form_values !== undefined
+                                && this.props.form_values.subject == 4 
+                                && <Field
+                                    name="title"
+                                    className="form-control"
+                                    component={renderTextField}
+                                    label="Enter problem type:"
+                                />   
+                            )}
 
                             <p></p><p></p><p></p>
                             <Field
@@ -65,7 +91,17 @@ class ContactUs extends Component {
     }
 }
 
-export default reduxForm({
+const mapStateToProps = (state) => {
+    return {
+        initialValues: {
+            email: state.user.email,
+        },
+        form_values: getFormValues('ContactUs')(state),
+    }
+}
+
+export default connect(mapStateToProps)(reduxForm({
     form: "ContactUs",
-    validate
-})(ContactUs);
+    validate,
+    enableReinitialize: true
+})(ContactUs));

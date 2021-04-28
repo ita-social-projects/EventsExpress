@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import ContactUs from "../components/contactUs/contactUs";
-import contact_Us from '../actions/contact-us-action';
+import contact_Us from '../actions/contactUs/contact-us-add-action';
 
 class ContactUsContainer extends React.Component {
     submit = values => {
@@ -9,13 +9,14 @@ class ContactUsContainer extends React.Component {
     };
 
     render() {
-        return <ContactUs onSubmit={this.submit} />
+        return <ContactUs onSubmit={this.submit} user={this.props.user}/>
     }
 }
 
-const mapStateToProps = state => {
-    return state.contactUs;
-};
+const mapStateToProps = (state) => ({
+    contactUs: state.contactUs,
+    user: state.user
+});
 
 const mapDispatchToProps = dispatch => {
     return {

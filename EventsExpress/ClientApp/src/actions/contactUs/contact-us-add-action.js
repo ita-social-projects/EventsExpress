@@ -1,7 +1,7 @@
-import { UserService } from "../services";
-import { setSuccessAllert } from './alert-action';
+import { UserService } from "../../services";
+import { setSuccessAllert } from './../alert-action';
 import { SubmissionError, reset } from 'redux-form';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const contactUs = {
     PENDING: "SET_CONTACTUS_PENDING",
@@ -37,4 +37,5 @@ function setContactUsSuccess(data) {
         payload: data
     };
 }
+
 

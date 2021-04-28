@@ -284,13 +284,18 @@ namespace EventsExpress.Controllers
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
-        [Authorize(Policy = PolicyNames.UserPolicyName)]
+        [AllowAnonymous]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
-           // var user = _authService.GetCurrentUser(HttpContext.User);
-
-           // var admins = _userService.GetUsersByRole("Admin");
-            var emailTitle = $"New request from {model.Email} on subject: {model.Subject}";
+            var emailTitle = string.Empty;
+            if (model.Title == null)
+            {
+                emailTitle = $"New request from {model.Email} on subject: {model.Subject}";
+            }
+            else
+            {
+                emailTitle = model.Title;
+            }
 
             try
             {

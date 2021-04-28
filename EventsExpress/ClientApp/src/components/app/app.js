@@ -72,7 +72,7 @@ class App extends Component {
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
-                        <Route path="/contactUs" component={this.UserRoleSecurity(ContactUsWrapper)} />
+                        <Route path="/contactUs" component={ContactUsWrapper} />
                         <Route path='/event/createEvent' component={this.UserRoleSecurity(AddEventWrapper)} />
                         <Route path='/editEvent/:id/' component={this.UserRoleSecurity(DraftEditWrapper)} />
                         <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />

@@ -199,6 +199,7 @@ const initialState = {
     contactUs: {
         isPending: false,
         isSuccess: false,
+        data: []
     },
     notification:
     {

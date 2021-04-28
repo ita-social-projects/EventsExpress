@@ -2,9 +2,10 @@
 {
     public enum ContactAdminReason
     {
-        NewCategory,
-        BugReport,
-        BadEvent,
-        BadUser,
+        NewCategory = 0,
+        BugReport = 1,
+        BadEvent = 2,
+        BadUser = 3,
+        Other = 4,
     }
 }
