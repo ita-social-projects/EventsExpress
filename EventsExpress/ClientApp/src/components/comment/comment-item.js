@@ -16,7 +16,7 @@ export default class commentItem extends Component {
                         {!(user === userId) &&
                             <div className="photo-container">
                                 <CustomAvatar
-                                    photoUrl={userPhoto}
+                                    userId={userId}
                                     name={userName}
                                 />
                                 <h1 className="text-secondary comment-text"> {getTimeDifferenceFromNull(date)}</h1>
@@ -36,7 +36,7 @@ export default class commentItem extends Component {
                         {(user === userId) &&
                             <div className="photo-container">
                                 <CustomAvatar
-                                    photoUrl={userPhoto}
+                                    userId={userId}
                                     name={userName}
                                 />
                                 <h1 className="text-secondary comment-text"> {getTimeDifferenceFromNull(date)}</h1>

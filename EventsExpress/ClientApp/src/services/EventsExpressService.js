@@ -1,4 +1,5 @@
 import { jwtStorageKey } from '../constants/constants';
+import {userImage} from "../constants/userImage";
 
 export default class EventsExpressService {
     _baseUrl = 'api/';
@@ -18,6 +19,17 @@ export default class EventsExpressService {
             res = await call(url);
         }
         return res;
+    }
+
+    getPhoto = async (url, imgTagId) => {
+        const call = _url => fetch(this._baseUrl + url);
+
+        let res = await call(url);
+
+        if(res.ok){
+            let blob = await res.blob();
+            document.getElementById(imgTagId).src = URL.createObjectURL(blob);
+        }
     }
 
     setResource = async (url, data) => {
@@ -77,7 +89,7 @@ export default class EventsExpressService {
         localStorage.setItem(jwtStorageKey, rest.jwtToken);
         return true;
     }
-	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+    setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
 
     getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);

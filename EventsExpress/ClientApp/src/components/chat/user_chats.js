@@ -6,6 +6,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
 import Spinner from '../spinner';
 import './user_chats.css';
+import {userImage} from "../../constants/userImage";
 
 class UserChats extends Component {
     componentWillMount = () => {
@@ -23,10 +24,9 @@ class UserChats extends Component {
                     <Link to={`/chat/${x.id}`}>
                         <div className={chatBg + " col-12 d-flex"}>
                             <ButtonBase>
-                                {user.photoUrl
-                                    ? <Avatar className='SmallAvatar' src={user.photoUrl} />
-                                    : <Avatar className='SmallAvatar' >{user.username.charAt(0).toUpperCase()}</Avatar>
-                                }
+                                <Avatar className='SmallAvatar'
+                                        src={`api/photo/GetUserPhoto?id=${user.id}`}
+                                        imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
                             </ButtonBase>
                             <div className="my-auto ml-5 wrap-text"><h5>{user.username}</h5>
                                 {new_msg.length == 0 && <span className="text-info">{x.lastMessage}</span>}
