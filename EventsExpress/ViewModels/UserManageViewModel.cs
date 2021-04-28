@@ -12,8 +12,6 @@ namespace EventsExpress.ViewModels
 
         public string Username { get; set; }
 
-        public string PhotoUrl { get; set; }
-
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }
