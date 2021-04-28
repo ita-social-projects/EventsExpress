@@ -68,7 +68,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToPreviewResolver>())
+                .ForMember(dest => dest.PhotoUrl, opts => opts.Ignore())
                 .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
@@ -93,7 +93,7 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
-                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom<ProfileDtoToViewModelResolver>());
+                .ForMember(dest => dest.UserPhoto, opts => opts.Ignore());
         }
     }
 }

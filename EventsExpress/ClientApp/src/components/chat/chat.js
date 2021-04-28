@@ -8,6 +8,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Avatar from '@material-ui/core/Avatar';
 import Msg from './msg';
 import Spinner from '../spinner';
+import {userImage} from "../../constants/userImage";
+import CustomAvatar from "../avatar/custom-avatar";
 
 class Chat extends Component {
 
@@ -85,9 +87,9 @@ class Chat extends Component {
                             <div className="d-flex bd-highlight">
                                 {sender != null &&
                                     <ButtonBase>
-                                        {sender.photoUrl
-                                            ? <Avatar className='SmallAvatar' src={sender.photoUrl} />
-                                            : <Avatar className='SmallAvatar' >{sender.username.charAt(0).toUpperCase()}</Avatar>}
+                                        <Avatar className='SmallAvatar'
+                                                src={`api/photo/GetUserPhoto?id=${sender.id}`}
+                                                imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userImage}` } }}/>
                                     </ButtonBase>
                                 }
                                 <div className="user_info">

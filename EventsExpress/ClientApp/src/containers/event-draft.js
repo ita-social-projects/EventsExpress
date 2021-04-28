@@ -77,7 +77,8 @@ class EventDraftWrapper extends Component {
                 haveMapCheckBox={true}
                 haveOnlineLocationCheckBox={true}
                 disabledDate={false}
-                isCreated={true} ><div className="col">
+                isCreated={true}
+                eventId={this.props.event.id}><div className="col">
                     <Button
                         className="border"
                         fullWidth={true}
