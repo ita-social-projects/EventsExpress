@@ -8,6 +8,7 @@ import Moment from 'react-moment';
 import Tooltip from '@material-ui/core/Tooltip';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
+import { getAttitudeClassName } from './attitude';
 import './event-item-header.css';
 
 
@@ -81,17 +82,6 @@ export default class EventHeader extends Component {
         }
     }
 
-    getClassName = (attitude) => {
-        switch (attitude) {
-            case 0:
-                return "attitude-like";
-            case 1:
-                return "attitude-dislike";
-            default:
-                return '';
-        }
-    }
-
     render() {
         const classes = useStyle;
 
@@ -110,7 +100,7 @@ export default class EventHeader extends Component {
 
         const PrintMenuMembers = members.map(x => (
             <MenuItem onClick={this.handleCloseOnMember} style={{ overflow: "visible"}}>
-                <div className={"d-flex align-items-center border-bottom w-100 " + this.getClassName(x.attitude)} >
+                <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(x.attitude)} >
                     <div className="flex-grow-1" >
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">

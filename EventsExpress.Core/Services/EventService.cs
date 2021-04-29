@@ -330,6 +330,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
