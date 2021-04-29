@@ -414,6 +414,31 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Message");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.ToTable("NotificationTemplates");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
                 {
                     b.Property<int>("Id")

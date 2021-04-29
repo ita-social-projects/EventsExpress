@@ -6,5 +6,6 @@
         Blocked,
         Canceled,
         Draft,
+        Deleted,
     }
 }

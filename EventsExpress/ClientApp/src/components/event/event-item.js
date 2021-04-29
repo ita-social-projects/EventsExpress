@@ -131,9 +131,10 @@ export default class EventCard extends Component {
                                         key={this.props.item.id + this.props.item.eventStatus}
                                         eventStatus={this.props.item.eventStatus}
                                         eventId={this.props.item.id}
-                                        onBlock={this.props.onBlock}
-                                        onUnBlock={this.props.onUnBlock} />
-                                </AuthComponent >
+
+                                        onBlock = {this.props.onBlock}
+                                        onUnBlock = {this.props.onUnBlock}/>
+                                </AuthComponent>
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
