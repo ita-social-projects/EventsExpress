@@ -4,26 +4,12 @@ import { getAttitudeClassName } from './attitude';
 import CustomAvatar from '../avatar/custom-avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import * as moment from 'moment';
 import './users-view.css';
+import { getAge } from '../helpers/helpers';
 
 export default class UserView extends Component{
     constructor() {
         super();
-    }
-
-
-    getAge = birthday => {
-        let today = new Date();
-        var date = moment(today);
-        var birthDate = moment(birthday);
-        let age = date.diff(birthDate, 'years');
-
-        if (age >= 100) {
-            age = "---";
-        }
-
-        return age;
     }
 
     render() {
@@ -38,7 +24,7 @@ export default class UserView extends Component{
                             <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
                             <div>
                                 <h5>{user.username}</h5>
-                                {'Age: ' + this.getAge(user.birthday)}
+                                {'Age: ' + getAge(user.birthday)}
                             </div>
                             {user.attitude === 0 &&
                                 <Tooltip title="You like this user" placement="bottom" TransitionComponent={Zoom}>

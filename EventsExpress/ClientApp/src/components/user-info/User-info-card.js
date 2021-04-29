@@ -6,21 +6,8 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
+import { getAge } from '../helpers/helpers';
 import './user-info.css';
-
-const getAge = (birthday) => {
-    let today = new Date();
-    let birthDate = new Date(birthday);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age = age - 1;
-    }
-    if (age > 100) {
-        age = "---";
-    }
-    return age;
-}
 
 export default class UserInfoCard extends Component {
     render() {
