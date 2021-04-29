@@ -1,6 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import get_event, { getEvent } from './event-item-view-action';
+import { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
 
