@@ -20,8 +20,6 @@ namespace EventsExpress.ViewModels
 
         public string Title { get; set; }
 
-        public string PhotoUrl { get; set; }
-
         public Guid EventId { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace EventsExpress.ViewModels.Base
 
         public bool IsReccurent { get; set; }
 
-        public int MaxParticipants { get; set; }
+        public int? MaxParticipants { get; set; }
 
         public int Frequency { get; set; }
 

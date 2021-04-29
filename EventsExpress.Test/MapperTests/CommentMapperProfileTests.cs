@@ -34,17 +34,6 @@ namespace EventsExpress.Test.MapperTests
         protected virtual void Init()
         {
             Initialize();
-
-            IServiceCollection services = new ServiceCollection();
-            var mock = new Mock<IPhotoService>();
-            services.AddTransient<IPhotoService>(sp => mock.Object);
-
-            services.AddAutoMapper(typeof(CommentMapperProfile));
-
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
         }
 
         [Test]
@@ -67,7 +56,6 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(commentViewModel.Date, Is.EqualTo(commentDto.Date));
             Assert.That(commentViewModel.CommentsId, Is.EqualTo(commentDto.CommentsId));
             Assert.That(commentViewModel.Children, Is.Empty);
-            Assert.That(commentViewModel.UserPhoto, Is.EqualTo("test"));
         }
     }
 }
