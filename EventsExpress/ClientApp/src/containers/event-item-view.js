@@ -7,10 +7,7 @@ import get_event, {
     join, 
     leave, 
     resetEvent, 
-    change_event_status, 
-    approveUser, 
-    deleteFromOwners, 
-    promoteToOwner
+    change_event_status
     }
     from '../actions/event/event-item-view-action';
 
@@ -40,17 +37,6 @@ class EventItemViewWrapper extends Component{
         this.props.unCancel(this.props.event.data.id, reason, eventStatus);
     }
 
-    onApprove = (userId, buttonAction) => {
-        this.props.approveUser(userId, this.props.event.data.id, buttonAction);
-    }
-
-    onDeleteFromOwners = (userId) => {
-        this.props.deleteFromOwners(userId, this.props.event.data.id);
-    }
-
-    onPromoteToOwner = (userId) => {
-        this.props.promoteToOwner(userId, this.props.event.data.id);
-    }
     render(){   
         const { isPending } = this.props.event;
         return isPending
@@ -62,9 +48,6 @@ class EventItemViewWrapper extends Component{
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onUnCancel={this.onUnCancel}
-                onApprove={this.onApprove}
-                onDeleteFromOwners={this.onDeleteFromOwners}
-                onPromoteToOwner={this.onPromoteToOwner}
                 current_user={this.props.current_user}
             />
     }
@@ -81,9 +64,6 @@ const mapDispatchToProps = (dispatch) => ({
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Canceled)),
     unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active)),
-    approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
-    deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
-    promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId)),
     reset: () => dispatch(resetEvent())
 });
 
