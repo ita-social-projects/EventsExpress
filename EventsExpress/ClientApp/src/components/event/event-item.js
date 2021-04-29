@@ -37,8 +37,17 @@ export default class EventCard extends Component {
         }
     }
 
-    componentDidMount() {
-        photoService.getPreviewEventPhoto(this.props.item.id);
+    async componentDidMount() {
+        const eventId = this.props.item.id;
+        const eventPreviewImage = await photoService.getPreviewEventPhoto(eventId);
+        if(eventPreviewImage !== null && document.getElementById("eventPreviewPhotoImg" + eventId) !== null){
+            document.getElementById("eventPreviewPhotoImg" + eventId).src = URL.createObjectURL(eventPreviewImage);
+        }
+    }
+
+    componentWillUnmount() {
+        const eventId = this.props.item.id;
+        URL.revokeObjectURL(document.getElementById("eventPreviewPhotoImg" + eventId).src);
     }
 
     renderCategories = (arr) => {

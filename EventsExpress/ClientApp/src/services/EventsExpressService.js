@@ -20,16 +20,16 @@ export default class EventsExpressService {
         return res;
     }
 
-    getPhoto = async (url, imgTagId) => {
+    getPhoto = async (url) => {
         const call = _url => fetch(this._baseUrl + url);
 
         let res = await call(url);
 
         if(res.ok){
-            let blob = await res.blob();
-            if(document.getElementById(imgTagId) !== null){
-                document.getElementById(imgTagId).src = URL.createObjectURL(blob);
-            }
+            return await res.blob();
+        }
+        else{
+            return null;
         }
     }
 

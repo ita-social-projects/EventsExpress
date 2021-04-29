@@ -34,8 +34,17 @@ export default class EventItemView extends Component {
         };
     }
 
-    componentDidMount() {
-        photoService.getFullEventPhoto(this.props.event.data.id);
+    async componentDidMount() {
+        const eventId = this.props.event.data.id;
+        const eventFullImage = await photoService.getFullEventPhoto(eventId);
+        if(eventFullImage !== null && document.getElementById("eventFullPhotoImg" + eventId) !== null){
+            document.getElementById("eventFullPhotoImg" + eventId).src = URL.createObjectURL(eventFullImage);
+        }
+    }
+
+    componentWillUnmount() {
+        const eventId = this.props.event.data.id;
+        URL.revokeObjectURL(document.getElementById("eventFullPhotoImg" + eventId).src);
     }
 
     renderCategories = arr => {
