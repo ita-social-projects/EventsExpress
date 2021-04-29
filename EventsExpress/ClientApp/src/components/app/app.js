@@ -24,7 +24,7 @@ import AddEventWrapper from '../../containers/add-event';
 import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
 import RegisterSuccess from '../register/register-success';
-import DraftEditWrapper from '../../containers/draft-edit-wrapper';
+import EventEditWrapper from '../../containers/event-edit-wrapper';
 import EventDraftListWrapper from '../../containers/event-draft-list';
 import Unauthorized from '../Route guard/401';
 import Forbidden from '../Route guard/403';
@@ -78,7 +78,7 @@ class App extends Component {
                         <Route path="/contactUs" component={this.UserRoleSecurity(ContactUsWrapper)} />
                         <Route path='/event/createEvent' component={this.UserRoleSecurity(AddEventWrapper)} />
                         <Route path='/registerSuccess' component={this.AdminAndUserRoleSecurity(RegisterSuccess)} />
-                        <Route path='/editEvent/:id/' component={this.UserRoleSecurity(DraftEditWrapper)} />
+                        <Route path='/editEvent/:id' component={this.UserRoleSecurity(EventEditWrapper)} />
                         <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
                         <Route path='/unauthorized' component={Unauthorized} />
                         <Route path='/forbidden' component={Forbidden} />
