@@ -16,8 +16,11 @@ import './event-item.css';
 import { useStyle } from '../event/CardStyle'
 import IconButton from "@material-ui/core/IconButton";
 import EventChangeStatusModal from '../event/event-change-status-modal';
+import PhotoService from "../../services/PhotoService";
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
 
 const useStyles = useStyle;
+const photoService = new PhotoService();
 
 export default class DraftEventCard extends Component {
     constructor(props) {
@@ -28,6 +31,19 @@ export default class DraftEventCard extends Component {
         }
     }
 
+    async componentDidMount() {
+        const eventId = this.props.item.id;
+        const eventPreviewImage = await photoService.getPreviewEventPhoto(eventId);
+        if(eventPreviewImage !== null && document.getElementById("eventPreviewPhotoImg" + eventId) !== null){
+            document.getElementById("eventPreviewPhotoImg" + eventId).src = URL.createObjectURL(eventPreviewImage);
+        }
+    }
+
+    componentWillUnmount() {
+        const eventId = this.props.item.id;
+        URL.revokeObjectURL(document.getElementById("eventPreviewPhotoImg" + eventId).src);
+    }
+
     render() {
         const classes = useStyles;
         const {
@@ -35,7 +51,6 @@ export default class DraftEventCard extends Component {
             title,
             dateFrom,
             description,
-            photoUrl,
             owners
         } = this.props.item;    
         return (
@@ -50,7 +65,7 @@ export default class DraftEventCard extends Component {
                                     <Badge overlap="circle" badgeContent={owners.length} color="primary">
                                         <CustomAvatar
                                             className={classes.avatar}
-                                            photoUrl={owners[0].photoUrl}
+                                            userId={owners[0].id}
                                             name={owners[0].username}
                                         />
                                     </Badge>
@@ -62,14 +77,10 @@ export default class DraftEventCard extends Component {
                         />
                         <CardMedia
                             className={classes.media + ' d-flex justify-content-center'}
-                            title={title}
-                        >
-                            {photoUrl &&
-                                <img src={photoUrl} className="w-100" alt="Event" />
-                            }
-                            {photoUrl === null &&
-                                <i class="far fa-images fa-10x"></i>
-                            }
+                            title={title}>
+                            <img src={eventDefaultImage}
+                                 id={"eventPreviewPhotoImg" + id} alt="Event"
+                                 className="w-100"/>
                         </CardMedia>
                         <CardContent className="py-2">
                             {description &&

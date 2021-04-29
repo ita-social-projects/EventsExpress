@@ -13,6 +13,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import './User-profile.css';
 import Events from './events';
+import AuthComponent from "../../security/authComponent";
 
 class UserItemView extends Component {
     splitPath(path) {
@@ -64,7 +65,6 @@ class UserItemView extends Component {
 
     render() {
         const {
-            userPhoto,
             name,
             email,
             birthday,
@@ -87,14 +87,15 @@ class UserItemView extends Component {
 
         return <>
             <div className="info">
-                {(id !== this.props.current_user)
-                    ?
+                <AuthComponent>
                     <div className="col-4 user">
                         <div className='d-flex flex-column justify-content-center align-items-center'>
                             <div className="user-profile-avatar">
-                                <CustomAvatar size="big" name={name} photoUrl={userPhoto} />
+                                <CustomAvatar size="big"
+                                              name={name}
+                                              userId={id}/>
                             </div>
-                            <RatingAverage value={rating} direction='row' />
+                            <RatingAverage value={rating} direction='row'/>
 
                             <div className="row justify-content-center">
                                 <Tooltip title="Like this user" placement="bottom" TransitionComponent={Zoom}>
@@ -116,15 +117,14 @@ class UserItemView extends Component {
                                 <Tooltip title="Start chat!" placement="bottom" TransitionComponent={Zoom}>
                                     <Link to={`/chat/${id}`}>
                                         <IconButton>
-                                            <i class="far fa-comments"></i>
+                                            <i className="far fa-comments"></i>
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
                             </div>
                         </div>
                     </div>
-                    : <div className="col-4"></div>
-                }
+                </AuthComponent>
                 <div className='col-sm-12  col-md-6'>
                     {render_prop('User Name', name)}
                     {render_prop('Age', this.getAge(birthday))}

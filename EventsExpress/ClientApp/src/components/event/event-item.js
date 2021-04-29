@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+﻿import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -21,9 +21,12 @@ import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { useStyle } from '../event/CardStyle'
 import AuthComponent from "../../security/authComponent";
-import { Roles } from '../../constants/userRoles';
+import PhotoService from '../../services/PhotoService';
+import { eventDefaultImage } from '../../constants/eventDefaultImage';
+import { Roles } from "../../constants/userRoles";
 
 const useStyles = useStyle;
+const photoService = new PhotoService();
 
 export default class EventCard extends Component {
     constructor(props) {
@@ -32,6 +35,19 @@ export default class EventCard extends Component {
         this.state = {
             anchorEl: null
         }
+    }
+
+    async componentDidMount() {
+        const eventId = this.props.item.id;
+        const eventPreviewImage = await photoService.getPreviewEventPhoto(eventId);
+        if(eventPreviewImage !== null && document.getElementById("eventPreviewPhotoImg" + eventId) !== null){
+            document.getElementById("eventPreviewPhotoImg" + eventId).src = URL.createObjectURL(eventPreviewImage);
+        }
+    }
+
+    componentWillUnmount() {
+        const eventId = this.props.item.id;
+        URL.revokeObjectURL(document.getElementById("eventPreviewPhotoImg" + eventId).src);
     }
 
     renderCategories = (arr) => {
@@ -57,7 +73,6 @@ export default class EventCard extends Component {
             isPublic,
             maxParticipants,
             eventStatus,
-            photoUrl,
             categories,
             countVisitor,
             owners
@@ -72,7 +87,7 @@ export default class EventCard extends Component {
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
-                                    photoUrl={x.photoUrl}
+                                    userId={owners[0].id}
                                     name={x.username}
                                 />
                                 <div>
@@ -83,7 +98,7 @@ export default class EventCard extends Component {
                     </div>
                 </div>
             </MenuItem>
-        ))
+        ));
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -93,8 +108,7 @@ export default class EventCard extends Component {
                         backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
                         opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
 
-                    }}
-                >
+                    }}>
                     <Menu
                         id="simple-menu"
                         anchorEl={anchorEl}
@@ -117,12 +131,10 @@ export default class EventCard extends Component {
                                 <Badge overlap="circle" badgeContent={owners.length} color="primary">
                                     <CustomAvatar
                                         className={classes.avatar}
-                                        photoUrl={owners[0].photoUrl}
-                                        name={owners[0].username}
-                                    />
+                                        userId={owners[0].id}
+                                        name={owners[0].username}/>
                                 </Badge>
                             </Button>
-
                         }
 
                         action={
@@ -140,38 +152,39 @@ export default class EventCard extends Component {
                     />
                     <CardMedia
                         className={classes.media}
-                        title={title}
-                    >
-                        <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                        title={title}>
+                        <Link to={`/event/${id}/1`} id="LinkToEvent">
+                            <img src={eventDefaultImage}
+                                 id={"eventPreviewPhotoImg" + id} alt="Event"
+                                 className="w-100"/>
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
-                        <CardContent>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                            >
-                                {countVisitor}/{maxParticipants} Participants
-                            </Typography>
-                        </CardContent>
+                    <CardContent>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {countVisitor}/{maxParticipants} Participants
+                        </Typography>
+                    </CardContent>
                     }
                     <CardContent>
                         {description &&
-                            <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
-                                <Typography variant="body2" color="textSecondary" className="description" component="p">
-                                    {description.substr(0, 128)}
-                                </Typography>
-                            </Tooltip>
-                        } 
+                        <Tooltip title={description.substr(0, 570) + (description.length > 570 ? '...' : '')} classes={{ tooltip: 'description-tooltip' }} >
+                            <Typography variant="body2" color="textSecondary" className="description" component="p">
+                                {description.substr(0, 128)}
+                            </Typography>
+                        </Tooltip>
+                        }
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.props.item.location &&
-                                <DisplayLocation
-                                    location={this.props.item.location}
-                                />
+                            <DisplayLocation
+                                location={this.props.item.location}
+                            />
                             }
                             <br />
                             <div className="float-left">
@@ -179,13 +192,13 @@ export default class EventCard extends Component {
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
-                                    <Tooltip title="Private event">
-                                        <IconButton>
-                                            <Badge color="primary">
-                                                <i className="fa fa-key"></i>
-                                            </Badge>
-                                        </IconButton>
-                                    </Tooltip>
+                                <Tooltip title="Private event">
+                                    <IconButton>
+                                        <Badge color="primary">
+                                            <i className="fa fa-key"></i>
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">
@@ -199,9 +212,9 @@ export default class EventCard extends Component {
                                         key={this.props.item.id + this.props.item.eventStatus}
                                         eventStatus={this.props.item.eventStatus}
                                         eventId={this.props.item.id}
-                                        onBlock = {this.props.onBlock}
-                                        onUnBlock = {this.props.onUnBlock}/>
-                                </AuthComponent>                      
+                                        onBlock={this.props.onBlock}
+                                        onUnBlock={this.props.onUnBlock} />
+                                </AuthComponent>
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>
