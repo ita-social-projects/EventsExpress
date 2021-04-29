@@ -45,7 +45,7 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
+            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult(new byte[] { 1 }));
         }
 
         [Test]
@@ -68,8 +68,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(eventScheduleViewModel.Title, Is.EqualTo(eventScheduleDto.Event.Title));
             Assert.That(eventScheduleViewModel.IsActive, Is.EqualTo(eventScheduleDto.IsActive));
             Assert.That(eventScheduleViewModel.Owners, Has.All.Matches<UserPreviewViewModel>(x => eventScheduleDto.Event.Owners
-                .All(o => x.Id == o.Id && x.Username == o.Name && x.PhotoUrl == "test")));
-            Assert.That(eventScheduleViewModel.PhotoUrl, Is.EqualTo("test"));
+                .All(o => x.Id == o.Id && x.Username == o.Name)));
         }
 
         [Test]
@@ -85,7 +84,6 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(eventScheduleViewModel.NextRun, Is.EqualTo(eventScheduleDto.NextRun));
             Assert.That(eventScheduleViewModel.Title, Is.EqualTo(eventScheduleDto.Event.Title));
             Assert.That(eventScheduleViewModel.IsActive, Is.EqualTo(eventScheduleDto.IsActive));
-            Assert.That(eventScheduleViewModel.PhotoUrl, Is.EqualTo("test"));
         }
     }
 }

@@ -44,7 +44,7 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
+            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult(new byte[] { 1 }));
         }
 
         [Test]
@@ -67,7 +67,6 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(commentViewModel.Date, Is.EqualTo(commentDto.Date));
             Assert.That(commentViewModel.CommentsId, Is.EqualTo(commentDto.CommentsId));
             Assert.That(commentViewModel.Children, Is.Empty);
-            Assert.That(commentViewModel.UserPhoto, Is.EqualTo("test"));
         }
     }
 }
