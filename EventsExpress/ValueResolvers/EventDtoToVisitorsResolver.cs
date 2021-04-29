@@ -39,6 +39,7 @@ namespace EventsExpress.ValueResolvers
             }
             catch (EventsExpressException)
             {
+                currUser = null;
             }
 
             foreach (var u in source.Visitors)

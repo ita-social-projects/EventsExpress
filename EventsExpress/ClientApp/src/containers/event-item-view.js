@@ -7,10 +7,7 @@ import get_event, {
     join, 
     leave, 
     resetEvent, 
-    change_event_status, 
-    approveUser, 
-    deleteFromOwners, 
-    promoteToOwner
+    change_event_status
     }
     from '../actions/event/event-item-view-action';
 
