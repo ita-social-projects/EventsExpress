@@ -87,17 +87,6 @@ namespace EventsExpress.Test.MapperTests
         protected virtual void Init()
         {
             Initialize();
-
-            IServiceCollection services = new ServiceCollection();
-            var mock = new Mock<IPhotoService>();
-            services.AddTransient<IPhotoService>(sp => mock.Object);
-
-            services.AddAutoMapper(typeof(UserMapperProfile));
-
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult(new byte[] { 1 }));
         }
 
         [Test]
