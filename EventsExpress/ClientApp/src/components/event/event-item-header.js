@@ -44,7 +44,7 @@ export default class EventHeader extends Component {
                 <Badge overlap="circle" badgeContent={owners.length} color="primary">
                     <CustomAvatar
                         className={avatar}
-                        photoUrl={owners[0].photoUrl}
+                        userId={owners[0].id}
                         name={owners[0].username}
                     />
                 </Badge>
@@ -61,7 +61,7 @@ export default class EventHeader extends Component {
                     <Badge overlap="circle" badgeContent={visitorsCount} color="primary">
                         <CustomAvatar
                             className={avatar}
-                            photoUrl={first.photoUrl}
+                            userId={first.id}
                             name={first.username}
                         />
                     </Badge>
@@ -98,18 +98,18 @@ export default class EventHeader extends Component {
 
         
 
-        const PrintMenuMembers = members.map(x => (
+        const PrintMenuMembers = members.map(user => (
             <MenuItem onClick={this.handleCloseOnMember} style={{ overflow: "visible"}}>
-                <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(x.attitude)} >
+                <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(user.attitude)} >
                     <div className="flex-grow-1" >
-                        <Link to={'/user/' + x.id} className="btn-custom">
+                        <Link to={'/user/' + user.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
-                                    photoUrl={x.photoUrl}
-                                    name={x.username}
+                                    userId={user.photoUrl}
+                                    name={user.username}
                                 />
                                 <div>
-                                    <h5 className="pl-2">{x.username}</h5>
+                                    <h5 className="pl-2">{user.username}</h5>
                                 </div>
                             </div>
                         </Link>
@@ -118,18 +118,18 @@ export default class EventHeader extends Component {
             </MenuItem>
         ))
 
-        const PrintMenuItems = owners.map(x => (
+        const PrintMenuItems = owners.map(user => (
             <MenuItem onClick={this.handleCloseOnOwners}>
                 <div className="d-flex align-items-center border-bottom">
                     <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
+                        <Link to={'/user/' + user.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
-                                    photoUrl={x.photoUrl}
-                                    name={x.username}
+                                    userId={user.id}
+                                    name={user.username}
                                 />
                                 <div>
-                                    <h5 className="pl-2">{x.username}</h5>
+                                    <h5 className="pl-2">{user.username}</h5>
                                 </div>
                             </div>
                         </Link>

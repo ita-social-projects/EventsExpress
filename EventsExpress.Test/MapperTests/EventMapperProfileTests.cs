@@ -409,7 +409,6 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Id == f.User.Id &&
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
-                                                          ex.PhotoUrl == "test" &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
             Assert.That(resEven.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                        firstEventDto.Owners

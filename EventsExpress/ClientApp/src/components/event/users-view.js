@@ -21,7 +21,7 @@ export default class UserView extends Component{
                 <div className="flex-grow-1" >
                     <Link to={'/user/' + user.id} className="btn-custom">
                         <div className="d-flex align-items-center">
-                            <CustomAvatar size="little" photoUrl={user.photoUrl} name={user.username} />
+                            <CustomAvatar size="little" userId={user.id} name={user.username} />
                             <div>
                                 <h5>{user.username}</h5>
                                 {'Age: ' + getAge(user.birthday)}
