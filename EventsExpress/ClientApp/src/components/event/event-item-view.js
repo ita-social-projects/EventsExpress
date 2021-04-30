@@ -19,10 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
-import { createBrowserHistory } from 'history';
 
-
-const history = createBrowserHistory({ forceRefresh: true });
 
 export default class EventItemView extends Component {
     constructor() {
