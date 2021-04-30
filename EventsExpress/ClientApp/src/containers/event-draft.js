@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createBrowserHistory } from 'history';
+import { withRouter } from "react-router";
 import EventForm from '../components/event/event-form';
 import EventChangeStatusModal from '../components/event/event-change-status-modal';
 import eventStatusEnum from '../constants/eventStatusEnum';
@@ -14,7 +14,6 @@ import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
 import './css/Draft.css';
 
-const history = createBrowserHistory({ forceRefresh: true });
 
 class EventDraftWrapper extends Component {
 
@@ -48,13 +47,9 @@ class EventDraftWrapper extends Component {
 
     onDelete = async (reason) => {
         await this.props.delete(this.props.event.id, reason);
-        this.handleClose();
+        this.props.history.goBack();
     }
-
-    handleClose = () => {
-        history.goBack();
-    }
-    
+   
 
     render() {
         let initialValues = {
@@ -126,7 +121,7 @@ class EventDraftWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.handleClose}>
+                        onClick={this.props.history.goBack}>
                         Cancel
                     </Button>
                 </div>
@@ -159,4 +154,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventDraftWrapper);
+export default withRouter(connect(
+    mapStateToProps, 
+    mapDispatchToProps
+)(EventDraftWrapper));
