@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Comment from '../comment/comment';
 import EditEventWrapper from '../../containers/edit-event';
-import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
-import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
-import SimpleModal from './simple-modal';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
-import Button from "@material-ui/core/Button";
 import EventVisitors from './event-visitors';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EventLeaveModal from './event-leave-modal';
 import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
-import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
@@ -51,176 +44,6 @@ export default class EventItemView extends Component {
 
     renderCategories = arr => {
         return arr.map(x => <span key={x.id}>#{x.name}</span>);
-    }
-
-    renderOwners = (arr, isMyEvent, current_user_id) => {
-        return arr.map((x, key) => (
-            <div key={key}>
-                <div className="d-flex align-items-center border-bottom">
-                    <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar size="little" userId={x.id} name={x.username} />
-                                <div>
-                                    <h5>{x.username}</h5>
-                                    {'Age: ' + this.getAge(x.birthday)}
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                    {(isMyEvent && x.id != current_user_id) &&
-                        <div>
-                            <SimpleModal
-                                action={() => this.props.onDeleteFromOwners(x.id)}
-                                data={'Are you sure, that you wanna delete ' + x.username + ' from owners?'}
-                                button={
-                                    <Tooltip title="Delete from owners">
-                                        <IconButton aria-label="delete">
-                                            <i className="far fa-trash-alt"></i>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
-                            />
-                        </div>
-                    }
-                </div>
-            </div>
-        ));
-    }
-
-    renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
-        return arr.map(x => (
-            <div>
-                <div className="d-flex align-items-center border-bottom w-100">
-                    <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar size="little" userId={x.id} name={x.username} />
-                                <div>
-                                    <h5>{x.username}</h5>
-                                    {'Age: ' + this.getAge(x.birthday)}
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                    {(isMyEvent) &&
-                        <div>
-                            <SimpleModal
-                                id={x.id}
-                                action={() => this.props.onPromoteToOwner(x.id)}
-                                data={'Are you sure, that you wanna approve ' + x.username + ' to owner?'}
-                                button={
-                                    <Tooltip title="Approve as an owner">
-                                        <IconButton aria-label="delete">
-                                            <i className="fas fa-plus-circle" ></i>
-                                        </IconButton>
-                                    </Tooltip>
-                                }
-                            />
-                        </div>
-                    }
-                </div>
-                {isMyPrivateEvent &&
-                    <Button
-                        onClick={() => this.props.onApprove(x.id, false)}
-                        variant="outlined"
-                        color="success"
-                    >
-                        Delete from event
-                        </Button>
-                }
-            </div>
-        ));
-    }
-
-    renderPendingUsers = (arr, isMyEvent) => {
-        return arr.map(x => (
-            <div>
-                <div className="flex-grow-1">
-                    <Link to={'/user/' + x.id} className="btn-custom">
-                        <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" userId={x.id} name={x.username} />
-                            <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-                {(isMyEvent) &&
-                    <div>
-                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </div>
-                }
-                <div>
-                    <Button
-                        variant="outlined"
-                        color="success"
-                        onClick={() => this.props.onApprove(x.id, true)}
-                    >
-                        Approve
-                        </Button>
-                    <Button
-                        onClick={() => this.props.onApprove(x.id, false)}
-                        variant="outlined"
-                        color="danger"
-                    >
-                        Deny
-                        </Button>
-                </div>
-            </div>)
-        );
-    }
-
-    renderDeniedUsers = (arr, isMyEvent) => {
-        return arr.map(x => (
-            <div>
-                <div className="flex-grow-1">
-                    <Link to={'/user/' + x.id} className="btn-custom">
-                        <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" userId={x.id} name={x.username} />
-                            <div>
-                                <h5>{x.username}</h5>
-                                {'Age: ' + this.getAge(x.birthday)}
-                            </div>
-                        </div>
-                    </Link>
-                </div>
-                {(isMyEvent) &&
-                    <div>
-                        <IconButton aria-label="delete" onClick={() => this.props.onPromoteToOwner(x.id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </div>
-                }
-                <Button
-                    onClick={() => this.props.onApprove(x.id, true)}
-                    variant="outlined"
-                    color="success"
-                >
-                    Add to event
-                </Button>
-            </div>)
-        );
-    }
-
-    getAge = birthday => {
-        let today = new Date();
-        let birthDate = new Date(birthday);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        let m = today.getMonth() - birthDate.getMonth();
-
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age = age - 1;
-        }
-
-        if (age >= 100) {
-            age = "---";
-        }
-
-        return age;
     }
 
     getUserEventStatus = visitor => {
@@ -270,7 +93,7 @@ export default class EventItemView extends Component {
             eventStatus,
             maxParticipants,
             visitors,
-            owners
+            owners,
         } = this.props.event.data;
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
@@ -335,15 +158,15 @@ export default class EventItemView extends Component {
                                     <DisplayLocation
                                         location={this.props.event.data.location}
                                     />
-                                }                                                                 
+                                }
                                 {categories_list}
                             </div>
                             <div className="button-block">
                                 {canEdit && <button onClick={this.onEdit} className="btn btn-edit mb-1">Edit</button>}
                                 {canCancel && <EventChangeStatusModal
                                     button={<button className="btn btn-edit">Cancel</button>}
-                                    submitCallback={this.props.onCancel}           
-                                    />}
+                                    submitCallback={this.props.onCancel}
+                                />}
                                 {(canUncancel) && <EventChangeStatusModal
                                     button={<button className="btn btn-edit">Undo cancel</button>}
                                     submitCallback={this.props.onUnCancel}
@@ -412,14 +235,10 @@ export default class EventItemView extends Component {
                         }
                         <EventVisitors data={{}}
                             admins={owners}
-                            renderOwners={this.renderOwners}
                             visitors={visitorsEnum}
-                            renderApprovedUsers={this.renderApprovedUsers}
                             isMyPrivateEvent={isMyPrivateEvent}
                             isMyEvent={isMyEvent}
                             current_user_id={current_user.id}
-                            renderPendingUsers={this.renderPendingUsers}
-                            renderDeniedUsers={this.renderDeniedUsers}
                         />
                     </div>
                 </div>
