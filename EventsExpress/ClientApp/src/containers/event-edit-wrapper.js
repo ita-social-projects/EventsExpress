@@ -32,10 +32,13 @@ class EventEditWrapper extends Component{
 
     render(){   
         const { isPending } = this.props.event;
-        return isPending
-            ? <Spinner />
-            : this.props.event.data.eventStatus == eventStatusEnum.Active ? 
-                <EditEventWrapper/> : <EventDraftWrapper/>
+        const spinner = isPending ? <Spinner /> : null;
+        const content = !isPending && this.props.event.data.eventStatus == eventStatusEnum.Active
+            ? <EditEventWrapper/> : <EventDraftWrapper/>
+
+        return <>
+            {spinner || content}
+        </>
     }
 }
 
