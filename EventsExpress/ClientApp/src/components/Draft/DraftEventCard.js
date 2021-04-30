@@ -27,21 +27,23 @@ export default class DraftEventCard extends Component {
         super(props);
 
         this.state = {
-            anchorEl: null
+            anchorEl: null,
+            eventImage: eventDefaultImage
         }
     }
 
-    async componentDidMount() {
-        const eventId = this.props.item.id;
-        const eventPreviewImage = await photoService.getPreviewEventPhoto(eventId);
-        if(eventPreviewImage !== null && document.getElementById("eventPreviewPhotoImg" + eventId) !== null){
-            document.getElementById("eventPreviewPhotoImg" + eventId).src = URL.createObjectURL(eventPreviewImage);
-        }
+    componentDidMount() {
+        photoService.getPreviewEventPhoto(this.props.item.id).then(
+            eventPreviewImage => {
+                if (eventPreviewImage != null) {
+                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                }
+            }
+        );
     }
 
     componentWillUnmount() {
-        const eventId = this.props.item.id;
-        URL.revokeObjectURL(document.getElementById("eventPreviewPhotoImg" + eventId).src);
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     render() {
@@ -78,7 +80,7 @@ export default class DraftEventCard extends Component {
                         <CardMedia
                             className={classes.media + ' d-flex justify-content-center'}
                             title={title}>
-                            <img src={eventDefaultImage}
+                            <img src={this.state.eventImage}
                                  id={"eventPreviewPhotoImg" + id} alt="Event"
                                  className="w-100"/>
                         </CardMedia>

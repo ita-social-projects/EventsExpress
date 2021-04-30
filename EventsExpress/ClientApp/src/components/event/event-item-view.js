@@ -30,21 +30,23 @@ export default class EventItemView extends Component {
         super();
 
         this.state = {
-            edit: false
+            edit: false,
+            eventImage: eventDefaultImage
         };
     }
 
-    async componentDidMount() {
-        const eventId = this.props.event.data.id;
-        const eventFullImage = await photoService.getFullEventPhoto(eventId);
-        if(eventFullImage !== null && document.getElementById("eventFullPhotoImg" + eventId) !== null){
-            document.getElementById("eventFullPhotoImg" + eventId).src = URL.createObjectURL(eventFullImage);
-        }
+    componentDidMount() {
+        photoService.getFullEventPhoto(this.props.event.data.id).then(
+            eventFullImage => {
+                if(eventFullImage != null){
+                    this.setState({eventImage: URL.createObjectURL(eventFullImage)});
+                }
+            }
+        );
     }
 
     componentWillUnmount() {
-        const eventId = this.props.event.data.id;
-        URL.revokeObjectURL(document.getElementById("eventFullPhotoImg" + eventId).src);
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     renderCategories = arr => {
@@ -294,7 +296,7 @@ export default class EventItemView extends Component {
                 <div className="row">
                     <div className="col-9">
                         <div className="col-12">
-                            <img src={eventDefaultImage}
+                            <img src={this.state.eventImage}
                                  id={"eventFullPhotoImg" + id} alt="Event"
                                  className="w-100" />
                             <div className="text-block">

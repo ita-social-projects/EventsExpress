@@ -26,7 +26,7 @@ export default class EventsExpressService {
         let res = await call(url);
 
         if(res.ok){
-            return await res.blob();
+            return res.blob();
         }
         else{
             return null;

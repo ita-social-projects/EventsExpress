@@ -33,21 +33,23 @@ export default class EventCard extends Component {
         super(props);
 
         this.state = {
-            anchorEl: null
+            anchorEl: null,
+            eventImage: eventDefaultImage
         }
     }
 
-    async componentDidMount() {
-        const eventId = this.props.item.id;
-        const eventPreviewImage = await photoService.getPreviewEventPhoto(eventId);
-        if(eventPreviewImage !== null && document.getElementById("eventPreviewPhotoImg" + eventId) !== null){
-            document.getElementById("eventPreviewPhotoImg" + eventId).src = URL.createObjectURL(eventPreviewImage);
-        }
+    componentDidMount() {
+        photoService.getPreviewEventPhoto(this.props.item.id).then(
+            eventPreviewImage => {
+                if (eventPreviewImage != null) {
+                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                }
+            }
+        );
     }
 
     componentWillUnmount() {
-        const eventId = this.props.item.id;
-        URL.revokeObjectURL(document.getElementById("eventPreviewPhotoImg" + eventId).src);
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     renderCategories = (arr) => {
@@ -154,7 +156,7 @@ export default class EventCard extends Component {
                         className={classes.media}
                         title={title}>
                         <Link to={`/event/${id}/1`} id="LinkToEvent">
-                            <img src={eventDefaultImage}
+                            <img src={this.state.eventImage}
                                  id={"eventPreviewPhotoImg" + id} alt="Event"
                                  className="w-100"/>
                         </Link>
