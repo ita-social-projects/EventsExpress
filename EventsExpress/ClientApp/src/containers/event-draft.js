@@ -15,11 +15,8 @@ import L from 'leaflet';
 import './css/Draft.css';
 
 const history = createBrowserHistory({ forceRefresh: true });
-class EventDraftWrapper extends Component {
 
-    handleClick = () => {
-        history.push(`/drafts`);
-    }
+class EventDraftWrapper extends Component {
 
     componentWillMount = () => {
         this.props.get_categories();
@@ -51,9 +48,12 @@ class EventDraftWrapper extends Component {
 
     onDelete = async (reason) => {
         await this.props.delete(this.props.event.id, reason);
-        history.push(`/drafts`);
+        this.handleClose();
     }
-    
+
+    handleClose = () => {
+        history.goBack();
+    }
     
 
     render() {
@@ -94,10 +94,7 @@ class EventDraftWrapper extends Component {
             </header>
             <EventForm
                 all_categories={this.props.all_categories}
-                onCancel={this.props.onCancelEditing}
                 onSubmit={this.onPublish}
-                onPublish={this.onSave}
-                onDelete={this.onDelete}
                 initialValues={initialValues}
                 form_values={this.props.form_values}
                 checked={this.props.event.isReccurent}
@@ -129,7 +126,7 @@ class EventDraftWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.handleClick}>
+                        onClick={this.handleClose}>
                         Cancel
                     </Button>
                 </div>
