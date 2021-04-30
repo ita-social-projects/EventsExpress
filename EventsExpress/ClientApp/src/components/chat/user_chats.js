@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import get_chats from '../../actions/chat/chats-action';
 import { connect } from 'react-redux';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
 import Spinner from '../spinner';
 import './user_chats.css';
+import CustomAvatar from "../avatar/custom-avatar";
 
 class UserChats extends Component {
     componentWillMount = () => {
@@ -23,10 +23,9 @@ class UserChats extends Component {
                     <Link to={`/chat/${x.id}`}>
                         <div className={chatBg + " col-12 d-flex"}>
                             <ButtonBase>
-                                {user.photoUrl
-                                    ? <Avatar className='SmallAvatar' src={user.photoUrl} />
-                                    : <Avatar className='SmallAvatar' >{user.username.charAt(0).toUpperCase()}</Avatar>
-                                }
+                                <CustomAvatar size={"Small"}
+                                              userId={user.id}
+                                              name={user.name}/>
                             </ButtonBase>
                             <div className="my-auto ml-5 wrap-text"><h5>{user.username}</h5>
                                 {new_msg.length == 0 && <span className="text-info">{x.lastMessage}</span>}

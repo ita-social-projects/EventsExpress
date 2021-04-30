@@ -20,15 +20,33 @@ import Tooltip from '@material-ui/core/Tooltip';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import EventChangeStatusModal from './event-change-status-modal';
+import {eventDefaultImage} from "../../constants/eventDefaultImage";
+import PhotoService from "../../services/PhotoService";
 
+const photoService = new PhotoService();
 
 export default class EventItemView extends Component {
     constructor() {
         super();
 
         this.state = {
-            edit: false
+            edit: false,
+            eventImage: eventDefaultImage
         };
+    }
+
+    componentDidMount() {
+        photoService.getFullEventPhoto(this.props.event.data.id).then(
+            eventFullImage => {
+                if(eventFullImage != null){
+                    this.setState({eventImage: URL.createObjectURL(eventFullImage)});
+                }
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     renderCategories = arr => {
@@ -42,7 +60,7 @@ export default class EventItemView extends Component {
                     <div className="flex-grow-1">
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                                <CustomAvatar size="little" userId={x.id} name={x.username} />
                                 <div>
                                     <h5>{x.username}</h5>
                                     {'Age: ' + this.getAge(x.birthday)}
@@ -77,7 +95,7 @@ export default class EventItemView extends Component {
                     <div className="flex-grow-1">
                         <Link to={'/user/' + x.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                                <CustomAvatar size="little" userId={x.id} name={x.username} />
                                 <div>
                                     <h5>{x.username}</h5>
                                     {'Age: ' + this.getAge(x.birthday)}
@@ -121,7 +139,7 @@ export default class EventItemView extends Component {
                 <div className="flex-grow-1">
                     <Link to={'/user/' + x.id} className="btn-custom">
                         <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                            <CustomAvatar size="little" userId={x.id} name={x.username} />
                             <div>
                                 <h5>{x.username}</h5>
                                 {'Age: ' + this.getAge(x.birthday)}
@@ -162,7 +180,7 @@ export default class EventItemView extends Component {
                 <div className="flex-grow-1">
                     <Link to={'/user/' + x.id} className="btn-custom">
                         <div className="d-flex align-items-center border-bottom">
-                            <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
+                            <CustomAvatar size="little" userId={x.id} name={x.username} />
                             <div>
                                 <h5>{x.username}</h5>
                                 {'Age: ' + this.getAge(x.birthday)}
@@ -243,7 +261,6 @@ export default class EventItemView extends Component {
         const { current_user } = this.props;
         const {
             id,
-            photoUrl,
             categories,
             title,
             dateFrom,
@@ -279,7 +296,9 @@ export default class EventItemView extends Component {
                 <div className="row">
                     <div className="col-9">
                         <div className="col-12">
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                            <img src={this.state.eventImage}
+                                 id={"eventFullPhotoImg" + id} alt="Event"
+                                 className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
