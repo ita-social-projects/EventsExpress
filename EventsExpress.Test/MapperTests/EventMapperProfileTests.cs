@@ -318,6 +318,8 @@ namespace EventsExpress.Test.MapperTests
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockUser.Object);
             services.AddTransient(sp => mockHttpAccessor.Object);
+
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
         }
 
         [Test]
