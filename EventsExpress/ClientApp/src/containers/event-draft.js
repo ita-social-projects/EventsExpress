@@ -48,10 +48,10 @@ class EventDraftWrapper extends Component {
 
     onDelete = async (reason) => {
         await this.props.delete(this.props.event.id, reason);
-        history.goBack();
+        this.handleClose();
     }
 
-    onCancel = () => {
+    handleClose = () => {
         history.goBack();
     }
     
@@ -126,7 +126,7 @@ class EventDraftWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.onCancel}>
+                        onClick={this.handleClose}>
                         Cancel
                     </Button>
                 </div>

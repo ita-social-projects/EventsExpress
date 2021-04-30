@@ -30,10 +30,10 @@ class EditEventWrapper extends Component {
 
     onSubmit = async (values) => {
         await this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
-        history.goBack();
+        this.handleClose();
     }
 
-    onCancel = () => {
+    handleClose = () => {
         history.goBack();
     }
 
@@ -76,7 +76,7 @@ class EditEventWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.onCancel}>
+                        onClick={this.handleClose}>
                         Cancel
                     </Button>
                 </div>
