@@ -319,7 +319,12 @@ namespace EventsExpress.Test.MapperTests
             services.AddTransient(sp => mockUser.Object);
             services.AddTransient(sp => mockHttpAccessor.Object);
 
+            services.AddAutoMapper(typeof(EventMapperProfile));
+            services.AddAutoMapper(typeof(UserMapperProfile));
+
             IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            Mapper = serviceProvider.GetService<IMapper>();
         }
 
         [Test]
