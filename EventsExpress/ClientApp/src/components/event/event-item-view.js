@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingWrapper from '../../containers/rating';
 import IconButton from "@material-ui/core/IconButton";
@@ -25,10 +24,6 @@ import EventChangeStatusModal from './event-change-status-modal';
 export default class EventItemView extends Component {
     constructor() {
         super();
-
-        this.state = {
-            edit: false
-        };
     }
 
     renderCategories = arr => {
@@ -235,10 +230,6 @@ export default class EventItemView extends Component {
         );
     }
 
-    onEdit = () => {
-        this.setState({ edit: true });
-    }
-
     render() {
         const { current_user } = this.props;
         const {
@@ -270,8 +261,8 @@ export default class EventItemView extends Component {
         let canEdit = isFutureEvent && isMyEvent;
         let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === eventStatusEnum.Active;
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null && eventStatus === eventStatusEnum.Active;
-        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && !this.state.edit && eventStatus !== eventStatusEnum.Canceled;
-        let canUncancel = isFutureEvent && isMyEvent && !this.state.edit && eventStatus === eventStatusEnum.Canceled;
+        let canCancel = isFutureEvent && current_user.id != null && isMyEvent && eventStatus !== eventStatusEnum.Canceled;
+        let canUncancel = isFutureEvent && isMyEvent && eventStatus === eventStatusEnum.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
 
         return <>
@@ -320,7 +311,11 @@ export default class EventItemView extends Component {
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {canEdit && <button onClick={this.onEdit} className="btn btn-edit mb-1">Edit</button>}
+                                {canEdit && 
+                                    <Link to={`/editEvent/${id}`}>
+                                        <button className="btn btn-edit mb-1">Edit</button> 
+                                    </Link>
+                                }
                                 {canCancel && <EventChangeStatusModal
                                     button={<button className="btn btn-edit">Cancel</button>}
                                     submitCallback={this.props.onCancel}           
@@ -331,43 +326,35 @@ export default class EventItemView extends Component {
                                 />}
                             </div>
                         </div>
-                        {this.state.edit
-                            ? <div className="shadow mx-3 my-5 pr-4 pt-3 pb-1 bg-white rounded">
-                                <EditEventWrapper
-                                    onCancelEditing={() => this.setState({ edit: false })}
+      
+                        {!isFutureEvent &&
+                            <div className="text-box overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
+                                <RatingWrapper
+                                    iWillVisitIt={iWillVisitIt}
+                                    eventId={id}
+                                    userId={current_user.id}
                                 />
                             </div>
-                            : <>
-                                {!isFutureEvent &&
-                                    <div className="text-box overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
-                                        <RatingWrapper
-                                            iWillVisitIt={iWillVisitIt}
-                                            eventId={id}
-                                            userId={current_user.id}
-                                        />
-                                    </div>
-                                }
-                                <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
-                                    {(eventStatus === eventStatusEnum.Canceled) &&
-                                        <div className="text-center text-uppercase cancel-text">
-                                            <i className="fas fa-exclamation-triangle text-warning"></i>
-                                            <span> This event is canceled </span>
-                                            <i className="fas fa-exclamation-triangle text-warning"></i>
-                                            <br />
-                                        </div>
-                                    }
-                                    {description}
-                                </div>
-                                <div className="shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
-                                    <InventoryList
-                                        eventId={id} />
-                                </div>
-
-                                <div className="overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
-                                    <Comment match={this.props.match} />
-                                </div>
-                            </>
                         }
+                        <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
+                            {(eventStatus === eventStatusEnum.Canceled) &&
+                                <div className="text-center text-uppercase cancel-text">
+                                    <i className="fas fa-exclamation-triangle text-warning"></i>
+                                    <span> This event is canceled </span>
+                                    <i className="fas fa-exclamation-triangle text-warning"></i>
+                                    <br />
+                                </div>
+                            }
+                            {description}
+                        </div>
+                        <div className="shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
+                            <InventoryList
+                                eventId={id} />
+                        </div>
+
+                        <div className="overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
+                            <Comment match={this.props.match} />
+                        </div>
                     </div>
 
                     <div className="col-3 overflow-auto shadow p-3 mb-5 bg-white rounded">

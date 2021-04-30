@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
+import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event} from '../actions/event/event-add-action';
@@ -8,6 +9,7 @@ import { resetEvent } from '../actions/event/event-item-view-action';
 import get_categories from '../actions/category/category-list-action';
 import L from 'leaflet';
 import Button from "@material-ui/core/Button";
+
 
 class EditEventWrapper extends Component {
 
@@ -25,9 +27,11 @@ class EditEventWrapper extends Component {
         this.props.reset();
     }
 
-    onSubmit = (values) => {
-        return this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+    onSubmit = async (values) => {
+        await this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+        this.props.history.goBack();
     }
+
 
     render() {
         let initialValues = {
@@ -47,7 +51,6 @@ class EditEventWrapper extends Component {
             <EventForm
                 validate={validate}
                 all_categories={this.props.all_categories}
-                onPublish={this.onPublish}
                 onSubmit={this.onSubmit}
                 initialValues={initialValues}
                 form_values={this.props.form_values}
@@ -60,19 +63,18 @@ class EditEventWrapper extends Component {
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        type="submit"
-                    >
+                        type="submit">
                         Save
-                        </Button>
+                    </Button>
                 </div>
                 <div className="col">
                     <Button
                         className="border"
                         fullWidth={true}
                         color="primary"
-                        onClick={this.props.onCancelEditing}>
+                        onClick={this.props.history.goBack}>
                         Cancel
-                        </Button>
+                    </Button>
                 </div>
             </EventForm>
         </>
@@ -100,5 +102,8 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditEventWrapper);
+export default withRouter(connect(
+    mapStateToProps, 
+    mapDispatchToProps
+)(EditEventWrapper));
 
