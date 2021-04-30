@@ -15,8 +15,6 @@ namespace EventsExpress.ViewModels
 
         public DateTime Date { get; set; }
 
-        public string UserPhoto { get; set; }
-
         public string UserName { get; set; }
 
         public Guid? CommentsId { get; set; }

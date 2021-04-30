@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,6 @@ namespace EventsExpress.Core.IServices
 
         Task AddPhotoByURL(string url, Guid id);
 
-        Task<string> GetPhotoFromAzureBlob(string url);
+        Task<byte[]> GetPhotoFromAzureBlob(string url);
     }
 }

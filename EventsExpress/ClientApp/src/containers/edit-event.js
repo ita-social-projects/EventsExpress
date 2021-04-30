@@ -57,7 +57,8 @@ class EditEventWrapper extends Component {
                 checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
                 disabledDate={false}
-                isCreated={true}>
+                isCreated={true}
+                eventId={this.props.event.id}>
                 <div className="col">
                     <Button
                         className="border"
