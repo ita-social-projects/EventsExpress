@@ -1,16 +1,15 @@
 import { UserService } from "../../services";
 import { setErrorAllertFromResponse } from '../alert-action';
 
-export const contactUs = {
-    PENDING: "SET_CONTACTUS_PENDING",
-}
+export const SET_CONTACTUS_PENDING = "SET_CONTACTUS_PENDING";
+export const GET_CONTACTUS_SUCCESS = "GET_CONTACTUS_SUCCESS";
 
 const api_serv = new UserService();
 
-export default function getIssues(data, page = 1) {
+export default function getIssues() {
     return async dispatch => {
         dispatch(setContactUsPending(true));
-        let response = await api_serv.getAllIssues(data, page);
+        let response = await api_serv.getAllIssues();
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -23,15 +22,14 @@ export default function getIssues(data, page = 1) {
 
 function setContactUsPending(data) {
     return {
-        type: contactUs.PENDING,
+        type: SET_CONTACTUS_PENDING,
         payload: data
     };
 }
 
-
 function getListOfIssues(data) {
     return {
-        type: GET_COMMENTS_SUCCESS,
+        type: GET_CONTACTUS_SUCCESS,
         payload: data
     }
 }

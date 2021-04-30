@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -8,6 +10,7 @@ using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -33,6 +36,20 @@ namespace EventsExpress.Core.Services
             var result = Insert(contactAdminEntity);
             await Context.SaveChangesAsync();
             return result.Id;
+        }
+
+        public IEnumerable<ContactAdminDto> GetAll()
+        {
+            var contactAdminMessages = Context.ContactAdmin.Select(x => new ContactAdminDto
+            {
+                SenderId = x.Id,
+                Title = x.Title,
+                DateCreated = x.DateCreated,
+                Status = x.Status,
+            })
+                .OrderBy(contactAdminMessages => contactAdminMessages.DateCreated);
+
+            return contactAdminMessages;
         }
     }
 }

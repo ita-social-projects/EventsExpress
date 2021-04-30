@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
@@ -25,25 +23,19 @@ namespace EventsExpress.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
-        private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
         private readonly IPhotoService _photoService;
-        private readonly IContactAdminService _contactAdminService;
+        private readonly IMapper _mapper;
 
         public UsersController(
             IUserService userSrv,
             IAuthService authSrv,
             IMapper mapper,
-            IEmailService emailService,
-            IPhotoService photoService,
-            IContactAdminService contactAdminService)
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _authService = authSrv;
-            _mapper = mapper;
-            _emailService = emailService;
             _photoService = photoService;
-            _contactAdminService = contactAdminService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -274,44 +266,6 @@ namespace EventsExpress.Controllers
             var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{user.Id}/photo.png").Result;
 
             return Ok(updatedPhoto);
-        }
-
-        /// <summary>
-        /// This method help to contact users with admins.
-        /// </summary>
-        /// <param name="model">Param model defines ContactUsViewModel model.</param>
-        /// <returns>The method sends message to admin mail.</returns>
-        /// <response code="200">Sending is succesfull.</response>
-        /// <response code="400">Sending process failed.</response>
-        [HttpPost("[action]")]
-        [AllowAnonymous]
-        public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
-        {
-            var emailTitle = string.Empty;
-            if (model.Title == null)
-            {
-                emailTitle = $"New request from {model.Email} on subject: {model.Subject}";
-            }
-            else
-            {
-                emailTitle = model.Title;
-            }
-
-            try
-            {
-                await _contactAdminService.SendMessageToAdmin(new ContactAdminDto
-                {
-                    Subject = model.Subject,
-                    Email = model.Email,
-                    MessageText = model.Description,
-                    Title = emailTitle,
-                });
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
 
         /// <summary>

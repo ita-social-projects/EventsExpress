@@ -1,5 +1,5 @@
-import { contactUs } from '../actions/contactUs/contact-us-add-action';
-import initialState from '../store/initialState';
+import { contactUs } from '../../actions/contactUs/contact-us-add-action';
+import initialState from '../../store/initialState';
 
 export const reducer = (state = initialState.contactUs, action) => {
     switch (action.type) {

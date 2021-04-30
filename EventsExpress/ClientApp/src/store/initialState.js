@@ -201,6 +201,11 @@ const initialState = {
         isSuccess: false,
         data: []
     },
+    contactUsList: {
+        isPending: false,
+        isSuccess: false,
+        data: []
+    },
     notification:
     {
         messages: [],

@@ -37,7 +37,8 @@ import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
 import * as Hub from './hub';
 import * as Alert from './alert';
-import * as ContactUs from './contact-us';
+import * as ContactUs from './contactUs/contact-us-reducer';
+import * as ContactUsList from './contactUs/contact-us-list-reducer';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
 
@@ -81,6 +82,7 @@ const rootReducers = {
     hubConnection: Hub.reducer,
     alert: Alert.reducer,
     contactUs: ContactUs.reducer,
+    contactUsList: ContactUsList.reducer,
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer
 
