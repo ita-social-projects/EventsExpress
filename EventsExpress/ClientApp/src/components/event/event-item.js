@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import 'moment-timezone';
@@ -19,13 +19,33 @@ import { useStyle } from '../event/CardStyle';
 import AuthComponent from "../../security/authComponent";
 import EventHeader from './event-item-header';
 import { Roles } from '../../constants/userRoles';
+import PhotoService from '../../services/PhotoService';
+import { eventDefaultImage } from '../../constants/eventDefaultImage';
 
 const useStyles = useStyle;
+const photoService = new PhotoService();
 
 export default class EventCard extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            eventImage: eventDefaultImage
+        }
+    }
+
+    componentDidMount() {
+        photoService.getPreviewEventPhoto(this.props.item.id).then(
+            eventPreviewImage => {
+                if (eventPreviewImage != null) {
+                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                }
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     renderCategories = (arr) => {
@@ -44,7 +64,6 @@ export default class EventCard extends Component {
             isPublic,
             maxParticipants,
             eventStatus,
-            photoUrl,
             categories,
             countVisitor,
             owners,
@@ -61,8 +80,7 @@ export default class EventCard extends Component {
                         backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
                         opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
 
-                    }}
-                >
+                    }}>
                     <EventHeader
                         members={members}
                         countVisitor={countVisitor}
@@ -72,22 +90,23 @@ export default class EventCard extends Component {
                     />
                     <CardMedia
                         className={classes.media}
-                        title={title}
-                    >
-                        <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                        title={title}>
+                        <Link to={`/event/${id}/1`} id="LinkToEvent">
+                            <img src={this.state.eventImage}
+                                 id={"eventPreviewPhotoImg" + id} alt="Event"
+                                 className="w-100"/>
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
-                        <CardContent>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                            >
-                                {countVisitor}/{maxParticipants} Participants
-                            </Typography>
-                        </CardContent>
+                    <CardContent>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {countVisitor}/{maxParticipants} Participants
+                        </Typography>
+                    </CardContent>
                     }
                     <CardContent>
                         {description &&
@@ -101,9 +120,9 @@ export default class EventCard extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.props.item.location &&
-                                <DisplayLocation
-                                    location={this.props.item.location}
-                                />
+                            <DisplayLocation
+                                location={this.props.item.location}
+                            />
                             }
                             <br />
                             <div className="float-left">
@@ -111,13 +130,13 @@ export default class EventCard extends Component {
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
-                                    <Tooltip title="Private event">
-                                        <IconButton>
-                                            <Badge color="primary">
-                                                <i className="fa fa-key"></i>
-                                            </Badge>
-                                        </IconButton>
-                                    </Tooltip>
+                                <Tooltip title="Private event">
+                                    <IconButton>
+                                        <Badge color="primary">
+                                            <i className="fa fa-key"></i>
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">

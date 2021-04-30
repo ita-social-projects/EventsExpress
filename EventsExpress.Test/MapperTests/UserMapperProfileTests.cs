@@ -105,7 +105,6 @@ namespace EventsExpress.Test.MapperTests
             Initialize();
 
             IServiceCollection services = new ServiceCollection();
-            var mock = new Mock<IPhotoService>();
             var mockAuth = new Mock<IAuthService>();
             mockUser = new Mock<IUserService>();
             mockAccessor = new Mock<IHttpContextAccessor>();
@@ -113,17 +112,9 @@ namespace EventsExpress.Test.MapperTests
             mockAccessor.Setup(sp => sp.HttpContext.User);
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
 
-            services.AddTransient(sp => mock.Object);
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);
-
-            services.AddAutoMapper(typeof(UserMapperProfile));
-
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
         }
 
         [Test]
@@ -148,7 +139,6 @@ namespace EventsExpress.Test.MapperTests
             firstUserDto = GetUserDto();
             var resEven = Mapper.Map<UserDto, UserPreviewViewModel>(firstUserDto);
 
-            Assert.That(resEven.PhotoUrl, Is.EqualTo("test"));
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
             Assert.That(resEven.Username, Is.EqualTo(firstUserDto.Name ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));
@@ -162,7 +152,6 @@ namespace EventsExpress.Test.MapperTests
             firstUserDto = GetUserDto();
             var resEven = Mapper.Map<UserDto, UserInfoViewModel>(firstUserDto);
 
-            Assert.That(resEven.PhotoUrl, Is.EqualTo("test"));
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
             Assert.That(resEven.Name, Is.EqualTo(firstUserDto.Name));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));
@@ -188,7 +177,6 @@ namespace EventsExpress.Test.MapperTests
             firstUserDto = GetUserDto();
             var resEven = Mapper.Map<UserDto, UserManageViewModel>(firstUserDto);
 
-            Assert.That(resEven.PhotoUrl, Is.EqualTo("test"));
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
             Assert.That(resEven.Username, Is.EqualTo(firstUserDto.Name ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));

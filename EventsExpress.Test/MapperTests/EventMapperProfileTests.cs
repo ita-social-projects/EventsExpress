@@ -41,7 +41,6 @@ namespace EventsExpress.Test.MapperTests
         private Guid idUnitOfMeasuring = Guid.NewGuid();
         private Guid idEventEditViewModel = Guid.NewGuid();
         private string categoryName = "category name";
-        private string photoUrl = "http://basin.example.com/#branch";
 
         private List<User> GetListUsers()
         {
@@ -226,7 +225,6 @@ namespace EventsExpress.Test.MapperTests
                     new UserPreviewViewModel
                     {
                         Id = idUser,
-                        PhotoUrl = photoUrl,
                         Username = "name of user",
                         Email = "user@gmail.com",
                         Birthday = DateTime.Now,
@@ -266,7 +264,6 @@ namespace EventsExpress.Test.MapperTests
                     new UserPreviewViewModel
                     {
                         Id = idUser,
-                        PhotoUrl = photoUrl,
                         Username = "name of user",
                         Email = "user@gmail.com",
                         Birthday = DateTime.Now,
@@ -312,25 +309,15 @@ namespace EventsExpress.Test.MapperTests
             Initialize();
 
             IServiceCollection services = new ServiceCollection();
-            var mock = new Mock<IPhotoService>();
             var mockAuth = new Mock<IAuthService>();
             var mockUser = new Mock<IUserService>();
             var mockHttpAccessor = new Mock<IHttpContextAccessor>();
 
             mockHttpAccessor.Setup(o => o.HttpContext.User);
 
-            services.AddTransient(sp => mock.Object);
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockUser.Object);
             services.AddTransient(sp => mockHttpAccessor.Object);
-
-            services.AddAutoMapper(typeof(EventMapperProfile));
-            services.AddAutoMapper(typeof(UserMapperProfile));
-
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            Mapper = serviceProvider.GetService<IMapper>();
-            mock.Setup(x => x.GetPhotoFromAzureBlob(It.IsAny<string>())).Returns(Task.FromResult("test"));
         }
 
         [Test]
@@ -405,7 +392,6 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<EventDto, EventPreviewViewModel>(firstEventDto);
             var visitorCount = firstEventDto.Visitors.Count(x => x.UserStatusEvent == 0);
 
-            Assert.That(resEven.PhotoUrl, Is.EqualTo("test"));
             Assert.That(resEven.Categories, Has.All.Matches<CategoryViewModel>(ex =>
                                                       firstEventDto.Categories
                                                       .All(f =>
@@ -429,7 +415,6 @@ namespace EventsExpress.Test.MapperTests
                                                        firstEventDto.Owners
                                                        .All(f =>
                                                            ex.Id == f.Id &&
-                                                           ex.PhotoUrl == "test" &&
                                                            ex.Birthday == f.Birthday &&
                                                            ex.Username == f.Name)));
         }
@@ -440,7 +425,6 @@ namespace EventsExpress.Test.MapperTests
             firstEventDto = GetEventDto();
             var resView = Mapper.Map<EventDto, EventViewModel>(firstEventDto);
 
-            Assert.That(resView.PhotoUrl, Is.EqualTo("test"));
             Assert.That(resView.Categories, Has.All.Matches<CategoryViewModel>(ex =>
                                                       firstEventDto.Categories
                                                       .All(f =>
@@ -465,14 +449,12 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Id == f.User.Id &&
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
-                                                          ex.PhotoUrl == "test" &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
             Assert.That(resView.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                       firstEventDto.Owners
                                                       .All(f =>
                                                           ex.Id == f.Id &&
                                                           ex.Birthday == f.Birthday &&
-                                                          ex.PhotoUrl == "test" &&
                                                           ex.Username == f.Name)));
             Assert.That(resView.Frequency, Is.EqualTo(firstEventDto.Frequency));
             Assert.That(resView.Periodicity, Is.EqualTo(firstEventDto.Periodicity));

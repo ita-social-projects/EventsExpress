@@ -25,7 +25,7 @@ export default class UserInfoCard extends Component {
                         <Link to={`/user/${user.id}`}>
                             <CustomAvatar
                                 size="little"
-                                photoUrl={user.photoUrl}
+                                userId={user.id}
                                 name={user.username}
                             />
                         </Link>
