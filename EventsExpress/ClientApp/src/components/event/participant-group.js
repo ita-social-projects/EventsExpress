@@ -4,14 +4,15 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import UserView from './users-view';
 
 export default class ParticipantGroup extends Component {
 
 
     render() {
         const { label,
-                renderGroup,
-                disabled,
+            disabled,
+            users,
         } = this.props;
 
         return (
@@ -21,12 +22,18 @@ export default class ParticipantGroup extends Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography>{ label }</Typography>
+                    <Typography>{label}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography className="w-100">
                         {
-                            renderGroup()
+                            users.map(user => (
+                                <UserView user={user}>
+                                    {
+                                        this.props.children
+                                    }
+                                </UserView>
+                            ))
                         }
                     </Typography>
                 </ExpansionPanelDetails>

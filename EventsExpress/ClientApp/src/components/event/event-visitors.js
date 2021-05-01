@@ -1,60 +1,11 @@
 import React, { Component } from 'react';
 import ParticipantGroup from './participant-group';
-import UserView from './users-view';
 import OwnersActions from './owners-action';
 import ApprovedUsersActions from './approved-users-action';
 import PendingUsersActions from './pending-users-action';
 import DeniedUsersActions from './denied-users-action';
 
 class EventVisitors extends Component {
-
-    renderOwners = (arr, isMyEvent) => {
-        return arr.map((user, key) => (
-            <div key={key}>
-                <UserView user={user}>
-                    <OwnersActions
-                        user={user}
-                        isMyEvent={isMyEvent}
-                    />
-                </UserView>
-            </div>
-        ));
-    }
-
-    renderApprovedUsers = (arr, isMyEvent, isMyPrivateEvent) => {
-        return arr.map(user => (
-            <UserView user={user}>
-                <ApprovedUsersActions
-                    user={user}
-                    isMyEvent={isMyEvent}
-                    isMyPrivateEvent={isMyPrivateEvent}
-                />
-            </UserView>
-        ));
-    }
-
-    renderPendingUsers = (arr, isMyEvent) => {
-        return arr.map(user => (
-            <UserView user={user}>
-                <PendingUsersActions
-                    user={user}
-                    isMyEvent={isMyEvent}
-                />
-            </UserView>
-        ));
-    }
-
-    renderDeniedUsers = (arr, isMyEvent) => {
-        return arr.map(user => (
-            <UserView user={user}>
-                <DeniedUsersActions
-                    user={user}
-                    isMyEvent={isMyEvent}
-                />
-            </UserView>
-        ));
-    }
-
 
     render() {
         const { isMyPrivateEvent, visitors, admins, isMyEvent } = this.props;
@@ -63,27 +14,64 @@ class EventVisitors extends Component {
             <div>
                 <ParticipantGroup
                     disabled={false}
-                    renderGroup={() => this.renderOwners(admins, isMyEvent)}
+                    users={admins}
                     label="Admin"
-                />
+                >
+                    {
+                        admins.map(user => (
+                            < OwnersActions
+                                user={user}
+                                isMyEvent={isMyEvent}
+                            />
+                        ))
+                    }
+                </ParticipantGroup>
                 <ParticipantGroup
                     disabled={visitors.approvedUsers.length == 0}
-                    renderGroup={() => this.renderApprovedUsers(visitors.approvedUsers, isMyEvent, isMyPrivateEvent)}
+                    users={visitors.approvedUsers}
                     label="Visitors"
-                />
+                >
+                    {
+                        visitors.approvedUsers.map(user => (
+                            <ApprovedUsersActions
+                                user={user}
+                                isMyEvent={isMyEvent}
+                                isMyPrivateEvent={isMyPrivateEvent}
+                            />
+                        ))
+                    }
+                </ParticipantGroup>
                 {isMyPrivateEvent &&
                     <ParticipantGroup
                         disabled={visitors.pendingUsers.length == 0}
-                        renderGroup={() => this.renderPendingUsers(visitors.pendingUsers)}
+                        users={visitors.pendingUsers}
                         label="Pending users"
-                    />
+                    >
+                        {
+                            visitors.pendingUsers.map(user => (
+                                <PendingUsersActions
+                                    user={user}
+                                    isMyEvent={isMyEvent}
+                                />
+                            ))
+                        }
+                    </ParticipantGroup>
                 }
                 {isMyPrivateEvent &&
                     <ParticipantGroup
                         disabled={visitors.deniedUsers.length == 0}
-                        renderGroup={() => this.renderDeniedUsers(visitors.deniedUsers)}
+                        users={visitors.deniedUsers}
                         label="Denied users"
-                    />
+                    >
+                        {
+                            visitors.deniedUsers.map(user => (
+                                <DeniedUsersActions
+                                    user={user}
+                                    isMyEvent={isMyEvent}
+                                />
+                            ))
+                        }
+                    </ParticipantGroup>
                 }
             </div>
         )
