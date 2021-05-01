@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -10,6 +12,7 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
 using EventsExpress.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -20,8 +23,22 @@ namespace EventsExpress.Test.MapperTests
     internal class UserMapperProfileTests : MapperTestInitializer<UserMapperProfile>
     {
         private UserDto firstUserDto;
+
         private Guid idUser = Guid.NewGuid();
         private Guid idRole = Guid.NewGuid();
+        private User firstUser;
+        private Mock<IHttpContextAccessor> mockAccessor;
+        private Mock<IUserService> mockUser;
+
+        private User GetUser()
+        {
+            List<User> users = GetListUsers();
+            return new User
+            {
+                Id = idUser,
+                Name = "First user",
+            };
+        }
 
         private List<User> GetListUsers()
         {
@@ -39,7 +56,6 @@ namespace EventsExpress.Test.MapperTests
 
         private UserDto GetUserDto()
         {
-            List<User> users = GetListUsers();
             return new UserDto
             {
                 Id = idUser,
@@ -87,12 +103,41 @@ namespace EventsExpress.Test.MapperTests
         protected virtual void Init()
         {
             Initialize();
+
+            IServiceCollection services = new ServiceCollection();
+            var mockAuth = new Mock<IAuthService>();
+            mockUser = new Mock<IUserService>();
+            mockAccessor = new Mock<IHttpContextAccessor>();
+
+            mockAccessor.Setup(sp => sp.HttpContext.User);
+            mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
+
+            services.AddTransient(sp => mockAuth.Object);
+            services.AddTransient(sp => mockAccessor.Object);
+            services.AddTransient(sp => mockUser.Object);
+
+            services.AddAutoMapper(typeof(EventMapperProfile));
+            services.AddAutoMapper(typeof(UserMapperProfile));
+
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            Mapper = serviceProvider.GetService<IMapper>();
         }
 
         [Test]
         public void UserMapperProfile_Should_HaveValidConfig()
         {
             Configuration.AssertConfigurationIsValid();
+        }
+
+        [Test]
+        public void UserMapperProfile_UserToUserDto()
+        {
+            firstUser = GetUser();
+            var resEven = Mapper.Map<User, UserDto>(firstUser);
+
+            Assert.That(resEven.Attitude, Is.EqualTo(2));
+            Assert.That(resEven.Rating, Is.EqualTo(5));
         }
 
         [Test]
