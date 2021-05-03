@@ -34,9 +34,7 @@ class EventForm extends Component {
         }));
 
     }
-    handleClick = () => {
-        history.push(`/`);
-    }
+
     onClickCallBack = (coords) => {
         this.setState({ selectedPos: [coords.lat, coords.lng] });
     }
