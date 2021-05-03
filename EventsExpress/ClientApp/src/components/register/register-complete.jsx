@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
-import { renderTextField, renderMyDatePicker } from '../helpers/helpers';
+import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import { renderSelectField, renderPhoneInput } from '../helpers/form-helpers';
 import { isValidPhoneNumber } from 'react-phone-number-input'
 
@@ -63,8 +63,9 @@ class RegisterComplete extends Component {
                                     name="birthday"
                                     id="date"
                                     label="Birthday"
-                                    type="date"
-                                    component={renderMyDatePicker}
+                                    minValue={new Date().getFullYear() - 115}
+                                    maxValue={new Date().getFullYear() - 15}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group col" >

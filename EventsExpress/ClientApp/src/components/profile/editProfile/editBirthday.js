@@ -4,8 +4,10 @@ import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 
-const { validate, renderMyDatePicker } = Module;
+const { validate, renderDatePicker } = Module;
 const EditBirthday = props => {
+    const minValue = new Date().getFullYear() - 115;
+    const maxValue = new Date().getFullYear() - 15;
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
@@ -14,8 +16,9 @@ const EditBirthday = props => {
                     name="Birthday"
                     id="date"
                     label="Birthday"
-                    type="date"
-                    component={renderMyDatePicker}
+                    minValue={minValue}
+                    maxValue={maxValue}
+                    component={renderDatePicker}
                     InputLabelProps={{
                         shrink: true
                     }}
