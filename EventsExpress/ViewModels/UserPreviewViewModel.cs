@@ -15,6 +15,8 @@ namespace EventsExpress.ViewModels
 
         public double Rating { get; set; }
 
+        public Attitude Attitude { get; set; }
+
         public UserStatusEvent? UserStatusEvent { get; set; }
     }
 }
