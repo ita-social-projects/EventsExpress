@@ -292,7 +292,8 @@ namespace EventsExpress.Core.Services
                         UserId = CurrentUser().Id,
                     });
                 await Context.SaveChangesAsync();
-
+                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+                await _mediator.Publish(new EventCreatedMessage(dtos));
                 return ev.Id;
             }
             else

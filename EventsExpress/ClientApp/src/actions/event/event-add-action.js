@@ -46,7 +46,7 @@ export function publish_event(data) {
         if (response.ok) {
             dispatch(setEventSuccess(true));
             dispatch(getEvent(data));
-            dispatch(eventWasCreated(data.id));
+            dispatch(eventWasCreated(data));
             return Promise.resolve();
         }
         else {
