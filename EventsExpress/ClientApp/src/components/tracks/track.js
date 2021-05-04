@@ -24,11 +24,13 @@ class Tracks extends Component {
     }
 
     handlePageChange = async (page) => {
+        const {entityNames, changesType, dateFrom, dateTo} = this.props.form_values;
         await this.props.getAllTracks({
-            entityName: !!this.props.form_values.entityNames && this.props.form_values.entityNames.map(x => x.entityName),
-            changesType: this.props.form_values.changesType,
-            dateFrom: this.props.form_values.dateFrom,
-            dateTo: this.props.form_values.dateTo,
+            entityName: entityNames !== null || true
+                ? entityNames.map(x => x.entityName) : null,
+            changesType: changesType,
+            dateFrom: dateFrom,
+            dateTo: dateTo,
             page: page
         })
     }

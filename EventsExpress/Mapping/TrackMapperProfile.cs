@@ -11,7 +11,8 @@ namespace EventsExpress.Mapping
         {
             CreateMap<ChangeInfo, TrackDto>()
                 .ForMember(e => e.Name, opts => opts.MapFrom(e => e.EntityName));
-            CreateMap<TrackDto, TrackViewModel>();
+            CreateMap<TrackDto, TrackViewModel>()
+                .ForMember(e => e.EntityName, opts => opts.MapFrom(e => e.Name));
         }
     }
 }

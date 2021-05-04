@@ -31,7 +31,7 @@ function trackChangesTypeReadingString(option) {
 class EventFilterStatus extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
-        if (input.value == "")
+        if (input.value === "")
             input.value = options
 
         return options.map((option, index) => {

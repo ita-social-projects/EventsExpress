@@ -1,20 +1,21 @@
 ﻿import React from "react";
 import CommentForm from '../components/comment/comment-form';
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import addComment,
-{ setCommentPending, setCommentSuccess } from "../actions/comment/comment-add-action";
-import { reset } from 'redux-form';
+{setCommentPending, setCommentSuccess} from "../actions/comment/comment-add-action";
+import {reset} from 'redux-form';
 
 class CommentWrapper extends React.Component {
-
-    submit = values => {
-        return this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId, commentsId: this.props.parentId });
-    };
-
-    submit = values => {
-        return this.props.add({ ...values, userId: this.props.userId, eventId: this.props.eventId, commentsId: this.props.parentId });
-    };
     
+    submit = values => {
+        return this.props.add({
+            ...values,
+            userId: this.props.userId,
+            eventId: this.props.eventId,
+            commentsId: this.props.parentId
+        });
+    };
+
     componentWillUnmount = () => {
         this.props.reset();
         this.props.resetCommentStatus();
@@ -23,7 +24,7 @@ class CommentWrapper extends React.Component {
     render() {
 
         return this.props.userId
-            ? <CommentForm onSubmit={this.submit} />
+            ? <CommentForm onSubmit={this.submit}/>
             : null
     }
 }

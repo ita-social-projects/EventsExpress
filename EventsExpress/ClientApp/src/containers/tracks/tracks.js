@@ -6,6 +6,6 @@ const mapStateToProps = (state) => ({
     tracks: state.tracks
 });
 
-const mapDispatchToProps = (dispatch) => { return bindActionCreators(() => { }, dispatch); };
+const mapDispatchToProps = (dispatch) => { return bindActionCreators(null, dispatch); };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tracks);

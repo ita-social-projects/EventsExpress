@@ -62,13 +62,9 @@ export default class TrackItem extends Component {
                 };
         }
     }
-
-    filter = values => {
-        this.props.filter({ ...values, id: this.props.item.id });
-    };
-
+    
     render() {
-        const { propertyChangesText, entityKeys, time, name, changesType, user } = this.props.item;
+        const { propertyChangesText, time, name, changesType, user } = this.props.item;
 
         return (
             <tr>
