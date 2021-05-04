@@ -44,8 +44,8 @@ export function publish_event(data) {
         let response = await api_serv.publishEvent(data);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(get_event(data.id));
-            dispatch(eventWasCreated(data.id));
+            dispatch(get_event(data));
+            dispatch(eventWasCreated(data));
             return Promise.resolve();
         }
         else {
