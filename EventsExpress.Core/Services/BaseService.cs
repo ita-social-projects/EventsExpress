@@ -4,7 +4,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventsExpress.Db.BaseService
+namespace EventsExpress.Core.Services
 {
     public class BaseService<T> : IBaseService<T>
         where T : class

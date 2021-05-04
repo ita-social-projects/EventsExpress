@@ -132,7 +132,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCaseSource(typeof(GettingOkDeletingUnits))]
+        [TestCaseSource(typeof(GettingOkDeletingUnits), nameof(GettingOkDeletingUnits.TestCases))]
         [Category("Get")]
         public void Get_NotExistingIdORDeletedUnit_Exception(Guid id)
         {

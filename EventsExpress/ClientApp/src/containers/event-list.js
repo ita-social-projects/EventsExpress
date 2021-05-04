@@ -1,49 +1,41 @@
 import React, { Component } from 'react';
+import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event/event-list-action';
-import history from '../history';
 import eventHelper from '../components/helpers/eventHelper';
+import { withRouter } from "react-router";
 
 class EventListWrapper extends Component {
     constructor(props) {
         super(props);
         this.objCurrentQueryParams = Object.create(null);
+        this.prevQueryStringSearch = "";
     }
 
     componentDidMount() {
-        this.setSearchParamsToEventFilter(this.props.location.search);
-        this.executeSearchEvents();
+        this.setSearchParamsToEventFilter(this.props.history.location.search);
+        const queryString = eventHelper.getQueryStringByEventFilter(this.objCurrentQueryParams);
+        this.props.get_events(queryString);
     }
 
-    componentDidUpdate(prevProps) {
-        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
-        if (this.hasUpdateSearchParams(objFilterParams)) {
-            this.objCurrentQueryParams = objFilterParams;
-            this.executeSearchEvents();
+    componentDidUpdate() {
+        if (this.props.history.location.search != this.prevQueryStringSearch) {
+            this.prevQueryStringSearch = this.props.history.location.search;
+            this.props.get_events(this.props.history.location.search);
         }
     }
 
-    hasUpdateSearchParams = objFilterParams => {
-        return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
-    }
-
-    executeSearchEvents = () => {
-        const queryString = eventHelper.getQueryStringByEventFilter(this.props.events.filter);
-        this.props.get_events(queryString);
-        history.push(`${this.props.location.pathname}${queryString}`);
-    }
-
     setSearchParamsToEventFilter = search => {
+        var filterCopy = { ...this.props.events.filter };
         this.objCurrentQueryParams = queryStringParse(search);
 
         Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
-            this.props.events.filter[key] = value;
+            filterCopy[key] = value;
         }.bind(this));
-
-        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(filterCopy);
     }
 
     render() {
@@ -71,7 +63,8 @@ class EventListWrapper extends Component {
 const mapStateToProps = (state) => {
     return {
         events: state.events,
-        current_user: state.user
+        current_user: state.user,
+        form_values: getFormValues('event-filter-form')(state),
     }
 };
 
@@ -81,7 +74,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(EventListWrapper);
+)(EventListWrapper));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -13,34 +14,43 @@ namespace EventsExpress.Test.HandlerTests
 {
     internal class BlockedUserHandlerTests
     {
+        private readonly NotificationChange _notificationChange = NotificationChange.Profile;
+        private readonly string _emailUser = "user@gmail.com";
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<INotificationTemplateService> _notificationTemplateService;
         private BlockedUserHandler _blockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
-        private string _emailUser = "user@gmail.com";
-        private User _user;
         private UserDto _userDto;
-        private BlockedUserMessage _blockedUserMessage;
-        private NotificationChange _notificationChange = NotificationChange.Profile;
+        private BlockedAccountMessage _blockedUserMessage;
         private Guid[] _usersIds;
+        private Account _account;
 
         [SetUp]
         public void Initialize()
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object);
-            _user = new User
+            _notificationTemplateService = new Mock<INotificationTemplateService>();
+
+            _notificationTemplateService
+                .Setup(service => service.GetByIdAsync(NotificationProfile.BlockedUser))
+                .ReturnsAsync(new NotificationTemplateDto { Id = NotificationProfile.BlockedUser });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+            _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+            _account = new Account
             {
-                Id = _idUser,
-                Email = _emailUser,
+                UserId = _idUser,
             };
             _userDto = new UserDto
             {
                 Id = _idUser,
                 Email = _emailUser,
             };
-            _blockedUserMessage = new BlockedUserMessage(_user);
+            _blockedUserMessage = new BlockedAccountMessage(_account);
             _usersIds = new Guid[] { _idUser };
             _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
         }

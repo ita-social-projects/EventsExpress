@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels
@@ -11,8 +12,6 @@ namespace EventsExpress.ViewModels
 
         public string Username { get; set; }
 
-        public string PhotoUrl { get; set; }
-
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }
@@ -21,7 +20,7 @@ namespace EventsExpress.ViewModels
 
         public byte Attitude { get; set; }
 
-        public virtual RoleViewModel Role { get; set; }
+        public IEnumerable<RoleViewModel> Roles { get; set; }
 
         public double Rating { get; set; }
     }

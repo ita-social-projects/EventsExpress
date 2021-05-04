@@ -3,7 +3,7 @@
 const baseService = new EventsExpressService();
 
 export default class UnitOfMeasuringService {
-    getUnitsOfMeasuring = async () => baseService.getResourceNew('unitofmeasuring/all');
+    getUnitsOfMeasuring = async () => baseService.getResource('unitofmeasuring/all');
 
     setUnitOfMeasuringDelete = data => baseService.setResource(`unitOfMeasuring/delete/${data}`);
 

@@ -91,7 +91,7 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var user = GetCurrentUser(HttpContext.User);
+                var user = _authService.GetCurrentUser(HttpContext.User);
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
@@ -106,53 +106,13 @@ namespace EventsExpress.Controllers
             }
         }
 
-        /// <summary>
-        /// This method have to change role of user.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <param name="roleId">Param roleId defines the role identifier.</param>
-        /// <returns>The method changes role for users.</returns>
-        /// <response code="200">Change role success.</response>
-        /// <response code="400">Change role failed.</response>
-        [HttpPost("[action]")]
-        [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<IActionResult> ChangeRole(Guid userId, Guid roleId)
+        [HttpGet("[action]")]
+        public IActionResult GetUserInfo()
         {
-            await _userService.ChangeRole(userId, roleId);
+            var user = GetCurrentUserOrNull(HttpContext.User);
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
 
-            return Ok();
-        }
-
-        /// <summary>
-        /// This method is to block user.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <returns>The method returns unblocked user.</returns>
-        /// <response code="200">Block is succesful.</response>
-        /// <response code="400">Block process failed.</response>
-        [HttpPost("{userId}/[action]")]
-        [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<IActionResult> Unblock(Guid userId)
-        {
-            await _userService.Unblock(userId);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// This method is to unblock event.
-        /// </summary>
-        /// <param name="userId">Param userId defines the user identifier.</param>
-        /// <returns>The method returns blocked user.</returns>
-        /// <response code="200">Unblock is succesful.</response>
-        /// <response code="400">Unblock process failed.</response>
-        [HttpPost("[action]")]
-        [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<IActionResult> Block(Guid userId)
-        {
-            await _userService.Block(userId);
-
-            return Ok();
+            return Ok(userInfo);
         }
 
         /// <summary>
@@ -347,15 +307,6 @@ namespace EventsExpress.Controllers
             return Ok();
         }
 
-        // HELPERS:
-
-        /// <summary>
-        /// This method help to get current user from JWT.
-        /// </summary>
-        /// <returns>The method returns current user.</returns>
-        [NonAction]
-        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
-
         /// <summary>
         /// This method is to edit user notificatin types.
         /// </summary>
@@ -382,6 +333,32 @@ namespace EventsExpress.Controllers
             var result = await _userService.EditFavoriteNotificationTypes(user, newNotificationTypes);
 
             return Ok(result);
+        }
+
+        // HELPERS:
+
+        /// <summary>
+        /// This method help to get current user from JWT.
+        /// </summary>
+        /// <returns>The method returns current user.</returns>
+        [NonAction]
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+
+        /// <summary>
+        /// This method help to get logged in user from JWT.
+        /// </summary>
+        /// <returns>Current user or null when not exist.</returns>
+        [NonAction]
+        private UserDto GetCurrentUserOrNull(ClaimsPrincipal userClaims)
+        {
+            try
+            {
+                return _authService.GetCurrentUser(userClaims);
+            }
+            catch (EventsExpressException)
+            {
+                return null;
+            }
         }
     }
 }

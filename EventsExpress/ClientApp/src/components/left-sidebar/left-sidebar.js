@@ -40,23 +40,7 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            <AuthComponent roleMatch={Roles.Admin}>
-                                <NavItem
-                                    to={'/user_chats'}
-                                    my_icon={
-                                        <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                            <i className="fas fa-comments"></i>
-                                        </Badge>
-                                    }
-                                    text={"Comuna"}
-                                />
-                                <NavItem
-                                    to={'/admin/'}
-                                    icon={'fa fa-user-secret'}
-                                    text={"Admin"}
-                                />
-                            </AuthComponent>
-                            <AuthComponent roleMatch={Roles.User}>
+                            <AuthComponent rolesMatch={[Roles.User]}>
                                 <NavItem
                                     to={'/user/' + this.props.user.id}
                                     icon={'fa fa-user'}
@@ -78,6 +62,13 @@ class LeftSidebar extends Component {
                                     text={"Recurrent Events"}
                                 />
                                 <NavItem
+                                    to={'/contactUs'}
+                                    icon={'fa fa-exclamation-circle'}
+                                    text={'Contact us'}
+                                />
+                            </AuthComponent>
+                            <AuthComponent>
+                                <NavItem
                                     to={'/user_chats'}
                                     my_icon={
                                         <Badge badgeContent={this.props.msg_for_read().length} color="primary">
@@ -86,10 +77,12 @@ class LeftSidebar extends Component {
                                     }
                                     text={"Comuna"}
                                 />
+                            </AuthComponent>
+                            <AuthComponent rolesMatch={[Roles.Admin]}>
                                 <NavItem
-                                    to={'/contactUs'}
-                                    icon={'fa fa-exclamation-circle'}
-                                    text={'Contact us'}
+                                    to={'/admin/'}
+                                    icon={'fa fa-user-secret'}
+                                    text={"Admin"}
                                 />
                             </AuthComponent>
                         </ul>

@@ -56,7 +56,8 @@ class EditFromParentEventWraper extends Component {
                 haveMapCheckBox={true}
                 haveOnlineLocationCheckBox={true}
                 disabledDate={true}
-                isCreated={true} />
+                isCreated={true}
+                eventId={this.props.event.id}/>
         </>
     }
 }

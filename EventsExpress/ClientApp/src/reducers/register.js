@@ -1,4 +1,4 @@
-import { SET_REGISTER_PENDING, SET_REGISTER_SUCCESS, SET_REGISTER_ERROR} from '../actions/register';
+import { SET_REGISTER_PENDING, SET_REGISTER_SUCCESS} from '../actions/register/register-action';
 import initialState from '../store/initialState';
 export const reducer = (
     state = initialState.register,
@@ -15,13 +15,6 @@ export const reducer = (
             isRegisterSuccess: action.payload,
             registerError: null,
             isRegisterPending: false,
-        });
-  
-      case SET_REGISTER_ERROR:
-        return Object.assign({}, state, {
-            registerError: action.registerError,
-            isRegisterSuccess: false,
-            isRegisterPending: false
         });
   
       default:

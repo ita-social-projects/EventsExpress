@@ -1,42 +1,14 @@
+import { jwtStorageKey } from '../constants/constants';
+
 export default class EventsExpressService {
     _baseUrl = 'api/';
 
-    // Obsolete
-    getResource = async (url) => {
-        const call = (url) => fetch(this._baseUrl + url, {
-            method: "get",
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }),
-        });
-
-        let res = await call(url);
-
-        if (res.status === 401 && await this.refreshHandler()) {
-            // one more try:
-            res = await call(url);
-        }
-
-        if (res.ok) {
-            return await res.json();
-        }
-        else {
-            return {
-                error: {
-                    ErrorCode: res.status,
-                    massage: await res.statusText
-                }
-            };
-        }
-    }
-
-    getResourceNew = async url => {
+    getResource = async url => {
         const call = _url => fetch(this._baseUrl + _url, {
             method: "get",
             headers: new Headers({
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
             }),
         });
 
@@ -48,6 +20,19 @@ export default class EventsExpressService {
         return res;
     }
 
+    getPhoto = async (url) => {
+        const call = _url => fetch(this._baseUrl + url);
+
+        let res = await call(url);
+
+        if(res.ok){
+            return res.blob();
+        }
+        else{
+            return null;
+        }
+    }
+
     setResource = async (url, data) => {
         const call = (url, data) => fetch(
             this._baseUrl + url,
@@ -55,7 +40,7 @@ export default class EventsExpressService {
                 method: "post",
                 headers: new Headers({
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
                 }),
                 body: JSON.stringify(data)
             }
@@ -77,7 +62,7 @@ export default class EventsExpressService {
             {
                 method: "post",
                 headers: new Headers({
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem(jwtStorageKey)}`
                 }),
                 body: data
             }
@@ -102,11 +87,11 @@ export default class EventsExpressService {
             return false;
         }
         let rest = await response.json();
-        localStorage.setItem('token', rest.jwtToken);
+        localStorage.setItem(jwtStorageKey, rest.jwtToken);
         return true;
     }
-	setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
+    setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
 
-    getUsersInventories = eventId => this.getResourceNew(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
+    getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 }

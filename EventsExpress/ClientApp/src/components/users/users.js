@@ -19,9 +19,11 @@ export default class Users extends Component {
     };
 
     renderUsers = (arr) => {
+        const reducer = (accumulator, currentValue) => accumulator + currentValue.id;
+        const key = user => user.id + user.isBlocked + user.roles.reduce(reducer)
         return arr.map(user =>
             <UserInfoWpapper
-                key={user.id + user.isBlocked + user.role.id}
+                key={key(user)}
                 user={user}
             />
         );
