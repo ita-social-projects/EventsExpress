@@ -198,6 +198,19 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
     </>
 }
 
+export const getAge = birthday => {
+    let today = new Date();
+    var date = moment(today);
+    var birthDate = moment(birthday);
+    let age = date.diff(birthDate, 'years');
+
+    if (age >= 100) {
+        age = "---";
+    }
+
+    return age;
+}
+
 export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
 
     if (value !== null && value !== undefined && value !== '') {

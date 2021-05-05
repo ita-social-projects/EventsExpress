@@ -1,77 +1,77 @@
 import React, { Component } from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ParticipantGroup from './participant-group';
+import OwnersActions from './owners-action';
+import ApprovedUsersActions from './approved-users-action';
+import PendingUsersActions from './pending-users-action';
+import DeniedUsersActions from './denied-users-action';
 
 class EventVisitors extends Component {
+
     render() {
-        const {isMyPrivateEvent, visitors, admins, isMyEvent, current_user_id} = this.props;
+        const { isMyPrivateEvent, visitors, admins, isMyEvent } = this.props;
 
         return (
             <div>
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        >
-                        <Typography>Admins</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography className = "w-100">
-                            {
-                                this.props.renderOwners(admins, isMyEvent, current_user_id)
-                            }
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-                <ExpansionPanel disabled={visitors.approvedUsers.length == 0}>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        >
-                        <Typography>Visitors</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography className = "w-100">
-                            {this.props.renderApprovedUsers(visitors.approvedUsers, isMyEvent, isMyPrivateEvent)}
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel> 
-                {isMyPrivateEvent && 
-                    <ExpansionPanel disabled={visitors.pendingUsers.length == 0}>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        >
-                        <Typography>Pending users</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography>
-                            {this.props.renderPendingUsers(visitors.pendingUsers)}
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel> 
+                <ParticipantGroup
+                    disabled={false}
+                    users={admins}
+                    label="Admin"
+                >
+                    {
+                        admins.map(user => (
+                            < OwnersActions
+                                user={user}
+                                isMyEvent={isMyEvent}
+                            />
+                        ))
+                    }
+                </ParticipantGroup>
+                <ParticipantGroup
+                    disabled={visitors.approvedUsers.length == 0}
+                    users={visitors.approvedUsers}
+                    label="Visitors"
+                >
+                    {
+                        visitors.approvedUsers.map(user => (
+                            <ApprovedUsersActions
+                                user={user}
+                                isMyEvent={isMyEvent}
+                                isMyPrivateEvent={isMyPrivateEvent}
+                            />
+                        ))
+                    }
+                </ParticipantGroup>
+                {isMyPrivateEvent &&
+                    <ParticipantGroup
+                        disabled={visitors.pendingUsers.length == 0}
+                        users={visitors.pendingUsers}
+                        label="Pending users"
+                    >
+                        {
+                            visitors.pendingUsers.map(user => (
+                                <PendingUsersActions
+                                    user={user}
+                                    isMyEvent={isMyEvent}
+                                />
+                            ))
+                        }
+                    </ParticipantGroup>
                 }
                 {isMyPrivateEvent &&
-                    <ExpansionPanel disabled={visitors.deniedUsers.length == 0}>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        >
-                        <Typography>Denied users</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography>
-                            {this.props.renderDeniedUsers(visitors.deniedUsers)}
-                        </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel> 
+                    <ParticipantGroup
+                        disabled={visitors.deniedUsers.length == 0}
+                        users={visitors.deniedUsers}
+                        label="Denied users"
+                    >
+                        {
+                            visitors.deniedUsers.map(user => (
+                                <DeniedUsersActions
+                                    user={user}
+                                    isMyEvent={isMyEvent}
+                                />
+                            ))
+                        }
+                    </ParticipantGroup>
                 }
             </div>
         )
