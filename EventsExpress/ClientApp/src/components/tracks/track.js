@@ -20,28 +20,25 @@ class Tracks extends Component {
         this.props.getEntityNames();
     }
 
-    handleSubmit = async (filters) => {
-        let currentFilters = filters || {};
-        const {entityNames = [], changesType, dateFrom, dateTo} = currentFilters;
-        await this.props.getAllTracks({
-            entityName: !!entityNames && entityNames.map(x => x.entityName),
-            changesType: changesType,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
-            page: 1
-        })
-    }
-
-    handlePageChange = async (page) => {
-        let currentFilters = this.props.form_values || {};
-        const {entityNames, changesType, dateFrom, dateTo} = currentFilters;
+    handleFunc = async (data, pages) => {
+        const {entityNames = [], changesType, dateFrom, dateTo} = data;
         await this.props.getAllTracks({
             entityName: !!entityNames ? entityNames.map(x => x.entityName) : null,
             changesType: changesType,
             dateFrom: dateFrom,
             dateTo: dateTo,
-            page: page
+            page: pages
         })
+    }
+    
+    handleSubmit = async (filters) => {
+        let currentFilters = filters || {};
+        await this.handleFunc(currentFilters, 1);
+    }
+
+    handlePageChange = async (page) => {
+        let currentFilters = this.props.form_values || {};
+        await this.handleFunc(currentFilters, page);
     }
 
     render() {
