@@ -9,25 +9,34 @@ import {connect} from 'react-redux';
 class Tracks extends Component {
 
     componentDidMount = () => {
-        this.props.getAllTracks(this.props.tracks.filter);
+        this.props.getAllTracks({
+            page: 1,
+            userName: "",
+            changesType: [],
+            dateFrom: null,
+            dateTo: null,
+            entityName: []
+        });
         this.props.getEntityNames();
     }
 
     handleSubmit = async (filters) => {
+        let currentFilters = filters || {};
+        const {entityNames = [], changesType, dateFrom, dateTo} = currentFilters;
         await this.props.getAllTracks({
-            entityName: !!filters.entityNames && filters.entityNames.map(x => x.entityName),
-            changesType: filters.changesType,
-            dateFrom: filters.dateFrom,
-            dateTo: filters.dateTo,
+            entityName: !!entityNames && entityNames.map(x => x.entityName),
+            changesType: changesType,
+            dateFrom: dateFrom,
+            dateTo: dateTo,
             page: 1
         })
     }
 
     handlePageChange = async (page) => {
-        const {entityNames, changesType, dateFrom, dateTo} = this.props.form_values;
+        let currentFilters = this.props.form_values || {};
+        const {entityNames, changesType, dateFrom, dateTo} = currentFilters;
         await this.props.getAllTracks({
-            entityName: entityNames !== null || true
-                ? entityNames.map(x => x.entityName) : null,
+            entityName: !!entityNames ? entityNames.map(x => x.entityName) : null,
             changesType: changesType,
             dateFrom: dateFrom,
             dateTo: dateTo,

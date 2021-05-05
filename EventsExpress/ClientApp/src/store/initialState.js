@@ -142,14 +142,6 @@ const initialState = {
             items:{},
             pageViewModel: {},
         },
-        filter: {
-            page: 1,
-            userName: "",
-            changesType: [],
-            dateFrom: null,
-            dateTo: null,
-            entityName: []
-        }
     },
     inventories: {
         isPending: true,

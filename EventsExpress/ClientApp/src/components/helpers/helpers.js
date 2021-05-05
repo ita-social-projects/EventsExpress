@@ -201,7 +201,7 @@ export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, m
 export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
 
     if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
+        if (!!minValue && new Date(value) < new Date(minValue)) {
             onChange(moment(minValue).format('L'))
         }
     }
@@ -213,18 +213,8 @@ export const renderDatePicker = ({ input: { onChange, value }, minValue, label }
         value={moment(value).format('YYYY-MM-DD')}
         onChange={onChange}
         inputProps={{
-            min: moment(minValue).format('YYYY-MM-DD')
+            min: minValue ? moment(minValue).format('YYYY-MM-DD') : null
         }}
-    />
-}
-
-export const renderTracksDatePicker = ({ input: { onChange, value }, label }) => {
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        onChange={onChange}
     />
 }
 
