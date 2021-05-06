@@ -1,7 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
-import DatePicker from 'react-datepicker';
 import 'react-widgets/dist/css/react-widgets.css';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
@@ -176,6 +175,19 @@ export const validateEventForm = values => {
     }
 
     return values;
+}
+
+export const getAge = birthday => {
+    let today = new Date();
+    var date = moment(today);
+    var birthDate = moment(birthday);
+    let age = date.diff(birthDate, 'years');
+
+    if (age >= 100) {
+        age = "---";
+    }
+
+    return age;
 }
 
 export const renderDatePicker = ({ input: { onChange, value }, minValue, maxValue, label }) => {
