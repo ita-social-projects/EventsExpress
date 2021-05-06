@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
-import { renderTextField, renderMyDatePicker } from '../helpers/helpers';
+import { renderTextField, renderDatePicker } from '../helpers/helpers';
 import { renderSelectField, renderPhoneInput } from '../helpers/form-helpers';
+import moment from "moment";
 import { isValidPhoneNumber } from 'react-phone-number-input'
 
 const validate = values => {
@@ -63,8 +64,9 @@ class RegisterComplete extends Component {
                                     name="birthday"
                                     id="date"
                                     label="Birthday"
-                                    type="date"
-                                    component={renderMyDatePicker}
+                                    minValue={moment(new Date()).subtract(115, 'years')}
+                                    maxValue={moment(new Date()).subtract(15, 'years')}
+                                    component={renderDatePicker}
                                 />
                             </div>
                             <div className="form-group col" >
