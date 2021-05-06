@@ -3,9 +3,9 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import {
     renderTextField,
-    renderDatePicker,
     renderMultiselect
 } from '../helpers/helpers';
+import { renderDatePicker } from '../helpers/form-helpers';
 import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
