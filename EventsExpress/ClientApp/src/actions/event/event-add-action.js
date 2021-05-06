@@ -1,6 +1,6 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import { getEvent } from './event-item-view-action';
+import get_event, { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
 
@@ -34,7 +34,7 @@ export function edit_event(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(getEvent(data));
+        dispatch(get_event(data.id));
         return Promise.resolve();
     }
 }
