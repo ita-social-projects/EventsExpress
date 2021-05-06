@@ -6,20 +6,19 @@ export const GET_CONTACTUS_SUCCESS = "GET_CONTACTUS_SUCCESS";
 
 const api_serv = new ContactUsService();
 
-export default function getIssues(page = 1) {
+
+export function change_issue_status(messageId, issueStatus) {
     return async dispatch => {
         dispatch(setContactUsPending(true));
-        let response = await api_serv.getAllIssues(page);
+        let response = await api_serv.setEventStatus({ MessageId: messageId, Status: issueStatus });
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        let jsonRes = await response.json();
-        dispatch(getListOfIssues(jsonRes));
+        dispatch(changeIssueStatus(eventId, eventStatus));
         return Promise.resolve();
     }
 }
-
 function setContactUsPending(data) {
     return {
         type: SET_CONTACTUS_PENDING,
@@ -27,10 +26,10 @@ function setContactUsPending(data) {
     };
 }
 
-function getListOfIssues(data) {
+function changeIssueStatus(id, issueStatus) {
     return {
         type: GET_CONTACTUS_SUCCESS,
-        payload: data
+        payload: { messageId: id, issueStatus: issueStatus }
     }
 }
 

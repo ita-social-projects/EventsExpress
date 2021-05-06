@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { renderTextArea, renderTextField } from '../helpers/helpers';
 import Module from '../helpers';
 import ErrorMessages from '../shared/errorMessage';
-import problemTypeEnum from '../../constants/ProblemTypeEnum ';
+import issueTypeEnum from '../../constants/IssueTypeEnum ';
 
 
 const { validate } = Module;
@@ -44,11 +44,11 @@ class ContactUs extends Component {
                                 component="select"
                                 parse={value => Number(value)}
                             >
-                                <option value={problemTypeEnum.NewCategory}>New Category</option>;
-                                <option value={problemTypeEnum.BugReport}>Bug Report</option>;
-                                <option value={problemTypeEnum.BadEvent}>Bad Event</option>;
-                                <option value={problemTypeEnum.BadUser}>Bad User</option>;
-                                <option value={problemTypeEnum.Other}>Other</option>;
+                                <option value={issueTypeEnum.NewCategory}>New Category</option>;
+                                <option value={issueTypeEnum.BugReport}>Bug Report</option>;
+                                <option value={issueTypeEnum.BadEvent}>Bad Event</option>;
+                                <option value={issueTypeEnum.BadUser}>Bad User</option>;
+                                <option value={issueTypeEnum.Other}>Other</option>;
                              </Field>
 
 

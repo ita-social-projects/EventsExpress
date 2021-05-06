@@ -7,13 +7,15 @@ export default class ContactUsList extends Component {
         item={item} />);
 
     render() {
-        let { data_list} = this.props;
+        let { data_list } = this.props;
+
         return (
             <>
-                <tr>
-                    <td>Title</td>
+                <tr className="bg-light text-dark font-weight-bold text-center">
+                    <td className="justify-content-center">Title</td>
                     <td className="d-flex align-items-center justify-content-center">Date created</td>
                     <td className="justify-content-center">Status</td>
+                    <td className="justify-content-center">Details</td>
                 </tr>
                 {this.renderItems(data_list)}
             </>);

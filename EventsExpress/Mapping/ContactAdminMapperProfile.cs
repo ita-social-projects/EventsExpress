@@ -10,10 +10,12 @@ namespace EventsExpress.Mapping
         public ContactAdminMapperProfile()
         {
             CreateMap<ContactAdmin, ContactAdminDto>()
-                .ForMember(dest => dest.MessageText, opt => opt.MapFrom(src => src.EmailBody));
+                .ForMember(dest => dest.MessageText, opt => opt.MapFrom(src => src.EmailBody))
+                .ForMember(dest => dest.MessageId, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<ContactAdminDto, ContactAdmin>()
                 .ForMember(dest => dest.EmailBody, opt => opt.MapFrom(src => src.MessageText))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MessageId))
                 .ForMember(dest => dest.Assignee, opt => opt.Ignore())
                 .ForMember(dest => dest.AssigneeId, opts => opts.Ignore())
                 .ForMember(dest => dest.DateUpdated, opts => opts.Ignore())

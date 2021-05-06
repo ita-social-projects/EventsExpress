@@ -204,7 +204,10 @@ const initialState = {
     contactUsList: {
         isPending: false,
         isSuccess: false,
-        data: []
+        data: {
+            items: [],
+            pageViewModel: {},
+        }
     },
     notification:
     {

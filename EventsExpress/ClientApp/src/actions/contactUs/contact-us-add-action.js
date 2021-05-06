@@ -1,4 +1,4 @@
-import { UserService } from "../../services";
+import { ContactUsService } from "../../services";
 import { setSuccessAllert } from './../alert-action';
 import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
@@ -8,7 +8,7 @@ export const contactUs = {
     SUCCESS: "SET_CONTACTUS_SUCCESS",
 }
 
-const api_serv = new UserService();
+const api_serv = new ContactUsService();
 
 export default function contact_Us(data) {
     return async dispatch => {

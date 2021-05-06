@@ -1,4 +1,4 @@
-const problemTypeEnum = {
+const issueTypeEnum = {
     NewCategory : 0,
     BugReport : 1,
     BadEvent: 2,
@@ -6,4 +6,4 @@ const problemTypeEnum = {
     Other : 4,
 };
 
-export default problemTypeEnum;
+export default issueTypeEnum;

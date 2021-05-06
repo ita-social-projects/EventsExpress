@@ -60,7 +60,7 @@ namespace EventsExpress.Test.ControllerTests
             _photoService = new Mock<IPhotoService>();
             _mapper = new Mock<IMapper>();
             _emailService = new Mock<IEmailService>();
-            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _emailService.Object, _photoService.Object);
+            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _photoService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -179,28 +179,6 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("ContactAdmins")]
-        public async Task ContactAdmins_CorrectAdmins_ContactCorrectCountPartsAsync()
-        {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
-            string roleName = "Admin";
-            Role role = new Role { Id = Guid.NewGuid(), Name = roleName };
-            UserDto firstAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
-            UserDto secondAdmin = new UserDto { Id = Guid.NewGuid(), Role = role };
-            var admins = new UserDto[] { firstAdmin, secondAdmin };
-            _userService.Setup(user => user.GetUsersByRole(roleName)).Returns(admins);
-            ContactUsViewModel model = new ContactUsViewModel { Description = "some description", Type = "some type" };
-
-            var res = await _usersController.ContactAdmins(model);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<IActionResult>(res);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
-            _userService.Verify(user => user.GetUsersByRole(roleName), Times.Exactly(1));
-            _emailService.Verify(email => email.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(admins.Length));
         }
 
         [Test]

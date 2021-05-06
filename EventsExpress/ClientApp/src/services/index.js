@@ -3,6 +3,7 @@ import CategoryService from './CategoryService'
 import ChatService from './ChatService'
 import CommentService from './CommentService'
 import EventService from './EventService'
+import ContactUsService from './ContactUsService'
 import EventScheduleService from './EventScheduleService'
 import InventoryService from './InventoryService'
 import RoleService from './RoleService'
@@ -19,5 +20,6 @@ export {
     InventoryService,
     RoleService,
     UserService,
-    NotificationTypeService
+    NotificationTypeService,
+    ContactUsService
 };

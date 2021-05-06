@@ -13,6 +13,8 @@ namespace EventsExpress.Db.Entities
 
         public User Assignee { get; set; }
 
+        public Guid MessageId { get; set; }
+
         public string Email { get; set; }
 
         public ContactAdminReason Subject { get; set; }
@@ -27,6 +29,6 @@ namespace EventsExpress.Db.Entities
 
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
 
-        public ContactAdminStatus Status { get; set; }
+        public virtual ContactAdminStatus Status { get; set; }
     }
 }

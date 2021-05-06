@@ -12,7 +12,7 @@ export default class UserService {
 
     setContactUs = data => baseService.setResource('contactUs/ContactAdmins', data);
 
-    getAllIssues = () => baseService.getResourceNew('contactUs/all');
+    getAllIssues = (page) => baseService.getResourceNew(`contactUs/All?page=${page}`, page);
 
     setAvatar = async(data) => {
         let file = new FormData();
