@@ -180,10 +180,6 @@ export const validateEventForm = values => {
 
 export const renderDatePicker = ({ input: { onChange, value }, minValue, maxValue, label }) => {
 
-    if (maxValue !== undefined && maxValue !== '' && maxValue !== null) {
-        maxValue = moment(maxValue).format('YYYY-MM-DD')
-    }
-
     if (value !== null && value !== undefined && value !== '') {
         if (new Date(value) < new Date(minValue)) {
             onChange(moment(minValue).format('L'))
@@ -197,8 +193,8 @@ export const renderDatePicker = ({ input: { onChange, value }, minValue, maxValu
         value={moment(value).format('YYYY-MM-DD')}
         onChange={onChange}
         inputProps={{
-            min: moment(minValue).format('YYYY-MM-DD'),
-            max: maxValue
+            min: minValue ? moment(minValue).format('YYYY-MM-DD') : null,
+            max: maxValue ? moment(maxValue).format('YYYY-MM-DD') : null
         }}
     />
 }
