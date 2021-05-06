@@ -190,27 +190,6 @@ export const getAge = birthday => {
     return age;
 }
 
-export const renderDatePicker = ({ input: { onChange, value }, minValue, maxValue, label }) => {
-
-    if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
-            onChange(moment(minValue).format('L'))
-        }
-    }
-
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        onChange={onChange}
-        inputProps={{
-            min: minValue ? moment(minValue).format('YYYY-MM-DD') : null,
-            max: maxValue ? moment(maxValue).format('YYYY-MM-DD') : null
-        }}
-    />
-}
-
 export const maxLength = max => value =>
     value && value.length > max
         ? `Must be ${max} characters or less`
