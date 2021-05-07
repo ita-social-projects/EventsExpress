@@ -34,9 +34,7 @@ class EventForm extends Component {
         }));
 
     }
-    handleClick = () => {
-        history.push(`/`);
-    }
+
     onClickCallBack = (coords) => {
         this.setState({ selectedPos: [coords.lat, coords.lng] });
     }
@@ -47,13 +45,13 @@ class EventForm extends Component {
         const { handleChange } = this;
 
         let values = form_values || initialValues;
-        const photoUrl = initialValues ?
-            initialValues.photoUrl : null;
+        const photoUrl = this.props.eventId ?
+            `api/photo/GetFullEventPhoto?id=${this.props.eventId}` : null;
 
         return (
-            <form onSubmit={this.props.handleSubmit}
-                encType="multipart/form-data" autoComplete="off" >
-                <div className="text text-2 pl-md-4">
+            <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
+                encType="multipart/form-data" autoComplete="off">
+                <div className="text text-2 pl-md-4 pt-md-2">
                     <Field
                         id="image-field"
                         name="photo"
@@ -137,7 +135,7 @@ class EventForm extends Component {
                             </span>
                         }
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-3">
                         <Field
                             name='description'
                             component={renderTextArea}
@@ -189,12 +187,13 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
+                                className="mb-4"
                             />
                         </div>
                     }
                     {isCreated ? null : <Inventory />}
                 </div>
-                <div className="row pl-md-4">
+                <div className="row pl-md-4 mb-4">
                     {this.props.children}
                 </div>
             </form>

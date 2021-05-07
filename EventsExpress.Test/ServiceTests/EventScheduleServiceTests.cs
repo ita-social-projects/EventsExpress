@@ -4,6 +4,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -50,6 +51,10 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "...",
+                StatusHistory = new List<EventStatusHistory>
+                {
+                    new EventStatusHistory { EventStatus = EventStatus.Active },
+                },
             };
 
             eventSchedules = new List<EventSchedule>

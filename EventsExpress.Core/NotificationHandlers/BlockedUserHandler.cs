@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -11,32 +12,43 @@ using MediatR;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
-    public class BlockedUserHandler : INotificationHandler<BlockedUserMessage>
+    public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
     {
         private readonly IEmailService _sender;
+        private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public BlockedUserHandler(
-            IEmailService sender, IUserService userService)
+            IEmailService sender,
+            IUserService userService,
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
             _userService = userService;
+            _notificationTemplateService = notificationTemplateService;
         }
 
-        public async Task Handle(BlockedUserMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(BlockedAccountMessage notification, CancellationToken cancellationToken)
         {
             try
             {
-                var userIds = new[] { notification.User.Id };
+                var userIds = new[] { notification.Account.UserId.Value };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
                 if (userEmail != null)
                 {
+                    Dictionary<string, string> pattern = new Dictionary<string, string>
+                    {
+                        { "(UserName)", userEmail },
+                    };
+
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.BlockedUser);
+
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = "Your account was blocked",
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
                         RecepientEmail = userEmail,
-                        MessageText = $"Dear {userEmail}, your account was blocked for some reason!",
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
             }

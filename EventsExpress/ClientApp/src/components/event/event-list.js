@@ -5,14 +5,22 @@ import RenderList from './RenderList'
 import EventCard from './event-item';
 import { change_event_status } from '../../actions/event/event-item-view-action';
 import eventStatusEnum from '../../constants/eventStatusEnum';
+import { withRouter } from "react-router";
+import { parse as queryStringParse } from 'query-string';
+import eventHelper from '../helpers/eventHelper';
 
 class EventList extends Component {
     handlePageChange = (page) => {
-        this.props.updateEventsFilters({
-            ...this.props.filter,
-            page: page,
-        });
+        if (this.props.history.location.search == "")
+            this.props.history.push(this.props.history.location.pathname + `?page=${page}`);
+        else {
+            const queryStringToObject = queryStringParse(this.props.history.location.search);
+            queryStringToObject.page = page;
+            this.props.history.location.search = eventHelper.getQueryStringByEventFilter(queryStringToObject);
+            this.props.history.push(this.props.history.location.pathname + this.props.history.location.search);
+        }
     };
+
 
     renderSingleItem = (item) => (
         <EventCard
@@ -24,10 +32,10 @@ class EventList extends Component {
         />
     )
 
-    render(){
+    render() {
         return <>
             <RenderList {...this.props} renderSingleItem={this.renderSingleItem} handlePageChange={this.handlePageChange} />
-            </>
+        </>
     }
 }
 
@@ -37,11 +45,10 @@ const mapDispatchToProps = (dispatch) => {
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
         onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Blocked)),
         onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active))
-
     }
 };
 
-export default connect(
+export default withRouter(connect(
     null,
     mapDispatchToProps
-)(EventList);
+)(EventList));

@@ -5,10 +5,10 @@ const baseService = new EventsExpressService();
 export default class EventScheduleService {
 
     getEventSchedule = id =>
-        baseService.getResourceNew(`eventSchedule/${id}`);
+        baseService.getResource(`eventSchedule/${id}`);
 
     getAllEventSchedules = () =>
-        baseService.getResourceNew(`eventSchedule/all`);
+        baseService.getResource(`eventSchedule/all`);
 
     setEventSchedule = (data) => {
         let file = new FormData();
