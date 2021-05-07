@@ -13,9 +13,9 @@ import {
     renderSelectPeriodicityField,
     renderCheckbox,
     renderTextField,
-    renderDatePicker,
     radioLocationType
 } from '../helpers/helpers';
+import { renderDatePicker } from '../helpers/form-helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
