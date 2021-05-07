@@ -5,6 +5,7 @@ import Spinner from '../spinner';
 import getAllTracks, {getEntityNames} from '../../actions/tracks/track-list-action';
 import {getFormValues, reset} from 'redux-form';
 import {connect} from 'react-redux';
+import { withRouter } from "react-router";
 
 class Tracks extends Component {
 
@@ -20,6 +21,21 @@ class Tracks extends Component {
         this.props.getEntityNames();
     }
 
+    handleSubmit = async (filters) => {
+        let currentFilters = filters || {};
+        await this.handleFunc(currentFilters, 1);
+    }
+
+    handlePageChange = async (page) => {
+        let currentFilters = this.props.form_values || {};
+        await this.handleFunc(currentFilters, page);
+    }
+    
+    onReset = async () => {
+        this.props.reset_filters();
+        await this.handleFunc({}, 1);
+    }
+
     handleFunc = async (data, pages) => {
         const {entityNames = [], changesType, dateFrom, dateTo} = data;
         await this.props.getAllTracks({
@@ -29,16 +45,6 @@ class Tracks extends Component {
             dateTo: dateTo,
             page: pages
         })
-    }
-    
-    handleSubmit = async (filters) => {
-        let currentFilters = filters || {};
-        await this.handleFunc(currentFilters, 1);
-    }
-
-    handlePageChange = async (page) => {
-        let currentFilters = this.props.form_values || {};
-        await this.handleFunc(currentFilters, page);
     }
 
     render() {
@@ -60,6 +66,7 @@ class Tracks extends Component {
                         <TracksFilter
                             entityNames={entityNames}
                             onSubmit={this.handleSubmit}
+                            onReset={this.onReset}
                             form_values={this.props.form_values}
                         />
                     </div>
@@ -80,7 +87,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getAllTracks: (filter) => dispatch(getAllTracks(filter)),
         getEntityNames: () => dispatch(getEntityNames()),
+        reset_filters: () => dispatch(reset('tracks-filter-form')),
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tracks);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Tracks));

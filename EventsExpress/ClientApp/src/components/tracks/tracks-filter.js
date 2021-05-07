@@ -4,11 +4,18 @@ import {Field, reduxForm} from 'redux-form';
 import {renderMultiselect, renderDatePicker} from "../helpers/helpers";
 import changesTypeEnum from "../../constants/changesTypeEnum";
 import EventFilterStatus from "../event/event-filter-status";
+import eventStatusEnum from "../../constants/eventStatusEnum";
 
 class TracksFilter extends Component {
     render() {
         const {entityNames, form_values} = this.props;
         let values = form_values || {};
+        let options = [
+            {value: changesTypeEnum.Undefined, text: "Undefined"},
+            {value: changesTypeEnum.Modified, text: "Modified"},
+            {value: changesTypeEnum.Created, text: "Created"},
+            {value: changesTypeEnum.Deleted, text: "Deleted"}
+        ];
 
         return <>
             {entityNames && entityNames.length !== 0 &&
@@ -27,8 +34,7 @@ class TracksFilter extends Component {
                     </div>
                     <div className="form-group">
                         <Field
-                            options={[changesTypeEnum.Undefined, changesTypeEnum.Modified,
-                                changesTypeEnum.Created, changesTypeEnum.Deleted]}
+                            options={options}
                             component={EventFilterStatus}
                             name="changesType"
                             className="form-control mt-2"
@@ -51,7 +57,15 @@ class TracksFilter extends Component {
                         />
                     </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group d-flex">
+                    <Button
+                        fullWidth={true}
+                        color="primary"
+                        onClick={this.props.onReset}
+                        disabled={this.props.submitting}
+                    >
+                        Reset
+                    </Button>
                     <Button
                         fullWidth={true}
                         type="submit"

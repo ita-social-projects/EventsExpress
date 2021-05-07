@@ -1,38 +1,10 @@
 ﻿import React, { Component } from 'react';
 
-function eventStatusHistoryReadingString(option) {
-    switch (option) {
-        case 0:
-            return " Active"
-        case 1:
-            return " Blocked"
-        case 2:
-            return " Canceled"
-        default:
-            return " Default status"
-    }
-}
-
-function trackChangesTypeReadingString(option) {
-    switch (option) {
-        case 0:
-            return " Undefined"
-        case 1:
-            return " Modified"
-        case 2:
-            return " Created"
-        case 3:
-            return " Deleted"
-        default:
-            return " Default status"
-    }
-}
-
-class EventFilterStatus extends Component {
+class EventFilterStatus extends Component { //TODO: rename later
     checkboxGroup() {
         let { options, input } = this.props;
         if (input.value === "")
-            input.value = options
+            input.value = [];
 
         return options.map((option, index) => {
             return (
@@ -40,21 +12,18 @@ class EventFilterStatus extends Component {
                     <label>
                         <input type="checkbox"
                             name={`${input.name}[${index}]`}
-                            value={option}
-                            checked={input.value.find(x => x === option) !== undefined}
+                            value={option.value}
+                            checked={input.value.find(x => x === option.value) !== undefined}
                             onChange={(event) => {
                                 const newValue = [...input.value];
                                 if (event.target.checked) {
-                                    newValue.push(option);
+                                    newValue.push(option.value);
                                 } else {
-                                    newValue.splice(newValue.indexOf(option), 1);
+                                    newValue.splice(newValue.indexOf(option.value), 1);
                                 }
                                 return input.onChange(newValue);
                             }} />
-                        {options.length >= 4 
-                            ? trackChangesTypeReadingString(option) 
-                            : eventStatusHistoryReadingString(option) 
-                        }
+                        {option.text}
                     </label>
                 </div>)
         });

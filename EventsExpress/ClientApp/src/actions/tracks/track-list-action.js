@@ -4,6 +4,7 @@ import {setErrorAllertFromResponse} from "../alert-action";
 export const SET_TRACKS_PENDING = "SET_TRACKS_PENDING";
 export const GET_TRACKS_SUCCESS = "GET_TRACKS_SUCCESS";
 export const GET_ENTITY_NAMES = "GET_ENTITY_NAMES";
+export const RESET_TRACKS = "RESET_TRACKS";
 
 const api_serv = new TrackService();
 
@@ -44,4 +45,10 @@ function setTracksPending(data) {
 
 function getTracks(data) {
     return {type: GET_TRACKS_SUCCESS, payload: data}
+}
+
+export function reset_tracks() {
+    return {
+        type: RESET_TRACKS
+    }
 }
