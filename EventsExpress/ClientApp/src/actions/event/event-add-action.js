@@ -39,14 +39,14 @@ export function edit_event(data) {
     }
 }
 
-export function publish_event(data) {
+export function publish_event(eventId) {
     return async dispatch => {
         dispatch(setEventPending(true));
-        let response = await api_serv.publishEvent(data);
+        let response = await api_serv.publishEvent(eventId);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(getEvent(data));
-            dispatch(eventWasCreated(data));
+            dispatch(getEvent(eventId));
+            dispatch(eventWasCreated(eventId));
             return Promise.resolve();
         }
         else {
