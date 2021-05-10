@@ -385,17 +385,17 @@ namespace EventsExpress.Test.ControllerTests
         [Category("Get")]
         public void Get_NotNull_Exception()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _authService.Setup(a => a.GetCurrentUserId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.Get(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
         }
 
         [Test]
         [Category("Get")]
         public void Get_NotNull_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
+            _authService.Setup(a => a.GetCurrentUserId(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.Get(_usersFilterViewModel);
 
@@ -404,7 +404,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
         }
 
         [Test]
@@ -425,10 +425,10 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_Exception()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _authService.Setup(a => a.GetCurrentUserId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.SearchUsers(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -437,16 +437,16 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_BadRequestResult()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
+            _authService.Setup(a => a.GetCurrentUserId(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
-            Assert.IsInstanceOf<BadRequestResult>(res);
+            Assert.That(res, Is.TypeOf<BadRequestResult>());
             BadRequestResult badResult = res as BadRequestResult;
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
 
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -455,13 +455,13 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_OkObjectResult1()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUserId(It.IsAny<ClaimsPrincipal>())).Returns(It.IsAny<Guid>());
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>())).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(us => us.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(1));
         }
 

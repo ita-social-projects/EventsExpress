@@ -127,8 +127,8 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword)
         {
-            var account = Context.Accounts.FirstOrDefault(x => x.Id == GetCurrentAccountId(userClaims));
-            var authLocal = account?.AuthLocal;
+            var userDto = GetCurrentUser(userClaims);
+            var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user");
@@ -231,42 +231,31 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found");
             }
 
-            return Mapper.Map<UserDto>(
-                Context.Users
-                .Include(u => u.Events)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AccountRoles)
-                        .ThenInclude(ar => ar.Role)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId));
+            return _userService.GetById(userId);
         }
 
         public Guid GetCurrentUserId(ClaimsPrincipal userClaims)
         {
             Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
 
-            if (string.IsNullOrEmpty(guidClaim?.Value))
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
             {
-                return Guid.Empty;
+                throw new EventsExpressException("User not found");
             }
 
-            return Guid.Parse(guidClaim.Value);
+            return userId;
         }
 
         public Guid GetCurrentAccountId(ClaimsPrincipal userClaims)
         {
             Claim guidClaim = userClaims.FindFirst(ClaimTypes.Sid);
 
-            if (string.IsNullOrEmpty(guidClaim?.Value))
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid accountId))
             {
-                return Guid.Empty;
+                throw new EventsExpressException("User not found");
             }
 
-            return Guid.Parse(guidClaim.Value);
+            return accountId;
         }
     }
 }

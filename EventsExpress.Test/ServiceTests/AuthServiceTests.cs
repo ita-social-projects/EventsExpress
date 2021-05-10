@@ -26,6 +26,7 @@ namespace EventsExpress.Test.ServiceTests
         private readonly string existingEmail = "existingEmail@gmail.com";
 
         private Mock<IUserService> mockUserService;
+        private Mock<IAuthService> mockAuthService;
         private Mock<ITokenService> mockTokenService;
         private Mock<ICacheHelper> mockCacheHelper;
         private Mock<IEmailService> mockEmailService;
@@ -42,6 +43,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
 
             mockUserService = new Mock<IUserService>();
+            mockAuthService = new Mock<IAuthService>();
             mockTokenService = new Mock<ITokenService>();
             mockCacheHelper = new Mock<ICacheHelper>();
             mockEmailService = new Mock<IEmailService>();

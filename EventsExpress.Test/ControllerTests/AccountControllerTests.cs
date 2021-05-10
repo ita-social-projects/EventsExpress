@@ -51,7 +51,7 @@ namespace EventsExpress.Test.ControllerTests
         public void GetLinkedAuth_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentAccountId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.GetLinkedAuth());
@@ -127,7 +127,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddFacebookLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentAccountId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddFacebookLogin(new AuthExternalViewModel()));
@@ -166,7 +166,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddTwitterLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentAccountId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddTwitterLogin(new AuthExternalViewModel()));
@@ -205,7 +205,7 @@ namespace EventsExpress.Test.ControllerTests
         public void AddLocalLogin_InvalidUser_ThrowException()
         {
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+                s.GetCurrentAccountId(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddLocalLogin(new LoginViewModel()));
