@@ -15,9 +15,7 @@ export default class EventsForProfile extends Component {
             this.props.callback( this.state.currentPage);
             return;
         }
-        if (this.props.notification_events.length < 0) {
-            this.props.callback(this.props.notification_events, this.state.currentPage);
-        }
+       
     }
 
     handlePageChange = (page, e) => {
