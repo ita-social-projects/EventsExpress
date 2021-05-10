@@ -32,19 +32,19 @@ namespace EventsExpress.ValueResolvers
         public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModelBase destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();
-            UserDto currUser = null;
+            Guid? currentUserId;
             try
             {
-                currUser = _authService?.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+                currentUserId = _authService?.GetCurrentUserId(_httpContextAccessor.HttpContext.User);
             }
             catch (EventsExpressException)
             {
-                currUser = null;
+                currentUserId = null;
             }
 
             foreach (var u in source.Visitors)
             {
-                var att = u.User.Relationships?.FirstOrDefault(r => r.UserFromId == currUser?.Id)?.Attitude ?? Attitude.None;
+                var att = u.User.Relationships?.FirstOrDefault(r => r.UserFromId == currentUserId)?.Attitude ?? Attitude.None;
 
                 res.Add(new UserPreviewViewModel
                 {

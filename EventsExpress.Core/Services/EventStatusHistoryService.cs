@@ -51,7 +51,7 @@ namespace EventsExpress.Core.Services
             var record = new EventStatusHistory
             {
                 EventId = e.Id,
-                UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id,
+                UserId = _authService.GetCurrentUserId(_httpContextAccessor.HttpContext.User),
                 EventStatus = status,
                 Reason = reason,
             };

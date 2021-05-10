@@ -33,7 +33,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(e => e.Owners)
                     .Include(es => es.Event)
                     .Where(opt => opt.IsActive &&
-                        opt.Event.Owners.Any(o => o.UserId == CurrentUser().Id))
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUserId()))
                     .ToList());
         }
 
@@ -105,7 +105,7 @@ namespace EventsExpress.Core.Services
             return await Edit(eventScheduleDTO);
         }
 
-        private UserDto CurrentUser() =>
-           _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+        private Guid CurrentUserId() =>
+           _authService.GetCurrentUserId(_httpContextAccessor.HttpContext.User);
     }
 }
