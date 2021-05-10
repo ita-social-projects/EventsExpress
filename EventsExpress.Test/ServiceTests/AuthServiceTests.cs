@@ -455,7 +455,7 @@ namespace EventsExpress.Test.ServiceTests
             ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             string[] roles = { "user" };
             GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
-            var res = service.GetCurrUserId(claimsObj);
+            var res = service.GetCurrentUserId(claimsObj);
             Assert.That(res, Is.EqualTo(userDto.Id));
         }
 

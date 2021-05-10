@@ -38,8 +38,8 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All()
         {
-            var currentUser = _authService.GetCurrentUser(HttpContext.User);
-            var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUser.Id));
+            var currentUserId = CurrentUserId();
+            var res = _mapper.Map<IEnumerable<UserChatViewModel>>(_messageService.GetUserChats(currentUserId));
             return Ok(res);
         }
 
@@ -53,8 +53,8 @@ namespace EventsExpress.Controllers
         [HttpGet("{chatId}")]
         public async Task<IActionResult> GetChat(Guid chatId)
         {
-            var sender = _authService.GetCurrentUser(HttpContext.User);
-            var chat = await _messageService.GetChat(chatId, sender.Id);
+            var senderId = CurrentUserId();
+            var chat = await _messageService.GetChat(chatId, senderId);
             if (chat == null)
             {
                 return BadRequest();
@@ -76,5 +76,9 @@ namespace EventsExpress.Controllers
             var res = _mapper.Map<IEnumerable<MessageViewModel>>(_messageService.GetUnreadMessages(userId));
             return Ok(res);
         }
+
+        [NonAction]
+        private Guid CurrentUserId() =>
+            _authService.GetCurrentUserId(HttpContext.User);
     }
 }

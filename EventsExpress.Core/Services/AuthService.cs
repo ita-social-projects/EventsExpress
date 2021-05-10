@@ -127,14 +127,14 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword)
         {
-            var userDto = GetCurrentUser(userClaims);
-            var authLocal = userDto.Account.AuthLocal;
+            var account = Context.Accounts.FirstOrDefault(x => x.Id == GetCurrentAccountId(userClaims));
+            var authLocal = account?.AuthLocal;
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user");
             }
 
-            if (!VerifyPassword(userDto.Account.AuthLocal, oldPassword))
+            if (!VerifyPassword(authLocal, oldPassword))
             {
                 throw new EventsExpressException("Invalid password");
             }
@@ -165,18 +165,6 @@ namespace EventsExpress.Core.Services
         public async Task RegisterComplete(RegisterCompleteDto registerCompleteDto)
         {
             await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
-        }
-
-        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return _userService.GetById(userId);
         }
 
         public async Task PasswordRecover(string email)
@@ -234,9 +222,44 @@ namespace EventsExpress.Core.Services
             return authLocal.Account;
         }
 
-        public Guid GetCurrUserId(ClaimsPrincipal userClaims)
+        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
+        {
+            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
+
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                throw new EventsExpressException("User not found");
+            }
+
+            return Mapper.Map<UserDto>(
+                Context.Users
+                .Include(u => u.Events)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AccountRoles)
+                        .ThenInclude(ar => ar.Role)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthExternal)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == userId));
+        }
+
+        public Guid GetCurrentUserId(ClaimsPrincipal userClaims)
         {
             Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
+
+            if (string.IsNullOrEmpty(guidClaim?.Value))
+            {
+                return Guid.Empty;
+            }
+
+            return Guid.Parse(guidClaim.Value);
+        }
+
+        public Guid GetCurrentAccountId(ClaimsPrincipal userClaims)
+        {
+            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Sid);
 
             if (string.IsNullOrEmpty(guidClaim?.Value))
             {

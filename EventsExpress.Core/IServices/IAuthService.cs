@@ -26,6 +26,8 @@ namespace EventsExpress.Core.IServices
 
         UserDto GetCurrentUser(ClaimsPrincipal userClaims);
 
-        Guid GetCurrUserId(ClaimsPrincipal userClaims);
+        Guid GetCurrentUserId(ClaimsPrincipal userClaims);
+
+        Guid GetCurrentAccountId(ClaimsPrincipal userClaims);
     }
 }

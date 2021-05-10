@@ -72,13 +72,13 @@ namespace EventsExpress.Core.Services
             var user = Mapper.Map<UserDto>(
                 Context.Users
                 .Include(u => u.Events)
-                .Include(u => u.Account)
+                /*.Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AuthLocal)
                 .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
+                    .ThenInclude(a => a.AuthExternal)*/
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
