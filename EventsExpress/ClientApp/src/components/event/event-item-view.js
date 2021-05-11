@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Comment from '../comment/comment';
-import EditEventWrapper from '../../containers/edit-event';
+import { Link } from 'react-router-dom'
 import RatingWrapper from '../../containers/rating';
 import Moment from 'react-moment';
 import 'moment-timezone';
