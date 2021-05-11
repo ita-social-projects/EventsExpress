@@ -12,7 +12,6 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,14 +20,17 @@ namespace EventsExpress.Core.Services
     public class AccountService : BaseService<Account>, IAccountService
     {
         private readonly IMediator _mediator;
+        private readonly IPasswordService _passwordService;
 
         public AccountService(
             AppDbContext context,
             IMediator mediator,
-            IMapper mapper)
+            IMapper mapper,
+            IPasswordService passwordService)
             : base(context, mapper)
         {
             _mediator = mediator;
+            _passwordService = passwordService;
         }
 
         public async Task ChangeRole(Guid userId, IEnumerable<Db.Entities.Role> roles)
@@ -84,13 +86,13 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("This login already in use");
             }
 
-            string salt = PasswordHasher.GenerateSalt();
+            string salt = _passwordService.GenerateSalt();
             var auth = new AuthLocal
             {
                 AccountId = accountId,
                 Email = email,
                 Salt = salt,
-                PasswordHash = PasswordHasher.GenerateHash(password, salt),
+                PasswordHash = _passwordService.GenerateHash(password, salt),
             };
             Context.AuthLocal.Add(auth);
             await Context.SaveChangesAsync();

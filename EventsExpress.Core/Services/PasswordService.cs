@@ -1,11 +1,19 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using EventsExpress.Core.IServices;
 
-namespace EventsExpress.Db.Helpers
+namespace EventsExpress.Core.Services
 {
-    public static class PasswordHasher
+    public class PasswordService : IPasswordService
     {
-        public static string GenerateHash(string password, string salt)
+        private readonly IPhotoService photoService;
+
+        public PasswordService(IPhotoService photoService)
+        {
+            this.photoService = photoService;
+        }
+
+        public string GenerateHash(string password, string salt)
         {
             byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);
             using var hashProvider = new SHA256Managed();
@@ -14,7 +22,7 @@ namespace EventsExpress.Db.Helpers
             return Encoding.ASCII.GetString(byteHash);
         }
 
-        public static string GenerateSalt()
+        public string GenerateSalt()
         {
             using var provider = new RNGCryptoServiceProvider();
             byte[] salt = new byte[16];

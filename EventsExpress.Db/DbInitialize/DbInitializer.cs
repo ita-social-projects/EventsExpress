@@ -3,7 +3,6 @@ using System.Linq;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.Helpers;
 
 namespace EventsExpress.Db.DbInitialize
 {
