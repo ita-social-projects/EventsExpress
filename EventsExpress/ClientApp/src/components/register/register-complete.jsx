@@ -26,7 +26,7 @@ const validate = values => {
     if (values.phone && !isValidPhoneNumber(values.phone)) {
         errors.phone = 'Invalid phone number'
     }
-    if (values.gender && values.gender >= 3) {
+    if (values.gender && values.gender > 3) {
         errors.gender = 'Invalid gender'
     }
     return errors

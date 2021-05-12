@@ -15,7 +15,7 @@ const EditBirthday = props => {
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="Birthday"
+                    name="birthday"
                     id="date"
                     label="Birthday"
                     minValue={minValue}
