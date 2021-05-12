@@ -12,8 +12,7 @@ export default class EventsForProfile extends Component {
 
     componentDidMount = (props) =>{
         if (this.props.notification_events == null) {
-            this.props.callback( this.state.currentPage);
-            return;
+            this.props.callback( this.state.currentPage);          
         }
        
     }
