@@ -19,7 +19,7 @@ export default function edit_Birthday(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEditBirthdaySuccess(true));
-        dispatch(updateBirthday(data.Birthday));
+        dispatch(updateBirthday(data.birthday));
         dispatch(setSuccessAllert('Date of birth is successfully set'));
         return Promise.resolve();
     }
