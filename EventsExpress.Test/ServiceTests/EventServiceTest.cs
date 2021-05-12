@@ -7,6 +7,7 @@ using System.Text;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -561,6 +562,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
+            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
         }
 
         [Test]
