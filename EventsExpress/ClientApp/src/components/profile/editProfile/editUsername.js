@@ -22,7 +22,7 @@ const EditUsername = props => {
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="UserName"
+                    name="userName"
                     component={renderTextField}
                     label="UserName"
                 />

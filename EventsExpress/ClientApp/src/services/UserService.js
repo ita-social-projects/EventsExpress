@@ -22,15 +22,15 @@ export default class UserService {
         baseService.setResource('Account/ChangeRoles', data);
 
     setUsername = data => baseService.setResource('Users/EditUsername', {
-        name: data.UserName
+        name: data.userName
     });
 
     setBirthday = data => baseService.setResource('Users/EditBirthday', {
-        birthday: new Date(data.Birthday)
+        birthday: new Date(data.birthday)
     });
 
     setGender = data => baseService.setResource('Users/EditGender', {
-        gender: Number(data.Gender)
+        gender: Number(data.gender)
     });
 
     setUserCategory = data => baseService.setResource('Users/EditUserCategory', data);
