@@ -1,6 +1,6 @@
 'use strict';
 
-import eventHelper from '../components/helpers/eventHelper';
+import filterHelper from '../components/helpers/filterHelper';
 
 const initialState = {
     modalWind: {
@@ -135,7 +135,7 @@ const initialState = {
             items: [],
             pageViewModel: {},
         },
-        filter: eventHelper.getDefaultEventFilter(),
+        filter: filterHelper.getDefaultEventFilter(),
     },
     inventories: {
         isPending: true,
@@ -207,7 +207,8 @@ const initialState = {
         data: {
             items: [],
             pageViewModel: {},
-        }
+        },
+        filter: filterHelper.getDefaultContactUsFilter(),
     },
     notification:
     {

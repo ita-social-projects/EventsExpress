@@ -10,8 +10,10 @@ namespace EventsExpress.Core.IServices
     {
         Task<Guid> SendMessageToAdmin(ContactAdminDto contactAdminDto);
 
-        IEnumerable<ContactAdminDto> GetAll(Guid id, int page, int pageSize, out int count);
+        IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count);
 
         Task SetIssueStatus(Guid messageId, ContactAdminStatus issueStatus);
+
+        ContactAdminDto MessageById(Guid messageId);
     }
 }

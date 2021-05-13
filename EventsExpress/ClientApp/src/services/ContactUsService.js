@@ -6,7 +6,9 @@ export default class ContactUsService {
 
     setContactUs = data => baseService.setResource('contactUs/ContactAdmins', data);
 
-    getAllIssues = (page) => baseService.getResourceNew(`contactUs/All?page=${page}`, page);
+    getAllIssues = filters => baseService.getResourceNew(`contactUs/All${filters}`);
 
-    setEventStatus = data => baseService.setResource(`contactUs/${data.MessageId}/SetStatus`, data);
+    setIssueStatus = data => baseService.setResource(`contactUs/${data.MessageId}/UpdateStatus`, data);
+
+    getMessage = id => baseService.getResourceNew(`contactUs/${id}`, id);
 }

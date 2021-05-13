@@ -21,7 +21,7 @@ export default class ContactUsItem extends Component {
                 {item.status}
             </td>
             <td className="justify-content-center ">
-                <Link to={`/event/{7f008261-c694-44a1-b92b-08d904d926c3}/1`}>
+                <Link to={`/contactUs/${item.messageId}/UpdateStatus`}>
                 <Tooltip title="View">
                     <IconButton style={{ fontSize: 16 }} aria-label="view" >
                         <i className="fa fa-eye "></i>

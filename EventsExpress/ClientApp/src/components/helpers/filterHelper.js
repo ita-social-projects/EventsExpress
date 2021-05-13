@@ -2,7 +2,7 @@
 
 import { stringify as queryStringStringify } from 'query-string';
 
-const eventHelper = (function () {
+const filterHelper = (function () {
     return {
         isObject: function (object) {
             return object !== null && typeof object === 'object';
@@ -42,18 +42,26 @@ const eventHelper = (function () {
             }
         },
 
-        getQueryStringByEventFilter: function (filter) {
+        getDefaultContactUsFilter: function () {
+            return {
+                page: '1',
+                dateCreated: undefined,
+                status: [],
+            }
+        },
+
+        getQueryStringByFilter: function (filter) {
             return `?${queryStringStringify(
                 filter,
                 { arrayFormat: 'index' }
             )}`;
         },
 
-        trimUndefinedKeys: function (eventFilter) {
-            return JSON.parse(JSON.stringify(eventFilter, (key, value) => value === null ? undefined : value));
+        trimUndefinedKeys: function (filter) {
+            return JSON.parse(JSON.stringify(filter, (key, value) => value === null ? undefined : value));
         },
 
     }
 }());
 
-export default eventHelper;
+export default filterHelper;

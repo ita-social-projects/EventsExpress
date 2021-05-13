@@ -10,29 +10,17 @@ using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
     public class ContactAdminService : BaseService<ContactAdmin>, IContactAdminService
     {
-        private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IMediator _mediator;
-
         public ContactAdminService(
             AppDbContext context,
-            IAuthService authService,
-            IHttpContextAccessor httpContextAccessor,
-            IMediator mediator,
             IMapper mapper)
             : base(context, mapper)
         {
-            _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
-            _mediator = mediator;
         }
 
         public async Task SetIssueStatus(Guid messageId, ContactAdminStatus issueStatus)
@@ -43,16 +31,19 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Invalid message id");
             }
 
-            var record = new ContactAdmin
-            {
-                MessageId = messageId,
-                Status = issueStatus,
-            };
-            Insert(record);
+            message.Status = issueStatus;
+            Update(message);
 
             await Context.SaveChangesAsync();
+        }
 
-         // await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
+        public ContactAdminDto MessageById(Guid messageId)
+        {
+            var res = Mapper.Map<ContactAdminDto>(
+                Context.ContactAdmin
+                .FirstOrDefault(x => x.Id == messageId));
+
+            return res;
         }
 
         public async Task<Guid> SendMessageToAdmin(ContactAdminDto contactAdminDto)
@@ -63,14 +54,27 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public IEnumerable<ContactAdminDto> GetAll(Guid id, int page, int pageSize, out int count)
+        public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count)
         {
             var contactAdminMessages = Context.ContactAdmin
-                .Where(x => x.MessageId == id && x.SenderId == null)
+                .Where(x => x.MessageId == id)
                 .AsNoTracking()
                 .AsQueryable();
+
+            contactAdminMessages = (model.DateCreated != null)
+                ? contactAdminMessages.Where(x => x.Status == model.Status)
+                .OrderBy(h => h.DateCreated)
+                : contactAdminMessages;
+
+            contactAdminMessages = (model.DateCreated != DateTime.MinValue)
+                ? contactAdminMessages.Where(x => x.DateCreated == model.DateCreated)
+                : contactAdminMessages;
+
             count = contactAdminMessages.Count();
-            var result = contactAdminMessages.OrderBy(x => x.DateCreated).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var result = contactAdminMessages
+                .OrderBy(x => x.DateCreated)
+                .Skip((model.Page - 1) * model.PageSize)
+                .Take(model.PageSize).ToList();
             return Mapper.Map<IEnumerable<ContactAdmin>, IEnumerable<ContactAdminDto>>(result);
         }
     }

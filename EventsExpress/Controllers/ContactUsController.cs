@@ -76,16 +76,17 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Return process failed.</response>
         [Authorize]
         [HttpGet("[action]")]
-        public IActionResult All(Guid id, int page = 1)
+        public IActionResult All([FromQuery] ContactAdminFilterViewModel filter, Guid id)
         {
+            filter.PageSize = 8;
+            filter.Page = 1;
             try
             {
-                int pageSize = 8;
-                var result = _contactAdminService.GetAll(id, page, pageSize, out int count);
                 var viewModel = new IndexViewModel<ContactUsViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<ContactUsViewModel>>(result),
-                    PageViewModel = new PageViewModel(count, page, pageSize),
+                    Items = _mapper.Map<IEnumerable<ContactUsViewModel>>(
+                        _contactAdminService.GetAll(filter, id, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
             }
@@ -102,13 +103,24 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns issue with new status.</returns>
         /// <response code="200">Status changing succesful.</response>
         /// <response code="400">Status changing failed.</response>
-        [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> SetStatus(ContactUsViewModel issueStatus)
+        [Authorize]
+        [HttpPost("{messageId:Guid}/[action]")]
+        public async Task<IActionResult> UpdateStatus(ContactUsViewModel issueStatus)
         {
             await _contactAdminService.SetIssueStatus(issueStatus.MessageId, issueStatus.Status);
 
             return Ok(issueStatus);
         }
+
+        /// <summary>
+        /// This method have to return message.
+        /// </summary>
+        /// <param name="messageId">Param messageId defines the message identifier.</param>
+        /// <returns>The method returns an message by identifier.</returns>
+        /// <response code="200">Return MessageInfo model.</response>
+        [AllowAnonymous]
+        [HttpGet("{messageId:Guid}")]
+        public IActionResult GetMessageById(Guid messageId) =>
+            Ok(_mapper.Map<ContactUsViewModel>(_contactAdminService.MessageById(messageId)));
     }
 }

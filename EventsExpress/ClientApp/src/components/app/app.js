@@ -20,6 +20,7 @@ import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
 import ContactUsWrapper from '../../containers/contactUs/contactUs-container';
 import ContactUsTable from '../contactUs/contactUs-table-component';
+import ContactUsDetails from '../../containers/contactUs/contactUs-details-container';
 import LoginTwitter from '../../containers/TwitterLogin';
 import AddEventWrapper from '../../containers/add-event';
 import Admin from '../admin';
@@ -69,7 +70,8 @@ class App extends Component {
                         <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
                         <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
                         <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />
-                        <Route path="/issues" component={ContactUsTable} />
+                        <Route path="/issues" component={this.AdminRoleSecurity(ContactUsTable)} />
+                        <Route path="/contactUs/:id/UpdateStatus" component={this.AdminRoleSecurity(ContactUsDetails)} />
                         <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/Authentication/TwitterLogin" component={LoginTwitter} />

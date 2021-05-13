@@ -5,7 +5,7 @@ import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
 import Spinner from '../components/spinner';
 import { get_events } from '../actions/event/event-list-action';
-import eventHelper from '../components/helpers/eventHelper';
+import filterHelper from '../components/helpers/filterHelper';
 import { withRouter } from "react-router";
 
 class EventListWrapper extends Component {
@@ -17,7 +17,7 @@ class EventListWrapper extends Component {
 
     componentDidMount() {
         this.setSearchParamsToEventFilter(this.props.history.location.search);
-        const queryString = eventHelper.getQueryStringByEventFilter(this.objCurrentQueryParams);
+        const queryString = filterHelper.getQueryStringByFilter(this.objCurrentQueryParams);
         this.props.get_events(queryString);
     }
 
@@ -35,7 +35,7 @@ class EventListWrapper extends Component {
         Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
             filterCopy[key] = value;
         }.bind(this));
-        this.objCurrentQueryParams = eventHelper.trimUndefinedKeys(filterCopy);
+        this.objCurrentQueryParams = filterHelper.trimUndefinedKeys(filterCopy);
     }
 
     render() {

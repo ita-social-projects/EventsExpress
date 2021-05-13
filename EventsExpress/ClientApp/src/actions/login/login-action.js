@@ -1,5 +1,5 @@
 import { AuthenticationService } from '../../services';
-import eventHelper from '../../components/helpers/eventHelper';
+import filterHelper from '../../components/helpers/filterHelper';
 import { initialConnection } from '../chat/chat-action';
 import { getUnreadMessages } from '../chat/chats-action';
 import { updateEventsFilters } from '../event/event-list-action';
@@ -61,7 +61,7 @@ const loginResponseHandler = call => {
         }
         let jsonRes = await response.json();
         const eventFilter = {
-            ...eventHelper.getDefaultEventFilter(),
+            ...filterHelper.getDefaultEventFilter(),
             categories: jsonRes.categories.map(item => item.id),
         };
 

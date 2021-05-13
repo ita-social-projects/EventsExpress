@@ -3,24 +3,24 @@ import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_CONTACTUS_PENDING = "SET_CONTACTUS_PENDING";
 export const GET_CONTACTUS_SUCCESS = "GET_CONTACTUS_SUCCESS";
-export const RESET_CONTACTUS = "RESET_CONTACTUS";
-export const UPDATE_CONTACTUS_FILTERS = "UPDATE_CONTACTUS_FILTERS";
 
 const api_serv = new ContactUsService();
 
-export default function getIssues(filters) {
+export default function get_message_by_id(id) {
     return async dispatch => {
         dispatch(setContactUsPending(true));
-        let response = await api_serv.getAllIssues(filters);
+
+        let response = await api_serv.getMessage(id);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getListOfIssues(jsonRes));
+        dispatch(getMessageById(jsonRes));
         return Promise.resolve();
     }
 }
+
 
 function setContactUsPending(data) {
     return {
@@ -29,23 +29,9 @@ function setContactUsPending(data) {
     };
 }
 
-function getListOfIssues(data) {
+function getMessageById(data) {
     return {
         type: GET_CONTACTUS_SUCCESS,
         payload: data
     }
 }
-
-export function resetContactUs() {
-    return {
-        type: RESET_CONTACTUS
-    }
-}
-
-export function updateContactUsFilters(data) {
-    return {
-        type: UPDATE_CONTACTUS_FILTERS,
-        payload: data
-    }
-}
-

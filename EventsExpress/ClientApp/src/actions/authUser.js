@@ -2,7 +2,7 @@ import { setLoginSuccess, setUser } from './login/login-action';
 import { initialConnection } from './chat/chat-action';
 import { getUnreadMessages } from './chat/chats-action';
 import { updateEventsFilters } from './event/event-list-action';
-import eventHelper from './../components/helpers/eventHelper';
+import filterHelper from './../components/helpers/filterHelper';
 import { AuthenticationService } from '../services';
 
 const api_serv = new AuthenticationService();
@@ -17,7 +17,7 @@ export default function AuthUser() {
         if (res.ok) {
             const user = await res.json();
             const eventFilter = {
-                ...eventHelper.getDefaultEventFilter(),
+                ...filterHelper.getDefaultEventFilter(),
                 categories: user.categories.map(item => item.id),
             }
 

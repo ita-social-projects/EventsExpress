@@ -40,6 +40,7 @@ import * as Alert from './alert';
 import * as ContactUs from './contactUs/contact-us-reducer';
 import * as ContactUsList from './contactUs/contact-us-list-reducer';
 import * as ContactUsIssueStatus from './contactUs/contact-us-issue-status-reducer';
+import * as ContactUsItem from './contactUs/contact-us-item-reducer';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
 
@@ -85,6 +86,7 @@ const rootReducers = {
     contactUs: ContactUs.reducer,
     contactUsList: ContactUsList.reducer,
     contactUsIssueStatus: ContactUsIssueStatus.reducer,
+    contactUsItem: ContactUsItem.reducer,
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer
 
