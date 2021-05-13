@@ -1,7 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
-import DatePicker from 'react-datepicker';
 import 'react-widgets/dist/css/react-widgets.css';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
@@ -178,26 +177,6 @@ export const validateEventForm = values => {
     return values;
 }
 
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue, label }) => {
-    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
-    minValue = new Date().getFullYear() - 115;
-    maxValue = new Date().getFullYear() - 15;
-
-    return <>
-        <InputLabel>{label}</InputLabel>
-        <DatePicker
-            onChange={onChange}
-            selected={new Date(value) || new Date()}
-            minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-            maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-            peekNextMonth
-            showMonthDropdown
-            showYearDropdown
-            dropdownMode="select"
-        />
-    </>
-}
-
 export const getAge = birthday => {
     let today = new Date();
     var date = moment(today);
@@ -209,26 +188,6 @@ export const getAge = birthday => {
     }
 
     return age;
-}
-
-export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
-
-    if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
-            onChange(moment(minValue).format('L'))
-        }
-    }
-
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        onChange={onChange}
-        inputProps={{
-            min: moment(minValue).format('YYYY-MM-DD')
-        }}
-    />
 }
 
 export const maxLength = max => value =>

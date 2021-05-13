@@ -102,7 +102,7 @@ class Chat extends Component {
                         </div>
                         <div className="card-footer">
                             <form className="w-100 d-flex" autocomplete="off" onSubmit={this.Send}>
-                                <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Send message..." />
+                                <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Type your message..." />
                                 <Button fullWidth={true} type="submit" color="primary" className="w-25">
                                     Send
                         </Button>
