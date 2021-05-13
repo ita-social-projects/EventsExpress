@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -8,7 +9,7 @@ namespace EventsExpress.Db.DbInitialize
 {
     public static class DbInitializer
     {
-        public static void Seed(AppDbContext dbContext)
+        public static void Seed(AppDbContext dbContext, IPasswordHasher passwordHasher)
         {
             dbContext.Database.EnsureCreated();
 
@@ -18,7 +19,7 @@ namespace EventsExpress.Db.DbInitialize
                 return; // DB has been seeded
             }
 
-            var saltDef = PasswordHasher.GenerateSalt();
+            var saltDef = passwordHasher.GenerateSalt();
             var users = new User[]
             {
                 new User
@@ -33,7 +34,7 @@ namespace EventsExpress.Db.DbInitialize
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
                             Salt = saltDef,
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
@@ -60,7 +61,7 @@ namespace EventsExpress.Db.DbInitialize
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = PasswordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
                             Salt = saltDef,
                             Email = "user@gmail.com",
                             EmailConfirmed = true,

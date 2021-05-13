@@ -9,6 +9,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -24,7 +25,7 @@ namespace EventsExpress.Core.Services
         private readonly ICacheHelper _cacheHelper;
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
-        private readonly IPasswordService _passwordService;
+        private readonly IPasswordHasher _passwordHasher;
 
         public AuthService(
             AppDbContext context,
@@ -34,7 +35,7 @@ namespace EventsExpress.Core.Services
             ICacheHelper cacheHelper,
             IEmailService emailService,
             IMediator mediator,
-            IPasswordService passwordService)
+            IPasswordHasher passwordHasher)
             : base(context, mapper)
         {
             _userService = userSrv;
@@ -42,7 +43,7 @@ namespace EventsExpress.Core.Services
             _cacheHelper = cacheHelper;
             _emailService = emailService;
             _mediator = mediator;
-            _passwordService = passwordService;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<AuthenticateResponseModel> Authenticate(string email, AuthExternalType type)
@@ -141,8 +142,8 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Invalid password");
             }
 
-            authLocal.Salt = _passwordService.GenerateSalt();
-            authLocal.PasswordHash = _passwordService.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
             await Context.SaveChangesAsync();
         }
 
@@ -178,8 +179,8 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-            authLocal.Salt = _passwordService.GenerateSalt();
-            authLocal.PasswordHash = _passwordService.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
 
             await Context.SaveChangesAsync();
             await _emailService.SendEmailAsync(new EmailDto
@@ -191,7 +192,7 @@ namespace EventsExpress.Core.Services
         }
 
         private bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
-           authLocal.PasswordHash == _passwordService.GenerateHash(actualPassword, authLocal.Salt);
+           authLocal.PasswordHash == _passwordHasher.GenerateHash(actualPassword, authLocal.Salt);
 
         private async Task<Account> ConfirmEmail(CacheDto cacheDto)
         {

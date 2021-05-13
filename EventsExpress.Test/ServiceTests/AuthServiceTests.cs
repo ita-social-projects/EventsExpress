@@ -8,6 +8,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Test.ServiceTests.TestClasses.Auth;
 using MediatR;
@@ -30,7 +31,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ITokenService> mockTokenService;
         private Mock<ICacheHelper> mockCacheHelper;
         private Mock<IEmailService> mockEmailService;
-        private Mock<IPasswordService> mockPasswordService;
+        private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
@@ -49,7 +50,7 @@ namespace EventsExpress.Test.ServiceTests
             mockTokenService = new Mock<ITokenService>();
             mockCacheHelper = new Mock<ICacheHelper>();
             mockEmailService = new Mock<IEmailService>();
-            mockPasswordService = new Mock<IPasswordService>();
+            mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
             service = new AuthService(
                 Context,
@@ -59,7 +60,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockCacheHelper.Object,
                 mockEmailService.Object,
                 mockMediator.Object,
-                mockPasswordService.Object);
+                mockPasswordHasherService.Object);
 
             existingUser = new User
             {
@@ -199,13 +200,15 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Authenticate With Local Provider")]
         public void AuthenticateLocal_InvalidPassword_ThrowException()
         {
+            var salt = mockPasswordHasherService.Object.GenerateSalt();
             var existingAccount = new Account
             {
                 AuthLocal = new AuthLocal
                 {
                     Email = existingEmail,
                     EmailConfirmed = true,
-                    Salt = mockPasswordService.Object.GenerateSalt(),
+                    Salt = salt,
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash("CorrectPassword", salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
@@ -224,7 +227,7 @@ namespace EventsExpress.Test.ServiceTests
         public async Task AuthenticateLocal_AllIsValid_DoesNotThrow()
         {
             var correctPassword = "CorrectPassword";
-            var salt = mockPasswordService.Object.GenerateSalt();
+            var salt = mockPasswordHasherService.Object.GenerateSalt();
             var existingAccount = new Account
             {
                 AuthLocal = new AuthLocal
@@ -232,7 +235,7 @@ namespace EventsExpress.Test.ServiceTests
                     Email = existingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordService.Object.GenerateHash(correctPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(correctPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
@@ -267,17 +270,18 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_InvalidPassword_Throws()
         {
-            string salt = mockPasswordService.Object.GenerateSalt();
+            string salt = mockPasswordHasherService.Object.GenerateSalt();
             string validPassword = "validPassword";
             string invalidPassword = "invalidPassword";
             UserDto userDto = new UserDto
             {
+                Name = "User",
                 Account = new Account
                 {
                     AuthLocal = new AuthLocal
                     {
                         Salt = salt,
-                        PasswordHash = mockPasswordService.Object.GenerateHash(validPassword, salt),
+                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                     },
                 },
             };
@@ -293,7 +297,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_ValidPassword_DoesNotThrows()
         {
-            string salt = mockPasswordService.Object.GenerateSalt();
+            string salt = mockPasswordHasherService.Object.GenerateSalt();
             string validPassword = "validPassword";
             UserDto userDto = new UserDto
             {
@@ -302,7 +306,7 @@ namespace EventsExpress.Test.ServiceTests
                     AuthLocal = new AuthLocal
                     {
                         Salt = salt,
-                        PasswordHash = mockPasswordService.Object.GenerateHash(validPassword, salt),
+                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                     },
                 },
             };

@@ -1,18 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 
 namespace EventsExpress.Core.Services
 {
-    public class PasswordService : IPasswordService
+    public class PasswordHasherService : IPasswordHasher
     {
-        private readonly IPhotoService photoService;
-
-        public PasswordService(IPhotoService photoService)
-        {
-            this.photoService = photoService;
-        }
-
         public string GenerateHash(string password, string salt)
         {
             byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);

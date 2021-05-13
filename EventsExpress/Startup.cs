@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
@@ -13,6 +14,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
@@ -137,7 +139,7 @@ namespace EventsExpress
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
-            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
