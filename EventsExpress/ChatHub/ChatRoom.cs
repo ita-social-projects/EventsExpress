@@ -31,8 +31,8 @@ namespace EventsExpress.Core.ChatHub
             text = text.Trim();
             if (text != string.Empty)
             {
-                var currentUser = _authService.GetCurrentUser(Context.User);
-                var res = await _messageService.Send(chatId, currentUser.Id, text);
+                var currentUserId = _authService.GetCurrentUserId(Context.User);
+                var res = await _messageService.Send(chatId, currentUserId, text);
 
                 var users = _messageService.GetChatUserIds(res.ChatRoomId);
 
@@ -49,9 +49,9 @@ namespace EventsExpress.Core.ChatHub
 
         public async Task EventWasCreated(Guid eventId)
         {
-            var currentUser = _authService.GetCurrentUser(Context.User);
+            var currentUserId = _authService.GetCurrentUserId(Context.User);
             var res = _eventService.EventById(eventId);
-            var users = _userService.GetUsersByCategories(res.Categories).Where(x => x.Id != currentUser.Id).Select(x => x.Id.ToString()).ToList();
+            var users = _userService.GetUsersByCategories(res.Categories).Where(x => x.Id != currentUserId).Select(x => x.Id.ToString()).ToList();
 
             await Clients.Users(users).SendAsync("ReceivedNewEvent", res.Id);
         }

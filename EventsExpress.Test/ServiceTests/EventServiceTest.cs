@@ -589,8 +589,8 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
             httpContextAccessor.SetupGet(x => x.HttpContext)
                 .Returns(new Mock<HttpContext>().Object);
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
-                .Returns(new UserDto { Id = userId });
+            mockAuthService.Setup(x => x.GetCurrentUserId(It.IsAny<ClaimsPrincipal>()))
+                .Returns(userId);
             var result = service.GetAllDraftEvents(1, 1, out x);
             Assert.AreEqual(1, result.Count());
         }

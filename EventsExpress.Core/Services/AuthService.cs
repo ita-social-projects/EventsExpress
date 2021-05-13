@@ -9,10 +9,10 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +25,7 @@ namespace EventsExpress.Core.Services
         private readonly ICacheHelper _cacheHelper;
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
+        private readonly IPasswordHasher _passwordHasher;
 
         public AuthService(
             AppDbContext context,
@@ -33,7 +34,8 @@ namespace EventsExpress.Core.Services
             ITokenService tokenService,
             ICacheHelper cacheHelper,
             IEmailService emailService,
-            IMediator mediator)
+            IMediator mediator,
+            IPasswordHasher passwordHasher)
             : base(context, mapper)
         {
             _userService = userSrv;
@@ -41,6 +43,7 @@ namespace EventsExpress.Core.Services
             _cacheHelper = cacheHelper;
             _emailService = emailService;
             _mediator = mediator;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<AuthenticateResponseModel> Authenticate(string email, AuthExternalType type)
@@ -127,20 +130,20 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword)
         {
-            var userDto = GetCurrentUser(userClaims);
+            var userDto = GetCurrentUser(userClaims); // Change it to GetAccountId
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user");
             }
 
-            if (!VerifyPassword(userDto.Account.AuthLocal, oldPassword))
+            if (!VerifyPassword(authLocal, oldPassword))
             {
                 throw new EventsExpressException("Invalid password");
             }
 
-            authLocal.Salt = PasswordHasher.GenerateSalt();
-            authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
             await Context.SaveChangesAsync();
         }
 
@@ -167,18 +170,6 @@ namespace EventsExpress.Core.Services
             await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
         }
 
-        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return _userService.GetById(userId);
-        }
-
         public async Task PasswordRecover(string email)
         {
             var authLocal = Context.AuthLocal.FirstOrDefault(al => al.Email == email);
@@ -188,8 +179,8 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-            authLocal.Salt = PasswordHasher.GenerateSalt();
-            authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
 
             await Context.SaveChangesAsync();
             await _emailService.SendEmailAsync(new EmailDto
@@ -200,8 +191,8 @@ namespace EventsExpress.Core.Services
             });
         }
 
-        private static bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
-           authLocal.PasswordHash == PasswordHasher.GenerateHash(actualPassword, authLocal.Salt);
+        private bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
+           authLocal.PasswordHash == _passwordHasher.GenerateHash(actualPassword, authLocal.Salt);
 
         private async Task<Account> ConfirmEmail(CacheDto cacheDto)
         {
@@ -234,16 +225,40 @@ namespace EventsExpress.Core.Services
             return authLocal.Account;
         }
 
-        public Guid GetCurrUserId(ClaimsPrincipal userClaims)
+        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
+        {
+            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
+
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                throw new EventsExpressException("User not found");
+            }
+
+            return _userService.GetById(userId);
+        }
+
+        public Guid GetCurrentUserId(ClaimsPrincipal userClaims)
         {
             Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
 
-            if (string.IsNullOrEmpty(guidClaim?.Value))
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
             {
-                return Guid.Empty;
+                throw new EventsExpressException("User not found");
             }
 
-            return Guid.Parse(guidClaim.Value);
+            return userId;
+        }
+
+        public Guid GetCurrentAccountId(ClaimsPrincipal userClaims)
+        {
+            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Sid);
+
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid accountId))
+            {
+                throw new EventsExpressException("User not found");
+            }
+
+            return accountId;
         }
     }
 }

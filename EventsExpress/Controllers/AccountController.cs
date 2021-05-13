@@ -51,8 +51,8 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetLinkedAuth()
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
-            var res = await _accountService.GetLinkedAuth(user.AccountId);
+            var accountId = GetCurrentAccountId();
+            var res = await _accountService.GetLinkedAuth(accountId);
 
             return Ok(_mapper.Map<IEnumerable<AuthViewModel>>(res));
         }
@@ -70,9 +70,9 @@ namespace EventsExpress.Controllers
         {
             await _googleSignatureVerificator.Verify(model.TokenId);
 
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Google);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Google);
 
             return Ok();
         }
@@ -88,9 +88,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddLocalLogin(LoginViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, model.Password);
+            await _accountService.AddAuth(accountId, model.Email, model.Password);
 
             return Ok();
         }
@@ -106,9 +106,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddFacebookLogin(AuthExternalViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Facebook);
 
             return Ok();
         }
@@ -124,9 +124,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddTwitterLogin(AuthExternalViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Twitter);
 
             return Ok();
         }
@@ -180,5 +180,9 @@ namespace EventsExpress.Controllers
 
             return Ok();
         }
+
+        [NonAction]
+        private Guid GetCurrentAccountId() =>
+            _authService.GetCurrentAccountId(HttpContext.User);
     }
 }
