@@ -46,6 +46,7 @@ export function publish_event(eventId) {
         if (response.ok) {
             dispatch(setEventSuccess(true));
             dispatch(getEvent(eventId));
+            dispatch(history.push(`/event/${eventId}/1`));
             dispatch(eventWasCreated(eventId));
             return Promise.resolve();
         }
