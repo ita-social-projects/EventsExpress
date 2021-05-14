@@ -2,20 +2,25 @@
 import { Field, reduxForm } from "redux-form";
 import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
+import moment from "moment";
 import ErrorMessages from '../../shared/errorMessage';
+import { renderDatePicker } from '../../helpers/form-helpers';
 
-const { validate, renderMyDatePicker } = Module;
+const { validate } = Module;
 const EditBirthday = props => {
+    const minValue = moment(new Date()).subtract(115, 'years')
+    const maxValue = moment(new Date()).subtract(15, 'years')
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="Birthday"
+                    name="birthday"
                     id="date"
                     label="Birthday"
-                    type="date"
-                    component={renderMyDatePicker}
+                    minValue={minValue}
+                    maxValue={maxValue}
+                    component={renderDatePicker}
                     InputLabelProps={{
                         shrink: true
                     }}

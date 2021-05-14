@@ -918,15 +918,15 @@ namespace EventsExpress.Db.Migrations
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
-                        .WithMany("Relationships")
+                        .WithMany()
                         .HasForeignKey("UserFromId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.User", "UserTo")
-                        .WithMany()
+                        .WithMany("Relationships")
                         .HasForeignKey("UserToId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

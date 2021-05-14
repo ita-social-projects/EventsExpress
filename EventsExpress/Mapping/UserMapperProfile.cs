@@ -19,8 +19,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
-                .ForMember(dest => dest.Rating, opts => opts.Ignore())
-                .ForMember(dest => dest.Attitude, opts => opts.Ignore())
+                .ForMember(dest => dest.Rating, opts => opts.MapFrom<UserToRatingResolver>())
+                .ForMember(dest => dest.Attitude, opts => opts.MapFrom<UserToAttitudeResolver>())
                 .ForMember(dest => dest.CanChangePassword, opts => opts.Ignore())
                 .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.AccountId, opts => opts.MapFrom(src => src.Account.Id));
@@ -47,8 +47,7 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToInfoResolver>());
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -61,15 +60,18 @@ namespace EventsExpress.Mapping
                     {
                         Id = x.Role.Id,
                         Name = x.Role.Name,
-                    })))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToManageResolver>());
+                    })));
 
             CreateMap<UserDto, UserPreviewViewModel>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
                 .ForMember(
                     dest => dest.Username,
                     opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
-                .ForMember(dest => dest.PhotoUrl, opts => opts.MapFrom<UserDtoToPreviewResolver>())
-                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore());
+                .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => src.Rating))
+                .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
+                .ForMember(dest => dest.Attitude, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
@@ -92,8 +94,7 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
-                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
-                .ForMember(dest => dest.UserPhoto, opts => opts.MapFrom<ProfileDtoToViewModelResolver>());
+                        src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })));
         }
     }
 }

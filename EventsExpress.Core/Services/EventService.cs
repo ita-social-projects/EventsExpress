@@ -292,7 +292,8 @@ namespace EventsExpress.Core.Services
                         UserId = CurrentUser().Id,
                     });
                 await Context.SaveChangesAsync();
-
+                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+                await _mediator.Publish(new EventCreatedMessage(dtos));
                 return ev.Id;
             }
             else
@@ -330,12 +331,14 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Inventories)
                     .ThenInclude(i => i.UnitOfMeasuring)
                 .Include(e => e.Visitors)
                     .ThenInclude(v => v.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .FirstOrDefault(x => x.Id == eventId));
 
@@ -352,6 +355,8 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
+                    .ThenInclude(v => v.User)
+                        .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .AsNoTracking()
                 .AsQueryable();
@@ -403,7 +408,8 @@ namespace EventsExpress.Core.Services
 
             count = events.Count();
 
-            var result = events.OrderBy(x => x.DateFrom)
+            var result = events
+                .OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize)
                 .ToList();

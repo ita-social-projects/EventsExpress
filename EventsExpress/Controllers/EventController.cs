@@ -280,6 +280,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("{eventId:Guid}/[action]")]
+        [AllowAnonymous]
         public IActionResult GetCurrentRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))
@@ -300,6 +301,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Getting is successful.</response>
         /// <response code="400">Getting is failed.</response>
         [HttpGet("{eventId:Guid}/[action]")]
+        [AllowAnonymous]
         public IActionResult GetAverageRate(Guid eventId)
         {
             if (!_eventService.Exists(eventId))

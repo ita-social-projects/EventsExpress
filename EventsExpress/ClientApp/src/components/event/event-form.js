@@ -13,9 +13,9 @@ import {
     renderSelectPeriodicityField,
     renderCheckbox,
     renderTextField,
-    renderDatePicker,
     radioLocationType
 } from '../helpers/helpers';
+import { renderDatePicker } from '../helpers/form-helpers';
 import Inventory from '../inventory/inventory';
 import LocationMap from './map/location-map';
 import { enumLocationType } from '../../constants/EventLocationType';
@@ -34,9 +34,7 @@ class EventForm extends Component {
         }));
 
     }
-    handleClick = () => {
-        history.push(`/`);
-    }
+
     onClickCallBack = (coords) => {
         this.setState({ selectedPos: [coords.lat, coords.lng] });
     }
@@ -47,8 +45,8 @@ class EventForm extends Component {
         const { handleChange } = this;
 
         let values = form_values || initialValues;
-        const photoUrl = initialValues ?
-            initialValues.photoUrl : null;
+        const photoUrl = this.props.eventId ?
+            `api/photo/GetFullEventPhoto?id=${this.props.eventId}` : null;
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}

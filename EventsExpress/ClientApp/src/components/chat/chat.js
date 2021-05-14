@@ -5,9 +5,9 @@ import Button from "@material-ui/core/Button";
 import { renderTextArea } from '../helpers/helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Avatar from '@material-ui/core/Avatar';
 import Msg from './msg';
 import Spinner from '../spinner';
+import CustomAvatar from "../avatar/custom-avatar";
 
 class Chat extends Component {
 
@@ -85,9 +85,9 @@ class Chat extends Component {
                             <div className="d-flex bd-highlight">
                                 {sender != null &&
                                     <ButtonBase>
-                                        {sender.photoUrl
-                                            ? <Avatar className='SmallAvatar' src={sender.photoUrl} />
-                                            : <Avatar className='SmallAvatar' >{sender.username.charAt(0).toUpperCase()}</Avatar>}
+                                        <CustomAvatar size={"Small"}
+                                            userId={sender.id}
+                                            name={sender.name}/>
                                     </ButtonBase>
                                 }
                                 <div className="user_info">
@@ -102,7 +102,7 @@ class Chat extends Component {
                         </div>
                         <div className="card-footer">
                             <form className="w-100 d-flex" autocomplete="off" onSubmit={this.Send}>
-                                <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Send message..." />
+                                <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Type your message..." />
                                 <Button fullWidth={true} type="submit" color="primary" className="w-25">
                                     Send
                         </Button>

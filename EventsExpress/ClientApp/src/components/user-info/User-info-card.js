@@ -4,21 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import genders from '../../constants/GenderConstants';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
+import Tooltip from '@material-ui/core/Tooltip';
+import Zoom from '@material-ui/core/Zoom';
+import { getAge } from '../helpers/helpers';
 import './user-info.css';
-
-const getAge = (birthday) => {
-    let today = new Date();
-    let birthDate = new Date(birthday);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age = age - 1;
-    }
-    if (age > 100) {
-        age = "---";
-    }
-    return age;
-}
 
 export default class UserInfoCard extends Component {
     render() {
@@ -36,7 +25,7 @@ export default class UserInfoCard extends Component {
                         <Link to={`/user/${user.id}`}>
                             <CustomAvatar
                                 size="little"
-                                photoUrl={user.photoUrl}
+                                userId={user.id}
                                 name={user.username}
                             />
                         </Link>
@@ -47,6 +36,20 @@ export default class UserInfoCard extends Component {
                         </div>
                         <div className='ml-auto'>
                             <RatingAverage value={user.rating} direction='col' />
+                            {user.attitude === 0 &&
+                                <Tooltip title="You like this user" placement="bottom" TransitionComponent={Zoom}>
+                                    <div className="retreat">
+                                        <i class="far fa-thumbs-up Size"></i>
+                                    </div>
+                                </Tooltip>
+                            }
+                            {user.attitude === 1 &&
+                                <Tooltip title="You dislike this user" placement="bottom" TransitionComponent={Zoom}>
+                                    <div className="retreat" >
+                                        <i class="far fa-thumbs-down Size"></i>
+                                    </div>
+                                </Tooltip>
+                            }
                         </div>
                     </div>
                 </Paper>

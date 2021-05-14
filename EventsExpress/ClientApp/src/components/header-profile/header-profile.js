@@ -19,7 +19,7 @@ export default class HeaderProfile extends Component {
     }
 
     render() {
-        const { id, name, photoUrl, rating } = this.props.user;
+        const { id, name, rating } = this.props.user;
         const { onClick } = this.props;
 
         return (
@@ -30,7 +30,7 @@ export default class HeaderProfile extends Component {
                     )}
                     <AuthComponent>
                         <div className="d-flex flex-column align-items-center">
-                            <CustomAvatar size="big" photoUrl={photoUrl} name={this.props.user.name} />
+                            <CustomAvatar size="big" userId={id} name={this.props.user.name} />
                             <h4 className="user-name">{name}</h4>
                             <RatingAverage value={rating} direction='row' />
                             <div>
