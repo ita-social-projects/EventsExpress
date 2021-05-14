@@ -70,6 +70,7 @@
     },
     "devDependencies": {
         "@types/leaflet": "1.5.19",
+        "history": "^5.0.0",
         "jshint": "2.12.0",
         "rimraf": "2.6.2"
     },

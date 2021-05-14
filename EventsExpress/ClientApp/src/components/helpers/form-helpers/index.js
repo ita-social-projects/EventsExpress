@@ -3,6 +3,7 @@ import renderPhoneInput from './render-phone-input';
 import renderFieldError from './render-field-error';
 import renderMultiselect from './render-multiselect-field';
 import renderDatePicker from './render-date-picker';
+import MultiCheckbox from "./MultiCheckbox";
 
 export {
     renderSelectField,
@@ -10,4 +11,5 @@ export {
     renderFieldError,
     renderMultiselect,
     renderDatePicker,
+    MultiCheckbox
 };

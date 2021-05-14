@@ -124,7 +124,7 @@ export default class EventCard extends Component {
                                 location={this.props.item.location}
                             />
                             }
-                            <br />
+                            <br/>
                             <div className="float-left">
                                 {this.renderCategories(categories.slice(0, 2))}
                             </div>
@@ -141,7 +141,7 @@ export default class EventCard extends Component {
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">
                                         <IconButton aria-label="view">
-                                            <i className="fa fa-eye"></i>
+                                            <i className="fa fa-eye"/>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
