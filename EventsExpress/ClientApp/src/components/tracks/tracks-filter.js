@@ -3,8 +3,7 @@ import Button from "@material-ui/core/Button";
 import {Field, reduxForm} from 'redux-form';
 import {renderMultiselect, renderDatePicker} from "../helpers/helpers";
 import changesTypeEnum from "../../constants/changesTypeEnum";
-import EventFilterStatus from "../event/event-filter-status";
-import eventStatusEnum from "../../constants/eventStatusEnum";
+import {MultiCheckbox} from "../helpers/form-helpers";
 
 class TracksFilter extends Component {
     render() {
@@ -35,7 +34,7 @@ class TracksFilter extends Component {
                     <div className="form-group">
                         <Field
                             options={options}
-                            component={EventFilterStatus}
+                            component={MultiCheckbox}
                             name="changesType"
                             className="form-control mt-2"
                             placeholder='Changes type'

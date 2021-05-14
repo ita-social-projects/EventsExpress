@@ -29,9 +29,9 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<TrackDto> GetAllTracks(TrackFilterViewModel model, out int count)
         {
-            var tracks = Context.ChangeInfos
-                .Include(e => e.User)
-                .AsQueryable();
+            IQueryable<ChangeInfo> tracks = Context.ChangeInfos
+                .Include(e => e.User);
+            var y = tracks.ToList();
 
             tracks = model.EntityName != null && model.EntityName.Any()
                 ? tracks.Where(x => model.EntityName.Contains(x.EntityName))

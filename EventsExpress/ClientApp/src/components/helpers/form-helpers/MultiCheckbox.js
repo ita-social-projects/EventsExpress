@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 
-class EventFilterStatus extends Component { //TODO: rename later
+class MultiCheckbox extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
         if (input.value === "")
@@ -36,5 +36,5 @@ class EventFilterStatus extends Component { //TODO: rename later
         )
     }
 }
-export default EventFilterStatus;
+export default MultiCheckbox;
 

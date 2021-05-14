@@ -10,7 +10,7 @@ import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
-import EventFilterStatus from './event-filter-status';
+import {MultiCheckbox} from "../helpers/form-helpers";
 import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
@@ -94,7 +94,7 @@ class EventFilter extends Component {
                         <div className="form-group">
                             {current_user.roles.includes("Admin") &&
                             <Field name="statuses"
-                                   component={EventFilterStatus}
+                                   component={MultiCheckbox}
                                    options={options}
                             />
                             }
