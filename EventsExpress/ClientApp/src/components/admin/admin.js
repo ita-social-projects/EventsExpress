@@ -69,8 +69,8 @@ export default class Admin extends Component {
                             <Route path="/admin/users" component={UsersWrapper} />
                             <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
                             <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
+                            <Route path="/admin/tracks" component={Track} />
                         </Switch>
-                        <Route path="/admin/tracks" component={Track} />
                     </div>
                 </div>
             </>
