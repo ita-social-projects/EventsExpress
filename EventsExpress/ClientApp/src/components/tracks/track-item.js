@@ -1,66 +1,31 @@
-import React, { Component } from "react";
-import { Link } from 'react-router-dom';
+import React, {Component} from "react";
+import {Link} from 'react-router-dom';
 import IconButton from "@material-ui/core/IconButton";
 import SimpleModal from '../event/simple-modal';
 
 export default class TrackItem extends Component {
-    getChangesTypeText = (changesType, propertyChangesText) => {
-
-        let changesTypeText = '';
-        let test = JSON.parse(propertyChangesText);
-        let data;
+    getChangesType = changesType => {
         switch (changesType) {
             case 0:
-                changesTypeText = 'Undefined';
-                data = test.map(x => (
-                    <tr>
-                        <td className="text-center">{x.entityName}</td>
-                        <td className="text-center">Old value: {x.OldValue}</td>
-                        <td className="text-center">New value: {x.NewValue}</td>
-                    </tr>
-                ))
-                return {
-                    changesTypeText,
-                    data
-                };
+                return 'Undefined';
             case 1:
-                changesTypeText = 'Modified';
-                data = test.map(x => (
-                    <tr>
-                        <td className="text-center">{x.entityName}</td>
-                        <td className="text-center">Old value: {x.OldValue}</td>
-                        <td className="text-center">New value: {x.NewValue}</td>
-                    </tr>
-                ))
-                return {
-                    changesTypeText,
-                    data
-                };
+                return 'Modified';
             case 2:
-                changesTypeText = 'Created';
-                data = test.map(x => (
-                    <tr>
-                        <td className="text-center">{x.entityName}</td>
-                        <td className="text-center">New value: {x.NewValue}</td>
-                    </tr>
-                ))
-                return {
-                    changesTypeText,
-                    data
-                };
+                return 'Created';
             case 3:
-                changesTypeText = 'Deleted';
-                data = test.map(x => (
-                    <tr>
-                        <td className="text-center">{x.entityName}</td>
-                        <td className="text-center">Old value: {x.OldValue}</td>
-                    </tr>
-                ))
-                return {
-                    changesTypeText,
-                    data
-                };
+                return 'Deleted';
         }
+    }
+    getPropertyChangesText = propertyChangesText => {
+        
+        let test = JSON.parse(propertyChangesText);
+        return test.map(x => (
+            <tr>
+                <td className="text-center">{x.entityName}</td>
+                <td className="text-center">Old value: {x.OldValue}</td>
+                <td className="text-center">New value: {x.NewValue}</td>
+            </tr>
+        ));
     }
     
     render() {
@@ -78,12 +43,12 @@ export default class TrackItem extends Component {
                     {new Date(time).toLocaleString()}
                 </td>
                 <td className="text-center">
-                    {this.getChangesTypeText(changesType, propertyChangesText).changesTypeText}
+                    {this.getChangesType(changesType)}
                 </td>
                 <td className="text-center">
                     <SimpleModal
                         id={user.id}
-                        data={this.getChangesTypeText(changesType, propertyChangesText).data}
+                        data={this.getPropertyChangesText(propertyChangesText)}
                         button={
                             <IconButton aria-label="delete">
                                 <i className="fas fa-info-circle" />

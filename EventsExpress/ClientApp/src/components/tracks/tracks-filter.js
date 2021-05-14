@@ -1,9 +1,9 @@
 ﻿import React, {Component} from 'react';
 import Button from "@material-ui/core/Button";
 import {Field, reduxForm} from 'redux-form';
-import {renderMultiselect, renderDatePicker} from "../helpers/helpers";
+import {renderMultiselect} from "../helpers/helpers";
 import changesTypeEnum from "../../constants/changesTypeEnum";
-import {MultiCheckbox} from "../helpers/form-helpers";
+import {MultiCheckbox, renderDatePicker} from "../helpers/form-helpers";
 
 class TracksFilter extends Component {
     render() {

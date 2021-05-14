@@ -31,7 +31,6 @@ namespace EventsExpress.Core.Services
         {
             IQueryable<ChangeInfo> tracks = Context.ChangeInfos
                 .Include(e => e.User);
-            var y = tracks.ToList();
 
             tracks = model.EntityName != null && model.EntityName.Any()
                 ? tracks.Where(x => model.EntityName.Contains(x.EntityName))

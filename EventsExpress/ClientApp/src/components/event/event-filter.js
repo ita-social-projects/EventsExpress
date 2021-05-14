@@ -5,12 +5,11 @@ import {
     renderTextField,
     renderMultiselect
 } from '../helpers/helpers';
-import { renderDatePicker } from '../helpers/form-helpers';
+import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
 import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
-import {MultiCheckbox} from "../helpers/form-helpers";
 import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
