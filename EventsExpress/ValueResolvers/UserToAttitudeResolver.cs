@@ -13,16 +13,11 @@ namespace EventsExpress.ValueResolvers
 {
     public class UserToAttitudeResolver : IValueResolver<User, UserDto, byte>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         private readonly IAuthService _authService;
 
-        public UserToAttitudeResolver(
-            IHttpContextAccessor httpContextAccessor,
-            IAuthService authService)
+        public UserToAttitudeResolver(IAuthService authService)
         {
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public byte Resolve(User source, UserDto destination, byte destMember, ResolutionContext context)

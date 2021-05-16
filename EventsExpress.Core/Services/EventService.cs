@@ -25,7 +25,6 @@ namespace EventsExpress.Core.Services
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
         private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
         private readonly IValidator<Event> _validator;
 
@@ -36,7 +35,6 @@ namespace EventsExpress.Core.Services
             IPhotoService photoService,
             ILocationService locationService,
             IAuthService authService,
-            IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService,
             IValidator<Event> validator)
             : base(context, mapper)
@@ -45,7 +43,6 @@ namespace EventsExpress.Core.Services
             _locationService = locationService;
             _mediator = mediator;
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
             _validator = validator;
         }

@@ -16,13 +16,11 @@ namespace EventsExpress.Core.Services
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
         private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService, IHttpContextAccessor httpContextAccessor)
+        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService)
             : base(context, mapper)
         {
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public IEnumerable<EventScheduleDto> GetAll()

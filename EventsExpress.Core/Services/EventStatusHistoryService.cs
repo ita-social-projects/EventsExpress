@@ -15,18 +15,15 @@ namespace EventsExpress.Core.Services
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
         private readonly IMediator _mediator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
 
         public EventStatusHistoryService(
             IMediator mediator,
-            IHttpContextAccessor httpContextAccessor,
             IAuthService authService,
             AppDbContext context)
              : base(context)
         {
             _mediator = mediator;
-            _httpContextAccessor = httpContextAccessor;
             _authService = authService;
         }
 

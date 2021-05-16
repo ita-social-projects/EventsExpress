@@ -8,7 +8,7 @@ namespace EventsExpress.Core.Services
 {
     public class SecurityContextService : ISecurityContext
     {
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SecurityContextService(IHttpContextAccessor httpContextAccessor)
         {

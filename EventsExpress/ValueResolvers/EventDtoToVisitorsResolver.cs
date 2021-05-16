@@ -15,17 +15,14 @@ namespace EventsExpress.ValueResolvers
 {
     public class EventDtoToVisitorsResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
 
         public EventDtoToVisitorsResolver(
             IAuthService authService,
-            IHttpContextAccessor httpContextAccessor,
             IUserService userService)
         {
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
         }
 
