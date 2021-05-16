@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get_users, reset_users } from '../actions/users/users-action';
+import { get_users, reset_users, get_count } from '../actions/users/users-action';
 import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';
@@ -8,16 +8,20 @@ import UsersFilterWrapper from '../containers/user-filter';
 class UsersWrapper extends Component {
     componentDidMount() {
         this.getUsers(this.props.location.search);
+        this.getCount();
+        this.intervalId = setInterval(this.getCount, 120000);
     }
 
     componentWillUnmount = () => {
         this.props.reset_users();
+        clearInterval(this.intervalId);
     }
 
+    getCount = () => this.props.get_count();
     getUsers = (page) => this.props.get_users(page);
 
     render() {
-        const { isPending } = this.props.users;
+        const { isPending, count } = this.props.users;
         const spinner = isPending ? <Spinner /> : null;
         const content = !isPending
             ? <Users
@@ -36,6 +40,9 @@ class UsersWrapper extends Component {
                 </div>
                 <div className="col-3">
                     {filter}
+                    <div>
+                        <span>All registred users: {count}</span>
+                    </div>
                 </div>
             </div>
         </>
@@ -48,6 +55,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        get_count: () => dispatch(get_count()),
         get_users: (page) => dispatch(get_users(page)),
         reset_users: () => dispatch(reset_users())
     };

@@ -291,5 +291,10 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
             return user.Id;
         }
+
+        public async Task<int> CountAsync()
+        {
+            return await Entities.CountAsync();
+        }
     }
 }

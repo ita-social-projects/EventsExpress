@@ -73,6 +73,14 @@ namespace EventsExpress.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Count()
+        {
+            var count = await _userService.CountAsync();
+            return Ok(count);
+        }
+
         /// <summary>
         /// This metod have to return UserDto for Admin.
         /// </summary>

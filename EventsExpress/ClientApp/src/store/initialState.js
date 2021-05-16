@@ -65,6 +65,7 @@ const initialState = {
         data: []
     },
     users: {
+        count: null,
         isPending: true,
         editedUser: null,
         userSearchFilter: null,

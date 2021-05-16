@@ -35,5 +35,7 @@ namespace EventsExpress.Core.IServices
         IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds);
 
         Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
+
+        Task<int> CountAsync();
     }
 }
