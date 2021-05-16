@@ -1,11 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using EventsExpress.Db.Bridge;
 
-namespace EventsExpress.Db.Helpers
+namespace EventsExpress.Core.Services
 {
-    public static class PasswordHasher
+    public class PasswordHasherService : IPasswordHasher
     {
-        public static string GenerateHash(string password, string salt)
+        public string GenerateHash(string password, string salt)
         {
             byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);
             using var hashProvider = new SHA256Managed();
@@ -14,7 +15,7 @@ namespace EventsExpress.Db.Helpers
             return Encoding.ASCII.GetString(byteHash);
         }
 
-        public static string GenerateSalt()
+        public string GenerateSalt()
         {
             using var provider = new RNGCryptoServiceProvider();
             byte[] salt = new byte[16];

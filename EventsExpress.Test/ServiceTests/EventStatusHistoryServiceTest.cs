@@ -39,7 +39,7 @@ namespace EventsExpress.Test.ServiceTests
             httpContextAccessor.SetupGet(x => x.HttpContext)
                 .Returns(new Mock<HttpContext>().Object);
             mockAuthService = new Mock<IAuthService>();
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
+            mockAuthService.Setup(x => x.GetCurrentUser())
                 .Returns(new UserDto { Id = userId });
 
             service = new EventStatusHistoryService(
