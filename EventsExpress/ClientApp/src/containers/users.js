@@ -40,9 +40,7 @@ class UsersWrapper extends Component {
                 </div>
                 <div className="col-3">
                     {filter}
-                    <div>
-                        <span>All registred users: {count}</span>
-                    </div>
+                    <span className="ml-2">All registred users: {count}</span>
                 </div>
             </div>
         </>
