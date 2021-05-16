@@ -14,6 +14,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
@@ -26,6 +27,8 @@ namespace EventsExpress.Core.Services
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISecurityContext _securityContext;
 
         public AuthService(
             AppDbContext context,
@@ -35,7 +38,9 @@ namespace EventsExpress.Core.Services
             ICacheHelper cacheHelper,
             IEmailService emailService,
             IMediator mediator,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher,
+            IHttpContextAccessor httpContextAccessor,
+            ISecurityContext securityContext)
             : base(context, mapper)
         {
             _userService = userSrv;
@@ -44,6 +49,8 @@ namespace EventsExpress.Core.Services
             _emailService = emailService;
             _mediator = mediator;
             _passwordHasher = passwordHasher;
+            _httpContextAccessor = httpContextAccessor;
+            _securityContext = securityContext;
         }
 
         public async Task<AuthenticateResponseModel> Authenticate(string email, AuthExternalType type)
@@ -128,9 +135,9 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword)
+        public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
-            var userDto = GetCurrentUser(userClaims); // Change it to GetAccountId
+            var userDto = GetCurrentUser(); // Change it to GetAccountId
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {
@@ -225,11 +232,11 @@ namespace EventsExpress.Core.Services
             return authLocal.Account;
         }
 
-        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
+        public UserDto GetCurrentUser()
         {
-            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
+            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
 
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
             {
                 throw new EventsExpressException("User not found");
             }
@@ -237,21 +244,14 @@ namespace EventsExpress.Core.Services
             return _userService.GetById(userId);
         }
 
-        public Guid GetCurrentUserId(ClaimsPrincipal userClaims)
+        public Guid GetCurrentUserId()
         {
-            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return userId;
+            return _securityContext.GetCurrentUserId();
         }
 
-        public Guid GetCurrentAccountId(ClaimsPrincipal userClaims)
+        public Guid GetCurrentAccountId()
         {
-            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Sid);
+            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
 
             if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid accountId))
             {

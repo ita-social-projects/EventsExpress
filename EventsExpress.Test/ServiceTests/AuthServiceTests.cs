@@ -12,6 +12,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Test.ServiceTests.TestClasses.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -33,6 +34,8 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IEmailService> mockEmailService;
         private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
+        private Mock<IHttpContextAccessor> mockHttpContextAccessor;
+        private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
 
@@ -50,6 +53,8 @@ namespace EventsExpress.Test.ServiceTests
             mockEmailService = new Mock<IEmailService>();
             mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
+            mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            mockSecurityContext = new Mock<ISecurityContext>();
             service = new AuthService(
                 Context,
                 MockMapper.Object,
@@ -58,7 +63,9 @@ namespace EventsExpress.Test.ServiceTests
                 mockCacheHelper.Object,
                 mockEmailService.Object,
                 mockMediator.Object,
-                mockPasswordHasherService.Object);
+                mockPasswordHasherService.Object,
+                mockHttpContextAccessor.Object,
+                mockSecurityContext.Object);
 
             existingUser = new User
             {
@@ -77,6 +84,7 @@ namespace EventsExpress.Test.ServiceTests
             Context.Users.Add(existingUser);
             Context.SaveChanges();
 
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
             mockPasswordHasherService.Setup(s => s.GenerateSalt()).Returns("salt");
             mockPasswordHasherService.Setup(s => s.GenerateHash(validPassword, "salt")).Returns("hash");
         }
@@ -261,7 +269,7 @@ namespace EventsExpress.Test.ServiceTests
             mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDtoWithoutAuthLocal);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), validPassword, "newPassword");
+                await service.ChangePasswordAsync(validPassword, "newPassword");
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
             Assert.That(ex.Message.Contains("Invalid user"));
@@ -287,7 +295,7 @@ namespace EventsExpress.Test.ServiceTests
             mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), invalidPassword, "newPassword");
+                await service.ChangePasswordAsync(invalidPassword, "newPassword");
 
             Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
         }
@@ -311,7 +319,7 @@ namespace EventsExpress.Test.ServiceTests
             mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), validPassword, "newPassword");
+                await service.ChangePasswordAsync(validPassword, "newPassword");
 
             Assert.DoesNotThrowAsync(methodInvoke);
         }
@@ -462,7 +470,8 @@ namespace EventsExpress.Test.ServiceTests
             ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             string[] roles = { "user" };
             GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
-            var res = service.GetCurrentUserId(claimsObj);
+            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(userDto.Id);
+            var res = service.GetCurrentUserId();
             Assert.That(res, Is.EqualTo(userDto.Id));
         }
 

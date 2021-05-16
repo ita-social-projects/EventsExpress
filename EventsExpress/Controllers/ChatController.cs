@@ -79,6 +79,6 @@ namespace EventsExpress.Controllers
 
         [NonAction]
         private Guid CurrentUserId() =>
-            _authService.GetCurrentUserId(HttpContext.User);
+            _authService.GetCurrentUserId();
     }
 }

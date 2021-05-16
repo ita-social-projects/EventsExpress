@@ -118,6 +118,7 @@ namespace EventsExpress
                     x => x.UseNetTopologySuite()));
 
             #region Configure our services...
+            services.AddScoped<ISecurityContext, SecurityContextService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();

@@ -31,7 +31,7 @@ namespace EventsExpress.Core.ChatHub
             text = text.Trim();
             if (text != string.Empty)
             {
-                var currentUserId = _authService.GetCurrentUserId(Context.User);
+                var currentUserId = _authService.GetCurrentUserId();
                 var res = await _messageService.Send(chatId, currentUserId, text);
 
                 var users = _messageService.GetChatUserIds(res.ChatRoomId);
@@ -49,7 +49,7 @@ namespace EventsExpress.Core.ChatHub
 
         public async Task EventWasCreated(Guid eventId)
         {
-            var currentUserId = _authService.GetCurrentUserId(Context.User);
+            var currentUserId = _authService.GetCurrentUserId();
             var res = _eventService.EventById(eventId);
             var users = _userService.GetUsersByCategories(res.Categories).Where(x => x.Id != currentUserId).Select(x => x.Id.ToString()).ToList();
 

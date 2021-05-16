@@ -58,7 +58,7 @@ namespace EventsExpress.Controllers
             filter.IsConfirmed = true;
             try
             {
-                var userId = _authService.GetCurrentUserId(HttpContext.User);
+                var userId = _authService.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
@@ -91,7 +91,7 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var userId = _authService.GetCurrentUserId(HttpContext.User);
+                var userId = _authService.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
@@ -342,7 +342,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <returns>The method returns current user.</returns>
         [NonAction]
-        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser();
 
         /// <summary>
         /// This method help to get logged in user from JWT.

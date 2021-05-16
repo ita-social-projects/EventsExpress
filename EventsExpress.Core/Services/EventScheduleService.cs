@@ -106,6 +106,6 @@ namespace EventsExpress.Core.Services
         }
 
         private Guid CurrentUserId() =>
-           _authService.GetCurrentUserId(_httpContextAccessor.HttpContext.User);
+           _authService.GetCurrentUserId();
     }
 }

@@ -35,7 +35,7 @@ namespace EventsExpress.ValueResolvers
             Guid? currentUserId;
             try
             {
-                currentUserId = _authService?.GetCurrentUserId(_httpContextAccessor.HttpContext.User);
+                currentUserId = _authService?.GetCurrentUserId();
             }
             catch (EventsExpressException)
             {

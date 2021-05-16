@@ -577,6 +577,6 @@ namespace EventsExpress.Core.Services
         public bool Exists(Guid eventId) => Context.Events.Find(eventId) != null;
 
         private Guid CurrentUserId() =>
-           _authService.GetCurrentUserId(_httpContextAccessor.HttpContext.User);
+           _authService.GetCurrentUserId();
     }
 }
