@@ -75,7 +75,7 @@ namespace EventsExpress.Controllers
 
         [HttpGet("[action]")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Count()
+        public async Task<ActionResult<int>> Count()
         {
             var count = await _userService.CountAsync();
             return Ok(count);
