@@ -22,7 +22,6 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
-        private static Mock<IHttpContextAccessor> httpContextAccessor;
 
         private EventStatusHistoryService service;
         private Guid eventId = Guid.NewGuid();
@@ -35,16 +34,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
-            httpContextAccessor = new Mock<IHttpContextAccessor>();
-            httpContextAccessor.SetupGet(x => x.HttpContext)
-                .Returns(new Mock<HttpContext>().Object);
             mockAuthService = new Mock<IAuthService>();
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
+            mockAuthService.Setup(x => x.GetCurrentUser())
                 .Returns(new UserDto { Id = userId });
 
             service = new EventStatusHistoryService(
                 mockMediator.Object,
-                httpContextAccessor.Object,
                 mockAuthService.Object,
                 Context);
         }

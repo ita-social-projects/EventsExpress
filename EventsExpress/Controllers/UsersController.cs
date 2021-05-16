@@ -58,10 +58,10 @@ namespace EventsExpress.Controllers
             filter.IsConfirmed = true;
             try
             {
-                var user = GetCurrentUser(HttpContext.User);
+                var userId = _authService.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -91,10 +91,10 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var user = _authService.GetCurrentUser(HttpContext.User);
+                var userId = _authService.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -110,7 +110,7 @@ namespace EventsExpress.Controllers
         public IActionResult GetUserInfo()
         {
             var user = GetCurrentUserOrNull(HttpContext.User);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user); // check if we need roles here
 
             return Ok(userInfo);
         }
@@ -244,7 +244,7 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.UserPolicyName)]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser(HttpContext.User);
 
             var admins = _userService.GetUsersByRole("Admin");
 
@@ -342,7 +342,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <returns>The method returns current user.</returns>
         [NonAction]
-        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser();
 
         /// <summary>
         /// This method help to get logged in user from JWT.
@@ -353,7 +353,7 @@ namespace EventsExpress.Controllers
         {
             try
             {
-                return _authService.GetCurrentUser(userClaims);
+                return GetCurrentUser(userClaims);
             }
             catch (EventsExpressException)
             {
