@@ -108,6 +108,33 @@ namespace EventsExpress.Test.ControllerTests
             _usersController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
         }
 
+        [TestCase(0)]
+        [TestCase(5)]
+        [TestCase(15)]
+        public async Task GetUsersCount_ReturnsValid(int count)
+        {
+            // Arrange
+            _userService.Setup(service => service.CountAsync())
+                .ReturnsAsync(count);
+
+            // Act
+            var actionResult = (OkObjectResult)(await _usersController.Count()).Result;
+            var actual = (int)actionResult.Value;
+
+            // Assert
+            Assert.AreEqual(count, actual);
+        }
+
+        [Test]
+        public async Task GetUsersCount_CalledMethodOfService()
+        {
+            // Act
+            await _usersController.Count();
+
+            // Assert
+            _userService.Verify(service => service.CountAsync(), Times.Once);
+        }
+
         [Test]
         [Category("EditUserNotificationType")]
         public async Task EditUserNotificationType_ExistsUserDto_OkObjectResultAsync()

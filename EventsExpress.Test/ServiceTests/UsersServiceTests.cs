@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -10,9 +11,9 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -66,6 +67,19 @@ namespace EventsExpress.Test.ServiceTests
             Context.Users.Add(existingUser);
             Context.UserNotificationTypes.Add(userNotificationType);
             Context.SaveChanges();
+        }
+
+        [Test]
+        public async Task GetUsersCount_ReturnsValid()
+        {
+            // Arrange
+            var expected = await Context.Users.CountAsync();
+
+            // Act
+            var actual = await service.CountAsync();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
