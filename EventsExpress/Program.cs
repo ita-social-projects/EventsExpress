@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using EventsExpress.Core;
+using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.DbInitialize;
 using EventsExpress.Db.EF;
 using Microsoft.AspNetCore;
@@ -25,9 +28,10 @@ namespace EventsExpress
                 var services = scope.ServiceProvider;
                 try
                 {
+                    var passwordService = services.GetRequiredService<IPasswordHasher>();
                     var dbContext = services.GetRequiredService<AppDbContext>();
                     dbContext.Database.Migrate();
-                    DbInitializer.Seed(dbContext);
+                    DbInitializer.Seed(dbContext, passwordService);
                 }
                 catch (Exception ex)
                 {
