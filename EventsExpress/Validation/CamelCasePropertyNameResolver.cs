@@ -24,12 +24,7 @@ namespace EventsExpress.Validation
                 }
             }
 
-            if (memberInfo != null)
-            {
-                return memberInfo.Name;
-            }
-
-            return null;
+            return memberInfo != null ? memberInfo.Name : null;
         }
 
         private static string ToCamelCase(string s)

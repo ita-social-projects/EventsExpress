@@ -24,6 +24,7 @@ import * as EventScheduleView from './eventSchedule-item-view';
 import * as AddComment from './add-comment';
 import * as DeleteComment from './delete-comment';
 import * as Comments from './comment-list';
+import * as Tracks from './tracks/track-list';
 import * as RecoverPassword from './editReducers/recoverPasswordReducer';
 import * as Profile from './user-item-view';
 import * as EventsForProfile from './events-for-profile';
@@ -73,6 +74,7 @@ const rootReducers = {
     eventSchedule: EventScheduleView.reducer,
     add_comment: AddComment.reducer,
     comments: Comments.reducer,
+    tracks: Tracks.reducer,
     roles: Roles.reducer,
     delete_comment: DeleteComment.reducer,
     profile: Profile.reducer,

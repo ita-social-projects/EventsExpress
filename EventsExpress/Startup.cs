@@ -133,6 +133,7 @@ namespace EventsExpress
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
+            services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
