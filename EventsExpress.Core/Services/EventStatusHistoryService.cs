@@ -15,18 +15,15 @@ namespace EventsExpress.Core.Services
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
         private readonly IMediator _mediator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
 
         public EventStatusHistoryService(
             IMediator mediator,
-            IHttpContextAccessor httpContextAccessor,
             IAuthService authService,
             AppDbContext context)
              : base(context)
         {
             _mediator = mediator;
-            _httpContextAccessor = httpContextAccessor;
             _authService = authService;
         }
 
@@ -51,7 +48,7 @@ namespace EventsExpress.Core.Services
             var record = new EventStatusHistory
             {
                 EventId = e.Id,
-                UserId = _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User).Id,
+                UserId = _authService.GetCurrentUserId(),
                 EventStatus = status,
                 Reason = reason,
             };

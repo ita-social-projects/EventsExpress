@@ -2,7 +2,7 @@
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Helpers;
+using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 
 namespace EventsExpress.Mapping
@@ -15,21 +15,10 @@ namespace EventsExpress.Mapping
             CreateMap<RegisterCompleteViewModel, RegisterCompleteDto>();
 
             CreateMap<RegisterDto, Account>()
-                .ForMember(dest => dest.AuthLocal, opts => opts.MapFrom(src => MapAuthLocal(src)));
+                .ForMember(dest => dest.AuthLocal, opts => opts.MapFrom<RegisterDtoToAccountResolver>());
 
             CreateMap<RegisterCompleteDto, UserDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Username));
-        }
-
-        private static AuthLocal MapAuthLocal(RegisterDto src)
-        {
-            var salt = PasswordHasher.GenerateSalt();
-            return new AuthLocal
-            {
-                Email = src.Email,
-                Salt = salt,
-                PasswordHash = PasswordHasher.GenerateHash(src.Password, salt),
-            };
         }
     }
 }
