@@ -1,13 +1,30 @@
 ﻿import React, { Component } from 'react';
 import ContactUsItemWrapper from '../../containers/contactUs/contactUs-item-container';
+import RenderList from '../event/RenderList'
+import { parse as queryStringParse } from 'query-string';
+import filterHelper from '../helpers/filterHelper';
 
 export default class ContactUsList extends Component {
-    renderItems = arr => arr.map(item => <ContactUsItemWrapper
-        key={item.senderId}
-        item={item} />);
+
+    handlePageChange = (page) => {
+        if (this.props.history.location.search == "")
+            this.props.history.push(this.props.history.location.pathname + `?page=${page}`);
+        else {
+            const queryStringToObject = queryStringParse(this.props.history.location.search);
+            queryStringToObject.page = page;
+            this.props.history.location.search = filterHelper.getQueryStringByFilter(queryStringToObject);
+            this.props.history.push(this.props.history.location.pathname + this.props.history.location.search);
+        }
+    };
+
+    renderSingleItem = (item) => (
+        <ContactUsItemWrapper
+            key={item.messageId + item.status}
+            item={item}
+        />
+    )
 
     render() {
-        let { data_list } = this.props;
 
         return (
             <>
@@ -17,7 +34,11 @@ export default class ContactUsList extends Component {
                     <td className="justify-content-center">Status</td>
                     <td className="justify-content-center">Details</td>
                 </tr>
-                {this.renderItems(data_list)}
+                <RenderList {...this.props} renderSingleItem={this.renderSingleItem}
+                    handlePageChange={this.handlePageChange} />
             </>);
     }
 }
+
+
+

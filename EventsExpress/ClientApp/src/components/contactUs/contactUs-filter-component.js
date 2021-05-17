@@ -3,15 +3,14 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import { renderDatePicker } from '../helpers/helpers';
 import filterHelper from '../helpers/filterHelper';
-import './event-filter.css';
+import './contactUs-filter.css';
 import ContactUsFilterStatus from './contactUs-filter-status-component';
-import issueStatusEnum from '../../constants/issueStatusEnum';
+import issueStatusEnum from '../../constants/IssueStatusEnum';
 
 class ContactUsFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            viewMore: false,
             needInitializeValues: true,
         };
     }
@@ -22,9 +21,9 @@ class ContactUsFilter extends Component {
         if (!filterHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
-                keyWord: initialValues.keyWord,
-                dateCreated: initialValues.dateCreated,
-                statuses: initialValues.status,
+                dateFrom: initialValues.dateFrom,
+                dateTo: initialValues.dateTo,
+                status: initialValues.status,
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -39,38 +38,33 @@ class ContactUsFilter extends Component {
         return <>
             <div className="sidebar-filter" >
                 <form onSubmit={this.props.handleSubmit} className="box">
-                    {this.state.viewMore &&
-                        <>
-                            <div className="form-group">
-                                <Field
-                                    name='dateCreated'
-                                    label='Date created'
-                                    minValue={new Date(values.dateCreated)}
-                                    component={renderDatePicker}
+                    {<>
+                        <div className="form-group">
+                            <Field
+                                name='dateFrom'
+                                label='From'
+                                minValue={new Date(2000, 1, 1, 12, 0, 0)}
+                                component={renderDatePicker}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <Field
+                                name='dateTo'
+                                label='To'
+                                minValue={new Date(values.dateFrom)}
+                                component={renderDatePicker}
+                            />
+                        </div>
+                        <div className="form-group">
+                            {current_user.role === "Admin" &&
+                                <Field name="status"
+                                    component={ContactUsFilterStatus}
+                                    options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
                                 />
-                            </div>
-                            <div className="form-group">
-                                {current_user.role === "Admin" &&
-                                    <Field name="status"
-                                        component={ContactUsFilterStatus}
-                                        options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
-                                    />
-                                }
-                            </div>
-                        </>
+                            }
+                        </div>
+                    </>
                     }
-                    <div>
-                        <Button
-                            key={this.state.viewMore}
-                            fullWidth={true}
-                            color="secondary"
-                            onClick={() => {
-                                this.setState({ viewMore: !this.state.viewMore });
-                            }}
-                        >
-                            {this.state.viewMore ? 'less...' : 'more filters...'}
-                        </Button>
-                    </div>
                     <div className="d-flex">
                         <Button
                             fullWidth={true}
@@ -97,6 +91,6 @@ class ContactUsFilter extends Component {
 
 ContactUsFilter = reduxForm({
     form: 'contactUs-filter-form',
-})(EventFilter);
+})(ContactUsFilter);
 
 export default ContactUsFilter;

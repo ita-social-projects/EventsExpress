@@ -29,7 +29,7 @@ class ContactUsDetailsContainer extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    contactUsData: state.contactUsList.data
+    contactUsData: state.contactUsItem.data
 });
 
 const mapDispatchToProps = dispatch => {

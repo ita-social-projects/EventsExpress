@@ -53,13 +53,13 @@ class ContactUs extends Component {
 
 
                             {(this.props.form_values !== undefined
-                                && this.props.form_values.subject == 4 
+                                && this.props.form_values.subject == 4
                                 && <Field
                                     name="title"
                                     className="form-control"
                                     component={renderTextField}
                                     label="Enter problem type:"
-                                />   
+                                />
                             )}
 
                             <p></p><p></p><p></p>
@@ -93,9 +93,7 @@ class ContactUs extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: {
-            email: state.user.email,
-        },
+        initialValues: { email: state.user.email },
         form_values: getFormValues('ContactUs')(state),
     }
 }

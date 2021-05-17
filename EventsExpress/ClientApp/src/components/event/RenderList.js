@@ -3,7 +3,7 @@ import PagePagination from '../shared/pagePagination';
 
 class RenderList extends Component {
     componentWillUnmount() {
-        this.props.reset_events();
+        this.props.resetFilters;
     }
     renderItems = arr =>
         arr.map(item => this.props.renderSingleItem(item));
@@ -17,7 +17,6 @@ class RenderList extends Component {
         const { page, totalPages, data_list } = this.props;
 
         return <>
-            <div className="row">
                 {data_list.length > 0
                     ? this.renderItems(data_list)
                     : <div id="notfound" className="w-100">
@@ -27,7 +26,6 @@ class RenderList extends Component {
                             </div>
                         </div>
                     </div>}
-            </div>
             <br />
             {totalPages > 1 &&
                 <PagePagination

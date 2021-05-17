@@ -1,8 +1,7 @@
 import {
     GET_CONTACTUS_SUCCESS,
     SET_CONTACTUS_PENDING,
-    RESET_CONTACTUS,
-    UPDATE_CONTACTUS_FILTERS
+    RESET_CONTACTUS
 } from '../../actions/contactUs/contact-us-list-action';
 import initialState from '../../store/initialState';
 
@@ -11,8 +10,7 @@ export const reducer = (state = initialState.contactUsList, action) => {
         case SET_CONTACTUS_PENDING:
             return {
                 ...state,
-                isPending: true,
-                data: action.payload
+                isPending: action.payload,
             }
         case GET_CONTACTUS_SUCCESS:
             return {
@@ -22,11 +20,6 @@ export const reducer = (state = initialState.contactUsList, action) => {
             }
         case RESET_CONTACTUS:
             return initialState.contactUsList;
-        case UPDATE_CONTACTUS_FILTERS:
-            return {
-                ...state,
-                filter: action.payload,
-            };
         default:
             return state;
     }

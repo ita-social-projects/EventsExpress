@@ -12,12 +12,12 @@ class EventFilterWrapper extends Component {
     }
 
     onReset = () => {
-        this.props.reset_filters();
+        this.props.resetFilters();
         this.props.history.push(this.props.history.location.pathname + "?page=1")
     }
 
     onLoadUserDefaults = () => {
-        this.props.reset_filters();
+        this.props.resetFilters();
         const defaultFilter = {
             ...filterHelper.getDefaultEventFilter(),
             categories: this.props.current_user.categories.map(item => item.id),
@@ -108,7 +108,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         get_categories: () => dispatch(get_categories()),
-        reset_filters: () => dispatch(reset('event-filter-form')),
+        resetFilters: () => dispatch(reset('event-filter-form')),
     }
 };
 

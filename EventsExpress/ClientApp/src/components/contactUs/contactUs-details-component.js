@@ -7,7 +7,7 @@ const history = createBrowserHistory({ forceRefresh: true });
 export default class ContactUsDetails extends Component {
 
     handleClose = () => {
-        history.push(`/issues`);
+        history.push(`/contactUs/issues`);
     }
 
     render() {
@@ -18,7 +18,7 @@ export default class ContactUsDetails extends Component {
                 <div>
                     <h1 className="text-center my-5">{'Issue description'}</h1>
                     {items.description}
-                    <div className = "text-center">
+                    <div className="text-center">
                         <div className="btn-group mt-5">
                             <button
                                 type="button"

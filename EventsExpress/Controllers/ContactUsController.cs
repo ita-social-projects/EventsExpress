@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.Enums;
-using EventsExpress.Filters;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -79,7 +77,7 @@ namespace EventsExpress.Controllers
         public IActionResult All([FromQuery] ContactAdminFilterViewModel filter, Guid id)
         {
             filter.PageSize = 8;
-            filter.Page = 1;
+
             try
             {
                 var viewModel = new IndexViewModel<ContactUsViewModel>

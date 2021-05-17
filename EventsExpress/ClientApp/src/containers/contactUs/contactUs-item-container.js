@@ -7,9 +7,9 @@ export default class ContactUsItemWrapper extends Component {
     render() {
 
         return <tr>
-             <ContactUsItem
-                    item={this.props.item}
-                />
+            <ContactUsItem
+                item={this.props.item}
+            />
         </tr>
     };
 }

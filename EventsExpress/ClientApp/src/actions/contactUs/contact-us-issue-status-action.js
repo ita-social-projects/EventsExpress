@@ -9,7 +9,7 @@ const api_serv = new ContactUsService();
 export default function change_issue_status(messageId, issueStatus) {
     return async dispatch => {
         dispatch(setContactUsPending(true));
-        let response = await api_serv.setIssueStatus({ MessageId: messageId, Status: issueStatus});
+        let response = await api_serv.setIssueStatus({ MessageId: messageId, Status: issueStatus });
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -23,7 +23,7 @@ export default function change_issue_status(messageId, issueStatus) {
 function changeIssueStatus(id, issueStatus) {
     return {
         type: CHANGE_STATUS,
-        payload: { messageId: id, issueStatus: issueStatus}
+        payload: { messageId: id, issueStatus: issueStatus }
     }
 }
 

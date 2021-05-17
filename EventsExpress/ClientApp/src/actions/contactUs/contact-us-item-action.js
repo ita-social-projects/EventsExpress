@@ -17,6 +17,7 @@ export default function get_message_by_id(id) {
         }
         let jsonRes = await response.json();
         dispatch(getMessageById(jsonRes));
+        dispatch(setContactUsPending(true));
         return Promise.resolve();
     }
 }

@@ -1,35 +1,79 @@
 ﻿import React, { Component } from 'react';
+import { withRouter } from "react-router";
+import { getFormValues } from 'redux-form';
+import { connect } from 'react-redux';
+import { parse as queryStringParse } from 'query-string';
 import ContactUsList from '../../components/contactUs/contactUs-list-component';
-import PagePagination from '../../components/shared/pagePagination';
+import Spinner from '../../components/spinner';
+import getIssues from '../../actions/contactUs/contact-us-list-action';
+import filterHelper from '../../components/helpers/filterHelper';
 
 
-export default class ContactUsListWrapper extends Component {
-    constructor() {
-        super();
-        this.state = {
-            currentPage: 1
-        };
+class ContactUsListWrapper extends Component {
+    constructor(props) {
+        super(props);
+        this.objCurrentQueryParams = Object.create(null);
+        this.prevQueryStringSearch = "";
     }
 
-    handlePageChange = (page) => {
-        this.props.callback(page);
-        this.setState({
-            currentPage: page
-        });
-    };
+    componentDidMount() {
+        this.setSearchParamsToContactUsFilter(this.props.history.location.search);
+        const queryString = filterHelper.getQueryStringByFilter(this.objCurrentQueryParams);
+        this.props.getIssues(queryString);
+    }
+
+    componentDidUpdate() {
+        if (this.props.history.location.search != this.prevQueryStringSearch) {
+            this.prevQueryStringSearch = this.props.history.location.search;
+            this.props.getIssues(this.props.history.location.search);
+        }
+    }
+
+    setSearchParamsToContactUsFilter = search => {
+        var filterCopy = { ...this.props.contactUsList.filter };
+        this.objCurrentQueryParams = queryStringParse(search);
+
+        Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
+            filterCopy[key] = value;
+        }.bind(this));
+        this.objCurrentQueryParams = filterHelper.trimUndefinedKeys(filterCopy);
+    }
+
     render() {
-        const { data } = this.props;
-        const { page, totalPages } = this.props;
-        return <>
-            <ContactUsList data_list={data} />
-            {totalPages > 1 &&
-                <PagePagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    callback={this.handlePageChange}
-                />
-            }
-        </>
+        const { data, isPending } = this.props.contactUsList;
+        const { items } = this.props.contactUsList.data;
+        return <div>
+            <table className="table w-100 m-auto">
+                <tbody>
+                    {!isPending
+                        ? <ContactUsList
+                            data_list={items}
+                            filter={this.props.contactUsList.filter}
+                            page={data.pageViewModel.pageNumber}
+                            totalPages={data.pageViewModel.totalPages}
+                        />
+                        : null}
+                </tbody>
+            </table>
+            {isPending ? <Spinner /> : null}
+        </div>
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        contactUsList: state.contactUsList,
+        form_values: getFormValues('contactUs-filter-form')(state),
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getIssues: (filter) => dispatch(getIssues(filter)),
+    }
+};
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ContactUsListWrapper));

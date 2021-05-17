@@ -198,17 +198,19 @@ const initialState = {
     },
     contactUs: {
         isPending: false,
-        isSuccess: false,
         data: []
     },
     contactUsList: {
-        isPending: false,
-        isSuccess: false,
+        isPending: true,
         data: {
             items: [],
             pageViewModel: {},
         },
         filter: filterHelper.getDefaultContactUsFilter(),
+    },
+    contactUsItem: {
+        isPending: false,
+        data: []
     },
     notification:
     {

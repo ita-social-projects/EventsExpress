@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
@@ -9,10 +10,12 @@ namespace EventsExpress.Core.DTOs
 
         public int PageSize { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime DateFrom { get; set; }
+
+        public DateTime DateTo { get; set; }
 
         public SortBy SortBy { get; set; }
 
-        public ContactAdminStatus Status { get; set; }
+        public List<ContactAdminStatus> Status { get; set; }
     }
 }

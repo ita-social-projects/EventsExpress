@@ -10,7 +10,6 @@ using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -57,17 +56,19 @@ namespace EventsExpress.Core.Services
         public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count)
         {
             var contactAdminMessages = Context.ContactAdmin
-                .Where(x => x.MessageId == id)
-                .AsNoTracking()
+                .Where(x => x.MessageId == id && x.SenderId == null)
                 .AsQueryable();
 
-            contactAdminMessages = (model.DateCreated != null)
-                ? contactAdminMessages.Where(x => x.Status == model.Status)
-                .OrderBy(h => h.DateCreated)
+            contactAdminMessages = (model.Status != null)
+                ? contactAdminMessages.Where(x => model.Status.Contains(x.Status))
                 : contactAdminMessages;
 
-            contactAdminMessages = (model.DateCreated != DateTime.MinValue)
-                ? contactAdminMessages.Where(x => x.DateCreated == model.DateCreated)
+            contactAdminMessages = (model.DateFrom != DateTime.MinValue)
+                ? contactAdminMessages.Where(x => x.DateCreated >= model.DateFrom)
+                : contactAdminMessages;
+
+            contactAdminMessages = (model.DateTo != DateTime.MinValue)
+                ? contactAdminMessages.Where(x => x.DateCreated <= model.DateTo)
                 : contactAdminMessages;
 
             count = contactAdminMessages.Count();

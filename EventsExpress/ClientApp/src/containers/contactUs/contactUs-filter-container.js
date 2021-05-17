@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import ContactUsFilter from '../../components/contactUs/contactUs-filter-status-component';
+import ContactUsFilter from '../../components/contactUs/contactUs-filter-component';
 import filterHelper from '../../components/helpers/filterHelper';
 import { withRouter } from "react-router";
 
 class ContactUsFilterWrapper extends Component {
 
     onReset = () => {
-        this.props.reset_filters();
+        this.props.resetFilters();
         this.props.history.push(this.props.history.location.pathname + "?page=1")
     }
 
@@ -19,7 +19,10 @@ class ContactUsFilterWrapper extends Component {
             switch (key) {
                 case 'page':
                     filterCopy[key] = value;
-                case 'dateCreated':
+                case 'dateFrom':
+                    filterCopy[key] = new Date(value).toDateString();
+                    break;
+                case 'dateTo':
                     filterCopy[key] = new Date(value).toDateString();
                     break;
                 case 'status':
@@ -32,10 +35,7 @@ class ContactUsFilterWrapper extends Component {
         }.bind(this));
         const queryString = filterHelper.getQueryStringByFilter(filterCopy);
 
-        if (filterCopy.x !== undefined && filterCopy.y !== undefined)
-            this.props.history.push(this.props.history.location.pathname + queryString);
-        else
-            this.props.history.push(this.props.history.location.pathname)
+        this.props.history.push(this.props.history.location.pathname + queryString);
     }
 
     buildInitialFormValues = () => {
@@ -66,7 +66,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        reset_filters: () => dispatch(reset('contactUs-filter-form')),
+        resetFilters: () => dispatch(reset('contactUs-filter-form')),
     }
 };
 
