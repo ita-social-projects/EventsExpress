@@ -468,6 +468,21 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void GetCurrentUser_OK()
+        {
+            mockUserService.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(existingUserDTO);
+            var res = service.GetCurrentUser();
+            Assert.That(res, Is.EqualTo(existingUserDTO));
+        }
+
+        [Test]
+        public void GetCurrentUser_Throws()
+        {
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
+            Assert.Throws<EventsExpressException>(() => service.GetCurrentUser());
+        }
+
+        [Test]
         public void GetCurrentUserId_OK()
         {
             mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(idUser);
