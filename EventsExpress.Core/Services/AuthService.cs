@@ -137,7 +137,7 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
-            var userDto = GetCurrentUser(); // Change it to GetAccountId
+            var userDto = GetCurrentUser();
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {

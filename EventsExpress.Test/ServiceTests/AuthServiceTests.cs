@@ -38,6 +38,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
+        private Guid idAccount = Guid.NewGuid();
 
         private UserDto existingUserDTO;
         private User existingUser;
@@ -457,29 +458,49 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GetCurrentUserId_OK()
         {
-            UserDto userDto = new UserDto
-            {
-                Id = idUser,
-            };
-
-            var claim = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userDto.Id.ToString()),
-            };
-
-            ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            string[] roles = { "user" };
-            GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
-            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(userDto.Id);
+            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(idUser);
             var res = service.GetCurrentUserId();
-            Assert.That(res, Is.EqualTo(userDto.Id));
+            Assert.That(res, Is.EqualTo(idUser));
+        }
+
+        [Test]
+        public void GetCurrentAccountId_OK()
+        {
+            var res = service.GetCurrentAccountId();
+            Assert.That(res, Is.EqualTo(idAccount));
+        }
+
+        [Test]
+        public void GetCurrentUserId_Throws()
+        {
+            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Throws<EventsExpressException>();
+            Assert.Throws<EventsExpressException>(() => service.GetCurrentUserId());
+        }
+
+        [Test]
+        public void GetCurrentAccountId_Throws()
+        {
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
+            Assert.Throws<EventsExpressException>(() => service.GetCurrentAccountId());
         }
 
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, $"{Guid.NewGuid()}"),
+                new Claim(ClaimTypes.Name, $"{idUser}"),
+                new Claim(ClaimTypes.Sid, $"{idAccount}"),
+            };
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            return new ClaimsPrincipal(identity);
+        }
+
+        private ClaimsPrincipal GetNullClaimsPrincipal()
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, $"{null}"),
+                new Claim(ClaimTypes.Sid, $"{null}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);
