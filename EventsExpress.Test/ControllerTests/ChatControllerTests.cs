@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Controllers;
 using EventsExpress.Core.IServices;
@@ -22,18 +23,11 @@ namespace EventsExpress.Test.ControllerTests
             Birthday = new DateTime(2001, 01, 01),
         };
 
-        private ChatController chatController;
-        private Mock<IMapper> mockMapper;
-        private Mock<IMessageService> mockMessageService;
-        private Mock<IAuthService> mockAuthService;
-
-        private IEnumerable<ChatRoom> userChats = new List<ChatRoom>()
+        private static ChatRoom chat = new ChatRoom
         {
-            new ChatRoom
-            {
-                Id = chatId,
-                Title = "title",
-                Users = new List<UserChat>
+            Id = chatId,
+            Title = "title",
+            Users = new List<UserChat>
                 {
                     new UserChat
                     {
@@ -43,7 +37,7 @@ namespace EventsExpress.Test.ControllerTests
                         ChatId = chatId,
                     },
                 },
-                Messages = new List<Message>
+            Messages = new List<Message>
                 {
                     new Message
                     {
@@ -55,7 +49,16 @@ namespace EventsExpress.Test.ControllerTests
                         Sender = user,
                     },
                 },
-            },
+        };
+
+        private ChatController chatController;
+        private Mock<IMapper> mockMapper;
+        private Mock<IMessageService> mockMessageService;
+        private Mock<IAuthService> mockAuthService;
+
+        private IEnumerable<ChatRoom> userChats = new List<ChatRoom>()
+        {
+            chat,
         };
 
         [SetUp]
@@ -81,6 +84,30 @@ namespace EventsExpress.Test.ControllerTests
             var res = chatController.All();
 
             Assert.IsInstanceOf<OkObjectResult>(res);
+        }
+
+        [Test]
+        public void GetChat_ReturnsOk()
+        {
+            mockAuthService.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockMessageService.Setup(x => x.GetChat(chatId, userId)).Returns(Task.FromResult(chat));
+
+            var res = chatController.GetChat(chatId);
+            var okRes = res.Result as OkObjectResult;
+
+            Assert.IsInstanceOf<OkObjectResult>(okRes);
+        }
+
+        [Test]
+        public void GetChat_ReturnsBadRequest()
+        {
+            mockAuthService.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockMessageService.Setup(x => x.GetChat(chatId, userId)).Returns(Task.FromResult((ChatRoom)null));
+
+            var res = chatController.GetChat(chatId);
+            var badRes = res.Result as BadRequestResult;
+
+            Assert.IsInstanceOf<BadRequestResult>(badRes);
         }
     }
 }
