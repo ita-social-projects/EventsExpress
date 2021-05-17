@@ -22,7 +22,7 @@ const EditUsername = props => {
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
-                    name="UserName"
+                    name="userName"
                     component={renderTextField}
                     label="UserName"
                 />
@@ -42,5 +42,6 @@ const EditUsername = props => {
 };
 
 export default reduxForm({
-    form: 'EditUsername', // a unique identifier for this form   
+    form: 'EditUsername',
+    
 })(EditUsername);

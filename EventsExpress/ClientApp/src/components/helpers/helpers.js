@@ -1,17 +1,16 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Multiselect from 'react-widgets/lib/Multiselect';
-import DatePicker from 'react-datepicker';
 import 'react-widgets/dist/css/react-widgets.css';
 import "react-datepicker/dist/react-datepicker.css";
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import { renderFieldError } from './form-helpers';
 import moment from "moment";
 import './helpers.css'
 
@@ -31,7 +30,7 @@ export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) 
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
         </RadioGroup>
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </FormControl>
 )
 
@@ -178,42 +177,17 @@ export const validateEventForm = values => {
     return values;
 }
 
+export const getAge = birthday => {
+    let today = new Date();
+    var date = moment(today);
+    var birthDate = moment(birthday);
+    let age = date.diff(birthDate, 'years');
 
-export const renderMyDatePicker = ({ input: { onChange, value }, defaultValue, minValue, maxValue }) => {
-    value = value || defaultValue || new Date(2000, 1, 1, 12, 0, 0);
-    minValue = new Date().getFullYear() - 115;
-    maxValue = new Date().getFullYear() - 15;
-
-    return <DatePicker
-        onChange={onChange}
-        selected={new Date(value) || new Date()}
-        minDate={new Date(minValue, 1, 1, 0, 0, 0)}
-        maxDate={new Date(maxValue, 12, 31, 23, 59, 59)}
-        peekNextMonth
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-    />
-}
-
-export const renderDatePicker = ({ input: { onChange, value }, minValue, label }) => {
-
-    if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
-            onChange(moment(minValue).format('L'))
-        }
+    if (age >= 100) {
+        age = "---";
     }
 
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        onChange={onChange}
-        inputProps={{
-            min: moment(minValue).format('YYYY-MM-DD')
-        }}
-    />
+    return age;
 }
 
 export const maxLength = max => value =>
@@ -256,7 +230,7 @@ export const renderSelectPeriodicityField = ({
             <option value=""></option>
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </FormControl>
 
 
@@ -271,7 +245,7 @@ export const renderMultiselect = ({ input, data, valueField, textField, placehol
             textField={textField}
             placeholder={placeholder}
         />
-        {renderErrorsFromHelper({ touched, error })}
+        {renderFieldError({ touched, error })}
     </>
 
 export const renderTextArea = ({
@@ -343,17 +317,9 @@ export const renderSelectField = ({
             >
                 {children}
             </Select>
-            {renderErrorsFromHelper({ touched, error })}
+            {renderFieldError({ touched, error })}
         </FormControl>
     )
-
-const renderErrorsFromHelper = ({ touched, error }) => {
-    if (!(touched && error)) {
-        return;
-    } else {
-        return <FormHelperText style={{ color: "#f44336" }}>{touched && error}</FormHelperText>;
-    }
-}
 
 export const renderCheckbox = ({ input, label }) => (
     <div>
@@ -384,6 +350,7 @@ export const renderErrorMessage = (responseData, key) => {
     }
 }
 
+// deprecated
 export const buildValidationState = (responseData) => {
     let response;
     response = JSON.parse(responseData)["errors"];

@@ -19,10 +19,22 @@ Criteria to be fulfilled before realize:
 Describe feature functionality Add mockup if needed
 
 **Acceptance criteria**
-Notes about what the story must do in order for the product owner to accept it as complete
-Given <...>
-When <...>
-Then <...>
+Notes about what the story must do in order for the product owner to accept it as complete  
+
+Given <...>  
+
+When <...>  
+
+Then <...>  
+
+
+or 
+1. Criteria 1
+2. Criteria 2
+3. Criteria 3
+4. ...
+
+
 
 **Additional context**
 If applicable, add mockups to help explain your story.

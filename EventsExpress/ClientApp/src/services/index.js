@@ -9,6 +9,8 @@ import InventoryService from './InventoryService'
 import RoleService from './RoleService'
 import UserService from './UserService'
 import NotificationTypeService from './NotificationTypeService'
+import AccountService from './AccountService';
+import NotificationTemplateService from "./NotificationTemplateService";
 
 export {
     AuthenticationService,
@@ -20,6 +22,9 @@ export {
     InventoryService,
     RoleService,
     UserService,
+    NotificationTypeService,
+    AccountService,
+    NotificationTemplateService
     NotificationTypeService,
     ContactUsService
 };

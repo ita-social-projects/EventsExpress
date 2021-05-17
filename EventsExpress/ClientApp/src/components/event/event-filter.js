@@ -3,9 +3,9 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import {
     renderTextField,
-    renderDatePicker,
     renderMultiselect
 } from '../helpers/helpers';
+import { renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
@@ -87,7 +87,7 @@ class EventFilter extends Component {
                                 />
                             </div>
                             <div className="form-group">
-                                {current_user.role === "Admin" &&
+                                {current_user.roles.includes("Admin") &&
                                     <Field name="statuses"
                                         component={EventFilterStatus}
                                         options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}

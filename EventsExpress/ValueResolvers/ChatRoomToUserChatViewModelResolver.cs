@@ -12,13 +12,6 @@ namespace EventsExpress.ValueResolvers
 {
     public class ChatRoomToUserChatViewModelResolver : IValueResolver<ChatRoom, UserChatViewModel, IEnumerable<UserPreviewViewModel>>
     {
-        private readonly IPhotoService photoService;
-
-        public ChatRoomToUserChatViewModelResolver(IPhotoService photoService)
-        {
-            this.photoService = photoService;
-        }
-
         public IEnumerable<UserPreviewViewModel> Resolve(ChatRoom source, UserChatViewModel destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();
@@ -30,7 +23,6 @@ namespace EventsExpress.ValueResolvers
                     Id = u.UserId,
                     Birthday = u.User.Birthday,
                     Username = u.User.Name ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
-                    PhotoUrl = photoService.GetPhotoFromAzureBlob($"users/{u.UserId}/photo.png").Result,
                 });
             }
 

@@ -20,7 +20,7 @@ export default function edit_Gender(data) {
         }
         dispatch(setEditGenderSuccess(true));
         dispatch(updateGender(data));
-        dispatch(setSuccessAllert('Set gender successed'));
+        dispatch(setSuccessAllert('Gender is successfully set'));
         return Promise.resolve();
     }
 }

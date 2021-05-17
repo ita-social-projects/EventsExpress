@@ -19,7 +19,7 @@ export default class HeaderProfile extends Component {
     }
 
     render() {
-        const { id, name, photoUrl, rating, role } = this.props.user;
+        const { id, name, rating } = this.props.user;
         const { onClick } = this.props;
 
         return (
@@ -30,18 +30,18 @@ export default class HeaderProfile extends Component {
                     )}
                     <AuthComponent>
                         <div className="d-flex flex-column align-items-center">
-                            <CustomAvatar size="big" photoUrl={photoUrl} name={this.props.user.name} />
+                            <CustomAvatar size="big" userId={id} name={this.props.user.name} />
                             <h4 className="user-name">{name}</h4>
                             <RatingAverage value={rating} direction='row' />
                             <div>
-                                <Link to={'/profile'}>
+                                <Link to={'/editProfile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
                                             <i className="fa fa-cog" aria-hidden="true"></i>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                <AuthComponent roleMatch={Roles.User}>
+                                <AuthComponent rolesMatch={[Roles.User]}>
                                     <Link to={'/notification_events'}>
                                         <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                             <IconButton>
@@ -65,7 +65,7 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
                                 </Link>
                             </div>
-                            <AuthComponent roleMatch={Roles.User}>
+                            <AuthComponent rolesMatch={[Roles.User]}>
                                 <button className="btn btn-outline-secondary" onClick={this.handleClick}>
                                     <i className="fas fa-plus mr-1"></i>
                                         add event

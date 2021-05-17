@@ -23,8 +23,6 @@ namespace EventsExpress.ViewModels
 
         public byte Attitude { get; set; }
 
-        public string UserPhoto { get; set; }
-
         public double Rating { get; set; }
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }

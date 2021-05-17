@@ -7,6 +7,7 @@ using System.Text;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -349,7 +350,8 @@ namespace EventsExpress.Test.ServiceTests
                 });
         }
 
-        [TestCaseSource(typeof(GetEventExistingId))]
+        [Test]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForGetEvent))]
         [Category("Get Event")]
         public void GetEvent_ExistingId_Success(Guid existingId)
         {
@@ -427,7 +429,8 @@ namespace EventsExpress.Test.ServiceTests
             Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
         }
 
-        [TestCaseSource(typeof(GetEventExistingId))]
+        [Test]
+        [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForAddUserToEvent))]
         [Category("Add user to event")]
         public void AddUserToEvent_ReturnTrue(Guid id)
         {
@@ -559,6 +562,7 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
+            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
         }
 
         [Test]

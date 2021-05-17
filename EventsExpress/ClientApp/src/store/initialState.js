@@ -3,11 +3,11 @@
 import filterHelper from '../components/helpers/filterHelper';
 
 const initialState = {
+    account:{
+        linkedAuths:[],
+    },
     modalWind: {
         isOpen: false
-    },
-    resetError: {
-        isError: false,
     },
     user: {
         id: null,
@@ -16,7 +16,7 @@ const initialState = {
         phone: null,
         birthday: null,
         gender: null,
-        role: null,
+        roles: [],
         photoUrl: null,
         token: null,
         categories: [],
@@ -24,7 +24,6 @@ const initialState = {
     },
     roles: {
         isPending: false,
-        isError: false,
         data: []
     },
     login: {
@@ -33,7 +32,6 @@ const initialState = {
     register: {
         isRegisterPending: false,
         isRegisterSuccess: false,
-        registerError: null
     },
     unitsOfMeasuring: {
         isPending: true,
@@ -221,7 +219,16 @@ const initialState = {
     notificationTypes: {
         isPending: false,
         data: []
-    }
+    },
+    notificationTemplates: {
+        data: []
+    },
+    notificationTemplate: {
+        id: null,
+        title: null,
+        subject: null,
+        message: null  
+    },
 };
 
 export default initialState;

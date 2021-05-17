@@ -40,6 +40,7 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
+                            <AuthComponent rolesMatch={[Roles.User]}>
                             <AuthComponent roleMatch={Roles.Admin} allowAnonymous={false}>
                                 <NavItem
                                     to={'/user_chats'}
@@ -83,6 +84,13 @@ class LeftSidebar extends Component {
                                     text={"Recurrent Events"}
                                 />
                                 <NavItem
+                                    to={'/contactUs'}
+                                    icon={'fa fa-exclamation-circle'}
+                                    text={'Contact us'}
+                                />
+                            </AuthComponent>
+                            <AuthComponent>
+                                <NavItem
                                     to={'/user_chats'}
                                     my_icon={
                                         <Badge badgeContent={this.props.msg_for_read().length} color="primary">
@@ -91,10 +99,12 @@ class LeftSidebar extends Component {
                                     }
                                     text={"Comuna"}
                                 />
+                            </AuthComponent>
+                            <AuthComponent rolesMatch={[Roles.Admin]}>
                                 <NavItem
-                                    to={'/contactUs'}
-                                    icon={'fa fa-exclamation-circle'}
-                                    text={'Contact us'}
+                                    to={'/admin/'}
+                                    icon={'fa fa-user-secret'}
+                                    text={"Admin"}
                                 />
                             </AuthComponent>
                             <AuthComponent onlyAnonymous>

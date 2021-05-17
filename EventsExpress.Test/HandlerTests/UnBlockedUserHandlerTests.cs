@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -15,12 +16,13 @@ namespace EventsExpress.Test.HandlerTests
     {
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<INotificationTemplateService> _notificationTemplateService;
         private UnblockedUserHandler _unBlockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
         private string _emailUser = "user@gmail.com";
-        private User _user;
+        private Account _account;
         private UserDto _userDto;
-        private UnblockedUserMessage _unBlockedUserMessage;
+        private UnblockedAccountMessage _unBlockedUserMessage;
         private NotificationChange _notificationChange = NotificationChange.Profile;
         private Guid[] _usersIds;
 
@@ -29,18 +31,26 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _unBlockedUserHandler = new UnblockedUserHandler(_emailService.Object, _userService.Object);
-            _user = new User
+            _notificationTemplateService = new Mock<INotificationTemplateService>();
+
+            _notificationTemplateService
+                .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
+                .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
+
+            _notificationTemplateService
+                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
+                .Returns(string.Empty);
+            _unBlockedUserHandler = new UnblockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+            _account = new Account
             {
-                Id = _idUser,
-                Email = _emailUser,
+                UserId = _idUser,
             };
             _userDto = new UserDto
             {
                 Id = _idUser,
                 Email = _emailUser,
             };
-            _unBlockedUserMessage = new UnblockedUserMessage(_user);
+            _unBlockedUserMessage = new UnblockedAccountMessage(_account);
             _usersIds = new Guid[] { _idUser };
             _userService.Setup(u => u.GetUsersByNotificationTypes(_notificationChange, _usersIds)).Returns(new UserDto[] { _userDto });
         }

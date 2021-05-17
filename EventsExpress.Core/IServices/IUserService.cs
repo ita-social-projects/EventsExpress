@@ -14,27 +14,13 @@ namespace EventsExpress.Core.IServices
 
         Task Update(UserDto userDto);
 
-        Task ChangeRole(Guid userId, Guid roleId);
-
         Task ChangeAvatar(Guid userId, IFormFile avatar);
-
-        Task ConfirmEmail(CacheDto cacheDto);
-
-        Task PasswordRecover(UserDto userDto);
 
         Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories);
 
         Task SetAttitude(AttitudeDto attitude);
 
-        Task Block(Guid userId);
-
-        Task Unblock(Guid userId);
-
         UserDto GetById(Guid userId);
-
-        UserDto GetByEmail(string email);
-
-        UserDto GetUserByRefreshToken(string token);
 
         ProfileDto GetProfileById(Guid userId, Guid fromId);
 

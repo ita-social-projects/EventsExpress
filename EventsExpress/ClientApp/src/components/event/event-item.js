@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import Moment from 'react-moment';
+﻿import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
-import { Button, Menu, MenuItem } from '@material-ui/core'
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,20 +13,39 @@ import Badge from '@material-ui/core/Badge';
 
 import SocialShareMenu from './share/SocialShareMenu';
 import EventActiveStatus from './event-active-status';
-import CustomAvatar from '../avatar/custom-avatar';
 import DisplayLocation from './map/display-location';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import { useStyle } from '../event/CardStyle'
+import { useStyle } from '../event/CardStyle';
+import AuthComponent from "../../security/authComponent";
+import EventHeader from './event-item-header';
+import { Roles } from '../../constants/userRoles';
+import PhotoService from '../../services/PhotoService';
+import { eventDefaultImage } from '../../constants/eventDefaultImage';
 
 const useStyles = useStyle;
+const photoService = new PhotoService();
 
 export default class EventCard extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            anchorEl: null
+            eventImage: eventDefaultImage
         }
+    }
+
+    componentDidMount() {
+        photoService.getPreviewEventPhoto(this.props.item.id).then(
+            eventPreviewImage => {
+                if (eventPreviewImage != null) {
+                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                }
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        URL.revokeObjectURL(this.state.eventImage);
     }
 
     renderCategories = (arr) => {
@@ -37,13 +53,6 @@ export default class EventCard extends Component {
         );
     }
 
-    handleClick = (event) => {
-        this.setState({ anchorEl: event.currentTarget });
-    }
-
-    handleClose = () => {
-        this.setState({ anchorEl: null });
-    }
 
     render() {
         const classes = useStyles;
@@ -55,33 +64,13 @@ export default class EventCard extends Component {
             isPublic,
             maxParticipants,
             eventStatus,
-            photoUrl,
             categories,
             countVisitor,
-            owners
+            owners,
+            members,
         } = this.props.item;
         const INT32_MAX_VALUE = null;
-        const { anchorEl } = this.state;
 
-        const PrintMenuItems = owners.map(x => (
-            <MenuItem onClick={this.handleClose}>
-                <div className="d-flex align-items-center border-bottom">
-                    <div className="flex-grow-1">
-                        <Link to={'/user/' + x.id} className="btn-custom">
-                            <div className="d-flex align-items-center border-bottom">
-                                <CustomAvatar
-                                    photoUrl={x.photoUrl}
-                                    name={x.username}
-                                />
-                                <div>
-                                    <h5 className="pl-2">{x.username}</h5>
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-            </MenuItem>
-        ))
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -91,69 +80,33 @@ export default class EventCard extends Component {
                         backgroundColor: (eventStatus === eventStatusEnum.Blocked) ? "gold" : "",
                         opacity: (eventStatus === eventStatusEnum.Canceled) ? 0.5 : 1
 
-                    }}
-                >
-                    <Menu
-                        id="simple-menu"
-                        anchorEl={anchorEl}
-                        keepMounted
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horisontal: "left"
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={this.handleClose}
-                    >
-
-                        {
-                            PrintMenuItems
-                        }
-                    </Menu>
-                    <CardHeader
-                        avatar={
-                            <Button title={owners[0].username} className="btn-custom" onClick={this.handleClick}>
-                                <Badge overlap="circle" badgeContent={owners.length} color="primary">
-                                    <CustomAvatar
-                                        className={classes.avatar}
-                                        photoUrl={owners[0].photoUrl}
-                                        name={owners[0].username}
-                                    />
-                                </Badge>
-                            </Button>
-
-                        }
-
-                        action={
-                            <Tooltip title="Visitors">
-                                <IconButton>
-                                    <Badge badgeContent={countVisitor} color="primary">
-                                        <i className="fa fa-users"></i>
-                                    </Badge>
-                                </IconButton>
-                            </Tooltip>
-                        }
+                    }}>
+                    <EventHeader
+                        members={members}
+                        countVisitor={countVisitor}
+                        owners={owners}
+                        dateFrom={dateFrom}
                         title={title}
-                        subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
-                        classes={{ title: 'title' }}
                     />
                     <CardMedia
                         className={classes.media}
-                        title={title}
-                    >
-                        <Link to={`/event/${id}/1`}>
-                            <img src={photoUrl} className="w-100" alt="Event" />
+                        title={title}>
+                        <Link to={`/event/${id}/1`} id="LinkToEvent">
+                            <img src={this.state.eventImage}
+                                 id={"eventPreviewPhotoImg" + id} alt="Event"
+                                 className="w-100"/>
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
-                        <CardContent>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                            >
-                                {countVisitor}/{maxParticipants} Participants
-                            </Typography>
-                        </CardContent>
+                    <CardContent>
+                        <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                        >
+                            {countVisitor}/{maxParticipants} Participants
+                        </Typography>
+                    </CardContent>
                     }
                     <CardContent>
                         {description &&
@@ -162,14 +115,14 @@ export default class EventCard extends Component {
                                     {description.substr(0, 128)}
                                 </Typography>
                             </Tooltip>
-                        } 
+                        }
                     </CardContent>
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.props.item.location &&
-                                <DisplayLocation
-                                    location={this.props.item.location}
-                                />
+                            <DisplayLocation
+                                location={this.props.item.location}
+                            />
                             }
                             <br />
                             <div className="float-left">
@@ -177,13 +130,13 @@ export default class EventCard extends Component {
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
-                                    <Tooltip title="Private event">
-                                        <IconButton>
-                                            <Badge color="primary">
-                                                <i className="fa fa-key"></i>
-                                            </Badge>
-                                        </IconButton>
-                                    </Tooltip>
+                                <Tooltip title="Private event">
+                                    <IconButton>
+                                        <Badge color="primary">
+                                            <i className="fa fa-key"></i>
+                                        </Badge>
+                                    </IconButton>
+                                </Tooltip>
                                 }
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">
@@ -192,15 +145,14 @@ export default class EventCard extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                {(this.props.current_user !== null
-                                    && this.props.current_user.role === "Admin")
-                                    && <EventActiveStatus
-                                    key={this.props.item.id + this.props.item.eventStatus}
-                                    eventStatus={this.props.item.eventStatus}
-                                    eventId={this.props.item.id}
-                                    onBlock = {this.props.onBlock}
-                                    onUnBlock = {this.props.onUnBlock}/>
-                                }                        
+                                <AuthComponent rolesMatch={[Roles.Admin]}>
+                                    <EventActiveStatus
+                                        key={this.props.item.id + this.props.item.eventStatus}
+                                        eventStatus={this.props.item.eventStatus}
+                                        eventId={this.props.item.id}
+                                        onBlock = {this.props.onBlock}
+                                        onUnBlock = {this.props.onUnBlock}/>
+                                </AuthComponent>
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
                         </div>

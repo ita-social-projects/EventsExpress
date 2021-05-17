@@ -37,5 +37,3 @@ function setContactUsSuccess(data) {
         payload: data
     };
 }
-
-
