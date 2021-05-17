@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
@@ -14,8 +13,8 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
-using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
+using EventsExpress.Hubs;
 using EventsExpress.Mapping;
 using EventsExpress.Policies;
 using EventsExpress.Validation;
@@ -268,6 +267,7 @@ namespace EventsExpress
             {
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatRoom>("/chatRoom");
+                endpoints.MapHub<UsersHub>("/usersHub");
             });
 
             app.UseSwagger();

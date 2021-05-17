@@ -155,7 +155,7 @@ namespace EventsExpress.Core.Services
                .Where(r => r.Name == role)
                .AsNoTracking()
                .FirstOrDefault()
-               .Accounts
+                ?.Accounts
                .Select(ar => ar.Account.User);
 
             return Mapper.Map<IEnumerable<UserDto>>(users);

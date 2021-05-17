@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
 using Microsoft.AspNetCore.SignalR;
 
-namespace EventsExpress.Core.ChatHub
+namespace EventsExpress.Hubs
 {
     public class ChatRoom : Hub
     {
