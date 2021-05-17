@@ -262,12 +262,16 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_InvalidUserClaims_Throws()
         {
-            var userDtoWithoutAuthLocal = new UserDto
+            var user = new User
             {
+                Id = idUser,
                 Account = new Account(),
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDtoWithoutAuthLocal);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
                 await service.ChangePasswordAsync(validPassword, "newPassword");
@@ -281,8 +285,9 @@ namespace EventsExpress.Test.ServiceTests
         {
             string salt = mockPasswordHasherService.Object.GenerateSalt();
 
-            UserDto userDto = new UserDto
+            User user = new User
             {
+                Id = idUser,
                 Account = new Account
                 {
                     AuthLocal = new AuthLocal
@@ -293,7 +298,10 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
                 await service.ChangePasswordAsync(invalidPassword, "newPassword");
@@ -305,8 +313,9 @@ namespace EventsExpress.Test.ServiceTests
         public void ChangePasswordAsync_ValidPassword_DoesNotThrows()
         {
             string salt = mockPasswordHasherService.Object.GenerateSalt();
-            UserDto userDto = new UserDto
+            User user = new User
             {
+                Id = idUser,
                 Account = new Account
                 {
                     AuthLocal = new AuthLocal
@@ -317,7 +326,10 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
                 await service.ChangePasswordAsync(validPassword, "newPassword");
