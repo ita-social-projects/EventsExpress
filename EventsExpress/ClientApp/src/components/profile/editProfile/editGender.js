@@ -15,9 +15,9 @@ let EditGender = props => {
                     label="Gender"
                 >
                     <option aria-label="None" value="" />
-                    <option value="0">Other</option>
                     <option value="1">Male</option>
                     <option value="2">Female</option>
+                    <option value="3">Other</option>
                 </Field>
                 {
                     props.error &&

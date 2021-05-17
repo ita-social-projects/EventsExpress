@@ -21,7 +21,7 @@ export default function change_avatar(data) {
         }
         dispatch(setAvatarSuccess(true));
         dispatch(updateAvatar(response));
-        dispatch(setSuccessAllert('Avatar is update'));
+        dispatch(setSuccessAllert('Avatar is successfully updated'));
         return Promise.resolve();
     }
 }
