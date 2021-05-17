@@ -15,36 +15,33 @@ namespace EventsExpress.ValueResolvers
 {
     public class EventDtoToOwnersResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
 
         public EventDtoToOwnersResolver(
             IAuthService authService,
-            IHttpContextAccessor httpContextAccessor,
             IUserService userService)
         {
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
         }
 
         public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModelBase destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
         {
             var res = new List<UserPreviewViewModel>();
-            UserDto currUser;
+            Guid? currentUserId;
             try
             {
-                currUser = _authService?.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+                currentUserId = _authService?.GetCurrentUserId();
             }
             catch (EventsExpressException)
             {
-                currUser = null;
+                currentUserId = null;
             }
 
             foreach (var o in source.Owners)
             {
-                var att = o.Relationships?.FirstOrDefault(r => r.UserFromId == currUser?.Id)?.Attitude ?? Attitude.None;
+                var att = o.Relationships?.FirstOrDefault(r => r.UserFromId == currentUserId)?.Attitude ?? Attitude.None;
 
                 res.Add(new UserPreviewViewModel
                 {
