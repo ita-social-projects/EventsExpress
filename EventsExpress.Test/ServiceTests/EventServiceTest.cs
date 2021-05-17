@@ -31,7 +31,6 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
         private static Mock<IAuthService> mockAuthService;
-        private static Mock<IHttpContextAccessor> httpContextAccessor;
         private static Mock<IValidator<Event>> mockValidationService;
 
         private EventService service;
@@ -133,11 +132,8 @@ namespace EventsExpress.Test.ServiceTests
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             mockValidationService = new Mock<IValidator<Event>>();
-            httpContextAccessor = new Mock<IHttpContextAccessor>();
-            httpContextAccessor.SetupGet(x => x.HttpContext)
-                .Returns(new Mock<HttpContext>().Object);
             mockAuthService = new Mock<IAuthService>();
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
+            mockAuthService.Setup(x => x.GetCurrentUser())
                 .Returns(new UserDto { Id = userId });
 
             service = new EventService(
@@ -147,7 +143,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockLocationService.Object,
                 mockAuthService.Object,
-                httpContextAccessor.Object,
                 mockEventScheduleService.Object,
                 mockValidationService.Object);
 
@@ -587,10 +582,8 @@ namespace EventsExpress.Test.ServiceTests
             int x = 1;
             MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            httpContextAccessor.SetupGet(x => x.HttpContext)
-                .Returns(new Mock<HttpContext>().Object);
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
-                .Returns(new UserDto { Id = userId });
+            mockAuthService.Setup(x => x.GetCurrentUserId())
+                .Returns(userId);
             var result = service.GetAllDraftEvents(1, 1, out x);
             Assert.AreEqual(1, result.Count());
         }
