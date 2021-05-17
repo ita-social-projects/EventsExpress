@@ -3,7 +3,6 @@ using AutoMapper;
 using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -37,15 +36,22 @@ namespace EventsExpress.Test.ControllerTests
         {
             int x = 1;
             _service.Setup(e => e.GetAllTracks(_filter, out x)).Returns(new List<TrackDto>());
+
             var expected = _tracksController.All(_filter);
+
             Assert.IsInstanceOf<OkObjectResult>(expected);
+            OkObjectResult okResult = expected as OkObjectResult;
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
         }
 
         [Test]
         public void GetEntityNames_OkResult()
         {
             _service.Setup(e => e.GetDistinctNames()).Returns(new List<EntityNamesDto>());
+
             var expected = _tracksController.GetEntityNames();
+
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
     }

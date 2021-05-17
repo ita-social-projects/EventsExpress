@@ -5,7 +5,6 @@ import Spinner from '../spinner';
 import getAllTracks, {getEntityNames} from '../../actions/tracks/track-list-action';
 import {getFormValues, reset} from 'redux-form';
 import {connect} from 'react-redux';
-import { withRouter } from "react-router";
 
 class Tracks extends Component {
 
@@ -91,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Tracks));
+export default connect(mapStateToProps, mapDispatchToProps)(Tracks);

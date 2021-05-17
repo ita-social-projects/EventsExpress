@@ -3,7 +3,7 @@ import {
     SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, GET_ENTITY_NAMES, RESET_TRACKS
 } from '../../actions/tracks/track-list-action';
 
-export const reducer = (state = initialState.tracks, action) => {
+export const reducer = (state = initialState.tracks, action ) => { 
     switch (action.type) {
         case SET_TRACKS_PENDING:
             return {

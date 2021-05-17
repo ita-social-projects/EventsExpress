@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
@@ -24,29 +23,18 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// This method have to return all tracks.
-        /// </summary>
-        /// <response code="200">Return IEnumerable ChangeInfo.</response>
         [HttpPost]
         public IActionResult All(TrackFilterViewModel filter)
         {
             filter.PageSize = 10;
 
-            try
+            var viewModel = new IndexViewModel<TrackDto>
             {
-                var viewModel = new IndexViewModel<TrackDto>
-                {
-                    Items = _mapper.Map<IEnumerable<TrackDto>>(
-                        _trackService.GetAllTracks(filter, out int count)),
-                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
-                };
-                return Ok(viewModel);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest();
-            }
+                Items = _mapper.Map<IEnumerable<TrackDto>>(
+                    _trackService.GetAllTracks(filter, out int count)),
+                PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
+            };
+            return Ok(viewModel);
         }
 
         [HttpGet]
