@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
@@ -24,21 +25,21 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
         private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
+        private readonly ISecurityContext _securityContextService;
 
         public AccountController(
             IMapper mapper,
-            IAuthService authSrv,
             IAccountService accountService,
-            IGoogleSignatureVerificator googleSignatureVerificator)
+            IGoogleSignatureVerificator googleSignatureVerificator,
+            ISecurityContext securityContextService)
         {
             _mapper = mapper;
-            _authService = authSrv;
             _accountService = accountService;
             _googleSignatureVerificator = googleSignatureVerificator;
+            _securityContextService = securityContextService;
         }
 
         /// <summary>
@@ -183,6 +184,6 @@ namespace EventsExpress.Controllers
 
         [NonAction]
         private Guid GetCurrentAccountId() =>
-            _authService.GetCurrentAccountId();
+            _securityContextService.GetCurrentAccountId();
     }
 }

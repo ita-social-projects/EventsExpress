@@ -475,42 +475,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(res, Is.EqualTo(existingUserDTO));
         }
 
-        [Test]
-        public void GetCurrentUser_Throws()
-        {
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
-            Assert.Throws<EventsExpressException>(() => service.GetCurrentUser());
-        }
-
-        [Test]
-        public void GetCurrentUserId_OK()
-        {
-            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(idUser);
-            var res = service.GetCurrentUserId();
-            Assert.That(res, Is.EqualTo(idUser));
-        }
-
-        [Test]
-        public void GetCurrentAccountId_OK()
-        {
-            var res = service.GetCurrentAccountId();
-            Assert.That(res, Is.EqualTo(idAccount));
-        }
-
-        [Test]
-        public void GetCurrentUserId_Throws()
-        {
-            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Throws<EventsExpressException>();
-            Assert.Throws<EventsExpressException>(() => service.GetCurrentUserId());
-        }
-
-        [Test]
-        public void GetCurrentAccountId_Throws()
-        {
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
-            Assert.Throws<EventsExpressException>(() => service.GetCurrentAccountId());
-        }
-
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]

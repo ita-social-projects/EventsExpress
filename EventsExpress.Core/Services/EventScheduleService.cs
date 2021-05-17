@@ -6,6 +6,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +16,12 @@ namespace EventsExpress.Core.Services
 {
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        private readonly IAuthService _authService;
+        private readonly ISecurityContext _securityContextService;
 
-        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService)
+        public EventScheduleService(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
             : base(context, mapper)
         {
-            _authService = authService;
+            _securityContextService = securityContextService;
         }
 
         public IEnumerable<EventScheduleDto> GetAll()
@@ -104,6 +105,6 @@ namespace EventsExpress.Core.Services
         }
 
         private Guid CurrentUserId() =>
-           _authService.GetCurrentUserId();
+           _securityContextService.GetCurrentUserId();
     }
 }

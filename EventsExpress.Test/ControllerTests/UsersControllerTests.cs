@@ -10,6 +10,7 @@ using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -27,6 +28,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IUserService> _userService;
         private Mock<IAuthService> _authService;
         private Mock<IPhotoService> _photoService;
+        private Mock<ISecurityContext> _securityContextService;
         private Mock<IMapper> _mapper;
         private Mock<IEmailService> _emailService;
         private UsersController _usersController;
@@ -55,9 +57,10 @@ namespace EventsExpress.Test.ControllerTests
             _userService = new Mock<IUserService>();
             _authService = new Mock<IAuthService>();
             _photoService = new Mock<IPhotoService>();
+            _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
             _emailService = new Mock<IEmailService>();
-            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _emailService.Object, _photoService.Object);
+            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _emailService.Object, _photoService.Object, _securityContextService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -385,17 +388,17 @@ namespace EventsExpress.Test.ControllerTests
         [Category("Get")]
         public void Get_NotNull_Exception()
         {
-            _authService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.Get(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
         }
 
         [Test]
         [Category("Get")]
         public void Get_NotNull_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.Get(_usersFilterViewModel);
 
@@ -404,7 +407,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
         }
 
         [Test]
@@ -425,10 +428,10 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_Exception()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.SearchUsers(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -437,7 +440,7 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_BadRequestResult()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
             Assert.That(res, Is.TypeOf<BadRequestResult>());
@@ -446,7 +449,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
 
-            _authService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -455,13 +458,13 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_OkObjectResult1()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUserId()).Returns(It.IsAny<Guid>());
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(It.IsAny<Guid>());
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>())).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(1));
         }
 

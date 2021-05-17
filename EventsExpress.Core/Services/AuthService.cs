@@ -146,7 +146,7 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AuthExternal)
                 .AsNoTracking()
-                .FirstOrDefault(x => x.Id == GetCurrentUserId());
+                .FirstOrDefault(x => x.Id == _securityContext.GetCurrentUserId());
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {
@@ -245,29 +245,7 @@ namespace EventsExpress.Core.Services
         {
             Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
 
-            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return _userService.GetById(userId);
-        }
-
-        public Guid GetCurrentUserId()
-        {
-            return _securityContext.GetCurrentUserId();
-        }
-
-        public Guid GetCurrentAccountId()
-        {
-            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
-
-            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid accountId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return accountId;
+            return _userService.GetById(Guid.Parse(guidClaim.Value));
         }
     }
 }

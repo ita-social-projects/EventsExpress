@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -17,16 +18,16 @@ namespace EventsExpress.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IMessageService _messageService;
-        private readonly IAuthService _authService;
+        private readonly ISecurityContext _securityContextService;
 
         public ChatController(
             IMessageService messageService,
-            IAuthService authService,
-            IMapper mapper)
+            IMapper mapper,
+            ISecurityContext securityContextService)
         {
-            _authService = authService;
             _messageService = messageService;
             _mapper = mapper;
+            _securityContextService = securityContextService;
         }
 
         /// <summary>
@@ -79,6 +80,6 @@ namespace EventsExpress.Controllers
 
         [NonAction]
         private Guid CurrentUserId() =>
-            _authService.GetCurrentUserId();
+            _securityContextService.GetCurrentUserId();
     }
 }

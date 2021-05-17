@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -15,16 +16,16 @@ namespace EventsExpress.Core.Services
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
         private readonly IMediator _mediator;
-        private readonly IAuthService _authService;
+        private readonly ISecurityContext _securityContextService;
 
         public EventStatusHistoryService(
             IMediator mediator,
-            IAuthService authService,
-            AppDbContext context)
+            AppDbContext context,
+            ISecurityContext securityContextService)
              : base(context)
         {
             _mediator = mediator;
-            _authService = authService;
+            _securityContextService = securityContextService;
         }
 
         public async Task SetStatusEvent(Guid eventId, string reason, EventStatus eventStatus)
@@ -48,7 +49,7 @@ namespace EventsExpress.Core.Services
             var record = new EventStatusHistory
             {
                 EventId = e.Id,
-                UserId = _authService.GetCurrentUserId(),
+                UserId = _securityContextService.GetCurrentUserId(),
                 EventStatus = status,
                 Reason = reason,
             };

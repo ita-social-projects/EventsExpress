@@ -10,6 +10,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
@@ -312,12 +313,14 @@ namespace EventsExpress.Test.MapperTests
             var mockAuth = new Mock<IAuthService>();
             var mockUser = new Mock<IUserService>();
             var mockHttpAccessor = new Mock<IHttpContextAccessor>();
+            var mockSecurityContextService = new Mock<ISecurityContext>();
 
             mockHttpAccessor.Setup(o => o.HttpContext.User);
 
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockUser.Object);
             services.AddTransient(sp => mockHttpAccessor.Object);
+            services.AddTransient(sp => mockSecurityContextService.Object);
 
             services.AddAutoMapper(typeof(EventMapperProfile));
             services.AddAutoMapper(typeof(UserMapperProfile));

@@ -26,9 +26,5 @@ namespace EventsExpress.Core.IServices
         Task ChangePasswordAsync(string oldPassword, string newPassword);
 
         UserDto GetCurrentUser();
-
-        Guid GetCurrentUserId();
-
-        Guid GetCurrentAccountId();
     }
 }

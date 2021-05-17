@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Controllers;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -54,7 +55,7 @@ namespace EventsExpress.Test.ControllerTests
         private ChatController chatController;
         private Mock<IMapper> mockMapper;
         private Mock<IMessageService> mockMessageService;
-        private Mock<IAuthService> mockAuthService;
+        private Mock<ISecurityContext> mockSecurityContextService;
 
         private IEnumerable<ChatRoom> userChats = new List<ChatRoom>()
         {
@@ -68,14 +69,14 @@ namespace EventsExpress.Test.ControllerTests
 
             mockMapper = new Mock<IMapper>();
             mockMessageService = new Mock<IMessageService>();
-            mockAuthService = new Mock<IAuthService>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
 
             chatController = new ChatController(
                 mockMessageService.Object,
-                mockAuthService.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockSecurityContextService.Object);
 
-            mockAuthService.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Returns(userId);
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace EventsExpress.Test.ControllerTests
         [Test]
         public void GetChat_ReturnsOk()
         {
-            mockAuthService.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Returns(userId);
             mockMessageService.Setup(x => x.GetChat(chatId, userId)).Returns(Task.FromResult(chat));
 
             var res = chatController.GetChat(chatId);
@@ -101,7 +102,7 @@ namespace EventsExpress.Test.ControllerTests
         [Test]
         public void GetChat_ReturnsBadRequest()
         {
-            mockAuthService.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Returns(userId);
             mockMessageService.Setup(x => x.GetChat(chatId, userId)).Returns(Task.FromResult((ChatRoom)null));
 
             var res = chatController.GetChat(chatId);

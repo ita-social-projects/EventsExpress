@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
@@ -16,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventScheduleServiceTests : TestInitializer
     {
         private static Mock<IMediator> mockMediator;
-        private static Mock<IAuthService> authService;
+        private static Mock<ISecurityContext> mockSecurityContextService;
         private EventScheduleService service;
         private List<EventSchedule> eventSchedules;
         private EventScheduleDto esDTO;
@@ -35,12 +36,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
-            authService = new Mock<IAuthService>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
 
             service = new EventScheduleService(
                 Context,
                 MockMapper.Object,
-                authService.Object);
+                mockSecurityContextService.Object);
 
             evnt = new Event
             {

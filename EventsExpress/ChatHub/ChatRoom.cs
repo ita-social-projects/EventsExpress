@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.Core.ChatHub
 {
     public class ChatRoom : Hub
     {
-        private readonly IAuthService _authService;
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
         private readonly IEventService _eventService;
+        private readonly ISecurityContext _securityContextService;
 
         public ChatRoom(
-                IAuthService authService,
                 IUserService userService,
                 IMessageService messageService,
-                IEventService eventService)
+                IEventService eventService,
+                ISecurityContext securityContextService)
         {
-            _authService = authService;
             _userService = userService;
             _messageService = messageService;
             _eventService = eventService;
+            _securityContextService = securityContextService;
         }
 
         public async Task Send(Guid chatId, string text)
@@ -31,7 +32,7 @@ namespace EventsExpress.Core.ChatHub
             text = text.Trim();
             if (text != string.Empty)
             {
-                var currentUserId = _authService.GetCurrentUserId();
+                var currentUserId = _securityContextService.GetCurrentUserId();
                 var res = await _messageService.Send(chatId, currentUserId, text);
 
                 var users = _messageService.GetChatUserIds(res.ChatRoomId);
@@ -49,7 +50,7 @@ namespace EventsExpress.Core.ChatHub
 
         public async Task EventWasCreated(Guid eventId)
         {
-            var currentUserId = _authService.GetCurrentUserId();
+            var currentUserId = _securityContextService.GetCurrentUserId();
             var res = _eventService.EventById(eventId);
             var users = _userService.GetUsersByCategories(res.Categories).Where(x => x.Id != currentUserId).Select(x => x.Id.ToString()).ToList();
 

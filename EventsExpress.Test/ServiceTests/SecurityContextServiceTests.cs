@@ -16,6 +16,9 @@ namespace EventsExpress.Test.ServiceTests
         private SecurityContextService securityContext;
         private Mock<IHttpContextAccessor> mockHttpContextAccessor;
 
+        private Guid userId = Guid.NewGuid();
+        private Guid accountId = Guid.NewGuid();
+
         [SetUp]
         protected override void Initialize()
         {
@@ -27,41 +30,31 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void GetCurrentUserId_DoesNotThrows()
+        public void GetCurrentUserId_Ok()
         {
             mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
 
-            TestDelegate methodInvoke = () => securityContext.GetCurrentUserId();
+            var res = securityContext.GetCurrentUserId();
 
-            Assert.DoesNotThrow(methodInvoke);
+            Assert.That(res, Is.EqualTo(userId));
         }
 
         [Test]
-        public void GetCurrentUserId_Throws()
+        public void GetCurrentAccountId_Ok()
         {
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
 
-            TestDelegate methodInvoke = () => securityContext.GetCurrentUserId();
+            var res = securityContext.GetCurrentAccountId();
 
-            var ex = Assert.Throws<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains("User not found"));
+            Assert.That(res, Is.EqualTo(accountId));
         }
 
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, $"{Guid.NewGuid()}"),
-            };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
-            return new ClaimsPrincipal(identity);
-        }
-
-        private ClaimsPrincipal GetNullClaimsPrincipal()
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, $"{null}"),
+                new Claim(ClaimTypes.Name, $"{userId}"),
+                new Claim(ClaimTypes.Sid, $"{accountId}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);

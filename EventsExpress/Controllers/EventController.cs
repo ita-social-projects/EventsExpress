@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
@@ -19,17 +20,14 @@ namespace EventsExpress.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
+        private readonly ISecurityContext _securityContextService;
 
-        public EventController(
-            IEventService eventService,
-            IAuthService authSrv,
-            IMapper mapper)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService)
         {
             _eventService = eventService;
-            _authService = authSrv;
             _mapper = mapper;
+            _securityContextService = securityContextService;
         }
 
         /// <summary>
@@ -288,7 +286,7 @@ namespace EventsExpress.Controllers
                 return BadRequest("Invalid id");
             }
 
-            var userId = _authService.GetCurrentUserId();
+            var userId = _securityContextService.GetCurrentUserId();
 
             return Ok(_eventService.GetRateFromUser(userId, eventId));
         }

@@ -8,6 +8,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -24,9 +25,9 @@ namespace EventsExpress.Core.Services
         private readonly IPhotoService _photoService;
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
-        private readonly IAuthService _authService;
         private readonly IEventScheduleService _eventScheduleService;
         private readonly IValidator<Event> _validator;
+        private readonly ISecurityContext _securityContextService;
 
         public EventService(
             AppDbContext context,
@@ -34,17 +35,17 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             IPhotoService photoService,
             ILocationService locationService,
-            IAuthService authService,
             IEventScheduleService eventScheduleService,
-            IValidator<Event> validator)
+            IValidator<Event> validator,
+            ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _photoService = photoService;
             _locationService = locationService;
             _mediator = mediator;
-            _authService = authService;
             _eventScheduleService = eventScheduleService;
             _validator = validator;
+            _securityContextService = securityContextService;
         }
 
         public async Task AddUserToEvent(Guid userId, Guid eventId)
@@ -575,6 +576,6 @@ namespace EventsExpress.Core.Services
         public bool Exists(Guid eventId) => Context.Events.Find(eventId) != null;
 
         private Guid CurrentUserId() =>
-           _authService.GetCurrentUserId();
+           _securityContextService.GetCurrentUserId();
     }
 }

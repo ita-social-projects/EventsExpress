@@ -9,6 +9,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Event;
@@ -30,8 +31,8 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
-        private static Mock<IAuthService> mockAuthService;
         private static Mock<IValidator<Event>> mockValidationService;
+        private static Mock<ISecurityContext> mockSecurityContextService;
 
         private EventService service;
         private List<Event> events;
@@ -132,9 +133,9 @@ namespace EventsExpress.Test.ServiceTests
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             mockValidationService = new Mock<IValidator<Event>>();
-            mockAuthService = new Mock<IAuthService>();
-            mockAuthService.Setup(x => x.GetCurrentUser())
-                .Returns(new UserDto { Id = userId });
+            mockSecurityContextService = new Mock<ISecurityContext>();
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId())
+                .Returns(userId);
 
             service = new EventService(
                 Context,
@@ -142,9 +143,9 @@ namespace EventsExpress.Test.ServiceTests
                 mockMediator.Object,
                 mockPhotoService.Object,
                 mockLocationService.Object,
-                mockAuthService.Object,
                 mockEventScheduleService.Object,
-                mockValidationService.Object);
+                mockValidationService.Object,
+                mockSecurityContextService.Object);
 
             eventLocationMap = new EventLocation
             {
@@ -582,7 +583,7 @@ namespace EventsExpress.Test.ServiceTests
             int x = 1;
             MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            mockAuthService.Setup(x => x.GetCurrentUserId())
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId())
                 .Returns(userId);
             var result = service.GetAllDraftEvents(1, 1, out x);
             Assert.AreEqual(1, result.Count());

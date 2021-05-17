@@ -6,6 +6,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
@@ -15,15 +16,15 @@ namespace EventsExpress.ValueResolvers
 {
     public class EventDtoToVisitorsResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
     {
-        private readonly IAuthService _authService;
         private readonly IUserService _userService;
+        private readonly ISecurityContext _securityContextService;
 
         public EventDtoToVisitorsResolver(
-            IAuthService authService,
-            IUserService userService)
+            IUserService userService,
+            ISecurityContext securityContextService)
         {
-            _authService = authService;
             _userService = userService;
+            _securityContextService = securityContextService;
         }
 
         public IEnumerable<UserPreviewViewModel> Resolve(EventDto source, EventViewModelBase destination, IEnumerable<UserPreviewViewModel> destMember, ResolutionContext context)
@@ -32,7 +33,7 @@ namespace EventsExpress.ValueResolvers
             Guid? currentUserId;
             try
             {
-                currentUserId = _authService?.GetCurrentUserId();
+                currentUserId = _securityContextService.GetCurrentUserId();
             }
             catch (EventsExpressException)
             {

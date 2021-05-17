@@ -19,12 +19,14 @@ namespace EventsExpress.Core.Services
         {
             Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
 
-            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
+            return Guid.Parse(guidClaim.Value);
+        }
 
-            return userId;
+        public Guid GetCurrentAccountId()
+        {
+            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
+
+            return Guid.Parse(guidClaim.Value);
         }
     }
 }
