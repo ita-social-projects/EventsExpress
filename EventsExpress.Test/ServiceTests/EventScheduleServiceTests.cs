@@ -16,7 +16,6 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventScheduleServiceTests : TestInitializer
     {
         private static Mock<IMediator> mockMediator;
-        private static Mock<IHttpContextAccessor> httpContextAccessor;
         private static Mock<IAuthService> authService;
         private EventScheduleService service;
         private List<EventSchedule> eventSchedules;
@@ -36,14 +35,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
-            httpContextAccessor = new Mock<IHttpContextAccessor>();
             authService = new Mock<IAuthService>();
 
             service = new EventScheduleService(
                 Context,
                 MockMapper.Object,
-                authService.Object,
-                httpContextAccessor.Object);
+                authService.Object);
 
             evnt = new Event
             {

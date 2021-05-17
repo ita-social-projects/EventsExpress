@@ -288,7 +288,7 @@ namespace EventsExpress.Controllers
                 return BadRequest("Invalid id");
             }
 
-            var userId = _authService.GetCurrentUser(HttpContext.User).Id;
+            var userId = _authService.GetCurrentUserId();
 
             return Ok(_eventService.GetRateFromUser(userId, eventId));
         }

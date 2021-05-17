@@ -369,7 +369,7 @@ namespace EventsExpress.Test.ControllerTests
             _authenticationController.ControllerContext = new ControllerContext();
             _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             _authService.Setup(s =>
-            s.ChangePasswordAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()))
+            s.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
@@ -392,7 +392,7 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
-            _authService.Verify(s => s.ChangePasswordAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _authService.Verify(s => s.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 }
