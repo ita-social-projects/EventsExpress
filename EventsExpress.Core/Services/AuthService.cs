@@ -245,7 +245,12 @@ namespace EventsExpress.Core.Services
         {
             Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
 
-            return _userService.GetById(Guid.Parse(guidClaim.Value));
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
+            {
+                throw new EventsExpressException("User not found");
+            }
+
+            return _userService.GetById(userId);
         }
     }
 }

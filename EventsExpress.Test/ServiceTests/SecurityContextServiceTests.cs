@@ -30,31 +30,41 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void GetCurrentUserId_Ok()
+        public void GetCurrentUserId_DoesNotThrows()
         {
             mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
 
-            var res = securityContext.GetCurrentUserId();
+            TestDelegate methodInvoke = () => securityContext.GetCurrentUserId();
 
-            Assert.That(res, Is.EqualTo(userId));
+            Assert.DoesNotThrow(methodInvoke);
         }
 
         [Test]
-        public void GetCurrentAccountId_Ok()
+        public void GetCurrentUserId_Throws()
         {
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
 
-            var res = securityContext.GetCurrentAccountId();
+            TestDelegate methodInvoke = () => securityContext.GetCurrentUserId();
 
-            Assert.That(res, Is.EqualTo(accountId));
+            var ex = Assert.Throws<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("User not found"));
         }
 
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, $"{userId}"),
-                new Claim(ClaimTypes.Sid, $"{accountId}"),
+                new Claim(ClaimTypes.Name, $"{Guid.NewGuid()}"),
+            };
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            return new ClaimsPrincipal(identity);
+        }
+
+        private ClaimsPrincipal GetNullClaimsPrincipal()
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, $"{null}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);
