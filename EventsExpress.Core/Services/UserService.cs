@@ -13,6 +13,7 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services
 {
@@ -146,13 +147,13 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
-        public IEnumerable<UserDto> GetUsersByRole(string role)
+        public IEnumerable<UserDto> GetUsersByRole(Role role)
         {
             var users = Context.Roles
                 .Include(r => r.Accounts)
                     .ThenInclude(ar => ar.Account)
                         .ThenInclude(a => a.User)
-               .Where(r => r.Name == role)
+               .Where(r => r.Id.Equals(role))
                .AsNoTracking()
                .FirstOrDefault()
                 ?.Accounts

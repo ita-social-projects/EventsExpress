@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Test.ControllerTests
 {
@@ -201,12 +202,12 @@ namespace EventsExpress.Test.ControllerTests
         public async Task ContactAdmins_CorrectAdmins_ContactCorrectCountPartsAsync()
         {
             _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
-            string roleName = "Admin";
+            const Role role = Role.Admin;
             UserDto firstAdmin = GetAdminAccount();
             UserDto secondAdmin = GetAdminAccount();
 
             var admins = new UserDto[] { firstAdmin, secondAdmin };
-            _userService.Setup(user => user.GetUsersByRole(roleName)).Returns(admins);
+            _userService.Setup(user => user.GetUsersByRole(role)).Returns(admins);
             ContactUsViewModel model = new ContactUsViewModel { Description = "some description", Type = "some type" };
 
             var res = await _usersController.ContactAdmins(model);
@@ -214,7 +215,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<IActionResult>(res);
             _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
-            _userService.Verify(user => user.GetUsersByRole(roleName), Times.Exactly(1));
+            _userService.Verify(user => user.GetUsersByRole(role), Times.Exactly(1));
             _emailService.Verify(email => email.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(admins.Length));
 
             static UserDto GetAdminAccount()

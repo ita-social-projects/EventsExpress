@@ -15,6 +15,7 @@ using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Controllers
 {
@@ -260,7 +261,7 @@ namespace EventsExpress.Controllers
         {
             var user = _authService.GetCurrentUser(HttpContext.User);
 
-            var admins = _userService.GetUsersByRole("Admin");
+            var admins = _userService.GetUsersByRole(Role.Admin);
 
             var emailBody = $"New request from <a href='mailto:{user.Email}?subject=re:{model.Type}'>{user.Email}</a> : <br />{model.Description}. ";
 

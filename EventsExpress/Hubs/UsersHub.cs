@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.Hubs
@@ -17,7 +18,7 @@ namespace EventsExpress.Hubs
         public async Task SendCountOfUsersAsync()
         {
             var numberOfUsers = await _userService.CountAsync();
-            var admins = _userService.GetUsersByRole("Admin")
+            var admins = _userService.GetUsersByRole(Role.Admin)
                 .Select(admin => admin.Id.ToString())
                 .ToList();
 
