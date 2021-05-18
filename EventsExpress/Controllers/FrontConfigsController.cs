@@ -4,6 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
+    [Route("api/[controller]")]
+    [ApiController]
     public class FrontConfigsController : Controller
     {
         private readonly IOptions<FrontConfigsViewModel> _frontConfigs;

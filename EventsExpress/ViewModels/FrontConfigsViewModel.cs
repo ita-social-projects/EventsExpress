@@ -7,14 +7,16 @@
 
     public class FrontConfigsViewModel
     {
-        public string FACEBOOK_CLIENT_ID { get; set; }
+        public string FacebookClientId { get; set; }
 
-        public string GOOGLE_CLIENT_ID { get; set; }
+        public string GoogleClientId { get; set; }
 
-        public string TWITTER_CALLBACK_URL { get; set; }
+        public string TwitterCallbackUrl { get; set; }
 
-        public string TWITTER_CONSUMER_KEY { get; set; }
+        public string TwitterConsumerKey { get; set; }
 
-        public string TWITTER_CONSUMER_SECRET { get; set; }
+        public string TwitterConsumerSecret { get; set; }
+
+        public bool TwitterLoginEnabled { get; set; }
     }
 }
