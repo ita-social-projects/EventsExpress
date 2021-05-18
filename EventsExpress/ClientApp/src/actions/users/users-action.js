@@ -21,8 +21,8 @@ export function initialConnection() {
             hubConnection.on("CountUsers", (numberOfUsers) => {
                 dispatch(getCount(numberOfUsers));
             });
-        } catch(ex) {
-            console.error(ex);
+        } catch(err) {
+            console.error(err.toString());
         }
     }
 }
