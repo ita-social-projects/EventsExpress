@@ -10,6 +10,5 @@
 
         public string GoogleClientSecret { get; set; }
 
-        public string JwtEmailEncryption { get; set; }
     }
 }
