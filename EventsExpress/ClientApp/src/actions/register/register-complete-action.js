@@ -19,6 +19,7 @@ export default function registerComplete(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
 
+        await hubConnection.start();
         await hubConnection.invoke("SendCountOfUsersAsync");
         
         let jsonRes = await response.json();
