@@ -243,14 +243,7 @@ namespace EventsExpress.Core.Services
 
         public UserDto GetCurrentUser()
         {
-            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
-
-            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return _userService.GetById(userId);
+            return _userService.GetById(_securityContext.GetCurrentUserId());
         }
     }
 }
