@@ -475,30 +475,12 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(res, Is.EqualTo(existingUserDTO));
         }
 
-        [Test]
-        public void GetCurrentUser_Throws()
-        {
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
-            Assert.Throws<EventsExpressException>(() => service.GetCurrentUser());
-        }
-
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, $"{idUser}"),
                 new Claim(ClaimTypes.Sid, $"{idAccount}"),
-            };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
-            return new ClaimsPrincipal(identity);
-        }
-
-        private ClaimsPrincipal GetNullClaimsPrincipal()
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, $"{null}"),
-                new Claim(ClaimTypes.Sid, $"{null}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);
