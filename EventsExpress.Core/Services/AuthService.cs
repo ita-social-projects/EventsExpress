@@ -27,7 +27,6 @@ namespace EventsExpress.Core.Services
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISecurityContext _securityContext;
 
         public AuthService(
@@ -39,7 +38,6 @@ namespace EventsExpress.Core.Services
             IEmailService emailService,
             IMediator mediator,
             IPasswordHasher passwordHasher,
-            IHttpContextAccessor httpContextAccessor,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
@@ -49,7 +47,6 @@ namespace EventsExpress.Core.Services
             _emailService = emailService;
             _mediator = mediator;
             _passwordHasher = passwordHasher;
-            _httpContextAccessor = httpContextAccessor;
             _securityContext = securityContext;
         }
 

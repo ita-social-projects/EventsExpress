@@ -34,7 +34,6 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IEmailService> mockEmailService;
         private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
-        private Mock<IHttpContextAccessor> mockHttpContextAccessor;
         private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
@@ -54,7 +53,6 @@ namespace EventsExpress.Test.ServiceTests
             mockEmailService = new Mock<IEmailService>();
             mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
-            mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             mockSecurityContext = new Mock<ISecurityContext>();
             service = new AuthService(
                 Context,
@@ -65,7 +63,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockEmailService.Object,
                 mockMediator.Object,
                 mockPasswordHasherService.Object,
-                mockHttpContextAccessor.Object,
                 mockSecurityContext.Object);
 
             existingUser = new User
@@ -85,7 +82,6 @@ namespace EventsExpress.Test.ServiceTests
             Context.Users.Add(existingUser);
             Context.SaveChanges();
 
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
             mockPasswordHasherService.Setup(s => s.GenerateSalt()).Returns("salt");
             mockPasswordHasherService.Setup(s => s.GenerateHash(validPassword, "salt")).Returns("hash");
         }
@@ -473,17 +469,6 @@ namespace EventsExpress.Test.ServiceTests
             mockUserService.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(existingUserDTO);
             var res = service.GetCurrentUser();
             Assert.That(res, Is.EqualTo(existingUserDTO));
-        }
-
-        private ClaimsPrincipal GetClaimsPrincipal()
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, $"{idUser}"),
-                new Claim(ClaimTypes.Sid, $"{idAccount}"),
-            };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
-            return new ClaimsPrincipal(identity);
         }
     }
 }

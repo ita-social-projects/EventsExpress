@@ -50,11 +50,33 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(ex.Message.Contains("User not found"));
         }
 
+        [Test]
+        public void GetCurrentAccountId_DoesNotThrows()
+        {
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetClaimsPrincipal());
+
+            TestDelegate methodInvoke = () => securityContext.GetCurrentAccountId();
+
+            Assert.DoesNotThrow(methodInvoke);
+        }
+
+        [Test]
+        public void GetCurrentAccountId_Throws()
+        {
+            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(GetNullClaimsPrincipal());
+
+            TestDelegate methodInvoke = () => securityContext.GetCurrentAccountId();
+
+            var ex = Assert.Throws<EventsExpressException>(methodInvoke);
+            Assert.That(ex.Message.Contains("User not found"));
+        }
+
         private ClaimsPrincipal GetClaimsPrincipal()
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, $"{Guid.NewGuid()}"),
+                new Claim(ClaimTypes.Name, $"{userId}"),
+                new Claim(ClaimTypes.Sid, $"{accountId}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);
@@ -65,6 +87,7 @@ namespace EventsExpress.Test.ServiceTests
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, $"{null}"),
+                new Claim(ClaimTypes.Sid, $"{null}"),
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             return new ClaimsPrincipal(identity);
