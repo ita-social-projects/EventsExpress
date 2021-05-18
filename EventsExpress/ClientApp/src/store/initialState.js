@@ -135,6 +135,14 @@ const initialState = {
         },
         filter: eventHelper.getDefaultEventFilter(),
     },
+    tracks: {
+        isPending: false,
+        isError: false,
+        data: {
+            items:{},
+            pageViewModel: {},
+        },
+    },
     inventories: {
         isPending: true,
         items: []

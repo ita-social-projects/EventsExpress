@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import { DialogContent } from '@material-ui/core';
+import {DialogContent} from '@material-ui/core';
 
 export default class SimpleModal extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ export default class SimpleModal extends Component {
 
     onConfirm = () => {
         this.props.action()
-        this.setState({ isOpen: false });
+        this.setState({isOpen: false});
     }
 
     render() {
@@ -59,6 +59,7 @@ export default class SimpleModal extends Component {
                             >
                                 confirm
                             </Button>
+                            }
                         </DialogActions>
                     </div>
                 </Dialog>
