@@ -12,19 +12,17 @@ namespace EventsExpress.Core.IServices
     {
         Task Create(UserDto userDto);
 
-        Task Update(UserDto userDto);
-
         Task ChangeAvatar(Guid userId, IFormFile avatar);
 
-        Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories);
+        Task EditFavoriteCategories(IEnumerable<Category> categories);
 
         Task SetAttitude(AttitudeDto attitude);
 
-        UserDto GetById(Guid userId);
+        UserDto GetCurrentUserInfo();
 
-        ProfileDto GetProfileById(Guid userId, Guid fromId);
+        ProfileDto GetProfileById(Guid fromId);
 
-        IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id);
+        IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count);
 
         IEnumerable<UserDto> GetUsersByCategories(IEnumerable<CategoryDto> categories);
 
@@ -34,6 +32,12 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds);
 
-        Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
+        Task<Guid> EditFavoriteNotificationTypes(IEnumerable<NotificationType> notificationTypes);
+
+        Task EditUserName(string name);
+
+        Task EditBirthday(DateTime birthday);
+
+        Task EditGender(Gender gender);
     }
 }
