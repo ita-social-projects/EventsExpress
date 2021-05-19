@@ -112,10 +112,10 @@ namespace EventsExpress.Test.ControllerTests
         [TestCase(0)]
         [TestCase(5)]
         [TestCase(15)]
-        public async Task GetUsersCount_ReturnsValid(int count)
+        public async Task GetUnblockedUsersCount_ReturnsValid(int count)
         {
             // Arrange
-            _userService.Setup(service => service.CountAsync())
+            _userService.Setup(service => service.CountUnblockedUsersAsync())
                 .ReturnsAsync(count);
 
             // Act
@@ -127,13 +127,13 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        public async Task GetUsersCount_CalledMethodOfService()
+        public async Task GetUnblockedUsersCount_CalledMethodOfService()
         {
             // Act
             await _usersController.Count();
 
             // Assert
-            _userService.Verify(service => service.CountAsync(), Times.Once);
+            _userService.Verify(service => service.CountUnblockedUsersAsync(), Times.Once);
         }
 
         [Test]

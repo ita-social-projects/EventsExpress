@@ -13,6 +13,8 @@ namespace EventsExpress.Core.IServices
     {
         Task Create(UserDto userDto);
 
+        Task<int> CountUnblockedUsersAsync();
+
         Task Update(UserDto userDto);
 
         Task ChangeAvatar(Guid userId, IFormFile avatar);
@@ -36,7 +38,5 @@ namespace EventsExpress.Core.IServices
         IEnumerable<UserDto> GetUsersByNotificationTypes(NotificationChange notificationType, IEnumerable<Guid> userIds);
 
         Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes);
-
-        Task<int> CountAsync();
     }
 }

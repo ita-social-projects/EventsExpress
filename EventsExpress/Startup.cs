@@ -14,6 +14,7 @@ using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.EF;
 using EventsExpress.Filters;
+using EventsExpress.Handlers;
 using EventsExpress.Hubs;
 using EventsExpress.Mapping;
 using EventsExpress.Policies;
@@ -176,6 +177,7 @@ namespace EventsExpress
             });
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(UserCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 

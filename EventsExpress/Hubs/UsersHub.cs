@@ -17,7 +17,7 @@ namespace EventsExpress.Hubs
 
         public async Task SendCountOfUsersAsync()
         {
-            var numberOfUsers = await _userService.CountAsync();
+            var numberOfUsers = await _userService.CountUnblockedUsersAsync();
             var admins = _userService.GetUsersByRole(Role.Admin)
                 .Select(admin => admin.Id.ToString())
                 .ToList();

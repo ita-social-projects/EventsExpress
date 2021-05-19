@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -19,14 +19,17 @@ namespace EventsExpress.Core.Services
 {
     public class UserService : BaseService<User>, IUserService
     {
+        private readonly IMediator _mediator;
         private readonly IPhotoService _photoService;
 
         public UserService(
             AppDbContext context,
             IMapper mapper,
+            IMediator mediator,
             IPhotoService photoSrv)
             : base(context, mapper)
         {
+            _mediator = mediator;
             _photoService = photoSrv;
         }
 
@@ -48,6 +51,13 @@ namespace EventsExpress.Core.Services
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
+
+            await _mediator.Publish(new UserCreatedNotification());
+        }
+
+        public async Task<int> CountUnblockedUsersAsync()
+        {
+            return await Entities.CountAsync(user => !user.Account.IsBlocked);
         }
 
         public async Task Update(UserDto userDto)
@@ -291,11 +301,6 @@ namespace EventsExpress.Core.Services
             Update(user);
             await Context.SaveChangesAsync();
             return user.Id;
-        }
-
-        public async Task<int> CountAsync()
-        {
-            return await Entities.CountAsync();
         }
     }
 }

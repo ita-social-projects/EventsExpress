@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static Mock<IPhotoService> mockPhotoService;
         private UserService service;
+        private Mock<IMediator> mockMediator;
 
         private UserDto existingUserDTO;
         private User existingUser;
@@ -37,10 +39,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockPhotoService = new Mock<IPhotoService>();
+            mockMediator = new Mock<IMediator>();
 
             service = new UserService(
                 Context,
                 MockMapper.Object,
+                mockMediator.Object,
                 mockPhotoService.Object);
 
             existingUser = new User
@@ -70,13 +74,13 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public async Task GetUsersCount_ReturnsValid()
+        public async Task GetUnblockedUsersCount_ReturnsValid()
         {
             // Arrange
-            var expected = await Context.Users.CountAsync();
+            var expected = await Context.Users.CountAsync(user => !user.Account.IsBlocked);
 
             // Act
-            var actual = await service.CountAsync();
+            var actual = await service.CountUnblockedUsersAsync();
 
             // Assert
             Assert.AreEqual(expected, actual);
