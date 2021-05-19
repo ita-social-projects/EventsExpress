@@ -6,6 +6,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
@@ -15,14 +16,12 @@ namespace EventsExpress.Core.Services
 {
     public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
     {
-        private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISecurityContext _securityContextService;
 
-        public EventScheduleService(AppDbContext context, IMapper mapper, IAuthService authService, IHttpContextAccessor httpContextAccessor)
+        public EventScheduleService(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
             : base(context, mapper)
         {
-            _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
+            _securityContextService = securityContextService;
         }
 
         public IEnumerable<EventScheduleDto> GetAll()
@@ -33,7 +32,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(e => e.Owners)
                     .Include(es => es.Event)
                     .Where(opt => opt.IsActive &&
-                        opt.Event.Owners.Any(o => o.UserId == CurrentUser().Id))
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUserId()))
                     .ToList());
         }
 
@@ -105,7 +104,7 @@ namespace EventsExpress.Core.Services
             return await Edit(eventScheduleDTO);
         }
 
-        private UserDto CurrentUser() =>
-           _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+        private Guid CurrentUserId() =>
+           _securityContextService.GetCurrentUserId();
     }
 }

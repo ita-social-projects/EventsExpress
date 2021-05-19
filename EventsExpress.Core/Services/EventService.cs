@@ -8,6 +8,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -24,10 +25,9 @@ namespace EventsExpress.Core.Services
         private readonly IPhotoService _photoService;
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
-        private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEventScheduleService _eventScheduleService;
         private readonly IValidator<Event> _validator;
+        private readonly ISecurityContext _securityContextService;
 
         public EventService(
             AppDbContext context,
@@ -35,19 +35,17 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             IPhotoService photoService,
             ILocationService locationService,
-            IAuthService authService,
-            IHttpContextAccessor httpContextAccessor,
             IEventScheduleService eventScheduleService,
-            IValidator<Event> validator)
+            IValidator<Event> validator,
+            ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _photoService = photoService;
             _locationService = locationService;
             _mediator = mediator;
-            _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
             _eventScheduleService = eventScheduleService;
             _validator = validator;
+            _securityContextService = securityContextService;
         }
 
         public async Task AddUserToEvent(Guid userId, Guid eventId)
@@ -135,14 +133,14 @@ namespace EventsExpress.Core.Services
                 {
                     EventStatus = EventStatus.Draft,
                     CreatedOn = DateTime.UtcNow,
-                    UserId = CurrentUser().Id,
+                    UserId = CurrentUserId(),
                 },
             };
             ev.Owners = new List<EventOwner>
             {
                 new EventOwner
                 {
-                    UserId = CurrentUser().Id,
+                    UserId = CurrentUserId(),
                     EventId = ev.Id,
                 },
             };
@@ -169,7 +167,7 @@ namespace EventsExpress.Core.Services
                 ev.Owners = new List<EventOwner>();
             }
 
-            ev.Owners.Add(new EventOwner() { UserId = CurrentUser().Id, EventId = eventDTO.Id });
+            ev.Owners.Add(new EventOwner() { UserId = CurrentUserId(), EventId = eventDTO.Id });
 
             var eventCategories = eventDTO.Categories?
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
@@ -289,7 +287,7 @@ namespace EventsExpress.Core.Services
                     {
                         EventStatus = EventStatus.Active,
                         CreatedOn = DateTime.UtcNow,
-                        UserId = CurrentUser().Id,
+                        UserId = CurrentUserId(),
                     });
                 await Context.SaveChangesAsync();
                 EventDto dtos = Mapper.Map<Event, EventDto>(ev);
@@ -430,7 +428,7 @@ namespace EventsExpress.Core.Services
                 .AsNoTracking()
                 .AsQueryable();
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus == EventStatus.Draft);
-            events = events.Where(x => x.Owners.Any(o => o.UserId == CurrentUser().Id));
+            events = events.Where(x => x.Owners.Any(o => o.UserId == CurrentUserId()));
             count = events.Count();
             var result = events.OrderBy(x => x.DateFrom).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return Mapper.Map<IEnumerable<Event>, IEnumerable<EventDto>>(result);
@@ -577,7 +575,7 @@ namespace EventsExpress.Core.Services
 
         public bool Exists(Guid eventId) => Context.Events.Find(eventId) != null;
 
-        private UserDto CurrentUser() =>
-           _authService.GetCurrentUser(_httpContextAccessor.HttpContext.User);
+        private Guid CurrentUserId() =>
+           _securityContextService.GetCurrentUserId();
     }
 }
