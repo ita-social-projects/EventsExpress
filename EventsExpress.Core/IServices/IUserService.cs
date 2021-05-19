@@ -5,12 +5,15 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.IServices
 {
     public interface IUserService
     {
         Task Create(UserDto userDto);
+
+        Task<int> CountUnblockedUsersAsync();
 
         Task Update(UserDto userDto);
 
@@ -28,7 +31,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<UserDto> GetUsersByCategories(IEnumerable<CategoryDto> categories);
 
-        IEnumerable<UserDto> GetUsersByRole(string role);
+        IEnumerable<UserDto> GetUsersByRole(Role role);
 
         double GetRating(Guid userId);
 

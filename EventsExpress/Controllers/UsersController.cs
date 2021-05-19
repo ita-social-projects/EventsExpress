@@ -16,6 +16,7 @@ using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Controllers
 {
@@ -75,6 +76,20 @@ namespace EventsExpress.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        /// <summary>
+        /// This method is used to get the number of all users.
+        /// </summary>
+        /// <returns>The method returns edited gender.</returns>
+        /// <response code="200">Edit is succesful.</response>
+        /// <response code="400">Edit process failed.</response>
+        [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
+        public async Task<ActionResult<int>> Count()
+        {
+            var count = await _userService.CountUnblockedUsersAsync();
+            return Ok(count);
         }
 
         /// <summary>
@@ -250,7 +265,7 @@ namespace EventsExpress.Controllers
         {
             var user = GetCurrentUser();
 
-            var admins = _userService.GetUsersByRole("Admin");
+            var admins = _userService.GetUsersByRole(Role.Admin);
 
             var emailBody = $"New request from <a href='mailto:{user.Email}?subject=re:{model.Type}'>{user.Email}</a> : <br />{model.Description}. ";
 
