@@ -204,7 +204,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ContactAdmins")]
         public async Task ContactAdmins_CorrectAdmins_ContactCorrectCountPartsAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             const Role role = Role.Admin;
             UserDto firstAdmin = GetAdminAccount();
             UserDto secondAdmin = GetAdminAccount();
@@ -217,7 +217,7 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<IActionResult>(res);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(user => user.GetUsersByRole(role), Times.Exactly(1));
             _emailService.Verify(email => email.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(admins.Length));
 
