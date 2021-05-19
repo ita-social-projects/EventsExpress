@@ -155,11 +155,11 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task EditUserName(string username)
+        public async Task EditUserName(string name)
         {
             var user = CurrentUser();
 
-            user.Name = username;
+            user.Name = name;
 
             Context.Update(user);
             await Context.SaveChangesAsync();
