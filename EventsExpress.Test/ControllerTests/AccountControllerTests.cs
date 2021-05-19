@@ -8,6 +8,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -29,6 +30,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IMapper> _mapper;
         private Mock<IAccountService> _accountService;
         private Mock<IGoogleSignatureVerificator> _googleSignatureVerificator;
+        private Mock<ISecurityContext> mockSecurityContextService;
 
         [SetUp]
         public void Initialize()
@@ -37,11 +39,12 @@ namespace EventsExpress.Test.ControllerTests
             _authService = new Mock<IAuthService>();
             _accountService = new Mock<IAccountService>();
             _googleSignatureVerificator = new Mock<IGoogleSignatureVerificator>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
             _accountController = new AccountController(
                 _mapper.Object,
-                _authService.Object,
                 _accountService.Object,
-                _googleSignatureVerificator.Object);
+                _googleSignatureVerificator.Object,
+                mockSecurityContextService.Object);
             _accountController.ControllerContext = new ControllerContext();
             _accountController.ControllerContext.HttpContext = new DefaultHttpContext();
         }
@@ -50,8 +53,8 @@ namespace EventsExpress.Test.ControllerTests
         [Category("GetLinkedAuth")]
         public void GetLinkedAuth_InvalidUser_ThrowException()
         {
-            _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            mockSecurityContextService.Setup(s =>
+                s.GetCurrentAccountId()).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.GetLinkedAuth());
@@ -67,7 +70,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
+                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.GetLinkedAuth(user.AccountId)).ReturnsAsync(new List<AuthDto>());
             _mapper.Setup(s =>
@@ -110,7 +113,7 @@ namespace EventsExpress.Test.ControllerTests
             _googleSignatureVerificator.Setup(s =>
                 s.Verify(model.TokenId)).ReturnsAsync(new GoogleJsonWebSignature.Payload());
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
+                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Google)).Returns(Task.CompletedTask);
 
@@ -126,8 +129,8 @@ namespace EventsExpress.Test.ControllerTests
         [Category("AddFacebookLogin")]
         public void AddFacebookLogin_InvalidUser_ThrowException()
         {
-            _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            mockSecurityContextService.Setup(s =>
+                s.GetCurrentAccountId()).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddFacebookLogin(new AuthExternalViewModel()));
@@ -149,7 +152,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
+                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook)).Returns(Task.CompletedTask);
 
@@ -165,8 +168,8 @@ namespace EventsExpress.Test.ControllerTests
         [Category("AddTwitterLogin")]
         public void AddTwitterLogin_InvalidUser_ThrowException()
         {
-            _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            mockSecurityContextService.Setup(s =>
+                s.GetCurrentAccountId()).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddTwitterLogin(new AuthExternalViewModel()));
@@ -188,7 +191,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
+                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter)).Returns(Task.CompletedTask);
 
@@ -204,8 +207,8 @@ namespace EventsExpress.Test.ControllerTests
         [Category("AddLocalLogin")]
         public void AddLocalLogin_InvalidUser_ThrowException()
         {
-            _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            mockSecurityContextService.Setup(s =>
+                s.GetCurrentAccountId()).Throws<EventsExpressException>();
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _accountController.AddLocalLogin(new LoginViewModel()));
@@ -228,7 +231,7 @@ namespace EventsExpress.Test.ControllerTests
             };
 
             _authService.Setup(s =>
-                s.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(user);
+                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, model.Password)).Returns(Task.CompletedTask);
 

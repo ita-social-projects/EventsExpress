@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
@@ -41,6 +42,8 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace EventsExpress
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -116,6 +119,7 @@ namespace EventsExpress
                     x => x.UseNetTopologySuite()));
 
             #region Configure our services...
+            services.AddScoped<ISecurityContext, SecurityContextService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
@@ -138,6 +142,7 @@ namespace EventsExpress
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 

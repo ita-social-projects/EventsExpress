@@ -8,6 +8,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
@@ -26,6 +27,7 @@ namespace EventsExpress.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
+        private readonly ISecurityContext _securityContext;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IPhotoService _photoService;
@@ -35,13 +37,15 @@ namespace EventsExpress.Controllers
             IAuthService authSrv,
             IMapper mapper,
             IEmailService emailService,
-            IPhotoService photoService)
+            IPhotoService photoService,
+            ISecurityContext securityContext)
         {
             _userService = userSrv;
             _authService = authSrv;
             _mapper = mapper;
             _emailService = emailService;
             _photoService = photoService;
+            _securityContext = securityContext;
         }
 
         /// <summary>
@@ -59,10 +63,10 @@ namespace EventsExpress.Controllers
             filter.IsConfirmed = true;
             try
             {
-                var user = GetCurrentUser(HttpContext.User);
+                var userId = _securityContext.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -106,10 +110,10 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var user = _authService.GetCurrentUser(HttpContext.User);
+                var userId = _securityContext.GetCurrentUserId();
                 var viewModel = new IndexViewModel<UserManageViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, user.Id)),
+                    Items = _mapper.Map<IEnumerable<UserDto>, IEnumerable<UserManageViewModel>>(_userService.Get(filter, out int count, userId)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
 
@@ -124,8 +128,8 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetUserInfo()
         {
-            var user = GetCurrentUserOrNull(HttpContext.User);
-            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
+            var user = GetCurrentUserOrNull();
+            var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user); // check if we need roles here
 
             return Ok(userInfo);
         }
@@ -140,7 +144,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(EditUserNameViewModel userName)
         {
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 return BadRequest();
@@ -162,7 +166,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(EditUserBirthViewModel userBirthday)
         {
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 return BadRequest();
@@ -184,7 +188,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(EditUserGenderViewModel userGender)
         {
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 return BadRequest();
@@ -211,7 +215,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 return BadRequest();
@@ -233,7 +237,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangeAvatar()
         {
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 return BadRequest();
@@ -259,7 +263,7 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.UserPolicyName)]
         public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
 
             var admins = _userService.GetUsersByRole(Role.Admin);
 
@@ -296,7 +300,7 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult GetUserProfileById(Guid id)
         {
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             var res = _mapper.Map<ProfileViewModel>(_userService.GetProfileById(id, user.Id));
 
             return Ok(res);
@@ -337,7 +341,7 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = GetCurrentUser(HttpContext.User);
+            var user = GetCurrentUser();
             if (user == null)
             {
                 throw new EventsExpressException("Null object");
@@ -357,18 +361,18 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <returns>The method returns current user.</returns>
         [NonAction]
-        private UserDto GetCurrentUser(ClaimsPrincipal userClaims) => _authService.GetCurrentUser(userClaims);
+        private UserDto GetCurrentUser() => _authService.GetCurrentUser();
 
         /// <summary>
         /// This method help to get logged in user from JWT.
         /// </summary>
         /// <returns>Current user or null when not exist.</returns>
         [NonAction]
-        private UserDto GetCurrentUserOrNull(ClaimsPrincipal userClaims)
+        private UserDto GetCurrentUserOrNull()
         {
             try
             {
-                return _authService.GetCurrentUser(userClaims);
+                return GetCurrentUser();
             }
             catch (EventsExpressException)
             {
