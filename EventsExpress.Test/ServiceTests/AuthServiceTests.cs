@@ -462,13 +462,5 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.DoesNotThrowAsync(async () => await service.PasswordRecover(existingUserDTO.Email));
         }
-
-        [Test]
-        public void GetCurrentUser_OK()
-        {
-            mockUserService.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(existingUserDTO);
-            var res = service.GetCurrentUser();
-            Assert.That(res, Is.EqualTo(existingUserDTO));
-        }
     }
 }
