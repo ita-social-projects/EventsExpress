@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using EventsExpress.Core;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
@@ -8,7 +11,9 @@ using EventsExpress.Db.EF;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace EventsExpress
@@ -44,7 +49,17 @@ namespace EventsExpress
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            WebHost.CreateDefaultBuilder(args).ConfigureAppConfiguration((context, config) =>
+            {
+                if (context.HostingEnvironment.IsProduction())
+                {
+                    var builtConfig = config.Build();
+                    var secretClient = new SecretClient(
+                        new Uri($"{builtConfig["AzureKeyVault"]}"),
+                        new DefaultAzureCredential());
+                    config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+                }
+            })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>();
