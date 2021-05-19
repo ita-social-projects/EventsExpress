@@ -20,9 +20,11 @@ export function initialConnection() {
         try {
             hubConnection.on("CountUsers", (numberOfUsers) => {
                 dispatch(getCount(numberOfUsers));
+                return Promise.resolve();
             });
         } catch(err) {
             console.error(err.toString());
+            return Promise.reject();
         }
     }
 }

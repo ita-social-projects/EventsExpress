@@ -2,7 +2,6 @@ import { AuthenticationService } from '../../services';
 import { createBrowserHistory } from 'history';
 import { setSuccessAllert } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
-import { hubConnection } from "../users/users-action";
 import { SubmissionError } from 'redux-form';
 import { jwtStorageKey } from '../../constants/constants';
 import jwt from 'jsonwebtoken';
@@ -18,10 +17,6 @@ export default function registerComplete(data) {
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-
-        await hubConnection.start();
-        await hubConnection.invoke("SendCountOfUsersAsync");
-        
         let jsonRes = await response.json();
         localStorage.setItem(jwtStorageKey, jsonRes.token);
         dispatch(setSuccessAllert('Your profile was updated'));
