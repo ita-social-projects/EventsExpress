@@ -171,32 +171,26 @@ namespace EventsExpress.Test.ServiceTests
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
         }
 
-        /*[Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void Update_EmailIsNull_ReturnFalse(string email)
+        [Test]
+        public void EditUserName_DoesNotThrow()
         {
-            UserDto newUser = new UserDto() { Email = email };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(newUser));
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditUserName(It.IsAny<string>()));
         }
 
         [Test]
-        public void Update_UserInDbNotFound_Throws()
+        public void EditBirthday_DoesNotThrow()
         {
-            existingUserDTO.Id = Guid.NewGuid();
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(existingUserDTO));
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditBirthday(It.IsAny<DateTime>()));
         }
 
         [Test]
-        public void Update_UserDtoIsvalid_DoesNotThrow()
+        public void EditGender_DoesNotThrow()
         {
-            MockMapper.Setup(m => m
-                .Map<UserDto, User>(existingUserDTO))
-                    .Returns(existingUser);
-
-            Assert.DoesNotThrowAsync(async () => await service.Update(existingUserDTO));
-        }*/
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditGender(It.IsAny<Gender>()));
+        }
 
         [Test]
         public void ChangeAvatar_UserInDbFound_Success()
