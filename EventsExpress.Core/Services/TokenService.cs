@@ -167,7 +167,7 @@ namespace EventsExpress.Core.Services
             var refreshToken = Context.RefreshTokens.SingleOrDefault(rt => rt.Token == token);
 
             // return false if token is not active
-            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive || refreshToken == null)
+            if (refreshToken == null || !_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
             {
                 return false;
             }
