@@ -6,9 +6,9 @@ export default class ContactUsService {
 
     setContactUs = data => baseService.setResource('contactUs/ContactAdmins', data);
 
-    getAllIssues = filters => baseService.getResourceNew(`contactUs/All${filters}`);
+    getAllIssues = filters => baseService.getResource(`contactUs/All${filters}`);
 
     updateIssueStatus = data => baseService.setResource(`contactUs/${data.MessageId}/UpdateStatus`, data);
 
-    getMessage = id => baseService.getResourceNew(`contactUs/${id}`, id);
+    getMessage = id => baseService.getResource(`contactUs/${id}`, id);
 }

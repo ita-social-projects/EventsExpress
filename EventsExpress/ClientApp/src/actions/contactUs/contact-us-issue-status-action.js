@@ -6,24 +6,24 @@ export const SET_CONTACTUS_PENDING = "SET_CONTACTUS_PENDING";
 
 const api_serv = new ContactUsService();
 
-export default function change_issue_status(Id, issueStatus) {
+export default function change_issue_status(messageId, issueStatus) {
     return async dispatch => {
         dispatch(setContactUsPending(true));
-        let response = await api_serv.updateIssueStatus({ Id: Id, Status: issueStatus });
+        let response = await api_serv.updateIssueStatus({ MessageId: messageId, Status: issueStatus });
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        dispatch(changeIssueStatus(Id, issueStatus));
+        dispatch(changeIssueStatus(messageId, issueStatus));
         dispatch(setSuccessAllert('Issue status was changed'));
         return Promise.resolve();
     }
 }
 
-function changeIssueStatus(id, issueStatus) {
+function changeIssueStatus(messageId, issueStatus) {
     return {
         type: CHANGE_STATUS,
-        payload: { Id: id, issueStatus: issueStatus }
+        payload: { MessageId: messageId, issueStatus: issueStatus }
     }
 }
 

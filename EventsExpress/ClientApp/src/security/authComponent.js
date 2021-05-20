@@ -14,13 +14,6 @@ class AuthComponent extends Component {
                 return children;
             }
         }
-
-     //   else {
-      //      if (this.props.id) {
-      //          return this.props.children;
-       //     }
-      //  }
-
         return <> </>
     }
 }

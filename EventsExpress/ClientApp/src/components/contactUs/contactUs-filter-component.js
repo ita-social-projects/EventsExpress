@@ -32,7 +32,7 @@ class ContactUsFilter extends Component {
     }
 
     render() {
-        const { form_values, current_user } = this.props;
+        const { form_values } = this.props;
         let values = form_values || {};
 
         return <>
@@ -56,12 +56,10 @@ class ContactUsFilter extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            {current_user.role === "Admin" &&
-                                <Field name="status"
-                                    component={ContactUsFilterStatus}
-                                    options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
-                                />
-                            }
+                            <Field name="status"
+                                component={ContactUsFilterStatus}
+                                options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
+                            />
                         </div>
                     </>
                     }

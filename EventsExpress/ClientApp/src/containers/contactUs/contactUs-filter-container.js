@@ -51,7 +51,6 @@ class ContactUsFilterWrapper extends Component {
                 onSubmit={this.onSubmit}
                 onReset={this.onReset}
                 form_values={this.props.form_values}
-                current_user={this.props.current_user}
                 initialFormValues={initialFormValues}
             />
         </>
@@ -61,7 +60,6 @@ class ContactUsFilterWrapper extends Component {
 const mapStateToProps = (state) => ({
     contactUsList: state.contactUsList,
     form_values: getFormValues('contactUs-filter-form')(state),
-    current_user: state.user
 });
 
 const mapDispatchToProps = (dispatch) => {

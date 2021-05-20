@@ -99,7 +99,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Update issue status")]
         public void UpdateIssueStatus_InvalidId_ThrowsException()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await _service.UpdateIssueStatus(messageId, issueStatus));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await _service.UpdateIssueStatus(Guid.Empty, issueStatus));
         }
 
         [Test]

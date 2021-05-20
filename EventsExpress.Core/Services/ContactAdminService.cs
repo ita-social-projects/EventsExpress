@@ -55,7 +55,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count)
         {
             var contactAdminMessages = Context.ContactAdmin
-                .Where(x => x.Id == id && x.SenderId == null)
+                .Where(x => x.SenderId == null)
                 .AsQueryable();
 
             contactAdminMessages = (model.Status != null)

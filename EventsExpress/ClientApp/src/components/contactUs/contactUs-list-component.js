@@ -3,8 +3,9 @@ import ContactUsItemWrapper from '../../containers/contactUs/contactUs-item-cont
 import RenderList from '../event/RenderList'
 import { parse as queryStringParse } from 'query-string';
 import filterHelper from '../helpers/filterHelper';
+import { withRouter } from "react-router";
 
-export default class ContactUsList extends Component {
+class ContactUsList extends Component {
 
     handlePageChange = (page) => {
         if (this.props.history.location.search == "")
@@ -39,6 +40,8 @@ export default class ContactUsList extends Component {
             </>);
     }
 }
+export default withRouter(ContactUsList);
+
 
 
 
