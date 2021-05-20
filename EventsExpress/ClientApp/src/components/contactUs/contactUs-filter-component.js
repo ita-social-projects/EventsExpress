@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { renderDatePicker } from '../helpers/helpers';
+import { renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import './contactUs-filter.css';
 import ContactUsFilterStatus from './contactUs-filter-status-component';

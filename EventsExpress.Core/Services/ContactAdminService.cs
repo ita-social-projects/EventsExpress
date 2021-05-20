@@ -6,7 +6,6 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.BaseService;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -22,12 +21,12 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task SetIssueStatus(Guid messageId, ContactAdminStatus issueStatus)
+        public async Task UpdateIssueStatus(Guid messageId, ContactAdminStatus issueStatus)
         {
             var message = Context.ContactAdmin.Find(messageId);
             if (message == null)
             {
-                throw new EventsExpressException("Invalid message id");
+                throw new EventsExpressException("Invalid message Id");
             }
 
             message.Status = issueStatus;
@@ -56,7 +55,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count)
         {
             var contactAdminMessages = Context.ContactAdmin
-                .Where(x => x.MessageId == id && x.SenderId == null)
+                .Where(x => x.Id == id && x.SenderId == null)
                 .AsQueryable();
 
             contactAdminMessages = (model.Status != null)

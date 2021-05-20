@@ -4,22 +4,22 @@ import { usersHaveAnyOfRoles } from './auth-utils';
 
 class AuthComponent extends Component {
     render() {
-        const {id, roles, rolesMatch, children} = this.props;
+        const { id, roles, rolesMatch, children, onlyAnonymous} = this.props;
 
         if( id && (rolesMatch ? usersHaveAnyOfRoles(roles, rolesMatch) : true )){
             return children;
         }
-        else if (this.props.onlyAnonymous) {
-            if (!!this.props.onlyAnonymous && !this.props.id) {
-                return this.props.children;
+        if (onlyAnonymous) {
+            if (!!onlyAnonymous && !id) {
+                return children;
             }
         }
 
-        else {
-            if (this.props.id) {
-                return this.props.children;
-            }
-        }
+     //   else {
+      //      if (this.props.id) {
+      //          return this.props.children;
+       //     }
+      //  }
 
         return <> </>
     }

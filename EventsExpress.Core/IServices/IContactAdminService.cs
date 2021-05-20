@@ -12,7 +12,7 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count);
 
-        Task SetIssueStatus(Guid messageId, ContactAdminStatus issueStatus);
+        Task UpdateIssueStatus(Guid messageId, ContactAdminStatus issueStatus);
 
         ContactAdminDto MessageById(Guid messageId);
     }

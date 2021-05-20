@@ -8,7 +8,7 @@ export default class ContactUsService {
 
     getAllIssues = filters => baseService.getResourceNew(`contactUs/All${filters}`);
 
-    setIssueStatus = data => baseService.setResource(`contactUs/${data.MessageId}/UpdateStatus`, data);
+    updateIssueStatus = data => baseService.setResource(`contactUs/${data.MessageId}/UpdateStatus`, data);
 
     getMessage = id => baseService.getResourceNew(`contactUs/${id}`, id);
 }

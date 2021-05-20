@@ -40,29 +40,7 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            <AuthComponent rolesMatch={[Roles.User]}>
-                            <AuthComponent roleMatch={Roles.Admin} allowAnonymous={false}>
-                                <NavItem
-                                    to={'/user_chats'}
-                                    my_icon={
-                                        <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                            <i className="fas fa-comments"></i>
-                                        </Badge>
-                                    }
-                                    text={"Comuna"}
-                                />
-                                <NavItem
-                                    to={'/admin/'}
-                                    icon={'fa fa-user-secret'}
-                                    text={"Admin"}
-                                />
-                                <NavItem
-                                    to={'/contactUs/issues'}
-                                    icon={'fa fa-exclamation-triangle'}
-                                    text={"Issues"}
-                                />
-                            </AuthComponent>
-                            <AuthComponent roleMatch={Roles.User} allowAnonymous={false}>
+                            <AuthComponent rolesMatch={[Roles.User]} onlyAnonymous={false}>
                                 <NavItem
                                     to={'/user/' + this.props.user.id}
                                     icon={'fa fa-user'}
@@ -100,11 +78,16 @@ class LeftSidebar extends Component {
                                     text={"Comuna"}
                                 />
                             </AuthComponent>
-                            <AuthComponent rolesMatch={[Roles.Admin]}>
+                            <AuthComponent rolesMatch={[Roles.Admin]} onlyAnonymous={false}>
                                 <NavItem
                                     to={'/admin/'}
                                     icon={'fa fa-user-secret'}
                                     text={"Admin"}
+                                />
+                                <NavItem
+                                    to={'/contactUs/issues'}
+                                    icon={'fa fa-exclamation-triangle'}
+                                    text={"Issues"}
                                 />
                             </AuthComponent>
                             <AuthComponent onlyAnonymous>

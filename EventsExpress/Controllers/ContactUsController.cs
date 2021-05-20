@@ -105,7 +105,7 @@ namespace EventsExpress.Controllers
         [HttpPost("{messageId:Guid}/[action]")]
         public async Task<IActionResult> UpdateStatus(ContactUsViewModel issueStatus)
         {
-            await _contactAdminService.SetIssueStatus(issueStatus.MessageId, issueStatus.Status);
+            await _contactAdminService.UpdateIssueStatus(issueStatus.MessageId, issueStatus.Status);
 
             return Ok(issueStatus);
         }

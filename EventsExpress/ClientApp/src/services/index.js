@@ -24,7 +24,6 @@ export {
     UserService,
     NotificationTypeService,
     AccountService,
-    NotificationTemplateService
-    NotificationTypeService,
+    NotificationTemplateService,
     ContactUsService
 };

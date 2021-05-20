@@ -13,8 +13,6 @@ namespace EventsExpress.Db.Entities
 
         public User Assignee { get; set; }
 
-        public Guid MessageId { get; set; }
-
         public string Email { get; set; }
 
         public ContactAdminReason Subject { get; set; }
