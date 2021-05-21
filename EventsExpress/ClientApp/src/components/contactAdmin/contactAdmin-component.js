@@ -10,7 +10,7 @@ import issueTypeEnum from '../../constants/IssueTypeEnum ';
 
 const { validate } = Module;
 
-class ContactUs extends Component {
+class ContactAdmin extends Component {
 
 
     render() {
@@ -94,14 +94,14 @@ class ContactUs extends Component {
 const mapStateToProps = (state) => {
     return {
         initialValues: { email: state.user.email },
-        form_values: getFormValues('ContactUs')(state),
+        form_values: getFormValues('ContactAdmin')(state),
     }
 }
 
 
 
 export default connect(mapStateToProps)(reduxForm({
-    form: "ContactUs",
+    form: "ContactAdmin",
     validate,
     enableReinitialize: true
-})(ContactUs));
+})(ContactAdmin));

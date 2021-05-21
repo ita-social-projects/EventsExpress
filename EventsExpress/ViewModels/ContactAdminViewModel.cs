@@ -3,7 +3,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels
 {
-    public class ContactUsViewModel
+    public class ContactAdminViewModel
     {
         public string Description { get; set; }
 

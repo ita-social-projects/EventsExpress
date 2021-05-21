@@ -4,10 +4,10 @@ import SimpleModal from './../event/simple-modal';
 
 const history = createBrowserHistory({ forceRefresh: true });
 
-export default class ContactUsDetails extends Component {
+export default class ContactAdminDetails extends Component {
 
     handleClose = () => {
-        history.push(`/contactUs/issues`);
+        history.push(`/contactAdmin/issues`);
     }
 
     render() {

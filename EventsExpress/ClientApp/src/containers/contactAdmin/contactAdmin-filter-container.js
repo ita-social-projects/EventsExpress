@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import ContactUsFilter from '../../components/contactUs/contactUs-filter-component';
+import ContactAdminFilter from '../../components/contactAdmin/contactAdmin-filter-component';
 import filterHelper from '../../components/helpers/filterHelper';
 import { withRouter } from "react-router";
 
-class ContactUsFilterWrapper extends Component {
+class ContactAdminFilterWrapper extends Component {
 
     onReset = () => {
         this.props.resetFilters();
@@ -14,7 +14,7 @@ class ContactUsFilterWrapper extends Component {
 
     onSubmit = (filters) => {
         filters = filterHelper.trimUndefinedKeys(filters);
-        var filterCopy = { ...this.props.contactUsList.filter };
+        var filterCopy = { ...this.props.contactAdminList.filter };
         Object.entries(filters).forEach(function ([key, value]) {
             switch (key) {
                 case 'page':
@@ -39,7 +39,7 @@ class ContactUsFilterWrapper extends Component {
     }
 
     buildInitialFormValues = () => {
-        const filter = filterHelper.trimUndefinedKeys(this.props.contactUsList.filter);
+        const filter = filterHelper.trimUndefinedKeys(this.props.contactAdminList.filter);
         let values = Object.assign({}, filter);
         return values;
     };
@@ -47,7 +47,7 @@ class ContactUsFilterWrapper extends Component {
     render() {
         const initialFormValues = this.buildInitialFormValues();
         return <>
-            <ContactUsFilter
+            <ContactAdminFilter
                 onSubmit={this.onSubmit}
                 onReset={this.onReset}
                 form_values={this.props.form_values}
@@ -58,17 +58,17 @@ class ContactUsFilterWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    contactUsList: state.contactUsList,
-    form_values: getFormValues('contactUs-filter-form')(state),
+    contactAdminList: state.contactAdminList,
+    form_values: getFormValues('contactAdmin-filter-form')(state),
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        resetFilters: () => dispatch(reset('contactUs-filter-form')),
+        resetFilters: () => dispatch(reset('contactAdmin-filter-form')),
     }
 };
 
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(ContactUsFilterWrapper));
+)(ContactAdminFilterWrapper));

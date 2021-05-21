@@ -194,19 +194,19 @@ const initialState = {
         autoHideDuration: null,
         open: false
     },
-    contactUs: {
+    contactAdmin: {
         isPending: false,
         data: []
     },
-    contactUsList: {
+    contactAdminList: {
         isPending: true,
         data: {
             items: [],
             pageViewModel: {},
         },
-        filter: filterHelper.getDefaultContactUsFilter(),
+        filter: filterHelper.getDefaultContactAdminFilter(),
     },
-    contactUsItem: {
+    contactAdminItem: {
         isPending: false,
         data: []
     },

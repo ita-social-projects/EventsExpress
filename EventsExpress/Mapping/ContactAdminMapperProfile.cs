@@ -22,10 +22,10 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.ResolutionDetails, opts => opts.Ignore())
                 .ForMember(dest => dest.Sender, opts => opts.Ignore());
 
-            CreateMap<ContactAdminDto, ContactUsViewModel>()
+            CreateMap<ContactAdminDto, ContactAdminViewModel>()
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.MessageText));
 
-            CreateMap<ContactUsViewModel, ContactAdminDto>()
+            CreateMap<ContactAdminViewModel, ContactAdminDto>()
                 .ForMember(dest => dest.MessageText, opt => opt.MapFrom(src => src.Description));
         }
     }

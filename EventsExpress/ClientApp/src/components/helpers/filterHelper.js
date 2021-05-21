@@ -42,7 +42,7 @@ const filterHelper = (function () {
             }
         },
 
-        getDefaultContactUsFilter: function () {
+        getDefaultContactAdminFilter: function () {
             return {
                 page: '1',
                 dateCreated: undefined,

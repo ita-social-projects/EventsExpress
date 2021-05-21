@@ -1,15 +1,15 @@
-import { ContactUsService } from "../../services";
+import { ContactAdminService } from "../../services";
 import { setErrorAllertFromResponse } from '../alert-action';
 
-export const SET_CONTACTUS_PENDING = "SET_CONTACTUS_PENDING";
-export const GET_CONTACTUS_SUCCESS = "GET_CONTACTUS_SUCCESS";
-export const RESET_CONTACTUS = "RESET_CONTACTUS";
+export const SET_CONTACT_ADMIN_PENDING = "SET_CONTACT_ADMIN_PENDING";
+export const GET_CONTACT_ADMIN_SUCCESS = "GET_CONTACT_ADMIN_SUCCESS";
+export const RESET_CONTACT_ADMIN = "RESET_CONTACT_ADMIN";
 
-const api_serv = new ContactUsService();
+const api_serv = new ContactAdminService();
 
 export default function getIssues(filters) {
     return async dispatch => {
-        dispatch(setContactUsPending(true));
+        dispatch(setContactAdminPending(true));
         let response = await api_serv.getAllIssues(filters);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
@@ -22,23 +22,23 @@ export default function getIssues(filters) {
     }
 }
 
-export function setContactUsPending(data) {
+export function setContactAdminPending(data) {
     return {
-        type: SET_CONTACTUS_PENDING,
+        type: SET_CONTACT_ADMIN_PENDING,
         payload: data
     };
 }
 
 export function getListOfIssues(data) {
     return {
-        type: GET_CONTACTUS_SUCCESS,
+        type: GET_CONTACT_ADMIN_SUCCESS,
         payload: data
     }
 }
 
 export function resetFilters() {
     return {
-        type: RESET_CONTACTUS
+        type: RESET_CONTACT_ADMIN
     }
 }
 

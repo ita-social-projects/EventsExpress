@@ -36,10 +36,10 @@ import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
 import * as Hub from './hub';
 import * as Alert from './alert';
-import * as ContactUs from './contactUs/contact-us-reducer';
-import * as ContactUsList from './contactUs/contact-us-list-reducer';
-import * as ContactUsIssueStatus from './contactUs/contact-us-issue-status-reducer';
-import * as ContactUsItem from './contactUs/contact-us-item-reducer';
+import * as ContactAdmin from './contactAdmin/contact-admin-reducer';
+import * as ContactAdminList from './contactAdmin/contact-admin-list-reducer';
+import * as ContactAdminIssueStatus from './contactAdmin/contact-admin-issue-status-reducer';
+import * as ContactAdminItem from './contactAdmin/contact-admin-item-reducer';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
 import * as Account from './account';
@@ -85,10 +85,10 @@ const rootReducers = {
     chat: Chat.reducer,
     hubConnection: Hub.reducer,
     alert: Alert.reducer,
-    contactUs: ContactUs.reducer,
-    contactUsList: ContactUsList.reducer,
-    contactUsIssueStatus: ContactUsIssueStatus.reducer,
-    contactUsItem: ContactUsItem.reducer,
+    contactAdmin: ContactAdmin.reducer,
+    contactAdminList: ContactAdminList.reducer,
+    contactAdminIssueStatus: ContactAdminIssueStatus.reducer,
+    contactAdminItem: ContactAdminItem.reducer,
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer,
     NotificationTemplates: NotificationTemplates.reducer,

@@ -4,7 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Moment from 'moment';
 import { Link } from 'react-router-dom'
 
-export default class ContactUsItem extends Component {
+export default class ContactAdminItem extends Component {
 
     render() {
         const { item } = this.props;
@@ -21,7 +21,7 @@ export default class ContactUsItem extends Component {
                 {item.status}
             </td>
             <td className="justify-content-center ">
-                <Link to={`/contactUs/${item.messageId}/UpdateStatus`}>
+                <Link to={`/contactAdmin/${item.messageId}/UpdateStatus`}>
                     <Tooltip title="View">
                         <IconButton style={{ fontSize: 16 }} aria-label="view" >
                             <i className="fa fa-eye "></i>

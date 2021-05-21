@@ -3,13 +3,13 @@ import { withRouter } from "react-router";
 import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
-import ContactUsList from '../../components/contactUs/contactUs-list-component';
+import ContactAdminList from '../../components/contactAdmin/contactAdmin-list-component';
 import Spinner from '../../components/spinner';
-import getIssues from '../../actions/contactUs/contact-us-list-action';
+import getIssues from '../../actions/contactAdmin/contact-admin-list-action';
 import filterHelper from '../../components/helpers/filterHelper';
 
 
-class ContactUsListWrapper extends Component {
+class ContactAdminListWrapper extends Component {
     constructor(props) {
         super(props);
         this.objCurrentQueryParams = Object.create(null);
@@ -17,7 +17,7 @@ class ContactUsListWrapper extends Component {
     }
 
     componentDidMount() {
-        this.setSearchParamsToContactUsFilter(this.props.history.location.search);
+        this.setSearchParamsToContactAdminFilter(this.props.history.location.search);
         const queryString = filterHelper.getQueryStringByFilter(this.objCurrentQueryParams);
         this.props.getIssues(queryString);
     }
@@ -29,8 +29,8 @@ class ContactUsListWrapper extends Component {
         }
     }
 
-    setSearchParamsToContactUsFilter = search => {
-        var filterCopy = { ...this.props.contactUsList.filter };
+    setSearchParamsToContactAdminFilter = search => {
+        var filterCopy = { ...this.props.contactAdminList.filter };
         this.objCurrentQueryParams = queryStringParse(search);
 
         Object.entries(this.objCurrentQueryParams).forEach(function ([key, value]) {
@@ -40,15 +40,15 @@ class ContactUsListWrapper extends Component {
     }
 
     render() {
-        const { data, isPending } = this.props.contactUsList;
-        const { items } = this.props.contactUsList.data;
+        const { data, isPending } = this.props.contactAdminList;
+        const { items } = this.props.contactAdminList.data;
         return <div>
             <table className="table w-100 m-auto">
                 <tbody>
                     {!isPending
-                        ? <ContactUsList
+                        ? <ContactAdminList
                             data_list={items}
-                            filter={this.props.contactUsList.filter}
+                            filter={this.props.contactAdminList.filter}
                             page={data.pageViewModel.pageNumber}
                             totalPages={data.pageViewModel.totalPages}
                         />
@@ -62,8 +62,8 @@ class ContactUsListWrapper extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        contactUsList: state.contactUsList,
-        form_values: getFormValues('contactUs-filter-form')(state),
+        contactAdminList: state.contactAdminList,
+        form_values: getFormValues('contactAdmin-filter-form')(state),
     }
 };
 
@@ -76,4 +76,4 @@ const mapDispatchToProps = (dispatch) => {
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(ContactUsListWrapper));
+)(ContactAdminListWrapper));

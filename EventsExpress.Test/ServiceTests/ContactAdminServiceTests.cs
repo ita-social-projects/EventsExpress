@@ -13,7 +13,7 @@ using NUnit.Framework.Internal;
 namespace EventsExpress.Test.ServiceTests
 {
     [TestFixture]
-    internal class ContactUsServiceTests : TestInitializer
+    internal class ContactAdminServiceTests : TestInitializer
     {
         private ContactAdminService _service;
         private ContactAdmin _contactAdmin;
@@ -137,7 +137,7 @@ namespace EventsExpress.Test.ServiceTests
             };
             var count = messages.Count;
             _service.GetAll(contactAdminFilterViewModel, messageId, out count);
-            Assert.AreEqual(count, 1);
+            Assert.AreEqual(count, 3);
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace EventsExpress.Test.ServiceTests
             MockMapper.Setup(u => u.Map<IEnumerable<ContactAdmin>, IEnumerable<ContactAdminDto>>(It.IsAny<IEnumerable<ContactAdmin>>()))
                 .Returns((IEnumerable<ContactAdmin> e) => e?.Select(item => new ContactAdminDto { MessageId = item.Id }));
             var result = _service.GetAll(contactAdminFilterViewModel, messageId, out count);
-            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(3, result.Count());
         }
 
         [Test]

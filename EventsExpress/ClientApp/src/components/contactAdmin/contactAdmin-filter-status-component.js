@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 
-function ContactUsStatusReadingString(option) {
+function ContactAdminStatusReadingString(option) {
     switch (option) {
         case 0:
             return " Open"
@@ -13,7 +13,7 @@ function ContactUsStatusReadingString(option) {
     }
 }
 
-class ContactUsFilterStatus extends Component {
+class ContactAdminFilterStatus extends Component {
     checkboxGroup() {
         let { options, input } = this.props;
         if (input.value == "")
@@ -27,16 +27,16 @@ class ContactUsFilterStatus extends Component {
                             name={`${input.name}[${index}]`}
                             value={option}
                             checked={input.value.find(x => x === option) !== undefined}
-                            onChange={(contactUs) => {
+                            onChange={(contactAdmin) => {
                                 const newValue = [...input.value];
-                                if (contactUs.target.checked) {
+                                if (contactAdmin.target.checked) {
                                     newValue.push(option);
                                 } else {
                                     newValue.splice(newValue.indexOf(option), 1);
                                 }
                                 return input.onChange(newValue);
                             }} />
-                        {ContactUsStatusReadingString(option)}
+                        {ContactAdminStatusReadingString(option)}
                     </label>
                 </div>)
         });
@@ -49,5 +49,5 @@ class ContactUsFilterStatus extends Component {
         )
     }
 }
-export default ContactUsFilterStatus;
+export default ContactAdminFilterStatus;
 

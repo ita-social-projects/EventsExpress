@@ -3,11 +3,11 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import { renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
-import './contactUs-filter.css';
-import ContactUsFilterStatus from './contactUs-filter-status-component';
+import './contactAdmin-filter.css';
+import ContactAdminFilterStatus from './contactAdmin-filter-status-component';
 import issueStatusEnum from '../../constants/IssueStatusEnum';
 
-class ContactUsFilter extends Component {
+class ContactAdminFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -57,7 +57,7 @@ class ContactUsFilter extends Component {
                         </div>
                         <div className="form-group">
                             <Field name="status"
-                                component={ContactUsFilterStatus}
+                                component={ContactAdminFilterStatus}
                                 options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
                             />
                         </div>
@@ -87,8 +87,8 @@ class ContactUsFilter extends Component {
     }
 }
 
-ContactUsFilter = reduxForm({
-    form: 'contactUs-filter-form',
-})(ContactUsFilter);
+ContactAdminFilter = reduxForm({
+    form: 'contactAdmin-filter-form',
+})(ContactAdminFilter);
 
-export default ContactUsFilter;
+export default ContactAdminFilter;

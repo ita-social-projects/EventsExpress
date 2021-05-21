@@ -1,11 +1,11 @@
 ﻿import React, { Component } from 'react';
-import ContactUsItemWrapper from '../../containers/contactUs/contactUs-item-container';
+import ContactAdminItemWrapper from '../../containers/contactAdmin/contactAdmin-item-container';
 import RenderList from '../event/RenderList'
 import { parse as queryStringParse } from 'query-string';
 import filterHelper from '../helpers/filterHelper';
 import { withRouter } from "react-router";
 
-class ContactUsList extends Component {
+class ContactAdminList extends Component {
 
     handlePageChange = (page) => {
         if (this.props.history.location.search == "")
@@ -19,7 +19,7 @@ class ContactUsList extends Component {
     };
 
     renderSingleItem = (item) => (
-        <ContactUsItemWrapper
+        <ContactAdminItemWrapper
             key={item.messageId + item.status}
             item={item}
         />
@@ -40,7 +40,7 @@ class ContactUsList extends Component {
             </>);
     }
 }
-export default withRouter(ContactUsList);
+export default withRouter(ContactAdminList);
 
 
 

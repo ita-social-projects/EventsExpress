@@ -40,7 +40,7 @@ class LeftSidebar extends Component {
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
-                            <AuthComponent rolesMatch={[Roles.User]} onlyAnonymous={false}>
+                            <AuthComponent rolesMatch={Roles.User}>
                                 <NavItem
                                     to={'/user/' + this.props.user.id}
                                     icon={'fa fa-user'}
@@ -62,7 +62,7 @@ class LeftSidebar extends Component {
                                     text={"Recurrent Events"}
                                 />
                                 <NavItem
-                                    to={'/contactUs'}
+                                    to={'/contactAdmin'}
                                     icon={'fa fa-exclamation-circle'}
                                     text={'Contact us'}
                                 />
@@ -78,21 +78,21 @@ class LeftSidebar extends Component {
                                     text={"Comuna"}
                                 />
                             </AuthComponent>
-                            <AuthComponent rolesMatch={[Roles.Admin]} onlyAnonymous={false}>
+                            <AuthComponent rolesMatch={Roles.Admin}>
                                 <NavItem
                                     to={'/admin/'}
                                     icon={'fa fa-user-secret'}
                                     text={"Admin"}
                                 />
                                 <NavItem
-                                    to={'/contactUs/issues'}
+                                    to={'/contactAdmin/issues'}
                                     icon={'fa fa-exclamation-triangle'}
                                     text={"Issues"}
                                 />
                             </AuthComponent>
                             <AuthComponent onlyAnonymous>
                                 <NavItem
-                                    to={'/contactUs'}
+                                    to={'/contactAdmin'}
                                     icon={'fa fa-exclamation-circle'}
                                     text={'Contact us'}
                                 />

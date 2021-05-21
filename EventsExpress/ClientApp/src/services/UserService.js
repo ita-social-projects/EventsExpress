@@ -10,10 +10,6 @@ export default class UserService {
 
     getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
-    setContactUs = data => baseService.setResource('contactUs/ContactAdmins', data);
-
-    getAllIssues = (page) => baseService.getResourceNew(`contactUs/All?page=${page}`, page);
-
     setAvatar = async(data) => {
         let file = new FormData();
         file.append('newAva', data.image.file);

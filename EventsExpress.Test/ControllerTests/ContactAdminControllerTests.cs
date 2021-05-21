@@ -16,18 +16,18 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ControllerTests
 {
     [TestFixture]
-    internal class ContactUSControllerTests
+    internal class ContactAdminControllerTests
     {
         private Mock<IContactAdminService> _contactAdminService;
         private Mock<IMapper> _mapper;
-        private ContactUsController _contactUsController;
+        private ContactAdminController _contactAdminController;
         private Guid id = Guid.NewGuid();
-        private ContactUsViewModel issueStatus;
+        private ContactAdminViewModel issueStatus;
         private ContactAdminDto contactAdminDTO;
         private ContactAdminFilterViewModel filter;
-        private ContactUsViewModel model;
+        private ContactAdminViewModel model;
         private int count = 1;
-        private ContactAdminFilterViewModel contactUsFilterViewModel;
+        private ContactAdminFilterViewModel contactAdminFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;
 
@@ -36,7 +36,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _contactAdminService = new Mock<IContactAdminService>();
             _mapper = new Mock<IMapper>();
-            _contactUsController = new ContactUsController(_mapper.Object, _contactAdminService.Object);
+            _contactAdminController = new ContactAdminController(_mapper.Object, _contactAdminService.Object);
             contactAdminDTO = new ContactAdminDto()
             {
                 MessageId = Guid.NewGuid(),
@@ -56,7 +56,7 @@ namespace EventsExpress.Test.ControllerTests
                 },
             };
 
-            model = new ContactUsViewModel()
+            model = new ContactAdminViewModel()
             {
                 Description = "some description",
                 Subject = ContactAdminReason.BadEvent,
@@ -65,9 +65,9 @@ namespace EventsExpress.Test.ControllerTests
                 DateCreated = DateTime.Now,
             };
 
-            issueStatus = new ContactUsViewModel { MessageId = id, Status = ContactAdminStatus.InProgress };
+            issueStatus = new ContactAdminViewModel { MessageId = id, Status = ContactAdminStatus.InProgress };
 
-            contactUsFilterViewModel = new ContactAdminFilterViewModel
+            contactAdminFilterViewModel = new ContactAdminFilterViewModel
             {
                 Page = _page,
                 PageSize = _pageSize,
@@ -88,7 +88,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _contactAdminService.Setup(message => message.GetAll(It.IsAny<ContactAdminFilterViewModel>(), It.IsAny<Guid>(), out count)).Returns(new ContactAdminDto[] { contactAdminDTO });
 
-            var res = _contactUsController.All(filter, id);
+            var res = _contactAdminController.All(filter, id);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
         }
@@ -98,7 +98,7 @@ namespace EventsExpress.Test.ControllerTests
         public void GetAll_NotNull_BadRequestResult()
         {
             _contactAdminService.Setup(message => message.GetAll(It.IsAny<ContactAdminFilterViewModel>(), It.IsAny<Guid>(), out count)).Returns(new ContactAdminDto[] { contactAdminDTO });
-            var res = _contactUsController.All(contactUsFilterViewModel, id);
+            var res = _contactAdminController.All(contactAdminFilterViewModel, id);
 
             BadRequestResult badResult = res as BadRequestResult;
             Assert.IsNotNull(badResult);
@@ -112,7 +112,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _contactAdminService.Setup(item => item.UpdateIssueStatus(issueStatus.MessageId, issueStatus.Status)).Returns(Task.CompletedTask);
 
-            var expected = await _contactUsController.UpdateStatus(issueStatus);
+            var expected = await _contactAdminController.UpdateStatus(issueStatus);
             Assert.DoesNotThrowAsync(() => Task.FromResult(expected));
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
@@ -123,7 +123,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _contactAdminService.Setup(item => item.UpdateIssueStatus(issueStatus.MessageId, issueStatus.Status)).Throws<EventsExpressException>();
 
-            Assert.ThrowsAsync<EventsExpressException>(() => _contactUsController.UpdateStatus(issueStatus));
+            Assert.ThrowsAsync<EventsExpressException>(() => _contactAdminController.UpdateStatus(issueStatus));
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _contactAdminService.Setup(item => item.MessageById(It.IsAny<Guid>())).Returns(contactAdminDTO);
             var testGuid = contactAdminDTO.MessageId;
-            var okResult = _contactUsController.GetMessageById(testGuid);
+            var okResult = _contactAdminController.GetMessageById(testGuid);
             Assert.IsInstanceOf<OkObjectResult>(okResult);
             Assert.IsNotNull(okResult);
         }
@@ -141,7 +141,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ContactAdmins")]
         public async Task ContactAdmins_OkResult()
         {
-            var res = await _contactUsController.ContactAdmins(model, id);
+            var res = await _contactAdminController.ContactAdmins(model, id);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<IActionResult>(res);

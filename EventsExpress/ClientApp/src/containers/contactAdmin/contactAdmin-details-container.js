@@ -1,27 +1,27 @@
 import React from "react";
 import { connect } from "react-redux";
-import ContactUsDetails from "../../components/contactUs/contactUs-details-component";
-import change_issue_status from '../../actions/contactUs/contact-us-issue-status-action';
-import get_message_by_id from '../../actions/contactUs/contact-us-item-action';
+import ContactAdminDetails from "../../components/contactAdmin/contactAdmin-details-component";
+import change_issue_status from '../../actions/contactAdmin/contact-admin-issue-status-action';
+import get_message_by_id from '../../actions/contactAdmin/contact-admin-item-action';
 import issueStatusEnum from '../../constants/IssueStatusEnum';
 
-class ContactUsDetailsContainer extends React.Component {
+class ContactAdminDetailsContainer extends React.Component {
     componentWillMount = () => {
         const { id } = this.props.match.params;
         this.props.get_message_by_id(id);
     }
 
     onResolve = () => {
-        this.props.resolve(this.props.contactUsData.messageId, this.props.contactUsData.status);
+        this.props.resolve(this.props.contactAdminData.messageId, this.props.contactAdminData.status);
     }
 
     onInProgress = () => {
-        this.props.inProgress(this.props.contactUsData.messageId, this.props.contactUsData.status);
+        this.props.inProgress(this.props.contactAdminData.messageId, this.props.contactAdminData.status);
     }
 
     render() {
-        return <ContactUsDetails
-            items={this.props.contactUsData}
+        return <ContactAdminDetails
+            items={this.props.contactAdminData}
             onResolve={this.onResolve}
             onInProgress={this.onInProgress}
         />
@@ -29,7 +29,7 @@ class ContactUsDetailsContainer extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    contactUsData: state.contactUsItem.data
+    contactAdminData: state.contactAdminItem.data
 });
 
 const mapDispatchToProps = dispatch => {
@@ -43,4 +43,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ContactUsDetailsContainer)
+)(ContactAdminDetailsContainer)

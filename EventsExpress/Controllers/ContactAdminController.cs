@@ -13,12 +13,12 @@ namespace EventsExpress.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ContactUsController : ControllerBase
+    public class ContactAdminController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IContactAdminService _contactAdminService;
 
-        public ContactUsController(
+        public ContactAdminController(
             IMapper mapper,
             IContactAdminService contactAdminService)
         {
@@ -29,14 +29,14 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method help to contact users with admins.
         /// </summary>
-        /// <param name="model">Param model defines ContactUsViewModel model.</param>
+        /// <param name="model">Param model defines ContactAdminViewModel model.</param>
         /// <param name="id">Param id defines the message identifier.</param>
         /// <returns>The method sends message to admin mail.</returns>
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> ContactAdmins(ContactUsViewModel model, Guid id)
+        public async Task<IActionResult> ContactAdmins(ContactAdminViewModel model, Guid id)
         {
             var emailTitle = string.Empty;
             if (model.Title == null)
@@ -80,9 +80,9 @@ namespace EventsExpress.Controllers
 
             try
             {
-                var viewModel = new IndexViewModel<ContactUsViewModel>
+                var viewModel = new IndexViewModel<ContactAdminViewModel>
                 {
-                    Items = _mapper.Map<IEnumerable<ContactUsViewModel>>(
+                    Items = _mapper.Map<IEnumerable<ContactAdminViewModel>>(
                         _contactAdminService.GetAll(filter, id, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
@@ -103,7 +103,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">Status changing failed.</response>
         [Authorize]
         [HttpPost("{messageId:Guid}/[action]")]
-        public async Task<IActionResult> UpdateStatus(ContactUsViewModel issueStatus)
+        public async Task<IActionResult> UpdateStatus(ContactAdminViewModel issueStatus)
         {
             await _contactAdminService.UpdateIssueStatus(issueStatus.MessageId, issueStatus.Status);
 
@@ -119,6 +119,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{messageId:Guid}")]
         public IActionResult GetMessageById(Guid messageId) =>
-            Ok(_mapper.Map<ContactUsViewModel>(_contactAdminService.MessageById(messageId)));
+            Ok(_mapper.Map<ContactAdminViewModel>(_contactAdminService.MessageById(messageId)));
     }
 }
