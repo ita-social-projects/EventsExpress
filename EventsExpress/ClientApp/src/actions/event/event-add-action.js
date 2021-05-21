@@ -3,7 +3,7 @@ import { EventService } from '../../services';
 import get_event, { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
-
+import { setSuccessAllert } from '../alert-action';
 
 export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
 export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
@@ -21,6 +21,7 @@ export default function add_event(data) {
         }
         dispatch(setEventSuccess(true));
         const event = await response.json();
+        dispatch(setSuccessAllert('Your event was successfully created!'));
         dispatch(history.push(`/editEvent/${event.id}`));
         return Promise.resolve();
     }
@@ -34,7 +35,7 @@ export function edit_event(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setEventSuccess(true));
-        dispatch(get_event(data.id));
+        dispatch(getEvent(data));
         return Promise.resolve();
     }
 }
@@ -45,8 +46,9 @@ export function publish_event(eventId) {
         let response = await api_serv.publishEvent(eventId);
         if (response.ok) {
             dispatch(setEventSuccess(true));
-            dispatch(getEvent(eventId));
+            dispatch(get_event(eventId));
             dispatch(eventWasCreated(eventId));
+            dispatch(setSuccessAllert('Your event has been successfully published!'));
             return Promise.resolve();
         }
         else {
