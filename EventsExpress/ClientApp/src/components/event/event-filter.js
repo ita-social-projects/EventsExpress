@@ -34,7 +34,7 @@ class EventFilter extends Component {
                 categories: initialValues.categories,
                 statuses: initialValues.statuses,
                 radius: initialValues.radius,
-                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { lat: null, lng: null },
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { latitude: null, longitude: null }
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -78,6 +78,7 @@ class EventFilter extends Component {
                             <div className="form-group">
                                 <Field
                                     name="categories"
+                                    fullWidth
                                     component={renderMultiselect}
                                     data={all_categories.data}
                                     valueField={"id"}
@@ -94,30 +95,20 @@ class EventFilter extends Component {
                                     />
                                 }
                             </div>
-
                             <div>
                                 <MapModal
                                     initialize={this.props.initialize}
-                                    initialValues={this.props.initialFormValues}
                                     values={values}
                                     reset={this.props.onReset} />
                             </div>
-
                             <div className="d-flex">
-
-                                {values.selectedPos &&
-                                    values.selectedPos.lat &&
-                                    <div>
-                                        <p>
-                                            Radius:
-                                {values.radius} km
-                                        </p>
-                                        <p>
-                                            Location:
-                                        </p>
-                                        <DisplayMap
-                                            location={{ latitude: values.selectedPos.lat, longitude: values.selectedPos.lng }}
-                                        />
+                                {
+                                    values.selectedPos &&
+                                    values.selectedPos.latitude &&
+                                    <div className="mt-2">
+                                        <p>Radius: {values.radius} km</p>
+                                        <p>Location:</p>
+                                        <DisplayMap location={{ ...values.selectedPos }}/>
                                     </div>
                                 }
                             </div>

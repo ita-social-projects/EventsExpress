@@ -4,40 +4,17 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import LocationMap from './map/location-map';
+import { renderLocationMapWithCircle } from '../helpers/form-helpers';
 import { Field } from 'redux-form';
-import eventHelper from '../helpers/eventHelper';
 import './slider.css';
 import DisplayMap from '../event/map/display-map';
+
 class MapModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
-            selectedPos: null,
-            radius: this.props.initialValues.radius != undefined ? this.props.initialValues.radius : 0,
-            needInitializeValues: true,
-            map: false
+            open: false
         }
-        this.baseState = this.state;
-        this.radius = React.createRef();
-    }
-    componentDidUpdate(prevProps) {
-        const initialValues = this.props.initialFormValues;
-        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
-            || this.state.needInitializeValues) {
-            this.props.initialize({
-                radius: this.props.values.radius,
-                selectedPos: this.props.values.selectedPos
-            });
-            this.setState({
-                ['needInitializeValues']: false
-            });
-        }
-    }
-
-    componentDidUpdate() {
-        return true;
     }
 
     handleClickOpen = () => {
@@ -47,34 +24,24 @@ class MapModal extends Component {
     handleClose = () => {
         const startValue = this.props.initialize({
             radius: 8,
-            selectedPos: { lat: null, lng: null }
+            selectedPos: { latitude: null, longitude: null }
         })
-        if (this.props.values.selectedPos.lat != null)
+        if (this.props.values.selectedPos.latitude != null)
             return startValue;
-        else 
-            return startValue && this.setState({ open: false })     
+        else
+            return startValue && this.setState({ open: false })  
     };
 
     handleFilter = () => {
         this.setState({ open: false });
     }
 
-    onClickCallBack = (coords) => {
-        this.setState({ selectedPos: [coords.lat, coords.lng] });
-    }
-
-    onRadiusChange = (event) => {
-        const { value } = event.target
-        this.setState({ radius: value });
-    }
-
     render() {
         return (
             <div>
-                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                <Button variant="outlined" fullWidth={true} color="primary" onClick={this.handleClickOpen}>
                     Filter by location
                 </Button>
-
                 <Dialog fullWidth={true} open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Filter by location</DialogTitle>
                     <DialogContent>
@@ -86,7 +53,7 @@ class MapModal extends Component {
                                         type="range"
                                         min="1" max="10000" value={this.props.values.radius}
                                         onChange={this.onRadiusChange}
-                                        step="any"
+                                        step="1"
                                         className="radius-slider"
                                     />
                                 </div>
@@ -96,43 +63,37 @@ class MapModal extends Component {
                             {
                                 this.props.values &&
                                 this.props.values.selectedPos != undefined &&
-                                this.props.values.selectedPos.lat != undefined &&
-                                this.props.values.selectedPos.lng != undefined &&
+                                this.props.values.selectedPos.latitude != undefined &&
+                                this.props.values.selectedPos.longitude != undefined &&
                                 <div>
                                     <p>Current position on the Map is:</p>
-                                    <p>latitude: {this.props.values.selectedPos.lat}</p>
-                                    <p>longitude: {this.props.values.selectedPos.lng}</p>
-                                    {this.props.values && this.state.map == false && <DisplayMap location={{ latitude: this.props.values.selectedPos.lat, longitude: this.props.values.selectedPos.lng }} />}
+                                    <p>latitude: {this.props.values.selectedPos.latitude}</p>
+                                    <p>longitude: {this.props.values.selectedPos.longitude}</p>
+                                    <DisplayMap location={{ ...this.props.values.selectedPos }}/>
                                 </div>
-
                             }
                             {
                                 this.props.values &&
-                                this.props.values.selectedPos.lat == null &&
-                                this.props.values.selectedPos.lng == null &&
+                                this.props.values.selectedPos.latitude == null &&
+                                this.props.values.selectedPos.longitude == null &&
                                 <div>
                                     <p>Choose position on the Map!</p>
                                 </div>
                             }
-
                             <Field
                                 name='selectedPos'
-                                component={LocationMap}
-                                onClickCallBack={this.onClickCallBack}
-                                circle
+                                component={renderLocationMapWithCircle}
                                 radius={this.props.values.radius}
-                                initialValues={this.props.values}
                             />
-
                         </div>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             Cancel
-                    </Button>
+                        </Button>
                         <Button onClick={this.handleFilter} color="primary">
                             Apply
-                </Button>
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
