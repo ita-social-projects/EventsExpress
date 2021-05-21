@@ -24,7 +24,5 @@ namespace EventsExpress.Core.IServices
         Task PasswordRecover(string email);
 
         Task ChangePasswordAsync(string oldPassword, string newPassword);
-
-        UserDto GetCurrentUser();
     }
 }
