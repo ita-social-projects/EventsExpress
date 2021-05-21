@@ -26,12 +26,11 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<CategoryDto> GetAllCategories()
         {
-            var categories = Context.Categories.Include(c => c.Users).Include(c => c.Events).Select(x => new CategoryDto
+            var categories = Context.Categories
+                .Include(c => c.Users).Include(c => c.Events)
+                .Select(x => new CategoryDto
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    CountOfEvents = x.Events.Count(),
-                    CountOfUser = x.Users.Count(),
+                    Id = x.Id, Name = x.Name, CountOfEvents = x.Events.Count(), CountOfUser = x.Users.Count(),
                 })
                 .OrderBy(category => category.Name);
 

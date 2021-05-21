@@ -13,7 +13,7 @@ export default function EventActiveStatus(props) {
                     submitCallback={(reason) => props.onBlock(props.eventId, reason, props.eventStatus)}
                     button={<Tooltip title="Active event">
                         <IconButton className="text-success" size="middle">
-                            <i className="fas fa-unlock"></i>
+                            <i className="fas fa-unlock"/>
                         </IconButton>
                     </Tooltip>}
                 />)
@@ -24,7 +24,7 @@ export default function EventActiveStatus(props) {
                     submitCallback={(reason) => props.onUnBlock(props.eventId, reason)}
                     button={<Tooltip title="Blocked event">
                         <IconButton className="text-danger" size="middle">
-                            <i className="fas fa-lock"></i>
+                            <i className="fas fa-lock"/>
                         </IconButton>
                     </Tooltip>}
                 />)
@@ -32,7 +32,7 @@ export default function EventActiveStatus(props) {
             return (
                 <Tooltip title="Canceled event">
                     <IconButton className="text-danger" size="middle" color="secondary" >
-                        <i class="far fa-calendar-times"></i>
+                        <i className="far fa-calendar-times"/>
                     </IconButton>
                 </Tooltip>)
     }

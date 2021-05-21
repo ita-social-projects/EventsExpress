@@ -1,16 +1,15 @@
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import React, {Component} from 'react';
+import {reduxForm, Field} from 'redux-form';
 import Button from "@material-ui/core/Button";
 import {
     renderTextField,
     renderMultiselect
 } from '../helpers/helpers';
-import { renderDatePicker } from '../helpers/form-helpers';
+import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
 import eventHelper from '../helpers/eventHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
-import EventFilterStatus from './event-filter-status';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 
 class EventFilter extends Component {
@@ -43,11 +42,16 @@ class EventFilter extends Component {
     }
 
     render() {
-        const { all_categories, form_values, current_user } = this.props;
+        const {all_categories, form_values, current_user} = this.props;
         let values = form_values || {};
+        let options = [
+            {value: eventStatusEnum.Active, text: "Active"},
+            {value: eventStatusEnum.Blocked, text: "Blocked"},
+            {value: eventStatusEnum.Canceled, text: "Canceled"}
+        ];
 
         return <>
-            <div className="sidebar-filter" >
+            <div className="sidebar-filter">
                 <form onSubmit={this.props.handleSubmit} className="box">
                     <div className="form-group">
                         <Field
@@ -58,61 +62,61 @@ class EventFilter extends Component {
                         />
                     </div>
                     {this.state.viewMore &&
-                        <>
-                            <div className="form-group">
-                                <Field
-                                    name='dateFrom'
-                                    label='From'
-                                    minValue={new Date()}
-                                    component={renderDatePicker}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <Field
-                                    name='dateTo'
-                                    label='To'
-                                    minValue={new Date(values.dateFrom)}
-                                    component={renderDatePicker}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <Field
-                                    name="categories"
-                                    fullWidth
-                                    component={renderMultiselect}
-                                    data={all_categories.data}
-                                    valueField={"id"}
-                                    textField={"name"}
-                                    className="form-control mt-2"
-                                    placeholder='#hashtags'
-                                />
-                            </div>
-                            <div className="form-group">
-                                {current_user.roles.includes("Admin") &&
-                                    <Field name="statuses"
-                                        component={EventFilterStatus}
-                                        options={[eventStatusEnum.Active, eventStatusEnum.Blocked, eventStatusEnum.Canceled]}
-                                    />
-                                }
-                            </div>
-                            <div>
-                                <MapModal
-                                    initialize={this.props.initialize}
-                                    values={values}
-                                    reset={this.props.onReset} />
-                            </div>
-                            <div className="d-flex">
-                                {
-                                    values.selectedPos &&
-                                    values.selectedPos.latitude &&
-                                    <div className="mt-2">
-                                        <p>Radius: {values.radius} km</p>
-                                        <p>Location:</p>
-                                        <DisplayMap location={{ ...values.selectedPos }}/>
-                                    </div>
-                                }
-                            </div>
-                        </>
+                      <>
+                          <div className="form-group">
+                              <Field
+                                  name='dateFrom'
+                                  label='From'
+                                  minValue={new Date()}
+                                  component={renderDatePicker}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <Field
+                                  name='dateTo'
+                                  label='To'
+                                  minValue={new Date(values.dateFrom)}
+                                  component={renderDatePicker}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <Field
+                                  name="categories"
+                                  fullWidth
+                                  component={renderMultiselect}
+                                  data={all_categories.data}
+                                  valueField={"id"}
+                                  textField={"name"}
+                                  className="form-control mt-2"
+                                  placeholder='#hashtags'
+                              />
+                          </div>
+                          <div className="form-group">
+                              {current_user.roles.includes("Admin") &&
+                              <Field name="statuses"
+                                     component={MultiCheckbox}
+                                     options={options}
+                              />
+                              }
+                          </div>
+                          <div>
+                              <MapModal
+                                  initialize={this.props.initialize}
+                                  values={values}
+                                  reset={this.props.onReset} />
+                          </div>
+                          <div className="d-flex">
+                              {
+                                  values.selectedPos &&
+                                  values.selectedPos.latitude &&
+                                  <div className="mt-2">
+                                      <p>Radius: {values.radius} km</p>
+                                      <p>Location:</p>
+                                      <DisplayMap location={{ ...values.selectedPos }}/>
+                                  </div>
+                              }
+                          </div>
+                      </>
                     }
                     <div>
                         <Button
@@ -120,7 +124,7 @@ class EventFilter extends Component {
                             fullWidth={true}
                             color="secondary"
                             onClick={() => {
-                                this.setState({ viewMore: !this.state.viewMore });
+                                this.setState({viewMore: !this.state.viewMore});
                             }}
                         >
                             {this.state.viewMore ? 'less...' : 'more filters...'}
@@ -136,14 +140,14 @@ class EventFilter extends Component {
                             Reset
                         </Button>
                         {current_user.id &&
-                            <Button
-                                fullWidth={true}
-                                color="primary"
-                                onClick={this.props.onLoadUserDefaults}
-                                disabled={this.props.submitting}
-                            >
-                                Favorite
-                            </Button>
+                        <Button
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.onLoadUserDefaults}
+                            disabled={this.props.submitting}
+                        >
+                            Favorite
+                        </Button>
                         }
                         <Button
                             fullWidth={true}

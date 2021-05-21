@@ -7,7 +7,7 @@ import UsersWrapper from '../../containers/users';
 import UnitOfMeasuring from '../unitOfMeasuring/unitsOfMeasuring';
 import NotificationTemplateWrapper from "../../containers/notification-template/notification-template";
 import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
-
+import Track from '../tracks/track';
 export default class Admin extends Component {
     render() {
         return (
@@ -47,6 +47,13 @@ export default class Admin extends Component {
                                         text={"Notification Templates"}
                                     />
                                 </div>
+                                <div>
+                                    <NavItem
+                                        to={'/admin/tracks/'}
+                                        icon={'fa fa-server'}
+                                        text={"Tracks"}
+                                    />
+                                </div>
                             </nav>
                         </ul>
                     </div>
@@ -62,6 +69,7 @@ export default class Admin extends Component {
                             <Route path="/admin/users" component={UsersWrapper} />
                             <Route path='/admin/notificationTemplates' component={NotificationTemplateWrapper} />
                             <Route path='/admin/notificationTemplate/:id' component={NotificationInfoWrapper} />
+                            <Route path="/admin/tracks" component={Track} />
                         </Switch>
                     </div>
                 </div>

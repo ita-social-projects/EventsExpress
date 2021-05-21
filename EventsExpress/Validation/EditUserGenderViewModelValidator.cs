@@ -8,7 +8,7 @@ namespace EventsExpress.Validation
         public EditUserGenderViewModelValidator()
         {
             RuleFor(x => x.Gender)
-                .InclusiveBetween((short)0, (short)2)
+                .InclusiveBetween((short)0, (short)3)
                 .WithMessage("InvalidGender");
         }
     }
