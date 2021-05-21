@@ -10,6 +10,7 @@ using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -27,8 +28,8 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IUserService> _userService;
         private Mock<IAuthService> _authService;
         private Mock<IPhotoService> _photoService;
+        private Mock<ISecurityContext> _securityContextService;
         private Mock<IMapper> _mapper;
-        private Mock<IEmailService> _emailService;
         private UsersController _usersController;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
@@ -55,9 +56,9 @@ namespace EventsExpress.Test.ControllerTests
             _userService = new Mock<IUserService>();
             _authService = new Mock<IAuthService>();
             _photoService = new Mock<IPhotoService>();
+            _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
-            _emailService = new Mock<IEmailService>();
-            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _photoService.Object);
+            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -112,7 +113,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserNotificationType")]
         public async Task EditUserNotificationType_ExistsUserDto_OkObjectResultAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(us => us.EditFavoriteNotificationTypes(_userDto, It.IsAny<NotificationType[]>())).Returns(Task.FromResult(_userDto.Id));
 
             var res = await _usersController.EditUserNotificationType(editUserNotificationTypesView);
@@ -123,7 +124,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.AreEqual(200, okResult.StatusCode);
             var assertId = okResult.Value;
             Assert.That(assertId, Is.EqualTo(_userDto.Id));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.EditFavoriteNotificationTypes(_userDto, It.IsAny<NotificationType[]>()), Times.Exactly(1));
         }
 
@@ -131,7 +132,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserNotificationType")]
         public void EditUserNotificationType_NULL_Throws()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
             Assert.ThrowsAsync<EventsExpressException>(async () => await _usersController.EditUserNotificationType(editUserNotificationTypesView));
         }
 
@@ -148,7 +149,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("GetUserProfileById")]
         public void GetUserProfileById_CorrectAttitude_DoesNotThrow()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             Guid userId = Guid.NewGuid();
             Guid fromId = Guid.NewGuid();
             ProfileDto profileDto = new ProfileDto
@@ -166,7 +167,7 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
         }
 
         [Test]
@@ -175,7 +176,7 @@ namespace EventsExpress.Test.ControllerTests
         {
             _userService.Setup(user => user.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<IFormFile>()));
             _userService.Setup(user => user.GetById(It.IsAny<Guid>())).Returns((UserDto user) => user);
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
 
             var res = await _usersController.ChangeAvatar();
 
@@ -184,7 +185,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(user => user.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<IFormFile>()), Times.Exactly(0));
             _userService.Verify(user => user.GetById(It.IsAny<Guid>()), Times.Exactly(0));
         }
@@ -193,7 +194,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ChangeAvatar")]
         public async Task ChangeAvatar_CorrectUser_OkObjectResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()));
             _usersController.ControllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
@@ -206,7 +207,7 @@ namespace EventsExpress.Test.ControllerTests
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
@@ -214,12 +215,12 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserCategory")]
         public async Task EditUserCategory_UserDto_OkObjectResultAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(us => us.EditFavoriteCategories(_userDto, It.IsAny<Category[]>())).Returns(Task.FromResult(_userDto.Id));
 
             var res = await _usersController.EditUserCategory(_editUserCategoriesViewModel);
             Assert.IsInstanceOf<IActionResult>(res);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.EditFavoriteCategories(_userDto, It.IsAny<Category[]>()), Times.Exactly(1));
         }
 
@@ -227,7 +228,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserCategory")]
         public async Task EditUserCategory_NULL_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
             _userService.Setup(us => us.EditFavoriteCategories(_userDto, It.IsAny<Category[]>())).Returns(Task.FromResult(_userDto.Id));
 
             var res = await _usersController.EditUserCategory(_editUserCategoriesViewModel);
@@ -237,7 +238,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.EditFavoriteCategories(_userDto, It.IsAny<Category[]>()), Times.Exactly(0));
         }
 
@@ -245,7 +246,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserGender")]
         public async Task EditUserGender_NULL_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
             _userService.Setup(user => user.Update(It.IsAny<UserDto>()));
 
             var res = await _usersController.EditGender(_editUserGenderViewModel);
@@ -255,7 +256,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(It.IsAny<UserDto>()), Times.Exactly(0));
         }
 
@@ -263,7 +264,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserGender")]
         public async Task EditUserGender_CorrectUserDto_OkResultAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(user => user.Update(_userDto));
 
             var res = await _usersController.EditGender(_editUserGenderViewModel);
@@ -271,7 +272,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
             OkResult okObjectResult = res as OkResult;
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(_userDto), Times.Exactly(1));
         }
 
@@ -279,7 +280,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserBirthday")]
         public async Task EditUserBirthday_NULL_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
             _userService.Setup(user => user.Update(It.IsAny<UserDto>()));
 
             var res = await _usersController.EditBirthday(_editUserBirthViewModel);
@@ -289,7 +290,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(It.IsAny<UserDto>()), Times.Exactly(0));
         }
 
@@ -297,14 +298,14 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserBirthday")]
         public async Task EditUserBirthday_UserDto_OkResultAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(user => user.Update(_userDto));
 
             var res = await _usersController.EditBirthday(_editUserBirthViewModel);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(_userDto), Times.Exactly(1));
         }
 
@@ -312,7 +313,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserName")]
         public async Task EditUserName_NULL_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns((UserDto)null);
+            _authService.Setup(a => a.GetCurrentUser()).Returns((UserDto)null);
             _userService.Setup(user => user.Update(It.IsAny<UserDto>()));
 
             var res = await _usersController.EditUsername(_editUserNameViewModel);
@@ -322,7 +323,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(It.IsAny<UserDto>()), Times.Exactly(0));
         }
 
@@ -330,14 +331,14 @@ namespace EventsExpress.Test.ControllerTests
         [Category("EditUserName")]
         public async Task EditUserName_UserDto_OkObjectResultAsync()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(user => user.Update(_userDto));
 
             var res = await _usersController.EditUsername(_editUserNameViewModel);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
-            _authService.Verify(aut => aut.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _authService.Verify(aut => aut.GetCurrentUser(), Times.Exactly(1));
             _userService.Verify(us => us.Update(_userDto), Times.Exactly(1));
         }
 
@@ -345,17 +346,17 @@ namespace EventsExpress.Test.ControllerTests
         [Category("Get")]
         public void Get_NotNull_Exception()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.Get(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
         }
 
         [Test]
         [Category("Get")]
         public void Get_NotNull_BadRequestResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.Get(_usersFilterViewModel);
 
@@ -364,7 +365,7 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
         }
 
         [Test]
@@ -372,7 +373,7 @@ namespace EventsExpress.Test.ControllerTests
         public void Get_NotNull_OkObjectResult()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>())).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.Get(_usersFilterViewModel);
@@ -385,10 +386,10 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_Exception()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<EventsExpressException>();
 
             Assert.Throws<EventsExpressException>(() => _usersController.SearchUsers(_usersFilterViewModel));
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -397,16 +398,16 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_BadRequestResult()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<ArgumentOutOfRangeException>();
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Throws<ArgumentOutOfRangeException>();
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
-            Assert.IsInstanceOf<BadRequestResult>(res);
+            Assert.That(res, Is.TypeOf<BadRequestResult>());
             BadRequestResult badResult = res as BadRequestResult;
             Assert.IsNotNull(badResult);
             Assert.AreEqual(400, badResult.StatusCode);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
 
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(0));
         }
 
@@ -415,13 +416,13 @@ namespace EventsExpress.Test.ControllerTests
         public void SearchUsers_NotNull_OkObjectResult1()
         {
             int count = 0;
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(It.IsAny<Guid>());
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>())).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.SearchUsers(_usersFilterViewModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Exactly(1));
+            _securityContextService.Verify(us => us.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count, It.IsAny<Guid>()), Times.Exactly(1));
         }
 
@@ -429,7 +430,7 @@ namespace EventsExpress.Test.ControllerTests
         [Category("GetUserInfo")]
         public void GetUserInfo_Success()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Returns(_userDto);
+            _authService.Setup(a => a.GetCurrentUser()).Returns(_userDto);
             _mapper.Setup(m => m.Map<UserDto, UserInfoViewModel>(_userDto))
                 .Returns(new UserInfoViewModel { Email = _userDto.Email });
 
@@ -437,7 +438,7 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Once);
+            _authService.Verify(us => us.GetCurrentUser(), Times.Once);
             Assert.That((res as OkObjectResult).Value != null);
         }
 
@@ -445,13 +446,13 @@ namespace EventsExpress.Test.ControllerTests
         [Category("GetUserInfo")]
         public void GetUserInfo_NullResult()
         {
-            _authService.Setup(a => a.GetCurrentUser(It.IsAny<ClaimsPrincipal>())).Throws<EventsExpressException>();
+            _authService.Setup(a => a.GetCurrentUser()).Throws<EventsExpressException>();
 
             var res = _usersController.GetUserInfo();
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(us => us.GetCurrentUser(It.IsAny<ClaimsPrincipal>()), Times.Once);
+            _authService.Verify(us => us.GetCurrentUser(), Times.Once);
             Assert.That((res as OkObjectResult).Value == null);
         }
     }
