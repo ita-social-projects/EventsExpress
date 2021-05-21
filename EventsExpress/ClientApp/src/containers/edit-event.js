@@ -4,10 +4,9 @@ import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event} from '../actions/event/event-add-action';
+import { setSuccessAllert } from '../actions/alert-action';
 import { validate, validateEventForm  } from '../components/helpers/helpers'
-import { resetEvent } from '../actions/event/event-item-view-action';
 import get_categories from '../actions/category/category-list-action';
-import L from 'leaflet';
 import Button from "@material-ui/core/Button";
 
 
@@ -28,36 +27,21 @@ class EditEventWrapper extends Component {
     }
 
     onSubmit = async (values) => {
-        await this.props.add_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+        await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+        this.props.alert('Your event has been successfully saved!');    
         this.props.history.goBack();
     }
 
-
     render() {
-        let initialValues = {
-            ...this.props.event,
-            location: this.props.event.location !== null ? {
-                selectedPos: L.latLng(
-
-                    this.props.event.location.latitude,
-                    this.props.event.location.longitude
-                ),
-                onlineMeeting: this.props.event.location.onlineMeeting,
-                type: String(this.props.event.location.type)
-            } : null,
-        }
-
         return <>
             <EventForm
                 validate={validate}
                 all_categories={this.props.all_categories}
                 onSubmit={this.onSubmit}
-                initialValues={initialValues}
+                initialValues={this.props.event}
                 form_values={this.props.form_values}
-                checked={this.props.event.isReccurent}
                 haveReccurentCheckBox={false}
-                disabledDate={false}
-                isCreated={true}
+                isCreated={false}
                 eventId={this.props.event.id}>
                 <div className="col">
                     <Button
@@ -92,12 +76,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_event: (data) => dispatch(edit_event(data)),
+        edit_event: (data) => dispatch(edit_event(data)),
         get_categories: () => dispatch(get_categories()),
-        resetEvent: () => dispatch(resetEvent()),
+        alert: (msg) => dispatch(setSuccessAllert(msg)),
         reset: () => {
             dispatch(reset('event-form'));
-            dispatch(setEventPending(true));
+            dispatch(setEventPending(true));    
             dispatch(setEventSuccess(false));
         }
     }
