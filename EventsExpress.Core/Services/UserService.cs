@@ -226,7 +226,7 @@ namespace EventsExpress.Core.Services
                     x.UserFromId == attitude.UserFromId &&
                     x.UserToId == attitude.UserToId));
 
-        public ProfileDto GetProfileById(Guid fromId)
+        public ProfileDto GetProfileById(Guid id)
         {
             var userId = _securityContext.GetCurrentUserId();
 
@@ -240,7 +240,7 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.Id == userId)));
 
             var rel = Context.Relationships
-                .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == userId);
+                .FirstOrDefault(x => x.UserFromId == id && x.UserToId == userId);
             user.Attitude = (rel != null)
                 ? (byte)rel.Attitude
                 : (byte)Attitude.None;

@@ -20,7 +20,7 @@ namespace EventsExpress.Core.IServices
 
         UserDto GetCurrentUserInfo();
 
-        ProfileDto GetProfileById(Guid fromId);
+        ProfileDto GetProfileById(Guid id);
 
         IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count);
 
