@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {reduxForm, Field} from 'redux-form';
+import React, { Component } from 'react';
+import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import {
     renderTextField,
@@ -33,7 +33,7 @@ class EventFilter extends Component {
                 categories: initialValues.categories,
                 statuses: initialValues.statuses,
                 radius: initialValues.radius,
-                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : {lat: null, lng: null},
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { latitude: null, longitude: null }
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -102,27 +102,18 @@ class EventFilter extends Component {
                         <div>
                             <MapModal
                                 initialize={this.props.initialize}
-                                initialValues={this.props.initialFormValues}
                                 values={values}
-                                reset={this.props.onReset}/>
+                                reset={this.props.onReset} />
                         </div>
-
                         <div className="d-flex">
-
-                            {values.selectedPos &&
-                            values.selectedPos.lat &&
-                            <div>
-                                <p>
-                                    Radius:
-                                    {values.radius} km
-                                </p>
-                                <p>
-                                    Location:
-                                </p>
-                                <DisplayMap
-                                    location={{latitude: values.selectedPos.lat, longitude: values.selectedPos.lng}}
-                                />
-                            </div>
+                            {
+                                values.selectedPos &&
+                                values.selectedPos.latitude &&
+                                <div className="mt-2">
+                                    <p>Radius: {values.radius} km</p>
+                                    <p>Location:</p>
+                                    <DisplayMap location={{ ...values.selectedPos }} />
+                                </div>
                             }
                         </div>
                     </>
