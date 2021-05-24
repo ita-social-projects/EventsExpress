@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LocationMap from './map/location-map';
 import { Field } from 'redux-form';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 import './slider.css';
 import DisplayMap from '../event/map/display-map';
 class MapModal extends Component {
@@ -24,7 +24,7 @@ class MapModal extends Component {
     }
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
-        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
+        if (!filterHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
                 radius: this.props.values.radius,

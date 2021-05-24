@@ -4,7 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
@@ -55,7 +55,7 @@ export default class HeaderProfile extends Component {
                                 <Link
                                     to={{
                                         pathname: "/home/events",
-                                        search: eventHelper.getQueryStringByEventFilter(this.props.filter),
+                                        search: filterHelper.getQueryStringByFilter(this.props.filter),
                                     }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>

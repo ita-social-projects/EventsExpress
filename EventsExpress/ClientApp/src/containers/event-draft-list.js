@@ -2,8 +2,8 @@
 import { connect } from 'react-redux';
 import DraftList from '../components/Draft/Draft-list';
 import Spinner from '../components/spinner';
-import { get_drafts, reset_events } from '../actions/event/event-list-action';
-import eventHelper from '../components/helpers/eventHelper';
+import { get_drafts, resetFilters } from '../actions/event/event-list-action';
+import filterHelper from '../components/helpers/filterHelper';
 
 
 class EventDraftListWrapper extends Component {
@@ -17,14 +17,14 @@ class EventDraftListWrapper extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const objFilterParams = eventHelper.trimUndefinedKeys(this.props.events.filter);
+        const objFilterParams = filterHelper.trimUndefinedKeys(this.props.events.filter);
         if (this.hasUpdateSearchParams(objFilterParams)) {
             this.objCurrentQueryParams = objFilterParams;
         }
     }
 
     hasUpdateSearchParams = objFilterParams => {
-        return !eventHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
+        return !filterHelper.compareObjects(objFilterParams, this.objCurrentQueryParams);
     }
 
     render() {
@@ -41,7 +41,7 @@ class EventDraftListWrapper extends Component {
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
-                reset_events={this.props.reset_events}
+                resetFilters={this.props.resetFilters}
                 get_drafts={this.props.get_drafts}
                 match={this.props.match}
             />
@@ -63,7 +63,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         get_drafts: (page) => dispatch(get_drafts(page)),
-        reset_events: () => dispatch(reset_events()),
+        resetFilters: () => dispatch(resetFilters()),
     }
 };
 

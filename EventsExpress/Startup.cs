@@ -138,6 +138,7 @@ namespace EventsExpress
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
+            services.AddScoped<IContactAdminService, ContactAdminService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

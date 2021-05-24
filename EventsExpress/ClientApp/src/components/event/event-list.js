@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reset_events, updateEventsFilters } from '../../actions/event/event-list-action';
+import { resetFilters, updateEventsFilters } from '../../actions/event/event-list-action';
 import RenderList from './RenderList'
 import EventCard from './event-item';
 import { change_event_status } from '../../actions/event/event-item-view-action';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { withRouter } from "react-router";
 import { parse as queryStringParse } from 'query-string';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 
 class EventList extends Component {
     handlePageChange = (page) => {
@@ -16,7 +16,7 @@ class EventList extends Component {
         else {
             const queryStringToObject = queryStringParse(this.props.history.location.search);
             queryStringToObject.page = page;
-            this.props.history.location.search = eventHelper.getQueryStringByEventFilter(queryStringToObject);
+            this.props.history.location.search = filterHelper.getQueryStringByFilter(queryStringToObject);
             this.props.history.push(this.props.history.location.pathname + this.props.history.location.search);
         }
     };
@@ -41,7 +41,7 @@ class EventList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        reset_events: () => dispatch(reset_events()),
+        resetFilters: () => dispatch(resetFilters()),
         updateEventsFilters: (filter) => dispatch(updateEventsFilters(filter)),
         onBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Blocked)),
         onUnBlock: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active))

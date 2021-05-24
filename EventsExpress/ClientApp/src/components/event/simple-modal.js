@@ -59,7 +59,6 @@ export default class SimpleModal extends Component {
                             >
                                 confirm
                             </Button>
-                            }
                         </DialogActions>
                     </div>
                 </Dialog>
