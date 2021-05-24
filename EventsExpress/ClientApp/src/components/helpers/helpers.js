@@ -14,7 +14,7 @@ import { renderFieldError } from './form-helpers';
 import moment from "moment";
 import './helpers.css'
 
-export const radioButton = ({ input, ...rest }) => (
+export const radioButton = ({ input, labels, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
             <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
@@ -227,7 +227,7 @@ export const renderSelectPeriodicityField = ({
                 id: 'age-native-simple'
             }}
         >
-            <option value=""></option>
+            <option value="" />
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
         {renderFieldError({ touched, error })}
@@ -356,11 +356,13 @@ export const buildValidationState = (responseData) => {
     response = JSON.parse(responseData)["errors"];
     let result = {};
     for (const [key, value] of Object.entries(response)) {
-        if (key == "") {
-            result = { ...result, _error: value }
+        if(key == "")
+        {
+            result = {...result, _error: value}
         }
-        else {
-            result = { ...result, [key]: value }
+        else
+        {
+            result = {...result, [key]: value}
         }
     }
     return result;

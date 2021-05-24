@@ -16,5 +16,7 @@ namespace EventsExpress.Db.Entities
         public ChangesType ChangesType { get; set; }
 
         public DateTime Time { get; set; }
+
+        public User User { get; set; }
     }
 }

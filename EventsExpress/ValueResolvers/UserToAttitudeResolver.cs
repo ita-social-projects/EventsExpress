@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
@@ -13,21 +14,16 @@ namespace EventsExpress.ValueResolvers
 {
     public class UserToAttitudeResolver : IValueResolver<User, UserDto, byte>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISecurityContext _securityContextService;
 
-        private readonly IAuthService _authService;
-
-        public UserToAttitudeResolver(
-            IHttpContextAccessor httpContextAccessor,
-            IAuthService authService)
+        public UserToAttitudeResolver(ISecurityContext securityContextService)
         {
-            _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
+            _securityContextService = securityContextService;
         }
 
         public byte Resolve(User source, UserDto destination, byte destMember, ResolutionContext context)
         {
-            var id = _authService.GetCurrUserId(_httpContextAccessor.HttpContext.User);
+            var id = _securityContextService.GetCurrentUserId();
 
             var att = source.Relationships?.FirstOrDefault(r => r.UserFromId == id)?.Attitude ?? Attitude.None;
 

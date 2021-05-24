@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.IServices
@@ -22,10 +23,8 @@ namespace EventsExpress.Core.IServices
 
         Task PasswordRecover(string email);
 
-        Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword);
+        Task ChangePasswordAsync(string oldPassword, string newPassword);
 
-        UserDto GetCurrentUser(ClaimsPrincipal userClaims);
-
-        Guid GetCurrUserId(ClaimsPrincipal userClaims);
+        UserDto GetCurrentUser();
     }
 }
