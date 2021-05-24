@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { renderLocationMapWithCircle } from '../helpers/form-helpers';
+import { LocationMapWithCircle } from '../helpers/form-helpers';
 import { Field } from 'redux-form';
 import './slider.css';
 import DisplayMap from '../event/map/display-map';
@@ -82,7 +82,7 @@ class MapModal extends Component {
                             }
                             <Field
                                 name='selectedPos'
-                                component={renderLocationMapWithCircle}
+                                component={LocationMapWithCircle}
                                 radius={this.props.values.radius}
                             />
                         </div>

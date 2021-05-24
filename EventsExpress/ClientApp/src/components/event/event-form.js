@@ -13,7 +13,7 @@ import {
     renderTextField,
     radioLocationType
 } from '../helpers/helpers';
-import { renderDatePicker, renderLocationMapWithMarker } from '../helpers/form-helpers';
+import { renderDatePicker, LocationMapWithMarker } from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 
@@ -150,7 +150,7 @@ class EventForm extends Component {
                         <div className="mt-2">
                             <Field
                                 name='location'
-                                component={renderLocationMapWithMarker}
+                                component={LocationMapWithMarker}
                             />
                         </div>
                     }

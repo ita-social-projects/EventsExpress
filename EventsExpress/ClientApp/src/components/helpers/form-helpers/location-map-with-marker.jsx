@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import { Marker, Popup } from 'react-leaflet';
-import { renderLocationMap } from './';
+import { LocationMap } from '.';
 
 export default function LocationMapWithMarker(props) {
     let initialPos = { lat: 50.4547, lng: 30.5238 };
@@ -28,7 +28,7 @@ export default function LocationMapWithMarker(props) {
             name='location'
             location = {location}
             onUpdate = {handleChange}
-            component={renderLocationMap}
+            component={LocationMap}
         >
             <Marker position={location}
                 draggable={true}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import { Circle } from 'react-leaflet';
-import { renderLocationMap } from './';
+import { LocationMap } from '.';
 
 export default function LocationMapWithCircle(props) {
     let initialPos = { lat: 50.4547, lng: 30.5238 };
@@ -20,7 +20,7 @@ export default function LocationMapWithCircle(props) {
             name='selectedPos'
             location = {location}
             onUpdate = {handleChange}
-            component={renderLocationMap}
+            component={LocationMap}
         >
             {props.input.value.latitude && 
              <Circle center={location} pathOptions={{ color: 'blue' }} radius={props.radius * 1000} />
