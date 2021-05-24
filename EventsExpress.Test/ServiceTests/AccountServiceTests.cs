@@ -10,8 +10,8 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Helpers;
 using EventsExpress.Mapping;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,10 +35,12 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             _mockMediator = new Mock<IMediator>();
+            var passwordHasher = new Mock<IPasswordHasher>();
             service = new AccountService(
                 Context,
                 _mockMediator.Object,
-                MockMapper.Object);
+                MockMapper.Object,
+                passwordHasher.Object);
 
             existingAccount = new Account
             {

@@ -29,12 +29,12 @@ export const reducer = (state = initialState.user, action) => {
         case editUsername.UPDATE:
             return {
                 ...state,
-                name: action.payload.UserName
+                name: action.payload.userName
             }
         case editGender.UPDATE:
             return {
                 ...state,
-                gender: action.payload.Gender
+                gender: action.payload.gender
             }
         case changeAvatar.UPDATE:
             return {
