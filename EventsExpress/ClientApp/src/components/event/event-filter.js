@@ -33,7 +33,7 @@ class EventFilter extends Component {
                 categories: initialValues.categories,
                 statuses: initialValues.statuses,
                 radius: initialValues.radius,
-                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : {lat: null, lng: null},
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { latitude: null, longitude: null }
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -62,70 +62,61 @@ class EventFilter extends Component {
                         />
                     </div>
                     {this.state.viewMore &&
-                    <>
-                        <div className="form-group">
-                            <Field
-                                name='dateFrom'
-                                label='From'
-                                minValue={new Date()}
-                                component={renderDatePicker}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Field
-                                name='dateTo'
-                                label='To'
-                                minValue={new Date(values.dateFrom)}
-                                component={renderDatePicker}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Field
-                                name="categories"
-                                component={renderMultiselect}
-                                data={all_categories.data}
-                                valueField={"id"}
-                                textField={"name"}
-                                className="form-control mt-2"
-                                placeholder='#hashtags'
-                            />
-                        </div>
-                        <div className="form-group">
-                            {current_user.roles.includes("Admin") &&
-                            <Field name="statuses"
-                                   component={MultiCheckbox}
-                                   options={options}
-                            />
-                            }
-                        </div>
-
-                        <div>
-                            <MapModal
-                                initialize={this.props.initialize}
-                                initialValues={this.props.initialFormValues}
-                                values={values}
-                                reset={this.props.onReset}/>
-                        </div>
-
-                        <div className="d-flex">
-
-                            {values.selectedPos &&
-                            values.selectedPos.lat &&
-                            <div>
-                                <p>
-                                    Radius:
-                                    {values.radius} km
-                                </p>
-                                <p>
-                                    Location:
-                                </p>
-                                <DisplayMap
-                                    location={{latitude: values.selectedPos.lat, longitude: values.selectedPos.lng}}
-                                />
-                            </div>
-                            }
-                        </div>
-                    </>
+                      <>
+                          <div className="form-group">
+                              <Field
+                                  name='dateFrom'
+                                  label='From'
+                                  minValue={new Date()}
+                                  component={renderDatePicker}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <Field
+                                  name='dateTo'
+                                  label='To'
+                                  minValue={new Date(values.dateFrom)}
+                                  component={renderDatePicker}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <Field
+                                  name="categories"
+                                  fullWidth
+                                  component={renderMultiselect}
+                                  data={all_categories.data}
+                                  valueField={"id"}
+                                  textField={"name"}
+                                  className="form-control mt-2"
+                                  placeholder='#hashtags'
+                              />
+                          </div>
+                          <div className="form-group">
+                              {current_user.roles.includes("Admin") &&
+                              <Field name="statuses"
+                                     component={MultiCheckbox}
+                                     options={options}
+                              />
+                              }
+                          </div>
+                          <div>
+                              <MapModal
+                                  initialize={this.props.initialize}
+                                  values={values}
+                                  reset={this.props.onReset} />
+                          </div>
+                          <div className="d-flex">
+                              {
+                                  values.selectedPos &&
+                                  values.selectedPos.latitude &&
+                                  <div className="mt-2">
+                                      <p>Radius: {values.radius} km</p>
+                                      <p>Location:</p>
+                                      <DisplayMap location={{ ...values.selectedPos }}/>
+                                  </div>
+                              }
+                          </div>
+                      </>
                     }
                     <div>
                         <Button
