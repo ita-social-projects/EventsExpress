@@ -16,6 +16,6 @@ export {
     renderDatePicker,
     renderLocationMap,
     renderLocationMapWithMarker,
-    renderLocationMapWithCircle
+    renderLocationMapWithCircle,
     MultiCheckbox
 };
