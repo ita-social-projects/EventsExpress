@@ -69,8 +69,6 @@ namespace EventsExpress.Test.ControllerTests
                 AccountId = Guid.NewGuid(),
             };
 
-            _authService.Setup(s =>
-                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.GetLinkedAuth(user.AccountId)).ReturnsAsync(new List<AuthDto>());
             _mapper.Setup(s =>
@@ -112,8 +110,6 @@ namespace EventsExpress.Test.ControllerTests
 
             _googleSignatureVerificator.Setup(s =>
                 s.Verify(model.TokenId)).ReturnsAsync(new GoogleJsonWebSignature.Payload());
-            _authService.Setup(s =>
-                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Google)).Returns(Task.CompletedTask);
 
@@ -151,8 +147,6 @@ namespace EventsExpress.Test.ControllerTests
                 AccountId = Guid.NewGuid(),
             };
 
-            _authService.Setup(s =>
-                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook)).Returns(Task.CompletedTask);
 
@@ -190,8 +184,6 @@ namespace EventsExpress.Test.ControllerTests
                 AccountId = Guid.NewGuid(),
             };
 
-            _authService.Setup(s =>
-                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter)).Returns(Task.CompletedTask);
 
@@ -230,8 +222,6 @@ namespace EventsExpress.Test.ControllerTests
                 AccountId = Guid.NewGuid(),
             };
 
-            _authService.Setup(s =>
-                s.GetCurrentUser()).Returns(user);
             _accountService.Setup(s =>
                 s.AddAuth(user.AccountId, model.Email, model.Password)).Returns(Task.CompletedTask);
 

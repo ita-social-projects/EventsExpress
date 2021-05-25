@@ -1,7 +1,5 @@
-﻿
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
@@ -15,36 +13,30 @@ import {
     renderTextField,
     radioLocationType
 } from '../helpers/helpers';
-import { renderDatePicker } from '../helpers/form-helpers';
-import Inventory from '../inventory/inventory';
-import LocationMap from './map/location-map';
+import { renderDatePicker, LocationMapWithMarker } from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
-import { createBrowserHistory } from 'history';
 import "./event-form.css";
+
 momentLocaliser(moment);
-const history = createBrowserHistory({ forceRefresh: true });
 
 class EventForm extends Component {
 
-    state = { checked: false };
+    state = { checked: this.props.initialValues.isReccurent };
 
     handleChange = () => {
         this.setState(state => ({
             checked: !state.checked,
         }));
-
-    }
-
-    onClickCallBack = (coords) => {
-        this.setState({ selectedPos: [coords.lat, coords.lng] });
     }
 
     render() {
-        const { form_values, all_categories, isCreated, disabledDate, initialValues } = this.props;
+        const { form_values, all_categories } = this.props;
         const { checked } = this.state;
-        const { handleChange } = this;
-
-        let values = form_values || initialValues;
+        
+        if (this.props.initialValues.location != null) {
+            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
+        }
+        
         const photoUrl = this.props.eventId ?
             `api/photo/GetFullEventPhoto?id=${this.props.eventId}` : null;
 
@@ -79,14 +71,13 @@ class EventForm extends Component {
                     </div>
                     {this.props.haveReccurentCheckBox &&
                         <div className="mt-2">
-                            <br />
                             <Field
                                 type="checkbox"
                                 label="Recurrent Event"
                                 name='isReccurent'
                                 component={renderCheckbox}
                                 checked={checked}
-                                onChange={handleChange} />
+                                onChange={this.handleChange} />
                         </div>
                     }
                     {checked &&
@@ -120,17 +111,15 @@ class EventForm extends Component {
                                 name='dateFrom'
                                 label='From'
                                 component={renderDatePicker}
-                                disabled={disabledDate ? true : false}
                             />
                         </span>
-                        {values && values.dateFrom &&
+                        {form_values && form_values.dateFrom &&
                             <span className="retreat">
                                 <Field
                                     name='dateTo'
                                     label='To'
-                                    minValue={values.dateFrom}
+                                    minValue={form_values.dateFrom}
                                     component={renderDatePicker}
-                                    disabled={disabledDate ? true : false}
                                 />
                             </span>
                         }
@@ -153,32 +142,21 @@ class EventForm extends Component {
                             className="form-control mt-2"
                             placeholder='#hashtags' />
                     </div>
-                    <div>
-                    </div>
-
                     <Field name="location.type" component={radioLocationType} />
-                    {(this.props.form_values == undefined
-                        || (this.props.form_values.location
-                            && this.props.form_values.location.type === enumLocationType.map))
-                        &&
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type == enumLocationType.map &&
 
                         <div className="mt-2">
                             <Field
-                                name='location.selectedPos'
-                                initialData={
-                                    this.props.initialValues &&
-                                    this.props.initialValues.location &&
-                                    this.props.initialValues.location.selectedPos
-                                }
-                                initialValues={initialValues}
-                                isAddEventMapLocation={true}
-                                component={LocationMap}
+                                name='location'
+                                component={LocationMapWithMarker}
                             />
                         </div>
                     }
                     {this.props.form_values
                         && this.props.form_values.location
-                        && this.props.form_values.location.type === enumLocationType.online &&
+                        && this.props.form_values.location.type == enumLocationType.online &&
 
                         <div className="mt-2">
                             <label for="url">Enter an https:// URL:</label>
@@ -187,27 +165,17 @@ class EventForm extends Component {
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
-                                className="mb-4"
                             />
                         </div>
                     }
-                    {isCreated ? null : <Inventory />}
                 </div>
-                <div className="row pl-md-4 mb-4">
+                <div className="row pl-md-4 my-4">
                     {this.props.children}
                 </div>
             </form>
         );
     }
 }
-
-const mapStateToProps = (state) => ({
-    initialData: state.event.data
-});
-
-EventForm = connect(
-    mapStateToProps
-)(EventForm);
 
 export default reduxForm({
     form: 'event-form',

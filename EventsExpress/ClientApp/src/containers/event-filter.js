@@ -47,8 +47,8 @@ class EventFilterWrapper extends Component {
                     filterCopy[key] = value;
                     break;
                 case 'selectedPos':
-                    var x = value.lat;
-                    var y = value.lng;
+                    var x = value.latitude;
+                    var y = value.longitude;
                     filterCopy['x'] = x;
                     filterCopy['y'] = y;
                     filterCopy[key] = undefined;
