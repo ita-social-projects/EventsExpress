@@ -136,12 +136,7 @@ namespace EventsExpress.Core.Services
         {
             var userDto = Context.Users
                 .Include(u => u.Account)
-                    .ThenInclude(a => a.AccountRoles)
-                        .ThenInclude(ar => ar.Role)
-                .Include(u => u.Account)
                     .ThenInclude(a => a.AuthLocal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == _securityContext.GetCurrentUserId());
             var authLocal = userDto.Account.AuthLocal;
@@ -236,11 +231,6 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
             _cacheHelper.Delete(cacheDto.AuthLocalId);
             return authLocal.Account;
-        }
-
-        public UserDto GetCurrentUser()
-        {
-            return _userService.GetById(_securityContext.GetCurrentUserId());
         }
     }
 }
