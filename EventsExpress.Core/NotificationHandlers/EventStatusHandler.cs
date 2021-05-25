@@ -6,10 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -20,17 +22,20 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly INotificationTemplateService _notificationTemplateService;
+        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
         public EventStatusHandler(
             IEmailService sender,
             IUserService userSrv,
             IEventService eventService,
-            INotificationTemplateService notificationTemplateService)
+            INotificationTemplateService notificationTemplateService,
+            IOptions<AppBaseUrlModel> urlOptions)
         {
             _sender = sender;
             _userService = userSrv;
             _eventService = eventService;
             _notificationTemplateService = notificationTemplateService;
+            _urlOptions = urlOptions;
         }
 
         public async Task Handle(EventStatusMessage notification, CancellationToken cancellationToken)
@@ -42,7 +47,7 @@ namespace EventsExpress.Core.NotificationHandlers
                 foreach (var email in usersEmails)
                 {
                     var userEvent = _eventService.EventById(notification.EventId);
-                    string eventLink = $"{AppHttpContext.AppBaseUrl}/event/{notification.EventId}/1";
+                    string eventLink = $"{_urlOptions.Value.Host}/event/{notification.EventId}/1";
 
                     var templateId = notification.EventStatus switch
                     {
