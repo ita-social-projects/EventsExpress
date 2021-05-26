@@ -17,12 +17,12 @@ namespace EventsExpress.Hubs
 
         public async Task SendCountOfUsersAsync()
         {
-            var users = await _userService.CountUsersAsync();
+            var numberOfUsers = await _userService.CountUsersAsync();
             var admins = _userService.GetUsersByRole(Role.Admin)
                 .Select(admin => admin.Id.ToString())
                 .ToList();
 
-            await Clients.Users(admins).SendAsync("CountUsers", users);
+            await Clients.Users(admins).SendAsync("CountUsers", numberOfUsers);
         }
     }
 }
