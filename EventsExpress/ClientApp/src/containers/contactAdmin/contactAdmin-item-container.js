@@ -11,5 +11,5 @@ export default class ContactAdminItemWrapper extends Component {
                 item={this.props.item}
             />
         </tr>
-    };
+    }
 }

@@ -2,9 +2,7 @@
 import PagePagination from '../shared/pagePagination';
 
 class RenderList extends Component {
-    componentWillUnmount() {
-        this.props.resetFilters;
-    }
+
     renderItems = arr =>
         arr.map(item => this.props.renderSingleItem(item));
 

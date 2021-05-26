@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createBrowserHistory } from 'history';
-import SimpleModal from './../event/simple-modal';
+import SimpleModalWithDetails from '../helpers/simple-modal-with-details';
 
 const history = createBrowserHistory({ forceRefresh: true });
 
@@ -26,15 +26,15 @@ export default class ContactAdminDetails extends Component {
                                 onClick={this.handleClose}>
                                 Close
                                 </button>
-                            {<SimpleModal
+                            {<SimpleModalWithDetails
                                 button={<button className="btn btn-primary btn-lg mr-5">Mark as resolved</button>}
-                                action={this.props.onResolve}
-                                data={'Are you sure?'}
+                                submitCallback={this.props.onResolve}
+                                data="Enter resolution details"
                             />}
-                            {<SimpleModal
+                            {<SimpleModalWithDetails
                                 button={<button className="btn btn-primary btn-lg mr-5">Move in progress</button>}
-                                action={this.props.onInProgress}
-                                data={'Are you sure?'}
+                                submitCallback={this.props.onInProgress}
+                                data="Enter resolution details"
                             />}
                         </div>
                     </div>

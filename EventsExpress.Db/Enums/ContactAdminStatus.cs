@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Db.Enums
 {
-    public enum ContactAdminStatus
+    public enum ContactAdminStatus : byte
     {
         Open,
         InProgress,

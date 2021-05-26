@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ContactAdminDetails from "../../components/contactAdmin/contactAdmin-details-component";
 import change_issue_status from '../../actions/contactAdmin/contact-admin-issue-status-action';
 import get_message_by_id from '../../actions/contactAdmin/contact-admin-item-action';
-import issueStatusEnum from '../../constants/IssueStatusEnum';
+import issueStatusEnum from '../../constants/issueStatusEnum';
 
 class ContactAdminDetailsContainer extends React.Component {
     componentWillMount = () => {
@@ -11,12 +11,12 @@ class ContactAdminDetailsContainer extends React.Component {
         this.props.get_message_by_id(id);
     }
 
-    onResolve = () => {
-        this.props.resolve(this.props.contactAdminData.messageId, this.props.contactAdminData.status);
+    onResolve = (resolutionDetails) => {
+        this.props.resolve(this.props.contactAdminData.messageId, resolutionDetails, this.props.contactAdminData.status);
     }
 
-    onInProgress = () => {
-        this.props.inProgress(this.props.contactAdminData.messageId, this.props.contactAdminData.status);
+    onInProgress = (resolutionDetails) => {
+        this.props.inProgress(this.props.contactAdminData.messageId, resolutionDetails, this.props.contactAdminData.status);
     }
 
     render() {
@@ -35,8 +35,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => {
     return {
         get_message_by_id: (id) => dispatch(get_message_by_id(id)),
-        resolve: (messageId) => dispatch(change_issue_status(messageId, issueStatusEnum.Resolve)),
-        inProgress: (messageId) => dispatch(change_issue_status(messageId, issueStatusEnum.InProgress)),
+        resolve: (messageId, resolutionDetails) => dispatch(change_issue_status(messageId, resolutionDetails, issueStatusEnum.Resolve)),
+        inProgress: (messageId, resolutionDetails) => dispatch(change_issue_status(messageId, resolutionDetails, issueStatusEnum.InProgress)),
     };
 };
 

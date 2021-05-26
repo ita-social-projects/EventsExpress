@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
@@ -21,7 +22,7 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public async Task UpdateIssueStatus(Guid messageId, ContactAdminStatus issueStatus)
+        public async Task UpdateIssueStatus(Guid messageId, string resolutionDetails, ContactAdminStatus issueStatus)
         {
             var message = Context.ContactAdmin.Find(messageId);
             if (message == null)
@@ -30,6 +31,7 @@ namespace EventsExpress.Core.Services
             }
 
             message.Status = issueStatus;
+            message.ResolutionDetails = resolutionDetails;
             Update(message);
 
             await Context.SaveChangesAsync();
@@ -46,17 +48,21 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> SendMessageToAdmin(ContactAdminDto contactAdminDto)
         {
+            if (contactAdminDto.Title == null)
+            {
+                contactAdminDto.Title = $"New request from {contactAdminDto.Email} on subject: {contactAdminDto.Subject}";
+            }
+
             var contactAdminEntity = Mapper.Map<ContactAdminDto, ContactAdmin>(contactAdminDto);
             var result = Insert(contactAdminEntity);
             await Context.SaveChangesAsync();
             return result.Id;
         }
 
-        public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, Guid id, out int count)
+        public IEnumerable<ContactAdminDto> GetAll(ContactAdminFilterViewModel model, out int count)
         {
-            var contactAdminMessages = Context.ContactAdmin
-                .Where(x => x.SenderId == null)
-                .AsQueryable();
+            IQueryable<ContactAdmin> contactAdminMessages = Context.ContactAdmin
+                .AsNoTracking();
 
             contactAdminMessages = (model.Status != null)
                 ? contactAdminMessages.Where(x => model.Status.Contains(x.Status))

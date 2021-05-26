@@ -6,10 +6,10 @@ export const SET_CONTACT_ADMIN_PENDING = "SET_CONTACT_ADMIN_PENDING";
 
 const api_serv = new ContactAdminService();
 
-export default function change_issue_status(messageId, issueStatus) {
+export default function change_issue_status(messageId, resolutionDetails, issueStatus) {
     return async dispatch => {
         dispatch(setContactAdminPending(true));
-        let response = await api_serv.updateIssueStatus({ MessageId: messageId, Status: issueStatus });
+        let response = await api_serv.updateIssueStatus({ MessageId: messageId, ResolutionDetails: resolutionDetails, Status: issueStatus });
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();

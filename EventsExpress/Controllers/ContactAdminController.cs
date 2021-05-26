@@ -30,51 +30,29 @@ namespace EventsExpress.Controllers
         /// This method help to contact users with admins.
         /// </summary>
         /// <param name="model">Param model defines ContactAdminViewModel model.</param>
-        /// <param name="id">Param id defines the message identifier.</param>
         /// <returns>The method sends message to admin mail.</returns>
         /// <response code="200">Sending is succesfull.</response>
         /// <response code="400">Sending process failed.</response>
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> ContactAdmins(ContactAdminViewModel model, Guid id)
+        public async Task<IActionResult> ContactAdmins(ContactAdminViewModel model)
         {
-            var emailTitle = string.Empty;
-            if (model.Title == null)
-            {
-                emailTitle = $"New request from {model.Email} on subject: {model.Subject}";
-            }
-            else
-            {
-                emailTitle = model.Title;
-            }
+            ContactAdminDto message = _mapper.Map<ContactAdminViewModel, ContactAdminDto>(model);
+            var result = await _contactAdminService.SendMessageToAdmin(message);
 
-            try
-            {
-                await _contactAdminService.SendMessageToAdmin(new ContactAdminDto
-                {
-                    Subject = model.Subject,
-                    Email = model.Email,
-                    MessageText = model.Description,
-                    Title = emailTitle,
-                    MessageId = id,
-                });
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(result);
         }
 
         /// <summary>
         /// This method have to return all messages for admin.
         /// </summary>
+        /// <param name="filter">Param filter provides the ability to filter the list of messages.</param>
         /// <returns>All messages for admin.</returns>
         /// <response code="200">Return all messages for admin.</response>
         /// <response code="400">If Return process failed.</response>
         [Authorize]
         [HttpGet("[action]")]
-        public IActionResult All([FromQuery] ContactAdminFilterViewModel filter, Guid id)
+        public IActionResult All([FromQuery] ContactAdminFilterViewModel filter)
         {
             filter.PageSize = 8;
 
@@ -83,7 +61,7 @@ namespace EventsExpress.Controllers
                 var viewModel = new IndexViewModel<ContactAdminViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<ContactAdminViewModel>>(
-                        _contactAdminService.GetAll(filter, id, out int count)),
+                        _contactAdminService.GetAll(filter, out int count)),
                     PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
                 };
                 return Ok(viewModel);
@@ -103,9 +81,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">Status changing failed.</response>
         [Authorize]
         [HttpPost("{messageId:Guid}/[action]")]
-        public async Task<IActionResult> UpdateStatus(ContactAdminViewModel issueStatus)
+        public async Task<IActionResult> UpdateStatus(UpdateIssueStatusViewModel issueStatus)
         {
-            await _contactAdminService.UpdateIssueStatus(issueStatus.MessageId, issueStatus.Status);
+            await _contactAdminService.UpdateIssueStatus(issueStatus.MessageId, issueStatus.ResolutionDetails, issueStatus.Status);
 
             return Ok(issueStatus);
         }

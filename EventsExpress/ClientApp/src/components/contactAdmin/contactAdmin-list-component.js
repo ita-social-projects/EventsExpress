@@ -7,14 +7,15 @@ import { withRouter } from "react-router";
 
 class ContactAdminList extends Component {
 
-    handlePageChange = (page) => {
-        if (this.props.history.location.search == "")
-            this.props.history.push(this.props.history.location.pathname + `?page=${page}`);
+    pageChange = (page) => {
+        const history = this.props.history;
+        if (history.location.search == "")
+            history.push(history.location.pathname + `?page=${page}`);
         else {
-            const queryStringToObject = queryStringParse(this.props.history.location.search);
-            queryStringToObject.page = page;
-            this.props.history.location.search = filterHelper.getQueryStringByFilter(queryStringToObject);
-            this.props.history.push(this.props.history.location.pathname + this.props.history.location.search);
+            const queryStringInObject = queryStringParse(history.location.search);
+            queryStringInObject.page = page;
+            history.location.search = filterHelper.getQueryStringByFilter(queryStringInObject);
+            history.push(history.location.pathname + history.location.search);
         }
     };
 
@@ -36,7 +37,7 @@ class ContactAdminList extends Component {
                     <td className="justify-content-center">Details</td>
                 </tr>
                 <RenderList {...this.props} renderSingleItem={this.renderSingleItem}
-                    handlePageChange={this.handlePageChange} />
+                    handlePageChange={this.pageChange} />
             </>);
     }
 }

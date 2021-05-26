@@ -11,7 +11,7 @@ class AuthComponent extends Component {
             }
         }
         else if (onlyAnonymous) {
-            if (!!onlyAnonymous && !id) {
+            if (!id) {
                 return children;
             }
         }

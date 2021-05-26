@@ -23,6 +23,7 @@ namespace EventsExpress.Test.ServiceTests
         private List<ContactAdmin> messages;
         private ContactAdminDto contactAdminDTO;
         private ContactAdminFilterViewModel contactAdminFilterViewModel;
+        private string resolutionDetails = "any details";
 
         [SetUp]
         protected override void Initialize()
@@ -59,6 +60,7 @@ namespace EventsExpress.Test.ServiceTests
                 Status = ContactAdminStatus.Open,
                 Email = "testEmail",
                 EmailBody = "anyDescription",
+                ResolutionDetails = "anyResolution",
             };
 
             _contactAdminTest = new ContactAdmin
@@ -68,6 +70,7 @@ namespace EventsExpress.Test.ServiceTests
                 Status = ContactAdminStatus.Resolve,
                 Email = "aneEmail",
                 EmailBody = "testDescription",
+                ResolutionDetails = "testResolution",
             };
 
             contactAdminDTO = new ContactAdminDto()
@@ -77,6 +80,7 @@ namespace EventsExpress.Test.ServiceTests
                 Title = "any title",
                 Email = "testEmail",
                 MessageText = "anyDescription",
+                ResolutionDetails = "anyResolution",
             };
 
             MockMapper
@@ -99,7 +103,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Update issue status")]
         public void UpdateIssueStatus_InvalidId_ThrowsException()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await _service.UpdateIssueStatus(Guid.Empty, issueStatus));
+            Assert.ThrowsAsync<EventsExpressException>(async () => await _service.UpdateIssueStatus(Guid.Empty, resolutionDetails, issueStatus));
         }
 
         [Test]
@@ -108,7 +112,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             var message = Context.ContactAdmin.Find(_contactAdmin.Id);
             message.Status = issueStatus;
-            Assert.DoesNotThrowAsync(async () => await _service.UpdateIssueStatus(message.Id, message.Status));
+            Assert.DoesNotThrowAsync(async () => await _service.UpdateIssueStatus(message.Id, resolutionDetails, message.Status));
         }
 
         [Test]
@@ -136,8 +140,8 @@ namespace EventsExpress.Test.ServiceTests
                 Status = new List<ContactAdminStatus> { ContactAdminStatus.Open, ContactAdminStatus.InProgress, ContactAdminStatus.Resolve },
             };
             var count = messages.Count;
-            _service.GetAll(contactAdminFilterViewModel, messageId, out count);
-            Assert.AreEqual(count, 3);
+            _service.GetAll(contactAdminFilterViewModel, out count);
+            Assert.AreEqual(3, count);
         }
 
         [Test]
@@ -147,7 +151,7 @@ namespace EventsExpress.Test.ServiceTests
             int count = 1;
             MockMapper.Setup(u => u.Map<IEnumerable<ContactAdmin>, IEnumerable<ContactAdminDto>>(It.IsAny<IEnumerable<ContactAdmin>>()))
                 .Returns((IEnumerable<ContactAdmin> e) => e?.Select(item => new ContactAdminDto { MessageId = item.Id }));
-            var result = _service.GetAll(contactAdminFilterViewModel, messageId, out count);
+            var result = _service.GetAll(contactAdminFilterViewModel, out count);
             Assert.AreEqual(3, result.Count());
         }
 

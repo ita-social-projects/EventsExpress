@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { renderDatePicker } from '../helpers/form-helpers';
+import { MultiCheckbox, renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import './contactAdmin-filter.css';
-import ContactAdminFilterStatus from './contactAdmin-filter-status-component';
-import issueStatusEnum from '../../constants/IssueStatusEnum';
+import issueStatusEnum from '../../constants/issueStatusEnum';
 
 class ContactAdminFilter extends Component {
     constructor(props) {
@@ -32,8 +31,13 @@ class ContactAdminFilter extends Component {
     }
 
     render() {
-        const { form_values } = this.props;
+        const { form_values, submitting, onReset } = this.props;
         let values = form_values || {};
+        let options = [
+            { value: issueStatusEnum.Open, text: "Open" },
+            { value: issueStatusEnum.InProgress, text: "In progress" },
+            { value: issueStatusEnum.Resolve, text: "Resolve" }
+        ];
 
         return <>
             <div className="sidebar-filter" >
@@ -57,8 +61,8 @@ class ContactAdminFilter extends Component {
                         </div>
                         <div className="form-group">
                             <Field name="status"
-                                component={ContactAdminFilterStatus}
-                                options={[issueStatusEnum.Open, issueStatusEnum.InProgress, issueStatusEnum.Resolve]}
+                                component={MultiCheckbox}
+                                options={options}
                             />
                         </div>
                     </>
@@ -67,8 +71,8 @@ class ContactAdminFilter extends Component {
                         <Button
                             fullWidth={true}
                             color="primary"
-                            onClick={this.props.onReset}
-                            disabled={this.props.submitting}
+                            onClick={onReset}
+                            disabled={submitting}
                         >
                             Reset
                         </Button>
@@ -76,7 +80,7 @@ class ContactAdminFilter extends Component {
                             fullWidth={true}
                             type="submit"
                             color="primary"
-                            disabled={this.props.submitting}
+                            disabled={submitting}
                         >
                             Search
                         </Button>

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { renderTextArea, renderTextField } from '../helpers/helpers';
 import Module from '../helpers';
 import ErrorMessages from '../shared/errorMessage';
-import issueTypeEnum from '../../constants/IssueTypeEnum ';
+import issueTypeEnum from '../../constants/issueTypeEnum ';
 
 
 const { validate } = Module;
@@ -53,7 +53,7 @@ class ContactAdmin extends Component {
 
 
                             {(this.props.form_values !== undefined
-                                && this.props.form_values.subject == 4
+                                && this.props.form_values.subject == issueTypeEnum.Other
                                 && <Field
                                     name="title"
                                     className="form-control"

@@ -50,7 +50,7 @@ export function getEvents(data) {
     }
 }
 
-export function resetFilters() {
+export function reset_events() {
     return {
         type: RESET_EVENTS
     }

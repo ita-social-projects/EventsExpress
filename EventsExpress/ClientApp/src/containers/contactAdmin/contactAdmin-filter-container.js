@@ -19,6 +19,7 @@ class ContactAdminFilterWrapper extends Component {
             switch (key) {
                 case 'page':
                     filterCopy[key] = value;
+                    break;
                 case 'dateFrom':
                     filterCopy[key] = new Date(value).toDateString();
                     break;
@@ -40,8 +41,7 @@ class ContactAdminFilterWrapper extends Component {
 
     buildInitialFormValues = () => {
         const filter = filterHelper.trimUndefinedKeys(this.props.contactAdminList.filter);
-        let values = Object.assign({}, filter);
-        return values;
+        return Object.assign({}, filter);
     };
 
     render() {

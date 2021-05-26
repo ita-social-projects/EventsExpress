@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Db.Enums
 {
-    public enum ContactAdminReason
+    public enum ContactAdminReason : byte
     {
         NewCategory = 0,
         BugReport = 1,

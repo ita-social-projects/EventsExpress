@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import EventForm from '../components/event/event-form';
-import EventChangeStatusModal from '../components/event/event-change-status-modal';
+import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
-import { getFormValues, reset , isPristine} from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event/event-add-action';
+import { getFormValues, reset, isPristine } from 'redux-form';
+import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { resetEvent, change_event_status } from '../actions/event/event-item-view-action';
 import Button from "@material-ui/core/Button";
@@ -31,14 +31,13 @@ class EventDraftWrapper extends Component {
         this.props.reset();
     }
 
-    onPublish = async (values) => { 
-        
-        if (!this.props.pristine)
-        {
+    onPublish = async (values) => {
+
+        if (!this.props.pristine) {
             await this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
         }
-         return this.props.publish(this.props.event.id);
-        
+        return this.props.publish(this.props.event.id);
+
     }
 
     onSave = () => {
@@ -49,14 +48,14 @@ class EventDraftWrapper extends Component {
         await this.props.delete(this.props.event.id, reason);
         this.props.history.goBack();
     }
-   
+
 
     render() {
         let initialValues = {
             ...this.props.event,
             location: this.props.event.location !== null ? {
                 selectedPos: L.latLng(
-                    
+
                     this.props.event.location.latitude,
                     this.props.event.location.longitude
                 ),
@@ -71,11 +70,12 @@ class EventDraftWrapper extends Component {
                 <div className="row pl-md-4">
                     <div className="col-12 py-3">
                         <div className="float-left">
-                            <h1>Edit event draft</h1>                  
+                            <h1>Edit event draft</h1>
                         </div>
                         <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                            <EventChangeStatusModal
+                            <SimpleModalWithDetails
                                 submitCallback={this.onDelete}
+                                data="Are you sure?"
                                 button={
                                     <IconButton className="text-danger" size="medium">
                                         <i className="fas fa-trash"></i>
@@ -85,7 +85,7 @@ class EventDraftWrapper extends Component {
                         </div>
                     </div>
                 </div>
-                <hr className="gradient ml-4 mt-0 mb-3"/>
+                <hr className="gradient ml-4 mt-0 mb-3" />
             </header>
             <EventForm
                 all_categories={this.props.all_categories}
@@ -128,7 +128,7 @@ class EventDraftWrapper extends Component {
             </EventForm>
         </>
     }
-}   
+}
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
@@ -155,6 +155,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withRouter(connect(
-    mapStateToProps, 
+    mapStateToProps,
     mapDispatchToProps
 )(EventDraftWrapper));

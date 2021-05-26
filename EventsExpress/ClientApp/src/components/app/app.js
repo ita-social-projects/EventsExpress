@@ -73,7 +73,7 @@ class App extends Component {
                         <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
                         <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
                         <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />
-                        <Route path="/contactAdmin/issues" component={this.AdminRoleSecurity(Issues)} />
+                        <Route path="/contactAdmin/issues" component={Issues} />
                         <Route path="/contactAdmin/:id/UpdateStatus" component={this.AdminRoleSecurity(ContactAdminDetails)} />
                         <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                         <Route path="/authentication/:id/:token" component={Authentication} />

@@ -19,7 +19,6 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Assignee, opt => opt.Ignore())
                 .ForMember(dest => dest.AssigneeId, opts => opts.Ignore())
                 .ForMember(dest => dest.DateUpdated, opts => opts.Ignore())
-                .ForMember(dest => dest.ResolutionDetails, opts => opts.Ignore())
                 .ForMember(dest => dest.Sender, opts => opts.Ignore());
 
             CreateMap<ContactAdminDto, ContactAdminViewModel>()

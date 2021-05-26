@@ -15,13 +15,13 @@ namespace EventsExpress.Db.Migrations
                     SenderId = table.Column<Guid>(nullable: true),
                     AssigneeId = table.Column<Guid>(nullable: true),
                     Email = table.Column<string>(nullable: false),
-                    Subject = table.Column<int>(nullable: false),
+                    Subject = table.Column<byte>(nullable: false),
                     Title = table.Column<string>(nullable: true),
                     EmailBody = table.Column<string>(nullable: true),
                     ResolutionDetails = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
+                    Status = table.Column<byte>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -41,6 +41,11 @@ namespace EventsExpress.Db.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChangeInfos_UserId",
+                table: "ChangeInfos",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ContactAdmin_AssigneeId",
                 table: "ContactAdmin",
                 column: "AssigneeId");
@@ -49,12 +54,28 @@ namespace EventsExpress.Db.Migrations
                 name: "IX_ContactAdmin_SenderId",
                 table: "ContactAdmin",
                 column: "SenderId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ChangeInfos_Users_UserId",
+                table: "ChangeInfos",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_ChangeInfos_Users_UserId",
+                table: "ChangeInfos");
+
             migrationBuilder.DropTable(
                 name: "ContactAdmin");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ChangeInfos_UserId",
+                table: "ChangeInfos");
         }
     }
 }

@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210520123621_AddContactAdmin")]
+    [Migration("20210525145940_AddContactAdmin")]
     partial class AddContactAdmin
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,6 +152,8 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ChangeInfos");
                 });
 
@@ -229,11 +231,11 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
 
-                    b.Property<int>("Subject")
-                        .HasColumnType("int");
+                    b.Property<byte>("Subject")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -824,6 +826,15 @@ namespace EventsExpress.Db.Migrations
                         .WithOne("AuthLocal")
                         .HasForeignKey("EventsExpress.Db.Entities.AuthLocal", "AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

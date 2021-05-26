@@ -85,7 +85,7 @@ class LeftSidebar extends Component {
                                     text={"Admin"}
                                 />
                                 <NavItem
-                                    to={'/contactAdmin/issues'}
+                                    to={'/contactAdmin/issues?page=1'}
                                     icon={'fa fa-exclamation-triangle'}
                                     text={"Issues"}
                                 />

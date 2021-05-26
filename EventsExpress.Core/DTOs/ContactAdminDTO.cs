@@ -13,12 +13,12 @@ namespace EventsExpress.Core.DTOs
 
         public string Email { get; set; }
 
-        public Guid? SenderId { get; set; }
-
         public Guid MessageId { get; set; }
 
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         public ContactAdminStatus Status { get; set; }
+
+        public string ResolutionDetails { get; set; }
     }
 }
