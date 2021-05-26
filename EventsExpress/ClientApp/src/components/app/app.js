@@ -22,7 +22,6 @@ import NotificationEvents from '../notification_events';
 import ContactAdminWrapper from '../../containers/contactAdmin/contactAdmin-container';
 import ContactAdminDetails from '../../containers/contactAdmin/contactAdmin-details-container';
 import LoginTwitter from '../../containers/TwitterLogin';
-import AddEventWrapper from '../../containers/add-event';
 import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
 import RegisterSuccess from '../register/register-success';
@@ -80,7 +79,6 @@ class App extends Component {
                         <Route path="/authentication/twitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
                         <Route path="/contactAdmin" component={ContactAdminWrapper} />
-                        <Route path='/event/createEvent' component={this.UserRoleSecurity(AddEventWrapper)} />
                         <Route path='/registerSuccess' component={this.AdminAndUserRoleSecurity(RegisterSuccess)} />
                         <Route path='/editEvent/:id' component={this.UserRoleSecurity(EventEditWrapper)} />
                         <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />

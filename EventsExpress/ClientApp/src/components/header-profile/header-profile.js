@@ -14,7 +14,7 @@ import { Roles } from '../../constants/userRoles';
 
 export default class HeaderProfile extends Component {
     handleClick = () => {
-        this.props.onSubmit(null);
+        this.props.onSubmit();
 
     }
 
