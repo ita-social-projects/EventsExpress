@@ -4,6 +4,8 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
+    getCount = () => baseService.getResource(`users/Count`)
+    
     getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 
     getUsers = filter => baseService.getResource(`users/get${filter}`);

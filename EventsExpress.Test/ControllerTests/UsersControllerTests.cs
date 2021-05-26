@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Test.ControllerTests
 {
@@ -106,6 +107,33 @@ namespace EventsExpress.Test.ControllerTests
 
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             _usersController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+        }
+
+        [TestCase(0)]
+        [TestCase(5)]
+        [TestCase(15)]
+        public async Task GetUsersCount_ReturnsValid(int count)
+        {
+            // Arrange
+            _userService.Setup(service => service.CountUsersAsync())
+                .ReturnsAsync(count);
+
+            // Act
+            var actionResult = (OkObjectResult)(await _usersController.Count()).Result;
+            var actual = (int)actionResult.Value;
+
+            // Assert
+            Assert.AreEqual(count, actual);
+        }
+
+        [Test]
+        public async Task GetUsersCount_CalledMethodOfService()
+        {
+            // Act
+            await _usersController.Count();
+
+            // Assert
+            _userService.Verify(service => service.CountUsersAsync(), Times.Once);
         }
 
         [Test]

@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users-action';
+import { GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER, GET_USERS_COUNT } from '../actions/users/users-action';
 import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user-action';
 
 export const reducer = (state = initialState.users, action) => {
@@ -72,7 +72,14 @@ export const reducer = (state = initialState.users, action) => {
                     userSearchFilter: action.payload
                 }
             }
-
+            
+        case GET_USERS_COUNT: {
+            return {
+                ...state,
+                count: action.payload
+            }
+        }
+            
         default:
             return state;
     }
