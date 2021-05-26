@@ -34,9 +34,9 @@ export default class EventService {
 
         if (data.location) {
             file.append('Location.Type', data.location.type)
-            if (data.location.selectedPos) {
-                file.append('Location.Latitude', data.location.selectedPos.lat);
-                file.append('Location.Longitude', data.location.selectedPos.lng);
+            if (data.location.latitude) {
+                file.append('Location.Latitude', data.location.latitude);
+                file.append('Location.Longitude', data.location.longitude);
             }
             if (data.location.onlineMeeting) {
                 file.append('Location.OnlineMeeting', data.location.onlineMeeting);

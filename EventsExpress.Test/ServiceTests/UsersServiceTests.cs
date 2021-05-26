@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
@@ -22,6 +23,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class UsersServiceTests : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
         private Mock<IMediator> mockMediator;
 
@@ -40,12 +42,14 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockPhotoService = new Mock<IPhotoService>();
             mockMediator = new Mock<IMediator>();
+            mockSecurityContext = new Mock<ISecurityContext>();
 
             service = new UserService(
                 Context,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object);
+                mockPhotoService.Object,
+                mockSecurityContext.Object);
 
             existingUser = new User
             {
@@ -74,10 +78,10 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public async Task GetUnblockedUsersCount_ReturnsValid()
+        public async Task GetUsersCount_ReturnsValid()
         {
             // Arrange
-            var expected = await Context.Users.CountAsync(user => !user.Account.IsBlocked);
+            var expected = await Context.Users.CountAsync();
 
             // Act
             var actual = await service.CountUsersAsync();
@@ -106,33 +110,35 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void EditFavoriteNotificationTypes_CorrectNotificationChange_CorrectUser_NotThrowAsync()
         {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
-            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(existingUserDTO, notificationTypes));
+            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(notificationTypes));
         }
 
         [Test]
         public void EditFavoriteNotificationTypes_CorrectNotificationChange_InCorrectUser_ThrowAsync()
         {
             var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
-            var notExistingUser = existingUserDTO;
-            notExistingUser.Id = Guid.NewGuid();
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notExistingUser, notificationTypes));
+            var notExistingUserId = Guid.NewGuid();
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notificationTypes));
         }
 
         [Test]
         public void EditFavoriteNotificationTypes_InCorrectNotificationChange_CorrectUser_ThrowAsync()
         {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
-            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(existingUserDTO, notificationTypes));
+            Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(notificationTypes));
         }
 
         [Test]
         public void EditFavoriteNotificationTypes_InCorrectNotificationChange_InCorrectUser_ThrowAsync()
         {
             var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
-            var notExistingUser = existingUserDTO;
-            notExistingUser.Id = Guid.NewGuid();
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notExistingUser, notificationTypes));
+            var notExistingUserId = Guid.NewGuid();
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EditFavoriteNotificationTypes(notificationTypes));
         }
 
         [Test]
@@ -184,36 +190,24 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void Update_EmailIsNull_ReturnFalse(string email)
+        public void EditUserName_DoesNotThrow()
         {
-            UserDto newUser = new UserDto() { Email = email };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(newUser));
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditUserName(It.IsAny<string>()));
         }
 
         [Test]
-        public void Update_UserInDbNotFound_Throws()
+        public void EditBirthday_DoesNotThrow()
         {
-            existingUserDTO.Id = Guid.NewGuid();
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Update(existingUserDTO));
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditBirthday(It.IsAny<DateTime>()));
         }
 
         [Test]
-        public void Update_UserDtoIsvalid_DoesNotThrow()
+        public void EditGender_DoesNotThrow()
         {
-            MockMapper.Setup(m => m
-                .Map<UserDto, User>(existingUserDTO))
-                    .Returns(existingUser);
-
-            Assert.DoesNotThrowAsync(async () => await service.Update(existingUserDTO));
-        }
-
-        [Test]
-        public void ChangeAvatar_UserInDbNotFound_Throws()
-        {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<FormFile>()));
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditGender(It.IsAny<Gender>()));
         }
 
         [Test]

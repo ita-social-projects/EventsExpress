@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {reduxForm, Field} from 'redux-form';
+import React, { Component } from 'react';
+import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import {
     renderTextField,
     renderMultiselect
 } from '../helpers/helpers';
 import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
@@ -24,7 +24,7 @@ class EventFilter extends Component {
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
 
-        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
+        if (!filterHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
                 keyWord: initialValues.keyWord,
@@ -33,7 +33,7 @@ class EventFilter extends Component {
                 categories: initialValues.categories,
                 statuses: initialValues.statuses,
                 radius: initialValues.radius,
-                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : {lat: null, lng: null},
+                selectedPos: initialValues.selectedPos != null ? initialValues.selectedPos : { latitude: null, longitude: null }
             });
             this.setState({
                 ['needInitializeValues']: false
@@ -102,27 +102,18 @@ class EventFilter extends Component {
                         <div>
                             <MapModal
                                 initialize={this.props.initialize}
-                                initialValues={this.props.initialFormValues}
                                 values={values}
-                                reset={this.props.onReset}/>
+                                reset={this.props.onReset} />
                         </div>
-
                         <div className="d-flex">
-
-                            {values.selectedPos &&
-                            values.selectedPos.lat &&
-                            <div>
-                                <p>
-                                    Radius:
-                                    {values.radius} km
-                                </p>
-                                <p>
-                                    Location:
-                                </p>
-                                <DisplayMap
-                                    location={{latitude: values.selectedPos.lat, longitude: values.selectedPos.lng}}
-                                />
-                            </div>
+                            {
+                                values.selectedPos &&
+                                values.selectedPos.latitude &&
+                                <div className="mt-2">
+                                    <p>Radius: {values.radius} km</p>
+                                    <p>Location:</p>
+                                    <DisplayMap location={{ ...values.selectedPos }} />
+                                </div>
                             }
                         </div>
                     </>

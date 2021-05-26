@@ -10,6 +10,7 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -19,23 +20,26 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly ICacheHelper _cacheHepler;
         private readonly ILogger<RegisterVerificationHandler> _logger;
         private readonly INotificationTemplateService _notificationTemplateService;
+        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
         public RegisterVerificationHandler(
             IEmailService sender,
             ICacheHelper cacheHepler,
             ILogger<RegisterVerificationHandler> logger,
-            INotificationTemplateService notificationTemplateService)
+            INotificationTemplateService notificationTemplateService,
+            IOptions<AppBaseUrlModel> urlOptions)
         {
             _sender = sender;
             _cacheHepler = cacheHepler;
             _logger = logger;
             _notificationTemplateService = notificationTemplateService;
+            _urlOptions = urlOptions;
         }
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
             var token = Guid.NewGuid().ToString();
-            string theEmailLink = $"<a \" target=\"_blank\" href=\"{AppHttpContext.AppBaseUrl}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
+            string theEmailLink = $"<a \" target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
 
             _cacheHepler.Add(new CacheDto
             {

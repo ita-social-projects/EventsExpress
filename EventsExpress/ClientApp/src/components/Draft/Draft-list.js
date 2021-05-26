@@ -5,6 +5,7 @@ import RenderList from '../event/RenderList'
 import { change_event_status } from '../../actions/event/event-item-view-action';
 import eventStatusEnum from '../../constants/eventStatusEnum';
 import { createBrowserHistory } from 'history';
+import { setSuccessAllert } from '../../actions/alert-action';
 
 const history = createBrowserHistory({ forceRefresh: true });
 
@@ -33,6 +34,7 @@ class DraftList extends Component {
 
     onDelete = async (eventId, reason) => {
         await this.props.delete(eventId, reason);
+        this.props.alert('Your event has been successfully deleted!');
         history.push(`/drafts`);
     }
 
@@ -45,6 +47,7 @@ class DraftList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        alert: (msg) => dispatch(setSuccessAllert(msg)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
     }
 };

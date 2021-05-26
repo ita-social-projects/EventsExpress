@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -21,16 +22,19 @@ namespace EventsExpress.Core.Services
     {
         private readonly IMediator _mediator;
         private readonly IPhotoService _photoService;
+        private readonly ISecurityContext _securityContext;
 
         public UserService(
             AppDbContext context,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv)
+            IPhotoService photoSrv,
+            ISecurityContext securityContext)
             : base(context, mapper)
         {
             _mediator = mediator;
             _photoService = photoSrv;
+            _securityContext = securityContext;
         }
 
         public async Task Create(UserDto userDto)
@@ -60,62 +64,22 @@ namespace EventsExpress.Core.Services
             return await Entities.CountAsync();
         }
 
-        public async Task Update(UserDto userDto)
+        public UserDto GetCurrentUserInfo()
         {
-            if (string.IsNullOrEmpty(userDto.Email))
-            {
-                throw new EventsExpressException("EMAIL cannot be empty");
-            }
+            var userId = _securityContext.GetCurrentUserId();
 
-            if (!Context.Users.Any(u => u.Id == userDto.Id))
-            {
-                throw new EventsExpressException("Not found");
-            }
-
-            var result = Mapper.Map<UserDto, User>(userDto);
-
-            Update(result);
-            await Context.SaveChangesAsync();
-        }
-
-        public UserDto GetById(Guid userId)
-        {
             var user = Mapper.Map<UserDto>(
                 Context.Users
-                .Include(u => u.Events)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthExternal)
-                .Include(u => u.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(n => n.NotificationType)
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId));
 
             return user;
         }
 
-        public UserDto GetByEmail(string email)
-        {
-            var user = Mapper.Map<UserDto>(Context.Users
-                .Include(u => u.Events)
-                .Include(u => u.Categories)
-                    .ThenInclude(c => c.Category)
-                .Include(u => u.NotificationTypes)
-                    .ThenInclude(n => n.NotificationType)
-                .Include(u => u.Relationships)
-                .AsNoTracking()
-                .FirstOrDefault(o => o.Email == email));
-
-            return user;
-        }
-
-        public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count, Guid id)
+        public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count)
         {
             var users = Context.Users
                 .Include(u => u.Account)
@@ -192,11 +156,6 @@ namespace EventsExpress.Core.Services
             var user = Context.Users
                 .FirstOrDefault(u => u.Id == userId);
 
-            if (user == null)
-            {
-                throw new EventsExpressException("User not found");
-            }
-
             try
             {
                 await _photoService.AddUserPhoto(avatar, user.Id);
@@ -207,11 +166,43 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task EditFavoriteCategories(UserDto userDto, IEnumerable<Category> categories)
+        public async Task EditUserName(string name)
         {
+            var user = CurrentUser();
+
+            user.Name = name;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task EditBirthday(DateTime birthday)
+        {
+            var user = CurrentUser();
+
+            user.Birthday = birthday;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task EditGender(Gender gender)
+        {
+            var user = CurrentUser();
+
+            user.Gender = gender;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task EditFavoriteCategories(IEnumerable<Category> categories)
+        {
+            var userId = _securityContext.GetCurrentUserId();
+
             var u = Context.Users
                 .Include(u => u.Categories)
-                .Single(user => user.Id == userDto.Id);
+                .Single(user => user.Id == userId);
 
             var newCategories = categories
                 .Select(x => new UserCategory { UserId = u.Id, CategoryId = x.Id })
@@ -246,12 +237,21 @@ namespace EventsExpress.Core.Services
                     x.UserFromId == attitude.UserFromId &&
                     x.UserToId == attitude.UserToId));
 
-        public ProfileDto GetProfileById(Guid userId, Guid fromId)
+        public ProfileDto GetProfileById(Guid id)
         {
-            var user = Mapper.Map<UserDto, ProfileDto>(GetById(userId));
+            var userId = _securityContext.GetCurrentUserId();
+
+            var user = Mapper.Map<UserDto, ProfileDto>(
+                Mapper.Map<UserDto>(Context.Users
+                .Include(u => u.Categories)
+                    .ThenInclude(c => c.Category)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == userId)));
 
             var rel = Context.Relationships
-                .FirstOrDefault(x => x.UserFromId == fromId && x.UserToId == userId);
+                .FirstOrDefault(x => x.UserFromId == id && x.UserToId == userId);
             user.Attitude = (rel != null)
                 ? (byte)rel.Attitude
                 : (byte)Attitude.None;
@@ -286,11 +286,13 @@ namespace EventsExpress.Core.Services
             return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public async Task<Guid> EditFavoriteNotificationTypes(UserDto userDto, IEnumerable<NotificationType> notificationTypes)
+        public async Task<Guid> EditFavoriteNotificationTypes(IEnumerable<NotificationType> notificationTypes)
         {
+            var userId = _securityContext.GetCurrentUserId();
+
             var user = Context.Users
                 .Include(u => u.NotificationTypes)
-                .Single(user => user.Id == userDto.Id);
+                .Single(user => user.Id == userId);
 
             var newNotificationTypes = notificationTypes
                 .Select(x => new UserNotificationType { UserId = user.Id, NotificationTypeId = x.Id })
@@ -301,6 +303,15 @@ namespace EventsExpress.Core.Services
             Update(user);
             await Context.SaveChangesAsync();
             return user.Id;
+        }
+
+        private User CurrentUser()
+        {
+            var userId = _securityContext.GetCurrentUserId();
+
+            var user = Context.Users.FirstOrDefault(x => x.Id == userId);
+
+            return user;
         }
     }
 }

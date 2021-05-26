@@ -4,7 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average'
@@ -14,7 +14,7 @@ import { Roles } from '../../constants/userRoles';
 
 export default class HeaderProfile extends Component {
     handleClick = () => {
-        this.props.onSubmit(null);
+        this.props.onSubmit();
 
     }
 
@@ -41,7 +41,7 @@ export default class HeaderProfile extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                <AuthComponent rolesMatch={[Roles.User]}>
+                                <AuthComponent rolesMatch={Roles.User}>
                                     <Link to={'/notification_events'}>
                                         <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                             <IconButton>
@@ -55,7 +55,7 @@ export default class HeaderProfile extends Component {
                                 <Link
                                     to={{
                                         pathname: "/home/events",
-                                        search: eventHelper.getQueryStringByEventFilter(this.props.filter),
+                                        search: filterHelper.getQueryStringByFilter(this.props.filter),
                                     }}
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>
@@ -65,7 +65,7 @@ export default class HeaderProfile extends Component {
                                     </Tooltip>
                                 </Link>
                             </div>
-                            <AuthComponent rolesMatch={[Roles.User]}>
+                            <AuthComponent rolesMatch={Roles.User}>
                                 <button className="btn btn-outline-secondary" onClick={this.handleClick}>
                                     <i className="fas fa-plus mr-1"></i>
                                         add event

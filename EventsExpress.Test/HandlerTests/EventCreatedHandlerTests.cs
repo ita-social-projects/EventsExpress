@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -19,6 +21,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
+        private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
         private EventCreatedHandler _eventCreatedHandler;
         private Guid _idUser = Guid.NewGuid();
         private string _emailUser = "user@gmail.com";
@@ -37,6 +40,9 @@ namespace EventsExpress.Test.HandlerTests
             _userService = new Mock<IUserService>();
             var templateId = NotificationProfile.EventCreated;
             _notificationTemplateService = new Mock<INotificationTemplateService>();
+            _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
+
+            _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
             _notificationTemplateService
                 .Setup(s => s.GetByIdAsync(templateId))
@@ -46,7 +52,7 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
 
-            _eventCreatedHandler = new EventCreatedHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+            _eventCreatedHandler = new EventCreatedHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
             _user = new User
             {
                 Id = _idUser,
@@ -67,7 +73,6 @@ namespace EventsExpress.Test.HandlerTests
             _userService.Setup(u => u.GetUsersByCategories(It.IsAny<CategoryDto[]>())).Returns(new UserDto[] { _userDto });
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
-            AppHttpContext.Configure(httpContext.Object);
         }
 
         [Test]

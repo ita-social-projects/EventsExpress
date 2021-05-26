@@ -31,13 +31,13 @@ namespace EventsExpress.Core.Services
                 Credentials = (!_senderOptions.Value.UseDefaultCredentials) ? new NetworkCredential(@from, pass) : null,
                 EnableSsl = true,
             };
-
             var mail = new MailMessage(@from, emailDto.RecepientEmail)
             {
                 Subject = emailDto.Subject,
                 Body = emailDto.MessageText,
                 IsBodyHtml = true,
             };
+
             return client.SendMailAsync(mail);
         }
     }

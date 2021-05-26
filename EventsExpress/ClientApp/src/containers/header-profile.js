@@ -12,7 +12,7 @@ class HeaderProfileWrapper extends Component {
     this.props.logout();
   }
 
-  onSubmit = (values) => {
+  onSubmit = () => {
     return this.props.add_event({ user_id: this.props.user.id });
   }
 

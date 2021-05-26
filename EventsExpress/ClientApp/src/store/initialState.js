@@ -1,6 +1,6 @@
 'use strict';
 
-import eventHelper from '../components/helpers/eventHelper';
+import filterHelper from '../components/helpers/filterHelper';
 
 const initialState = {
     account:{
@@ -134,7 +134,7 @@ const initialState = {
             items: [],
             pageViewModel: {},
         },
-        filter: eventHelper.getDefaultEventFilter(),
+        filter: filterHelper.getDefaultEventFilter(),
     },
     tracks: {
         isPending: false,
@@ -203,9 +203,21 @@ const initialState = {
         autoHideDuration: null,
         open: false
     },
-    contactUs: {
+    contactAdmin: {
         isPending: false,
-        isSuccess: false,
+        data: []
+    },
+    contactAdminList: {
+        isPending: true,
+        data: {
+            items: [],
+            pageViewModel: {},
+        },
+        filter: filterHelper.getDefaultContactAdminFilter(),
+    },
+    contactAdminItem: {
+        isPending: false,
+        data: []
     },
     notification:
     {
