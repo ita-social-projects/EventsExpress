@@ -118,7 +118,7 @@ namespace EventsExpress.Test.ControllerTests
         public async Task GetUnblockedUsersCount_ReturnsValid(int count)
         {
             // Arrange
-            _userService.Setup(service => service.CountUnblockedUsersAsync())
+            _userService.Setup(service => service.CountUsersAsync())
                 .ReturnsAsync(count);
 
             // Act
@@ -136,7 +136,7 @@ namespace EventsExpress.Test.ControllerTests
             await _usersController.Count();
 
             // Assert
-            _userService.Verify(service => service.CountUnblockedUsersAsync(), Times.Once);
+            _userService.Verify(service => service.CountUsersAsync(), Times.Once);
         }
 
         [Test]

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get_users, reset_users, get_count, initialConnection } from '../actions/users/users-action';
+import { get_users, reset_users, get_count, initialConnection, closeConnection } from '../actions/users/users-action';
 import { connect } from 'react-redux';
 import Users from '../components/users';
 import Spinner from '../components/spinner';
@@ -14,6 +14,7 @@ class UsersWrapper extends Component {
 
     componentWillUnmount = () => {
         this.props.reset_users();
+        this.props.closeConnection();
     }
     
     getUsers = (page) => this.props.get_users(page);
@@ -51,6 +52,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        closeConnection: () => dispatch(closeConnection()),
         initialConnection: () => dispatch(initialConnection()),
         get_count: () => dispatch(get_count()),
         get_users: (page) => dispatch(get_users(page)),

@@ -80,7 +80,7 @@ namespace EventsExpress.Test.ServiceTests
             var expected = await Context.Users.CountAsync(user => !user.Account.IsBlocked);
 
             // Act
-            var actual = await service.CountUnblockedUsersAsync();
+            var actual = await service.CountUsersAsync();
 
             // Assert
             Assert.AreEqual(expected, actual);

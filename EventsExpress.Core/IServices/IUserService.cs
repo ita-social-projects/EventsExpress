@@ -13,7 +13,7 @@ namespace EventsExpress.Core.IServices
     {
         Task Create(UserDto userDto);
 
-        Task<int> CountUnblockedUsersAsync();
+        Task<int> CountUsersAsync();
 
         Task Update(UserDto userDto);
 

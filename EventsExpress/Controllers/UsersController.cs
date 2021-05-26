@@ -88,7 +88,7 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<ActionResult<int>> Count()
         {
-            var count = await _userService.CountUnblockedUsersAsync();
+            var count = await _userService.CountUsersAsync();
             return Ok(count);
         }
 
