@@ -150,6 +150,8 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("ChangeInfos");
                 });
 
@@ -197,6 +199,52 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.ContactAdmin", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssigneeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailBody")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResolutionDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Subject")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ContactAdmin");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>
@@ -779,6 +827,15 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.Comments", "Parent")
@@ -796,6 +853,17 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.ContactAdmin", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.User", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeId");
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>

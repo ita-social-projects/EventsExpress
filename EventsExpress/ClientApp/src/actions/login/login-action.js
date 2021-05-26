@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { setErrorAllertFromResponse } from '../alert-action';
 import { createBrowserHistory } from 'history';
-import eventHelper from '../../components/helpers/eventHelper';
+import filterHelper from '../../components/helpers/filterHelper';
 import { updateEventsFilters } from '../event/event-list-action';
 import { initialConnection } from '../chat/chat-action';
 import { getUnreadMessages } from '../chat/chats-action';
@@ -81,7 +81,7 @@ export function getUserInfo() {
 
         let userInfo = await response.json();
         const eventFilter = {
-            ...eventHelper.getDefaultEventFilter(),
+            ...filterHelper.getDefaultEventFilter(),
             categories: userInfo.categories.map(item => item.id),
         };
         dispatch(setUser(userInfo));

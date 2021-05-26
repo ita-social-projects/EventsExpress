@@ -29,7 +29,6 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IPhotoService> _photoService;
         private Mock<ISecurityContext> _securityContextService;
         private Mock<IMapper> _mapper;
-        private Mock<IEmailService> _emailService;
         private UsersController _usersController;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
@@ -57,8 +56,8 @@ namespace EventsExpress.Test.ControllerTests
             _photoService = new Mock<IPhotoService>();
             _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
-            _emailService = new Mock<IEmailService>();
-            _usersController = new UsersController(_userService.Object, _mapper.Object, _emailService.Object, _photoService.Object, _securityContextService.Object);
+
+            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -156,46 +155,6 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-        }
-
-        [Test]
-        [Category("ContactAdmins")]
-        public async Task ContactAdmins_CorrectAdmins_ContactCorrectCountPartsAsync()
-        {
-            _userService.Setup(a => a.GetCurrentUserInfo()).Returns(_userDto);
-            string roleName = "Admin";
-            UserDto firstAdmin = GetAdminAccount();
-            UserDto secondAdmin = GetAdminAccount();
-
-            var admins = new UserDto[] { firstAdmin, secondAdmin };
-            _userService.Setup(user => user.GetUsersByRole(roleName)).Returns(admins);
-            ContactUsViewModel model = new ContactUsViewModel { Description = "some description", Type = "some type" };
-
-            var res = await _usersController.ContactAdmins(model);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<IActionResult>(res);
-            _userService.Verify(aut => aut.GetCurrentUserInfo(), Times.Exactly(1));
-            _userService.Verify(user => user.GetUsersByRole(roleName), Times.Exactly(1));
-            _emailService.Verify(email => email.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(admins.Length));
-
-            static UserDto GetAdminAccount()
-            {
-                return new UserDto
-                {
-                    Id = Guid.NewGuid(),
-                    Account = new Account
-                    {
-                        AccountRoles = new[]
-                        {
-                            new AccountRole
-                            {
-                                RoleId = Db.Enums.Role.Admin,
-                            },
-                        },
-                    },
-                };
-            }
         }
 
         [Test]
