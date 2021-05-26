@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import EventForm from '../components/event/event-form';
-import EventChangeStatusModal from '../components/event/event-change-status-modal';
+import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
-import { getFormValues, reset , isPristine} from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event/event-add-action';
+import { getFormValues, reset, isPristine } from 'redux-form';
+import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
@@ -49,18 +49,19 @@ class EventDraftWrapper extends Component {
         this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
     }
-   
+  
     render() {
         return <>
             <header>
                 <div className="row pl-md-4">
                     <div className="col-12 py-3">
                         <div className="float-left">
-                            <h1>Edit event draft</h1>                  
+                            <h1>Edit event draft</h1>
                         </div>
                         <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                            <EventChangeStatusModal
+                            <SimpleModalWithDetails
                                 submitCallback={this.onDelete}
+                                data="Are you sure?"
                                 button={
                                     <IconButton className="text-danger" size="medium">
                                         <i className="fas fa-trash"></i>
@@ -70,7 +71,7 @@ class EventDraftWrapper extends Component {
                         </div>
                     </div>
                 </div>
-                <hr className="gradient ml-4 mt-0 mb-3"/>
+                <hr className="gradient ml-4 mt-0 mb-3" />
             </header>
             <EventForm
                 all_categories={this.props.all_categories}
@@ -109,7 +110,7 @@ class EventDraftWrapper extends Component {
             </EventForm>
         </>
     }
-}   
+}
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
@@ -136,6 +137,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withRouter(connect(
-    mapStateToProps, 
+    mapStateToProps,
     mapDispatchToProps
 )(EventDraftWrapper));
