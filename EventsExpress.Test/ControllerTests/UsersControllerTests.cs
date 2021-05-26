@@ -57,7 +57,7 @@ namespace EventsExpress.Test.ControllerTests
             _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
 
-            _usersController = new UsersController(_userService.Object, _authService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
+            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
