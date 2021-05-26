@@ -2,6 +2,6 @@
 {
     public class AppBaseUrlModel
     {
-        public string Host { get; set; }
+        public virtual string Host { get; set; }
     }
 }

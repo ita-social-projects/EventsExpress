@@ -265,7 +265,6 @@ namespace EventsExpress
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseHttpContext();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
