@@ -149,6 +149,7 @@ namespace EventsExpress
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.Configure<AppBaseUrlModel>(Configuration.GetSection("AppBaseUrl"));
 
             services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
@@ -264,7 +265,6 @@ namespace EventsExpress
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseHttpContext();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
