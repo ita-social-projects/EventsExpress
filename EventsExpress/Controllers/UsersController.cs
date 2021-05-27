@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -27,20 +25,17 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly ISecurityContext _securityContext;
         private readonly IMapper _mapper;
-        private readonly IEmailService _emailService;
         private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
             IMapper mapper,
-            IEmailService emailService,
             IPhotoService photoService,
             ISecurityContext securityContext)
         {
             _userService = userSrv;
-            _mapper = mapper;
-            _emailService = emailService;
             _photoService = photoService;
+            _mapper = mapper;
             _securityContext = securityContext;
         }
 
@@ -199,43 +194,6 @@ namespace EventsExpress.Controllers
             var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png").Result;
 
             return Ok(updatedPhoto);
-        }
-
-        /// <summary>
-        /// This method help to contact users with admins.
-        /// </summary>
-        /// <param name="model">Param model defines ContactUsViewModel model.</param>
-        /// <returns>The method sends message to admin mail.</returns>
-        /// <response code="200">Sending is succesfull.</response>
-        /// <response code="400">Sending process failed.</response>
-        [HttpPost("[action]")]
-        [Authorize(Policy = PolicyNames.UserPolicyName)]
-        public async Task<IActionResult> ContactAdmins(ContactUsViewModel model)
-        {
-            var user = GetCurrentUserOrNull(); // Replace this method
-
-            var admins = _userService.GetUsersByRole("Admin");
-
-            var emailBody = $"New request from <a href='mailto:{user.Email}?subject=re:{model.Type}'>{user.Email}</a> : <br />{model.Description}. ";
-
-            try
-            {
-                foreach (var admin in admins)
-                {
-                    await _emailService.SendEmailAsync(new EmailDto
-                    {
-                        Subject = model.Type,
-                        RecepientEmail = admin.Email,
-                        MessageText = emailBody,
-                    });
-                }
-
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
 
         /// <summary>
