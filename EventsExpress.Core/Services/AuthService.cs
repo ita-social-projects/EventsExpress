@@ -13,11 +13,10 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Role = EventsExpress.Db.Entities.Role;
 
 namespace EventsExpress.Core.Services
 {
-    using Role = Db.Entities.Role;
-
     public class AuthService : BaseService<Account>, IAuthService
     {
         private readonly IUserService _userService;

@@ -45,14 +45,10 @@ namespace EventsExpress.Test.ServiceTests
                 AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } },
             };
 
+            _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
+
             Context.Accounts.Add(_existingAccount);
             Context.SaveChanges();
-        }
-
-        [Test]
-        public void GetClaims_Works()
-        {
-            _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
         }
     }
 }
