@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -12,10 +9,8 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Test.ServiceTests.TestClasses.Auth;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -37,7 +32,6 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
-        private Guid idAccount = Guid.NewGuid();
 
         private UserDto existingUserDTO;
         private User existingUser;

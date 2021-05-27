@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -13,11 +12,12 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
+    using Role = Db.Entities.Role;
+
     public class AuthService : BaseService<Account>, IAuthService
     {
         private readonly IUserService _userService;
@@ -55,9 +55,8 @@ namespace EventsExpress.Core.Services
                 .Include(a => a.AuthExternal)
                 .Include(a => a.RefreshTokens)
                 .Include(a => a.AccountRoles)
-                    .ThenInclude(ar => ar.Role)
-                .Where(a => a.AuthExternal.Any(x => x.Email == email && x.Type == type))
-                .FirstOrDefault();
+                    .ThenInclude<Account, AccountRole, Role>(ar => ar.Role)
+                .FirstOrDefault(a => a.AuthExternal.Any(x => x.Email == email && x.Type == type));
 
             if (account == null)
             {

@@ -47,10 +47,8 @@ namespace EventsExpress.Core.Services
                 {
                     return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
                 }
-                else
-                {
-                    return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-                }
+
+                return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             }
         }
 
@@ -105,20 +103,17 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, newRefreshToken.Token);
         }
 
-        private Claim[] GetClaims(Account account)
+        private IEnumerable<Claim> GetClaims(Account account)
         {
             List<Claim> claims = new List<Claim>();
             if (account.UserId != null)
             {
-            claims.Add(new Claim(ClaimTypes.Name, $"{account.UserId}"));
+                claims.Add(new Claim(ClaimTypes.Name, $"{account.UserId}"));
             }
 
             claims.Add(new Claim(ClaimTypes.Sid, $"{account.Id}"));
             var roles = account.AccountRoles.Select(ar => ar.Role);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
-            }
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Name)));
 
             return claims.ToArray();
         }
