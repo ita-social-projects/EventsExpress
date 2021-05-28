@@ -17,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.UnitOfMeasuring
 
         public IEnumerator GetEnumerator()
         {
-            yield return new object[] { correctUnitName, correctShortName, correctCategory, Is.False };
+            yield return new object[] { correctUnitName, correctShortName, correctCategory, Is.True };
             yield return new object[] { randomStringName, correctShortName, correctCategory, Is.False };
             yield return new object[] { correctUnitName, randomStringName, correctCategory,  Is.False };
             yield return new object[] { correctUnitName, correctShortName, randomCategory, Is.False };
