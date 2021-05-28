@@ -145,7 +145,7 @@ export default class EventCard extends Component {
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                <AuthComponent rolesMatch={[Roles.Admin]}>
+                                <AuthComponent rolesMatch={Roles.Admin}>
                                     <EventActiveStatus
                                         key={this.props.item.id + this.props.item.eventStatus}
                                         eventStatus={this.props.item.eventStatus}

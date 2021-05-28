@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
@@ -16,12 +17,12 @@ namespace EventsExpress.Db.EF
 {
     public class AppDbContext : DbContext
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISecurityContext _securityContext;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
+        public AppDbContext(DbContextOptions<AppDbContext> options, ISecurityContext securityContext)
             : base(options)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _securityContext = securityContext;
         }
 
         public DbSet<Account> Accounts { get; set; }
@@ -78,6 +79,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<NotificationTemplate> NotificationTemplates { get; set; }
 
+        public DbSet<ContactAdmin> ContactAdmin { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -107,7 +110,7 @@ namespace EventsExpress.Db.EF
                     EntityName = change.Entity.GetType().Name,
                     Time = now,
                     ChangesType = MapEntityStateToChangeType(change.State),
-                    UserId = CurrentUserId(),
+                    UserId = _securityContext.GetCurrentUserId(),
                     EntityKeys = JsonConvert.SerializeObject(entityKeyDictionary),
                 };
 
@@ -189,10 +192,5 @@ namespace EventsExpress.Db.EF
             SaveTracks();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
-
-        private Guid CurrentUserId() =>
-           _httpContextAccessor.HttpContext != null ?
-            new Guid(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value) :
-            Guid.Empty;
     }
 }

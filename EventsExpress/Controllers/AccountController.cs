@@ -7,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
@@ -24,21 +25,21 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
         private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
+        private readonly ISecurityContext _securityContextService;
 
         public AccountController(
             IMapper mapper,
-            IAuthService authSrv,
             IAccountService accountService,
-            IGoogleSignatureVerificator googleSignatureVerificator)
+            IGoogleSignatureVerificator googleSignatureVerificator,
+            ISecurityContext securityContextService)
         {
             _mapper = mapper;
-            _authService = authSrv;
             _accountService = accountService;
             _googleSignatureVerificator = googleSignatureVerificator;
+            _securityContextService = securityContextService;
         }
 
         /// <summary>
@@ -51,8 +52,8 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetLinkedAuth()
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
-            var res = await _accountService.GetLinkedAuth(user.AccountId);
+            var accountId = GetCurrentAccountId();
+            var res = await _accountService.GetLinkedAuth(accountId);
 
             return Ok(_mapper.Map<IEnumerable<AuthViewModel>>(res));
         }
@@ -70,9 +71,9 @@ namespace EventsExpress.Controllers
         {
             await _googleSignatureVerificator.Verify(model.TokenId);
 
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Google);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Google);
 
             return Ok();
         }
@@ -88,9 +89,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddLocalLogin(LoginViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, model.Password);
+            await _accountService.AddAuth(accountId, model.Email, model.Password);
 
             return Ok();
         }
@@ -106,9 +107,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddFacebookLogin(AuthExternalViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Facebook);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Facebook);
 
             return Ok();
         }
@@ -124,9 +125,9 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> AddTwitterLogin(AuthExternalViewModel model)
         {
-            var user = _authService.GetCurrentUser(HttpContext.User);
+            var accountId = GetCurrentAccountId();
 
-            await _accountService.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter);
+            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Twitter);
 
             return Ok();
         }
@@ -180,5 +181,9 @@ namespace EventsExpress.Controllers
 
             return Ok();
         }
+
+        [NonAction]
+        private Guid GetCurrentAccountId() =>
+            _securityContextService.GetCurrentAccountId();
     }
 }

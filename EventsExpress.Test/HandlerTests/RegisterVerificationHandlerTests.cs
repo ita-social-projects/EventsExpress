@@ -11,6 +11,7 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -22,6 +23,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IEmailService> _sender;
         private Mock<ICacheHelper> _cacheHelper;
         private Mock<ILogger<RegisterVerificationHandler>> _logger;
+        private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private RegisterVerificationHandler _registerVerificationHandler;
         private RegisterVerificationMessage _message;
@@ -33,6 +35,10 @@ namespace EventsExpress.Test.HandlerTests
             _cacheHelper = new Mock<ICacheHelper>();
             _logger = new Mock<ILogger<RegisterVerificationHandler>>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
+            _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
+
+            _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
+
             _notificationTemplateService.Setup(
                     service => service.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns("Replacement result");
@@ -64,11 +70,11 @@ namespace EventsExpress.Test.HandlerTests
                 _sender.Object,
                 _cacheHelper.Object,
                 _logger.Object,
-                _notificationTemplateService.Object);
+                _notificationTemplateService.Object,
+                _appBaseUrl.Object);
 
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
-            AppHttpContext.Configure(httpContext.Object);
         }
 
         [Test]

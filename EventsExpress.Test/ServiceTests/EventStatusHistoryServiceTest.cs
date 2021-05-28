@@ -7,6 +7,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
@@ -21,8 +22,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventStatusHistoryServiceTest : TestInitializer
     {
         private static Mock<IMediator> mockMediator;
-        private static Mock<IAuthService> mockAuthService;
-        private static Mock<IHttpContextAccessor> httpContextAccessor;
+        private static Mock<ISecurityContext> mockSecurityContextService;
 
         private EventStatusHistoryService service;
         private Guid eventId = Guid.NewGuid();
@@ -35,18 +35,14 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             mockMediator = new Mock<IMediator>();
-            httpContextAccessor = new Mock<IHttpContextAccessor>();
-            httpContextAccessor.SetupGet(x => x.HttpContext)
-                .Returns(new Mock<HttpContext>().Object);
-            mockAuthService = new Mock<IAuthService>();
-            mockAuthService.Setup(x => x.GetCurrentUser(It.IsAny<ClaimsPrincipal>()))
-                .Returns(new UserDto { Id = userId });
+            mockSecurityContextService = new Mock<ISecurityContext>();
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId())
+                .Returns(userId);
 
             service = new EventStatusHistoryService(
                 mockMediator.Object,
-                httpContextAccessor.Object,
-                mockAuthService.Object,
-                Context);
+                Context,
+                mockSecurityContextService.Object);
         }
 
         [Test]

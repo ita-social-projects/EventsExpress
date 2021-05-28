@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
-using EventsExpress.Db.Helpers;
 using EventsExpress.Test.ServiceTests.TestClasses.Auth;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -24,12 +20,16 @@ namespace EventsExpress.Test.ServiceTests
         private static readonly Guid AuthLocalId = ConfirmEmail.AuthLocalId;
         private readonly string name = "existingName";
         private readonly string existingEmail = "existingEmail@gmail.com";
+        private readonly string validPassword = "validPassword";
+        private readonly string invalidPassword = "invalidPassword";
 
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
         private Mock<ICacheHelper> mockCacheHelper;
         private Mock<IEmailService> mockEmailService;
+        private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
+        private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
 
@@ -45,7 +45,9 @@ namespace EventsExpress.Test.ServiceTests
             mockTokenService = new Mock<ITokenService>();
             mockCacheHelper = new Mock<ICacheHelper>();
             mockEmailService = new Mock<IEmailService>();
+            mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
+            mockSecurityContext = new Mock<ISecurityContext>();
             service = new AuthService(
                 Context,
                 MockMapper.Object,
@@ -53,7 +55,9 @@ namespace EventsExpress.Test.ServiceTests
                 mockTokenService.Object,
                 mockCacheHelper.Object,
                 mockEmailService.Object,
-                mockMediator.Object);
+                mockMediator.Object,
+                mockPasswordHasherService.Object,
+                mockSecurityContext.Object);
 
             existingUser = new User
             {
@@ -71,6 +75,9 @@ namespace EventsExpress.Test.ServiceTests
 
             Context.Users.Add(existingUser);
             Context.SaveChanges();
+
+            mockPasswordHasherService.Setup(s => s.GenerateSalt()).Returns("salt");
+            mockPasswordHasherService.Setup(s => s.GenerateHash(validPassword, "salt")).Returns("hash");
         }
 
         [Test]
@@ -143,7 +150,7 @@ namespace EventsExpress.Test.ServiceTests
         public void AuthenticateLocal_AccountNotFound_ThrowException()
         {
             AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate("InvalidEmail", "InvalidPassword");
+                await service.Authenticate("InvalidEmail", invalidPassword);
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password"));
@@ -193,20 +200,22 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Authenticate With Local Provider")]
         public void AuthenticateLocal_InvalidPassword_ThrowException()
         {
+            var salt = mockPasswordHasherService.Object.GenerateSalt();
             var existingAccount = new Account
             {
                 AuthLocal = new AuthLocal
                 {
                     Email = existingEmail,
                     EmailConfirmed = true,
-                    Salt = PasswordHasher.GenerateSalt(),
+                    Salt = salt,
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate(existingEmail, "IncorrectPassword");
+                await service.Authenticate(existingEmail, invalidPassword);
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password1"));
@@ -217,8 +226,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Authenticate With Local Provider")]
         public async Task AuthenticateLocal_AllIsValid_DoesNotThrow()
         {
-            var correctPassword = "CorrectPassword";
-            var salt = PasswordHasher.GenerateSalt();
+            var salt = mockPasswordHasherService.Object.GenerateSalt();
             var existingAccount = new Account
             {
                 AuthLocal = new AuthLocal
@@ -226,7 +234,7 @@ namespace EventsExpress.Test.ServiceTests
                     Email = existingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = PasswordHasher.GenerateHash(correctPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
@@ -235,7 +243,7 @@ namespace EventsExpress.Test.ServiceTests
             mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
             mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
 
-            var res = await service.Authenticate(existingEmail, correctPassword);
+            var res = await service.Authenticate(existingEmail, validPassword);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<AuthenticateResponseModel>(res);
@@ -244,15 +252,19 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_InvalidUserClaims_Throws()
         {
-            var userDtoWithoutAuthLocal = new UserDto
+            var user = new User
             {
+                Id = idUser,
                 Account = new Account(),
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDtoWithoutAuthLocal);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), "validPassword", "newPassword");
+                await service.ChangePasswordAsync(validPassword, "newPassword");
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
             Assert.That(ex.Message.Contains("Invalid user"));
@@ -261,25 +273,28 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_InvalidPassword_Throws()
         {
-            string salt = PasswordHasher.GenerateSalt();
-            string validPassword = "validPassword";
-            string invalidPassword = "invalidPassword";
-            UserDto userDto = new UserDto
+            string salt = mockPasswordHasherService.Object.GenerateSalt();
+
+            User user = new User
             {
+                Id = idUser,
                 Account = new Account
                 {
                     AuthLocal = new AuthLocal
                     {
                         Salt = salt,
-                        PasswordHash = PasswordHasher.GenerateHash(validPassword, salt),
+                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                     },
                 },
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), invalidPassword, "newPassword");
+                await service.ChangePasswordAsync(invalidPassword, "newPassword");
 
             Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
         }
@@ -287,24 +302,27 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangePasswordAsync_ValidPassword_DoesNotThrows()
         {
-            string salt = PasswordHasher.GenerateSalt();
-            string validPassword = "validPassword";
-            UserDto userDto = new UserDto
+            string salt = mockPasswordHasherService.Object.GenerateSalt();
+            User user = new User
             {
+                Id = idUser,
                 Account = new Account
                 {
                     AuthLocal = new AuthLocal
                     {
                         Salt = salt,
-                        PasswordHash = PasswordHasher.GenerateHash(validPassword, salt),
+                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                     },
                 },
             };
 
-            mockUserService.Setup(s => s.GetById(It.IsAny<Guid>())).Returns(userDto);
+            Context.Users.Add(user);
+            Context.SaveChanges();
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
 
             AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(GetClaimsPrincipal(), validPassword, "newPassword");
+                await service.ChangePasswordAsync(validPassword, "newPassword");
 
             Assert.DoesNotThrowAsync(methodInvoke);
         }
@@ -437,36 +455,6 @@ namespace EventsExpress.Test.ServiceTests
             Context.SaveChanges();
 
             Assert.DoesNotThrowAsync(async () => await service.PasswordRecover(existingUserDTO.Email));
-        }
-
-        [Test]
-        public void GetCurrentUserId_OK()
-        {
-            UserDto userDto = new UserDto
-            {
-                Id = idUser,
-            };
-
-            var claim = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userDto.Id.ToString()),
-            };
-
-            ClaimsIdentity id = new ClaimsIdentity(claim, "auth", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            string[] roles = { "user" };
-            GenericPrincipal claimsObj = new GenericPrincipal(id, roles);
-            var res = service.GetCurrUserId(claimsObj);
-            Assert.That(res, Is.EqualTo(userDto.Id));
-        }
-
-        private ClaimsPrincipal GetClaimsPrincipal()
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, $"{Guid.NewGuid()}"),
-            };
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
-            return new ClaimsPrincipal(identity);
         }
     }
 }
