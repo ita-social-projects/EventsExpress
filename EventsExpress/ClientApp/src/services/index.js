@@ -28,7 +28,6 @@ export {
     AccountService,
 	TrackService,
     NotificationTemplateService,
-    ContactAdminService
-    NotificationTemplateService,
+    ContactAdminService,
     ConfigService
 };
