@@ -90,9 +90,9 @@ namespace EventsExpress.Core.Services
         public bool ExistsByName(string unitName, string shortName, string categoryOfMeasuring)
         {
             return Context.UnitOfMeasurings
-                  .Any(x => ((!x.IsDeleted) && (x.UnitName == unitName)
-                                            && (x.ShortName == shortName)
-                                            && (x.CategoryOfMeasuring == categoryOfMeasuring)));
+                  .Any(x => (!x.IsDeleted) && (x.UnitName == unitName)
+                                           && (x.ShortName == shortName)
+                                           && (x.CategoryOfMeasuring == categoryOfMeasuring));
         }
     }
 }

@@ -12,9 +12,11 @@ namespace EventsExpress.Validation
         {
             _unitOfMeasuringService = unitOfMeasuringService;
 
-            RuleFor(x => x.UnitName).NotEmpty().Length(3, 20).WithMessage("Unit Name needs to consist of from 3 to 20 characters");
+            RuleFor(x => x.UnitName).NotEmpty().Length(5, 20).WithMessage("Unit Name needs to consist of from 5 to 20 characters");
 
             RuleFor(x => x.ShortName).NotEmpty().Length(1, 5).WithMessage("Short Name needs to consist of from 1 to 5 characters");
+
+            RuleFor(x => x.CategoryOfMeasuring).NotEmpty().WithMessage("Category must be selected");
 
             RuleFor(x => x)
                .Must(item => !_unitOfMeasuringService.ExistsByName(item.UnitName, item.ShortName, item.CategoryOfMeasuring))

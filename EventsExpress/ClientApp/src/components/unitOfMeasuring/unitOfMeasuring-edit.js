@@ -54,7 +54,7 @@ class UnitOfMeasuringEdit extends Component {
                             label='Category'
                         >
                             <option aria-label="None" value="" />
-                            <option value={"Mass"}>Mass</option>
+                            <option value={"Weight"}>Weight</option>
                             <option value={"Liquids"}>Liquids</option>
                             <option value={"Points"}>Points</option>
                             <option value={"Length"}>Length</option>

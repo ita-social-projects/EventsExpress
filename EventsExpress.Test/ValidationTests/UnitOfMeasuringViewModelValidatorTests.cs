@@ -43,7 +43,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ShoudHaveError_ExistingUnitOfMeasuring()
         {
             UnitOfMeasuringViewModel existedModel = new UnitOfMeasuringViewModel
-            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName };
+            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName, CategoryOfMeasuring = existedCategory };
             var result = unitOfMeasuringViewModelValidator.TestValidate(existedModel);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(ExistedUnitOfMeasuring);
         }
