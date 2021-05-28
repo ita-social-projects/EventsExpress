@@ -4,5 +4,5 @@
   "TWITTER_CALLBACK_URL": "/Authentication/TwitterLogin",
   "TWITTER_CONSUMER_KEY": "9SrdZyy2wdtjVyXBpVK5blfCf",
   "TWITTER_CONSUMER_SECRET": "dsTaBtiBcXSCK3AcyfM9OjO1QUHDlTBnKxqsmIOhqDPKRv6fax",
-  "TWITTER_LOGIN_ENABLED": false,
+  "TWITTER_CONSUMER_SECRET": false,
 }
