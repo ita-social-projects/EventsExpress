@@ -12,6 +12,8 @@ namespace EventsExpress.Core.DTOs
 
         public string ShortName { get; set; }
 
+        public string CategoryOfMeasuring { get; set; }
+
         public bool IsDeleted { get; set;  }
     }
 }

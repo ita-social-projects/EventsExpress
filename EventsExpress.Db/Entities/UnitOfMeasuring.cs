@@ -12,6 +12,8 @@ namespace EventsExpress.Db.Entities
 
         public ICollection<Inventory> Inventories { get; set; }
 
+        public string CategoryOfMeasuring { get; set; }
+
         public bool IsDeleted { get; set; }
     }
 }

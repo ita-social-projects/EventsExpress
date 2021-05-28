@@ -16,8 +16,10 @@ namespace EventsExpress.Validation
 
             RuleFor(x => x.ShortName).NotEmpty().Length(1, 5).WithMessage("Short Name needs to consist of from 1 to 5 characters");
 
+            RuleFor(x => x.CategoryOfMeasuring).NotEmpty().WithMessage("Category must be selected");
+
             RuleFor(x => x)
-               .Must(item => !_unitOfMeasuringService.ExistsByName(item.UnitName, item.ShortName))
+               .Must(item => !_unitOfMeasuringService.ExistsByName(item.UnitName, item.ShortName, item.CategoryOfMeasuring))
                .WithMessage("The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!");
 
             RuleFor(x => x.UnitName).Cascade(CascadeMode.Stop)
