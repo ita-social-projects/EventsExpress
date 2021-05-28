@@ -17,6 +17,6 @@ namespace EventsExpress.Core.IServices
 
         Task Delete(Guid id);
 
-        bool ExistsByName(string unitName, string shortName);
+        bool ExistsByName(string unitName, string shortName, string categoryOfMeasuring);
     }
 }

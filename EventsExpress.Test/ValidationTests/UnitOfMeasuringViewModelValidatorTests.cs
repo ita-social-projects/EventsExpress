@@ -20,6 +20,7 @@ namespace EventsExpress.Test.ServiceTests
 
         private readonly string existedUnitName = "Existed Unit Name";
         private readonly string existedShortName = "Ex/SN";
+        private readonly string existedCategory = "existedCategory";
         private readonly string notExistedUnitName = "Not Existed Unit Name";
         private readonly string notExistedShortName = "N/SN";
 
@@ -33,7 +34,8 @@ namespace EventsExpress.Test.ServiceTests
             unitOfMeasuringViewModelValidator = new UnitOfMeasuringViewModelValidator(mockUnitService.Object);
             mockUnitService.Setup(x => x.ExistsByName(
              It.Is<string>(i => i == existedUnitName),
-             It.Is<string>(i => i == existedShortName))).Returns(true);
+             It.Is<string>(i => i == existedShortName),
+             It.Is<string>(i => i == existedCategory))).Returns(true);
         }
 
         [Test]
@@ -41,7 +43,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ShoudHaveError_ExistingUnitOfMeasuring()
         {
             UnitOfMeasuringViewModel existedModel = new UnitOfMeasuringViewModel
-            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName };
+            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName, CategoryOfMeasuring = existedCategory };
             var result = unitOfMeasuringViewModelValidator.TestValidate(existedModel);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(ExistedUnitOfMeasuring);
         }

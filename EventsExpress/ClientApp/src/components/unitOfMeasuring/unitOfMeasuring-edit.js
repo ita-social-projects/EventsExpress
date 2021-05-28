@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { renderTextField } from '../helpers/helpers';
+import { renderSelectField, renderTextField } from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 
 const divStyle = {
     width: "90wh"
 };
-
-const dSt = {
-    marginLeft: "0"
-}
 
 
 class UnitOfMeasuringEdit extends Component {
@@ -39,17 +35,31 @@ class UnitOfMeasuringEdit extends Component {
                     <div style={divStyle} className="d-flex flex justify-content-around ">
 
                         <Field
-                            className="form-control"
+                            className="form-control w-25"
                             name="unitName"
                             label="Unit name"
                             component={renderTextField}
                         />
                         <Field
-                            className="form-control"
+                            className="form-control w-25"
                             name="shortName"
                             label="Short name"
                             component={renderTextField}
                         />
+                        <Field
+                            fullWidth={true}
+                            component={renderSelectField}
+                            className=" mw-100"
+                            name="categoryOfMeasuring"
+                            label='Category'
+                        >
+                            <option aria-label="None" value="" />
+                            <option value={"Weight"}>Weight</option>
+                            <option value={"Liquids"}>Liquids</option>
+                            <option value={"Points"}>Points</option>
+                            <option value={"Length"}>Length</option>
+                            <option value={"Other"}>Other</option>
+                        </Field>
                         {
                             this.props.error &&
                             <ErrorMessages error={this.props.error} className="text-center" />

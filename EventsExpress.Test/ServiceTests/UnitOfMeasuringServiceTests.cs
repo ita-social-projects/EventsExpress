@@ -20,8 +20,11 @@ namespace EventsExpress.Test.ServiceTests
         public const string CreateShortName = "create Unit Name";
         public const string CorrectUnitName = "CorrectUnitName";
         public const string CorrectShortName = "CSN";
+        public const string CreateCategory = "create Category";
+        public const string CorrectCategory = "CorrectCategory";
         public const string DeletedUnitName = "DeletedUnitName";
         public const string DeletedShortName = "DSN";
+        public const string DeletedCategory = "DeleteCategory";
         public const string RandomStringName = "Rnd";
         public const string InCorrectUnitName = "78789878Unitk";
 
@@ -32,6 +35,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = unitOfMeasuringDTO.Id,
                 UnitName = unitOfMeasuringDTO.UnitName,
                 ShortName = unitOfMeasuringDTO.ShortName,
+                CategoryOfMeasuring = unitOfMeasuringDTO.CategoryOfMeasuring,
                 IsDeleted = unitOfMeasuringDTO.IsDeleted,
             };
         }
@@ -43,6 +47,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UnitName = CorrectUnitName,
                 ShortName = CorrectShortName,
+                CategoryOfMeasuring = CorrectCategory,
                 IsDeleted = false,
             };
         }
@@ -67,6 +72,7 @@ namespace EventsExpress.Test.ServiceTests
                   Id = e.Id,
                   UnitName = e.UnitName,
                   ShortName = e.ShortName,
+                  CategoryOfMeasuring = e.CategoryOfMeasuring,
                   IsDeleted = e.IsDeleted,
               });
 
@@ -150,9 +156,9 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(ExistingUnitByName))]
         [Category("Exist By Name")]
-        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, IResolveConstraint constraint)
+        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, string expectedCategory, IResolveConstraint constraint)
         {
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), constraint);
+            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName, expectedCategory), constraint);
         }
     }
 }
