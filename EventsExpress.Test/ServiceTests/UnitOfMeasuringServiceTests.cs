@@ -150,9 +150,9 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(ExistingUnitByName))]
         [Category("Exist By Name")]
-        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, IResolveConstraint constraint)
+        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, string expectedCategory, IResolveConstraint constraint)
         {
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), constraint);
+            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName, expectedCategory), constraint);
         }
     }
 }

@@ -44,15 +44,17 @@ namespace EventsExpress.Core.Services
 
             entity.ShortName = unitOfMeasuringDTO.ShortName;
             entity.UnitName = unitOfMeasuringDTO.UnitName;
+            entity.CategoryOfMeasuring = unitOfMeasuringDTO.CategoryOfMeasuring;
             await Context.SaveChangesAsync();
 
             return entity.Id;
         }
 
         public IEnumerable<UnitOfMeasuringDto> GetAll() => Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(
-                    Context.UnitOfMeasurings.Where(item => !item.IsDeleted)
-                                            .OrderBy(unit => unit.UnitName)
-                                            .ThenBy(unit => unit.ShortName));
+                            Context.UnitOfMeasurings.Where(item => !item.IsDeleted)
+                                                    .OrderBy(unit => unit.CategoryOfMeasuring)
+                                                    .ThenBy(unit => unit.UnitName)
+                                                    .ThenBy(unit => unit.ShortName));
 
         public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
         {
@@ -67,6 +69,7 @@ namespace EventsExpress.Core.Services
                 Id = unitOfMeasuring.Id,
                 UnitName = unitOfMeasuring.UnitName,
                 ShortName = unitOfMeasuring.ShortName,
+                CategoryOfMeasuring = unitOfMeasuring.CategoryOfMeasuring,
                 IsDeleted = unitOfMeasuring.IsDeleted,
             };
         }
@@ -84,9 +87,12 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public bool ExistsByName(string unitName, string shortName)
+        public bool ExistsByName(string unitName, string shortName, string categoryOfMeasuring)
         {
-          return Context.UnitOfMeasurings.Any(x => ((!x.IsDeleted) && (x.UnitName == unitName) && (x.ShortName == shortName)));
+            return Context.UnitOfMeasurings
+                  .Any(x => ((!x.IsDeleted) && (x.UnitName == unitName)
+                                            && (x.ShortName == shortName)
+                                            && (x.CategoryOfMeasuring == categoryOfMeasuring)));
         }
     }
 }

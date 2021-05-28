@@ -11,7 +11,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 class UnitOfMeasuringItemWrapper extends Component {
     save = values => {
         if (values.unitName === this.props.item.unitName &&
-            values.shortName === this.props.item.shortName) {
+            values.shortName === this.props.item.shortName &&
+            values.categoryOfMeasuring === this.props.item.categoryOfMeasuring) {
             this.props.edit_cancel();
         } else {
            return this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
