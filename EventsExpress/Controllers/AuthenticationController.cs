@@ -8,7 +8,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
@@ -159,7 +158,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="email">Param email defines user email.</param>
         /// <returns>The method performs password recovery operation.</returns>
-        /// <response code="200">Password recovery succesful.</response>
+        /// <response code="200">Password recovery successful.</response>
         /// <response code="400">If password recover process failed.</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
@@ -182,7 +181,7 @@ namespace EventsExpress.Controllers
         /// <param name="token">Param token defines access token.</param>
         /// <returns>The method performs mail confirmation operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
-        /// <response code="400">If emeil confirm process failed.</response>
+        /// <response code="400">If email confirm process failed.</response>
         [AllowAnonymous]
         [HttpPost("verify/{authLocalId}/{token}")]
         public async Task<IActionResult> EmailConfirm(string authLocalId, string token)
@@ -204,12 +203,12 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="model">Param changePasswordDto ChangeViewModel.</param>
         /// <returns>The method performs password change operation.</returns>
-        /// <response code="200">Password change succesful.</response>
-        /// <response code="400">If assword change process failed.</response>
+        /// <response code="200">Password change successful.</response>
+        /// <response code="400">If password change process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangeViewModel model)
         {
-            await _authService.ChangePasswordAsync(HttpContext.User, model.OldPassword, model.NewPassword);
+            await _authService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
 
             return Ok();
         }

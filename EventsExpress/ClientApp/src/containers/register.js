@@ -1,6 +1,6 @@
 import React from "react";
 import Register from "../components/register";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import register from "../actions/register/register-action";
 
 
@@ -11,34 +11,33 @@ class RegisterWrapper extends React.Component {
         }
     }
 
-
     submit = values => {
-        this.props.register(values.email, values.password); 
-  };
-  render() {
-      const { registerError } = this.props;
-    
-    return <>
-        <Register onSubmit={this.submit} />
+        this.props.register(values.email, values.password);
+    }
 
-      {registerError && 
-              <p className="text-danger text-center">{registerError}</p>
-        }
-        
-      </>;
-    
-  }
+    render() {
+        const {registerError} = this.props;
+
+        return <>
+            <Register onSubmit={this.submit}/>
+            {registerError &&
+            <p className="text-danger text-center">{registerError}</p>
+            }
+        </>;
+
+    }
 }
+
 const mapStateToProps = state => {
-  return state.register;
-};
+    return state.register;
+}
 
 const mapDispatchToProps = dispatch => {
-  return {
-      register: (email, password) => dispatch(register(email, password))
-  };
-};
+    return {
+        register: (email, password) => dispatch(register(email, password))
+    }
+}
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(RegisterWrapper);

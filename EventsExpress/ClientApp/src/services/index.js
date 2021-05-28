@@ -3,6 +3,7 @@ import CategoryService from './CategoryService'
 import ChatService from './ChatService'
 import CommentService from './CommentService'
 import EventService from './EventService'
+import ContactAdminService from './ContactAdminService'
 import EventScheduleService from './EventScheduleService'
 import InventoryService from './InventoryService'
 import RoleService from './RoleService'
@@ -26,6 +27,8 @@ export {
     NotificationTypeService,
     AccountService,
 	TrackService,
+    NotificationTemplateService,
+    ContactAdminService
     NotificationTemplateService,
     ConfigService
 };

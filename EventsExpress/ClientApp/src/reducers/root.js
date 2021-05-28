@@ -37,7 +37,10 @@ import * as Chat from './chat';
 import * as ModalWind from './ModalWind';
 import * as Hub from './hub';
 import * as Alert from './alert';
-import * as ContactUs from './contact-us';
+import * as ContactAdmin from './contactAdmin/contact-admin-reducer';
+import * as ContactAdminList from './contactAdmin/contact-admin-list-reducer';
+import * as ContactAdminIssueStatus from './contactAdmin/contact-admin-issue-status-reducer';
+import * as ContactAdminItem from './contactAdmin/contact-admin-item-reducer';
 import * as Notification from './notification';
 import * as NotificationTypes from './notificationType/notificationType-list';
 import * as Account from './account';
@@ -85,7 +88,10 @@ const rootReducers = {
     chat: Chat.reducer,
     hubConnection: Hub.reducer,
     alert: Alert.reducer,
-    contactUs: ContactUs.reducer,
+    contactAdmin: ContactAdmin.reducer,
+    contactAdminList: ContactAdminList.reducer,
+    contactAdminIssueStatus: ContactAdminIssueStatus.reducer,
+    contactAdminItem: ContactAdminItem.reducer,
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer,
     NotificationTemplates: NotificationTemplates.reducer,

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
@@ -29,6 +30,7 @@ namespace EventsExpress.Test.MapperTests
         private User firstUser;
         private Mock<IHttpContextAccessor> mockAccessor;
         private Mock<IUserService> mockUser;
+        private Mock<ISecurityContext> mockSecurityContextService;
 
         private User GetUser()
         {
@@ -108,6 +110,7 @@ namespace EventsExpress.Test.MapperTests
             var mockAuth = new Mock<IAuthService>();
             mockUser = new Mock<IUserService>();
             mockAccessor = new Mock<IHttpContextAccessor>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
 
             mockAccessor.Setup(sp => sp.HttpContext.User);
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
@@ -115,6 +118,7 @@ namespace EventsExpress.Test.MapperTests
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);
+            services.AddTransient(sp => mockSecurityContextService.Object);
 
             services.AddAutoMapper(typeof(EventMapperProfile));
             services.AddAutoMapper(typeof(UserMapperProfile));

@@ -1,4 +1,4 @@
-import eventHelper from '../../components/helpers/eventHelper';
+import filterHelper from '../../components/helpers/filterHelper';
 import { AuthenticationService } from '../../services';
 import { reset } from '../chat/chat-action';
 import { resetNotification } from '../chat/chats-action';
@@ -10,7 +10,7 @@ const api_serv = new AuthenticationService();
 
 export default function logout() {
     return async dispatch => {
-        dispatch(updateEventsFilters(eventHelper.getDefaultEventFilter()));
+        dispatch(updateEventsFilters(filterHelper.getDefaultEventFilter()));
         dispatch(reset());
         dispatch(setLogout());
         dispatch(resetNotification());

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core;
 using EventsExpress.Core.ChatHub;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
@@ -13,6 +14,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
@@ -116,6 +118,7 @@ namespace EventsExpress
                     x => x.UseNetTopologySuite()));
 
             #region Configure our services...
+            services.AddScoped<ISecurityContext, SecurityContextService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
@@ -135,9 +138,11 @@ namespace EventsExpress
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
+            services.AddScoped<IContactAdminService, ContactAdminService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
 
@@ -145,6 +150,7 @@ namespace EventsExpress
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.Configure<AppBaseUrlModel>(Configuration.GetSection("AppBaseUrl"));
 
             services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
@@ -260,7 +266,6 @@ namespace EventsExpress
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseHttpContext();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

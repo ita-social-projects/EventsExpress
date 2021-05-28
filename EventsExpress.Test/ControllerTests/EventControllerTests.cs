@@ -10,6 +10,7 @@ using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
@@ -25,7 +26,7 @@ namespace EventsExpress.Test.ControllerTests
     {
         private Mock<IEventService> service;
         private EventController eventController;
-        private Mock<IAuthService> auth;
+        private Mock<ISecurityContext> mockSecurityContextService;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
         private string _userEmal = "user@gmail.com";
@@ -36,9 +37,9 @@ namespace EventsExpress.Test.ControllerTests
         protected void Initialize()
         {
             MockMapper = new Mock<IMapper>();
-            auth = new Mock<IAuthService>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
             service = new Mock<IEventService>();
-            eventController = new EventController(service.Object, auth.Object, MockMapper.Object);
+            eventController = new EventController(service.Object, MockMapper.Object, mockSecurityContextService.Object);
             eventController.ControllerContext = new ControllerContext();
             eventController.ControllerContext.HttpContext = new DefaultHttpContext();
             _userDto = new UserDto

@@ -2,14 +2,15 @@ import React from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from '@material-ui/core/Tooltip';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import EventChangeStatusModal from './event-change-status-modal';
+import SimpleModalWithDetails from '../helpers/simple-modal-with-details';
 
 export default function EventActiveStatus(props) {
     switch (props.eventStatus) {
         case eventStatusEnum.Active:
             return (
-                <EventChangeStatusModal
+                <SimpleModalWithDetails
                     key={props.eventId + props.eventStatus}
+                    data="Are you sure?"
                     submitCallback={(reason) => props.onBlock(props.eventId, reason, props.eventStatus)}
                     button={<Tooltip title="Active event">
                         <IconButton className="text-success" size="middle">
@@ -19,8 +20,9 @@ export default function EventActiveStatus(props) {
                 />)
         case eventStatusEnum.Blocked:
             return (
-                <EventChangeStatusModal
+                <SimpleModalWithDetails
                     key={props.eventId + props.eventStatus}
+                    data="Are you sure?"
                     submitCallback={(reason) => props.onUnBlock(props.eventId, reason)}
                     button={<Tooltip title="Blocked event">
                         <IconButton className="text-danger" size="middle">

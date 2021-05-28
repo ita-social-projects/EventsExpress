@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import React, {Component} from "react";
+import {Field, reduxForm} from "redux-form";
 import Button from "@material-ui/core/Button";
-import { renderTextField } from '../helpers/helpers';
-import { renderSelectField, renderPhoneInput, renderDatePicker } from '../helpers/form-helpers';
+import {renderTextField} from '../helpers/helpers';
+import {renderSelectField, renderPhoneInput, renderDatePicker} from '../helpers/form-helpers';
 import moment from "moment";
-import { isValidPhoneNumber } from 'react-phone-number-input'
+import {isValidPhoneNumber} from 'react-phone-number-input'
 
 const validate = values => {
     const errors = {}
@@ -35,14 +35,14 @@ const validate = values => {
 class RegisterComplete extends Component {
 
     render() {
-        const { pristine, submitting, handleSubmit } = this.props;
+        const {pristine, submitting, handleSubmit} = this.props;
         return (
             <>
                 <div className="row">
                     <h5 className="m-3">Please, complete your registration</h5>
                 </div>
                 <div className="row">
-                    <form onSubmit={handleSubmit} class="col-md-6">
+                    <form onSubmit={handleSubmit} className="col-md-6">
                         <div className="form-group">
                             <Field
                                 name="email"
@@ -58,7 +58,7 @@ class RegisterComplete extends Component {
                                 label="User name"
                             />
                         </div>
-                        <div class="row">
+                        <div className="row">
                             <div className="form-group col">
                                 <Field
                                     name="birthday"
@@ -69,14 +69,14 @@ class RegisterComplete extends Component {
                                     component={renderDatePicker}
                                 />
                             </div>
-                            <div className="form-group col" >
+                            <div className="form-group col">
                                 <Field
                                     name="gender"
                                     component={renderSelectField}
                                     label="Gender"
-                                    parse = {Number}
+                                    parse={Number}
                                 >
-                                    <option aria-label="None" value={0} />
+                                    <option aria-label="None" value={0}/>
                                     <option value={1}>Male</option>
                                     <option value={2}>Female</option>
                                     <option value={3}>Other</option>

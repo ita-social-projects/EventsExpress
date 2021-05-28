@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -9,12 +7,13 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Db.Helpers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Role = EventsExpress.Db.Entities.Role;
 
 namespace EventsExpress.Core.Services
 {
@@ -25,6 +24,8 @@ namespace EventsExpress.Core.Services
         private readonly ICacheHelper _cacheHelper;
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly ISecurityContext _securityContext;
 
         public AuthService(
             AppDbContext context,
@@ -33,7 +34,9 @@ namespace EventsExpress.Core.Services
             ITokenService tokenService,
             ICacheHelper cacheHelper,
             IEmailService emailService,
-            IMediator mediator)
+            IMediator mediator,
+            IPasswordHasher passwordHasher,
+            ISecurityContext securityContext)
             : base(context, mapper)
         {
             _userService = userSrv;
@@ -41,6 +44,8 @@ namespace EventsExpress.Core.Services
             _cacheHelper = cacheHelper;
             _emailService = emailService;
             _mediator = mediator;
+            _passwordHasher = passwordHasher;
+            _securityContext = securityContext;
         }
 
         public async Task<AuthenticateResponseModel> Authenticate(string email, AuthExternalType type)
@@ -49,9 +54,8 @@ namespace EventsExpress.Core.Services
                 .Include(a => a.AuthExternal)
                 .Include(a => a.RefreshTokens)
                 .Include(a => a.AccountRoles)
-                    .ThenInclude(ar => ar.Role)
-                .Where(a => a.AuthExternal.Any(x => x.Email == email && x.Type == type))
-                .FirstOrDefault();
+                    .ThenInclude<Account, AccountRole, Role>(ar => ar.Role)
+                .FirstOrDefault(a => a.AuthExternal.Any(x => x.Email == email && x.Type == type));
 
             if (account == null)
             {
@@ -125,22 +129,26 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task ChangePasswordAsync(ClaimsPrincipal userClaims, string oldPassword, string newPassword)
+        public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
-            var userDto = GetCurrentUser(userClaims);
+            var userDto = Context.Users
+                .Include(u => u.Account)
+                    .ThenInclude(a => a.AuthLocal)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Id == _securityContext.GetCurrentUserId());
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user");
             }
 
-            if (!VerifyPassword(userDto.Account.AuthLocal, oldPassword))
+            if (!VerifyPassword(authLocal, oldPassword))
             {
                 throw new EventsExpressException("Invalid password");
             }
 
-            authLocal.Salt = PasswordHasher.GenerateSalt();
-            authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
             await Context.SaveChangesAsync();
         }
 
@@ -167,18 +175,6 @@ namespace EventsExpress.Core.Services
             await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
         }
 
-        public UserDto GetCurrentUser(ClaimsPrincipal userClaims)
-        {
-            Claim userIdClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid userId))
-            {
-                throw new EventsExpressException("User not found");
-            }
-
-            return _userService.GetById(userId);
-        }
-
         public async Task PasswordRecover(string email)
         {
             var authLocal = Context.AuthLocal.FirstOrDefault(al => al.Email == email);
@@ -188,8 +184,8 @@ namespace EventsExpress.Core.Services
             }
 
             var newPassword = Guid.NewGuid().ToString();
-            authLocal.Salt = PasswordHasher.GenerateSalt();
-            authLocal.PasswordHash = PasswordHasher.GenerateHash(newPassword, authLocal.Salt);
+            authLocal.Salt = _passwordHasher.GenerateSalt();
+            authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
 
             await Context.SaveChangesAsync();
             await _emailService.SendEmailAsync(new EmailDto
@@ -200,8 +196,8 @@ namespace EventsExpress.Core.Services
             });
         }
 
-        private static bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
-           authLocal.PasswordHash == PasswordHasher.GenerateHash(actualPassword, authLocal.Salt);
+        private bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
+           authLocal.PasswordHash == _passwordHasher.GenerateHash(actualPassword, authLocal.Salt);
 
         private async Task<Account> ConfirmEmail(CacheDto cacheDto)
         {
@@ -232,18 +228,6 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
             _cacheHelper.Delete(cacheDto.AuthLocalId);
             return authLocal.Account;
-        }
-
-        public Guid GetCurrUserId(ClaimsPrincipal userClaims)
-        {
-            Claim guidClaim = userClaims.FindFirst(ClaimTypes.Name);
-
-            if (string.IsNullOrEmpty(guidClaim?.Value))
-            {
-                return Guid.Empty;
-            }
-
-            return Guid.Parse(guidClaim.Value);
         }
     }
 }

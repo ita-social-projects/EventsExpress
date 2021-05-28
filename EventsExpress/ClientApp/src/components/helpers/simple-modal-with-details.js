@@ -9,20 +9,20 @@ import { renderTextField} from '../helpers/helpers';
 export const validate = values => {
     const errors = {};
     const requiredFields = [
-        'changeStatusReason'
+        'detailsString'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
         }
     });
-    if (values.changeStatusReason && values.changeStatusReason.length < 6) {
-        errors.changeStatusReason = `Must be minimum 6 symbols`;
+    if (values.detailsString && values.detailsString.length < 6) {
+        errors.detailsString = `Must be minimum 6 symbols`;
     }
     return errors;
 }
 
-class EventChangeStatusModal extends Component {
+class SimpleModalWithDetails extends Component {
     constructor(props) {
         super(props)
 
@@ -39,12 +39,12 @@ class EventChangeStatusModal extends Component {
     }
 
     submit = (values) => {
-        this.props.submitCallback(values.changeStatusReason);
+        this.props.submitCallback(values.detailsString);
         this.handleClose();
     }
 
     render() {
-        const { handleSubmit, pristine, submitting } = this.props;
+        const { handleSubmit, pristine, submitting, data } = this.props;
         return (
             <>
                 <div onClick={this.handleClickOpen}>{this.props.button}</div>
@@ -54,13 +54,13 @@ class EventChangeStatusModal extends Component {
                 >
                     <form onSubmit={handleSubmit(this.submit)}>
                         <DialogContent>
-                            <h4>Are you sure?</h4>
+                            <h4>{data}</h4>
                             <Field
                                 className="form-control"
-                                name='changeStatusReason'
+                                name='detailsString'
                                 component={renderTextField}
                                 type="text"
-                                label="Enter the reason"
+                                label={data}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -89,6 +89,6 @@ class EventChangeStatusModal extends Component {
 }
 
 export default reduxForm({
-    form: "changeStatus-form",
+    form: "details-modal-form",
     validate
-})(EventChangeStatusModal);
+})(SimpleModalWithDetails);
