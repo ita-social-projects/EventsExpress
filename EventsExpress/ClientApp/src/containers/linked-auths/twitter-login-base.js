@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import TwitterLogin from 'react-twitter-login';
+import config from '../../config';
 import oauth from 'oauth-sign';
 import uuid from 'uuid';
-import { connect } from 'react-redux';
 import '../css/Auth.css';
 
-export class TwitterLoginBase extends Component {
+export default class TwitterLoginBase extends Component {
     authHandler = async (err, data) => {
         const authData = {
             email: undefined,
@@ -44,7 +44,7 @@ export class TwitterLoginBase extends Component {
             include_email: true,
             skip_status: true,
             oauth_token: oauthToken,
-            oauth_consumer_key: this.props.config.keys.twitterConsumerKey,
+            oauth_consumer_key: config.TWITTER_CONSUMER_KEY,
             oauth_nonce: uuid.v4().replace(/-/g, ''),
             oauth_signature_method: 'HMAC-SHA1',
             oauth_timestamp: (Date.now() / 1000).toFixed(),
@@ -55,7 +55,7 @@ export class TwitterLoginBase extends Component {
             'GET',
             urlVerifyCredentials,
             apiTwitterAuthParams,
-            this.props.config.keys.twitterConsumerSecret,
+            config.TWITTER_CONSUMER_SECRET,
             oauthTokenSecret
         );
 
@@ -75,28 +75,17 @@ export class TwitterLoginBase extends Component {
         }).join(', ')}`;
     }
 
-
     render() {
         return (
             <div>
                 <TwitterLogin
                     authCallback={this.authHandler}
                     buttonTheme="light_short"
-                    consumerKey={this.props.config.keys.twitterConsumerKey}
-                    consumerSecret={this.props.config.keys.twitterConsumerSecret}
-                    callbackUrl={`${window.location.origin}${this.props.config.keys.twitterCallbackUrl}`}
+                    consumerKey={config.TWITTER_CONSUMER_KEY}
+                    consumerSecret={config.TWITTER_CONSUMER_SECRET}
+                    callbackUrl={`${window.location.origin}${config.TWITTER_CALLBACK_URL}`}
                 />
             </div>
         );
     }
-
-
 }
-
-const mapStateToProps = (state) => {
-    return {
-        config: state.config
-    }
-};
-
-export default connect(mapStateToProps, null)(TwitterLoginBase);

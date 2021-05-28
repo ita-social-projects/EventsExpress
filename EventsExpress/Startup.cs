@@ -152,7 +152,7 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
-            services.Configure<ViewModels.FrontConfigsViewModel>(Configuration.GetSection("FrontEndConfigs"));
+
             services.AddAzureClients(builder =>
             {
                 // Add a storage account client

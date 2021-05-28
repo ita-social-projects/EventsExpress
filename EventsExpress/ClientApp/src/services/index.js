@@ -10,8 +10,7 @@ import UserService from './UserService'
 import NotificationTypeService from './NotificationTypeService'
 import AccountService from './AccountService';
 import NotificationTemplateService from "./NotificationTemplateService";
-import TrackService from './TrackService';
-import ConfigService from './ConfigService'
+import TrackService from './TrackService'
 
 export {
     AuthenticationService,
@@ -26,6 +25,5 @@ export {
     NotificationTypeService,
     AccountService,
 	TrackService,
-    NotificationTemplateService,
-    ConfigService
+    NotificationTemplateService
 };

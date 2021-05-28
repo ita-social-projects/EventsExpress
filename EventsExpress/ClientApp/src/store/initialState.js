@@ -225,14 +225,6 @@ const initialState = {
         subject: null,
         message: null  
     },
-    configs: {
-        facebookClientId: null,
-        googleClientId: null,
-        twitterCallbackUrl: null,
-        twitterConsumerKey: null,
-        twitterConsumerSecret: null,
-        twitterLoginEnabled:null
-    }
 };
 
 export default initialState;
