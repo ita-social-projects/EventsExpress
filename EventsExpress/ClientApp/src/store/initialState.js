@@ -3,6 +3,10 @@
 import eventHelper from '../components/helpers/eventHelper';
 
 const initialState = {
+    requestCount:{
+        counter: 0,
+    },
+
     account:{
         linkedAuths:[],
     },
@@ -89,14 +93,9 @@ const initialState = {
         isCommentDeleteSuccess: false,
     },
     event: {
-        isPending: true,
         cancelationModalStatus: false,
         cancelation: {},
-        data: {
-            dateFrom: null,
-            dateTo: null,
-            photoUrl: null,
-        }
+        data: [],
     },
     eventSchedule: {
         isPending: true,
@@ -108,8 +107,6 @@ const initialState = {
         }
     },
     add_event: {
-        isEventPending: false,
-        isEventSuccess: false,
     },
     add_copy_event: {
         isCopyEventPending: false,
@@ -128,7 +125,6 @@ const initialState = {
         isCancelEventSchedulesSuccess: false,
     },
     events: {
-        isPending: true,
         data: {
             items: [],
             pageViewModel: {},

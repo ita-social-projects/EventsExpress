@@ -6,7 +6,6 @@ import * as Gender from './editReducers/EditGenderReducer';
 import * as Birthday from './editReducers/EditBirthdayReducer';
 import * as User from './user';
 import * as Register from './register';
-import * as AddEvent from './add-event';
 import * as AddCopyEvent from './add-copy-event';
 import * as EditEventFromParent from './edit-event-from-parent';
 import * as CancelNextEventSchedule from './cancel-next-eventSchedule';
@@ -43,8 +42,10 @@ import * as NotificationTypes from './notificationType/notificationType-list';
 import * as Account from './account';
 import * as NotificationTemplates from "./notification-templates/notification-templates";
 import * as NotificationTemplate from "./notification-templates/notification-template";
+import * as RequestCount from "./request-index-count"
 
 const rootReducers = {
+    requestCount: RequestCount.reducer,
     account : Account.reducer,
     modal: ModalWind.reducer,
     user: User.reducer,
@@ -55,7 +56,6 @@ const rootReducers = {
     editGender: Gender.reducer,
     editBirthday: Birthday.reducer,
     register: Register.reducer,
-    add_event: AddEvent.reducer,
     add_copy_event: AddCopyEvent.reducer,
     edit_event_from_parent: EditEventFromParent.reducer,
     cancel_next_eventSchedule: CancelNextEventSchedule.reducer,

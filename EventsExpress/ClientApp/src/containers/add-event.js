@@ -2,8 +2,8 @@
 import EventForm from '../components/event/event-form';
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import add_event,
-{ setEventPending, setEventSuccess } from '../actions/event/event-add-action';
+import add_event from '../actions/event/event-add-action';
+import { getRequestInc, getRequestDec } from "../actions/request-count-action";
 import { setAlert } from '../actions/alert-action';
 import get_categories from '../actions/category/category-list-action';
 import { validateEventForm } from '../components/helpers/helpers';
@@ -21,7 +21,7 @@ class AddEventWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
+        if (!this.props.add_event_status.errorEvent && !this.props.add_event_status.counter)  {
             this.props.reset();
             this.props.resetEventStatus();
             this.props.alert({ variant: 'success', message: 'Your event was created!', autoHideDuration: 5000 });
@@ -43,7 +43,7 @@ class AddEventWrapper extends Component {
 
 
     render() {
-        if (this.props.add_event_status.isEventSuccess) {
+        if (!this.props.add_event_status.counter) {
             this.setState({ open: true });
         }
         let initialValues = {
@@ -77,7 +77,8 @@ const mapStateToProps = (state) => ({
     user_id: state.user.id,
     add_event_status: state.add_event,
     all_categories: state.categories,
-    form_values: getFormValues('event-form')(state)
+    form_values: getFormValues('event-form')(state),
+    counter: state.requestCount.counter
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -89,8 +90,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         alert: (data) => dispatch(setAlert(data)),
         resetEventStatus: () => {
-            dispatch(setEventPending(true));
-            dispatch(setEventSuccess(false));
+            dispatch(getRequestInc());
+            dispatch(getRequestDec());
         }
     }
 };

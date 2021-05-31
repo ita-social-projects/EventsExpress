@@ -5,8 +5,9 @@ import EventChangeStatusModal from '../components/event/event-change-status-moda
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues, reset , isPristine} from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event, publish_event} from '../actions/event/event-add-action';
+import { edit_event, publish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
+import { getRequestInc, getRequestDec } from "../actions/request-count-action";
 import { resetEvent, change_event_status } from '../actions/event/event-item-view-action';
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -22,7 +23,7 @@ class EventDraftWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
+        if (!this.props.add_event_status.errorEvent && !this.props.counter) {
             this.props.reset();
         }
     }
@@ -137,6 +138,7 @@ const mapStateToProps = (state) => ({
     form_values: getFormValues('event-form')(state),
     pristine: isPristine('event-form')(state),
     event: state.event.data,
+    counter: state.requestCount.counter
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -148,8 +150,8 @@ const mapDispatchToProps = (dispatch) => {
         resetEvent: () => dispatch(resetEvent()),
         reset: () => {
             dispatch(reset('event-form'));
-            dispatch(setEventPending(true));
-            dispatch(setEventSuccess(false));
+            dispatch(getRequestInc());
+            dispatch(getRequestDec());
         }
     }
 };

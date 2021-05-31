@@ -1,23 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import Spinner from '../components/spinner';
-import get_event, { 
-    join, 
-    leave, 
-    resetEvent, 
+import get_event, {
+    join,
+    leave,
+    resetEvent,
     change_event_status
-    }
+}
     from '../actions/event/event-item-view-action';
 
-class EventItemViewWrapper extends Component{
-    componentWillMount(){    
+class EventItemViewWrapper extends Component {
+    componentWillMount() {
         const { id } = this.props.match.params;
         this.props.get_event(id);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.props.reset();
     }
 
@@ -37,25 +37,26 @@ class EventItemViewWrapper extends Component{
         this.props.unCancel(this.props.event.data.id, reason, eventStatus);
     }
 
-    render(){   
-        const { isPending } = this.props.event;
-        return isPending
-            ? <Spinner />
-            : <EventItemView
+    render() {
+        const { data } = this.props.event;
+
+        return <Spinner showContent={data!=undefined}>
+            <EventItemView
                 event={this.props.event}
-                match={this.props.match} 
-                onLeave={this.onLeave} 
+                match={this.props.match}
+                onLeave={this.onLeave}
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onUnCancel={this.onUnCancel}
                 current_user={this.props.current_user}
             />
+        </Spinner>
     }
 }
 
 const mapStateToProps = (state) => ({
-    event: state.event, 
-    current_user: state.user
+    event: state.event,
+    current_user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

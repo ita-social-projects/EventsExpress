@@ -3,7 +3,8 @@ import EventForm from '../components/event/event-form';
 import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event} from '../actions/event/event-add-action';
+import { edit_event } from '../actions/event/event-add-action';
+import { getRequestInc, getRequestDec } from "../actions/request-count-action";
 import { validate, validateEventForm  } from '../components/helpers/helpers'
 import { resetEvent } from '../actions/event/event-item-view-action';
 import get_categories from '../actions/category/category-list-action';
@@ -18,7 +19,7 @@ class EditEventWrapper extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
+        if (!this.props.add_event_status.errorEvent && !this.props.add_event_status.counter) {
             this.props.reset();
         }
     }
@@ -88,6 +89,7 @@ const mapStateToProps = (state) => ({
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),
     event: state.event.data,
+    counter: state.requestCount.counter
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -97,8 +99,8 @@ const mapDispatchToProps = (dispatch) => {
         resetEvent: () => dispatch(resetEvent()),
         reset: () => {
             dispatch(reset('event-form'));
-            dispatch(setEventPending(true));
-            dispatch(setEventSuccess(false));
+            dispatch(getRequestInc());
+            dispatch(getRequestDec());
         }
     }
 };
