@@ -8,7 +8,6 @@ import {
     TwitterLoginAdd,
     LocalLoginAdd,
 } from './linked-auths';
-import config from '../config';
 import './css/linked-auths.css';
 
 class LinkedAuthsWrapper extends Component {
@@ -25,7 +24,7 @@ class LinkedAuthsWrapper extends Component {
             <div className="d-flex justify-content-around mb-3">
                 <GoogleLoginAdd />
                 <FacebookLoginAdd />
-                {config.TWITTER_LOGIN_ENABLED && <TwitterLoginAdd />}
+                {this.props.config.keys.twitterLoginEnabled && <TwitterLoginAdd />}
                 <LocalLoginAdd />
             </div>
         </>
@@ -34,6 +33,7 @@ class LinkedAuthsWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     data: state.account,
+    config: state.config
 });
 
 const mapDispatchToProps = (dispatch) => ({
