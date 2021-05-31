@@ -12,8 +12,8 @@ import InventoryList from '../inventory/InventoryList';
 import DisplayLocation from './map/display-location';
 import userStatusEnum from '../../constants/userStatusEnum';
 import eventStatusEnum from '../../constants/eventStatusEnum';
-import EventChangeStatusModal from './event-change-status-modal';
-import {eventDefaultImage} from "../../constants/eventDefaultImage";
+import SimpleModalWithDetails from '../helpers/simple-modal-with-details';
+import { eventDefaultImage } from "../../constants/eventDefaultImage";
 import PhotoService from "../../services/PhotoService";
 
 const photoService = new PhotoService();
@@ -30,8 +30,8 @@ export default class EventItemView extends Component {
     componentDidMount() {
         photoService.getFullEventPhoto(this.props.event.data.id).then(
             eventFullImage => {
-                if(eventFullImage != null){
-                    this.setState({eventImage: URL.createObjectURL(eventFullImage)});
+                if (eventFullImage != null) {
+                    this.setState({ eventImage: URL.createObjectURL(eventFullImage) });
                 }
             }
         );
@@ -115,8 +115,8 @@ export default class EventItemView extends Component {
                     <div className="col-9">
                         <div className="col-12">
                             <img src={this.state.eventImage}
-                                 id={"eventFullPhotoImg" + id} alt="Event"
-                                 className="w-100" />
+                                id={"eventFullPhotoImg" + id} alt="Event"
+                                className="w-100" />
                             <div className="text-block">
                                 <span className="title">{title}</span>
                                 <br />
@@ -157,22 +157,24 @@ export default class EventItemView extends Component {
                                 {categories_list}
                             </div>
                             <div className="button-block">
-                                {canEdit && 
+                                {canEdit &&
                                     <Link to={`/editEvent/${id}`}>
-                                        <button className="btn btn-edit mb-1">Edit</button> 
+                                        <button className="btn btn-edit mb-1">Edit</button>
                                     </Link>
                                 }
-                                {canCancel && <EventChangeStatusModal
+                                {canCancel && <SimpleModalWithDetails
                                     button={<button className="btn btn-edit">Cancel</button>}
                                     submitCallback={this.props.onCancel}
+                                    data="Are you sure?"
                                 />}
-                                {(canUncancel) && <EventChangeStatusModal
+                                {(canUncancel) && <SimpleModalWithDetails
                                     button={<button className="btn btn-edit">Undo cancel</button>}
                                     submitCallback={this.props.onUnCancel}
+                                    data="Are you sure?"
                                 />}
                             </div>
                         </div>
-      
+
                         {!isFutureEvent &&
                             <div className="text-box overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                                 <RatingWrapper

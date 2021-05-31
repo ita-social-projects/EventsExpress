@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import RegisterComplete from '../components/register/register-complete';
 import registerComplete from "../actions/register/register-complete-action";
-
-
 
 class RegisterCompleteWrapper extends Component {
     render() {
         return <>
-            <RegisterComplete onSubmit = {this.props.submit}/>
+            <RegisterComplete onSubmit={this.props.submit}/>
         </>
     }
 }
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch) => ({
     submit: (data) => dispatch(registerComplete(data))

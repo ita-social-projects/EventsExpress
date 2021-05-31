@@ -1,10 +1,10 @@
 import { SubmissionError } from 'redux-form';
 import { EventService } from '../../services';
-import { getEvent } from './event-item-view-action';
+import get_event, { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
 import { getRequestInc, getRequestDec } from "../request-count-action";
-
+import { setSuccessAllert } from '../alert-action';
 
 export const EVENT_WAS_CREATED = "EVENT_WAS_CREATED";
 
@@ -20,6 +20,7 @@ export default function add_event(data) {
         }
         dispatch(getRequestDec());
         const event = await response.json();
+        dispatch(setSuccessAllert('Your event was successfully created!'));
         dispatch(history.push(`/editEvent/${event.id}`));
         return Promise.resolve();
     }
@@ -43,7 +44,8 @@ export function publish_event(eventId) {
         dispatch(getRequestInc());
         let response = await api_serv.publishEvent(eventId);
         if (response.ok) {
-            dispatch(getEvent(eventId));
+            dispatch(get_event(eventId));
+            dispatch(setSuccessAllert('Your event has been successfully published!'));
             dispatch(getRequestDec());
             dispatch(history.push(`/event/${eventId}/1`));
             dispatch(eventWasCreated(eventId));

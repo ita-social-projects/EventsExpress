@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 import EventForm from '../components/event/event-form';
-import EventChangeStatusModal from '../components/event/event-change-status-modal';
+import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues, reset , isPristine} from 'redux-form';
@@ -9,10 +9,11 @@ import { edit_event, publish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from '../components/helpers/helpers'
 import { getRequestInc, getRequestDec } from "../actions/request-count-action";
 import { resetEvent, change_event_status } from '../actions/event/event-item-view-action';
+import { change_event_status } from '../actions/event/event-item-view-action';
+import { setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import get_categories from '../actions/category/category-list-action';
-import L from 'leaflet';
 import './css/Draft.css';
 
 
@@ -33,50 +34,36 @@ class EventDraftWrapper extends Component {
     }
 
     onPublish = async (values) => { 
-        
         if (!this.props.pristine)
         {
-            await this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
+            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
         }
-         return this.props.publish(this.props.event.id);
-        
+        return this.props.publish(this.props.event.id);
     }
 
-    onSave = () => {
-        return this.props.add_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
+    onSave = async () => {
+        await this.props.edit_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
+        this.props.alert('Your event has been successfully saved!');    
     }
 
     onDelete = async (reason) => {
         await this.props.delete(this.props.event.id, reason);
+        this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
     }
-   
-
+  
     render() {
-        let initialValues = {
-            ...this.props.event,
-            location: this.props.event.location !== null ? {
-                selectedPos: L.latLng(
-                    
-                    this.props.event.location.latitude,
-                    this.props.event.location.longitude
-                ),
-                onlineMeeting: this.props.event.location.onlineMeeting,
-                type: String(this.props.event.location.type)
-            } : null,
-
-        }
-        console.log(this.props.form_values)
         return <>
             <header>
                 <div className="row pl-md-4">
                     <div className="col-12 py-3">
                         <div className="float-left">
-                            <h1>Edit event draft</h1>                  
+                            <h1>Edit event draft</h1>
                         </div>
                         <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                            <EventChangeStatusModal
+                            <SimpleModalWithDetails
                                 submitCallback={this.onDelete}
+                                data="Are you sure?"
                                 button={
                                     <IconButton className="text-danger" size="medium">
                                         <i className="fas fa-trash"></i>
@@ -86,19 +73,15 @@ class EventDraftWrapper extends Component {
                         </div>
                     </div>
                 </div>
-                <hr className="gradient ml-4 mt-0 mb-3"/>
+                <hr className="gradient ml-4 mt-0 mb-3" />
             </header>
             <EventForm
                 all_categories={this.props.all_categories}
                 onSubmit={this.onPublish}
-                initialValues={initialValues}
+                initialValues={this.props.event}
                 form_values={this.props.form_values}
-                checked={this.props.event.isReccurent}
-                haveReccurentCheckBox={false}
-                haveMapCheckBox={true}
-                haveOnlineLocationCheckBox={true}
-                disabledDate={false}
-                isCreated={true}>
+                haveReccurentCheckBox={true}
+                eventId={this.props.event.id}>
                 <div className="col">
                     <Button
                         className="border"
@@ -129,7 +112,7 @@ class EventDraftWrapper extends Component {
             </EventForm>
         </>
     }
-}   
+}
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
@@ -143,11 +126,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_event: (data) => dispatch(edit_event(data)),
+        edit_event: (data) => dispatch(edit_event(data)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
-        resetEvent: () => dispatch(resetEvent()),
+        alert: (msg) => dispatch(setSuccessAllert(msg)),
         reset: () => {
             dispatch(reset('event-form'));
             dispatch(getRequestInc());
@@ -157,6 +140,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withRouter(connect(
-    mapStateToProps, 
+    mapStateToProps,
     mapDispatchToProps
 )(EventDraftWrapper));
