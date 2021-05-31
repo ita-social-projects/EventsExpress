@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { renderTextArea, renderTextField } from '../helpers/helpers';
 import Module from '../helpers';
 import ErrorMessages from '../shared/errorMessage';
-import issueTypeEnum from '../../constants/issueTypeEnum ';
+import issueTypeEnum from '../../constants/IssueTypeEnum ';
 
 
 const { validate } = Module;
