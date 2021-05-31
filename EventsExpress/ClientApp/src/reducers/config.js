@@ -9,7 +9,7 @@ export const reducer = (state = initialState.configs, action) => {
         };
         case GET_CONFIGS_SUCCESS: return{
             keys:action.payload,
-                isConfigsSuccess : false,
+                isConfigsSuccess : true,
                     
         };
         default: return state;
