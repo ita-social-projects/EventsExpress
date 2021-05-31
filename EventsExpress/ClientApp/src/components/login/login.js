@@ -70,6 +70,6 @@ Login = reduxForm({
     validate
 })(Login);
 
- connect(mapStateToProps, null)(LoginFacebook);
+export default connect(mapStateToProps, null)(Login);
 
-export default Login;
+

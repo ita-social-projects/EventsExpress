@@ -30,8 +30,8 @@ const mapStateToProps = (state) => {
         config: state.config
     }
 };
-const mapDispatchToProps = dispatch => ({
+/*const mapDispatchToProps = dispatch => ({
     facebookLoginAdd: email => dispatch(facebookLoginAdd(email)),
     setErrorAlert: msg => dispatch(setErrorAlert(msg)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(ShareButtons);
+});*/
+export default connect(mapStateToProps, null)(ShareButtons);

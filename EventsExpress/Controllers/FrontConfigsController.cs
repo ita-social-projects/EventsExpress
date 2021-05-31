@@ -17,7 +17,6 @@
 
         public IActionResult GetConfigs()
         {
-            _ = new FrontConfigsViewModel();
             FrontConfigsViewModel configResult = _frontConfigs.Value;
             return Ok(configResult);
         }
