@@ -208,9 +208,16 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangeViewModel model)
         {
-            await _authService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
+            try
+            {
+                await _authService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
 
-            return Ok();
+                return Ok();
+            }
+            catch (EventsExpressException)
+            {
+                return BadRequest();
+            }
         }
     }
 }
