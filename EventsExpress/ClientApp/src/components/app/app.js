@@ -32,11 +32,13 @@ import Forbidden from '../Route guard/403';
 import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
+import getConfigs from '../../actions/config/get-configs-action';
 
 class App extends Component {
     constructor(props){
         super(props);
         this.props.authUser();
+        this.props.getConfig();
     }
 
     UserRoleSecurity = withAuthRedirect(['User']);
@@ -94,7 +96,8 @@ class App extends Component {
 
 let mapDispatchToProps = (dispatch) => {
     return {
-        authUser: () => dispatch(AuthUser())
+        authUser: () => dispatch(AuthUser()),
+        getConfig: () => dispatch(getConfigs())
     }
 }
 
