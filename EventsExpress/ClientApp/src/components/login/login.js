@@ -7,7 +7,7 @@ import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
-import config from '../../config';
+import { connect } from 'react-redux';
 import { Redirect } from "react-router";
 
 const { validate, renderTextField } = Module;
@@ -48,7 +48,7 @@ class Login extends Component {
                     </div>
                 </form>
                 <div className="d-flex justify-content-around mb-3">
-                    {config.TWITTER_LOGIN_ENABLED && <TwitterLogin />}
+                    {this.props.config.keys.twitterLoginEnabled && <TwitterLogin />}
                     <LoginFacebook />
                     <GoogleLogin />
                 </div>
@@ -59,10 +59,17 @@ class Login extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        config: state.config
+    }
+};
 
 Login = reduxForm({
     form: "login-form",
     validate
 })(Login);
 
-export default Login;
+export default connect(mapStateToProps, null)(Login);
+
+

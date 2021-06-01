@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
-import config from '../config';
 import { loginFacebook } from '../actions/login/login-action';
 import './css/Auth.css';
 
@@ -14,10 +13,12 @@ class LoginFacebook extends Component {
             this.props.loginFacebook(response.email, response.name, response.picture.data.url);
         }
 
+
+
         return (
             <div>
                 <FacebookLogin
-                    appId={config.FACEBOOK_CLIENT_ID}
+                    appId={this.props.config.keys.facebookClientId}
                     autoLoad={false}
                     fields="name,email,picture"
                     callback={responseFacebook}
@@ -33,7 +34,8 @@ class LoginFacebook extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        login: state.login
+        login: state.login,
+        config: state.config
     }
 };
 
