@@ -38,7 +38,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.props.authUser();
-        this.props.config();
+        this.props.getConfig();
     }
 
     UserRoleSecurity = withAuthRedirect(['User']);
@@ -97,7 +97,7 @@ class App extends Component {
 let mapDispatchToProps = (dispatch) => {
     return {
         authUser: () => dispatch(AuthUser()),
-        config: () => dispatch(getConfigs())
+        getConfig: () => dispatch(getConfigs())
     }
 }
 
