@@ -134,7 +134,6 @@ namespace EventsExpress.Core.Services
             var userDto = Context.Users
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AuthLocal)
-                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == _securityContext.GetCurrentUserId());
             var authLocal = userDto.Account.AuthLocal;
             if (authLocal == null)
