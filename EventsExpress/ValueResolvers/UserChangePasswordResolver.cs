@@ -10,8 +10,8 @@ namespace EventsExpress.ValueResolvers
 {
     public class UserChangePasswordResolver : IValueResolver<User, UserDto, bool>
     {
-        private AppDbContext dbContext;
-        private ISecurityContext securityContext;
+        private readonly AppDbContext dbContext;
+        private readonly ISecurityContext securityContext;
 
         public UserChangePasswordResolver(AppDbContext dbContext, ISecurityContext securityContext)
         {
