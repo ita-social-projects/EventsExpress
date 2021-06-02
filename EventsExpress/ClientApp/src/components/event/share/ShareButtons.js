@@ -1,14 +1,15 @@
 ﻿import React, { Component } from 'react';
 import { FacebookProvider, ShareButton } from 'react-facebook';
 import { Telegram, Twitter, Linkedin } from 'react-social-sharing';
-import config from '../../../config';
+import { connect } from 'react-redux';
 import './share.css';
 
-export default class ShareButtons extends Component {
+export class ShareButtons extends Component {
+     
     render() {
         return (
             <>
-                <FacebookProvider appId={config.FACEBOOK_CLIENT_ID}>
+                <FacebookProvider appId={this.props.config.keys.facebookClientId}>
                     <ShareButton className="btn" href={this.props.href} >
                         <div id="fb-share-button">
                             <i className="fab fa-facebook text-white"></i>
@@ -23,3 +24,11 @@ export default class ShareButtons extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        config: state.config
+    }
+};
+
+export default connect(mapStateToProps, null)(ShareButtons);

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import { facebookLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
-import config from '../../config';
 import { setErrorAlert } from '../../actions/alert-action';
 import '../css/Auth.css';
 
@@ -14,11 +13,12 @@ class LoginFacebook extends Component {
         }
         this.props.facebookLoginAdd(response.email);
     }
+
     render() {
         return (
             <div>
                 <FacebookLogin
-                    appId={config.FACEBOOK_CLIENT_ID}
+                    appId={this.props.config.keys.facebookClientId}
                     autoLoad={false}
                     fields="email"
                     callback={this.facebookResponseHandler}
@@ -32,9 +32,15 @@ class LoginFacebook extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        config: state.config
+    }
+};
+
 const mapDispatchToProps = dispatch => ({
     facebookLoginAdd: email => dispatch(facebookLoginAdd(email)),
-        setErrorAlert: msg => dispatch(setErrorAlert(msg))
+    setErrorAlert: msg => dispatch(setErrorAlert(msg))
 });
 
-export default connect(null, mapDispatchToProps)(LoginFacebook);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginFacebook);

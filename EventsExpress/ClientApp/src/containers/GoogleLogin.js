@@ -2,7 +2,6 @@
 import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
 import { loginGoogle } from '../actions/login/login-action';
-import config from '../config';
 import { withRouter } from 'react-router-dom';
 import './css/Auth.css';
 
@@ -20,10 +19,11 @@ class LoginGoogle extends Component {
             );
         }
 
+
         return (
             <div>
                 <GoogleLogin
-                    clientId={config.GOOGLE_CLIENT_ID}
+                    clientId={this.props.config.keys.googleClientId}
                     render={renderProps => (
                         <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
                             <i className="fab fa-google blue fa-lg"></i>
@@ -40,7 +40,8 @@ class LoginGoogle extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        login: state.login
+        login: state.login,
+        config: state.config
     }
 };
 
