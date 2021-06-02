@@ -63,7 +63,7 @@ namespace EventsExpress.Test.ValidatorTests
             context.AuthLocal.Add(authLocal);
             context.SaveChanges();
 
-            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockSecurityContext.Setup(x => x.GetCurrentAccountId()).Returns(accountId);
 
             viewModel = new ChangeViewModel
             {
