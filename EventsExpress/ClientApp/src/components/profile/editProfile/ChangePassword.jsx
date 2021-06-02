@@ -61,10 +61,7 @@ const ChangePassword = (props) => {
                                     label="Input current password"
                                     component={renderTextField}
                                     type="password"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    className="mb-4"
+                                    className="mb-3"
                                 />
 
                                 <Field
@@ -72,10 +69,7 @@ const ChangePassword = (props) => {
                                     label="Input new password"
                                     component={renderTextField}
                                     type="password"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    className="mb-4"
+                                    className="mb-3"
                                 />
 
                                 <Field
@@ -83,10 +77,7 @@ const ChangePassword = (props) => {
                                     type="password"
                                     label="Repeat new password"
                                     component={renderTextField}
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
-                                    className="mb-4"
+                                    className="mb-3"
                                 />
 
                             </div>
