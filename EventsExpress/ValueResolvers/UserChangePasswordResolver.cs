@@ -19,17 +19,7 @@ namespace EventsExpress.ValueResolvers
             this.securityContext = securityContext;
         }
 
-        public bool Resolve(User source, UserDto destination, bool destMember, ResolutionContext context)
-        {
-            var authLocal = dbContext.AuthLocal
-                .FirstOrDefault(x => x.AccountId == securityContext.GetCurrentAccountId());
-
-            if (authLocal == null)
-            {
-                return false;
-            }
-
-            return true;
-        }
+        public bool Resolve(User source, UserDto destination, bool destMember, ResolutionContext context) =>
+            dbContext.AuthLocal.Any(x => x.AccountId == securityContext.GetCurrentAccountId());
     }
 }
