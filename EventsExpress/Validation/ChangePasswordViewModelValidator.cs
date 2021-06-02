@@ -28,10 +28,8 @@ namespace EventsExpress.Validation
 
         protected bool ValidOldPassword(string password)
         {
-            var account = appDbContext.Accounts
-                .Include(a => a.AuthLocal)
-                .FirstOrDefault(x => x.Id == securityContext.GetCurrentAccountId());
-            var authLocal = account.AuthLocal;
+            var authLocal = appDbContext.AuthLocal
+                .FirstOrDefault(x => x.AccountId == securityContext.GetCurrentAccountId());
 
             return authLocal.PasswordHash == passwordHasher.GenerateHash(password, authLocal.Salt);
         }

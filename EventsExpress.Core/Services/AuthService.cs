@@ -131,20 +131,8 @@ namespace EventsExpress.Core.Services
 
         public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
-            var userDto = Context.Users
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .FirstOrDefault(x => x.Id == _securityContext.GetCurrentUserId());
-            var authLocal = userDto.Account.AuthLocal;
-            if (authLocal == null)
-            {
-                throw new EventsExpressException("Invalid user");
-            }
-
-            if (!VerifyPassword(authLocal, oldPassword))
-            {
-                throw new EventsExpressException("Invalid password");
-            }
+            var authLocal = Context.AuthLocal
+                .FirstOrDefault(x => x.AccountId == _securityContext.GetCurrentAccountId());
 
             authLocal.Salt = _passwordHasher.GenerateSalt();
             authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);

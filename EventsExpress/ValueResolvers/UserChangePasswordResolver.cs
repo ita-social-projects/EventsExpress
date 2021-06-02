@@ -21,12 +21,10 @@ namespace EventsExpress.ValueResolvers
 
         public bool Resolve(User source, UserDto destination, bool destMember, ResolutionContext context)
         {
-            var user = dbContext.Users
-                .Include(u => u.Account)
-                    .ThenInclude(a => a.AuthLocal)
-                .FirstOrDefault(x => x.Id == securityContext.GetCurrentUserId());
+            var authLocal = dbContext.AuthLocal
+                .FirstOrDefault(x => x.AccountId == securityContext.GetCurrentAccountId());
 
-            if (user?.Account?.AuthLocal == null)
+            if (authLocal == null)
             {
                 return false;
             }
