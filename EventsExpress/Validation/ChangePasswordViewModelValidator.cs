@@ -11,10 +11,10 @@ namespace EventsExpress.Validation
     public class ChangePasswordViewModelValidator : AbstractValidator<ChangeViewModel>
     {
         private readonly AppDbContext appDbContext;
-        private readonly IPasswordHasher passwordHasher;
         private readonly ISecurityContext securityContext;
+        private readonly IPasswordHasher passwordHasher;
 
-        public ChangePasswordViewModelValidator(AppDbContext appDbContext, IPasswordHasher passwordHasher, ISecurityContext securityContext, IAuthService authService)
+        public ChangePasswordViewModelValidator(AppDbContext appDbContext, ISecurityContext securityContext, IPasswordHasher passwordHasher)
         {
             this.appDbContext = appDbContext;
             this.passwordHasher = passwordHasher;

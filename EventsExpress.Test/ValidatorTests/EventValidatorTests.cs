@@ -9,8 +9,6 @@ using EventsExpress.Test.ValidatorTests.TestClasses.Location;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.TestHelper;
-using Moq;
-using NetTopologySuite.Geometries;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ValidatorTests
