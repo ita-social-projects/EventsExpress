@@ -236,8 +236,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
                     .ThenInclude(n => n.NotificationType)
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId)));
+                .FirstOrDefault(x => x.Id == id)));
 
             var rel = Context.Relationships
                 .FirstOrDefault(x => x.UserFromId == id && x.UserToId == userId);
