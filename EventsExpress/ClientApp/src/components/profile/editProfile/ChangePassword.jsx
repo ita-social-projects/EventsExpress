@@ -18,14 +18,14 @@ const renderTextField = ({
     meta: { touched, error },
     ...custom
 }) => (
-        <TextField
-            hintText={label}
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            {...custom}
-        />
-    );
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+    />
+);
 const { validate } = Module;
 
 const useStyles = makeStyles(theme => ({
