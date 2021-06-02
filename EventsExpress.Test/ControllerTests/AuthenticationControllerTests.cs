@@ -364,23 +364,6 @@ namespace EventsExpress.Test.ControllerTests
 
         [Test]
         [Category("ChangePassword")]
-        public void ChangePassword_InvalidAuthLocalId_ReturnBadRequest()
-        {
-            _authenticationController.ControllerContext = new ControllerContext();
-            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
-            _authService.Setup(s =>
-            s.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws<EventsExpressException>();
-
-            var result = _authenticationController.ChangePassword(new ChangeViewModel()).Result;
-
-            var badRes = result as BadRequestResult;
-
-            Assert.IsInstanceOf<BadRequestResult>(badRes);
-        }
-
-        [Test]
-        [Category("ChangePassword")]
         public async Task ChangePassword_AllOk_DoesNotThrowExceptionAsync()
         {
             _authenticationController.ControllerContext = new ControllerContext();
