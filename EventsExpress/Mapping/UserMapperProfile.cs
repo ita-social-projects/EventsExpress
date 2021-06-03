@@ -21,7 +21,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.Rating, opts => opts.MapFrom<UserToRatingResolver>())
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom<UserToAttitudeResolver>())
-                .ForMember(dest => dest.CanChangePassword, opts => opts.Ignore())
+                .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom<UserChangePasswordResolver>())
                 .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.AccountId, opts => opts.MapFrom(src => src.Account.Id));
 
@@ -47,7 +47,8 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
-                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender));
+                .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom(src => src.CanChangePassword));
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

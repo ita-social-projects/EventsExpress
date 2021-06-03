@@ -29,8 +29,10 @@ namespace EventsExpress.Test.MapperTests
 
         private Guid idUser = Guid.NewGuid();
         private Guid idUser2 = Guid.NewGuid();
+        private Guid idAccount = Guid.NewGuid();
         private Guid idRole = Guid.NewGuid();
         private User firstUser;
+        private AppDbContext context;
         private Mock<IHttpContextAccessor> mockAccessor;
         private Mock<IUserService> mockUser;
         private Mock<ISecurityContext> mockSecurityContextService;
@@ -150,6 +152,7 @@ namespace EventsExpress.Test.MapperTests
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
 
             services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(databaseName: "db"));
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "db"));
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);
@@ -161,7 +164,7 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
-            var context = serviceProvider.GetService<AppDbContext>();
+            context = serviceProvider.GetService<AppDbContext>();
 
             mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Returns(idUser);
 
@@ -178,11 +181,12 @@ namespace EventsExpress.Test.MapperTests
         [Test]
         public void UserMapperProfile_UserToUserDto()
         {
-            firstUser = GetUser();
+            firstUser = context.Users.FirstOrDefault(x => x.Id == GetUser().Id);
             var resEven = Mapper.Map<User, UserDto>(firstUser);
 
             Assert.That(resEven.Attitude, Is.EqualTo(1));
             Assert.That(resEven.Rating, Is.EqualTo(5));
+            Assert.That(resEven.CanChangePassword, Is.EqualTo(false));
         }
 
         [Test]
