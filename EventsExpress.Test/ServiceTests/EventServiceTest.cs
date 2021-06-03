@@ -393,6 +393,18 @@ namespace EventsExpress.Test.ServiceTests
             EventDto dto = DeepCopyDto(eventDto);
             dto.Id = Guid.Empty;
 
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            dto.Photo = file;
+
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
             mockPhotoService.Verify(x => x.AddEventPhoto(It.IsAny<IFormFile>(), dto.Id), Times.Once);
         }
