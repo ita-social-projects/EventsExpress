@@ -17,7 +17,7 @@ export default function add_copy_event(eventId) {
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(setSuccessAllert('Your event was created!'));
+        dispatch(setSuccessAllert('Your event has been successfully created!'));
         dispatch(history.push(`/event/${jsonRes.id}/1`));
         return Promise.resolve();
     }
