@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,8 +33,11 @@ namespace EventsExpress.Core.Services
                     .Include(es => es.Event)
                         .ThenInclude(e => e.Owners)
                     .Include(es => es.Event)
+                        .ThenInclude(e => e.StatusHistory)
+                    .Include(es => es.Event)
                     .Where(opt => opt.IsActive &&
-                        opt.Event.Owners.Any(o => o.UserId == CurrentUserId()))
+                        opt.Event.Owners.Any(o => o.UserId == CurrentUserId()) &&
+                        opt.Event.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft)
                     .ToList());
         }
 
@@ -84,6 +89,25 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
 
             return eventScheduleDTO.Id;
+        }
+
+        public async Task<Guid> Delete(Guid id)
+        {
+            var eventSchedule = Context.EventSchedules.Find(id);
+            if (eventSchedule == null)
+            {
+                throw new EventsExpressException("Not found");
+            }
+
+            var result = Delete(eventSchedule);
+            if (result.Id != id)
+            {
+                throw new EventsExpressException(string.Empty);
+            }
+
+            await Context.SaveChangesAsync();
+
+            return result.Id;
         }
 
         public async Task<Guid> CancelEvents(Guid eventId)
