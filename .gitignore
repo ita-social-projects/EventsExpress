@@ -279,3 +279,4 @@ __pycache__/
 /EventsExpress/ClientApp/package-lock.json
 /EventsExpress/Properties/PublishProfiles/*
 /EventsExpress/ClientApp/build
+/.vscode/*
