@@ -2,7 +2,8 @@
 import TextField from "@material-ui/core/TextField";
 import moment from 'moment';
 
-export default ({ input: { onChange, value }, minValue, maxValue, label }) => {
+export default ({ input: { onChange, value }, meta: { touched, invalid, error }, 
+    minValue, maxValue, label, disabled }) => {
 
     if (value !== null && value !== undefined && value !== '') {
         if (new Date(value) < new Date(minValue)) {
@@ -15,7 +16,10 @@ export default ({ input: { onChange, value }, minValue, maxValue, label }) => {
         label={label}
         selected={moment(value).format('L')}
         value={moment(value).format('YYYY-MM-DD')}
+        error={touched && invalid}
+        helperText={touched && error}
         onChange={onChange}
+        disabled={disabled}
         inputProps={{
             min: minValue ? moment(minValue).format('YYYY-MM-DD') : null,
             max: maxValue ? moment(maxValue).format('YYYY-MM-DD') : null
