@@ -249,6 +249,7 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<ProfileDto, ProfileViewModel>(firstProfileDto);
 
             Assert.That(resEven.Attitude, Is.EqualTo(1));
+            Assert.That(resEven.Rating, Is.EqualTo(5));
         }
     }
 }
