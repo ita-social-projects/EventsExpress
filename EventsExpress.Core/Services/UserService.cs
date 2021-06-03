@@ -222,8 +222,6 @@ namespace EventsExpress.Core.Services
 
         public ProfileDto GetProfileById(Guid id)
         {
-            var userId = _securityContext.GetCurrentUserId();
-
             var user = Mapper.Map<UserDto, ProfileDto>(
                 Mapper.Map<UserDto>(Context.Users
                 .Include(u => u.Categories)

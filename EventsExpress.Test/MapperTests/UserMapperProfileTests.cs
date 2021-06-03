@@ -8,12 +8,14 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -26,6 +28,7 @@ namespace EventsExpress.Test.MapperTests
         private UserDto firstUserDto;
 
         private Guid idUser = Guid.NewGuid();
+        private Guid idUser2 = Guid.NewGuid();
         private Guid idRole = Guid.NewGuid();
         private User firstUser;
         private Mock<IHttpContextAccessor> mockAccessor;
@@ -34,24 +37,53 @@ namespace EventsExpress.Test.MapperTests
 
         private User GetUser()
         {
-            List<User> users = GetListUsers();
             return new User
             {
                 Id = idUser,
-                Name = "First user",
-            };
-        }
-
-        private List<User> GetListUsers()
-        {
-            return new List<User>()
-            {
-                new User
+                Name = "first user",
+                Email = "admin@gmail.com",
+                Phone = "+38066666666",
+                Birthday = new DateTime(2001, 01, 01),
+                Gender = Gender.Male,
+                Account = new Account
                 {
-                    Id = idUser,
-                    Name = "User",
-                    Email = "user@gmail.com",
-                    Birthday = DateTime.Now,
+                    AccountRoles = new[]
+                    {
+                        new AccountRole
+                        {
+                            Role = new Db.Entities.Role
+                            {
+                                Name = "Admin",
+                                Id = Db.Enums.Role.Admin,
+                            },
+                        },
+                    },
+                    IsBlocked = false,
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = idUser,
+                        Category = new Category { Name = "some" },
+                    },
+                },
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = idUser,
+                        NotificationType = new NotificationType { Name = "not" },
+                    },
+                },
+                Relationships = new List<Relationship>
+                {
+                    new Relationship
+                    {
+                        Attitude = Attitude.Dislike,
+                        UserFromId = idUser,
+                        UserToId = idUser2,
+                    },
                 },
             };
         }
@@ -101,6 +133,8 @@ namespace EventsExpress.Test.MapperTests
             };
         }
 
+        private ProfileDto GetProfileDto() => Mapper.Map<ProfileDto>(GetUserDto());
+
         [OneTimeSetUp]
         protected virtual void Init()
         {
@@ -115,6 +149,7 @@ namespace EventsExpress.Test.MapperTests
             mockAccessor.Setup(sp => sp.HttpContext.User);
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
 
+            services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(databaseName: "db"));
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);
@@ -126,6 +161,12 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
+            var context = serviceProvider.GetService<AppDbContext>();
+
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Returns(idUser);
+
+            context.Users.Add(GetUser());
+            context.SaveChanges();
         }
 
         [Test]
@@ -140,7 +181,7 @@ namespace EventsExpress.Test.MapperTests
             firstUser = GetUser();
             var resEven = Mapper.Map<User, UserDto>(firstUser);
 
-            Assert.That(resEven.Attitude, Is.EqualTo(2));
+            Assert.That(resEven.Attitude, Is.EqualTo(1));
             Assert.That(resEven.Rating, Is.EqualTo(5));
         }
 
@@ -195,6 +236,15 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));
             Assert.That((int)resEven.Gender, Is.EqualTo((int)firstUserDto.Gender));
             Assert.That(resEven.IsBlocked, Is.EqualTo(firstUserDto.Account.IsBlocked));
+        }
+
+        [Test]
+        public void UserMapperProfile_ProfileDtoToUProfileViewModel()
+        {
+            var firstProfileDto = GetProfileDto();
+            var resEven = Mapper.Map<ProfileDto, ProfileViewModel>(firstProfileDto);
+
+            Assert.That(resEven.Attitude, Is.EqualTo(1));
         }
     }
 }
