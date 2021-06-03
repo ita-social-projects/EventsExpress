@@ -4,8 +4,11 @@ import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import Module from '../../helpers';
 import ErrorMessages from '../../shared/errorMessage';
+import PhotoService from '../../../services/PhotoService';
 
 const { validate } = Module;
+
+const photoService = new PhotoService();
 
 let ChangeAvatar = props => {
     const { handleSubmit, pristine, submitting } = props;
@@ -18,7 +21,7 @@ let ChangeAvatar = props => {
                 type="file"
                 crop={true}
                 cropShape='round'
-                photoUrl={`api/photo/GetUserPhoto?id=${props.initialValues.userId}`}
+                loadImage={() => photoService.getUserPhoto(props.initialValues.userId)}
             />
             {
                 props.error &&

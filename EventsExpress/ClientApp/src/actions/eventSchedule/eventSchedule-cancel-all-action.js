@@ -17,7 +17,7 @@ export default function cancel_all_eventSchedules(eventId) {
             return Promise.reject();
         }
         dispatch(setCancelAllEventSchedulesSuccess(true));
-        dispatch(setSuccessAllert('Your events was canceled!'));
+        dispatch(setSuccessAllert('Your events have been canceled!'));
         dispatch(history.push(`/eventSchedules`));
         return Promise.resolve();
     }

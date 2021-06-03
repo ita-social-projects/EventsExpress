@@ -162,12 +162,24 @@ namespace EventsExpress.Core.Services
             var ev = Mapper.Map<EventDto, Event>(eventDTO);
             ev.EventLocationId = locationId;
 
-            if (ev.Owners == null)
+            ev.StatusHistory = new List<EventStatusHistory>
             {
-                ev.Owners = new List<EventOwner>();
-            }
+                new EventStatusHistory
+                {
+                    EventStatus = EventStatus.Active,
+                    CreatedOn = DateTime.UtcNow,
+                    UserId = CurrentUserId(),
+                },
+            };
 
-            ev.Owners.Add(new EventOwner() { UserId = CurrentUserId(), EventId = eventDTO.Id });
+            ev.Owners = new List<EventOwner>
+            {
+                new EventOwner
+                {
+                    UserId = CurrentUserId(),
+                    EventId = eventDTO.Id,
+                },
+            };
 
             var eventCategories = eventDTO.Categories?
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
@@ -178,22 +190,19 @@ namespace EventsExpress.Core.Services
 
             eventDTO.Id = result.Id;
 
-            try
+            if (eventDTO.Photo != null)
             {
-                await _photoService.AddEventPhoto(eventDTO.Photo, eventDTO.Id);
-            }
-            catch (ArgumentException)
-            {
-                throw new EventsExpressException("Invalid file");
+                try
+                {
+                    await _photoService.AddEventPhoto(eventDTO.Photo, eventDTO.Id);
+                }
+                catch (ArgumentException)
+                {
+                    throw new EventsExpressException("Invalid file");
+                }
             }
 
             await Context.SaveChangesAsync();
-
-            if (eventDTO.IsReccurent)
-            {
-                await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(eventDTO));
-            }
-
             await _mediator.Publish(new EventCreatedMessage(eventDTO));
 
             return result.Id;
@@ -202,12 +211,13 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> CreateNextEvent(Guid eventId)
         {
             var eventDTO = EventById(eventId);
-            eventDTO.Inventories = null;
+
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
 
             var ticksDiff = eventDTO.DateTo.Value.Ticks - eventDTO.DateFrom.Value.Ticks;
             eventDTO.Id = Guid.Empty;
             eventDTO.Owners = null;
+            eventDTO.Inventories = null;
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
             eventDTO.DateTo = eventDTO.DateFrom.Value.AddTicks(ticksDiff);
@@ -215,8 +225,9 @@ namespace EventsExpress.Core.Services
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
 
-            var createResult = await Create(eventDTO);
             await _eventScheduleService.Edit(eventScheduleDTO);
+
+            var createResult = await Create(eventDTO);
 
             return createResult;
         }
@@ -227,6 +238,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventLocation)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
+                .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
 
             if (e.Photo != null)
@@ -248,12 +260,37 @@ namespace EventsExpress.Core.Services
                 ev.EventLocationId = locationId;
             }
 
+            if (e.IsReccurent)
+            {
+                if (e.EventStatus == EventStatus.Draft)
+                {
+                    if (ev.EventSchedule == null)
+                    {
+                        await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(e));
+                    }
+                    else
+                    {
+                        var eventScheduleDTO = Mapper.Map<EventScheduleDto>(e);
+                        eventScheduleDTO.Id = ev.EventSchedule.Id;
+                        await _eventScheduleService.Edit(eventScheduleDTO);
+                    }
+                }
+            }
+            else
+            {
+                if (ev.EventSchedule != null)
+                {
+                    await _eventScheduleService.Delete(ev.EventSchedule.Id);
+                }
+            }
+
             ev.Title = e.Title;
             ev.MaxParticipants = e.MaxParticipants;
             ev.Description = e.Description;
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
+
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 
@@ -313,11 +350,12 @@ namespace EventsExpress.Core.Services
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
 
+            await _eventScheduleService.Edit(eventScheduleDTO);
+
             eventDTO.IsReccurent = false;
             eventDTO.Id = Guid.Empty;
 
             var createResult = await Create(eventDTO);
-            await _eventScheduleService.Edit(eventScheduleDTO);
 
             return createResult;
         }
@@ -338,6 +376,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
+                .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == eventId));
 
             return res;
