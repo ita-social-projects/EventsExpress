@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
@@ -11,6 +12,7 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -23,6 +25,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private Mock<ITrackService> _trackService;
+        private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
         private CreateEventVerificationHandler _eventVerificationHandler;
         private CreateEventVerificationMessage _createEventVerificationMessage;
         private EventScheduleDto _eventScheduleDto;
@@ -42,6 +45,9 @@ namespace EventsExpress.Test.HandlerTests
             _userService = new Mock<IUserService>();
             _trackService = new Mock<ITrackService>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
+            _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
+
+            _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
             _notificationTemplateService
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
@@ -51,7 +57,7 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
 
-            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, _notificationTemplateService.Object);
+            _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
             _eventScheduleDto = new EventScheduleDto
             {
                 Id = _idEventSchedule,
@@ -78,7 +84,6 @@ namespace EventsExpress.Test.HandlerTests
             _userService.Setup(u => u.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>())).Returns(new UserDto[] { _userDto });
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
-            AppHttpContext.Configure(httpContext.Object);
         }
 
         [Test]

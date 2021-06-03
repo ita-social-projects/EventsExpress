@@ -6,6 +6,7 @@ import {
     Switch
 } from 'react-router-dom';
 import Home from '../home';
+import Issues from '../contactAdmin/issues';
 import Profile from '../profile';
 import UserItemViewWrapper from '../../containers/user-item-view';
 import EventItemViewWrapper from '../../containers/event-item-view';
@@ -18,7 +19,8 @@ import Authentication from '../Authentication/authentication';
 import Chat from '../chat';
 import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
-import ContactUsWrapper from '../../containers/contactUs';
+import ContactAdminWrapper from '../../containers/contactAdmin/contactAdmin-container';
+import ContactAdminDetails from '../../containers/contactAdmin/contactAdmin-details-container';
 import LoginTwitter from '../../containers/TwitterLogin';
 import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
@@ -30,11 +32,13 @@ import Forbidden from '../Route guard/403';
 import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
+import getConfigs from '../../actions/config/get-configs-action';
 
 class App extends Component {
     constructor(props){
         super(props);
         this.props.authUser();
+        this.props.getConfig();
     }
 
     UserRoleSecurity = withAuthRedirect(['User']);
@@ -70,12 +74,14 @@ class App extends Component {
                         <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
                         <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
                         <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />
+                        <Route path="/contactAdmin/issues" component={Issues} />
+                        <Route path="/contactAdmin/:id/UpdateStatus" component={this.AdminRoleSecurity(ContactAdminDetails)} />
                         <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                         <Route path="/authentication/:id/:token" component={Authentication} />
                         <Route path="/authentication/twitterLogin" component={LoginTwitter} />
                         <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
-                        <Route path="/contactUs" component={this.UserRoleSecurity(ContactUsWrapper)} />
-                        <Route path='/registerSuccess' component={this.AdminAndUserRoleSecurity(RegisterSuccess)} />
+                        <Route path="/contactAdmin" component={ContactAdminWrapper} />
+                        <Route path='/registerSuccess' component={RegisterSuccess} />
                         <Route path='/editEvent/:id' component={this.UserRoleSecurity(EventEditWrapper)} />
                         <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
                         <Route path='/unauthorized' component={Unauthorized} />
@@ -90,7 +96,8 @@ class App extends Component {
 
 let mapDispatchToProps = (dispatch) => {
     return {
-        authUser: () => dispatch(AuthUser())
+        authUser: () => dispatch(AuthUser()),
+        getConfig: () => dispatch(getConfigs())
     }
 }
 

@@ -15,9 +15,9 @@ import CustomAvatar from '../avatar/custom-avatar';
 import './event-item.css';
 import { useStyle } from '../event/CardStyle'
 import IconButton from "@material-ui/core/IconButton";
-import EventChangeStatusModal from '../event/event-change-status-modal';
+import SimpleModalWithDetails from '../helpers/simple-modal-with-details';
 import PhotoService from "../../services/PhotoService";
-import {eventDefaultImage} from "../../constants/eventDefaultImage";
+import { eventDefaultImage } from "../../constants/eventDefaultImage";
 
 const useStyles = useStyle;
 const photoService = new PhotoService();
@@ -36,7 +36,7 @@ export default class DraftEventCard extends Component {
         photoService.getPreviewEventPhoto(this.props.item.id).then(
             eventPreviewImage => {
                 if (eventPreviewImage != null) {
-                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                    this.setState({ eventImage: URL.createObjectURL(eventPreviewImage) });
                 }
             }
         );
@@ -54,7 +54,7 @@ export default class DraftEventCard extends Component {
             dateFrom,
             description,
             owners
-        } = this.props.item;    
+        } = this.props.item;
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
                 <Card
@@ -81,8 +81,8 @@ export default class DraftEventCard extends Component {
                             className={classes.media + ' d-flex justify-content-center'}
                             title={title}>
                             <img src={this.state.eventImage}
-                                 id={"eventPreviewPhotoImg" + id} alt="Event"
-                                 className="w-100"/>
+                                id={"eventPreviewPhotoImg" + id} alt="Event"
+                                className="w-100" />
                         </CardMedia>
                         <CardContent className="py-2">
                             {description &&
@@ -97,8 +97,9 @@ export default class DraftEventCard extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                                <EventChangeStatusModal
+                                <SimpleModalWithDetails
                                     submitCallback={(reason) => this.props.onDelete(id, reason)}
+                                    data="Are you sure?"
                                     button={
                                         <IconButton className="text-danger" size="medium">
                                             <i className="fas fa-trash"></i>

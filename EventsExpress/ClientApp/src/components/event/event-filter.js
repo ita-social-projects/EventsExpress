@@ -6,7 +6,7 @@ import {
     renderMultiselect
 } from '../helpers/helpers';
 import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
-import eventHelper from '../helpers/eventHelper';
+import filterHelper from '../helpers/filterHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
 import DisplayMap from '../event/map/display-map';
@@ -24,7 +24,7 @@ class EventFilter extends Component {
     componentDidUpdate(prevProps) {
         const initialValues = this.props.initialFormValues;
 
-        if (!eventHelper.compareObjects(initialValues, prevProps.initialFormValues)
+        if (!filterHelper.compareObjects(initialValues, prevProps.initialFormValues)
             || this.state.needInitializeValues) {
             this.props.initialize({
                 keyWord: initialValues.keyWord,

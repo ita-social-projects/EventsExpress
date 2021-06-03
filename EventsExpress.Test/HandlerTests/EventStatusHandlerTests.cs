@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 
@@ -24,6 +26,7 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IEventStatusHistoryService> _unblockEventStatusHistoryService;
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
+        private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
         private EventStatusHandler _cancelEventHandler;
         private EventStatusHandler _blockEventHandler;
         private EventStatusHandler _unblockEventHandler;
@@ -64,6 +67,10 @@ namespace EventsExpress.Test.HandlerTests
             _cancelEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _blockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
             _unblockEventStatusHistoryService = new Mock<IEventStatusHistoryService>();
+            _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
+
+            _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
+
             _event = new Event
             {
                 Id = _idEvent,
@@ -139,10 +146,9 @@ namespace EventsExpress.Test.HandlerTests
             _unblockEventStatusHistoryService.Setup(e => e.GetLastRecord(It.IsAny<Guid>(), EventStatus.Active)).Returns(_eventStatusHistoryUnBlocked);
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
-            AppHttpContext.Configure(httpContext.Object);
-            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
-            _blockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
-            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object);
+            _cancelEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
+            _blockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
+            _unblockEventHandler = new EventStatusHandler(_emailService.Object, _userService.Object, _eventService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
         }
 
         [Test]

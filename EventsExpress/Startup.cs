@@ -138,6 +138,7 @@ namespace EventsExpress
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
+            services.AddScoped<IContactAdminService, ContactAdminService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -149,6 +150,7 @@ namespace EventsExpress
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));
             services.Configure<JwtOptionsModel>(Configuration.GetSection("JWTOptions"));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.Configure<AppBaseUrlModel>(Configuration.GetSection("AppBaseUrl"));
 
             services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
@@ -156,7 +158,7 @@ namespace EventsExpress
             services.AddCors();
             services.AddControllers();
             services.AddHttpClient();
-
+            services.Configure<ViewModels.FrontConfigsViewModel>(Configuration.GetSection("FrontEndConfigs"));
             services.AddAzureClients(builder =>
             {
                 // Add a storage account client
@@ -264,7 +266,6 @@ namespace EventsExpress
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
-            app.UseHttpContext();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

@@ -5,11 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
+using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.NotificationHandlers
 {
@@ -21,19 +24,22 @@ namespace EventsExpress.Core.NotificationHandlers
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly ITrackService _trackService;
         private readonly INotificationTemplateService _notificationTemplateService;
+        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
         public CreateEventVerificationHandler(
             ILogger<CreateEventVerificationHandler> logger,
             IEmailService sender,
             IUserService userService,
             ITrackService trackService,
-            INotificationTemplateService notificationTemplateService)
+            INotificationTemplateService notificationTemplateService,
+            IOptions<AppBaseUrlModel> urlOptions)
         {
             _logger = logger;
             _sender = sender;
             _userService = userService;
             _trackService = trackService;
             _notificationTemplateService = notificationTemplateService;
+            _urlOptions = urlOptions;
         }
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
@@ -54,7 +60,7 @@ namespace EventsExpress.Core.NotificationHandlers
 
                 if (userEmail != null)
                 {
-                    string link = $"{AppHttpContext.AppBaseUrl}/eventSchedule/{notification.EventSchedule.Id}";
+                    string link = $"{_urlOptions.Value.Host}/eventSchedule/{notification.EventSchedule.Id}";
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {

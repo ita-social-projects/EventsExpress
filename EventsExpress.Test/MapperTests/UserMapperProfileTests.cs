@@ -8,12 +8,14 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -26,8 +28,10 @@ namespace EventsExpress.Test.MapperTests
         private UserDto firstUserDto;
 
         private Guid idUser = Guid.NewGuid();
+        private Guid idAccount = Guid.NewGuid();
         private Guid idRole = Guid.NewGuid();
         private User firstUser;
+        private AppDbContext context;
         private Mock<IHttpContextAccessor> mockAccessor;
         private Mock<IUserService> mockUser;
         private Mock<ISecurityContext> mockSecurityContextService;
@@ -115,6 +119,7 @@ namespace EventsExpress.Test.MapperTests
             mockAccessor.Setup(sp => sp.HttpContext.User);
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
 
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "db"));
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);
@@ -126,6 +131,10 @@ namespace EventsExpress.Test.MapperTests
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             Mapper = serviceProvider.GetService<IMapper>();
+            context = serviceProvider.GetService<AppDbContext>();
+
+            context.Users.Add(GetUser());
+            context.SaveChanges();
         }
 
         [Test]
@@ -137,11 +146,12 @@ namespace EventsExpress.Test.MapperTests
         [Test]
         public void UserMapperProfile_UserToUserDto()
         {
-            firstUser = GetUser();
+            firstUser = context.Users.FirstOrDefault(x => x.Id == GetUser().Id);
             var resEven = Mapper.Map<User, UserDto>(firstUser);
 
             Assert.That(resEven.Attitude, Is.EqualTo(2));
             Assert.That(resEven.Rating, Is.EqualTo(5));
+            Assert.That(resEven.CanChangePassword, Is.EqualTo(false));
         }
 
         [Test]
