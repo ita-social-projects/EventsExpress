@@ -96,6 +96,7 @@ namespace EventsExpress.Mapping
                     dest => dest.NotificationTypes,
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeViewModel { Id = x.Id, Name = x.Name })))
+                .ForMember(dest => dest.Rating, opts => opts.MapFrom<ProfileToRatingResolver>())
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom<ProfileToAttitudeResolver>());
         }
     }
