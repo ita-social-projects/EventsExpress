@@ -14,7 +14,6 @@ import IconButton from "@material-ui/core/IconButton";
 import get_categories from '../actions/category/category-list-action';
 import './css/Draft.css';
 
-
 class EventDraftWrapper extends Component {
 
     componentWillMount = () => {
@@ -52,61 +51,63 @@ class EventDraftWrapper extends Component {
    
     render() {
         return <>
-            <header>
-                <div className="row pl-md-4">
-                    <div className="col-12 py-3">
-                        <div className="float-left">
-                            <h1>Edit event draft</h1>                  
-                        </div>
-                        <div className='d-flex flex-row align-items-center justify-content-center float-right'>
-                            <EventChangeStatusModal
-                                submitCallback={this.onDelete}
-                                button={
-                                    <IconButton className="text-danger" size="medium">
-                                        <i className="fas fa-trash"></i>
-                                    </IconButton>
-                                }
-                            />
+            <div className="pl-md-4">
+                <header>
+                    <div className="row">
+                        <div className="col-12 py-3">
+                            <div className="float-left">
+                                <h1>Edit event draft</h1>                  
+                            </div>
+                            <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                                <EventChangeStatusModal
+                                    submitCallback={this.onDelete}
+                                    button={
+                                        <IconButton className="text-danger" size="medium">
+                                            <i className="fas fa-trash"></i>
+                                        </IconButton>
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr className="gradient ml-4 mt-0 mb-3"/>
-            </header>
-            <EventForm
-                all_categories={this.props.all_categories}
-                onSubmit={this.onPublish}
-                initialValues={this.props.event}
-                form_values={this.props.form_values}
-                haveReccurentCheckBox={true}
-                eventId={this.props.event.id}>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.onSave}>
-                        Save
-                    </Button>
-                </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit">
-                        Publish
-                    </Button>
-                </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.props.history.goBack}>
-                        Cancel
-                    </Button>
-                </div>
-            </EventForm>
+                    <hr className="gradient mt-0 mb-3"/>
+                </header>
+                <EventForm
+                    all_categories={this.props.all_categories}
+                    onSubmit={this.onPublish}
+                    initialValues={this.props.event}
+                    form_values={this.props.form_values}
+                    haveReccurentCheckBox={true}
+                    eventId={this.props.event.id}>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.onSave}>
+                            Save
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            type="submit">
+                            Publish
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.history.goBack}>
+                            Cancel
+                        </Button>
+                    </div>
+                </EventForm>
+            </div>
         </>
     }
 }   

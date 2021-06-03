@@ -48,7 +48,7 @@ export default class SimpleModal extends Component {
                                 color="primary"
                                 onClick={this.onClose}
                             >
-                                discard
+                                Discard
                             </Button>
                             <Button
                                 fullWidth={true}
@@ -57,9 +57,8 @@ export default class SimpleModal extends Component {
                                 color="primary"
                                 onClick={this.onConfirm}
                             >
-                                confirm
+                                Confirm
                             </Button>
-                            }
                         </DialogActions>
                     </div>
                 </Dialog>
