@@ -22,14 +22,12 @@ export default class EventService {
             file.append('Photo', data.photo.file);
         }
 
+        file.append('EventStatus', data.eventStatus);
+        
         if (data.isReccurent) {
             file.append('IsReccurent', data.isReccurent);
-            file.append('Frequency', data.frequency);
             file.append('Periodicity', data.periodicity);
-        }
-
-        if (data.photoId) {
-            file.append('PhotoId', data.photoId);
+            file.append('Frequency', data.frequency);
         }
 
         if (data.location) {
@@ -42,7 +40,6 @@ export default class EventService {
                 file.append('Location.OnlineMeeting', data.location.onlineMeeting);
             }
         }
-       
 
         file.append('Title', data.title);
         file.append('Description', data.description);
