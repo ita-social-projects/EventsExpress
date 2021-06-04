@@ -230,8 +230,6 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(n => n.NotificationType)
                 .FirstOrDefault(x => x.Id == id)));
 
-            user.Rating = GetRating(user.Id);
-
             return user;
         }
 
