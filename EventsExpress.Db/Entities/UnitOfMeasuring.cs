@@ -12,7 +12,9 @@ namespace EventsExpress.Db.Entities
 
         public ICollection<Inventory> Inventories { get; set; }
 
-        public string CategoryOfMeasuring { get; set; }
+        public CategoryOfMeasuring Category { get; set; }
+
+        public Guid CategoryId { get; set; }
 
         public bool IsDeleted { get; set; }
     }

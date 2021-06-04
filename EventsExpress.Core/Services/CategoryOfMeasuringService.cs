@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
+using EventsExpress.Db.EF;
+using EventsExpress.Db.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace EventsExpress.Core.Services
+{
+    public class CategoryOfMeasuringService : BaseService<CategoryOfMeasuring>, ICategoryOfMeasuringService
+    {
+        public CategoryOfMeasuringService(
+            AppDbContext context,
+            IMapper mapper)
+            : base(context, mapper)
+        {
+        }
+
+        public IEnumerable<CategoryOfMeasuringDto> GetAllCategories()
+        {
+            return Mapper.Map<IEnumerable<CategoryOfMeasuringDto>>(
+                Context.CategoriesOfMeasurings
+                .Include(e => e.UnitOfMeasurings)
+                 .Select(x => new CategoryOfMeasuringDto
+                 {
+                     Id = x.Id,
+                     CategoryName = x.CategoryName,
+                 })
+                .OrderBy(category => category.CategoryName));
+        }
+
+        public CategoryOfMeasuringDto GetCategoryOfMeasuringById(Guid id)
+        {
+            var entity = Context.CategoriesOfMeasurings.Find(id);
+
+            if (entity == null)
+            {
+                return new CategoryOfMeasuringDto();
+            }
+
+            return Mapper.Map<CategoryOfMeasuring, CategoryOfMeasuringDto>(entity);
+        }
+    }
+}

@@ -133,6 +133,7 @@ namespace EventsExpress
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
+            services.AddScoped<ICategoryOfMeasuringService, CategoryOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
             services.AddScoped<IEventOwnersService, EventOwnersService>();
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();

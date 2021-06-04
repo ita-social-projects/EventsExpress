@@ -57,6 +57,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<CategoryOfMeasuring> CategoriesOfMeasurings { get; set; }
+
         public DbSet<ChatRoom> ChatRoom { get; set; }
 
         public DbSet<Message> Message { get; set; }

@@ -14,8 +14,22 @@ namespace EventsExpress.Test.ServiceTests
 {
     internal class UnitOfMeasuringServiceTests : TestInitializer
     {
+        private CategoryOfMeasuringService categoryOfMeasuringService;
         private UnitOfMeasuringService service;
         private UnitOfMeasuringDto correctUnitOfMeasuringDTO;
+        private CategoryOfMeasuring categoryOfMeasuring = new CategoryOfMeasuring
+        {
+            Id = Guid.NewGuid(),
+            CategoryName = "testName",
+        };
+
+        private CategoryOfMeasuringDto categoryOfMeasuringDto = new CategoryOfMeasuringDto
+        {
+            Id = Guid.NewGuid(),
+            CategoryName = "testDtoName",
+        };
+
+        private Guid id = Guid.NewGuid();
         public const string CreateUnitName = "create Unit Name";
         public const string CreateShortName = "create Unit Name";
         public const string CorrectUnitName = "CorrectUnitName";
@@ -35,7 +49,8 @@ namespace EventsExpress.Test.ServiceTests
                 Id = unitOfMeasuringDTO.Id,
                 UnitName = unitOfMeasuringDTO.UnitName,
                 ShortName = unitOfMeasuringDTO.ShortName,
-                CategoryOfMeasuring = unitOfMeasuringDTO.CategoryOfMeasuring,
+
+                Category = categoryOfMeasuring,
                 IsDeleted = unitOfMeasuringDTO.IsDeleted,
             };
         }
@@ -47,7 +62,8 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UnitName = CorrectUnitName,
                 ShortName = CorrectShortName,
-                CategoryOfMeasuring = CorrectCategory,
+
+                Category = categoryOfMeasuringDto,
                 IsDeleted = false,
             };
         }
@@ -63,7 +79,8 @@ namespace EventsExpress.Test.ServiceTests
             UnitOfMeasuring deletedUnitOfMeasuring = FromDTOToUnit(EditingUnit.DeletedUnitOfMeasuringDTO);
             Context.UnitOfMeasurings.Add(deletedUnitOfMeasuring);
             Context.SaveChanges();
-            service = new UnitOfMeasuringService(Context, MockMapper.Object);
+            categoryOfMeasuringService = new CategoryOfMeasuringService(Context, MockMapper.Object);
+            service = new UnitOfMeasuringService(Context, MockMapper.Object, categoryOfMeasuringService);
             MockMapper.Setup(u => u.Map<UnitOfMeasuringDto, UnitOfMeasuring>(It.IsAny<UnitOfMeasuringDto>()))
               .Returns((UnitOfMeasuringDto e) => e == null ?
               null :
@@ -72,7 +89,7 @@ namespace EventsExpress.Test.ServiceTests
                   Id = e.Id,
                   UnitName = e.UnitName,
                   ShortName = e.ShortName,
-                  CategoryOfMeasuring = e.CategoryOfMeasuring,
+                  Category = categoryOfMeasuring,
                   IsDeleted = e.IsDeleted,
               });
 
@@ -101,15 +118,17 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Create")]
         public async System.Threading.Tasks.Task Create_CorrectDTO_IdUnit()
         {
-           UnitOfMeasuringDto unitOfMeasuringDTOCreate = new UnitOfMeasuringDto
+            UnitOfMeasuringDto unitOfMeasuringDTOCreate = new UnitOfMeasuringDto
             {
                 Id = Guid.NewGuid(),
                 UnitName = CreateUnitName,
                 ShortName = CreateShortName,
+                Category = categoryOfMeasuringService.GetCategoryOfMeasuringById(id),
                 IsDeleted = false,
             };
-           Guid unitId = await service.Create(unitOfMeasuringDTOCreate);
-           Assert.That(unitId, Is.Not.Null);
+
+            Guid unitId = await service.Create(unitOfMeasuringDTOCreate);
+            Assert.That(unitId, Is.Not.Null);
         }
 
         [TestCaseSource(typeof(EditingUnit))]
@@ -156,9 +175,9 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(ExistingUnitByName))]
         [Category("Exist By Name")]
-        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, string expectedCategory, IResolveConstraint constraint)
+        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, IResolveConstraint constraint)
         {
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName, expectedCategory), constraint);
+            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), constraint);
         }
     }
 }

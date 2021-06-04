@@ -8,16 +8,21 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
     public class UnitOfMeasuringService : BaseService<UnitOfMeasuring>, IUnitOfMeasuringService
     {
+        private readonly ICategoryOfMeasuringService _categoryOfMeasuringService;
+
         public UnitOfMeasuringService(
             AppDbContext context,
-            IMapper mapper)
+            IMapper mapper,
+            ICategoryOfMeasuringService categoryOfMeasuringService)
             : base(context, mapper)
         {
+            _categoryOfMeasuringService = categoryOfMeasuringService;
         }
 
         public async Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO)
@@ -36,7 +41,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Edit(UnitOfMeasuringDto unitOfMeasuringDTO)
         {
-            var entity = Context.UnitOfMeasurings.Find(unitOfMeasuringDTO.Id);
+            var entity = Context.UnitOfMeasurings
+                .Include(e => e.Category)
+                .FirstOrDefault(x => x.Id == unitOfMeasuringDTO.Id);
             if (entity == null || entity.IsDeleted)
             {
                 throw new EventsExpressException("Object not found");
@@ -44,7 +51,8 @@ namespace EventsExpress.Core.Services
 
             entity.ShortName = unitOfMeasuringDTO.ShortName;
             entity.UnitName = unitOfMeasuringDTO.UnitName;
-            entity.CategoryOfMeasuring = unitOfMeasuringDTO.CategoryOfMeasuring;
+
+           // entity.Category = categoryOfMeasuring;
             await Context.SaveChangesAsync();
 
             return entity.Id;
@@ -52,7 +60,7 @@ namespace EventsExpress.Core.Services
 
         public IEnumerable<UnitOfMeasuringDto> GetAll() => Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(
                             Context.UnitOfMeasurings.Where(item => !item.IsDeleted)
-                                                    .OrderBy(unit => unit.CategoryOfMeasuring)
+                                                    .OrderBy(unit => unit.Category)
                                                     .ThenBy(unit => unit.UnitName)
                                                     .ThenBy(unit => unit.ShortName));
 
@@ -69,7 +77,7 @@ namespace EventsExpress.Core.Services
                 Id = unitOfMeasuring.Id,
                 UnitName = unitOfMeasuring.UnitName,
                 ShortName = unitOfMeasuring.ShortName,
-                CategoryOfMeasuring = unitOfMeasuring.CategoryOfMeasuring,
+                Category = _categoryOfMeasuringService.GetCategoryOfMeasuringById(unitOfMeasuringId),
                 IsDeleted = unitOfMeasuring.IsDeleted,
             };
         }
@@ -87,12 +95,12 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public bool ExistsByName(string unitName, string shortName, string categoryOfMeasuring)
+        public bool ExistsByName(string unitName, string shortName)
         {
             return Context.UnitOfMeasurings
+                  .Include(e => e.Category)
                   .Any(x => (!x.IsDeleted) && (x.UnitName == unitName)
-                                           && (x.ShortName == shortName)
-                                           && (x.CategoryOfMeasuring == categoryOfMeasuring));
+                                           && (x.ShortName == shortName));
         }
     }
 }

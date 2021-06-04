@@ -19,6 +19,5 @@ export default class UnitOfMeasuringService {
         shortName: data.shortName,
         categoryOfMeasuring: data.categoryOfMeasuring
     });
-
 }
 

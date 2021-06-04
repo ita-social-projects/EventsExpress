@@ -17,10 +17,8 @@ namespace EventsExpress.Test.ServiceTests
         private const string OnlyCharactersUnitName = "Unit name needs to consist only letters or whitespaces";
         private const string CountOfCharactersShortName = "Short Name needs to consist of from 1 to 5 characters";
         private const string OnlyCharactersShortName = "Short name needs to consist only letters or letter(s)/letter(s)";
-
         private readonly string existedUnitName = "Existed Unit Name";
         private readonly string existedShortName = "Ex/SN";
-        private readonly string existedCategory = "existedCategory";
         private readonly string notExistedUnitName = "Not Existed Unit Name";
         private readonly string notExistedShortName = "N/SN";
 
@@ -34,8 +32,7 @@ namespace EventsExpress.Test.ServiceTests
             unitOfMeasuringViewModelValidator = new UnitOfMeasuringViewModelValidator(mockUnitService.Object);
             mockUnitService.Setup(x => x.ExistsByName(
              It.Is<string>(i => i == existedUnitName),
-             It.Is<string>(i => i == existedShortName),
-             It.Is<string>(i => i == existedCategory))).Returns(true);
+             It.Is<string>(i => i == existedShortName))).Returns(true);
         }
 
         [Test]
@@ -43,7 +40,7 @@ namespace EventsExpress.Test.ServiceTests
         public void ShoudHaveError_ExistingUnitOfMeasuring()
         {
             UnitOfMeasuringViewModel existedModel = new UnitOfMeasuringViewModel
-            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName, CategoryOfMeasuring = existedCategory };
+            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName };
             var result = unitOfMeasuringViewModelValidator.TestValidate(existedModel);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(ExistedUnitOfMeasuring);
         }

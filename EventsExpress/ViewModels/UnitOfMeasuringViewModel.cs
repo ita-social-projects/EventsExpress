@@ -10,6 +10,6 @@ namespace EventsExpress.ViewModels
 
         public string ShortName { get; set; }
 
-        public string CategoryOfMeasuring { get; set; }
+        public CategoryOfMeasuringViewModel Category { get; set; }
     }
 }

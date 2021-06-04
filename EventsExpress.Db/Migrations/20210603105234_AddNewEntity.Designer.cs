@@ -4,15 +4,17 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210603105234_AddNewEntity")]
+    partial class AddNewEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -667,6 +669,12 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CategoryNameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryOfMeasuring")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -678,7 +686,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryNameId");
 
                     b.HasIndex("UnitName", "ShortName")
                         .IsUnique()
@@ -1019,11 +1027,9 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.CategoryOfMeasuring", "Category")
+                    b.HasOne("EventsExpress.Db.Entities.CategoryOfMeasuring", "CategoryName")
                         .WithMany("UnitOfMeasurings")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryNameId");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>

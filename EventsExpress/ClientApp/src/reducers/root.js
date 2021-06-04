@@ -15,6 +15,7 @@ import * as Events from './event-list';
 import * as EventSchedules from './eventSchedules-list';
 import * as AddCategories from './category/add-category';
 import * as Categories from './category/category-list';
+import * as CategoriesOfMeasurings from './categoryOfMeasuring-list';
 import * as Users from './users';
 import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
@@ -68,6 +69,7 @@ const rootReducers = {
     inventories: Inventory.reducer,
     usersInventories: UsersInventories.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
+    categoriesOfMeasuring: CategoriesOfMeasurings.reducer,
     add_unitOfMeasuring: AddUnitOfMeasuring.reducer, add_category: AddCategories.reducer,
     categories: Categories.reducer,
     users: Users.reducer,

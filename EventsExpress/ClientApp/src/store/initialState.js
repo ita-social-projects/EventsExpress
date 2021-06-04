@@ -64,6 +64,10 @@ const initialState = {
         editedCategory: null,
         data: []
     },
+    categoriesOfMeasuring: {
+        isPending: false,
+        data: []
+    },
     users: {
         isPending: true,
         editedUser: null,

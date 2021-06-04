@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { renderSelectField, renderTextField } from '../helpers/helpers';
+import { renderSelectField, renderTextField, renderMultiselect } from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 
@@ -28,6 +28,14 @@ class UnitOfMeasuringEdit extends Component {
         });
     };
 
+    categoriesList = (
+        this.props.all_categories.data.map((item) =>
+            <option value={item.categoryName} key={item.id}>
+                    {item.categoryName}
+            </option>
+            )
+    );
+
     render() {
         return <>
             <td colSpan="3" className="align-middle">
@@ -54,12 +62,9 @@ class UnitOfMeasuringEdit extends Component {
                             label='Category'
                         >
                             <option aria-label="None" value="" />
-                            <option value={"Weight"}>Weight</option>
-                            <option value={"Liquids"}>Liquids</option>
-                            <option value={"Points"}>Points</option>
-                            <option value={"Length"}>Length</option>
-                            <option value={"Other"}>Other</option>
+                            {this.categoriesList}
                         </Field>
+
                         {
                             this.props.error &&
                             <ErrorMessages error={this.props.error} className="text-center" />

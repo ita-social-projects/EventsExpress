@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -12,7 +10,7 @@ namespace EventsExpress.Core.DTOs
 
         public string ShortName { get; set; }
 
-        public string CategoryOfMeasuring { get; set; }
+        public CategoryOfMeasuringDto Category { get; set; }
 
         public bool IsDeleted { get; set;  }
     }
