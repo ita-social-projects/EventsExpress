@@ -115,7 +115,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 label='From'
-                                disabled={disabledDate ? true: false}
+                                disabled={disabledDate}
                                 component={renderDatePicker}
                             />
                         </span>
@@ -124,7 +124,7 @@ class EventForm extends Component {
                                 <Field
                                     name='dateTo'
                                     label='To'
-                                    disabled={disabledDate ? true: false}
+                                    disabled={disabledDate}
                                     minValue={form_values.dateFrom}
                                     component={renderDatePicker}
                                 />

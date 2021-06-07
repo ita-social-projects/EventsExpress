@@ -100,10 +100,6 @@ namespace EventsExpress.Core.Services
             }
 
             var result = Delete(eventSchedule);
-            if (result.Id != id)
-            {
-                throw new EventsExpressException(string.Empty);
-            }
 
             await Context.SaveChangesAsync();
 
