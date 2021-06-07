@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import './eventSchedule.css'
@@ -11,16 +10,13 @@ import EventSchedulePopover from './eventSchedule-popover'
 import EventScheduleModal from './eventSchedule-modal'
 import './eventSchedule.css'
 
-
-class SelectiveForm extends Component {
+export default class SelectiveForm extends Component {
     constructor() {
         super()
         this.state = {
             show: false,
-            submit: false,
+            submit: false
         };
-        this.cancelHandler = this.cancelHandler.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
     }
 
     cancelHandler = () => {
@@ -44,11 +40,10 @@ class SelectiveForm extends Component {
     }
 
     render() {
-
         return <>
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 <div className="row">
-                    <div className="col-11 mb-3">
+                    <div className="col-11">
                         <DropdownButton title="Select Option For Event">
                             <Dropdown.Item as={AddFromParentEventWrapper}></Dropdown.Item>
                             <Dropdown.Item onClick={this.onEdit}>Create with editing</Dropdown.Item>
@@ -59,21 +54,16 @@ class SelectiveForm extends Component {
                     <EventSchedulePopover />
                 </div>
                 <EventScheduleModal
-                    cancelHandler={() => this.cancelHandler()}
-                    message="Are you sure to create the event with editing?"
+                    cancelHandler={this.cancelHandler}
+                    message="Are you sure you want to create the event with editing?"
                     show={this.state.show}
                     submitHandler={this.submitHandler} />
                 {this.state.submit &&
-                    <EditFromParentEventWrapper onCancelEditing={() => this.setState({submit:false})}/>}
+                    <div className="mt-3">
+                        <EditFromParentEventWrapper onCancelEditing={this.cancelHandler}/>
+                    </div>
+                }
             </div>
         </>
     }
 }
-
-
-const mapStateToProps = (state) => ({
-    user_id: state.user.id,
-    initialValues: state.event.data,
-});
-
-export default connect(mapStateToProps)(SelectiveForm);
