@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import { Field, reduxForm } from "redux-form";
-import TextField from "material-ui/TextField";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -12,21 +11,7 @@ import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 
-const renderTextField = ({
-    input,
-    label,
-    meta: { touched, error },
-    ...custom
-}) => (
-        <TextField
-            hintText={label}
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            {...custom}
-        />
-    );
-const { validate } = Module;
+const { validate, renderTextField } = Module;
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -69,16 +54,14 @@ const ChangePassword = (props) => {
                     <MuiThemeProvider>
 
                         <form onSubmit={handleSubmit}>
-                            <div className="d-flex flex-column " >
+                            <div className="d-flex flex-column" >
 
                                 <Field
                                     name="oldPassword"
                                     label="Input current password"
                                     component={renderTextField}
                                     type="password"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
+                                    className="mb-3"
                                 />
 
                                 <Field
@@ -86,9 +69,7 @@ const ChangePassword = (props) => {
                                     label="Input new password"
                                     component={renderTextField}
                                     type="password"
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
+                                    className="mb-3"
                                 />
 
                                 <Field
@@ -96,9 +77,7 @@ const ChangePassword = (props) => {
                                     type="password"
                                     label="Repeat new password"
                                     component={renderTextField}
-                                    InputLabelProps={{
-                                        shrink: true
-                                    }}
+                                    className="mb-3"
                                 />
 
                             </div>
@@ -107,7 +86,7 @@ const ChangePassword = (props) => {
                                 <ErrorMessages error={props.error} className="text-center" />
                             }
 
-                            <div className='mt-5'>
+                            <div>
                                 <Button type="submit" color="primary" disabled={pristine || submitting}>
                                     Submit
                                 </Button>
