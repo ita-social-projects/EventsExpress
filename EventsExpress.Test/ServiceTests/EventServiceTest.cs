@@ -453,7 +453,7 @@ namespace EventsExpress.Test.ServiceTests
             };
             var count = events.Count;
             service.GetAll(eventFilterViewModel, out count);
-            Assert.AreEqual(count, 1);
+            Assert.AreEqual(1, count);
         }
 
         [Test]
@@ -466,7 +466,7 @@ namespace EventsExpress.Test.ServiceTests
             };
             var count = events.Count;
             service.GetAll(eventFilterViewModel, out count);
-            Assert.AreEqual(count, 1);
+            Assert.AreEqual(1, count);
         }
 
         [Test]
