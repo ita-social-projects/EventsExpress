@@ -61,7 +61,7 @@ namespace EventsExpress.Core.Services
 
             if (ev.MaxParticipants <= ev.Visitors.Count)
             {
-                throw new EventsExpressException("To much participants!");
+                throw new EventsExpressException("Too much participants!");
             }
 
             var us = Context.Users.Find(userId);

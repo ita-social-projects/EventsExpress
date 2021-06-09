@@ -251,7 +251,7 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.AreEqual(validEventScheduleId, result);
             var changedEventSchedule = Context.EventSchedules.Find(result);
-            Assert.AreEqual(changedEventSchedule.IsActive, false);
+            Assert.AreEqual(false, changedEventSchedule.IsActive);
         }
 
         [Test]
