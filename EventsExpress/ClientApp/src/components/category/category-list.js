@@ -13,11 +13,11 @@ export default class CategoryList extends Component {
         return (
             <>
                 <tr>
-
                     <td>Name</td>
                     <td className="d-flex align-items-center justify-content-center">Users</td>
                     <td className="justify-content-center">Events</td>
-
+                    <td></td>
+                    <td></td>
                 </tr>
                 {this.renderItems(data_list)}
             </>);
