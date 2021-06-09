@@ -5,54 +5,44 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using MediatR;
-using Microsoft.Extensions.Options;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
-    public class EventCreatedHandler : INotificationHandler<EventCreatedMessage>
+    public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
     {
         private readonly IEmailService _sender;
-        private readonly IUserService _userService;
-        private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly INotificationTemplateService _notificationTemplateService;
-        private readonly IOptions<AppBaseUrlModel> _urlOptions;
+        private readonly IUserService _userService;
+        private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
-        public EventCreatedHandler(
+        public BlockedUserHandler(
             IEmailService sender,
-            IUserService userSrv,
-            INotificationTemplateService notificationTemplateService,
-            IOptions<AppBaseUrlModel> urlOptions)
+            IUserService userService,
+            INotificationTemplateService notificationTemplateService)
         {
             _sender = sender;
-            _userService = userSrv;
+            _userService = userService;
             _notificationTemplateService = notificationTemplateService;
-            _urlOptions = urlOptions;
         }
 
-        public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(BlockedAccountMessage notification, CancellationToken cancellationToken)
         {
             try
             {
-                var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
-                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
-
-                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
-
-                foreach (var userEmail in usersEmails)
+                var userIds = new[] { notification.Account.UserId.Value };
+                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
+                if (userEmail != null)
                 {
-                    string link = $"{_urlOptions.Value.Host}/event/{notification.Event.Id}/1";
-
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
                         { "(UserName)", userEmail },
-                        { "(link)", link },
                     };
+
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.BlockedUser);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {

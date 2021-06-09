@@ -59,6 +59,16 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new UserCreatedNotification());
         }
 
+        public async Task<int> CountBlockedUsersAsync()
+        {
+            return await Entities.CountAsync(e => e.Account.IsBlocked);
+        }
+
+        public async Task<int> CountUnblockedUsersAsync()
+        {
+            return await Entities.CountAsync(e => !e.Account.IsBlocked);
+        }
+
         public async Task<int> CountUsersAsync()
         {
             return await Entities.CountAsync();

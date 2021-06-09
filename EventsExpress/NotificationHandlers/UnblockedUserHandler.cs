@@ -10,16 +10,17 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using MediatR;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
-    public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
+    public class UnblockedUserHandler : INotificationHandler<UnblockedAccountMessage>
     {
         private readonly IEmailService _sender;
-        private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IUserService _userService;
+        private readonly INotificationTemplateService _notificationTemplateService;
+
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
-        public BlockedUserHandler(
+        public UnblockedUserHandler(
             IEmailService sender,
             IUserService userService,
             INotificationTemplateService notificationTemplateService)
@@ -29,20 +30,21 @@ namespace EventsExpress.Core.NotificationHandlers
             _notificationTemplateService = notificationTemplateService;
         }
 
-        public async Task Handle(BlockedAccountMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(UnblockedAccountMessage notification, CancellationToken cancellationToken)
         {
             try
             {
                 var userIds = new[] { notification.Account.UserId.Value };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
+
                 if (userEmail != null)
                 {
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.UnblockedUser);
+
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
                         { "(UserName)", userEmail },
                     };
-
-                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.BlockedUser);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {

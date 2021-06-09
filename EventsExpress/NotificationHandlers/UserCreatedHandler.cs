@@ -4,7 +4,7 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Hubs;
 using MediatR;
 
-namespace EventsExpress.Handlers
+namespace EventsExpress.NotificationHandlers
 {
     public class UserCreatedHandler : INotificationHandler<UserCreatedNotification>
     {

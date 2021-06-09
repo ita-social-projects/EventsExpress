@@ -11,12 +11,10 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Filters;
-using EventsExpress.Handlers;
 using EventsExpress.Hubs;
 using EventsExpress.Mapping;
 using EventsExpress.Policies;
@@ -44,6 +42,7 @@ using Swashbuckle.AspNetCore.Swagger;
 namespace EventsExpress
 {
     using Microsoft.AspNetCore.Identity;
+    using NotificationHandlers;
 
     public class Startup
     {

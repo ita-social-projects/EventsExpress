@@ -6,7 +6,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -17,6 +16,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
+    using NotificationHandlers;
+
     internal class EventStatusHandlerTests
     {
         private Mock<IEmailService> _emailService;
