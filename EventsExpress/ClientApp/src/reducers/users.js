@@ -1,5 +1,13 @@
 import initialState from '../store/initialState';
-import { GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER, GET_USERS_COUNT } from '../actions/users/users-action';
+import {
+    GET_USERS_PENDING,
+    GET_USERS_SUCCESS,
+    RESET_USERS,
+    CHANGE_USERS_FILTER,
+    GET_USERS_COUNT,
+    GET_BLOCKED_USERS_COUNT,
+    GET_UNBLOCKED_USERS_COUNT
+} from '../actions/users/users-action';
 import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user-action';
 
 export const reducer = (state = initialState.users, action) => {
@@ -79,7 +87,21 @@ export const reducer = (state = initialState.users, action) => {
                 count: action.payload
             }
         }
-            
+
+        case GET_BLOCKED_USERS_COUNT: {
+            return {
+                ...state,
+                countOfBlocked: action.payload
+            }
+        }
+
+        case GET_UNBLOCKED_USERS_COUNT: {
+            return {
+                ...state,
+                countOfUnblocked: action.payload
+            }
+        }
+
         default:
             return state;
     }

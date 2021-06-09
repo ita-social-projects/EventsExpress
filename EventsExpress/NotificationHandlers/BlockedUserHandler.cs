@@ -8,22 +8,26 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs;
 using MediatR;
 
 namespace EventsExpress.NotificationHandlers
 {
     public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
     {
+        private readonly UsersHub _hub;
         private readonly IEmailService _sender;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public BlockedUserHandler(
+            UsersHub hub,
             IEmailService sender,
             IUserService userService,
             INotificationTemplateService notificationTemplateService)
         {
+            _hub = hub;
             _sender = sender;
             _userService = userService;
             _notificationTemplateService = notificationTemplateService;
@@ -35,6 +39,7 @@ namespace EventsExpress.NotificationHandlers
             {
                 var userIds = new[] { notification.Account.UserId.Value };
                 var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
+
                 if (userEmail != null)
                 {
                     Dictionary<string, string> pattern = new Dictionary<string, string>
@@ -51,6 +56,8 @@ namespace EventsExpress.NotificationHandlers
                         MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
+
+                await _hub.SendCountOfBlockedUsersAsync();
             }
             catch (Exception ex)
             {

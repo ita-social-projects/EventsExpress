@@ -8,12 +8,14 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs;
 using MediatR;
 
 namespace EventsExpress.NotificationHandlers
 {
     public class UnblockedUserHandler : INotificationHandler<UnblockedAccountMessage>
     {
+        private readonly UsersHub _hub;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
         private readonly INotificationTemplateService _notificationTemplateService;
@@ -21,10 +23,12 @@ namespace EventsExpress.NotificationHandlers
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public UnblockedUserHandler(
+            UsersHub hub,
             IEmailService sender,
             IUserService userService,
             INotificationTemplateService notificationTemplateService)
         {
+            _hub = hub;
             _sender = sender;
             _userService = userService;
             _notificationTemplateService = notificationTemplateService;
@@ -53,6 +57,8 @@ namespace EventsExpress.NotificationHandlers
                         MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
+
+                await _hub.SendCountOfUnblockedUsersAsync();
             }
             catch (Exception ex)
             {

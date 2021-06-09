@@ -8,6 +8,8 @@ export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const RESET_USERS = "RESET_USERS";
 export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
 export const GET_USERS_COUNT = "GET_USERS_COUNT";
+export const GET_BLOCKED_USERS_COUNT = "GET_BLOCKED_USERS_COUNT";
+export const GET_UNBLOCKED_USERS_COUNT = "GET_UNBLOCKED_USERS_COUNT";
 
 const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/usersHub`,
     { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
@@ -42,6 +44,32 @@ export function get_count() {
         }
         const jsonRes = await response.json();
         dispatch(getCount(jsonRes));
+        return Promise.resolve();
+    }
+}
+
+export function get_count_of_blocked() {
+    return async dispatch => {
+        const response = await api_serv.getCount();
+        if(!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        const jsonRes = await response.json();
+        dispatch(getBlockedCount(jsonRes));
+        return Promise.resolve();
+    }
+}
+
+export function get_count_of_unblocked() {
+    return async dispatch => {
+        const response = await api_serv.getCount();
+        if(!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        const jsonRes = await response.json();
+        dispatch(getUnblockedCount(jsonRes));
         return Promise.resolve();
     }
 }
@@ -90,6 +118,20 @@ function getUsersPending(data) {
 function getCount(data) {
     return {
         type: GET_USERS_COUNT,
+        payload: data
+    }
+}
+
+function getBlockedCount(data) {
+    return {
+        type: GET_BLOCKED_USERS_COUNT,
+        payload: data
+    }
+}
+
+function getUnblockedCount(data) {
+    return {
+        type: GET_UNBLOCKED_USERS_COUNT,
         payload: data
     }
 }

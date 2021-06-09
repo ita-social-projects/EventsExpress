@@ -6,15 +6,17 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.NotificationHandlers;
 using Moq;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
-    using NotificationHandlers;
+    using Hubs;
 
-    internal class UnBlockedUserHandlerTests
+    internal class UnblockedUserHandlerTests
     {
+        private Mock<UsersHub> _usersHub;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
@@ -30,6 +32,7 @@ namespace EventsExpress.Test.HandlerTests
         [SetUp]
         public void Initialize()
         {
+            _usersHub = new Mock<UsersHub>();
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
@@ -41,7 +44,13 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
-            _unBlockedUserHandler = new UnblockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+
+            _unBlockedUserHandler = new UnblockedUserHandler(
+                _usersHub.Object,
+                _emailService.Object,
+                _userService.Object,
+                _notificationTemplateService.Object);
+
             _account = new Account
             {
                 UserId = _idUser,

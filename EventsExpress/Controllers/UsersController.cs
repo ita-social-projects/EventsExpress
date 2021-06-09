@@ -73,13 +73,41 @@ namespace EventsExpress.Controllers
         /// This method is used to get the number of all users.
         /// </summary>
         /// <returns>The method returns edited gender.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpGet("[action]")]
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
         public async Task<ActionResult<int>> Count()
         {
             var count = await _userService.CountUsersAsync();
+            return Ok(count);
+        }
+
+        /// <summary>
+        /// This method is used to get the number of blocked users.
+        /// </summary>
+        /// <returns>The method returns edited gender.</returns>
+        /// <response code="200">Edit is successful.</response>
+        /// <response code="400">Edit process failed.</response>
+        [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
+        public async Task<ActionResult<int>> CountBlocked()
+        {
+            var count = await _userService.CountBlockedUsersAsync();
+            return Ok(count);
+        }
+
+        /// <summary>
+        /// This method is used to get the number of unblocked users.
+        /// </summary>
+        /// <returns>The method returns edited gender.</returns>
+        /// <response code="200">Edit is successful.</response>
+        /// <response code="400">Edit process failed.</response>
+        [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.AdminPolicyName)]
+        public async Task<ActionResult<int>> CountUnblocked()
+        {
+            var count = await _userService.CountUnblockedUsersAsync();
             return Ok(count);
         }
 

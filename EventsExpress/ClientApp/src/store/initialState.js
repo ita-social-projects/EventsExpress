@@ -66,6 +66,8 @@ const initialState = {
     },
     users: {
         count: null,
+        countOfBlocked: null,
+        countOfUnblocked: null,
         isPending: true,
         editedUser: null,
         userSearchFilter: null,
