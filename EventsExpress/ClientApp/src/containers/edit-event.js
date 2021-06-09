@@ -3,12 +3,11 @@ import EventForm from '../components/event/event-form';
 import { withRouter } from "react-router";
 import { connect } from 'react-redux';
 import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event} from '../actions/event/event-add-action';
+import { setEventPending, setEventSuccess, edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import { validate, validateEventForm  } from '../components/helpers/helpers'
 import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
-
 
 class EditEventWrapper extends Component {
 
@@ -34,34 +33,35 @@ class EditEventWrapper extends Component {
 
     render() {
         return <>
-            <EventForm
-                validate={validate}
-                all_categories={this.props.all_categories}
-                onSubmit={this.onSubmit}
-                initialValues={this.props.event}
-                form_values={this.props.form_values}
-                haveReccurentCheckBox={false}
-                isCreated={false}
-                eventId={this.props.event.id}>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit">
-                        Save
-                    </Button>
-                </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.props.history.goBack}>
-                        Cancel
-                    </Button>
-                </div>
-            </EventForm>
+            <div className="pl-md-4">
+                <EventForm
+                    validate={validate}
+                    all_categories={this.props.all_categories}
+                    onSubmit={this.onSubmit}
+                    initialValues={this.props.event}
+                    form_values={this.props.form_values}
+                    haveReccurentCheckBox={false}
+                    eventId={this.props.event.id}>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            type="submit">
+                            Save
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.history.goBack}>
+                            Cancel
+                        </Button>
+                    </div>
+                </EventForm>
+            </div>
         </>
     }
 }

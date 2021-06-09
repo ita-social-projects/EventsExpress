@@ -13,21 +13,35 @@ export default class DropZoneField extends Component {
         cropped: false
     };
 
-    componentWillMount = () => {
-        if (this.props.photoUrl) {
-            const imagefile = {
-                file: '',
-                name: '',
-                preview: this.props.photoUrl,
-                size: 1
-            };
-            this.setState({ imagefile: [imagefile] });
-        }
+    componentDidMount() {
+        this.props.loadImage().then(
+            image => {
+                if (image != null) {
+                    const imagefile = {
+                        file: '',
+                        name: '',
+                        preview: URL.createObjectURL(image)
+                    };
+                    this.setState({ imagefile: [imagefile] });
+                }
+            }
+        )
+    }
+
+    componentWillUnmount() {
+        this.revokeImageUrl();
     }
 
     handleOnClear = () => {
+        this.revokeImageUrl();
         this.setState({ cropped: false, imagefile: [] });
         this.props.input.onChange(null);
+    }
+
+    revokeImageUrl = () => {
+        if(this.state.imagefile[0] != undefined && !this.state.cropped) {
+            URL.revokeObjectURL(this.state.imagefile[0].preview);
+        }
     }
 
     handleOnDrop = (file) => {
@@ -35,20 +49,19 @@ export default class DropZoneField extends Component {
             const imagefile = {
                 file: file[0],
                 name: file[0].name,
-                preview: URL.createObjectURL(file[0]),
-                size: 1
+                preview: URL.createObjectURL(file[0])
             };
             this.setState({ imagefile: [imagefile] });
         }
     }
 
     handleOnCrop = (croppedImage) => {
-        const file = new File([croppedImage], "image.jpg", { type: "image/jpeg" });
+        URL.revokeObjectURL(this.state.imagefile[0].preview);
+        const file = new File(croppedImage, "image.jpg", { type: "image/jpeg" });
         const imagefile = {
             file: file,
             name: "image.jpg",
-            preview: croppedImage,
-            size: 1
+            preview: croppedImage[0]
         };
         this.setState({ imagefile: [imagefile], cropped: true },
             () => this.props.input.onChange(imagefile));
@@ -65,10 +78,9 @@ export default class DropZoneField extends Component {
         const { imagefile, cropped } = this.state;
         const { handleOnCrop, handleOnDrop, handleOnClear } = this;
         const containerClass = error && touched ? "invalid" : "valid";
-
         return (
             <Fragment>
-                <div className={`preview-container ${containerClass}`}>
+                <div className={`preview-container ${containerClass}`}>  
                     {imagefile.length && crop && !cropped ? (
                         <div>
                             <ImageResizer
@@ -88,7 +100,7 @@ export default class DropZoneField extends Component {
                                 >
                                     {props =>
                                         imagefile && imagefile.length > 0 ? (
-                                            <ImagePreview imagefile={imagefile} />
+                                            <ImagePreview imagefile={imagefile} shape={cropShape} />
                                         ) : (
                                                 <Placeholder {...props} error={error} touched={touched} />
                                             )
@@ -105,7 +117,7 @@ export default class DropZoneField extends Component {
                         style={{ float: "right" }}
                     >
                         Clear
-                </Button>
+                    </Button>
                 </div>
                 {error && touched ? (
                     <span className="error-text">
@@ -119,13 +131,11 @@ export default class DropZoneField extends Component {
 
 DropZoneField.propTypes = {
     error: PropTypes.string,
-    handleOnDrop: PropTypes.func.isRequired,
     imagefile: PropTypes.arrayOf(
         PropTypes.shape({
             file: PropTypes.file,
             name: PropTypes.string,
-            preview: PropTypes.string,
-            size: PropTypes.number
+            preview: PropTypes.string
         })
     ),
     onChange: PropTypes.func,
