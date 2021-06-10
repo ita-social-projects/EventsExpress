@@ -2,13 +2,21 @@ import React from 'react';
 import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Module from '../../helpers';
 import ErrorMessages from '../../shared/errorMessage';
 
-const { validate } = Module;
+
+ const validate = values => {
+    const errors = {};
+     if (values.image != null && values.image.file != null && values.image.file.size < 4096) { errors.image = "Image is too small"; }
+     if (values.image === null || values.image === undefined) { errors.image = "Image is required"; }
+
+    return errors;
+}
+
 
 let ChangeAvatar = props => {
-    const { handleSubmit, pristine, submitting } = props;
+    const { handleSubmit, pristine, submitting, invalid } = props;
+    
 
     return (
         <form name="change-avatar" onSubmit={handleSubmit}>
@@ -25,7 +33,7 @@ let ChangeAvatar = props => {
                 <ErrorMessages error={props.error} className="text-center" />
             }
             <div>
-                <Button color="primary" type="submit" disabled={pristine || submitting}> Submit </Button >
+                <Button color="primary" type="submit" disabled={pristine || submitting || invalid}> Submit </Button >
             </div>
         </form>
     )    
@@ -33,5 +41,6 @@ let ChangeAvatar = props => {
 
 export default reduxForm({
     form: "change-avatar",
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(ChangeAvatar);

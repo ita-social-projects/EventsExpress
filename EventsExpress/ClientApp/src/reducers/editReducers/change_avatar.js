@@ -14,6 +14,10 @@ export const reducer = (
             return Object.assign({}, state, {
                 isSuccess: action.payload
             });
+        case changeAvatar.UPDATE:
+            return Object.assign({}, state, {
+                Update: state.Update+1
+            });
             
         default:
             return state;
