@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
+    import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderMultiselect,
@@ -19,6 +20,8 @@ import "./event-form.css";
 
 momentLocaliser(moment);
 
+const photoService = new PhotoService();
+
 class EventForm extends Component {
 
     state = { checked: this.props.initialValues.isReccurent };
@@ -30,20 +33,17 @@ class EventForm extends Component {
     }
 
     render() {
-        const { form_values, all_categories } = this.props;
+        const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
         
         if (this.props.initialValues.location != null) {
             this.props.initialValues.location.type = String(this.props.initialValues.location.type);
         }
-        
-        const photoUrl = this.props.eventId ?
-            `api/photo/GetFullEventPhoto?id=${this.props.eventId}` : null;
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
                 encType="multipart/form-data" autoComplete="off">
-                <div className="text text-2 pl-md-4 pt-md-2">
+                <div className="text text-2 pt-md-2">
                     <Field
                         id="image-field"
                         name="photo"
@@ -51,10 +51,11 @@ class EventForm extends Component {
                         type="file"
                         crop={true}
                         cropShape='rect'
-                        photoUrl={photoUrl}
+                        loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
                     />
                     <div className="mt-2">
-                        <Field name='title'
+                        <Field 
+                            name='title'
                             component={renderTextField}
                             type="input"
                             label="Title"
@@ -77,23 +78,27 @@ class EventForm extends Component {
                                 name='isReccurent'
                                 component={renderCheckbox}
                                 checked={checked}
-                                onChange={this.handleChange} />
+                                onChange={this.handleChange} 
+                            />
                         </div>
                     }
-                    {checked &&
+                    {this.props.haveReccurentCheckBox && checked &&
                         <div>
                             <div className="mt-2">
                                 <Field
                                     name="periodicity"
                                     text="Periodicity"
                                     data={periodicity}
-                                    component={renderSelectPeriodicityField} />
+                                    component={renderSelectPeriodicityField} 
+                                />
                             </div>
                             <div className="mt-2">
                                 <Field
                                     name='frequency'
                                     type="number"
-                                    component={renderTextField} />
+                                    component={renderTextField}
+                                    label="Frequency" 
+                                />
                             </div>
                         </div>
                     }
@@ -110,6 +115,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 label='From'
+                                disabled={disabledDate}
                                 component={renderDatePicker}
                             />
                         </span>
@@ -118,6 +124,7 @@ class EventForm extends Component {
                                 <Field
                                     name='dateTo'
                                     label='To'
+                                    disabled={disabledDate}
                                     minValue={form_values.dateFrom}
                                     component={renderDatePicker}
                                 />
@@ -139,8 +146,9 @@ class EventForm extends Component {
                             data={all_categories.data}
                             valueField={"id"}
                             textField={"name"}
-                            className="form-control mt-2"
-                            placeholder='#hashtags' />
+                            className="form-control"
+                            placeholder='#hashtags' 
+                        />
                     </div>
                     <Field name="location.type" component={radioLocationType} />
                     {this.props.form_values
@@ -159,17 +167,18 @@ class EventForm extends Component {
                         && this.props.form_values.location.type == enumLocationType.online &&
 
                         <div className="mt-2">
-                            <label for="url">Enter an https:// URL:</label>
+                            <label htmlFor="url">Enter an https:// URL:</label>
                             <Field
                                 name='location.onlineMeeting'
                                 component={renderTextField}
                                 type="url"
                                 label="Url"
+                                id="url"
                             />
                         </div>
                     }
                 </div>
-                <div className="row pl-md-4 my-4">
+                <div className="row my-4">
                     {this.props.children}
                 </div>
             </form>

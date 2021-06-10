@@ -3,6 +3,7 @@ import DropZoneField from '../../helpers/DropZoneField';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
+import PhotoService from '../../../services/PhotoService';
 
 
  const validate = values => {
@@ -13,6 +14,8 @@ import ErrorMessages from '../../shared/errorMessage';
     return errors;
 }
 
+
+const photoService = new PhotoService();
 
 let ChangeAvatar = props => {
     const { handleSubmit, pristine, submitting, invalid } = props;
@@ -26,7 +29,7 @@ let ChangeAvatar = props => {
                 type="file"
                 crop={true}
                 cropShape='round'
-                photoUrl={`api/photo/GetUserPhoto?id=${props.initialValues.userId}`}
+                loadImage={() => photoService.getUserPhoto(props.initialValues.userId)}
             />
             {
                 props.error &&
