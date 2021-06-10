@@ -28,9 +28,11 @@ export class CustomAvatar extends Component {
     componentDidMount() {
         this.uploadPhoto()
     }
-    componentWillUpdate() {
-        this.uploadPhoto()
+    componentDidUpdate(prevProps) {
+        if (this.props.changeAvatarCounter !== prevProps.changeAvatarCounter)
+            this.uploadPhoto();
     }
+
     componentWillUnmount() {
         URL.revokeObjectURL(this.state.avatarImage);
     }
@@ -57,7 +59,7 @@ export class CustomAvatar extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        change_avatar: state.change_avatar.Update
+        changeAvatarCounter: state.change_avatar.Update
     }
 };
 

@@ -7,10 +7,8 @@ import ErrorMessages from '../../shared/errorMessage';
 
  const validate = values => {
     const errors = {};
-    if (values.image != null && values.image.file != null && values.image.file.size < 4096)
-         errors.image = "Image is too small";
-     if (values.image === null || values.image === undefined)
-         errors.image = "Image is required";
+     if (values.image != null && values.image.file != null && values.image.file.size < 4096) { errors.image = "Image is too small"; }
+     if (values.image === null || values.image === undefined) { errors.image = "Image is required"; }
 
     return errors;
 }
