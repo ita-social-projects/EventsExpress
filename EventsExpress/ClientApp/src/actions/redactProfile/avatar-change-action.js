@@ -20,16 +20,17 @@ export default function change_avatar(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setAvatarSuccess(true));
-        dispatch(updateAvatar(response));
+        dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar is successfully updated'));
         return Promise.resolve();
     }
 }
 
-function updateAvatar(data) {
+
+
+export function updateAvatar() {
     return {
         type: changeAvatar.UPDATE,
-        payload: data
     };
 }
 

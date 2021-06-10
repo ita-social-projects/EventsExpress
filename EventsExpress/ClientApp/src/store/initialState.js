@@ -47,6 +47,7 @@ const initialState = {
     change_avatar: {
         isPending: false,
         isSuccess: false,
+        Update:0,
     },
     editUsername: {
         isEditUsernamePending: false,
