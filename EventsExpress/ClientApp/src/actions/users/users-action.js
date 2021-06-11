@@ -10,6 +10,7 @@ export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
 export const GET_USERS_COUNT = "GET_USERS_COUNT";
 export const GET_BLOCKED_USERS_COUNT = "GET_BLOCKED_USERS_COUNT";
 export const GET_UNBLOCKED_USERS_COUNT = "GET_UNBLOCKED_USERS_COUNT";
+export const CHANGE_STATUS = "CHANGE_STATUS";
 
 const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/usersHub`,
     { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
@@ -24,6 +25,14 @@ export function initialConnection() {
                 dispatch(getCount(numberOfUsers));
                 return Promise.resolve();
             });
+            hubConnection.on("CountBlockedUsers", (numberOfUsers) => {
+                dispatch(getBlockedCount(numberOfUsers));
+                return Promise.resolve();
+            });
+            hubConnection.on("CountUnblockedUsers", (numberOfUsers) => {
+                dispatch(getUnblockedCount(numberOfUsers));
+                return Promise.resolve();
+            });
         } catch(err) {
             console.error(err.toString());
             return Promise.reject();
@@ -31,8 +40,10 @@ export function initialConnection() {
     }
 }
 
-export async function closeConnection() {
-    await hubConnection.stop();
+export function closeConnection() {
+    return async () => {
+        await hubConnection.stop();
+    }
 }
 
 export function get_count() {
@@ -50,7 +61,7 @@ export function get_count() {
 
 export function get_count_of_blocked() {
     return async dispatch => {
-        const response = await api_serv.getCount();
+        const response = await api_serv.getCountOfBlocked();
         if(!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -63,7 +74,7 @@ export function get_count_of_blocked() {
 
 export function get_count_of_unblocked() {
     return async dispatch => {
-        const response = await api_serv.getCount();
+        const response = await api_serv.getCountOfUnblocked();
         if(!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -85,6 +96,12 @@ export function get_users(filters) {
         let jsonRes = await response.json();
         dispatch(getUsers(jsonRes));
         return Promise.resolve();
+    }
+}
+
+export function change_status(status) {
+    return dispatch => {
+        dispatch(changeStatus(status));
     }
 }
 
@@ -139,6 +156,13 @@ function getUnblockedCount(data) {
 function getUsers(data) {
     return {
         type: GET_USERS_SUCCESS,
+        payload: data
+    }
+}
+
+function changeStatus(data) {
+    return {
+        type: CHANGE_STATUS,
         payload: data
     }
 }

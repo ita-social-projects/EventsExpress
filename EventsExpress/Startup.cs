@@ -6,8 +6,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -17,6 +15,7 @@ using EventsExpress.Db.EF;
 using EventsExpress.Filters;
 using EventsExpress.Hubs;
 using EventsExpress.Mapping;
+using EventsExpress.NotificationHandlers;
 using EventsExpress.Policies;
 using EventsExpress.Validation;
 using FluentValidation;
@@ -41,9 +40,6 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace EventsExpress
 {
-    using Microsoft.AspNetCore.Identity;
-    using NotificationHandlers;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)

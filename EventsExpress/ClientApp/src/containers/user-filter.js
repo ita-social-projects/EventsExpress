@@ -1,12 +1,36 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UsersFilters from '../components/users/UsersFilters';
-import { get_users } from '../actions/users/users-action';
+import {
+    get_users,
+    get_count,
+    get_count_of_blocked,
+    get_count_of_unblocked,
+    initialConnection,
+    closeConnection,
+    change_status } from '../actions/users/users-action';
 import history from '../history';
+
+const BLOCKED_USERS = "BLOCKED_USERS";
+const ACTIVE_USERS = "ACTIVE_USERS";
+
 class UsersFilterWrapper extends Component {
 
+    componentDidMount() {
+        this.props.get_count();
+        this.props.get_count_of_blocked();
+        this.props.get_count_of_unblocked();
+        this.props.initialConnection();
+    }
+
+    componentWillUnmount = () => {
+        this.props.closeConnection();
+    }
+
     onSubmit = (filters) => {
-        var search_string = '?page=1';
+        let search_string = '?page=1';
+        let status;
+
         if (filters != null) {
             if (filters.search != null) {
                 search_string += '&keyWord=' + filters.search;
@@ -14,35 +38,84 @@ class UsersFilterWrapper extends Component {
             if (filters.role != null) {
                 search_string += '&Role=' + filters.role;
             }
-            if (filters.status == 'blocked') {
-                search_string += '&Blocked=' + true;
+
+            switch (filters.status) {
+                case 'blocked':
+                    search_string += '&Blocked=' + true;
+                    this.props.get_count_of_blocked();
+                    status = BLOCKED_USERS;
+                    break;
+                case 'active':
+                    search_string += '&Unblocked=' + true;
+                    this.props.get_count_of_unblocked();
+                    status = ACTIVE_USERS;
+                    break;
+                default:
+                    search_string += '&All=' + true;
+                    this.props.get_count();
+                    status = null;
             }
-            if (filters.status == 'unblocked') {
-                search_string += '&Unblocked=' + true;
-            }
-            if (filters.status == 'all') {
-                search_string += '&All=' + true;
-            }
+
+            this.props.changeStatus(status);
+
             if (filters.PageSize != null) {
                 search_string += '&PageSize=' + filters.PageSize;
             }
         }
+
         this.props.search(search_string);
         history.push(window.location.pathname + search_string);
     }
 
+    renderCount = (status) => {
+        const { count, countOfBlocked, countOfUnblocked } = this.props;
+        let countElement, label, total;
+
+        switch(status)
+        {
+            case ACTIVE_USERS:
+                label = "Active users:";
+                total = countOfUnblocked;
+                break;
+            case BLOCKED_USERS:
+                label = "Blocked users:";
+                total = countOfBlocked;
+                break;
+            default:
+                label = "All users:";
+                total = count;
+        }
+        
+        return <>
+            <span className="ml-2">{label} {total}</span><br/>
+        </>
+    }
+    
     render() {
+        const { status } = this.props;
+
         return <>
             <UsersFilters onSubmit={this.onSubmit} />
+            {this.renderCount(status)}
         </>
     }
 }
 
 const mapStateToProps = (state) => ({
+    status: state.users.status,
+    count: state.users.count,
+    countOfBlocked: state.users.countOfBlocked,
+    countOfUnblocked: state.users.countOfUnblocked
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        changeStatus: (status) => dispatch(change_status(status)),
+        closeConnection: () => dispatch(closeConnection()),
+        initialConnection: () => dispatch(initialConnection()),
+        get_count: () => dispatch(get_count()),
+        get_count_of_blocked: () => dispatch(get_count_of_blocked()),
+        get_count_of_unblocked: () => dispatch(get_count_of_unblocked()),
         search: (values) => dispatch(get_users(values))
     }
 };

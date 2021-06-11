@@ -65,6 +65,7 @@ const initialState = {
         data: []
     },
     users: {
+        status: null,
         count: null,
         countOfBlocked: null,
         countOfUnblocked: null,
