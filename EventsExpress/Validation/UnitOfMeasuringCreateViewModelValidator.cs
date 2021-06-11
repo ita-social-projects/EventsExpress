@@ -4,11 +4,11 @@ using FluentValidation;
 
 namespace EventsExpress.Validation
 {
-    public class UnitOfMeasuringViewModelValidator : AbstractValidator<UnitOfMeasuringViewModel>
+    public class UnitOfMeasuringCreateViewModelValidator : AbstractValidator<UnitOfMeasuringCreateViewModel>
     {
         private readonly IUnitOfMeasuringService _unitOfMeasuringService;
 
-        public UnitOfMeasuringViewModelValidator(IUnitOfMeasuringService unitOfMeasuringService)
+        public UnitOfMeasuringCreateViewModelValidator(IUnitOfMeasuringService unitOfMeasuringService)
         {
             _unitOfMeasuringService = unitOfMeasuringService;
 
@@ -16,12 +16,12 @@ namespace EventsExpress.Validation
 
             RuleFor(x => x.ShortName).NotEmpty().Length(1, 5).WithMessage("Short Name needs to consist of from 1 to 5 characters");
 
-            RuleFor(x => x.Category).NotEmpty().WithMessage("Category must be selected");
+            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("Category must be selected");
+            RuleFor(x => x.CategoryId).NotNull();
 
             RuleFor(x => x)
-                .Must(item => !_unitOfMeasuringService.ExistsByName(item.UnitName, item.ShortName))
+                .Must(item => !_unitOfMeasuringService.ExistsByItems(item.UnitName, item.ShortName, item.CategoryId))
                .WithMessage("The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!");
-
             RuleFor(x => x.UnitName).Cascade(CascadeMode.Stop)
                 .Matches(@"^[\p{L} ]+$")
                 .WithMessage("Unit name needs to consist only letters or whitespaces");

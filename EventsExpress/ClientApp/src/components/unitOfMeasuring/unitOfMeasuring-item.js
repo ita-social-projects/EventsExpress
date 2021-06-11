@@ -18,7 +18,7 @@ export default class UnitOfMeasuringItem extends Component {
         return (<>
             <td>
                 <i className="mr-1"></i>
-                {item.categoryOfMeasuring}
+                {item.category.categoryName}
             </td>
             <td>
                 <i className="fas fa-hashtag mr-1"></i>

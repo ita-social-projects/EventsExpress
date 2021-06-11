@@ -9,7 +9,8 @@ namespace EventsExpress.Db.Configuration
         public void Configure(EntityTypeBuilder<CategoryOfMeasuring> builder)
         {
             builder.HasMany(c => c.UnitOfMeasurings)
-           .WithOne(e => e.Category);
+           .WithOne(u => u.Category)
+           .HasForeignKey(u => u.CategoryId);
         }
     }
 }

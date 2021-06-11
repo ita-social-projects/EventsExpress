@@ -33,16 +33,5 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAll() =>
             Ok(_mapper.Map<IEnumerable<CategoryOfMeasuringViewModel>>(_categoryOfMeasuringService.GetAllCategories()));
-
-        /// <summary>
-        /// This method have to return category.
-        /// </summary>
-        /// <param name="id">Param id defines the category identifier.</param>
-        /// <returns>The method returns an category by identifier.</returns>
-        /// <response code="200">Return CategoryInfo model.</response>
-        [AllowAnonymous]
-        [HttpGet("{id:Guid}")]
-        public IActionResult GetById(Guid id) =>
-            Ok(_mapper.Map<ContactAdminViewModel>(_categoryOfMeasuringService.GetCategoryOfMeasuringById(id)));
     }
 }

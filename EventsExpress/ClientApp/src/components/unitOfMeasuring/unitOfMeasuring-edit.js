@@ -30,7 +30,7 @@ class UnitOfMeasuringEdit extends Component {
 
     categoriesList = (
         this.props.all_categories.data.map((item) =>
-            <option value={item.categoryName} key={item.id}>
+            <option value={item.id} key={item.id}>
                     {item.categoryName}
             </option>
             )
@@ -58,7 +58,7 @@ class UnitOfMeasuringEdit extends Component {
                             fullWidth={true}
                             component={renderSelectField}
                             className=" mw-100"
-                            name="categoryOfMeasuring"
+                            name="category"
                             label='Category'
                         >
                             <option aria-label="None" value="" />

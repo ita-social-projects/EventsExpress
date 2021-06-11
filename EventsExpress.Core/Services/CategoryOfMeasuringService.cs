@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -30,18 +29,6 @@ namespace EventsExpress.Core.Services
                      CategoryName = x.CategoryName,
                  })
                 .OrderBy(category => category.CategoryName));
-        }
-
-        public CategoryOfMeasuringDto GetCategoryOfMeasuringById(Guid id)
-        {
-            var entity = Context.CategoriesOfMeasurings.Find(id);
-
-            if (entity == null)
-            {
-                return new CategoryOfMeasuringDto();
-            }
-
-            return Mapper.Map<CategoryOfMeasuring, CategoryOfMeasuringDto>(entity);
         }
     }
 }

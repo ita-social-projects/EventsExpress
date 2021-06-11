@@ -18,6 +18,6 @@ namespace EventsExpress.Core.IServices
 
         Task Delete(Guid id);
 
-        bool ExistsByName(string unitName, string shortName);
+        bool ExistsByItems(string unitName, string shortName, Guid categoryId);
     }
 }

@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ServiceTests
 {
     [TestFixture]
-    public class UnitOfMeasuringViewModelValidatorTests : TestInitializer
+    public class UnitOfMeasuringCreateViewModelValidatorTests : TestInitializer
     {
         private const string ExistedUnitOfMeasuring = "The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!";
         private const string CountOfCharactersUnitName = "Unit Name needs to consist of from 5 to 20 characters";
@@ -21,26 +21,28 @@ namespace EventsExpress.Test.ServiceTests
         private readonly string existedShortName = "Ex/SN";
         private readonly string notExistedUnitName = "Not Existed Unit Name";
         private readonly string notExistedShortName = "N/SN";
+        private readonly Guid categoryId = Guid.NewGuid();
 
-        private UnitOfMeasuringViewModelValidator unitOfMeasuringViewModelValidator;
+        private UnitOfMeasuringCreateViewModelValidator unitOfMeasuringViewModelValidator;
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
             var mockUnitService = new Mock<IUnitOfMeasuringService>();
-            unitOfMeasuringViewModelValidator = new UnitOfMeasuringViewModelValidator(mockUnitService.Object);
-            mockUnitService.Setup(x => x.ExistsByName(
+            unitOfMeasuringViewModelValidator = new UnitOfMeasuringCreateViewModelValidator(mockUnitService.Object);
+            mockUnitService.Setup(x => x.ExistsByItems(
              It.Is<string>(i => i == existedUnitName),
-             It.Is<string>(i => i == existedShortName))).Returns(true);
+             It.Is<string>(i => i == existedShortName),
+             It.Is<Guid>(i => i == categoryId))).Returns(true);
         }
 
         [Test]
         [Category("Existing OR Not Existing Unit Of Measuring")]
         public void ShoudHaveError_ExistingUnitOfMeasuring()
         {
-            UnitOfMeasuringViewModel existedModel = new UnitOfMeasuringViewModel
-            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName };
+            UnitOfMeasuringCreateViewModel existedModel = new UnitOfMeasuringCreateViewModel
+            { Id = Guid.NewGuid(), UnitName = existedUnitName, ShortName = existedShortName, CategoryId = categoryId };
             var result = unitOfMeasuringViewModelValidator.TestValidate(existedModel);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(ExistedUnitOfMeasuring);
         }
@@ -49,15 +51,15 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Existing OR Not Existing Unit Of Measuring")]
         public void ShoudNotHaveError_NotExistingUnitOfMeasuring()
         {
-            UnitOfMeasuringViewModel notExistedModel = new UnitOfMeasuringViewModel
-            { Id = Guid.NewGuid(), UnitName = notExistedUnitName, ShortName = notExistedShortName };
+            UnitOfMeasuringCreateViewModel notExistedModel = new UnitOfMeasuringCreateViewModel
+            { Id = Guid.NewGuid(), UnitName = notExistedUnitName, ShortName = notExistedShortName, CategoryId = categoryId };
             var result = unitOfMeasuringViewModelValidator.TestValidate(notExistedModel);
             result.ShouldNotHaveValidationErrorFor(x => x);
         }
 
         [TestCaseSource(typeof(CorrectShortName))]
         [Category("Correct Short Name")]
-        public void ShoudNotHaveError_CorrectShortName(UnitOfMeasuringViewModel model)
+        public void ShoudNotHaveError_CorrectShortName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.ShortName);
@@ -65,7 +67,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(CorrectUnitName))]
         [Category("Correct Unit Name")]
-        public void ShoudNotHaveError_CorrectUnitName(UnitOfMeasuringViewModel model)
+        public void ShoudNotHaveError_CorrectUnitName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.UnitName);
@@ -73,7 +75,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(InCorrectLengthUnitName))]
         [Category("InCorrect Unit Name")]
-        public void ShoudHaveError_InCorrectLengthUnitName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_InCorrectLengthUnitName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(CountOfCharactersUnitName);
@@ -81,7 +83,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(LetterAndCharactershUnitName))]
         [Category("InCorrect Unit Name")]
-        public void ShoudHaveError_LetterAndCharactersUnitName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_LetterAndCharactersUnitName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.UnitName).WithErrorMessage(OnlyCharactersUnitName);
@@ -89,7 +91,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(LittleAndBigCharactershUnitName))]
         [Category("InCorrect Unit Name")]
-        public void ShoudHaveError_LittleAndBigCharactersUnitName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_LittleAndBigCharactersUnitName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.UnitName)
@@ -99,7 +101,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(EmptyORManyLettersShortName))]
         [Category("InCorrect Short Name")]
-        public void ShoudHaveError_EmptyOrManyLettersShortName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_EmptyOrManyLettersShortName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
@@ -108,7 +110,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(DifferentCharactersSlashShortName))]
         [Category("InCorrect Short Name")]
-        public void ShoudHaveError_DifferentCharactersSlashShortName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_DifferentCharactersSlashShortName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
@@ -117,7 +119,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(DifferentCharactersSlashLengthShortName))]
         [Category("InCorrect Short Name")]
-        public void ShoudHaveError_DifferentCharactersSlashLengthShortName(UnitOfMeasuringViewModel model)
+        public void ShoudHaveError_DifferentCharactersSlashLengthShortName(UnitOfMeasuringCreateViewModel model)
         {
             var result = unitOfMeasuringViewModelValidator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.ShortName)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -38,9 +39,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Create process failed.</response>
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] UnitOfMeasuringViewModel model)
+        public async Task<IActionResult> Create([FromBody] UnitOfMeasuringCreateViewModel model)
         {
-                UnitOfMeasuringDto dTO = _mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model);
+                UnitOfMeasuringDto dTO = _mapper.Map<UnitOfMeasuringCreateViewModel, UnitOfMeasuringDto>(model);
                 var result = await _unitOfMeasuringService.Create(dTO);
 
                 return Ok(result);
@@ -57,14 +58,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit process failed.</response>
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringViewModel model)
+        public async Task<IActionResult> Edit([FromBody] UnitOfMeasuringCreateViewModel model)
         {
             if (model == null)
             {
                 throw new EventsExpressException("Null object");
             }
 
-            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(model));
+            var result = await _unitOfMeasuringService.Edit(_mapper.Map<UnitOfMeasuringCreateViewModel, UnitOfMeasuringDto>(model));
 
             return Ok(result);
         }

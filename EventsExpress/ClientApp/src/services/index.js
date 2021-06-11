@@ -12,6 +12,8 @@ import NotificationTypeService from './NotificationTypeService'
 import AccountService from './AccountService';
 import NotificationTemplateService from "./NotificationTemplateService";
 import TrackService from './TrackService'
+import UnitOfMeasuringService from './unitOfMeasuringService'
+import CategoryOfMeasuringService from './CategoryOfMeasuringService'
 
 export {
     AuthenticationService,
@@ -27,5 +29,8 @@ export {
     AccountService,
 	TrackService,
     NotificationTemplateService,
-    ContactAdminService
+    ContactAdminService,
+    UnitOfMeasuringService,
+    CategoryOfMeasuringService
+
 };

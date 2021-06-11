@@ -17,6 +17,7 @@ namespace EventsExpress.Test.ServiceTests
         private CategoryOfMeasuringService categoryOfMeasuringService;
         private UnitOfMeasuringService service;
         private UnitOfMeasuringDto correctUnitOfMeasuringDTO;
+        private UnitOfMeasuring unitOfMeasuring;
         private CategoryOfMeasuring categoryOfMeasuring = new CategoryOfMeasuring
         {
             Id = Guid.NewGuid(),
@@ -49,7 +50,6 @@ namespace EventsExpress.Test.ServiceTests
                 Id = unitOfMeasuringDTO.Id,
                 UnitName = unitOfMeasuringDTO.UnitName,
                 ShortName = unitOfMeasuringDTO.ShortName,
-
                 Category = categoryOfMeasuring,
                 IsDeleted = unitOfMeasuringDTO.IsDeleted,
             };
@@ -62,7 +62,6 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UnitName = CorrectUnitName,
                 ShortName = CorrectShortName,
-
                 Category = categoryOfMeasuringDto,
                 IsDeleted = false,
             };
@@ -73,14 +72,18 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             InitTestData();
-            UnitOfMeasuring correctUnitOfMeasuring = FromDTOToUnit(correctUnitOfMeasuringDTO);
-            Context.UnitOfMeasurings.Add(correctUnitOfMeasuring);
-            Context.SaveChanges();
-            UnitOfMeasuring deletedUnitOfMeasuring = FromDTOToUnit(EditingUnit.DeletedUnitOfMeasuringDTO);
-            Context.UnitOfMeasurings.Add(deletedUnitOfMeasuring);
-            Context.SaveChanges();
             categoryOfMeasuringService = new CategoryOfMeasuringService(Context, MockMapper.Object);
             service = new UnitOfMeasuringService(Context, MockMapper.Object, categoryOfMeasuringService);
+            unitOfMeasuring = new UnitOfMeasuring
+            {
+                UnitName = "RandomUnitName",
+                ShortName = "RandomShortName",
+                CategoryId = Guid.NewGuid(),
+            };
+            UnitOfMeasuring correctUnitOfMeasuring = FromDTOToUnit(correctUnitOfMeasuringDTO);
+            Context.UnitOfMeasurings.Add(correctUnitOfMeasuring);
+            Context.UnitOfMeasurings.Add(unitOfMeasuring);
+            Context.SaveChanges();
             MockMapper.Setup(u => u.Map<UnitOfMeasuringDto, UnitOfMeasuring>(It.IsAny<UnitOfMeasuringDto>()))
               .Returns((UnitOfMeasuringDto e) => e == null ?
               null :
@@ -101,10 +104,8 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Get All")]
         public void Get_ALL_CorrectData()
         {
-            int expectedCount = 1;
             var res = service.GetAll();
             Assert.That(res.Any(item => item.Id == correctUnitOfMeasuringDTO.Id), Is.True);
-            Assert.That(res.Count(), Is.EqualTo(expectedCount));
         }
 
         [Test]
@@ -123,7 +124,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UnitName = CreateUnitName,
                 ShortName = CreateShortName,
-                Category = categoryOfMeasuringService.GetCategoryOfMeasuringById(id),
+                Category = categoryOfMeasuringDto,
                 IsDeleted = false,
             };
 
@@ -173,11 +174,37 @@ namespace EventsExpress.Test.ServiceTests
             Assert.Throws<EventsExpressException>(() => service.GetById(expectedId));
         }
 
-        [TestCaseSource(typeof(ExistingUnitByName))]
-        [Category("Exist By Name")]
-        public void ExistsByName_Names_BoolReturned(string expectedUnitName, string expectedShortName, IResolveConstraint constraint)
+        [Test]
+        [Category("Exists By Items")]
+        public void Get_ExistingItems_ReturnTrue()
         {
-            Assert.That(service.ExistsByName(expectedUnitName, expectedShortName), constraint);
+            var res = service.ExistsByItems(unitOfMeasuring.UnitName, unitOfMeasuring.ShortName, unitOfMeasuring.CategoryId);
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void Get_NotExistingByUnitName_ReturnFalse()
+        {
+            var res = service.ExistsByItems("randomUnitName", unitOfMeasuring.ShortName, unitOfMeasuring.CategoryId);
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void Get_NotExistinByShortName_ReturnFalse()
+        {
+            var res = service.ExistsByItems(unitOfMeasuring.UnitName, "randomShortName", unitOfMeasuring.CategoryId);
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
+        public void Get_NotExistingByCategory_ReturnFalse()
+        {
+            var res = service.ExistsByItems(unitOfMeasuring.UnitName, unitOfMeasuring.ShortName, Guid.Empty);
+
+            Assert.IsFalse(res);
         }
     }
 }

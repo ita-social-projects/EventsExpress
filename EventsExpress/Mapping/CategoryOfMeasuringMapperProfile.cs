@@ -20,7 +20,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.UnitOfMeasurings, opt => opt.MapFrom(src => src.UnitOfMeasuring));
 
             CreateMap<CategoryOfMeasuringDto, CategoryOfMeasuringViewModel>()
-                  .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => src.UnitOfMeasuring));
 
