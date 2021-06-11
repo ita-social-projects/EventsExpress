@@ -4,23 +4,22 @@ import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import './eventSchedule.css'
 
-
-export class EventSchedulePopover extends Component {
+export default class EventSchedulePopover extends Component {
 
     state = {
-        anchorEl: false,
+        anchorEl: null,
         isFocused: false,
     }
     
     handlePopover = (event) => {
         this.setState({
-            anchorEl: true
+            anchorEl: event.currentTarget
         });
     }
 
     handlePopoverClose = () => {
         this.setState({
-            anchorEl: false
+            anchorEl: null
         });
     }
     
@@ -29,7 +28,6 @@ export class EventSchedulePopover extends Component {
     }
 
     render() {
-
         return (
             <>
                 <Button
@@ -37,10 +35,10 @@ export class EventSchedulePopover extends Component {
                     style={(this.state.isFocused) ?
                         { minWidth: "2px", outlineStyle: "none" } :
                         { minWidth: "2px" }} onClick={this.handlePopover}>
-                    <i class="fas fa-info-circle"></i>
+                    <i className="fas fa-info-circle"></i>
                 </Button>
                 <Popover
-                    open={this.state.anchorEl}
+                    open={Boolean(this.state.anchorEl)}
                     anchorEl={this.state.anchorEl}
                     onClose={this.handlePopoverClose}
                     anchorOrigin={{
@@ -48,14 +46,14 @@ export class EventSchedulePopover extends Component {
                         horizontal: 'center',
                     }}
                 >
-                    <Typography style={{ maxWidth: "350px", padding: "15px" }}>
-                        Click Create Without Editing to create the event without editing.
-                        To create the event with editing you can choose second option.
-                        Click Cancel Once to cancel the next event, to cancel all events click Cancel.</Typography>
+                    <Typography style={{ maxWidth: "500px", padding: "15px" }}>
+                        Click "Create without editing" to create the event without editing.<br/>
+                        Click "Create with editing" to create the event with editing.<br/>
+                        Click "Cancel Once" to cancel the next event.<br/>
+                        Click "Cancel" to cancel all events.<br/>
+                    </Typography>
                 </Popover>
             </>
         );
     }
 }
-
-export default EventSchedulePopover

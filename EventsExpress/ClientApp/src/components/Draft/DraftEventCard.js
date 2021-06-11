@@ -60,7 +60,7 @@ export default class DraftEventCard extends Component {
                 <Card
                     className={classes.card}
                 >
-                    <Link to={`/editEvent/${id}`} class="text-dark">
+                    <Link to={`/editEvent/${id}`} className="text-dark">
                         <CardHeader
                             avatar={
                                 <Button title={owners[0].username} className="btn-custom">

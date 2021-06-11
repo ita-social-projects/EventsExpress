@@ -18,7 +18,7 @@ export default function edit_event_from_parent(data) {
         }
         dispatch(setEventFromParentSuccess(true));
         let jsonRes  = await response.json();
-        dispatch(setSuccessAllert('Your event was created!'));
+        dispatch(setSuccessAllert('Your event has been successfully created!'));
         dispatch(history.push(`/event/${jsonRes.id}/1`));
         return Promise.resolve();
     }

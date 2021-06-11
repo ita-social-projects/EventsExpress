@@ -5,11 +5,11 @@ import { MdCloudUpload } from "react-icons/md";
 const Placeholder = ({ getInputProps, getRootProps, error, touched }) => {
     const iconStyle = {
         fontSize: 100,
-        paddingTop: 85
+        maxWidth: 40,
+        paddingRight: 10
     }
-    const spanStyle = {
-
-    }
+    const spanStyle = {}
+    
     if (error && touched) {
         iconStyle.color = "#f44336";
         spanStyle.color = "#f44336";
@@ -21,8 +21,10 @@ const Placeholder = ({ getInputProps, getRootProps, error, touched }) => {
             className={`placeholder-preview ${error && touched ? "has-error" : ""}`}
         >
             <input {...getInputProps()} />
-            <MdCloudUpload style={iconStyle} />
-            <span style={spanStyle}>Click or drag image file to this area to upload.</span>
+            <div className='cursor-pointer d-flex align-items-center justify-content-center'>
+                <MdCloudUpload style={iconStyle} />
+                <span style={spanStyle}>Click or drag image file to this area to upload</span>
+            </div>
         </div>
     );
 }
