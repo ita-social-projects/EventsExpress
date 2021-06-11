@@ -219,7 +219,7 @@ namespace EventsExpress.Test.ServiceTests
                 await service.Authenticate(existingEmail, invalidPassword);
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains("Incorrect login or password1"));
+            Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
 

@@ -102,7 +102,7 @@ namespace EventsExpress.Core.Services
 
             if (!VerifyPassword(account.AuthLocal, password))
             {
-                throw new EventsExpressException("Incorrect login or password1");
+                throw new EventsExpressException("Incorrect login or password");
             }
 
             // authentication successful so generate jwt and refresh tokens
