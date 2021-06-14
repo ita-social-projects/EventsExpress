@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import CustomAvatar from '../avatar/custom-avatar';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import { connect } from 'react-redux';
-import IconButton from "@material-ui/core/IconButton";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import { renderPeriod } from './render-period'
@@ -14,45 +11,37 @@ import { useStyles } from './card-style-const'
 import SelectiveForm from './selective-form'
 import '../layout/colorlib.css';
 import get_event from '../../actions/event/event-item-view-action';
-import {eventDefaultImage} from "../../constants/eventDefaultImage";
+import { eventDefaultImage } from "../../constants/eventDefaultImage";
+import PhotoService from '../../services/PhotoService';
+
+const photoService = new PhotoService();
 
 class EventScheduleItemView extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            eventImage: eventDefaultImage
+        }
+    }
+
+    componentDidMount() {
+        photoService.getPreviewEventPhoto(this.props.eventSchedule.data.eventId).then(
+            eventPreviewImage => {
+                if (eventPreviewImage != null) {
+                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                }
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        URL.revokeObjectURL(this.state.eventImage);
+    }
 
     componentWillMount() {
         this.props.get_event(this.props.eventSchedule.data.eventId);
     }
-
-    renderUsers = arr => {
-        return arr.map(x => (
-            <Link to={'/user/' + x.id} className="btn-custom">
-                <div className="d-flex align-items-center border-bottom">
-                    <CustomAvatar size="little" photoUrl={x.photoUrl} name={x.username} />
-                    <div>
-                        <h5>{x.username}</h5>
-                        {'Age: ' + this.getAge(x.birthday)}
-                    </div>
-                </div>
-            </Link>)
-        );
-    }
-
-    renderOwner = user => (
-        <Link to={'/user/' + user.id} className="btn-custom">
-            <div className="d-flex align-items-center border-bottom">
-                <div className='d-flex flex-column'>
-                    <IconButton className="text-warning" size="small" disabled >
-                        <i class="fas fa-crown"></i>
-                    </IconButton>
-                    <CustomAvatar size="little" userId={user.id} name={user.username} />
-                </div>
-                <div>
-                    <h5>{user.username}</h5>
-                    {'Age: ' + this.getAge(user.birthday)}
-                </div>
-            </div>
-        </Link>
-    )
-
 
     render() {
 
@@ -72,17 +61,13 @@ class EventScheduleItemView extends Component {
         return <>
             <div className="container-fluid mt-1">
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                    <Card
-                        className={classes.card}
-                    >
-                        <CardHeader
-                            subheader={`Reccurent event ${period}`}
-                        />
+                    <Card className={classes.card}>
+                        <CardHeader subheader={`Reccurent event ${period}`}/>
                         <CardMedia
                             className={classes.media}
                             title={title}
                         >
-                            <img src={eventDefaultImage}
+                            <img src={this.state.eventImage}
                                  id={"eventPreviewPhotoImg" + eventId} alt="Event"
                                  className="w-100" />
                         </CardMedia>
@@ -101,7 +86,7 @@ class EventScheduleItemView extends Component {
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
                     {isMyEvent &&                        
-                        <SelectiveForm eventId={eventId} event={this.props.event} />
+                        <SelectiveForm />
                     }
                 </div>
             </div>
@@ -109,12 +94,8 @@ class EventScheduleItemView extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    eventSchedule: state.eventSchedule,
-});
-
 const mapDispatchToProps = (dispatch) => ({
     get_event: (id) => dispatch(get_event(id))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemView);
+export default connect(null, mapDispatchToProps)(EventScheduleItemView);

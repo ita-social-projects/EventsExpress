@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import EventSchedule from './eventSchedule-item';
 
-const limit = 2;
-const pageCount = 3;
-
 class EventSchedulesList extends Component {
 
     renderItems = arr =>

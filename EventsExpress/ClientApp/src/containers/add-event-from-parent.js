@@ -1,36 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropdown from 'react-bootstrap/Dropdown'
-import { reset } from 'redux-form';
 import EventScheduleModal from '../components/eventSchedule/eventSchedule-modal'
-import add_copy_event, {
-    setCopyEventPending,
-    setCopyEventSuccess
-}
-    from '../actions/event/event-copy-without-edit-action';
+import add_copy_event from '../actions/event/event-copy-without-edit-action';
 
 class AddFromParentEventWrapper extends Component {
     constructor() {
         super()
         this.state = {
-            show: false,
+            show: false
         };
-        this.cancelHandler = this.cancelHandler.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
-    }
-
-    componentDidUpdate = () => {
-
-        if (!this.props.add_copy_event_status.copyEventError &&
-            this.props.add_copy_event_status.isCopyEventSuccess) {
-            this.props.resetEvent();
-            this.props.reset();
-        }
     }
 
     cancelHandler = () => {
         this.setState({
-            show: false,
+            show: false
         });
     }
 
@@ -42,18 +26,17 @@ class AddFromParentEventWrapper extends Component {
 
     submitHandler = () => {
         this.setState({
-            show: false,
+            show: false
         });
-        this.props.add_copy_event(this.props.initialValues.id);
+        this.props.add_copy_event(this.props.eventId);
     }
 
     render() {
-
         return <>
             <Dropdown.Item onClick={this.handleClick}>Create without editing</Dropdown.Item>
             <EventScheduleModal
                 cancelHandler={this.cancelHandler}
-                message="Are you sure to create the event without editing?"
+                message="Are you sure you want to create the event without editing?"
                 show={this.state.show}
                 submitHandler={this.submitHandler} />
         </>
@@ -61,19 +44,13 @@ class AddFromParentEventWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user_id: state.user.id,
     add_copy_event_status: state.add_copy_event,
-    initialValues: state.event.data,
+    eventId: state.event.data.id
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        add_copy_event: (data) => dispatch(add_copy_event(data)),
-        resetEvent: () => dispatch(reset('event-form')),
-        reset: () => {
-            dispatch(setCopyEventPending(true));
-            dispatch(setCopyEventSuccess(false));
-        }
+        add_copy_event: (data) => dispatch(add_copy_event(data))
     }
 };
 

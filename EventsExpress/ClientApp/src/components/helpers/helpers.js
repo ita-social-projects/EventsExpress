@@ -25,7 +25,6 @@ export const radioButton = ({ input, labels, ...rest }) => (
 )
 export const radioLocationType = ({ input, meta: { error, touched }, ...rest }) => (
     <FormControl>
-
         <RadioGroup {...input} {...rest}>
             <FormControlLabel value="0" control={<Radio />} label="Map" />
             <FormControlLabel value="1" control={<Radio />} label="Online" />
@@ -162,6 +161,12 @@ export const validateEventForm = values => {
         values.isPublic = false;
     }
 
+    if (values.isReccurent) {
+        if (!values.frequency) {
+            values.frequency = 0;
+        }
+    }
+
     if (!values.maxParticipants) {
         values.maxParticipants = 2147483647;
     }
@@ -227,7 +232,6 @@ export const renderSelectPeriodicityField = ({
                 id: 'age-native-simple'
             }}
         >
-            <option value="" />
             {data.map(x => <option key={x.value} value={x.value}>{x.label}</option>)}
         </Select>
         {renderFieldError({ touched, error })}

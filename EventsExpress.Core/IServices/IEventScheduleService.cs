@@ -11,6 +11,8 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> CancelEvents(Guid eventId);
 
+        Task<Guid> Delete(Guid id);
+
         Task<Guid> CancelNextEvent(Guid eventId);
 
         Task<Guid> Edit(EventScheduleDto eventScheduleDTO);

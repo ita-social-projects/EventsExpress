@@ -8,16 +8,13 @@ class CancelAllEventsWrapper extends Component {
     constructor() {
         super()
         this.state = {
-            show: false,
+            show: false
         };
-        this.cancelHandler = this.cancelHandler.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
     }
 
     cancelHandler = () => {
         this.setState({
-            redirect: false,
-            show: false,
+            show: false
         });
     }
 
@@ -29,18 +26,17 @@ class CancelAllEventsWrapper extends Component {
 
     submitHandler = () => {
         this.setState({
-            show: false,
+            show: false
         });
-        this.props.cancel_all_eventSchedules(this.props.initialValues.id);
+        this.props.cancel_all_eventSchedules(this.props.eventId);
     }
 
     render() {
-
         return <>
             <Dropdown.Item onClick={this.handleClick}>Cancel</Dropdown.Item>
             <EventScheduleModal
                 cancelHandler={this.cancelHandler}
-                message="Are you sure to cancel all events?"
+                message="Are you sure you want to cancel all events?"
                 show={this.state.show}
                 submitHandler={this.submitHandler} />
         </>
@@ -48,14 +44,13 @@ class CancelAllEventsWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user_id: state.user.id,
     cancel_all_eventSchedule_status: state.cancel_all_eventSchedules,
-    initialValues: state.event.data,
+    eventId: state.event.data.id
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        cancel_all_eventSchedules: (data) => dispatch(cancel_all_eventSchedules(data)),
+        cancel_all_eventSchedules: (data) => dispatch(cancel_all_eventSchedules(data))
     }
 };
 

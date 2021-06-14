@@ -47,6 +47,7 @@ const initialState = {
     change_avatar: {
         isPending: false,
         isSuccess: false,
+        Update:0,
     },
     editUsername: {
         isEditUsernamePending: false,
@@ -241,6 +242,14 @@ const initialState = {
         subject: null,
         message: null  
     },
+    configs: {
+        facebookClientId: null,
+        googleClientId: null,
+        twitterCallbackUrl: null,
+        twitterConsumerKey: null,
+        twitterConsumerSecret: null,
+        twitterLoginEnabled:null
+    }
 };
 
 export default initialState;
