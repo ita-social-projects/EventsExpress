@@ -96,6 +96,17 @@ namespace EventsExpress.Db.DbInitialize
 
             dbContext.Categories.AddRange(categories);
 
+            var categoriesOfMeasuring = new CategoryOfMeasuring[]
+           {
+                new CategoryOfMeasuring { CategoryName = "Weight" },
+                new CategoryOfMeasuring { CategoryName = "Liquids" },
+                new CategoryOfMeasuring { CategoryName = "Points" },
+                new CategoryOfMeasuring { CategoryName = "Length" },
+                new CategoryOfMeasuring { CategoryName = "Other" },
+           };
+
+            dbContext.CategoriesOfMeasurings.AddRange(categoriesOfMeasuring);
+
             var emailMessages = new[]
             {
                 new NotificationTemplate { Id = NotificationProfile.BlockedUser, Title = "BlockedUser", Subject = "Your account was blocked", Message = "Dear (UserName), your account was blocked for some reason!" },

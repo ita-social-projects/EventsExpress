@@ -58,19 +58,19 @@ namespace EventsExpress.Test.ServiceTests
                 IsDeleted = true,
             };
             constDTO = new UnitOfMeasuringDto
-                        {
-                            Id = Guid.NewGuid(),
-                            UnitName = "Const Unit name",
-                            ShortName = "SN",
-                            IsDeleted = false,
-                        };
+            {
+                Id = Guid.NewGuid(),
+                UnitName = "Const Unit name",
+                ShortName = "SN",
+                IsDeleted = false,
+            };
             newDTO = new UnitOfMeasuringDto
-                        {
-                            Id = Guid.NewGuid(),
-                            UnitName = "New Unit Name",
-                            ShortName = "NS/N",
-                            IsDeleted = false,
-                        };
+            {
+                Id = Guid.NewGuid(),
+                UnitName = "New Unit Name",
+                ShortName = "NS/N",
+                IsDeleted = false,
+            };
 
             MockMapper.Setup(u => u.Map<UnitOfMeasuringViewModel, UnitOfMeasuringDto>(It.IsAny<UnitOfMeasuringViewModel>()))
              .Returns((UnitOfMeasuringViewModel e) => e == null ?
@@ -155,9 +155,10 @@ namespace EventsExpress.Test.ServiceTests
             service.Setup(x => x.Create(It.IsAny<UnitOfMeasuringDto>()))
                         .Returns((UnitOfMeasuringDto e) => Task.FromResult(newDTO.Id));
 
-            UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
+            UnitOfMeasuringCreateViewModel testItem = new UnitOfMeasuringCreateViewModel()
             {
                 Id = newDTO.Id,
+                CategoryId = Guid.NewGuid(),
                 UnitName = newDTO.UnitName,
                 ShortName = newDTO.ShortName,
             };
@@ -207,12 +208,13 @@ namespace EventsExpress.Test.ServiceTests
         {
             Guid testId = constDTO.Id;
             service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDto>())).Throws<EventsExpressException>();
-            UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
-                            {
-                                Id = Guid.NewGuid(),
-                                UnitName = "New Unit name",
-                                ShortName = "SN",
-                            };
+            UnitOfMeasuringCreateViewModel testItem = new UnitOfMeasuringCreateViewModel()
+            {
+                Id = Guid.NewGuid(),
+                UnitName = "New Unit name",
+                ShortName = "SN",
+                CategoryId = Guid.NewGuid(),
+            };
             Assert.ThrowsAsync<EventsExpressException>(async () => await unitController.Edit(testItem));
         }
 
@@ -222,12 +224,13 @@ namespace EventsExpress.Test.ServiceTests
             Guid testId = constDTO.Id;
             service.Setup(x => x.Edit(It.IsAny<UnitOfMeasuringDto>()))
                        .Returns(Task.FromResult(testId));
-            UnitOfMeasuringViewModel testItem = new UnitOfMeasuringViewModel()
-                        {
-                            Id = testId,
-                            UnitName = "New Unit name",
-                            ShortName = "SN",
-                        };
+            UnitOfMeasuringCreateViewModel testItem = new UnitOfMeasuringCreateViewModel()
+            {
+                Id = testId,
+                UnitName = "New Unit name",
+                ShortName = "SN",
+                CategoryId = Guid.NewGuid(),
+            };
             var result = unitController.Edit(testItem);
 
             OkObjectResult okResult = result.Result as OkObjectResult;
