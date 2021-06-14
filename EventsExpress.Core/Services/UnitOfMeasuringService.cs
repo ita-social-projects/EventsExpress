@@ -14,15 +14,11 @@ namespace EventsExpress.Core.Services
 {
     public class UnitOfMeasuringService : BaseService<UnitOfMeasuring>, IUnitOfMeasuringService
     {
-        private readonly ICategoryOfMeasuringService _categoryOfMeasuringService;
-
         public UnitOfMeasuringService(
             AppDbContext context,
-            IMapper mapper,
-            ICategoryOfMeasuringService categoryOfMeasuringService)
+            IMapper mapper)
             : base(context, mapper)
         {
-            _categoryOfMeasuringService = categoryOfMeasuringService;
         }
 
         public async Task<Guid> Create(UnitOfMeasuringDto unitOfMeasuringDTO)

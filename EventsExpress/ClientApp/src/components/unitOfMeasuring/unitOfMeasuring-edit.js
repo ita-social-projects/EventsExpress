@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { renderSelectField, renderTextField, renderMultiselect } from '../helpers/helpers';
+import { renderSelectField, renderTextField} from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 

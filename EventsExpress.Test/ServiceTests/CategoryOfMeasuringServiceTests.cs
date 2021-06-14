@@ -53,7 +53,7 @@ namespace EventsExpress.Test.ServiceTests
             MockMapper.Setup(u => u.Map<IEnumerable<CategoryOfMeasuringDto>>(It.IsAny<IEnumerable<CategoryOfMeasuring>>()))
                 .Returns((IEnumerable<CategoryOfMeasuring> e) => e.Select(item => new CategoryOfMeasuringDto { Id = item.Id }));
             service.GetAllCategories();
-            Assert.AreEqual(count, 1);
+            Assert.AreEqual(1, count);
         }
     }
 }

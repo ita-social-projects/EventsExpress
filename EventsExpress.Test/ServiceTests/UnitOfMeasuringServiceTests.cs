@@ -14,7 +14,6 @@ namespace EventsExpress.Test.ServiceTests
 {
     internal class UnitOfMeasuringServiceTests : TestInitializer
     {
-        private CategoryOfMeasuringService categoryOfMeasuringService;
         private UnitOfMeasuringService service;
         private UnitOfMeasuringDto correctUnitOfMeasuringDTO;
         private UnitOfMeasuring unitOfMeasuring;
@@ -72,8 +71,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             InitTestData();
-            categoryOfMeasuringService = new CategoryOfMeasuringService(Context, MockMapper.Object);
-            service = new UnitOfMeasuringService(Context, MockMapper.Object, categoryOfMeasuringService);
+            service = new UnitOfMeasuringService(Context, MockMapper.Object);
             unitOfMeasuring = new UnitOfMeasuring
             {
                 UnitName = "RandomUnitName",

@@ -32,6 +32,6 @@ export {
     NotificationTemplateService,
     ContactAdminService,
     UnitOfMeasuringService,
-    CategoryOfMeasuringService
-    ConfigService
+    CategoryOfMeasuringService,
+    ConfigService,
 };
