@@ -17,6 +17,10 @@ export default class UnitOfMeasuringItem extends Component {
         const { item } = this.props;
         return (<>
             <td>
+                <i className="mr-1"></i>
+                {item.category.categoryName}
+            </td>
+            <td>
                 <i className="fas fa-hashtag mr-1"></i>
                 {item.unitName}
             </td>
