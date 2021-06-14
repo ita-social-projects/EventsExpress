@@ -15,17 +15,24 @@
             Id = GetEventExistingId.FirstEventId,
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today,
-            Description = "sjsdnl sdmkskdl dsnlndsl",
+            Description = "First event",
             Owners = new List<User>()
+            {
+                new User
                 {
-                    new User
-                    {
-                        Id = Guid.NewGuid(),
-                    },
+                    Id = Guid.NewGuid(),
                 },
-            Title = "SLdndsndj",
+            },
+            Title = "First",
             IsPublic = true,
-            Categories = null,
+            Categories = new List<CategoryDto>()
+            {
+                new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Category#1",
+                },
+            },
             Point = new Point(10.45, 12.34),
             MaxParticipants = 2147483647,
             Type = LocationType.Map,
@@ -36,20 +43,63 @@
             Id = GetEventExistingId.SecondEventId,
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today,
-            Description = "second event",
+            Description = "Second event",
             Owners = new List<User>()
+            {
+                new User
                 {
-                    new User
-                    {
-                        Id = Guid.NewGuid(),
-                    },
+                    Id = Guid.NewGuid(),
                 },
+            },
             Title = "Second",
             IsPublic = true,
-            Categories = null,
+            IsReccurent = true,
+            Frequency = 1,
+            Periodicity = Periodicity.Weekly,
+            EventStatus = EventStatus.Draft,
+            Categories = new List<CategoryDto>()
+            {
+                new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Category#1",
+                },
+            },
             OnlineMeeting = new Uri("http://basin.example.com/#branch"),
             MaxParticipants = 2147483647,
             Type = LocationType.Online,
+        };
+
+        private static EventDto eventDTOReccurentDraft = new EventDto
+        {
+            Id = GetEventExistingId.ThirdEventId,
+            DateFrom = DateTime.Today,
+            DateTo = DateTime.Today,
+            Description = "Third event",
+            Owners = new List<User>()
+            {
+                new User
+                {
+                    Id = Guid.NewGuid(),
+                },
+            },
+            Title = "Third",
+            IsPublic = true,
+            IsReccurent = true,
+            Frequency = 1,
+            Periodicity = Periodicity.Weekly,
+            EventStatus = EventStatus.Draft,
+            Categories = new List<CategoryDto>()
+            {
+                new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Category#1",
+                },
+            },
+            Point = new Point(50.45, 35.34),
+            MaxParticipants = 14,
+            Type = LocationType.Map,
         };
 
         public static EventDto EventDTOMap
@@ -62,10 +112,16 @@
             get => eventDTOOnline;
         }
 
+        public static EventDto EventDTOReccurentDraft
+        {
+            get => eventDTOReccurentDraft;
+        }
+
         public IEnumerator GetEnumerator()
         {
             yield return new object[] { EventDTOMap };
             yield return new object[] { EventDTOOnline };
+            yield return new object[] { EventDTOReccurentDraft };
         }
     }
 }

@@ -5,6 +5,8 @@ import { buildValidationState } from '../../components/helpers/action-helpers.js
 import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const changeAvatar = {
+    PENDING: "SET_CHANGE_AVATAR_PENDING",
+    SUCCESS: "SET_CHANGE_AVATAR_SUCCESS",
     UPDATE: "UPDATE_CHANGE_AVATAR"
 }
 
@@ -12,23 +14,26 @@ const api_serv = new UserService();
 
 export default function change_avatar(data) {
     return async dispatch => {
+        dispatch(setAvatarPending(true));
         dispatch(getRequestInc());
 
         let response = await api_serv.setAvatar(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
+        dispatch(setAvatarSuccess(true));
         dispatch(getRequestDec());
-        dispatch(updateAvatar(response));
+        dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar is successfully updated'));
         return Promise.resolve();
     }
 }
 
-function updateAvatar(data) {
+
+
+export function updateAvatar() {
     return {
         type: changeAvatar.UPDATE,
-        payload: data
     };
 }
 

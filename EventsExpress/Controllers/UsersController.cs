@@ -191,7 +191,7 @@ namespace EventsExpress.Controllers
 
             await _userService.ChangeAvatar(userId, newAva);
 
-            var updatedPhoto = _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png").Result;
+            var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
 
             return Ok(updatedPhoto);
         }

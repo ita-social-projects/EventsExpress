@@ -17,7 +17,7 @@ export default function cancel_next_eventSchedule(eventId) {
             return Promise.reject();
         }
         dispatch(setCancelNextEventScheduleSuccess(true));
-        dispatch(setSuccessAllert('The next event was canceled!'));
+        dispatch(setSuccessAllert('The next event has been canceled!'));
         dispatch(history.push(`/eventSchedules`));
         return Promise.resolve();
     }

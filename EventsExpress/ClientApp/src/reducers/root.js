@@ -45,6 +45,7 @@ import * as NotificationTypes from './notificationType/notificationType-list';
 import * as Account from './account';
 import * as NotificationTemplates from "./notification-templates/notification-templates";
 import * as NotificationTemplate from "./notification-templates/notification-template";
+import * as Config from './config';
 import * as RequestCount from "./request-index-count"
 
 const rootReducers = {
@@ -95,7 +96,8 @@ const rootReducers = {
     notification: Notification.reducer,
     notificationType: NotificationTypes.reducer,
     NotificationTemplates: NotificationTemplates.reducer,
-    NotificationTemplate: NotificationTemplate.reducer
+    NotificationTemplate: NotificationTemplate.reducer,
+    config: Config.reducer
 };
 
 export default rootReducers;

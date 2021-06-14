@@ -8,7 +8,6 @@ import { setSuccessAllert } from '../actions/alert-action';
 import { validate, validateEventForm  } from '../components/helpers/helpers'
 import Button from "@material-ui/core/Button";
 
-
 class EditEventWrapper extends Component {
 
     onSubmit = async (values) => {
@@ -19,34 +18,35 @@ class EditEventWrapper extends Component {
 
     render() {
         return <>
-            <EventForm
-                validate={validate}
-                all_categories={this.props.all_categories}
-                onSubmit={this.onSubmit}
-                initialValues={this.props.event}
-                form_values={this.props.form_values}
-                haveReccurentCheckBox={false}
-                isCreated={false}
-                eventId={this.props.event.id}>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        type="submit">
-                        Save
-                    </Button>
-                </div>
-                <div className="col">
-                    <Button
-                        className="border"
-                        fullWidth={true}
-                        color="primary"
-                        onClick={this.props.history.goBack}>
-                        Cancel
-                    </Button>
-                </div>
-            </EventForm>
+            <div className="pl-md-4">
+                <EventForm
+                    validate={validate}
+                    all_categories={this.props.all_categories}
+                    onSubmit={this.onSubmit}
+                    initialValues={this.props.event}
+                    form_values={this.props.form_values}
+                    haveReccurentCheckBox={false}
+                    eventId={this.props.event.id}>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            type="submit">
+                            Save
+                        </Button>
+                    </div>
+                    <div className="col">
+                        <Button
+                            className="border"
+                            fullWidth={true}
+                            color="primary"
+                            onClick={this.props.history.goBack}>
+                            Cancel
+                        </Button>
+                    </div>
+                </EventForm>
+            </div>
         </>
     }
 }

@@ -1,7 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
 import { reset } from 'redux-form';
-import IconButton from "@material-ui/core/IconButton";
 import add_category,
 {
     set_edited_category
@@ -21,13 +20,10 @@ class CategoryAddWrapper extends React.Component {
         return (this.props.item.id !== this.props.editedCategory)
             ? <tr>
                 <td className="align-middle align-items-stretch" width="20%">
-                    <div className="d-flex align-items-center justify-content-center">
-                        <IconButton
-                            className="text-info"
-                            onClick={this.props.set_category_edited}
-                        >
-                            <i className="fas fa-plus-circle"></i>
-                        </IconButton>
+                    <div className="d-flex align-items-center justify-content-left">
+                        <button className="btn btn-outline-primary ml-0" onClick={this.props.set_category_edited}>
+                            Add category
+                        </button>
                     </div>
                 </td>
                 <td width="55%"></td>

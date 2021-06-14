@@ -222,32 +222,15 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
-        public AttitudeDto GetAttitude(AttitudeDto attitude) =>
-            Mapper.Map<Relationship, AttitudeDto>(Context.Relationships
-                .FirstOrDefault(x =>
-                    x.UserFromId == attitude.UserFromId &&
-                    x.UserToId == attitude.UserToId));
-
         public ProfileDto GetProfileById(Guid id)
         {
-            var userId = _securityContext.GetCurrentUserId();
-
             var user = Mapper.Map<UserDto, ProfileDto>(
                 Mapper.Map<UserDto>(Context.Users
                 .Include(u => u.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(u => u.NotificationTypes)
                     .ThenInclude(n => n.NotificationType)
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId)));
-
-            var rel = Context.Relationships
-                .FirstOrDefault(x => x.UserFromId == id && x.UserToId == userId);
-            user.Attitude = (rel != null)
-                ? (byte)rel.Attitude
-                : (byte)Attitude.None;
-
-            user.Rating = GetRating(user.Id);
+                .FirstOrDefault(x => x.Id == id)));
 
             return user;
         }

@@ -32,6 +32,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
         private Guid idUser = Guid.NewGuid();
+        private Guid idAccount = Guid.NewGuid();
 
         private UserDto existingUserDTO;
         private User existingUser;
@@ -218,7 +219,7 @@ namespace EventsExpress.Test.ServiceTests
                 await service.Authenticate(existingEmail, invalidPassword);
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains("Incorrect login or password1"));
+            Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
 
@@ -250,56 +251,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void ChangePasswordAsync_InvalidUserClaims_Throws()
-        {
-            var user = new User
-            {
-                Id = idUser,
-                Account = new Account(),
-            };
-
-            Context.Users.Add(user);
-            Context.SaveChanges();
-
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
-
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(validPassword, "newPassword");
-
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains("Invalid user"));
-        }
-
-        [Test]
-        public void ChangePasswordAsync_InvalidPassword_Throws()
-        {
-            string salt = mockPasswordHasherService.Object.GenerateSalt();
-
-            User user = new User
-            {
-                Id = idUser,
-                Account = new Account
-                {
-                    AuthLocal = new AuthLocal
-                    {
-                        Salt = salt,
-                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
-                    },
-                },
-            };
-
-            Context.Users.Add(user);
-            Context.SaveChanges();
-
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
-
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(invalidPassword, "newPassword");
-
-            Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-        }
-
-        [Test]
         public void ChangePasswordAsync_ValidPassword_DoesNotThrows()
         {
             string salt = mockPasswordHasherService.Object.GenerateSalt();
@@ -308,8 +259,10 @@ namespace EventsExpress.Test.ServiceTests
                 Id = idUser,
                 Account = new Account
                 {
+                    Id = idAccount,
                     AuthLocal = new AuthLocal
                     {
+                        Id = AuthLocalId,
                         Salt = salt,
                         PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
                     },
@@ -319,7 +272,7 @@ namespace EventsExpress.Test.ServiceTests
             Context.Users.Add(user);
             Context.SaveChanges();
 
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(idUser);
+            mockSecurityContext.Setup(s => s.GetCurrentAccountId()).Returns(idAccount);
 
             AsyncTestDelegate methodInvoke = async () =>
                 await service.ChangePasswordAsync(validPassword, "newPassword");
