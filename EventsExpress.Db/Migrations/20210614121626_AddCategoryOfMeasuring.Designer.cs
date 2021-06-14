@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210603105234_AddNewEntity")]
-    partial class AddNewEntity
+    [Migration("20210614121626_AddCategoryOfMeasuring")]
+    partial class AddCategoryOfMeasuring
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -669,12 +669,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryNameId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CategoryOfMeasuring")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -686,7 +680,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryNameId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UnitName", "ShortName")
                         .IsUnique()
@@ -1027,9 +1021,11 @@ namespace EventsExpress.Db.Migrations
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
                 {
-                    b.HasOne("EventsExpress.Db.Entities.CategoryOfMeasuring", "CategoryName")
+                    b.HasOne("EventsExpress.Db.Entities.CategoryOfMeasuring", "Category")
                         .WithMany("UnitOfMeasurings")
-                        .HasForeignKey("CategoryNameId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>

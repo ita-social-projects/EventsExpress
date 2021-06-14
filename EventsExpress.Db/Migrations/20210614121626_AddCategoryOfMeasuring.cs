@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class AddNewEntity : Migration
+    public partial class AddCategoryOfMeasuring : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,11 +12,6 @@ namespace EventsExpress.Db.Migrations
                 table: "UnitOfMeasurings",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "CategoryNameId",
-                table: "UnitOfMeasurings",
-                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "CategoriesOfMeasurings",
@@ -31,38 +26,34 @@ namespace EventsExpress.Db.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UnitOfMeasurings_CategoryNameId",
+                name: "IX_UnitOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings",
-                column: "CategoryNameId");
+                column: "CategoryId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_UnitOfMeasurings_CategoriesOfMeasurings_CategoryNameId",
+                name: "FK_UnitOfMeasurings_CategoriesOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings",
-                column: "CategoryNameId",
+                column: "CategoryId",
                 principalTable: "CategoriesOfMeasurings",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_UnitOfMeasurings_CategoriesOfMeasurings_CategoryNameId",
+                name: "FK_UnitOfMeasurings_CategoriesOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings");
 
             migrationBuilder.DropTable(
                 name: "CategoriesOfMeasurings");
 
             migrationBuilder.DropIndex(
-                name: "IX_UnitOfMeasurings_CategoryNameId",
+                name: "IX_UnitOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings");
 
             migrationBuilder.DropColumn(
                 name: "CategoryId",
-                table: "UnitOfMeasurings");
-
-            migrationBuilder.DropColumn(
-                name: "CategoryNameId",
                 table: "UnitOfMeasurings");
         }
     }
