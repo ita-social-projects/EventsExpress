@@ -22,6 +22,7 @@ namespace EventsExpress.Test.ServiceTests
         private readonly string notExistedUnitName = "Not Existed Unit Name";
         private readonly string notExistedShortName = "N/SN";
         private readonly Guid categoryId = Guid.NewGuid();
+        private UnitOfMeasuringCreateViewModel unitViewModel;
 
         private UnitOfMeasuringCreateViewModelValidator unitOfMeasuringViewModelValidator;
 
@@ -35,6 +36,13 @@ namespace EventsExpress.Test.ServiceTests
              It.Is<string>(i => i == existedUnitName),
              It.Is<string>(i => i == existedShortName),
              It.Is<Guid>(i => i == categoryId))).Returns(true);
+
+            unitViewModel = new UnitOfMeasuringCreateViewModel
+            {
+                CategoryId = categoryId,
+                ShortName = "testShortName",
+                UnitName = "testUnitName",
+            };
         }
 
         [Test]
@@ -125,6 +133,28 @@ namespace EventsExpress.Test.ServiceTests
             result.ShouldHaveValidationErrorFor(x => x.ShortName)
                   .WithErrorMessage(OnlyCharactersShortName)
                   .WithErrorMessage(CountOfCharactersShortName);
+        }
+
+        [Test]
+        public void SelectCategoriesForUnitOfMeasuring_ValidCategories_ValidationErrorIsNotReturn()
+        {
+            var mockUnitService = new Mock<IUnitOfMeasuringService>();
+            mockUnitService.Setup(service => service.ExistsByItems(existedUnitName, existedShortName, categoryId)).Returns(true);
+            var result = unitOfMeasuringViewModelValidator.TestValidate(unitViewModel);
+            result.ShouldNotHaveValidationErrorFor(e => e.CategoryId);
+        }
+
+        [Test]
+        public void SelectCategoriesForUnitOfMeasuring_EmptyCategory_ReturnValidationError()
+        {
+            var unitViewModelEmptyCategory = new UnitOfMeasuringCreateViewModel
+            {
+                CategoryId = Guid.Empty,
+                ShortName = "testShortName",
+                UnitName = "testUnitName",
+            };
+            var result = unitOfMeasuringViewModelValidator.TestValidate(unitViewModelEmptyCategory);
+            result.ShouldHaveValidationErrorFor(e => e.CategoryId);
         }
     }
 }
