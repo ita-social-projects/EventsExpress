@@ -13,7 +13,7 @@ class HeaderProfileWrapper extends Component {
   }
 
   onSubmit = () => {
-    return this.props.add_event({ user_id: this.props.user.id });
+    return this.props.add_event();
   }
 
   render() {
@@ -39,7 +39,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    add_event: (data) => dispatch(add_event(data)),
+    add_event: () => dispatch(add_event()),
     logout: () => { dispatch(logout()) },
     reset: () => {
       dispatch(setRegisterPending(true));

@@ -10,11 +10,17 @@ import get_event, {
     change_event_status
 }
     from '../actions/event/event-item-view-action';
+import get_unitsOfMeasuring from '../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
+import { get_inventories_by_event_id } from '../actions/inventory/inventory-list-action';
+import { get_users_inventories_by_event_id, } from '../actions/users/users-inventories-action';
 
 class EventItemViewWrapper extends Component {
     componentWillMount() {
         const { id } = this.props.match.params;
         this.props.get_event(id);
+        this.props.get_unitsOfMeasuring();
+        this.props.get_inventories_by_event_id(id);
+        this.props.get_users_inventories_by_event_id(id);
     }
 
     componentWillUnmount() {
@@ -65,6 +71,9 @@ const mapDispatchToProps = (dispatch) => ({
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Canceled)),
     unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active)),
+    get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
+    get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
+    get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
     reset: () => dispatch(resetEvent())
 });
 

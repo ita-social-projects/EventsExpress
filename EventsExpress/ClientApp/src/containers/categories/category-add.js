@@ -4,10 +4,10 @@ import { reset } from 'redux-form';
 import IconButton from "@material-ui/core/IconButton";
 import add_category,
 {
-    setCategoryPending,
-    setCategorySuccess,
     set_edited_category
 } from '../../actions/category/category-add-action';
+
+import { getRequestInc, getRequestDec } from '../../actions/request-count-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
@@ -15,15 +15,6 @@ class CategoryAddWrapper extends React.Component {
 
     submit = values => {
         return this.props.add({ ...values });
-    }
-
-    componentWillUpdate = () => {
-        const { isCategorySuccess } = this.props.status;
-
-        if (isCategorySuccess) {
-            this.props.reset();
-            this.props.edit_cancel();
-        }
     }
 
     render() {
@@ -55,8 +46,8 @@ class CategoryAddWrapper extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        status: state.add_category,
-        editedCategory: state.categories.editedCategory
+        editedCategory: state.categories.editedCategory,
+        counter: state.requestCount.counter
     }
 };
 
@@ -67,11 +58,6 @@ const mapDispatchToProps = (dispatch, props) => {
         edit_cancel: () => {
             dispatch(set_edited_category(null));
         },
-        reset: () => {
-            dispatch(reset('add-form'));
-            dispatch(setCategoryPending(false));
-            dispatch(setCategorySuccess(false));
-        }
     };
 };
 

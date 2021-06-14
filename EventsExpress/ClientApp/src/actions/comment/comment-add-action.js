@@ -2,6 +2,7 @@
 import { CommentService } from '../../services';
 import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const SET_COMMENT_PENDING = "SET_COMMENT_PENDING";
 export const SET_COMMENT_SUCCESS = "SET_COMMENT_SUCCESS";
@@ -10,8 +11,9 @@ const api_serv = new CommentService();
 
 export default function addComment(data) {
     return async dispatch => {
-        dispatch(setCommentPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setComment(data);
+        dispatch(getRequestDec());
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }

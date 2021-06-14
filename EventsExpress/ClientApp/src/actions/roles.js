@@ -23,7 +23,6 @@ export default function get_roles() {
         let jsonRes = await response.json();
         dispatch(setRolesSuccess(jsonRes));
         return Promise.resolve();
-
     }
 }
 

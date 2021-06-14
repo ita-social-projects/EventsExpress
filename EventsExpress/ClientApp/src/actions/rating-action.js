@@ -1,5 +1,6 @@
 import { EventService } from '../services';
 import { setErrorAllertFromResponse } from './alert-action';
+import { getRequestInc, getRequestDec } from "./request-count-action";
 
 export const getRate = {
     PENDING: 'GET_RATE_PENDING',
@@ -20,7 +21,7 @@ const api_serv = new EventService();
 
 export function set_rating(data) {
     return async dispatch => {
-        dispatch(setRatingPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setRate(data);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));

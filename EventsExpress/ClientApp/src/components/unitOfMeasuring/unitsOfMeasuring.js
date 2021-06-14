@@ -17,16 +17,17 @@ class UnitsOfMeasuring extends Component {
                     <UnitOfMeasuringAddWrapper
                         item={{ id: "00000000-0000-0000-0000-000000000000", unitName: "", shortName: "" }}
                     />
-                    {!unitsOfMeasuring.isPending ? <UnitOfMeasuringListWrapper data={unitsOfMeasuring.units} /> : null}
+                    <Spinner showContent={unitsOfMeasuring != undefined}>
+                        <UnitOfMeasuringListWrapper data={unitsOfMeasuring} />
+                    </Spinner>
                 </tbody>
             </table>
-            {unitsOfMeasuring.isPending ? <Spinner /> : null}
         </div>
     }
 }
 
 const mapStateToProps = (state) => ({
-    unitsOfMeasuring: state.unitsOfMeasuring
+    unitsOfMeasuring: state.unitsOfMeasuring.units
 });
 
 const mapDispatchToProps = (dispatch) => {

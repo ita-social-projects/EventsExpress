@@ -1,6 +1,7 @@
 ﻿import { CategoryService } from '../../services';
 import get_categories from './category-list-action';
 import { SubmissionError } from 'redux-form';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 import { buildValidationState } from '../../components/helpers/action-helpers';
 
 export const SET_CATEGORY_PENDING = "SET_CATEGORY_PENDING";
@@ -11,17 +12,18 @@ const api_serv = new CategoryService();
 
 export default function add_category(data) {
     return async dispatch => {
-        dispatch(setCategoryPending(true));
+        dispatch(getRequestInc());
         let response;
         if (!!(data.id)) {
             response = await api_serv.editCategory(data)
         } else {
             response = await api_serv.setCategory(data)
         }
+        dispatch(getRequestDec());
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setCategorySuccess(true));
+        dispatch(setCategoryEdited(null));
         dispatch(get_categories());
         return Promise.resolve();
     }

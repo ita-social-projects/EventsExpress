@@ -1,6 +1,7 @@
 import { EventService } from '../../services';
 import { setErrorAllertFromResponse, setSuccessAllert } from '../alert-action';
 import { createBrowserHistory } from 'history';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const SET_COPY_EVENT_SUCCESS = "SET_COPY_EVENT_SUCCESS";
 export const SET_COPY_EVENT_PENDING = "SET_COPY_EVENT_PENDING";
@@ -10,8 +11,9 @@ const history = createBrowserHistory({ forceRefresh: true });
 
 export default function add_copy_event(eventId) {
     return async dispatch => {
-        dispatch(setCopyEventPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setCopyEvent(eventId);
+        dispatch(getRequestDec())
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();

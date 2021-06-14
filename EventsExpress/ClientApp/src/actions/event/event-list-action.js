@@ -12,12 +12,12 @@ export function get_events(filters) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.getAllEvents(filters);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getRequestDec());
         dispatch(getEvents(jsonRes));
         return Promise.resolve();
     }
@@ -27,12 +27,12 @@ export function get_drafts(page = 1) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.getAllDrafts(page);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getRequestDec());
         dispatch(getEvents(jsonRes));
         return Promise.resolve();
     }

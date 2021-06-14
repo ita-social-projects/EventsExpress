@@ -1,7 +1,7 @@
 ﻿
 import initialState from '../store/initialState';
 import {
-    GET_PROFILE_PENDING, GET_PROFILE_SUCCESS, RESET_USER
+     GET_PROFILE_DATA, RESET_USER
 } from '../actions/user/user-item-view-action';
 
 export const reducer = (
@@ -9,15 +9,9 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_PROFILE_PENDING:
+        case GET_PROFILE_DATA:
             return {
                 ...state,
-                isPending: action.payload
-            }
-        case GET_PROFILE_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
                 isError: false,
                 data: action.payload
             }

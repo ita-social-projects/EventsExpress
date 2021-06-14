@@ -4,21 +4,22 @@ import get_event, { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
 import { getRequestInc, getRequestDec } from "../request-count-action";
-import { setSuccessAllert } from '../alert-action';
+import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 
 export const EVENT_WAS_CREATED = "EVENT_WAS_CREATED";
 
 const api_serv = new EventService();
 const history = createBrowserHistory({ forceRefresh: true });
 
-export default function add_event(data) {
+export default function add_event() {
     return async dispatch => {
         dispatch(getRequestInc());
-        let response = await api_serv.setEvent(data);
-        if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
-        }
+        let response = await api_serv.setEvent();
         dispatch(getRequestDec());
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
         const event = await response.json();
         dispatch(setSuccessAllert('Your event was successfully created!'));
         dispatch(history.push(`/editEvent/${event.id}`));

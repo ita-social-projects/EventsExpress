@@ -70,7 +70,7 @@ export default class EventService {
         return baseService.setResourceWithData(path, file);
     }
 
-    setEvent = data => this.setEventTemplate(data, `event/create`);
+    setEvent = () => baseService.setResource(`event/create`);
 
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);

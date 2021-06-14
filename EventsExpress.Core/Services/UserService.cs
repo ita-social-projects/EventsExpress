@@ -62,6 +62,8 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
+                .Include(u => u.NotificationTypes)
+                    .ThenInclude(n => n.NotificationType)
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId));
 

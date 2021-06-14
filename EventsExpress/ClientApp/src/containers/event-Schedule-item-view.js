@@ -18,15 +18,15 @@ class EventScheduleItemViewWrapper extends Component {
     }
 
     render() {
-        const { isPending } = this.props.eventSchedule;
-        return isPending
-            ? <Spinner />
-            : <EventScheduleItemView
+        const { data } = this.props.eventSchedule;
+        return <Spinner showContent={data != undefined}>
+            <EventScheduleItemView
                 eventSchedule={this.props.eventSchedule}
                 match={this.props.match}
                 event={this.props.event}
                 current_user={this.props.current_user}
             />
+        </Spinner>
     }
 }
 

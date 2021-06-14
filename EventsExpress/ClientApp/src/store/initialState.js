@@ -64,12 +64,10 @@ const initialState = {
         isCategorySuccess: false,
     },
     categories: {
-        isPending: false,
         editedCategory: null,
         data: []
     },
     users: {
-        isPending: true,
         editedUser: null,
         userSearchFilter: null,
         data: {
@@ -154,11 +152,9 @@ const initialState = {
         },
     },
     profile: {
-        isPending: true,
         data: null
     },
     events_for_profile: {
-        isPending: true,
         data: {
             items: [],
             pageViewModel: {},

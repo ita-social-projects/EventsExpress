@@ -1,18 +1,11 @@
 import initialState from '../store/initialState';
-import { SET_INVENTORY_PENDING, GET_INVENTORY_SUCCESS } from '../actions/inventory/inventory-list-action';
+import { SET_INVENTORY_PENDING, GET_INVENTORY_DATA } from '../actions/inventory/inventory-list-action';
 
 export const reducer = (state = initialState.inventories, action) => {
     switch (action.type) {
-        case SET_INVENTORY_PENDING:
+        case GET_INVENTORY_DATA:
             return {
                 ...state,
-                isPending: true,
-                listInventoriesErrorMessage: null
-            };
-        case GET_INVENTORY_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
                 items: action.payload
             };
         default:

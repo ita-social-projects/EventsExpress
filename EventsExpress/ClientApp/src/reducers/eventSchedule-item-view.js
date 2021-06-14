@@ -9,15 +9,9 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_SCHEDULE_PENDING:
-            return {
-                ...state,
-                isPending: action.payload
-            }
         case GET_EVENT_SCHEDULE_SUCCESS:
             return {
                 ...state,
-                isPending: false,
                 data: action.payload
             }
         case RESET_EVENT_SCHEDULE:

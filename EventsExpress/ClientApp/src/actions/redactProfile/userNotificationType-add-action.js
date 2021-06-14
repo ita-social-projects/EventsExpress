@@ -2,6 +2,7 @@ import { UserService } from '../../services';
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const addUserNotificationType = {
     PENDING: "SET_ADD_USER_NOTIFICATION_TYPE_PENDING",
@@ -13,12 +14,12 @@ const api_serv = new UserService();
 
 export default function setUserNotificationTypes(data) {
     return async dispatch => {
-        dispatch(setAddUserNotificationTypePending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setUserNotificationType(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setAddUserNotificationTypeSuccess(true));
+        dispatch(getRequestDec());
         dispatch(updateNotificationTypes(data));
         const textMessage = `Favorite notification type${data.notificationTypes.length > 1 ? "s have" : " has"} been updated`;
         dispatch(setSuccessAllert(textMessage));

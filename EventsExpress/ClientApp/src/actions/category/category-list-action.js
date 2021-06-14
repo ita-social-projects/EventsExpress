@@ -1,17 +1,18 @@
 ﻿
 import { CategoryService } from '../../services';
 import { setErrorAllertFromResponse } from './../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_CATEGORIES_PENDING = "SET_CATEGORIES_PENDING";
-export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
+export const GET_CATEGORIES_DATA = "GET_CATEGORIES_DATA";
 
 const api_serv = new CategoryService();
 
 export default function get_categories() {
 
     return async dispatch => {
-        dispatch(setCategoryPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getAllCategories();
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -22,16 +23,9 @@ export default function get_categories() {
     }
 }
 
-function setCategoryPending(data) {
+export function getCategories(data) {
     return {
-        type: SET_CATEGORIES_PENDING,
-        payload: data
-    }
-}
-
-function getCategories(data) {
-    return {
-        type: GET_CATEGORIES_SUCCESS,
+        type: GET_CATEGORIES_DATA,
         payload: data
     }
 }
