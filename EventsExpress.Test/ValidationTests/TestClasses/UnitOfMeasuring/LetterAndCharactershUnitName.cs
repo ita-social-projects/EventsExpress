@@ -6,10 +6,10 @@ namespace EventsExpress.Test.ValidationTests.TestClasses.UnitOfMeasuring
 {
     public class LetterAndCharactershUnitName : IEnumerable
     {
-        private readonly UnitOfMeasuringViewModel modelNotLetterUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelNotLetterUnitName = new UnitOfMeasuringCreateViewModel
         { Id = Guid.NewGuid(), UnitName = "78789878", ShortName = "rndSN" };
 
-        private readonly UnitOfMeasuringViewModel modelLettersAndCharactersUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelLettersAndCharactersUnitName = new UnitOfMeasuringCreateViewModel
         { Id = Guid.NewGuid(), UnitName = "78789878Unit", ShortName = "rndSN" };
 
         public IEnumerator GetEnumerator()

@@ -6,14 +6,14 @@ namespace EventsExpress.Test.ValidationTests.TestClasses.UnitOfMeasuring
 {
     public class EmptyORManyLettersShortName : IEnumerable
     {
-        private readonly UnitOfMeasuringViewModel modelEmptyShortName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelEmptyShortName = new UnitOfMeasuringCreateViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "rndUN",
             ShortName = string.Empty,
         };
 
-        private readonly UnitOfMeasuringViewModel modelManyLettersShortName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelManyLettersShortName = new UnitOfMeasuringCreateViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "rndUN",
