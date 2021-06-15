@@ -13,9 +13,9 @@ namespace EventsExpress.Test.ServiceTests
     public class UnitOfMeasuringCreateViewModelValidatorTests : TestInitializer
     {
         private const string ExistedUnitOfMeasuring = "The same UNIT OF MEASURING already exists!";
-        private const string CountOfCharactersUnitName = "Unit Name should consist of from 5 to 20 characters";
+        private const string CountOfCharactersUnitName = "Unit name should consist of from 5 to 20 characters";
         private const string OnlyCharactersUnitName = "Unit name should consist only letters or whitespaces";
-        private const string CountOfCharactersShortName = "Short Name should consist of from 1 to 5 characters";
+        private const string CountOfCharactersShortName = "Short name should consist of from 1 to 5 characters";
         private const string OnlyCharactersShortName = "Short name should consist only letters";
         private readonly string existedUnitName = "Existed Unit Name";
         private readonly string existedShortName = "Ex/SN";
