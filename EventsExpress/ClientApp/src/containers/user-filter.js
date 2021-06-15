@@ -10,16 +10,14 @@ import {
     change_status } from '../actions/users/users-action';
 import history from '../history';
 
-const BLOCKED_USERS = "BLOCKED_USERS";
-const ACTIVE_USERS = "ACTIVE_USERS";
-
 class UsersFilterWrapper extends Component {
 
     componentDidMount() {
-        this.props.get_count();
-        this.props.get_count_of_blocked();
-        this.props.get_count_of_unblocked();
-        this.props.initialConnection();
+        let status = accountStatus.All;
+
+        this.props.get_count(status);
+        this.props.changeStatus(status);
+        this.props.initialConnection(this.props.status);
     }
 
     componentWillUnmount = () => {
@@ -41,18 +39,18 @@ class UsersFilterWrapper extends Component {
             switch (filters.status) {
                 case 'blocked':
                     search_string += '&Blocked=' + true;
-                    this.props.get_count(accountStatus.Blocked);
-                    status = BLOCKED_USERS;
+                    status = accountStatus.Blocked;
+                    this.props.get_count(status);
                     break;
                 case 'active':
                     search_string += '&Unblocked=' + true;
-                    this.props.get_count(accountStatus.Activated);
-                    status = ACTIVE_USERS;
+                    status = accountStatus.Activated;
+                    this.props.get_count(status);
                     break;
                 default:
                     search_string += '&All=' + true;
-                    this.props.get_count(accountStatus.All);
-                    status = null;
+                    status = accountStatus.All;
+                    this.props.get_count(status);
             }
 
             this.props.changeStatus(status);
@@ -72,11 +70,11 @@ class UsersFilterWrapper extends Component {
 
         switch(status)
         {
-            case ACTIVE_USERS:
+            case accountStatus.Activated:
                 label = "Active users:";
                 total = countOfUnblocked;
                 break;
-            case BLOCKED_USERS:
+            case accountStatus.Blocked:
                 label = "Blocked users:";
                 total = countOfBlocked;
                 break;

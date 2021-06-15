@@ -21,20 +21,32 @@ const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.locat
     { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
 const api_serv = new UserService();
 
-export function initialConnection() {
+export function initialConnection(currentStatus) {
     return async dispatch => {
         await hubConnection.start();
-        
+
         try {
             hubConnection.on("CountUsers", (numberOfUsers) => {
+                if (currentStatus !== accountStatus.All) {
+                    return Promise.reject();
+                }
+
                 dispatch(getCount(numberOfUsers));
                 return Promise.resolve();
             });
             hubConnection.on("CountBlockedUsers", (numberOfUsers) => {
+                if (currentStatus !== accountStatus.Blocked) {
+                    return Promise.reject();
+                }
+
                 dispatch(getBlockedCount(numberOfUsers));
                 return Promise.resolve();
             });
             hubConnection.on("CountUnblockedUsers", (numberOfUsers) => {
+                if (currentStatus !== accountStatus.Activated) {
+                    return Promise.reject();
+                }
+
                 dispatch(getUnblockedCount(numberOfUsers));
                 return Promise.resolve();
             });
@@ -51,9 +63,9 @@ export function closeConnection() {
     }
 }
 
-export function get_count(accountStatus) {
+export function get_count(status) {
     return async dispatch => {
-        const response = await api_serv.getCount(accountStatus);
+        const response = await api_serv.getCount(status);
 
         if(!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
@@ -62,11 +74,11 @@ export function get_count(accountStatus) {
 
         const jsonRes = await response.json();
 
-        switch (accountStatus) {
-            case this.accountStatus.Blocked:
+        switch (status) {
+            case accountStatus.Blocked:
                 dispatch(getBlockedCount(jsonRes));
                 break;
-            case this.accountStatus.Activated:
+            case accountStatus.Activated:
                 dispatch(getUnblockedCount(jsonRes));
                 break;
             default:
