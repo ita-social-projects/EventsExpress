@@ -13,7 +13,7 @@ class UnitOfMeasuringItemWrapper extends Component {
     save = values => {
         if (values.unitName === this.props.item.unitName &&
             values.shortName === this.props.item.shortName &&
-            values.category === this.props.item.category) {
+            values.categoryId === this.props.item.category) {
             this.props.edit_cancel();
         } else {
            return this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });

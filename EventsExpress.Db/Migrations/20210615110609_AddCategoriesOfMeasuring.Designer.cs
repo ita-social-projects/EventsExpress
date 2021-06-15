@@ -11,8 +11,8 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210614121626_AddCategoryOfMeasuring")]
-    partial class AddCategoryOfMeasuring
+    [Migration("20210615110609_AddCategoriesOfMeasuring")]
+    partial class AddCategoriesOfMeasuring
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -682,7 +682,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UnitName", "ShortName")
+                    b.HasIndex("UnitName", "ShortName", "CategoryId")
                         .IsUnique()
                         .HasFilter("IsDeleted = 0");
 

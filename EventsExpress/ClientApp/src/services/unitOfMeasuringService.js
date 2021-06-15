@@ -10,7 +10,7 @@ export default class UnitOfMeasuringService {
     setUnitOfMeasuring = data => baseService.setResource('unitOfMeasuring/create', {
         unitName: data.unitName,
         shortName: data.shortName,
-        categoryId: data.category
+        categoryId: data.categoryId
     });
 
     editUnitOfMeasuring = data => baseService.setResource('unitOfMeasuring/edit', {

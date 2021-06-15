@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsExpress.Db.Migrations
 {
-    public partial class AddCategoryOfMeasuring : Migration
+    public partial class AddCategoriesOfMeasuring : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_UnitOfMeasurings_UnitName_ShortName",
+                table: "UnitOfMeasurings");
+
             migrationBuilder.AddColumn<Guid>(
                 name: "CategoryId",
                 table: "UnitOfMeasurings",
@@ -30,6 +34,13 @@ namespace EventsExpress.Db.Migrations
                 table: "UnitOfMeasurings",
                 column: "CategoryId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_UnitOfMeasurings_UnitName_ShortName_CategoryId",
+                table: "UnitOfMeasurings",
+                columns: new[] { "UnitName", "ShortName", "CategoryId" },
+                unique: true,
+                filter: "IsDeleted = 0");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_UnitOfMeasurings_CategoriesOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings",
@@ -52,9 +63,20 @@ namespace EventsExpress.Db.Migrations
                 name: "IX_UnitOfMeasurings_CategoryId",
                 table: "UnitOfMeasurings");
 
+            migrationBuilder.DropIndex(
+                name: "IX_UnitOfMeasurings_UnitName_ShortName_CategoryId",
+                table: "UnitOfMeasurings");
+
             migrationBuilder.DropColumn(
                 name: "CategoryId",
                 table: "UnitOfMeasurings");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UnitOfMeasurings_UnitName_ShortName",
+                table: "UnitOfMeasurings",
+                columns: new[] { "UnitName", "ShortName" },
+                unique: true,
+                filter: "IsDeleted = 0");
         }
     }
 }

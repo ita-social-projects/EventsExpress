@@ -680,7 +680,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UnitName", "ShortName")
+                    b.HasIndex("UnitName", "ShortName", "CategoryId")
                         .IsUnique()
                         .HasFilter("IsDeleted = 0");
 

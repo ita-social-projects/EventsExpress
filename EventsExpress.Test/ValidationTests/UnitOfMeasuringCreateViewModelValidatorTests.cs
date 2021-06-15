@@ -12,11 +12,11 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     public class UnitOfMeasuringCreateViewModelValidatorTests : TestInitializer
     {
-        private const string ExistedUnitOfMeasuring = "The same UNIT OF MEASURING and SHORT UNIT OF MEASURING already exists!";
-        private const string CountOfCharactersUnitName = "Unit Name needs to consist of from 5 to 20 characters";
-        private const string OnlyCharactersUnitName = "Unit name needs to consist only letters or whitespaces";
-        private const string CountOfCharactersShortName = "Short Name needs to consist of from 1 to 5 characters";
-        private const string OnlyCharactersShortName = "Short name needs to consist only letters or letter(s)/letter(s)";
+        private const string ExistedUnitOfMeasuring = "The same UNIT OF MEASURING already exists!";
+        private const string CountOfCharactersUnitName = "Unit Name should consist of from 5 to 20 characters";
+        private const string OnlyCharactersUnitName = "Unit name should consist only letters or whitespaces";
+        private const string CountOfCharactersShortName = "Short Name should consist of from 1 to 5 characters";
+        private const string OnlyCharactersShortName = "Short name should consist only letters";
         private readonly string existedUnitName = "Existed Unit Name";
         private readonly string existedShortName = "Ex/SN";
         private readonly string notExistedUnitName = "Not Existed Unit Name";
@@ -136,6 +136,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        [Category("Correct Category")]
         public void SelectCategoriesForUnitOfMeasuring_ValidCategories_ValidationErrorIsNotReturn()
         {
             var mockUnitService = new Mock<IUnitOfMeasuringService>();
@@ -145,6 +146,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        [Category("Category Not Selected")]
         public void SelectCategoriesForUnitOfMeasuring_EmptyCategory_ReturnValidationError()
         {
             var unitViewModelEmptyCategory = new UnitOfMeasuringCreateViewModel
@@ -154,7 +156,8 @@ namespace EventsExpress.Test.ServiceTests
                 UnitName = "testUnitName",
             };
             var result = unitOfMeasuringViewModelValidator.TestValidate(unitViewModelEmptyCategory);
-            result.ShouldHaveValidationErrorFor(e => e.CategoryId);
+            result.ShouldHaveValidationErrorFor(e => e.CategoryId)
+                .WithErrorMessage("Category should be selected");
         }
     }
 }

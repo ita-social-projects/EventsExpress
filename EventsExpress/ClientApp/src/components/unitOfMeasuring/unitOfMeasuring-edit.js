@@ -57,18 +57,20 @@ class UnitOfMeasuringEdit extends Component {
                         <Field
                             fullWidth={true}
                             component={renderSelectField}
-                            className=" mw-100"
-                            name="category"
+                            className="mw-50"
+                            name="categoryId"
                             label='Category'
                         >
                             <option aria-label="None" value="" />
                             {this.categoriesList}
                         </Field>
+                    </div>
 
-                        {
-                            this.props.error &&
-                            <ErrorMessages error={this.props.error} className="text-center" />
-                        }
+                    <div>
+                    {
+                        this.props.error &&
+                            <ErrorMessages error={this.props.error} className="text-center"/>
+                    }
                     </div>
                 </form>
             </td>
