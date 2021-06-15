@@ -2,10 +2,9 @@
 import { connect } from 'react-redux';
 import UsersFilters from '../components/users/UsersFilters';
 import {
+    accountStatus,
     get_users,
     get_count,
-    get_count_of_blocked,
-    get_count_of_unblocked,
     initialConnection,
     closeConnection,
     change_status } from '../actions/users/users-action';
@@ -42,17 +41,17 @@ class UsersFilterWrapper extends Component {
             switch (filters.status) {
                 case 'blocked':
                     search_string += '&Blocked=' + true;
-                    this.props.get_count_of_blocked();
+                    this.props.get_count(accountStatus.Blocked);
                     status = BLOCKED_USERS;
                     break;
                 case 'active':
                     search_string += '&Unblocked=' + true;
-                    this.props.get_count_of_unblocked();
+                    this.props.get_count(accountStatus.Activated);
                     status = ACTIVE_USERS;
                     break;
                 default:
                     search_string += '&All=' + true;
-                    this.props.get_count();
+                    this.props.get_count(accountStatus.All);
                     status = null;
             }
 
@@ -113,9 +112,7 @@ const mapDispatchToProps = (dispatch) => {
         changeStatus: (status) => dispatch(change_status(status)),
         closeConnection: () => dispatch(closeConnection()),
         initialConnection: () => dispatch(initialConnection()),
-        get_count: () => dispatch(get_count()),
-        get_count_of_blocked: () => dispatch(get_count_of_blocked()),
-        get_count_of_unblocked: () => dispatch(get_count_of_unblocked()),
+        get_count: (accountStatus) => dispatch(get_count(accountStatus)),
         search: (values) => dispatch(get_users(values))
     }
 };

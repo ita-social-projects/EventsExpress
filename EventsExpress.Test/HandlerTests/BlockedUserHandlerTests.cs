@@ -17,7 +17,7 @@ namespace EventsExpress.Test.HandlerTests
     {
         private readonly NotificationChange _notificationChange = NotificationChange.Profile;
         private readonly string _emailUser = "user@gmail.com";
-        private Mock<UsersHub> _usersHub;
+        private UsersHub _usersHub;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
@@ -31,9 +31,9 @@ namespace EventsExpress.Test.HandlerTests
         [SetUp]
         public void Initialize()
         {
-            _usersHub = new Mock<UsersHub>();
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
+            _usersHub = new UsersHub(_userService.Object);
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
             _notificationTemplateService
@@ -45,7 +45,7 @@ namespace EventsExpress.Test.HandlerTests
                 .Returns(string.Empty);
 
             _blockedUserHandler = new BlockedUserHandler(
-                _usersHub.Object,
+                _usersHub,
                 _emailService.Object,
                 _userService.Object,
                 _notificationTemplateService.Object);

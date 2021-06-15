@@ -8,6 +8,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.NotificationHandlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -15,8 +16,6 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
-    using NotificationHandlers;
-
     internal class ParticipationHandlerTests
     {
         private Mock<IEmailService> _emailService;

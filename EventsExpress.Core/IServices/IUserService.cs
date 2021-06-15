@@ -13,11 +13,7 @@ namespace EventsExpress.Core.IServices
     {
         Task Create(UserDto userDto);
 
-        Task<int> CountBlockedUsersAsync();
-
-        Task<int> CountUnblockedUsersAsync();
-
-        Task<int> CountUsersAsync();
+        Task<int> CountUsersAsync(AccountStatus status);
 
         Task ChangeAvatar(Guid userId, IFormFile avatar);
 

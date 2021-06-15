@@ -4,11 +4,7 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
-    getCount = () => baseService.getResource(`users/Count`);
-
-    getCountOfBlocked = () => baseService.getResource(`users/CountBlocked`);
-
-    getCountOfUnblocked = () => baseService.getResource(`users/CountUnblocked`);
+    getCount = accountStatus => baseService.getResource(`users/Count?accountStatus=${accountStatus}`);
 
     getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 

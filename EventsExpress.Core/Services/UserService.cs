@@ -51,7 +51,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Registration failed");
             }
 
-            var account = Context.Accounts.Find(userDto.AccountId);
+            var account = await Context.Accounts.FindAsync(userDto.AccountId);
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
@@ -59,19 +59,16 @@ namespace EventsExpress.Core.Services
             await _mediator.Publish(new UserCreatedNotification());
         }
 
-        public async Task<int> CountBlockedUsersAsync()
+        public async Task<int> CountUsersAsync(AccountStatus status)
         {
-            return await Entities.CountAsync(e => e.Account.IsBlocked);
-        }
+            var count = status switch
+            {
+                AccountStatus.Activated => await Entities.Where(user => !user.Account.IsBlocked).CountAsync(),
+                AccountStatus.Blocked => await Entities.Where(user => user.Account.IsBlocked).CountAsync(),
+                _ => await Entities.CountAsync()
+            };
 
-        public async Task<int> CountUnblockedUsersAsync()
-        {
-            return await Entities.CountAsync(e => !e.Account.IsBlocked);
-        }
-
-        public async Task<int> CountUsersAsync()
-        {
-            return await Entities.CountAsync();
+            return count;
         }
 
         public UserDto GetCurrentUserInfo()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -12,9 +11,7 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Controllers
 {
@@ -41,7 +38,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method seach Users with filter.
+        /// This method search Users with filter.
         /// </summary>
         /// <param name="filter">Param filter defines UsersFilterViewModel.</param>
         /// <returns>The method returns found user.</returns>
@@ -77,42 +74,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">Edit process failed.</response>
         [HttpGet("[action]")]
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<ActionResult<int>> Count()
+        public async Task<ActionResult<int>> Count([FromQuery] int accountStatus)
         {
-            var count = await _userService.CountUsersAsync();
+            var count = await _userService.CountUsersAsync((AccountStatus)accountStatus);
             return Ok(count);
         }
 
         /// <summary>
-        /// This method is used to get the number of blocked users.
-        /// </summary>
-        /// <returns>The method returns edited gender.</returns>
-        /// <response code="200">Edit is successful.</response>
-        /// <response code="400">Edit process failed.</response>
-        [HttpGet("[action]")]
-        [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<ActionResult<int>> CountBlocked()
-        {
-            var count = await _userService.CountBlockedUsersAsync();
-            return Ok(count);
-        }
-
-        /// <summary>
-        /// This method is used to get the number of unblocked users.
-        /// </summary>
-        /// <returns>The method returns edited gender.</returns>
-        /// <response code="200">Edit is successful.</response>
-        /// <response code="400">Edit process failed.</response>
-        [HttpGet("[action]")]
-        [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<ActionResult<int>> CountUnblocked()
-        {
-            var count = await _userService.CountUnblockedUsersAsync();
-            return Ok(count);
-        }
-
-        /// <summary>
-        /// This metod have to return UserDto for Admin.
+        /// This method have to return UserDto for Admin.
         /// </summary>
         /// <param name="filter">Param filter defines UsersFilterViewModel.</param>
         /// <returns>The method returns all users.</returns>
@@ -157,7 +126,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="userName">Param userName defines the username.</param>
         /// <returns>The method returns edited username.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(EditUserNameViewModel userName)
@@ -172,7 +141,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="userBirthday">Param userBirthday defines the user Birthday.</param>
         /// <returns>The method returns edited birthday.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditBirthday(EditUserBirthViewModel userBirthday)
@@ -187,7 +156,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="userGender">Param userGender defines the user gender.</param>
         /// <returns>The method returns edited gender.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditGender(EditUserGenderViewModel userGender)
@@ -202,7 +171,7 @@ namespace EventsExpress.Controllers
         /// </summary>
         /// <param name="model">Param model defines EditUserCategoriesViewModel model.</param>
         /// <returns>The method returns edited categories for user.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserCategory(EditUserCategoriesViewModel model)
@@ -220,10 +189,10 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This metod is to change user avatar.
+        /// This method is to change user avatar.
         /// </summary>
         /// <returns>The method returns edited profile photo.</returns>
-        /// <response code="200">Changing is succesful.</response>
+        /// <response code="200">Changing is successful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangeAvatar()
@@ -256,7 +225,7 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to set attitide t user.
+        /// This method is to set attitude t user.
         /// </summary>
         /// <param name="attitude">Param attitude defines the attitude.</param>
         /// <returns>The method returns the specified attitude.</returns>
@@ -276,11 +245,11 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to edit user notificatin types.
+        /// This method is to edit user notification types.
         /// </summary>
         /// <param name="model">Param model defines EditUserNotificationTypesViewModel model.</param>
         /// <returns>The method returns edited notification types for user.</returns>
-        /// <response code="200">Edit is succesful.</response>
+        /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUserNotificationType(EditUserNotificationTypesViewModel model)

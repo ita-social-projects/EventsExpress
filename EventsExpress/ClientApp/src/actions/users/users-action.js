@@ -11,6 +11,11 @@ export const GET_USERS_COUNT = "GET_USERS_COUNT";
 export const GET_BLOCKED_USERS_COUNT = "GET_BLOCKED_USERS_COUNT";
 export const GET_UNBLOCKED_USERS_COUNT = "GET_UNBLOCKED_USERS_COUNT";
 export const CHANGE_STATUS = "CHANGE_STATUS";
+export const accountStatus = {
+    All: 0,
+    Activated: 1,
+    Blocked: 2
+}
 
 const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.location.origin}/usersHub`,
     { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
@@ -46,41 +51,28 @@ export function closeConnection() {
     }
 }
 
-export function get_count() {
+export function get_count(accountStatus) {
     return async dispatch => {
-        const response = await api_serv.getCount();
-        if(!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
-        }
-        const jsonRes = await response.json();
-        dispatch(getCount(jsonRes));
-        return Promise.resolve();
-    }
-}
+        const response = await api_serv.getCount(accountStatus);
 
-export function get_count_of_blocked() {
-    return async dispatch => {
-        const response = await api_serv.getCountOfBlocked();
         if(!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        const jsonRes = await response.json();
-        dispatch(getBlockedCount(jsonRes));
-        return Promise.resolve();
-    }
-}
 
-export function get_count_of_unblocked() {
-    return async dispatch => {
-        const response = await api_serv.getCountOfUnblocked();
-        if(!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
-        }
         const jsonRes = await response.json();
-        dispatch(getUnblockedCount(jsonRes));
+
+        switch (accountStatus) {
+            case this.accountStatus.Blocked:
+                dispatch(getBlockedCount(jsonRes));
+                break;
+            case this.accountStatus.Activated:
+                dispatch(getUnblockedCount(jsonRes));
+                break;
+            default:
+                dispatch(getCount(jsonRes));
+        }
+
         return Promise.resolve();
     }
 }

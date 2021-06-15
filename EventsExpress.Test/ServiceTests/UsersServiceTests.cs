@@ -84,7 +84,7 @@ namespace EventsExpress.Test.ServiceTests
             var expected = await Context.Users.CountAsync();
 
             // Act
-            var actual = await service.CountUsersAsync();
+            var actual = await service.CountUsersAsync(AccountStatus.All);
 
             // Assert
             Assert.AreEqual(expected, actual);
