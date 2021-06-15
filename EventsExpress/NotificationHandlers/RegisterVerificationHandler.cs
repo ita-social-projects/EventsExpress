@@ -42,8 +42,8 @@ namespace EventsExpress.NotificationHandlers
 
             _cacheHelper.Add(new CacheDto
             {
-                AuthLocalId = notification.AuthLocal.Id,
-                Token = token,
+                Key = notification.AuthLocal.Id.ToString(),
+                Value = token,
             });
 
             var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.RegisterVerification);

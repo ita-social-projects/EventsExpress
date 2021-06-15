@@ -117,7 +117,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token)
         {
-            var cache = new CacheDto { Token = token, AuthLocalId = authLocalId };
+            var cache = new CacheDto { Key = authLocalId.ToString(), Value = token };
 
             var account = await ConfirmEmail(cache);
             var jwtToken = _tokenService.GenerateAccessToken(account);
@@ -188,13 +188,14 @@ namespace EventsExpress.Core.Services
 
         private async Task<Account> ConfirmEmail(CacheDto cacheDto)
         {
-            if (string.IsNullOrEmpty(cacheDto.Token))
+            if (string.IsNullOrEmpty(cacheDto.Value))
             {
                 throw new EventsExpressException("Token is null or empty");
             }
 
-            var cachedDto = _cacheHelper.GetValue(cacheDto.AuthLocalId);
-            if (cachedDto == null || cachedDto.Token != cacheDto.Token)
+            var cachedDto = _cacheHelper.GetValue(cacheDto.Key);
+
+            if (cachedDto == null || cachedDto.Value != cacheDto.Value)
             {
                 throw new EventsExpressException("Validation failed");
             }
@@ -205,7 +206,8 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(ar => ar.Role)
                 .Include(al => al.Account)
                     .ThenInclude(a => a.RefreshTokens)
-                .FirstOrDefault(al => al.Id == cacheDto.AuthLocalId);
+                .FirstOrDefault(al => al.Id.ToString() == cacheDto.Key);
+
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user Id");
@@ -213,7 +215,8 @@ namespace EventsExpress.Core.Services
 
             authLocal.EmailConfirmed = true;
             await Context.SaveChangesAsync();
-            _cacheHelper.Delete(cacheDto.AuthLocalId);
+            _cacheHelper.Delete(cacheDto.Key);
+
             return authLocal.Account;
         }
     }
