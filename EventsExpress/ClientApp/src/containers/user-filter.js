@@ -17,7 +17,7 @@ class UsersFilterWrapper extends Component {
 
         this.props.get_count(status);
         this.props.changeStatus(status);
-        this.props.initialConnection(this.props.status);
+        this.props.initialConnection();
     }
 
     componentWillUnmount = () => {

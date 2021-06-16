@@ -21,13 +21,13 @@ const hubConnection = new SignalR.HubConnectionBuilder().withUrl(`${window.locat
     { accessTokenFactory: () => (localStorage.getItem(jwtStorageKey)) }).build();
 const api_serv = new UserService();
 
-export function initialConnection(currentStatus) {
-    return async dispatch => {
+export function initialConnection() {
+    return async (dispatch, getState) => {
         await hubConnection.start();
 
         try {
             hubConnection.on("CountUsers", (numberOfUsers) => {
-                if (currentStatus !== accountStatus.All) {
+                if (getState().users.status !== accountStatus.All) {
                     return Promise.reject();
                 }
 
@@ -35,7 +35,7 @@ export function initialConnection(currentStatus) {
                 return Promise.resolve();
             });
             hubConnection.on("CountBlockedUsers", (numberOfUsers) => {
-                if (currentStatus !== accountStatus.Blocked) {
+                if (getState().users.status !== accountStatus.Blocked) {
                     return Promise.reject();
                 }
 
@@ -43,7 +43,7 @@ export function initialConnection(currentStatus) {
                 return Promise.resolve();
             });
             hubConnection.on("CountUnblockedUsers", (numberOfUsers) => {
-                if (currentStatus !== accountStatus.Activated) {
+                if (getState().users.status !== accountStatus.Activated) {
                     return Promise.reject();
                 }
 

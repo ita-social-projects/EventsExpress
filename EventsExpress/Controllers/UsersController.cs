@@ -69,6 +69,7 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is used to get the number of all users.
         /// </summary>
+        /// <param name="accountStatus">Param account status is used to determine the number of users with a specific status.</param>
         /// <returns>The method returns edited gender.</returns>
         /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
