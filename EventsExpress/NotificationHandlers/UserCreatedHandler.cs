@@ -1,12 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
 using MediatR;
 
 namespace EventsExpress.NotificationHandlers
 {
-    public class UserCreatedHandler : INotificationHandler<UserCreatedNotification>
+    public class UserCreatedHandler : INotificationHandler<UserCreatedMessage>
     {
         private readonly UsersHub _hub;
 
@@ -15,9 +16,9 @@ namespace EventsExpress.NotificationHandlers
             _hub = hub;
         }
 
-        public async Task Handle(UserCreatedNotification notification, CancellationToken cancellationToken)
+        public async Task Handle(UserCreatedMessage notification, CancellationToken cancellationToken)
         {
-            await _hub.SendCountOfUsersAsync();
+            await _hub.SendCountOfUsersAsync(AccountStatus.All);
         }
     }
 }

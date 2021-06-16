@@ -2,7 +2,7 @@
 
 namespace EventsExpress.Core.Notifications
 {
-    public class UserCreatedNotification : INotification
+    public class UserCreatedMessage : INotification
     {
     }
 }

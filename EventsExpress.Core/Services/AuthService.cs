@@ -188,7 +188,7 @@ namespace EventsExpress.Core.Services
 
         private async Task<Account> ConfirmEmail(CacheDto cacheDto)
         {
-            if (string.IsNullOrEmpty(cacheDto.Value))
+            if (string.IsNullOrEmpty((string)cacheDto.Value))
             {
                 throw new EventsExpressException("Token is null or empty");
             }

@@ -13,7 +13,7 @@ namespace EventsExpress.Controllers
     [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationTemplateController : Controller
+    public class NotificationTemplateController : ControllerBase
     {
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IMapper _mapper;

@@ -366,7 +366,7 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns(new RefreshToken());
 
             // Act
-            async Task MethodInvoke() => await service.EmailConfirmAndAuthenticate(Guid.Parse(cache.Key), cache.Value);
+            async Task MethodInvoke() => await service.EmailConfirmAndAuthenticate(Guid.Parse(cache.Key), (string)cache.Value);
 
             // Assert
             Assert.DoesNotThrowAsync(MethodInvoke);

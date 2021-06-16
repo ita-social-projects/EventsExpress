@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.SignalR;
@@ -9,37 +11,49 @@ namespace EventsExpress.Hubs
 {
     public class UsersHub : Hub
     {
-        private readonly IUserService _userService;
+        public static readonly string AdminsCacheKey = Guid.NewGuid().ToString();
 
-        public UsersHub(IUserService userService)
+        private readonly IUserService _userService;
+        private readonly ICacheHelper _cacheHelper;
+
+        public UsersHub(
+            ICacheHelper cacheHelper,
+            IUserService userService)
         {
+            _cacheHelper = cacheHelper;
             _userService = userService;
-            Admins = _userService.GetUsersByRole(Role.Admin)
-                .Select(admin => admin.Id.ToString())
-                .ToList();
         }
 
-        private List<string> Admins { get; }
-
-        public async Task SendCountOfUsersAsync()
+        private List<string> Admins
         {
-            var numberOfUsers = await _userService.CountUsersAsync(AccountStatus.All);
+            get
+            {
+                var cachedAdmins = _cacheHelper.GetValue(AdminsCacheKey);
+
+                if (cachedAdmins != null)
+                {
+                    return (List<string>)cachedAdmins.Value;
+                }
+
+                var admins = _userService.GetUsersByRole(Role.Admin)
+                    .Select(admin => admin.Id.ToString())
+                    .ToList();
+
+                _cacheHelper.Add(new CacheDto
+                {
+                    Key = AdminsCacheKey,
+                    Value = admins,
+                });
+
+                return admins;
+            }
+        }
+
+        public async Task SendCountOfUsersAsync(AccountStatus accountStatus)
+        {
+            var numberOfUsers = await _userService.CountUsersAsync(accountStatus);
 
             await Clients.Users(Admins).SendAsync("CountUsers", numberOfUsers);
-        }
-
-        public async Task SendCountOfBlockedUsersAsync()
-        {
-            var numberOfUsers = await _userService.CountUsersAsync(AccountStatus.Activated);
-
-            await Clients.Users(Admins).SendAsync("CountBlockedUsers", numberOfUsers);
-        }
-
-        public async Task SendCountOfUnblockedUsersAsync()
-        {
-            var numberOfUsers = await _userService.CountUsersAsync(AccountStatus.Blocked);
-
-            await Clients.Users(Admins).SendAsync("CountUnblockedUsers", numberOfUsers);
         }
     }
 }

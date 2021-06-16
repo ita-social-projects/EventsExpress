@@ -58,7 +58,7 @@ namespace EventsExpress.NotificationHandlers
                     });
                 }
 
-                await _hub.SendCountOfUnblockedUsersAsync();
+                await _hub.SendCountOfUsersAsync(AccountStatus.Activated);
             }
             catch (Exception ex)
             {

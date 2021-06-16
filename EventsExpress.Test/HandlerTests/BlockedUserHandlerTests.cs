@@ -20,6 +20,7 @@ namespace EventsExpress.Test.HandlerTests
         private UsersHub _usersHub;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<ICacheHelper> _cacheHelper;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private BlockedUserHandler _blockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
@@ -33,7 +34,10 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
-            _usersHub = new UsersHub(_userService.Object);
+            _cacheHelper = new Mock<ICacheHelper>();
+            _usersHub = new UsersHub(
+                _cacheHelper.Object,
+                _userService.Object);
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
             _notificationTemplateService
