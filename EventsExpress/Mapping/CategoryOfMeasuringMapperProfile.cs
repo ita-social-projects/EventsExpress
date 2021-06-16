@@ -11,23 +11,19 @@ namespace EventsExpress.Mapping
         {
             CreateMap<CategoryOfMeasuring, CategoryOfMeasuringDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => src.UnitOfMeasurings));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<CategoryOfMeasuringDto, CategoryOfMeasuring>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UnitOfMeasurings, opt => opt.MapFrom(src => src.UnitOfMeasuring));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<CategoryOfMeasuringDto, CategoryOfMeasuringViewModel>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => src.UnitOfMeasuring));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<CategoryOfMeasuringViewModel, CategoryOfMeasuringDto>()
                  .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.UnitOfMeasuring, opt => opt.MapFrom(src => src.UnitOfMeasuring));
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

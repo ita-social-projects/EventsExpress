@@ -17,7 +17,7 @@ export default class UnitOfMeasuringService {
         id: data.id,
         unitName: data.unitName,
         shortName: data.shortName,
-        categoryId: data.category
+        categoryId: data.categoryId
     });
 }
 

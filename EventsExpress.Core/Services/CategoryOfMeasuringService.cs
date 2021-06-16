@@ -22,12 +22,6 @@ namespace EventsExpress.Core.Services
         {
             return Mapper.Map<IEnumerable<CategoryOfMeasuringDto>>(
                 Context.CategoriesOfMeasurings
-                .Include(e => e.UnitOfMeasurings)
-                 .Select(x => new CategoryOfMeasuringDto
-                 {
-                     Id = x.Id,
-                     CategoryName = x.CategoryName,
-                 })
                 .OrderBy(category => category.CategoryName));
         }
     }
