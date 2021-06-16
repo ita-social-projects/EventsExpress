@@ -6,10 +6,10 @@ namespace EventsExpress.Test.ValidationTests.TestClasses.UnitOfMeasuring
 {
     public class LittleAndBigCharactershUnitName : IEnumerable
     {
-        private readonly UnitOfMeasuringViewModel modelLitteLengthCharactersUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelLitteLengthCharactersUnitName = new UnitOfMeasuringCreateViewModel
         { Id = Guid.NewGuid(), UnitName = "888", ShortName = "rndSN" };
 
-        private readonly UnitOfMeasuringViewModel modelBigLengthCharactersUnitName = new UnitOfMeasuringViewModel
+        private readonly UnitOfMeasuringCreateViewModel modelBigLengthCharactersUnitName = new UnitOfMeasuringCreateViewModel
         {
             Id = Guid.NewGuid(),
             UnitName = "888 888888888888888888888888888888888888888" +
