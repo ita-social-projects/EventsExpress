@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Core.IServices
 {
@@ -17,6 +18,6 @@ namespace EventsExpress.Core.IServices
 
         Task Delete(Guid id);
 
-        bool ExistsByName(string unitName, string shortName);
+        bool ExistsByItems(string unitName, string shortName, Guid categoryId);
     }
 }

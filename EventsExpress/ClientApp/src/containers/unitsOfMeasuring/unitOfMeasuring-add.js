@@ -8,6 +8,7 @@ import {
     setUnitOfMeasuringSuccess,
     set_edited_unitOfMeasuring
 } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
+import get_categoriesOfMeasuring  from "../../actions/categoryOfMeasuring/categoryOfMeasuring-list-action";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
 
 const pStyle = {
@@ -19,8 +20,12 @@ class UnitOfMeasuringAddWrapper extends React.Component {
         return this.props.add({ ...values });
     };
 
+    componentWillMount() {
+        this.props.get_categoriesOfMeasuring();
+    }
+
     componentWillUpdate = () => {
-        const {isUnitOfMeasuringSuccess } = this.props.status;
+        const { isUnitOfMeasuringSuccess } = this.props.status;
 
         if (isUnitOfMeasuringSuccess) {
             this.props.reset();
@@ -49,6 +54,7 @@ class UnitOfMeasuringAddWrapper extends React.Component {
                     item={this.props.item}
                     onSubmit={this.submit}
                     cancel={this.props.edit_cancel}
+                    all_categories={this.props.all_categories}
                 />
                 <td></td>
             </tr>
@@ -56,17 +62,18 @@ class UnitOfMeasuringAddWrapper extends React.Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
-        status: state.add_unitOfMeasuring,
-        editedUnitOfMeasuring: state.unitsOfMeasuring.editedUnitOfMeasuring
-    }
-};
+const mapStateToProps = (state) => ({
+    all_categories: state.categoriesOfMeasuring,
+    status: state.add_unitOfMeasuring,
+    editedUnitOfMeasuring: state.unitsOfMeasuring.editedUnitOfMeasuring,
+});
+
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_unitOfMeasuring(data)),
         set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
+        get_categoriesOfMeasuring: () => dispatch(get_categoriesOfMeasuring()),
         edit_cancel: () => {
             dispatch(set_edited_unitOfMeasuring(null));
         },

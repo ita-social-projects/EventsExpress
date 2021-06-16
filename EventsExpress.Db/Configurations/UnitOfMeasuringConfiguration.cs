@@ -8,7 +8,7 @@ namespace EventsExpress.Db.Configuration
     {
         public void Configure(EntityTypeBuilder<UnitOfMeasuring> builder)
         {
-            builder.HasIndex(u => new { u.UnitName, u.ShortName })
+            builder.HasIndex(u => new { u.UnitName, u.ShortName, u.CategoryId })
                 .HasFilter("IsDeleted = 0")
                 .IsUnique();
         }
