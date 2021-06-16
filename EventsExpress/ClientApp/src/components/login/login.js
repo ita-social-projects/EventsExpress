@@ -9,8 +9,9 @@ import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router";
+import { renderTextField } from '../helpers/form-helpers';
 
-const { validate, renderTextField } = Module;
+const { validate } = Module;
 
 class Login extends Component {
 

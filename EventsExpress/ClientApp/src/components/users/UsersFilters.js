@@ -1,9 +1,8 @@
 ﻿import React, { Component } from 'react';
-import { renderTextField, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import Radio from '@material-ui/core/Radio'
-import { renderSelectField } from '../helpers/helpers'
+import { renderSelectField, renderTextField, radioButton} from '../helpers/form-helpers';
 
 class UsersFilters extends Component {
     render() {

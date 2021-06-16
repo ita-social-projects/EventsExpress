@@ -10,8 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
-
-const { validate, renderTextField } = Module;
+import { renderTextField } from '../../helpers/form-helpers';
+const { validate} = Module;
 
 const useStyles = makeStyles(theme => ({
     root: {

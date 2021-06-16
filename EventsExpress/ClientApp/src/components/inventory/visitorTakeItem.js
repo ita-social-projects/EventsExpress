@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { renderTextField, renderSelectField } from '../helpers/helpers';
+import { renderTextField } from '../helpers/form-helpers';
 import IconButton from "@material-ui/core/IconButton";
 import Module from '../helpers';
 

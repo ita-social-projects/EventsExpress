@@ -4,17 +4,12 @@ import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
-    import PhotoService from '../../services/PhotoService';
+import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
-    renderMultiselect,
-    renderTextArea,
-    renderSelectPeriodicityField,
-    renderCheckbox,
-    renderTextField,
-    radioLocationType
-} from '../helpers/helpers';
-import { renderDatePicker, LocationMapWithMarker } from '../helpers/form-helpers';
+    renderDatePicker, LocationMapWithMarker, renderCheckbox, radioLocationType,
+    renderSelectPeriodicityField, renderTextField, renderTextArea, renderMultiselect
+} from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { reduxForm, Field, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { renderTextArea, renderTextField } from '../helpers/helpers';
+import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import Module from '../helpers';
 import ErrorMessages from '../shared/errorMessage';
 import issueTypeEnum from '../../constants/IssueTypeEnum ';

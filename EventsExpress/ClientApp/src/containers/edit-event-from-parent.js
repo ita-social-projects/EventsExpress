@@ -8,7 +8,8 @@ import edit_event_from_parent, {
 }
     from '../actions/event/event-copy-with-edit-action';
 import * as moment from 'moment';
-import { validate, validateEventForm } from '../components/helpers/helpers'
+import { validate } from '../components/helpers/helpers'
+import { validateEventForm } from '../components/helpers/validators/event-validate-form'
 import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
 

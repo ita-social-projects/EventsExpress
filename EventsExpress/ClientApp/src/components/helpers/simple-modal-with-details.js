@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
 import { Field, reduxForm } from "redux-form";
-import { renderTextField} from '../helpers/helpers';
+import { renderTextField } from '../helpers/form-helpers';
 
 export const validate = values => {
     const errors = {};

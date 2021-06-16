@@ -5,9 +5,9 @@ import Button from "@material-ui/core/Button";
 import Module from '../helpers';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import ErrorMessages from '../shared/errorMessage';
+import { renderTextField } from '../helpers/form-helpers';
 
-
-const { validate, renderTextField } = Module;
+const { validate } = Module;
 
 class RecoverPassword extends React.Component {
 
