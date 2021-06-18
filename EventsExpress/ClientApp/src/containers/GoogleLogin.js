@@ -21,7 +21,6 @@ class LoginGoogle extends Component {
     }
 
     failedGoogle = response => {
-        console.log('Google auth failed')
         console.log(response);
     }
 
