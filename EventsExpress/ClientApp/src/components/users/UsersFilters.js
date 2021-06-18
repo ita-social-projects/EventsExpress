@@ -2,7 +2,6 @@
 import { renderTextField, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio'
 import { renderSelectField } from '../helpers/helpers'
 
 class UsersFilters extends Component {
@@ -32,11 +31,7 @@ class UsersFilters extends Component {
                     <option value={"15"}>15</option>
                 </Field>
                 <br/>
-                <Field name="status" component={radioButton}>
-                    <Radio value="true" label="Blocked" />
-                    <Radio value="true" label="Unblocked" />
-                    <Radio value="true" label="All" />
-                </Field>
+                <Field name="status" component={radioButton} />
                 <Button fullWidth={true} type="submit"  color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>

@@ -13,7 +13,7 @@ class UsersWrapper extends Component {
     componentWillUnmount = () => {
         this.props.reset_users();
     }
-
+    
     getUsers = (page) => this.props.get_users(page);
 
     render() {
@@ -27,7 +27,7 @@ class UsersWrapper extends Component {
                 callback={this.getUsers}
             />
             : null;
-        const filter = !isPending ? < UsersFilterWrapper /> : null;
+        const filter = <UsersFilterWrapper />;
 
         return <>
             <div className="row">

@@ -70,6 +70,10 @@ const initialState = {
         data: []
     },
     users: {
+        status: null,
+        count: null,
+        countOfBlocked: null,
+        countOfUnblocked: null,
         isPending: true,
         editedUser: null,
         userSearchFilter: null,

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
@@ -14,21 +14,25 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services
 {
     public class UserService : BaseService<User>, IUserService
     {
+        private readonly IMediator _mediator;
         private readonly IPhotoService _photoService;
         private readonly ISecurityContext _securityContext;
 
         public UserService(
             AppDbContext context,
             IMapper mapper,
+            IMediator mediator,
             IPhotoService photoSrv,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
+            _mediator = mediator;
             _photoService = photoSrv;
             _securityContext = securityContext;
         }
@@ -47,10 +51,24 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Registration failed");
             }
 
-            var account = Context.Accounts.Find(userDto.AccountId);
+            var account = await Context.Accounts.FindAsync(userDto.AccountId);
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
+
+            await _mediator.Publish(new UserCreatedMessage());
+        }
+
+        public async Task<int> CountUsersAsync(AccountStatus status)
+        {
+            var count = status switch
+            {
+                AccountStatus.Activated => await Entities.Where(user => !user.Account.IsBlocked).CountAsync(),
+                AccountStatus.Blocked => await Entities.Where(user => user.Account.IsBlocked).CountAsync(),
+                _ => await Entities.CountAsync()
+            };
+
+            return count;
         }
 
         public UserDto GetCurrentUserInfo()
@@ -110,16 +128,16 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
-        public IEnumerable<UserDto> GetUsersByRole(string role)
+        public IEnumerable<UserDto> GetUsersByRole(Role role)
         {
             var users = Context.Roles
                 .Include(r => r.Accounts)
                     .ThenInclude(ar => ar.Account)
                         .ThenInclude(a => a.User)
-               .Where(r => r.Name == role)
+               .Where(r => r.Id.Equals(role))
                .AsNoTracking()
                .FirstOrDefault()
-               .Accounts
+                ?.Accounts
                .Select(ar => ar.Account.User);
 
             return Mapper.Map<IEnumerable<UserDto>>(users);

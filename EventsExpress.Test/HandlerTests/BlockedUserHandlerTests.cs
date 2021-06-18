@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs;
+using EventsExpress.NotificationHandlers;
 using Moq;
 using NUnit.Framework;
 
@@ -16,8 +17,10 @@ namespace EventsExpress.Test.HandlerTests
     {
         private readonly NotificationChange _notificationChange = NotificationChange.Profile;
         private readonly string _emailUser = "user@gmail.com";
+        private UsersHub _usersHub;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<ICacheHelper> _cacheHelper;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private BlockedUserHandler _blockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
@@ -31,6 +34,10 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
+            _cacheHelper = new Mock<ICacheHelper>();
+            _usersHub = new UsersHub(
+                _cacheHelper.Object,
+                _userService.Object);
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
             _notificationTemplateService
@@ -40,7 +47,13 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
-            _blockedUserHandler = new BlockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+
+            _blockedUserHandler = new BlockedUserHandler(
+                _usersHub,
+                _emailService.Object,
+                _userService.Object,
+                _notificationTemplateService.Object);
+
             _account = new Account
             {
                 UserId = _idUser,

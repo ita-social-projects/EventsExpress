@@ -1,35 +1,39 @@
 ﻿using System;
 using System.Runtime.Caching;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
 
-namespace EventsExpress.Core.Infrastructure
+namespace EventsExpress.Core.Services
 {
     public class CacheHelper : ICacheHelper
     {
-        public CacheDto GetValue(Guid userId)
+        public CacheDto GetValue(string key)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Get(userId.ToString()) as CacheDto;
+
+            return memoryCache.Get(key) as CacheDto;
         }
 
         public bool Add(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Add(value.AuthLocalId.ToString(), value, DateTime.Now.AddDays(10));
+
+            return memoryCache.Add(value.Key, value, DateTime.Now.AddDays(10));
         }
 
         public void Update(CacheDto value)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            memoryCache.Set(value.AuthLocalId.ToString(), value, DateTime.Now.AddDays(10));
+            memoryCache.Set(value.Key, value, DateTime.Now.AddDays(10));
         }
 
-        public void Delete(Guid userId)
+        public void Delete(string key)
         {
             MemoryCache memoryCache = MemoryCache.Default;
-            if (memoryCache.Contains(userId.ToString()))
+
+            if (memoryCache.Contains(key))
             {
-                memoryCache.Remove(userId.ToString());
+                memoryCache.Remove(key);
             }
         }
     }

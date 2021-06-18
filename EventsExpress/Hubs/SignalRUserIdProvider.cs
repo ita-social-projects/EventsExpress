@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace EventsExpress.Core.ChatHub
+namespace EventsExpress.Hubs
 {
     public class SignalRUserIdProvider : IUserIdProvider
     {

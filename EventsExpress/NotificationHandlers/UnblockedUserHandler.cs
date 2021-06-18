@@ -5,53 +5,49 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs;
 using MediatR;
-using Microsoft.Extensions.Options;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
-    public class EventCreatedHandler : INotificationHandler<EventCreatedMessage>
+    public class UnblockedUserHandler : INotificationHandler<UnblockedAccountMessage>
     {
+        private readonly UsersHub _hub;
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly INotificationTemplateService _notificationTemplateService;
-        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
-        public EventCreatedHandler(
+        private readonly NotificationChange _nameNotification = NotificationChange.Profile;
+
+        public UnblockedUserHandler(
+            UsersHub hub,
             IEmailService sender,
-            IUserService userSrv,
-            INotificationTemplateService notificationTemplateService,
-            IOptions<AppBaseUrlModel> urlOptions)
+            IUserService userService,
+            INotificationTemplateService notificationTemplateService)
         {
+            _hub = hub;
             _sender = sender;
-            _userService = userSrv;
+            _userService = userService;
             _notificationTemplateService = notificationTemplateService;
-            _urlOptions = urlOptions;
         }
 
-        public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(UnblockedAccountMessage notification, CancellationToken cancellationToken)
         {
             try
             {
-                var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
-                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
+                var userIds = new[] { notification.Account.UserId.Value };
+                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
 
-                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
-
-                foreach (var userEmail in usersEmails)
+                if (userEmail != null)
                 {
-                    string link = $"{_urlOptions.Value.Host}/event/{notification.Event.Id}/1";
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.UnblockedUser);
 
                     Dictionary<string, string> pattern = new Dictionary<string, string>
                     {
                         { "(UserName)", userEmail },
-                        { "(link)", link },
                     };
 
                     await _sender.SendEmailAsync(new EmailDto
@@ -61,6 +57,8 @@ namespace EventsExpress.Core.NotificationHandlers
                         MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
                     });
                 }
+
+                await _hub.SendCountOfUsersAsync(AccountStatus.Activated);
             }
             catch (Exception ex)
             {
