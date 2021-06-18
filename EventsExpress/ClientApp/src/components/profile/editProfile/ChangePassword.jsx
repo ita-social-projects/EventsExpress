@@ -7,11 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { makeStyles } from "@material-ui/core/styles";
-import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderTextField } from '../../helpers/form-helpers';
-const { validate} = Module;
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,6 +25,24 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.text.secondary,
     },
 }));
+
+const validate = values => {
+    const errors = {}
+    const requiredFields = [
+        'oldPassword',
+        'newPassword',
+        'repeatPassword',
+    ]
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    })
+    if (values.newPassword !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords do not match';
+    }
+    return errors
+}
 
 const ChangePassword = (props) => {
     const { handleSubmit, pristine, reset, submitting } = props;

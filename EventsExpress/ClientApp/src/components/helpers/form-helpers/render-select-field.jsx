@@ -5,20 +5,28 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { renderFieldError } from '.';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles210 = makeStyles((theme) => ({
     formControl: {
         minWidth: 210,
     },
 }));
 
-export default ({ input, label, meta: { touched, error, invalid }, children }) => {
-    const classes = useStyles();
+const useStyles100 = makeStyles((theme) => ({
+    formControl: {
+        minWidth: 100,
+    },
+}));
+
+export default ({ input, label, meta: { touched, error, invalid }, children, fullWidth }) => {
+    const classes = useStyles210();
+    const classesInventories = useStyles100();
     return (
-        <FormControl variant="outlined" className={classes.formControl} >
+        <FormControl variant="outlined" className={fullWidth ? classes.formControl : classesInventories.formControl} >
             <InputLabel>{label}</InputLabel>
             <Select
                 {...input}
                 native
+                fullWidth={true}
                 value={input.value}
                 onChange={input.onChange}
                 label={label}

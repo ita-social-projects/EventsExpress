@@ -4,6 +4,18 @@ import { renderTextField } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import IconButton from "@material-ui/core/IconButton";
 
+const validate = values => {
+    const errors = {};
+    const requiredFields = [
+        'name',
+    ];
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    });
+    return errors;
+}
 
 class CategoryEdit extends Component {
 
@@ -45,6 +57,7 @@ class CategoryEdit extends Component {
 
 CategoryEdit = reduxForm({
     form: "save-form",
+    validate,
     enableReinitialize: true
 })(CategoryEdit);
 
