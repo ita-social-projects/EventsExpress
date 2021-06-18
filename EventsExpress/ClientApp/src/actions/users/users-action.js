@@ -26,14 +26,6 @@ export function initialConnection() {
         await hubConnection.start();
 
         try {
-            hubConnection.on("CountUsers", (numberOfUsers) => {
-                if (getState().users.status !== accountStatus.All) {
-                    return Promise.reject();
-                }
-
-                dispatch(getCount(numberOfUsers));
-                return Promise.resolve();
-            });
             hubConnection.on("CountBlockedUsers", (numberOfUsers) => {
                 if (getState().users.status !== accountStatus.Blocked) {
                     return Promise.reject();
@@ -48,6 +40,14 @@ export function initialConnection() {
                 }
 
                 dispatch(getUnblockedCount(numberOfUsers));
+                return Promise.resolve();
+            });
+            hubConnection.on("CountUsers", (numberOfUsers) => {
+                if (getState().users.status !== accountStatus.All) {
+                    return Promise.reject();
+                }
+
+                dispatch(getCount(numberOfUsers));
                 return Promise.resolve();
             });
         } catch(err) {

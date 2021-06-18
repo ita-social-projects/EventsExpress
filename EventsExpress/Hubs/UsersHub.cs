@@ -52,8 +52,14 @@ namespace EventsExpress.Hubs
         public async Task SendCountOfUsersAsync(AccountStatus accountStatus)
         {
             var numberOfUsers = await _userService.CountUsersAsync(accountStatus);
+            var method = accountStatus switch
+            {
+                AccountStatus.Blocked => "CountBlockedUsers",
+                AccountStatus.Activated => "CountUnblockedUsers",
+                _ => "CountUsers"
+            };
 
-            await Clients.Users(Admins).SendAsync("CountUsers", numberOfUsers);
+            await Clients.Users(Admins).SendAsync(method, numberOfUsers);
         }
     }
 }
