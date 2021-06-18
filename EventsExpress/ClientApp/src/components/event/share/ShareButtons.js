@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import './share.css';
 
 export class ShareButtons extends Component {
-     
+
     render() {
         return (
             <>
-                <FacebookProvider appId={this.props.config.keys.facebookClientId}>
+                <FacebookProvider appId={this.props.config.facebookClientId}>
                     <ShareButton className="btn" href={this.props.href} >
                         <div id="fb-share-button">
-                            <i className="fab fa-facebook text-white"></i>
+                            <i className="fab fa-facebook text-white"/>
                         </div>
                     </ShareButton>
                 </FacebookProvider>
