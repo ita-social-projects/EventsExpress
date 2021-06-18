@@ -6,37 +6,44 @@ import { withRouter } from 'react-router-dom';
 import './css/Auth.css';
 
 class LoginGoogle extends Component {
-    render() {
-        const responseGoogle = (response) => {
-            if (typeof response.profileObj.email === 'undefined') {
-                this.props.login.loginError = "Please add email to your google account!"
-            }
-            this.props.loginGoogle(
-                response.tokenId,
-                response.profileObj.email,
-                response.profileObj.name,
-                response.profileObj.imageUrl
-            );
+
+    responseGoogle = (response) => {
+        if (typeof response.profileObj.email === 'undefined') {
+            this.props.login.loginError = "Please add email to your google account!"
         }
 
+        this.props.loginGoogle(
+            response.tokenId,
+            response.profileObj.email,
+            response.profileObj.name,
+            response.profileObj.imageUrl
+        );
+    }
 
+    failedGoogle = response => {
+        console.log('Google auth failed')
+        console.log(response);
+    }
+
+    render() {
         return (
             <div>
                 <GoogleLogin
-                    clientId={this.props.config.keys.googleClientId}
+                    clientId={this.props.config.googleClientId}
                     render={renderProps => (
                         <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            <i className="fab fa-google blue fa-lg"></i>
+                            <i className="fab fa-google blue fa-lg" />
                             <span>Log in</span>
                         </button>
                     )}
-                    onSuccess={responseGoogle}
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.failedGoogle}
                     version="3.2"
                 />
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = (state) => {
     return {
