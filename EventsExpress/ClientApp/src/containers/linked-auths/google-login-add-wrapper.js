@@ -18,11 +18,6 @@ class GoogleLoginAdd extends Component {
         );
     }
 
-    failedGoogle = response => {
-        console.log('Google auth failed')
-        console.log(response);
-    }
-
     render() {
 
         return (
@@ -36,7 +31,6 @@ class GoogleLoginAdd extends Component {
                         </button>
                     )}
                     onSuccess={this.responseGoogle}
-                    onFailure={this.failedGoogle}
                     version="3.2"
                 />
             </div>
