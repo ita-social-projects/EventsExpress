@@ -13,6 +13,8 @@ import AccountService from './AccountService';
 import NotificationTemplateService from "./NotificationTemplateService";
 import TrackService from './TrackService';
 import ConfigService from './ConfigService'
+import UnitOfMeasuringService from './unitOfMeasuringService'
+import CategoryOfMeasuringService from './CategoryOfMeasuringService'
 
 export {
     AuthenticationService,
@@ -29,5 +31,7 @@ export {
 	TrackService,
     NotificationTemplateService,
     ContactAdminService,
-    ConfigService
+    UnitOfMeasuringService,
+    CategoryOfMeasuringService,
+    ConfigService,
 };

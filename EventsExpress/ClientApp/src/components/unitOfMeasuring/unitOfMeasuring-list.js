@@ -8,9 +8,10 @@ export default class UnitOfMeasuringList extends Component {
 
         return (
             <>
-                <tr>
-                    <td width="36%">Unit name</td>
-                    <td width="24%">Short name</td>
+                <tr className="font-weight-bold">
+                    <td width="20%">Group</td>
+                    <td width="20%">Unit name</td>
+                    <td width="20%">Short name</td>
                     <td width="45%" colSpan="3"></td>
                 </tr>
                 {data_list.map(item => <UnitOfMeasuringItemWrapper
