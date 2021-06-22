@@ -1,6 +1,4 @@
-﻿using System;
-using AutoMapper;
-using EventsExpress.Mapping;
+﻿using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
 using NUnit.Framework;
 
