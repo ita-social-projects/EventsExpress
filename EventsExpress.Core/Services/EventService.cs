@@ -14,7 +14,6 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
@@ -190,20 +189,10 @@ namespace EventsExpress.Core.Services
 
             eventDTO.Id = result.Id;
 
-            if (eventDTO.Photo != null)
-            {
-                try
-                {
-                    await _photoService.AddEventPhoto(eventDTO.Photo, eventDTO.Id);
-                }
-                catch (ArgumentException)
-                {
-                    throw new EventsExpressException("Invalid file");
-                }
-            }
-
             await Context.SaveChangesAsync();
             await _mediator.Publish(new EventCreatedMessage(eventDTO));
+
+            await _photoService.ChangeTempToImagePhoto(eventDTO.Id);
 
             return result.Id;
         }
@@ -240,18 +229,6 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
-
-            if (e.Photo != null)
-            {
-                try
-                {
-                    await _photoService.AddEventPhoto(e.Photo, e.Id);
-                }
-                catch (ArgumentException)
-                {
-                    throw new EventsExpressException("Invalid file");
-                }
-            }
 
             if (e.OnlineMeeting != null || e.Point != null)
             {
@@ -296,6 +273,8 @@ namespace EventsExpress.Core.Services
 
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
+
+            await _photoService.ChangeTempToImagePhoto(e.Id);
 
             return ev.Id;
         }

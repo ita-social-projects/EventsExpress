@@ -18,9 +18,6 @@ export default class EventService {
             file.append('Id', data.id);
         }
 
-        if (data.photo != null) {
-            file.append('Photo', data.photo.file);
-        }
 
         file.append('EventStatus', data.eventStatus);
         
@@ -68,14 +65,22 @@ export default class EventService {
     }
 
     setEvent = data => this.setEventTemplate(data, `event/create`);
+    
 
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = data =>
+    setEventFromParent = async (data) => {
+        let photo = new FormData();
+        photo.append(`Photo`, data.photo.file);
+        await baseService.setResourceWithData(`event/SetEventTempPhoto/${data.id}`, photo);
         this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
+    }
     
     editEvent = async (data) => {
+        let photo = new FormData();
+        photo.append(`Photo`, data.photo.file);
+        await baseService.setResourceWithData(`event/SetEventTempPhoto/${data.id}`, photo);
         return this.setEventTemplate(data,`event/${data.id}/edit`)
     }
     publishEvent = (id) => {

@@ -504,22 +504,7 @@ namespace EventsExpress.Test.ServiceTests
             dto.Photo = GetPhoto(@"./Images/valid-image.jpg");
 
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
-            mockPhotoService.Verify(x => x.AddEventPhoto(It.IsAny<IFormFile>(), dto.Id), Times.Once);
-        }
-
-        [Test]
-        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
-        [Category("Create Next Event")]
-        public void CreateEvent_InvalidEventImage_ThrowsAsync(EventDto eventDto)
-        {
-            EventDto dto = DeepCopyDto(eventDto);
-            dto.Id = Guid.Empty;
-            dto.Photo = GetPhoto(@"./Images/invalidFile.txt");
-            mockPhotoService.Setup(e => e.AddEventPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).ThrowsAsync(new ArgumentException());
-
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(dto));
-            Assert.That(ex.Message, Contains.Substring("Invalid file"));
-            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Never);
+            mockPhotoService.Verify(x => x.ChangeTempToImagePhoto(dto.Id), Times.Once);
         }
 
         [Test]
@@ -530,7 +515,7 @@ namespace EventsExpress.Test.ServiceTests
             eventDto.Photo = GetPhoto(@"./Images/valid-image.jpg");
 
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
-            mockPhotoService.Verify(x => x.AddEventPhoto(eventDto.Photo, eventDto.Id), Times.Once);
+            mockPhotoService.Verify(x => x.ChangeTempToImagePhoto(eventDto.Id), Times.Once);
         }
 
         [Test]
@@ -538,18 +523,6 @@ namespace EventsExpress.Test.ServiceTests
         public void EditEvent_InvalidEvent_Failed()
         {
             Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
-        }
-
-        [Test]
-        [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
-        [Category("Edit Event")]
-        public void EditEvent_InvalidEventImage_ThrowsAsync(EventDto eventDto)
-        {
-            eventDto.Photo = GetPhoto(@"./Images/invalidFile.txt");
-            mockPhotoService.Setup(e => e.AddEventPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).ThrowsAsync(new ArgumentException());
-
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(eventDto));
-            Assert.That(ex.Message, Contains.Substring("Invalid file"));
         }
 
         [Test]
