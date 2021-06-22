@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import '../css/Auth.css';
 
 export class TwitterLoginBase extends Component {
+
     authHandler = async (err, data) => {
         const authData = {
             email: undefined,
@@ -34,7 +35,6 @@ export class TwitterLoginBase extends Component {
 
     doWork = (accountCred, authData) => {
         // override when implement
-        return;
     }
 
     obtainAccountCredentials = async (oauthToken, oauthTokenSecret) => {
@@ -44,7 +44,7 @@ export class TwitterLoginBase extends Component {
             include_email: true,
             skip_status: true,
             oauth_token: oauthToken,
-            oauth_consumer_key: this.props.config.keys.twitterConsumerKey,
+            oauth_consumer_key: this.props.config.twitterConsumerKey,
             oauth_nonce: uuid.v4().replace(/-/g, ''),
             oauth_signature_method: 'HMAC-SHA1',
             oauth_timestamp: (Date.now() / 1000).toFixed(),
@@ -55,7 +55,7 @@ export class TwitterLoginBase extends Component {
             'GET',
             urlVerifyCredentials,
             apiTwitterAuthParams,
-            this.props.config.keys.twitterConsumerSecret,
+            this.props.config.twitterConsumerSecret,
             oauthTokenSecret
         );
 
@@ -75,22 +75,19 @@ export class TwitterLoginBase extends Component {
         }).join(', ')}`;
     }
 
-
     render() {
         return (
             <div>
                 <TwitterLogin
                     authCallback={this.authHandler}
                     buttonTheme="light_short"
-                    consumerKey={this.props.config.keys.twitterConsumerKey}
-                    consumerSecret={this.props.config.keys.twitterConsumerSecret}
-                    callbackUrl={`${window.location.origin}${this.props.config.keys.twitterCallbackUrl}`}
+                    consumerKey={this.props.config.twitterConsumerKey}
+                    consumerSecret={this.props.config.twitterConsumerSecret}
+                    callbackUrl={`${window.location.origin}${this.props.config.twitterCallbackUrl}`}
                 />
             </div>
         );
     }
-
-
 }
 
 const mapStateToProps = (state) => {

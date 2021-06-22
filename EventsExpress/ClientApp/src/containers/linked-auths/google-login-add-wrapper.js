@@ -7,6 +7,7 @@ import { setErrorAlert } from '../../actions/alert-action';
 import '../css/Auth.css';
 
 class GoogleLoginAdd extends Component {
+
     googleResponseHandler = response => {
         if (typeof response.profileObj.email === 'undefined') {
             this.props.setErrorAlert("Please add email to your google account!")
@@ -17,16 +18,15 @@ class GoogleLoginAdd extends Component {
         );
     }
 
-
     render() {
-        
+
         return (
             <div>
                 <GoogleLogin
-                    clientId={this.props.config.keys.googleClientId}
+                    clientId={this.props.config.googleClientId}
                     render={renderProps => (
                         <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            <i className="fab fa-google blue fa-lg"></i>
+                            <i className="fab fa-google blue fa-lg" />
                             <span>Log in</span>
                         </button>
                     )}
