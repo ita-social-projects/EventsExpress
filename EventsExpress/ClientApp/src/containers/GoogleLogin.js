@@ -7,7 +7,7 @@ import './css/Auth.css';
 
 class LoginGoogle extends Component {
 
-    responseGoogle = (response) => {
+    googleResponseHandler = (response) => {
         if (typeof response.profileObj.email === 'undefined') {
             this.props.login.loginError = "Please add email to your google account!"
         }
@@ -31,7 +31,7 @@ class LoginGoogle extends Component {
                             <span>Log in</span>
                         </button>
                     )}
-                    onSuccess={this.responseGoogle}
+                    onSuccess={this.googleResponseHandler}
                     version="3.2"
                 />
             </div>
