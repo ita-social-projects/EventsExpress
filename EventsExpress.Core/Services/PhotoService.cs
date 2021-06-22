@@ -18,15 +18,12 @@ namespace EventsExpress.Core.Services
     {
         private readonly BlobContainerClient _blobContainerClient;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
-        private readonly Lazy<HttpClient> _client;
 
         public PhotoService(
             IOptions<ImageOptionsModel> opt,
-            IHttpClientFactory clientFactory,
             BlobServiceClient blobServiceClient)
         {
             _widthOptions = opt;
-            _client = new Lazy<HttpClient>(() => clientFactory.CreateClient());
             _blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
         }
 
