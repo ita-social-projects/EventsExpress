@@ -104,46 +104,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void AddEventPhoto_ValidFormFile_DoesNotThrows()
-        {
-            string testFilePath = @"./Images/valid-image.jpg";
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
-            Guid id = Guid.NewGuid();
-
-            Assert.DoesNotThrowAsync(async () => await PhotoService.AddEventPhoto(file, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-        }
-
-        [Test]
-        [TestCase(@"./Images/invalidFile.txt")]
-        [TestCase(@"./Images/invalidFile.html")]
-        [TestCase(@"./Images/tooSmallImage.jpg")]
-        public void AddEventPhoto_InValidFormFile_WillThrows(string testFilePath)
-        {
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
-            Guid id = Guid.NewGuid();
-
-            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddEventPhoto(file, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [Test]
         public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
             string testFilePath = @"./Images/valid-image.jpg";
