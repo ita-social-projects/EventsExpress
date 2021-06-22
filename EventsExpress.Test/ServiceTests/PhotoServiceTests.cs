@@ -63,21 +63,44 @@ namespace EventsExpress.Test.ServiceTests
             PhotoService = new PhotoService(mockOpt.Object, HttpClientFactoryMock.Object, mockBlobServiceClient.Object);
         }
 
-        private void SetUpHttpHandlerMock(HttpStatusCode statusCode)
+        [Test]
+        public void AddEventTempPhoto_DoesntThrowExceptions()
         {
-            HttpMessageHandlerMock
-                   .Protected()
-                   .Setup<Task<HttpResponseMessage>>(
-                         "SendAsync",
-                         ItExpr.IsAny<HttpRequestMessage>(),
-                         ItExpr.IsAny<CancellationToken>())
-                   .ReturnsAsync(new HttpResponseMessage()
-                   {
-                       StatusCode = statusCode,
-                       Content = new StringContent($"{{\"expires_in\": 100, \"access_token\":\"\"}}"),
-                   })
+            string testFilePath = @"./Images/valid-image.jpg";
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
 
-                   .Verifiable();
+            Assert.DoesNotThrowAsync(async () => await PhotoService.AddEventTempPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        }
+
+        [Test]
+        [TestCase(@"./Images/invalidFile.txt")]
+        [TestCase(@"./Images/invalidFile.html")]
+        [TestCase(@"./Images/tooSmallImage.jpg")]
+        public void AddEventTempPhoto_WithInvalidImages_ShouldThrow(string testFilePath)
+        {
+            byte[] bytes = File.ReadAllBytes(testFilePath);
+            string base64 = Convert.ToBase64String(bytes);
+            string fileName = Path.GetFileName(testFilePath);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = GetContentType(fileName),
+            };
+            Guid id = Guid.NewGuid();
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddEventTempPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -157,30 +180,6 @@ namespace EventsExpress.Test.ServiceTests
             Guid id = Guid.NewGuid();
 
             Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddUserPhoto(file, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [Test]
-        public void AddPhotoByURL_ValidResponse()
-        {
-            SetUpHttpHandlerMock(HttpStatusCode.OK);
-
-            string url = "https://google.com";
-            Guid id = Guid.NewGuid();
-
-            Assert.DoesNotThrowAsync(async () => await PhotoService.AddPhotoByURL(url, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        [Test]
-        public void AddPhotoByURL_InvalidResponse()
-        {
-            SetUpHttpHandlerMock(HttpStatusCode.BadRequest);
-
-            string url = "https://google.com";
-            Guid id = Guid.NewGuid();
-
-            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddPhotoByURL(url, id));
             BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 

@@ -10,6 +10,7 @@ using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
@@ -19,15 +20,30 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
+        private readonly IPhotoService _photoService;
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
         {
+            _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
+        }
+
+        [HttpPost("[action]/{eventId:Guid}")]
+        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] IFormFile photo)
+        {
+            if (eventId == null || photo == null)
+            {
+                return BadRequest();
+            }
+
+            await _photoService.AddEventTempPhoto(photo, eventId);
+
+            return Ok();
         }
 
         /// <summary>

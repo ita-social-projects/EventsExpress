@@ -46,6 +46,14 @@ namespace EventsExpress.Core.Services
             await UploadPhotoToBlob(fullPhoto, $"events/{id}/full.png");
         }
 
+        public async Task ChangeTempToImagePhoto(Guid id)
+        {
+            byte[] photo = await GetPhotoFromAzureBlob($"events/{id}/previewTemp.png");
+            await UploadPhotoToBlob(photo, $"events/{id}/preview.png");
+            photo = await GetPhotoFromAzureBlob($"events/{id}/fullTemp.png");
+            await UploadPhotoToBlob(photo, $"events/{id}/full.png");
+        }
+
         public async Task AddUserPhoto(IFormFile uploadedFile, Guid id)
         {
             if (!IsValidImage(uploadedFile))
@@ -56,32 +64,6 @@ namespace EventsExpress.Core.Services
             var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
 
             await UploadPhotoToBlob(photo, $"users/{id}/photo.png");
-        }
-
-        public async Task AddPhotoByURL(string url, Guid id)
-        {
-            if (!await IsImageUrl(url))
-            {
-                throw new ArgumentException("The url should be a valid image", nameof(url));
-            }
-
-            Uri uri = new Uri(url);
-            byte[] photo = _client.Value.GetByteArrayAsync(uri).Result;
-
-            await UploadPhotoToBlob(photo, $"users/{id}/photo.png");
-        }
-
-        private async Task<bool> IsImageUrl(string url)
-        {
-            try
-            {
-                HttpResponseMessage result = await _client.Value.GetAsync(url);
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
         }
 
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
@@ -139,6 +121,20 @@ namespace EventsExpress.Core.Services
             {
                 return null;
             }
+        }
+
+        public async Task AddEventTempPhoto(IFormFile uploadedFile, Guid id)
+        {
+            if (!IsValidImage(uploadedFile))
+            {
+                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
+            }
+
+            var previewPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
+            await UploadPhotoToBlob(previewPhoto, $"events/{id}/previewTemp.png");
+
+            var fullPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image);
+            await UploadPhotoToBlob(fullPhoto, $"events/{id}/fullTemp.png");
         }
     }
 }
