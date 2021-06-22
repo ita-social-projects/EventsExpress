@@ -22,3 +22,4 @@ export default ({ input, label, meta: { touched, error, invalid }, children, ...
         </div>
     );
 }
+

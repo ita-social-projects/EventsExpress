@@ -9,7 +9,7 @@ export default class OwnerSeeItem extends Component {
             <>
                 {!item.isEdit &&
                     <>
-                        <div className="col col-md-4 d-flex align-items-center">
+                        <div className="col col-md-3 d-flex align-items-center">
                             <span className="item" onClick={() => onAlreadyGet(item)}>{item.itemName}</span>
                         </div>
                         <div className="col align-items-center" key={item.id}>
@@ -34,9 +34,9 @@ export default class OwnerSeeItem extends Component {
                                     </>
                                 }
                         </div>
-                        <div className="col col-md-1 d-flex align-items-center">{item.needQuantity}</div>
-                        <div className="col col-md-1 d-flex align-items-center">{item.unitOfMeasuring.shortName}</div>
-                        <div className="col col-md-2">
+                        <div className="col col-md-2 d-flex align-items-center">{item.needQuantity}</div>
+                        <div className="col col-md-2 d-flex align-items-center">{item.unitOfMeasuring.shortName}</div>
+                    <div className="col col-md-2 d-flex align-items-center">
                             <IconButton 
                                 disabled={disabledEdit} 
                                 onClick={markItemAsEdit}>

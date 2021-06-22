@@ -5,7 +5,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import './users-view.css';
-import { getAge } from '../helpers/helpers';
+import { getAge } from '../helpers/validators/get-age-validator';
 
 export default class UserView extends Component{
     constructor() {

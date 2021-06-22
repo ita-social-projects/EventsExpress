@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { renderSelectField, renderTextField} from '../helpers/helpers';
+import { renderTextField, renderSelectField } from '../helpers/form-helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 
 const divStyle = {
     width: "90wh"
 };
-
 
 class UnitOfMeasuringEdit extends Component {
     state = ({
