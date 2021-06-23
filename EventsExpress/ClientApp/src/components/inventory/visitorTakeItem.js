@@ -3,13 +3,14 @@ import { Field, reduxForm } from 'redux-form';
 import { renderTextField } from '../helpers/form-helpers';
 import IconButton from "@material-ui/core/IconButton";
 
+class VisitorEditItemForm extends Component {
     maxValue = max => value =>
         value && value > max ? `Must be less or equal than ${max}` : undefined
     maxValueLimitor = this.maxValue(this.props.initialValues.needQuantity - this.props.alreadyGet)
 
     minValue = min => value =>
         value && value < min ? `Must be at least ${min}` : undefined
-    minValueLimitor = this.minValue(1)
+    minValueLimitor = this.minValue(1);
 
     render() {
         const { initialValues, alreadyGet } = this.props;
