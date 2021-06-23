@@ -26,6 +26,7 @@ const useStyles = useStyle;
 const photoService = new PhotoService();
 
 export default class EventCard extends Component {
+
     constructor(props) {
         super(props);
 
@@ -53,7 +54,6 @@ export default class EventCard extends Component {
         );
     }
 
-
     render() {
         const classes = useStyles;
         const {
@@ -70,7 +70,6 @@ export default class EventCard extends Component {
             members,
         } = this.props.item;
         const INT32_MAX_VALUE = null;
-
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -133,7 +132,7 @@ export default class EventCard extends Component {
                                 <Tooltip title="Private event">
                                     <IconButton>
                                         <Badge color="primary">
-                                            <i className="fa fa-key"></i>
+                                            <i className="fa fa-key" />
                                         </Badge>
                                     </IconButton>
                                 </Tooltip>
@@ -141,7 +140,7 @@ export default class EventCard extends Component {
                                 <Link to={`/event/${id}/1`}>
                                     <Tooltip title="View">
                                         <IconButton aria-label="view">
-                                            <i className="fa fa-eye"/>
+                                            <i className="fa fa-eye" />
                                         </IconButton>
                                     </Tooltip>
                                 </Link>

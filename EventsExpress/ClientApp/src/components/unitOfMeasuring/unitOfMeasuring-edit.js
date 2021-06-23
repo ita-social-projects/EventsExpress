@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { renderTextField } from '../helpers/helpers';
+import { renderSelectField, renderTextField} from '../helpers/helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 
@@ -8,12 +8,8 @@ const divStyle = {
     width: "90wh"
 };
 
-const dSt = {
-    marginLeft: "0"
-}
-
-
 class UnitOfMeasuringEdit extends Component {
+
     state = ({
         unitError: null,
         shortError: null,
@@ -32,6 +28,14 @@ class UnitOfMeasuringEdit extends Component {
         });
     };
 
+    categoriesList = (
+        this.props.all_categories.data.map((item) =>
+            <option value={item.id} key={item.id}>
+                    {item.categoryName}
+            </option>
+            )
+    );
+
     render() {
         return <>
             <td colSpan="3" className="align-middle">
@@ -39,35 +43,48 @@ class UnitOfMeasuringEdit extends Component {
                     <div style={divStyle} className="d-flex flex justify-content-around ">
 
                         <Field
-                            className="form-control"
+                            className="form-control w-25"
                             name="unitName"
                             label="Unit name"
                             component={renderTextField}
                         />
                         <Field
-                            className="form-control"
+                            className="form-control w-25"
                             name="shortName"
                             label="Short name"
                             component={renderTextField}
                         />
-                        {
-                            this.props.error &&
-                            <ErrorMessages error={this.props.error} className="text-center" />
-                        }
+                        <Field
+                            fullWidth={true}
+                            component={renderSelectField}
+                            className="mw-50"
+                            name="categoryId"
+                            label='Category'
+                        >
+                            <option aria-label="None" value="" />
+                            {this.categoriesList}
+                        </Field>
+                    </div>
+
+                    <div>
+                    {
+                        this.props.error &&
+                            <ErrorMessages error={this.props.error} className="text-center"/>
+                    }
                     </div>
                 </form>
             </td>
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-success" size="small" type="submit" form="save-form">
-                        <i className="fa fa-check"></i>
+                        <i className="fa fa-check" />
                     </IconButton>
                 </div>
             </td>
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
-                        <i className="fas fa-times"></i>
+                        <i className="fas fa-times" />
                     </IconButton>
                 </div>
             </td>

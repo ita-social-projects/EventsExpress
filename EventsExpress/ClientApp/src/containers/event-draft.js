@@ -15,7 +15,7 @@ import './css/Draft.css';
 
 class EventDraftWrapper extends Component {
 
-    onPublish = async (values) => { 
+    onPublish = async (values) => {
         if (!this.props.pristine)
         {
             await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
@@ -25,7 +25,7 @@ class EventDraftWrapper extends Component {
 
     onSave = async () => {
         await this.props.edit_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-        this.props.alert('Your event has been successfully saved!');    
+        this.props.alert('Your event has been successfully saved!');
     }
 
     onDelete = async (reason) => {
@@ -33,7 +33,7 @@ class EventDraftWrapper extends Component {
         this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
     }
-  
+
     render() {
         return <>
             <div className="pl-md-4">
@@ -41,7 +41,7 @@ class EventDraftWrapper extends Component {
                     <div className="row">
                         <div className="col-12 py-3">
                             <div className="float-left">
-                                <h1>Edit event draft</h1>                  
+                                <h1>Edit event draft</h1>
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 <SimpleModalWithDetails
@@ -49,7 +49,7 @@ class EventDraftWrapper extends Component {
                                     data="Are you sure?"
                                     button={
                                         <IconButton className="text-danger" size="medium">
-                                            <i className="fas fa-trash"></i>
+                                            <i className="fas fa-trash" />
                                         </IconButton>
                                     }
                                 />

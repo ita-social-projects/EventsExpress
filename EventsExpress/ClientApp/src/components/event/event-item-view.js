@@ -19,8 +19,9 @@ import PhotoService from "../../services/PhotoService";
 const photoService = new PhotoService();
 
 export default class EventItemView extends Component {
-    constructor() {
-        super();
+
+    constructor(props) {
+        super(props);
 
         this.state = {
             eventImage: eventDefaultImage
@@ -187,9 +188,9 @@ export default class EventItemView extends Component {
                         <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                             {(eventStatus === eventStatusEnum.Canceled) &&
                                 <div className="text-center text-uppercase cancel-text">
-                                    <i className="fas fa-exclamation-triangle text-warning"></i>
+                                    <i className="fas fa-exclamation-triangle text-warning" />
                                     <span> This event is canceled </span>
-                                    <i className="fas fa-exclamation-triangle text-warning"></i>
+                                    <i className="fas fa-exclamation-triangle text-warning" />
                                     <br />
                                 </div>
                             }
@@ -239,4 +240,3 @@ export default class EventItemView extends Component {
         </>
     }
 }
-

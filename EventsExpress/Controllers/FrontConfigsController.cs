@@ -6,7 +6,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class FrontConfigsController : Controller
+    public class FrontConfigsController : ControllerBase
     {
         private readonly IOptions<FrontConfigsViewModel> _frontConfigs;
 
@@ -15,6 +15,7 @@
             _frontConfigs = frontConfigs;
         }
 
+        [HttpGet("[action]")]
         public IActionResult GetConfigs()
         {
             FrontConfigsViewModel configResult = _frontConfigs.Value;

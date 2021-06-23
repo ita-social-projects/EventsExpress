@@ -10,6 +10,7 @@ import { getAge } from '../helpers/helpers';
 import './user-info.css';
 
 export default class UserInfoCard extends Component {
+
     render() {
         const { user } = this.props;
         const attitudeColor = (user.attitude === 0)
@@ -39,14 +40,14 @@ export default class UserInfoCard extends Component {
                             {user.attitude === 0 &&
                                 <Tooltip title="You like this user" placement="bottom" TransitionComponent={Zoom}>
                                     <div className="retreat">
-                                        <i class="far fa-thumbs-up Size"></i>
+                                        <i className="far fa-thumbs-up Size" />
                                     </div>
                                 </Tooltip>
                             }
                             {user.attitude === 1 &&
                                 <Tooltip title="You dislike this user" placement="bottom" TransitionComponent={Zoom}>
                                     <div className="retreat" >
-                                        <i class="far fa-thumbs-down Size"></i>
+                                        <i className="far fa-thumbs-down Size" />
                                     </div>
                                 </Tooltip>
                             }

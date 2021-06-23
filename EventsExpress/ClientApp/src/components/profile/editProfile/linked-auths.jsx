@@ -6,10 +6,10 @@ const LinkedAuths = props => {
     return (
         <div>
             <div className="btn-group m-1" role="group" disabled>
-                <a href="#" class="btn btn-secondary disabled" role="button" aria-disabled="true">
+                <a href="#" className="btn btn-secondary disabled" role="button" aria-disabled="true">
                     {renderType(item.type)}
                 </a>
-                <a href="#" class="btn btn-outline-secondary disabled" role="button" aria-disabled="true">
+                <a href="#" className="btn btn-outline-secondary disabled" role="button" aria-disabled="true">
                     {item.email}
                 </a>
             </div>
@@ -20,13 +20,13 @@ const LinkedAuths = props => {
 const renderType = type => {
     switch(type){
         case externalLoginTypeEnum.Google:
-            return <i class="fab fa-google"></i>;
+            return <i className="fab fa-google" />
         case externalLoginTypeEnum.Facebook:
-            return <i class="fab fa-facebook"></i>
+            return <i className="fab fa-facebook" />
         case externalLoginTypeEnum.Twitter:
-            return <i class="fab fa-twitter"></i>
+            return <i className="fab fa-twitter" />
         default :
-            return <i class="fas fa-at"></i>
+            return <i className="fas fa-at" />
     }
 }
 

@@ -4,6 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SimpleModal from '../event/simple-modal';
 
 export default class TrackItem extends Component {
+
     getChangesType = changesType => {
         switch (changesType) {
             case 0:
@@ -17,7 +18,7 @@ export default class TrackItem extends Component {
         }
     }
     getPropertyChangesText = propertyChangesText => {
-        
+
         let test = JSON.parse(propertyChangesText);
         return test.map(x => (
             <tr>
@@ -27,7 +28,7 @@ export default class TrackItem extends Component {
             </tr>
         ));
     }
-    
+
     render() {
         const { propertyChangesText, time, name, changesType, user } = this.props.item;
 

@@ -50,25 +50,25 @@ class InventoryList extends Component {
         let updateList = [];
         if (inventories.items) {
             updateList = inventories.items.map(item => {
-                return { 
+                return {
                     ...item,
                     isTaken: usersInventories.data
-                        .filter(dataItem => 
-                            user.id === dataItem.userId && 
+                        .filter(dataItem =>
+                            user.id === dataItem.userId &&
                             item.id === dataItem.inventoryId)
                         .length > 0
-                }                
+                }
             });
         }
         return (
             <>
-                
-                <InventoryHeaderButton 
-                    isOpen={this.state.isOpen} 
+
+                <InventoryHeaderButton
+                    isOpen={this.state.isOpen}
                     handleOnClickCaret={this.handleOnClickCaret}
                 />
-                
-                
+
+
                 { this.state.isOpen &&
                 <div>
                     {isMyEvent &&
@@ -76,7 +76,7 @@ class InventoryList extends Component {
                             disabled = {this.state.disabledEdit}
                             onClick = {this.addItemToList.bind(this)}
                             size = "small">
-                            <span className="icon"><i className="fa-sm fas fa-plus"></i></span> &nbsp; Add item 
+                            <span className="icon"><i className="fa-sm fas fa-plus" /></span> &nbsp; Add item
                         </IconButton>
                     }
                         <div className="container">
@@ -87,8 +87,8 @@ class InventoryList extends Component {
                                 <div className="col col-md-2"><b>Will take</b></div>
                                 }
                                 <div className="col col-md-1"><b>Count</b></div>
-                                <div className="col col-md-1"></div>
-                                <div className="col col-md-2"></div>
+                                <div className="col col-md-1" />
+                                <div className="col col-md-2" />
                             </div>
                             {this.state.isNew &&
                                 <InventoryItemWrapper
@@ -123,7 +123,7 @@ class InventoryList extends Component {
                                         key={key}
                                     />
                                 );
-                            })}                    
+                            })}
                         </div>
                 </div>
                 }

@@ -17,6 +17,7 @@ import AuthComponent from "../../security/authComponent";
 import { getAge } from '../helpers/helpers';
 
 class UserItemView extends Component {
+
     splitPath(path) {
         var n = path.toLowerCase().split("/");
         return n[n.length - 1];
@@ -92,7 +93,7 @@ class UserItemView extends Component {
                                         className={attitude == '0' ? 'text-success' : ''}
                                         onClick={attitude != '0' ? this.props.onLike : this.props.onReset}
                                     >
-                                        <i className="fas fa-thumbs-up"></i>
+                                        <i className="fas fa-thumbs-up" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Dislike this user" placement="bottom" TransitionComponent={Zoom}>
@@ -100,13 +101,13 @@ class UserItemView extends Component {
                                         className={attitude == '1' ? 'text-danger' : ''}
                                         onClick={attitude != '1' ? this.props.onDislike : this.props.onReset}
                                     >
-                                        <i className="fas fa-thumbs-down"></i>
+                                        <i className="fas fa-thumbs-down" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Start chat!" placement="bottom" TransitionComponent={Zoom}>
                                     <Link to={`/chat/${id}`}>
                                         <IconButton>
-                                            <i className="far fa-comments"></i>
+                                            <i className="far fa-comments" />
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
@@ -137,7 +138,7 @@ class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 0 ? '' : 'primary'}>
-                                    <i className="far fa-calendar-alt"></i>
+                                    <i className="far fa-calendar-alt" />
                                 </IconButton>}
                             component={Link}
                             to={`/user/${userId}/FutureEvents`} />
@@ -146,7 +147,7 @@ class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 1 ? '' : 'primary'}>
-                                    <i className="fas fa-archive"></i>
+                                    <i className="fas fa-archive" />
                                 </IconButton>}
                             component={Link}
                             to={`/user/${userId}/ArchiveEvents`} />
@@ -155,7 +156,7 @@ class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 2 ? '' : 'primary'}>
-                                    <i className="fas fa-history"></i>
+                                    <i className="fas fa-history" />
                                 </IconButton>}
                             component={Link}
                             to={`/user/${userId}/VisitedEvents`} />
@@ -164,7 +165,7 @@ class UserItemView extends Component {
                             icon={
                                 <IconButton
                                     color={this.state.value === 3 ? '' : 'primary'}>
-                                    <i className="fas fa-map-marker-alt"></i>
+                                    <i className="fas fa-map-marker-alt" />
                                 </IconButton>}
                             component={Link}
                             to={`/user/${userId}/EventsToGo`} />

@@ -124,6 +124,20 @@ namespace EventsExpress.Db.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.CategoryOfMeasuring", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoriesOfMeasurings");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -650,6 +664,9 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -661,7 +678,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UnitName", "ShortName")
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UnitName", "ShortName", "CategoryId")
                         .IsUnique()
                         .HasFilter("IsDeleted = 0");
 
@@ -995,6 +1014,15 @@ namespace EventsExpress.Db.Migrations
                         .WithMany("Relationships")
                         .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.CategoryOfMeasuring", "Category")
+                        .WithMany("UnitOfMeasurings")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
