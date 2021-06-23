@@ -5,7 +5,7 @@ export const GET_CONFIG_SUCCESS = "GET_CONFIG_SUCCESS";
 
 const api_serv = new ConfigService();
 
-export default function getConfigs() {
+export default function getConfig() {
     return async dispatch => {
         let response = await api_serv.getConfigsFromBack();
 

@@ -37,7 +37,7 @@ export default class HeaderProfile extends Component {
                                 <Link to={'/editProfile'}>
                                     <Tooltip title="Edit your profile" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton>
-                                            <i className="fa fa-cog" aria-hidden="true"></i>
+                                            <i className="fa fa-cog" aria-hidden="true" />
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
@@ -46,7 +46,7 @@ export default class HeaderProfile extends Component {
                                         <Tooltip title="Notifications" placement="bottom" TransitionComponent={Zoom}>
                                             <IconButton>
                                                 <Badge badgeContent={this.props.notification} color="primary">
-                                                    <i className="fas fa-bell"></i>
+                                                    <i className="fas fa-bell" />
                                                 </Badge>
                                             </IconButton>
                                         </Tooltip>
@@ -60,21 +60,21 @@ export default class HeaderProfile extends Component {
                                 >
                                     <Tooltip title="Sign out" placement="bottom" TransitionComponent={Zoom}>
                                         <IconButton onClick={onClick}>
-                                            <i className="fas fa-sign-out-alt"></i>
+                                            <i className="fas fa-sign-out-alt" />
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
                             </div>
                             <AuthComponent rolesMatch={Roles.User}>
                                 <button className="btn btn-outline-secondary" onClick={this.handleClick}>
-                                    <i className="fas fa-plus mr-1"></i>
-                                        add event
+                                    <i className="fas fa-plus mr-1" />
+                                    add event
                                 </button>
                             </AuthComponent>
                         </div>
                     </AuthComponent>
                 </div>
-            </div >
+            </div>
         );
     }
 }
