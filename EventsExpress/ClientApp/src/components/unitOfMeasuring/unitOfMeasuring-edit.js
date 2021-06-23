@@ -54,9 +54,9 @@ class UnitOfMeasuringEdit extends Component {
                             component={renderTextField}
                         />
                         <Field
-                            fullWidth={true}
+                            minWidth={150}
                             component={renderSelectField}
-                            className="mw-50"
+                            className="min-vw-50"
                             name="categoryId"
                             label='Category'
                         >

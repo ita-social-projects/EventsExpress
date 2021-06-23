@@ -10,4 +10,5 @@ const maxLength = max => value =>
 export const minLength10 = minLength(10);
 export const minLength20 = minLength(20);
 export const maxLength15 = maxLength(15);
+export const maxLength30 = maxLength(30);
 export const minLength6 = minLength(6);

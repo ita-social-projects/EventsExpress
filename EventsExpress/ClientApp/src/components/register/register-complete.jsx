@@ -70,6 +70,7 @@ class RegisterComplete extends Component {
                             </div>
                             <div className="form-group col">
                                 <Field
+                                    minWidth={210}
                                     name="gender"
                                     component={renderSelectField}
                                     label="Gender"

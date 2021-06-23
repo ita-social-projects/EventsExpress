@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import issueTypeEnum from '../../constants/IssueTypeEnum ';
+import { maxLength30 } from '../helpers/validators/min-max-length-validators'
 
 const validate = values => {
     const errors = {};
@@ -74,7 +75,8 @@ class ContactAdmin extends Component {
                                     name="title"
                                     className="form-control"
                                     component={renderTextField}
-                                    label="Enter problem type:"
+                                label="Enter problem type:"
+                                validate={[maxLength30]}
                                 />
                             )}
 

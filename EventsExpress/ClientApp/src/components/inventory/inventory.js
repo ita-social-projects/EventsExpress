@@ -41,7 +41,8 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
                     <div className="p-2 bd-highlight">
                         <Field
                             className="selectpicker"
-                            name={`${item}.unitOfMeasuring.id`} 
+                            name={`${item}.unitOfMeasuring.id`}
+                            minWidth={100}
                             component={renderSelectField}>
                             <option></option>
                             {unitOfMeasuringState.units.map((unit, key) => 

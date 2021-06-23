@@ -1,8 +1,9 @@
 ﻿import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio'
-import { renderSelectField, renderTextField, radioButton} from '../helpers/form-helpers';
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { renderSelectField, renderTextField, radioButton } from '../helpers/form-helpers';
 
 class UsersFilters extends Component {
     render() {
@@ -10,7 +11,7 @@ class UsersFilters extends Component {
             <form onSubmit={this.props.handleSubmit} className="box">
                 <Field name='search' component={renderTextField} type="input" label="Search:" />
                 <Field
-                    fullWidth={true}
+                    minWidth={150}
                     name="role"
                     component={renderSelectField}
                     label="Role"
@@ -21,6 +22,7 @@ class UsersFilters extends Component {
                 </Field>
                 <br/>
                 <Field
+                    minWidth={150}
                     name='PageSize' 
                     component={renderSelectField}
                     label="PageSize"
@@ -32,9 +34,9 @@ class UsersFilters extends Component {
                 </Field>
                 <br/>
                 <Field name="status" component={radioButton}>
-                    <Radio value="true" label="Blocked" />
-                    <Radio value="true" label="Unblocked" />
-                    <Radio value="true" label="All" />
+                    <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+                    <FormControlLabel value="active" control={<Radio />} label="Active" />
+                    <FormControlLabel value="all" control={<Radio />} label="All" />
                 </Field>
                 <Button fullWidth={true} type="submit"  color="primary" disabled={this.props.submitting}>
                     Search

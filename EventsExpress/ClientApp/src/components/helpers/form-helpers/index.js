@@ -11,8 +11,6 @@ import renderCheckbox from './render-checkbox';
 import renderTextField from './render-text-field';
 import renderTextArea from './render-text-area';
 import radioButton from './render-radio-button';
-import renderSelectPeriodicityField from './render-select-periodicity-field';
-import radioLocationType from './render-radio-location-type';
 
 export {
     renderSelectField,
@@ -28,6 +26,4 @@ export {
     renderCheckbox,
     renderTextArea,
     radioButton,
-    radioLocationType,
-    renderSelectPeriodicityField,
 };
