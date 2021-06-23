@@ -7,7 +7,7 @@ const api_serv = new ConfigService();
 
 export default function getConfig() {
     return async dispatch => {
-        let response = await api_serv.getConfigsFromBack();
+        let response = await api_serv.getConfigFromBack();
 
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import Login from '../../components/google-login';
 import { connect } from 'react-redux';
 import { googleLoginAdd } from '../../actions/redactProfile/linked-auths-add-action';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +12,7 @@ class GoogleLoginAdd extends Component {
         if (typeof response.profileObj.email === 'undefined') {
             this.props.setErrorAlert("Please add email to your google account!")
         }
+
         this.props.googleLoginAdd(
             response.tokenId,
             response.profileObj.email
@@ -19,22 +20,10 @@ class GoogleLoginAdd extends Component {
     }
 
     render() {
-
-        return (
-            <div>
-                <GoogleLogin
-                    clientId={this.props.config.googleClientId}
-                    render={renderProps => (
-                        <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            <i className="fab fa-google blue fa-lg" />
-                            <span>Log in</span>
-                        </button>
-                    )}
-                    onSuccess={this.googleResponseHandler}
-                    version="3.2"
-                />
-            </div>
-        );
+        return <Login
+            googleClientId={this.props.config.googleClientId}
+            googleResponseHandler={this.googleResponseHandler}
+        />
     }
 }
 
