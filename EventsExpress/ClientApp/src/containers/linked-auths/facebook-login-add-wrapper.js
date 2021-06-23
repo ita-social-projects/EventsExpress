@@ -6,6 +6,7 @@ import { setErrorAlert } from '../../actions/alert-action';
 import '../css/Auth.css';
 
 class LoginFacebook extends Component {
+
     facebookResponseHandler = response => {
         if (typeof response === 'undefined'|| typeof response.email === 'undefined') {
             this.props.setErrorAlert("Please add email to your google account!")
@@ -18,12 +19,12 @@ class LoginFacebook extends Component {
         return (
             <div>
                 <FacebookLogin
-                    appId={this.props.config.keys.facebookClientId}
+                    appId={this.props.config.facebookClientId}
                     autoLoad={false}
                     fields="email"
                     callback={this.facebookResponseHandler}
                     cssClass="btnFacebook"
-                    icon={<i className="fab fa-facebook fa-lg"></i>}
+                    icon={<i className="fab fa-facebook fa-lg"/>}
                     textButton="&nbsp;&nbsp;Log in"
                     version="3.1"
                 />

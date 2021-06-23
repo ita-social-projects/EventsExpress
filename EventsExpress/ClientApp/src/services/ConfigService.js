@@ -3,5 +3,5 @@
 const baseService = new EventsExpressService();
 
 export default class ConfigService {
-    getConfigsFromBack = () => baseService.getResource('frontconfigs');
+    getConfigsFromBack = () => baseService.getResource('FrontConfigs/GetConfigs');
 }
