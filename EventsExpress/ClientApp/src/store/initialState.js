@@ -242,7 +242,7 @@ const initialState = {
         subject: null,
         message: null  
     },
-    configs: {
+    config: {
         facebookClientId: null,
         googleClientId: null,
         twitterCallbackUrl: null,

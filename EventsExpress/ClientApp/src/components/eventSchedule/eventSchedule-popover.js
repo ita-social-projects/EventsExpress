@@ -10,7 +10,7 @@ export default class EventSchedulePopover extends Component {
         anchorEl: null,
         isFocused: false,
     }
-    
+
     handlePopover = (event) => {
         this.setState({
             anchorEl: event.currentTarget
@@ -22,7 +22,7 @@ export default class EventSchedulePopover extends Component {
             anchorEl: null
         });
     }
-    
+
     onFocusChange = () => {
         this.setState({ isFocused: true });
     }
@@ -35,7 +35,7 @@ export default class EventSchedulePopover extends Component {
                     style={(this.state.isFocused) ?
                         { minWidth: "2px", outlineStyle: "none" } :
                         { minWidth: "2px" }} onClick={this.handlePopover}>
-                    <i className="fas fa-info-circle"></i>
+                    <i className="fas fa-info-circle" />
                 </Button>
                 <Popover
                     open={Boolean(this.state.anchorEl)}

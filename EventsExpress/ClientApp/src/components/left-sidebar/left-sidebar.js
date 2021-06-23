@@ -6,8 +6,8 @@ import { NavItem } from '../NavItem/NavItem';
 import AuthComponent from '../../security/authComponent';
 import { Roles } from '../../constants/userRoles';
 
-
 class LeftSidebar extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -58,7 +58,7 @@ class LeftSidebar extends Component {
                                 />
                                 <NavItem
                                     to={'/eventSchedules'}
-                                    my_icon={<i className="fa fa-clone"></i>}
+                                    my_icon={<i className="fa fa-clone" />}
                                     text={"Recurrent Events"}
                                 />
                                 <NavItem
@@ -72,7 +72,7 @@ class LeftSidebar extends Component {
                                     to={'/user_chats'}
                                     my_icon={
                                         <Badge badgeContent={this.props.msg_for_read().length} color="primary">
-                                            <i className="fas fa-comments"></i>
+                                            <i className="fas fa-comments" />
                                         </Badge>
                                     }
                                     text={"Comuna"}
