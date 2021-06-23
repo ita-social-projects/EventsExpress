@@ -14,14 +14,12 @@ const api_serv = new UserService();
 
 export default function change_avatar(data) {
     return async dispatch => {
-        dispatch(setAvatarPending(true));
         dispatch(getRequestInc());
 
         let response = await api_serv.setAvatar(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setAvatarSuccess(true));
         dispatch(getRequestDec());
         dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar is successfully updated'));
@@ -34,20 +32,6 @@ export default function change_avatar(data) {
 export function updateAvatar() {
     return {
         type: changeAvatar.UPDATE,
-    };
-}
-
-function setAvatarPending(data) {
-    return {
-        type: changeAvatar.PENDING,
-        payload: data
-    };
-}
-
-function setAvatarSuccess(data) {
-    return {
-        type: changeAvatar.SUCCESS,
-        payload: data
     };
 }
 

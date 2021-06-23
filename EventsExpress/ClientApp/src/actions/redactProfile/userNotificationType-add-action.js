@@ -5,8 +5,6 @@ import { buildValidationState } from '../../components/helpers/action-helpers';
 import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const addUserNotificationType = {
-    PENDING: "SET_ADD_USER_NOTIFICATION_TYPE_PENDING",
-    SUCCESS: "SET_ADD_USER_NOTIFICATION_TYPE_SUCCESS",
     UPDATE: "UPDATE_NOTIFICATION_TYPES",
 }
 
@@ -33,19 +31,3 @@ function updateNotificationTypes(data) {
         payload: data.notificationTypes,
     };
 }
-
-function setAddUserNotificationTypePending(data) {
-    return {
-        type: addUserNotificationType.PENDING,
-        payload: data
-    };
-}
-
-function setAddUserNotificationTypeSuccess(data) {
-    return {
-        type: addUserNotificationType.SUCCESS,
-        payload: data
-    };
-}
-
-

@@ -4,8 +4,6 @@ import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_UNIT_OF_MEASURING_PENDING = "SET_UNIT_OF_MEASURING_PENDING";
-export const SET_UNIT_OF_MEASURING_SUCCESS = "SET_UNIT_OF_MEASURING_SUCCESS";
 export const SET_UNIT_OF_MEASURING_EDITED = "SET_UNIT_OF_MEASURING_EDITED";
 
 const api_serv = new UnitOfMeasuringService();

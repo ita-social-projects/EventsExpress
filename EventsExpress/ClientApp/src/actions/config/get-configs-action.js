@@ -1,36 +1,29 @@
 ﻿import { ConfigService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_CONFIGS_PENDING = "GET_CONFIGS_PENDING";
-export const GET_CONFIGS_SUCCESS = "GET_CONFIGS_SUCCESS";
+export const GET_CONFIGS_DATA = "GET_CONFIGS_DATA";
 
 const api_serv = new ConfigService();
 
 export default function getConfigs() {
     return async dispatch => {
-        dispatch(getConfigsPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getConfigsFromBack();
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let configs = await response.json();
-        
-        dispatch(getConfigSuccess(true,configs));
+        dispatch(getConfigSuccess(configs));
+        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }
 
-export function getConfigsPending(isConfigsPending) {
+export function getConfigSuccess(data) {
     return {
-        type: GET_CONFIGS_PENDING,
-        isConfigsPending
-    };
-}
-export function getConfigSuccess(isConfigsSuccess,data) {
-    return {
-        type: GET_CONFIGS_SUCCESS,
-        isConfigsSuccess,
-        payload:data
+        type: GET_CONFIGS_DATA,
+        payload: data
     };
 }

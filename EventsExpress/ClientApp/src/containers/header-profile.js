@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
 import logout from '../actions/login/logout-action';
-import { setRegisterPending, setRegisterSuccess } from '../actions/register/register-action';
-import { setLoginPending, setLoginSuccess } from '../actions/login/login-action';
+import { getRequestInc, getRequestDec } from '../actions/request-count-action';
 import add_event from '../actions/event/event-add-action';
 
 class HeaderProfileWrapper extends Component {
@@ -42,10 +41,8 @@ const mapDispatchToProps = dispatch => {
     add_event: () => dispatch(add_event()),
     logout: () => { dispatch(logout()) },
     reset: () => {
-      dispatch(setRegisterPending(true));
-      dispatch(setRegisterSuccess(false));
-      dispatch(setLoginPending(true));
-      dispatch(setLoginSuccess(false));
+        dispatch(getRequestInc());
+        dispatch(getRequestDec());
     }
   };
 };

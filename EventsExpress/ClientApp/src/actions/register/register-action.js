@@ -10,30 +10,16 @@ const api_serv = new AuthenticationService();
 const history = createBrowserHistory({ forceRefresh: true });
 
 export default function register(email, password) {
-  return async dispatch => {
-      dispatch(getRequestInc());
+    return async dispatch => {
+        dispatch(getRequestInc());
 
-    let response = await api_serv.setRegister({Email: email, Password: password});
-      if(!response.ok){
-        dispatch(setErrorAllertFromResponse(response));
-        return Promise.reject();
-      }
-      dispatch(getRequestDec());
-      dispatch(history.push('/registerSuccess'))
-      return Promise.resolve();
-  };
-}
-
-export function setRegisterPending(isRegisterPending) {
-  return {
-    type: SET_REGISTER_PENDING,
-    isRegisterPending
-  };
-}
-
-export function setRegisterSuccess(data) {
-  return {
-    type: SET_REGISTER_SUCCESS,
-    payload: data
-  };
+        let response = await api_serv.setRegister({ Email: email, Password: password });
+        dispatch(getRequestDec());
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        dispatch(history.push('/registerSuccess'))
+        return Promise.resolve();
+    };
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import { connect } from 'react-redux';
 import IconButton from "@material-ui/core/IconButton";
-import { update_inventories } from '../../actions/inventory/inventory-list-action';
+import { getInventoryData } from '../../actions/inventory/inventory-list-action';
 import InventoryItemWrapper from '../../containers/inventory-item';
 import { edit_users_inventory } from '../../actions/users/users-inventories-action';
 
@@ -141,7 +141,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_inventories: (inventories) => dispatch(update_inventories(inventories)),
+        get_inventories: (inventories) => dispatch(getInventoryData(inventories)),
         edit_users_inventory: (data) => dispatch(edit_users_inventory(data))
     }
 };

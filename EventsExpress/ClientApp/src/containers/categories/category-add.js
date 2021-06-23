@@ -1,12 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { reset } from 'redux-form';
-import add_category,
-{
-    set_edited_category
-} from '../../actions/category/category-add-action';
-
-import { getRequestInc, getRequestDec } from '../../actions/request-count-action';
+import add_category, { setCategoryEdited }from '../../actions/category/category-add-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
@@ -50,9 +44,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_category(data)),
-        set_category_edited: () => dispatch(set_edited_category(props.item.id)),
+        set_category_edited: () => dispatch(setCategoryEdited(props.item.id)),
         edit_cancel: () => {
-            dispatch(set_edited_category(null));
+            dispatch(setCategoryEdited(null));
         },
     };
 };

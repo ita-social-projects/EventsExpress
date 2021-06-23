@@ -28,6 +28,7 @@ export function set_rating(data) {
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(setRatingSuccess(jsonRes));
         dispatch(getRatingSuccess(data.rate));
         return Promise.resolve();

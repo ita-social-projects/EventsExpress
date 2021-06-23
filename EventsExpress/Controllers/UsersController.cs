@@ -197,6 +197,34 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method is for get user notificationTypes.
+        /// </summary>
+        /// <returns>The method returns user NotificationTypes.</returns>
+        /// <response code="200">Return user NotificationTypes.</response>
+        /// <response code="400">Attitude set failed.</response>
+        [HttpGet("[action]")]
+        public IActionResult GetNotificationTypes()
+        {
+            var notificationTypes = _userService.GetUserNotificationTypes();
+
+            return Ok(notificationTypes);
+        }
+
+        /// <summary>
+        /// This method is for get user Categories.
+        /// </summary>
+        /// <returns>The method returns user Categories.</returns>
+        /// <response code="200">Return user Categories.</response>
+        /// <response code="400">Attitude set failed.</response>
+        [HttpGet("[action]")]
+        public IActionResult GetCategories()
+        {
+            var categories = _userService.GetUserCategories();
+
+            return Ok(categories);
+        }
+
+        /// <summary>
         /// This method is for get user.
         /// </summary>
         /// <param name="id">Param id defines the user identifier.</param>

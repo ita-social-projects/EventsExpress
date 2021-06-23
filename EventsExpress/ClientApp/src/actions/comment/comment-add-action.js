@@ -4,9 +4,6 @@ import { SubmissionError, reset } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_COMMENT_PENDING = "SET_COMMENT_PENDING";
-export const SET_COMMENT_SUCCESS = "SET_COMMENT_SUCCESS";
-
 const api_serv = new CommentService();
 
 export default function addComment(data) {
@@ -21,18 +18,4 @@ export default function addComment(data) {
         dispatch(reset('add-comment'));
         return Promise.resolve();
     }
-}
-
-export function setCommentSuccess(data) {
-    return {
-        type: SET_COMMENT_SUCCESS,
-        payload: data
-    };
-}
-
-export function setCommentPending(data) {
-    return {
-        type: SET_COMMENT_PENDING,
-        payload: data
-    };
 }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import CategoryItem from "../../components/category/category-item";
 import CategoryEdit from "../../components/category/category-edit";
-import add_category, { set_edited_category } from "../../actions/category/category-add-action";
+import add_category, { setCategoryEdited } from "../../actions/category/category-add-action";
 import { delete_category } from "../../actions/category/category-delete-action";
 
 
@@ -17,13 +17,6 @@ class CategoryItemWrapper extends Component {
         }
     };
 
-    componentWillUpdate = () => {
-        const { isCategorySuccess } = this.props.status;
-
-        if (isCategorySuccess) {
-            this.props.edit_cansel();
-        }
-    }
     render() {
         const { delete_category, set_category_edited, edit_cansel } = this.props;
 
@@ -63,8 +56,8 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         delete_category: () => dispatch(delete_category(props.item.id)),
         save_category: (data) => dispatch(add_category(data)),
-        set_category_edited: () => dispatch(set_edited_category(props.item.id)),
-        edit_cansel: () => dispatch(set_edited_category(null))
+        set_category_edited: () => dispatch(setCategoryEdited(props.item.id)),
+        edit_cansel: () => dispatch(setCategoryEdited(null))
     };
 };
 

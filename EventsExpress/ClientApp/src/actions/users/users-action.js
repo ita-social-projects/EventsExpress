@@ -33,12 +33,12 @@ export function get_SearchUsers(filters) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.getSearchUsers(filters);
-        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(getUsers(jsonRes));
         return Promise.resolve();
     }

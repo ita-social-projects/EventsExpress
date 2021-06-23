@@ -16,10 +16,10 @@ export default function change_Password(data) {
         dispatch(getRequestInc());
 
         let response = await api_serv.setChangePassword(data);
+        dispatch(getRequestDec());
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(getRequestDec());
         dispatch(setSuccessAllert('Password was succesfully changed'));
         dispatch(reset('ChangePassword'));
         return Promise.resolve();
