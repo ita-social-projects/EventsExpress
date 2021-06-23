@@ -1,14 +1,14 @@
 import { ContactAdminService } from "../../services";
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_CONTACT_ADMIN_PENDING = "SET_CONTACT_ADMIN_PENDING";
-export const GET_CONTACT_ADMIN_SUCCESS = "GET_CONTACT_ADMIN_SUCCESS";
+export const GET_CONTACT_ADMIN_DATA = "GET_CONTACT_ADMIN_DATA";
 
 const api_serv = new ContactAdminService();
 
 export default function get_message_by_id(id) {
     return async dispatch => {
-        dispatch(setContactAdminPending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.getMessage(id);
         if (!response.ok) {
@@ -16,23 +16,15 @@ export default function get_message_by_id(id) {
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(getMessageById(jsonRes));
-        dispatch(setContactAdminPending(true));
         return Promise.resolve();
     }
 }
 
-
-function setContactAdminPending(data) {
-    return {
-        type: SET_CONTACT_ADMIN_PENDING,
-        payload: data
-    };
-}
-
 function getMessageById(data) {
     return {
-        type: GET_CONTACT_ADMIN_SUCCESS,
+        type: GET_CONTACT_ADMIN_DATA,
         payload: data
     }
 }

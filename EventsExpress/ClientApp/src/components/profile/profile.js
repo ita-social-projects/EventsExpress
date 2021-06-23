@@ -175,4 +175,8 @@ const mapStateToProps = state => {
     return state.user;
 };
 
+const mapDispatchToProps = dispatch => ({
+    getComments: (data, page) => dispatch(getComments(data, page))
+});
+
 export default connect(mapStateToProps)(Profile);

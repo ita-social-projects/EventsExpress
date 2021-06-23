@@ -40,23 +40,22 @@ class ContactAdminListWrapper extends Component {
     }
 
     render() {
-        const { data, isPending } = this.props.contactAdminList;
+        const { data } = this.props.contactAdminList;
         const { items } = this.props.contactAdminList.data;
-        return <div>
-            <table className="table w-100 m-auto">
-                <tbody>
-                    {!isPending
-                        ? <ContactAdminList
+        return <Spinner showContent={data != undefined}>
+            <div>
+                <table className="table w-100 m-auto">
+                    <tbody>
+                        <ContactAdminList
                             data_list={items}
                             filter={this.props.contactAdminList.filter}
                             page={data.pageViewModel.pageNumber}
                             totalPages={data.pageViewModel.totalPages}
                         />
-                        : null}
-                </tbody>
-            </table>
-            {isPending ? <Spinner /> : null}
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        </Spinner>
     }
 }
 

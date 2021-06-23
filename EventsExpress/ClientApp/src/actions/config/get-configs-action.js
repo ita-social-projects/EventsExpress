@@ -1,29 +1,29 @@
-import { InventoryService } from '../../services';
+﻿import { ConfigService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
 import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_INVENTORY_DATA = "GET_INVENTORY_DATA";
+export const GET_CONFIGS_DATA = "GET_CONFIGS_DATA";
 
-const api_serv = new InventoryService();
+const api_serv = new ConfigService();
 
-export function get_inventories_by_event_id(eventId) {
+export default function getConfigs() {
     return async dispatch => {
         dispatch(getRequestInc());
-        let response = await api_serv.getInventoriesByEventId(eventId);
+        let response = await api_serv.getConfigsFromBack();
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        let jsonRes = await response.json();
+        let configs = await response.json();
+        dispatch(getConfigSuccess(configs));
         dispatch(getRequestDec());
-        dispatch(getInventoryData(jsonRes));
         return Promise.resolve();
     }
 }
 
-export function getInventoryData(data) {
+export function getConfigSuccess(data) {
     return {
-        type: GET_INVENTORY_DATA,
+        type: GET_CONFIGS_DATA,
         payload: data
-    }
+    };
 }

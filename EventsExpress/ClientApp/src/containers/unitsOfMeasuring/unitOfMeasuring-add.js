@@ -1,12 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { reset } from 'redux-form';
 import IconButton from "@material-ui/core/IconButton";
 import {
     add_unitOfMeasuring,
-    setUnitOfMeasuringPending,
-    setUnitOfMeasuringSuccess,
-    set_edited_unitOfMeasuring
+    setUnitOfMeasuringEdited
 } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
 import get_categoriesOfMeasuring  from "../../actions/categoryOfMeasuring/categoryOfMeasuring-list-action";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
@@ -20,19 +17,6 @@ class UnitOfMeasuringAddWrapper extends React.Component {
     submit = values => {
         return this.props.add({ ...values });
     };
-
-    componentWillMount() {
-        this.props.get_categoriesOfMeasuring();
-    }
-
-    componentWillUpdate = () => {
-        const { isUnitOfMeasuringSuccess } = this.props.status;
-
-        if (isUnitOfMeasuringSuccess) {
-            this.props.reset();
-            this.props.edit_cancel();
-        }
-    }
 
     render() {
         return (
@@ -71,16 +55,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_unitOfMeasuring(data)),
-        set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
-        get_categoriesOfMeasuring: () => dispatch(get_categoriesOfMeasuring()),
-        edit_cancel: () => {
-            dispatch(set_edited_unitOfMeasuring(null));
-        },
-        reset: () => {
-            dispatch(reset('add-form'));
-            dispatch(setUnitOfMeasuringPending(false));
-            dispatch(setUnitOfMeasuringSuccess(false));
-        }
+        set_unitOfMeasuring_edited: () => dispatch(setUnitOfMeasuringEdited(props.item.id)),
     };
 };
 

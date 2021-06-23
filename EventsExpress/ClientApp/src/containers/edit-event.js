@@ -2,28 +2,13 @@
 import EventForm from '../components/event/event-form';
 import { withRouter } from "react-router";
 import { connect } from 'react-redux';
-import { getFormValues, reset } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event } from '../actions/event/event-add-action';
+import { getFormValues } from 'redux-form';
+import { edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import { validate, validateEventForm  } from '../components/helpers/helpers'
-import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
 
 class EditEventWrapper extends Component {
-
-    componentWillMount = () => {
-        this.props.get_categories();
-    }
-
-    componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
-            this.props.reset();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.reset();
-    }
 
     onSubmit = async (values) => {
         await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
@@ -77,13 +62,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         edit_event: (data) => dispatch(edit_event(data)),
-        get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-        reset: () => {
-            dispatch(reset('event-form'));
-            dispatch(setEventPending(true));    
-            dispatch(setEventSuccess(false));
-        }
     }
 };
 

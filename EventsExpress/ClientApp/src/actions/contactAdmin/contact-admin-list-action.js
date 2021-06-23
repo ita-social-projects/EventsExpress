@@ -1,37 +1,31 @@
 import { ContactAdminService } from "../../services";
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_CONTACT_ADMIN_PENDING = "SET_CONTACT_ADMIN_PENDING";
-export const GET_CONTACT_ADMIN_SUCCESS = "GET_CONTACT_ADMIN_SUCCESS";
+export const GET_CONTACT_ADMIN_DATA = "GET_CONTACT_ADMIN_DATA";
 export const RESET_CONTACT_ADMIN = "RESET_CONTACT_ADMIN";
 
 const api_serv = new ContactAdminService();
 
 export default function getIssues(filters) {
     return async dispatch => {
-        dispatch(setContactAdminPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getAllIssues(filters);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(getListOfIssues(jsonRes));
         return Promise.resolve();
 
     }
 }
 
-export function setContactAdminPending(data) {
-    return {
-        type: SET_CONTACT_ADMIN_PENDING,
-        payload: data
-    };
-}
-
 export function getListOfIssues(data) {
     return {
-        type: GET_CONTACT_ADMIN_SUCCESS,
+        type: GET_CONTACT_ADMIN_DATA,
         payload: data
     }
 }

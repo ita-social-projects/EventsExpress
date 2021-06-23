@@ -1,8 +1,8 @@
 import { EventService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_EVENTS_PENDING = "SET_EVENTS_PENDING";
-export const GET_EVENTS_SUCCESS = "GET_EVENTS_SUCCESS";
+export const GET_EVENTS_DATA = "GET_EVENTS_DATA";
 export const RESET_EVENTS = "RESET_EVENTS";
 export const UPDATE_EVENTS_FILTERS = "UPDATE_EVENTS_FILTERS";
 
@@ -10,8 +10,9 @@ const api_serv = new EventService();
 
 export function get_events(filters) {
     return async dispatch => {
-        dispatch(setEventPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getAllEvents(filters);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -24,8 +25,9 @@ export function get_events(filters) {
 
 export function get_drafts(page = 1) {
     return async dispatch => {
-        dispatch(setEventPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getAllDrafts(page);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -36,16 +38,10 @@ export function get_drafts(page = 1) {
     }
 }
 
-export function setEventPending(data) {
-    return {
-        type: SET_EVENTS_PENDING,
-        payload: data
-    }
-}
 
 export function getEvents(data) {
     return {
-        type: GET_EVENTS_SUCCESS,
+        type: GET_EVENTS_DATA,
         payload: data
     }
 }

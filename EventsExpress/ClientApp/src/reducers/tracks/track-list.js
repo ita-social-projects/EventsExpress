@@ -1,19 +1,13 @@
 import initialState from '../../store/initialState';
 import {
-    SET_TRACKS_PENDING, GET_TRACKS_SUCCESS, GET_ENTITY_NAMES, RESET_TRACKS
+    SET_TRACKS_PENDING, GET_TRACKS_DATA, GET_ENTITY_NAMES, RESET_TRACKS
 } from '../../actions/tracks/track-list-action';
 
 export const reducer = (state = initialState.tracks, action ) => { 
     switch (action.type) {
-        case SET_TRACKS_PENDING:
+        case GET_TRACKS_DATA:
             return {
                 ...state,
-                isPending: action.payload
-            }
-        case GET_TRACKS_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
                 data: action.payload
             }
         case GET_ENTITY_NAMES:

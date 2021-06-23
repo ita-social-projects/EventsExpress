@@ -1,8 +1,8 @@
 ﻿import { EventService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_EVENTS_PROFILE_PENDING = "SET_EVENTS_PROFILE_PENDING";
-export const GET_EVENTS_PROFILE_SUCCESS = "GET_EVENTS_PROFILE_SUCCESS";
+export const GET_EVENTS_PROFILE_DATA = "GET_EVENTS_PROFILE_DATA";
 
 const api_serv = new EventService();
 
@@ -28,7 +28,6 @@ export function get_events_togo(id, page = 1) {
 
 function master(call, id, page) {
     return async dispatch => {
-        dispatch(setEventPending(true));
         let response = await call(id, page);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
@@ -40,16 +39,9 @@ function master(call, id, page) {
     }
 }
 
-function setEventPending(data) {
-    return {
-        type: SET_EVENTS_PROFILE_PENDING,
-        payload: data
-    }
-}
-
 function getEvents(data) {
     return {
-        type: GET_EVENTS_PROFILE_SUCCESS,
+        type: GET_EVENTS_PROFILE_DATA,
         payload: data
     }
 }
