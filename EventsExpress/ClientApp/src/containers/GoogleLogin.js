@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import Login from "../components/google-login";
+import GoogleLogin from "../components/google-login";
 import { connect } from 'react-redux';
 import { loginGoogle } from '../actions/login/login-action';
 import { withRouter } from 'react-router-dom';
@@ -21,7 +21,7 @@ class LoginGoogle extends Component {
     }
 
     render() {
-        return <Login
+        return <GoogleLogin
             googleClientId={this.props.config.googleClientId}
             googleResponseHandler={this.googleResponseHandler}
         />

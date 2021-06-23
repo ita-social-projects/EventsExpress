@@ -1,14 +1,14 @@
 ﻿import React, { Component } from "react";
-import { GoogleLogin } from "react-google-login";
+import { GoogleLogin as Login } from "react-google-login";
 
-export default class Login extends Component {
+export default class GoogleLogin extends Component {
 
     render() {
         const { googleClientId, googleResponseHandler } = this.props;
 
         return (
             <div>
-                <GoogleLogin
+                <Login
                     clientId={googleClientId}
                     render={renderProps => (
                         <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>

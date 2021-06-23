@@ -1,3 +1,3 @@
-﻿import Login from './google-login';
+﻿import GoogleLogin from './google-login';
 
-export default Login;
+export default GoogleLogin;
