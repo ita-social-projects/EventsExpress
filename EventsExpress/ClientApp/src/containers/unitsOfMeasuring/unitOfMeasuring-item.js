@@ -10,6 +10,7 @@ import get_categoriesOfMeasuring from "../../actions/categoryOfMeasuring/categor
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 class UnitOfMeasuringItemWrapper extends Component {
+
     save = values => {
         if (values.unitName === this.props.item.unitName &&
             values.shortName === this.props.item.shortName &&
@@ -72,11 +73,10 @@ class UnitOfMeasuringItemWrapper extends Component {
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center justify-content-center" width="15%">
                     <IconButton className="text-danger" size="small" onClick={this.isDeleteConfirm}>
-                        <i className="fas fa-trash"></i>
+                        <i className="fas fa-trash" />
                     </IconButton>
                 </div>
             </td>
-
         </tr>
     }
 }

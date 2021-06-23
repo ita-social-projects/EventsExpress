@@ -11,6 +11,7 @@ import {
 import './css/linked-auths.css';
 
 class LinkedAuthsWrapper extends Component {
+
     componentDidMount() {
         this.props.loadData();
     }
@@ -24,7 +25,7 @@ class LinkedAuthsWrapper extends Component {
             <div className="d-flex justify-content-around mb-3">
                 <GoogleLoginAdd />
                 <FacebookLoginAdd />
-                {this.props.config.keys.twitterLoginEnabled && <TwitterLoginAdd />}
+                {this.props.config.twitterLoginEnabled && <TwitterLoginAdd />}
                 <LocalLoginAdd />
             </div>
         </>

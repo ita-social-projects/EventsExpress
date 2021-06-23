@@ -1,25 +1,26 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
 import Module from '../helpers';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 import { connect } from 'react-redux';
-import { Redirect } from "react-router";
+import { Redirect } from 'react-router';
 
 const { validate, renderTextField } = Module;
 
 class Login extends Component {
 
     render() {
-        const { pristine, reset, submitting } = this.props;
+        const { pristine, reset, submitting, error, handleSubmit } = this.props;
+        const { twitterLoginEnabled } = this.props.config;
 
         return (
             <div className="auth">
-                <form onSubmit={this.props.handleSubmit} autoComplete="off">
+                <form onSubmit={handleSubmit} autoComplete="off">
                     <div>
                         <Field
                             name="email"
@@ -48,17 +49,18 @@ class Login extends Component {
                     </div>
                 </form>
                 <div className="d-flex justify-content-around mb-3">
-                    {this.props.config.keys.twitterLoginEnabled && <TwitterLogin />}
+                    {twitterLoginEnabled && <TwitterLogin />}
                     <LoginFacebook />
                     <GoogleLogin />
                 </div>
-                {this.props.error &&
-                    <ErrorMessages error={this.props.error} className="text-center" />
+                {error &&
+                    <ErrorMessages error={error} className="text-center" />
                 }
             </div>
         );
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         config: state.config
@@ -71,5 +73,3 @@ Login = reduxForm({
 })(Login);
 
 export default connect(mapStateToProps, null)(Login);
-
-

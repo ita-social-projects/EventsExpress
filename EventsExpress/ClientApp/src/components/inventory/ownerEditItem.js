@@ -36,9 +36,9 @@ class OwnerEditItemForm extends Component {
                         name={"unitOfMeasuring.id"}
                         component={renderSelectField}>
                         <option></option>
-                        {unitOfMeasuringState.units.map((unit, key) => 
+                        {unitOfMeasuringState.units.map((unit, key) =>
                             <option value={unit.id} key={key}>{unit.unitName}</option>
-                        )} 
+                        )}
                     </Field>
                 </div>
                 {
@@ -47,10 +47,10 @@ class OwnerEditItemForm extends Component {
                 }
                 <div className="col col-md-2">
                 <IconButton type="submit">
-                    <i className = "fa-sm fas fa-check text-success"></i>
+                    <i className = "fa-sm fas fa-check text-success" />
                 </IconButton>
                 <IconButton onClick={() => this.props.onCancel(initialValues)}>
-                    <i className = "fa-sm fas fa-times text-danger"></i>
+                    <i className = "fa-sm fas fa-times text-danger" />
                 </IconButton>
                 </div>
             </form>

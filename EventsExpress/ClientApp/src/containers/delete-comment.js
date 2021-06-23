@@ -19,7 +19,7 @@ class commentItemWrapper extends React.Component {
             info: !this.state.info
         });
     };
-    
+
     submit = () => {
         let value = this.props.item;
         this.props.deleteComm({ id: value.id, eventId: this.props.eventId });
@@ -39,7 +39,7 @@ class commentItemWrapper extends React.Component {
                                     size="small"
                                     onClick={this.changeInfo}
                                     aria-label="Reply">
-                                    <i className="fa fa-comments"></i>
+                                    <i className="fa fa-comments" />
                                 </Fab>
                                 </div>}
                             {(this.props.item.commentsId === null && !this.state.info) &&
@@ -48,7 +48,7 @@ class commentItemWrapper extends React.Component {
                                         size="small"
                                         onClick={this.changeInfo}
                                         aria-label="Cancel">
-                                        <i className="fa fa-times"></i>
+                                        <i className="fa fa-times" />
                                     </Fab>
                                 </div>}
                         {this.props.item.userId === this.props.userId &&
@@ -57,13 +57,13 @@ class commentItemWrapper extends React.Component {
                                     size="small"
                                     onClick={this.submit}
                                     aria-label="Delete">
-                                    <i className="fa fa-trash"></i>
+                                    <i className="fa fa-trash" />
                                 </Fab>
                             </div>
                         }
                         </div>
                     </div>
-                    
+
                 </div>
                 {!this.state.info && <AddComment parentId={id} />}
                 <div className="children">

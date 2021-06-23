@@ -6,7 +6,7 @@ export const NavItem = ({ to, icon, text, my_icon }) => {
         <li className="sidebar-header">
             <Link to={to} className="active">
                 <span className="link">
-                    <i className={icon + ' nav-item-icon'}></i>
+                    <i className={icon + ' nav-item-icon'} />
                     {my_icon}
                     <span className="nav-item-text">&nbsp;{text}</span>
                     <strong></strong>
