@@ -4,7 +4,6 @@ import {renderTextField} from '../helpers/helpers';
 import ErrorMessages from '../shared/errorMessage';
 import IconButton from "@material-ui/core/IconButton";
 
-
 class CategoryEdit extends Component {
 
     render() {
@@ -30,18 +29,17 @@ class CategoryEdit extends Component {
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-success" size="small" type="submit" form="save-form">
-                        <i className="fa fa-check"/>
+                        <i className="fa fa-check" />
                     </IconButton>
 
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
-                        <i className="fas fa-times"/>
+                        <i className="fas fa-times" />
                     </IconButton>
                 </div>
             </td>
         </>
     }
 }
-
 
 CategoryEdit = reduxForm({
     form: "save-form",

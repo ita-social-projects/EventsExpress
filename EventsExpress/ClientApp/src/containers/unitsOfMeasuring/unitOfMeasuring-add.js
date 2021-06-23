@@ -16,6 +16,7 @@ const pStyle = {
 };
 
 class UnitOfMeasuringAddWrapper extends React.Component {
+
     submit = values => {
         return this.props.add({ ...values });
     };
@@ -44,7 +45,7 @@ class UnitOfMeasuringAddWrapper extends React.Component {
                         <IconButton
                             className="text-info"
                             onClick={this.props.set_unitOfMeasuring_edited}>
-                            <i className="fas fa-plus-circle"></i>
+                            <i className="fas fa-plus-circle" />
                         </IconButton>
                     </div>
                 </td>
@@ -56,18 +57,16 @@ class UnitOfMeasuringAddWrapper extends React.Component {
                     cancel={this.props.edit_cancel}
                     all_categories={this.props.all_categories}
                 />
-                <td></td>
+                <td />
             </tr>
     }
 }
-
 
 const mapStateToProps = (state) => ({
     all_categories: state.categoriesOfMeasuring,
     status: state.add_unitOfMeasuring,
     editedUnitOfMeasuring: state.unitsOfMeasuring.editedUnitOfMeasuring,
 });
-
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
