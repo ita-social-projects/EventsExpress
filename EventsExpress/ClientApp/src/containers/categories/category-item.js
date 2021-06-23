@@ -43,7 +43,7 @@ class CategoryItemWrapper extends Component {
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-danger" size="small" onClick={delete_category}>
-                        <i className="fas fa-trash"></i>
+                        <i className="fas fa-trash" />
                     </IconButton>
                 </div>
             </td>

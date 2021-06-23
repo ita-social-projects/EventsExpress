@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as moment from 'moment';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { deleteSeenMsgNotification } from '../../actions/chat/chat-action';
 import './msg.css';
@@ -36,7 +35,7 @@ class Msg extends Component {
                 :
                 <div className="d-flex justify-content-end mb-4">
                     <div className="msg_cotainer_send">
-                        {item.text} {seenItem && <i className="fa fa-check"></i>}<br />
+                        {item.text} {seenItem && <i className="fa fa-check" />}<br />
                         <span className="msg_time_send text-center">{getTimeDifferenceFromNull(item.dateCreated)}</span>
                     </div>
                 </div>

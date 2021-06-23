@@ -5,6 +5,7 @@ import { loginFacebook } from '../actions/login/login-action';
 import './css/Auth.css';
 
 class LoginFacebook extends Component {
+
     render() {
         const responseFacebook = (response) => {
             if (typeof response.email === 'undefined') {
@@ -13,24 +14,22 @@ class LoginFacebook extends Component {
             this.props.loginFacebook(response.email, response.name, response.picture.data.url);
         }
 
-
-
         return (
             <div>
                 <FacebookLogin
-                    appId={this.props.config.keys.facebookClientId}
+                    appId={this.props.config.facebookClientId}
                     autoLoad={false}
                     fields="name,email,picture"
                     callback={responseFacebook}
                     cssClass="btnFacebook"
-                    icon={<i className="fab fa-facebook fa-lg"></i>}
+                    icon={<i className="fab fa-facebook fa-lg" />}
                     textButton="&nbsp;&nbsp;Log in"
                     version="3.1"
                 />
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = (state) => {
     return {

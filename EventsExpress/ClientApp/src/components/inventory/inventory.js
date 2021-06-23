@@ -7,13 +7,12 @@ import InventoryHeaderButton from './InventoryHeaderButton';
 import './inventory.css';
 import ErrorMessages from '../shared/errorMessage';
 
-
 const renderInventories = ({ fields, unitOfMeasuringState }) => {
 
     return (
     <div className="form-group">
-        <button type="button" title="Remove item" class="btn btn-secondary btn-icon" onClick={() => fields.push({})}>
-            <span class="icon"><i class="fas fa-plus"></i></span> Add item
+        <button type="button" title="Remove item" className="btn btn-secondary btn-icon" onClick={() => fields.push({})}>
+            <span className="icon"><i className="fas fa-plus" /></span> Add item
         </button>
         <ul className="">
         {fields.map((item, index) =>
@@ -45,17 +44,17 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
                             minWidth={100}
                             component={renderSelectField}>
                             <option></option>
-                            {unitOfMeasuringState.units.map((unit, key) => 
+                            {unitOfMeasuringState.units.map((unit, key) =>
                                 <option value={unit.id} key={key}>{unit.unitName}</option>
-                            )} 
+                            )}
                         </Field>
                     </div>
                     {
                         props.error &&
                         <ErrorMessages error={props.error} className="text-center" />
                     }
-                    <button type="button" title="Remove item" class="p-2 btn btn-circle clear-backgroud align-self-end" onClick={() => fields.remove(index)}>
-                        <i class="fas fa-trash text-danger"></i>
+                    <button type="button" title="Remove item" className="p-2 btn btn-circle clear-backgroud align-self-end" onClick={() => fields.remove(index)}>
+                        <i className="fas fa-trash text-danger" />
                     </button>
                 </div>
             </li>
@@ -64,8 +63,6 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
     </div>
     )
 }
-
-
 
 class Inventory extends Component {
 
@@ -94,9 +91,9 @@ class Inventory extends Component {
             <div>
                 <div className='d-flex justify-content-start align-items-center'>
                     <InventoryHeaderButton isOpen={this.state.isOpen} handleOnClickCaret={this.handleOnClickCaret}/>
-                    {this.props.syncErrors.inventories && !this.state.isOpen && 
-                        <span className="text-danger"><i class="fas fa-exclamation-circle text-danger"></i>required</span>
-                    }                  
+                    {this.props.syncErrors.inventories && !this.state.isOpen &&
+                        <span className="text-danger"><i className="fas fa-exclamation-circle text-danger" />required</span>
+                    }
                 </div>
                 <div className={this.state.isOpen ? "d-block" : "d-none"}>
                     <FieldArray name="inventories" props={this.props} component={renderInventories}/>

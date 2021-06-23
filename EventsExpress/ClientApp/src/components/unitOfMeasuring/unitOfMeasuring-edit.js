@@ -9,6 +9,7 @@ const divStyle = {
 };
 
 class UnitOfMeasuringEdit extends Component {
+
     state = ({
         unitError: null,
         shortError: null,
@@ -76,14 +77,14 @@ class UnitOfMeasuringEdit extends Component {
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-success" size="small" type="submit" form="save-form">
-                        <i className="fa fa-check"></i>
+                        <i className="fa fa-check" />
                     </IconButton>
                 </div>
             </td>
             <td className="align-middle align-items-stretch" width="15%">
                 <div className="d-flex align-items-center justify-content-center">
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
-                        <i className="fas fa-times"></i>
+                        <i className="fas fa-times" />
                     </IconButton>
                 </div>
             </td>
