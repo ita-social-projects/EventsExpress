@@ -6,7 +6,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 import RatingAverage from '../rating/rating-average';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import { getAge } from '../helpers/helpers';
+import { getAge } from '../helpers/get-age-string';
 import './user-info.css';
 
 export default class UserInfoCard extends Component {

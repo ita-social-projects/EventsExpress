@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import {
-    renderTextField,
-    renderMultiselect
-} from '../helpers/helpers';
-import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
+import { renderDatePicker, MultiCheckbox, renderTextField, renderMultiselect } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
