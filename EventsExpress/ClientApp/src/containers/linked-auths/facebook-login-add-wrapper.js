@@ -24,7 +24,7 @@ class LoginFacebook extends Component {
                     fields="email"
                     callback={this.facebookResponseHandler}
                     cssClass="btnFacebook"
-                    icon={<i className="fab fa-facebook fa-lg"/>}
+                    icon={<i className="fab fa-facebook fa-lg" />}
                     textButton="&nbsp;&nbsp;Log in"
                     version="3.1"
                 />

@@ -12,7 +12,7 @@ export default class Login extends Component {
                     clientId={googleClientId}
                     render={renderProps => (
                         <button className="btnGoogle" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                            <i className="fab fa-google blue fa-lg"></i>
+                            <i className="fab fa-google blue fa-lg" />
                             <span>Log in</span>
                         </button>
                     )}

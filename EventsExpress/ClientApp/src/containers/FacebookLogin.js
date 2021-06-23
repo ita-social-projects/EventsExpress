@@ -22,7 +22,7 @@ class LoginFacebook extends Component {
                     fields="name,email,picture"
                     callback={responseFacebook}
                     cssClass="btnFacebook"
-                    icon={<i className="fab fa-facebook fa-lg"/>}
+                    icon={<i className="fab fa-facebook fa-lg" />}
                     textButton="&nbsp;&nbsp;Log in"
                     version="3.1"
                 />
