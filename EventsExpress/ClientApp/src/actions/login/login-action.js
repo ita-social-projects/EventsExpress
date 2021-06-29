@@ -107,7 +107,7 @@ function loginResponseHandler(call) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await call();
-        
+        dispatch(getRequestDec());
         if (!response.ok) {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
@@ -119,7 +119,7 @@ function loginResponseHandler(call) {
 async function setUserInfo(response, dispatch) {
     let jsonRes = await response.json();
     localStorage.setItem(jwtStorageKey, jsonRes.token);
-    dispatch(getRequestDec());
+
     dispatch(getUserInfo());
     return Promise.resolve();
 }

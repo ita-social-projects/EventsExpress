@@ -1,7 +1,5 @@
 import initialState from '../store/initialState';
-import {
-    GET_EVENT_SCHEDULE_PENDING, GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE
-} from '../actions/eventSchedule/eventSchedule-item-view-action';
+import { GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE } from '../actions/eventSchedule/eventSchedule-item-view-action';
 
 
 export const reducer = (
@@ -21,4 +19,4 @@ export const reducer = (
         default:
             return state;
     }
-} 
+}

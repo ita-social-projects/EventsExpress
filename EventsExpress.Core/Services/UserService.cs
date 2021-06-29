@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
@@ -72,11 +73,11 @@ namespace EventsExpress.Core.Services
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            var userNotificationType = Context.UserNotificationTypes
-                                        .Where(x => x.User.Id == userId)
-                                        .Include(n => n.NotificationType)
-                                        .Select(n => new NotificationTypeDto { Id = n.NotificationType.Id, Name = n.NotificationType.Name })
-                                        .AsNoTracking();
+            var userNotificationType = Mapper.Map<IEnumerable<NotificationTypeDto>>(Context.UserNotificationTypes
+                                        .Include(u => u.NotificationType)
+                                        .Where(u => u.UserId == userId)
+                                        .AsNoTracking()
+                                        .ToList());
 
             return userNotificationType;
         }
@@ -90,7 +91,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .First(user => user.Id == userId);
 
-            var userCategories = u.Categories.Select(c => new CategoryDto { Id = c.Category.Id, Name = c.Category.Name });
+            var userCategories = Mapper.Map<IEnumerable<CategoryDto>>(u.Categories);
 
             return userCategories;
         }

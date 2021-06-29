@@ -84,7 +84,6 @@ class EventFilterWrapper extends Component {
 
     render() {
         const initialFormValues = this.buildInitialFormValues();
-        const { form_values } = this.props;
         return <>
             <EventFilter
                 all_categories={this.props.all_categories}

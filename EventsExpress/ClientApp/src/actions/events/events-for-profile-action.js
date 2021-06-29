@@ -1,6 +1,5 @@
 ﻿import { EventService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
-import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const GET_EVENTS_PROFILE_DATA = "GET_EVENTS_PROFILE_DATA";
 

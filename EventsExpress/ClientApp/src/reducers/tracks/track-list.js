@@ -1,6 +1,6 @@
 import initialState from '../../store/initialState';
 import {
-    SET_TRACKS_PENDING, GET_TRACKS_DATA, GET_ENTITY_NAMES, RESET_TRACKS
+    GET_TRACKS_DATA, GET_ENTITY_NAMES, RESET_TRACKS
 } from '../../actions/tracks/track-list-action';
 
 export const reducer = (state = initialState.tracks, action ) => { 

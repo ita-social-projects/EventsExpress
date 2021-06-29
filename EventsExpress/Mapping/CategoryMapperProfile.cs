@@ -13,7 +13,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore())
                 .ReverseMap();
-            CreateMap<CategoryDto, CategoryViewModel>().ReverseMap();
+            CreateMap<CategoryDto, CategoryViewModel>()
+                .ReverseMap();
             CreateMap<CategoryCreateViewModel, CategoryDto>()
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
@@ -21,6 +22,10 @@ namespace EventsExpress.Mapping
             CreateMap<CategoryEditViewModel, CategoryDto>()
                 .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
                 .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore());
+            CreateMap<UserCategory, CategoryDto>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Category.Id))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Category.Name))
+                .ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

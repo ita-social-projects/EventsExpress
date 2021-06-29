@@ -14,11 +14,11 @@ export default function recover_Password(data) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.setRecoverPassword(data);
+        dispatch(getRequestDec());
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(setRecoverPasswordSucces());
-        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }

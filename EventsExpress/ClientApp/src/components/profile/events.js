@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import EventsForProfile from '../event/events-for-profile';
-import Spinner from '../spinner';
 import 'moment-timezone';
 import './User-profile.css';
 

@@ -5,7 +5,6 @@ import {
     add_unitOfMeasuring,
     setUnitOfMeasuringEdited
 } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
-import get_categoriesOfMeasuring  from "../../actions/categoryOfMeasuring/categoryOfMeasuring-list-action";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
 
 const pStyle = {
