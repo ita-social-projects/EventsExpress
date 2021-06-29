@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Field, FieldArray, getFormSyncErrors } from 'redux-form';
-import { renderTextField, renderSelectField } from '../helpers/helpers';
+import { renderSelectField, renderTextField} from '../helpers/form-helpers';
 import { connect } from 'react-redux';
 import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 import InventoryHeaderButton from './InventoryHeaderButton';
@@ -41,6 +41,7 @@ const renderInventories = ({ fields, unitOfMeasuringState }) => {
                         <Field
                             className="selectpicker"
                             name={`${item}.unitOfMeasuring.id`}
+                            minWidth={100}
                             component={renderSelectField}>
                             <option></option>
                             {unitOfMeasuringState.units.map((unit, key) =>
