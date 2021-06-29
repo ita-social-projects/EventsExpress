@@ -13,11 +13,14 @@ import { emailField } from '../helpers/validators/email-field-validator';
 
 const validate = values => {
     let errors = {}
-
-    if (!values.password) {
-        errors.password = 'Required'
-    }
-
+    const requiredFields = [
+        'password',
+    ]
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    })
     var emailErrors = emailField(values);
     errors = { ...errors, ...emailErrors };
 

@@ -8,8 +8,7 @@ import { renderTextField } from '../helpers/form-helpers';
 import { emailField } from '../helpers/validators/email-field-validator';
 
 const validate = values => {
-    var emailErrors = emailField(values);
-    return emailErrors
+    return emailField(values)
 }
 
 class RecoverPassword extends React.Component {
