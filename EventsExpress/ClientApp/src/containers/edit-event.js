@@ -6,7 +6,7 @@ import { getFormValues, reset } from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import { validate } from './event-edit-validate-form '
-import { validateEventForm } from '../components/helpers/validators/event-validate-form'
+import { validateEventForm } from './event-validate-form'
 import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
 

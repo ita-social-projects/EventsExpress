@@ -29,7 +29,7 @@ class EventForm extends Component {
         }));
     }
 
-    periodicityList = (periodicity.map((item) =>
+    periodicityListOptions = (periodicity.map((item) =>
         <option value={item.value} key={item.value}> {item.label} </option>
     ));
 
@@ -92,7 +92,7 @@ class EventForm extends Component {
                                     text="Periodicity"
                                     component={renderSelectField}
                                 >
-                                    {this.periodicityList}
+                                {this.periodicityListOptions}
                                 </Field>
                             </div>
                             <div className="mt-2">

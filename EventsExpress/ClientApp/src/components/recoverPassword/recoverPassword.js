@@ -5,21 +5,11 @@ import Button from "@material-ui/core/Button";
 import DialogContentText from '@material-ui/core/DialogContentText';
 import ErrorMessages from '../shared/errorMessage';
 import { renderTextField } from '../helpers/form-helpers';
+import { emailField } from '../helpers/validators/email-field-validator';
 
 const validate = values => {
-    const errors = {}
-    const requiredFields = [
-        'email'
-    ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
-    return errors
+    var emailErrors = emailField(values);
+    return emailErrors
 }
 
 class RecoverPassword extends React.Component {

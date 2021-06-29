@@ -5,10 +5,11 @@ import Button from '@material-ui/core/Button';
 import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import issueTypeEnum from '../../constants/IssueTypeEnum ';
+import { emailField } from '../helpers/validators/email-field-validator';
 import { maxLength30 } from '../helpers/validators/min-max-length-validators'
 
 const validate = values => {
-    const errors = {};
+    let errors = {};
     const requiredFields = [
         'email',
         'title',
@@ -19,13 +20,12 @@ const validate = values => {
             errors[field] = 'Required'
         }
     });
-    if (values.title && values.title.length > 30) {
+    if (maxLength30(values.title)) {
         errors.title = `Title should be less 30 symbols`;
     }
-    if (values.email &&
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
+    
+    var emailErrors = emailField(values);
+    errors = { ...errors, ...emailErrors };
     return errors;
 }
 
@@ -76,7 +76,6 @@ class ContactAdmin extends Component {
                                     className="form-control"
                                     component={renderTextField}
                                 label="Enter problem type:"
-                                validate={[maxLength30]}
                                 />
                             )}
 

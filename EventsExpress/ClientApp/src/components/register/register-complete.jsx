@@ -3,12 +3,12 @@ import {Field, reduxForm} from "redux-form";
 import Button from "@material-ui/core/Button";
 import { renderSelectField, renderPhoneInput, renderDatePicker, renderTextField} from '../helpers/form-helpers';
 import moment from "moment";
-import {isValidPhoneNumber} from 'react-phone-number-input'
+import { isValidPhoneNumber } from 'react-phone-number-input';
+import { emailField } from '../helpers/validators/email-field-validator';
 
 const validate = values => {
-    const errors = {}
+    let errors = {}
     const requiredFields = [
-        'email',
         'birthday',
         'userName',
         'phone',
@@ -19,15 +19,15 @@ const validate = values => {
             errors[field] = 'Required'
         }
     })
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
     if (values.phone && !isValidPhoneNumber(values.phone)) {
         errors.phone = 'Invalid phone number'
     }
     if (values.gender && values.gender > 3) {
         errors.gender = 'Invalid gender'
     }
+    var emailErrors = emailField(values);
+    errors = { ...errors, ...emailErrors };
+
     return errors
 }
 

@@ -4,11 +4,11 @@ import {Field, reduxForm} from "redux-form";
 import Button from "@material-ui/core/Button";
 import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-validators'
 import { renderTextField } from '../helpers/form-helpers';
+import { emailField } from '../helpers/validators/email-field-validator';
 
 const validate = values => {
-    const errors = {};
+    let errors = {};
     const requiredFields = [
-        'email',
         'password',
         'RepeatPassword',
     ];
@@ -17,10 +17,6 @@ const validate = values => {
             errors[field] = 'Required'
         }
     });
-    if (values.email &&
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
 
     if (values.password !== values.RepeatPassword) {
         errors.RepeatPassword = 'Passwords do not match';
@@ -29,6 +25,10 @@ const validate = values => {
     if (values.newPassword !== values.repeatPassword) {
         errors.repeatPassword = 'Passwords do not match';
     }
+
+    var emailErrors = emailField(values);
+    errors = { ...errors, ...emailErrors };
+
     return errors;
 }
 

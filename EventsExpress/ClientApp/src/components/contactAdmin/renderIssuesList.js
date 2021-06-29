@@ -5,10 +5,6 @@ class RenderIssuesList extends Component {
 
     renderIssues = arr =>
         arr.map(item => this.props.renderSingleIssue(item));
-    constructor(props)
-    {
-        super(props)
-    }
 
     render() {
         const { page, totalPages, data_list } = this.props;
