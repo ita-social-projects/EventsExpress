@@ -13,6 +13,7 @@ import './event-item-header.css';
 
 
 export default class EventHeader extends Component {
+
     constructor(props) {
         super(props);
 
@@ -52,7 +53,7 @@ export default class EventHeader extends Component {
             );
     }
 
-    
+
 
     renderMembers = (first, visitorsCount, avatar) => {
         if (first !== undefined) {
@@ -73,7 +74,7 @@ export default class EventHeader extends Component {
                 <Tooltip title="Visitors">
                     <IconButton>
                         <Badge badgeContent={ visitorsCount} color="primary">
-                            <i className="fa fa-users"></i>
+                            <i className="fa fa-users" />
                         </Badge>
                     </IconButton>
                 </Tooltip>
@@ -96,7 +97,7 @@ export default class EventHeader extends Component {
 
         const firstMember = members ? members[0] : null;
 
-        
+
 
         const PrintMenuMembers = members.map(user => (
             <MenuItem onClick={this.handleCloseOnMember} style={{ overflow: "visible"}}>
@@ -174,4 +175,3 @@ export default class EventHeader extends Component {
 
     }
 }
-

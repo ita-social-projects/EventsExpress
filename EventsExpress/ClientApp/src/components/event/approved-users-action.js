@@ -19,7 +19,7 @@ const ApprovedUsersActions = (props) => {
                         button={
                             <Tooltip title="Approve as an owner">
                                 <IconButton aria-label="delete">
-                                    <i className="fas fa-plus-circle" ></i>
+                                    <i className="fas fa-plus-circle" />
                                 </IconButton>
                             </Tooltip>
                         }
@@ -47,6 +47,5 @@ const mapDispatchToProps = (dispatch) => ({
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
     promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId))
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApprovedUsersActions);

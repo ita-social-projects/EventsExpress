@@ -6,8 +6,8 @@ import Module from '../helpers';
 
 const { validate } = Module;
 
-
 class VisitorEditItemForm extends Component {
+
     maxValue = max => value =>
         value && value > max ? `Must be less or equal than ${max}` : undefined
     maxValueLimitor = this.maxValue(this.props.initialValues.needQuantity - this.props.alreadyGet)
@@ -15,7 +15,7 @@ class VisitorEditItemForm extends Component {
     minValue = min => value =>
         value && value < min ? `Must be at least ${min}` : undefined
     minValueLimitor = this.minValue(1)
-    
+
     render() {
         const { initialValues, alreadyGet } = this.props;
         return (
@@ -41,10 +41,10 @@ class VisitorEditItemForm extends Component {
                 </div>
                 <div className="col col-md-2">
                     <IconButton type="submit">
-                        <i className = "fa-sm fas fa-check text-success"></i>
+                        <i className = "fa-sm fas fa-check text-success" />
                     </IconButton>
                     <IconButton onClick={() => this.props.onCancel(initialValues)}>
-                        <i className = "fa-sm fas fa-times text-danger"></i>
+                        <i className = "fa-sm fas fa-times text-danger" />
                     </IconButton>
                 </div>
             </form>
