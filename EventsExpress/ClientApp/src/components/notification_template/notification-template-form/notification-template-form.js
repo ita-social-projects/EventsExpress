@@ -2,7 +2,7 @@
 import { Field, reduxForm, reset } from 'redux-form';
 import { connect } from 'react-redux';
 import { TextField, Button } from '@material-ui/core'
-import { minLength10, minLength20 } from '../../helpers/validators';
+import { minLength10, minLength20 } from '../../helpers/validators/min-max-length-validators';
 
 class NotificationTemplateForm extends Component {
 

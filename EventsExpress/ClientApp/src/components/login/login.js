@@ -2,15 +2,27 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
-import Module from '../helpers';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
 import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { renderTextField } from '../helpers/form-helpers';
+import { emailField } from '../helpers/validators/email-field-validator';
 
-const { validate, renderTextField } = Module;
+const validate = values => {
+    let errors = {}
+
+    if (!values.password) {
+        errors.password = 'Required'
+    }
+
+    var emailErrors = emailField(values);
+    errors = { ...errors, ...emailErrors };
+
+    return errors
+}
 
 class Login extends Component {
 

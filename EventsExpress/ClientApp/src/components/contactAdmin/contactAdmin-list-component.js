@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import ContactAdminItemWrapper from '../../containers/contactAdmin/contactAdmin-item-container';
-import RenderList from '../event/RenderList'
+import RenderIssuesList from './renderIssuesList'
 import { parse as queryStringParse } from 'query-string';
 import filterHelper from '../helpers/filterHelper';
 import { withRouter } from "react-router";
@@ -19,7 +19,7 @@ class ContactAdminList extends Component {
         }
     };
 
-    renderSingleItem = (item) => (
+    renderSingleIssue = (item) => (
         <ContactAdminItemWrapper
             key={item.messageId + item.status}
             item={item}
@@ -36,7 +36,7 @@ class ContactAdminList extends Component {
                     <td className="justify-content-center">Status</td>
                     <td className="justify-content-center">Details</td>
                 </tr>
-                <RenderList {...this.props} renderSingleItem={this.renderSingleItem}
+                <RenderIssuesList {...this.props} renderSingleIssue={this.renderSingleIssue}
                     handlePageChange={this.pageChange} />
             </>);
     }

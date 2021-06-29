@@ -2,16 +2,33 @@ import React, { Component } from 'react';
 import { reduxForm, Field, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { renderTextArea, renderTextField } from '../helpers/helpers';
-import Module from '../helpers';
+import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import issueTypeEnum from '../../constants/IssueTypeEnum ';
+import { emailField } from '../helpers/validators/email-field-validator';
+import { maxLength30 } from '../helpers/validators/min-max-length-validators'
 
-
-const { validate } = Module;
+const validate = values => {
+    let errors = {};
+    const requiredFields = [
+        'title',
+        'description'
+    ];
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'Required'
+        }
+    });
+    if (maxLength30(values.title)) {
+        errors.title = `Title should be less 30 symbols`;
+    }
+    
+    var emailErrors = emailField(values);
+    errors = { ...errors, ...emailErrors };
+    return errors;
+}
 
 class ContactAdmin extends Component {
-
 
     render() {
         const { pristine, reset, submitting, error } = this.props;
@@ -51,14 +68,13 @@ class ContactAdmin extends Component {
                                 <option value={issueTypeEnum.Other}>Other</option>;
                              </Field>
 
-
                             {(this.props.form_values !== undefined
                                 && this.props.form_values.subject == issueTypeEnum.Other
                                 && <Field
                                     name="title"
                                     className="form-control"
                                     component={renderTextField}
-                                    label="Enter problem type:"
+                                label="Enter problem type:"
                                 />
                             )}
 
@@ -97,8 +113,6 @@ const mapStateToProps = (state) => {
         form_values: getFormValues('ContactAdmin')(state),
     }
 }
-
-
 
 export default connect(mapStateToProps)(reduxForm({
     form: "ContactAdmin",
