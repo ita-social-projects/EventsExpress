@@ -24,9 +24,21 @@ class InventoryItemWrapper extends Component {
         this.onWillTake = this.onWillTake.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props === nextProps && this.state === nextState)
+            return false
+        if (this.props.usersInventories.isPending !== nextProps.usersInventories.isPending) {
+            const { item, user } = nextProps
+            if (!this.state.isWillTake && nextProps.usersInventories.data.some(e => e.userId === user.id && e.inventoryId === item.id))
+                this.onAlreadyGet()
+        }
+        return true
+    }
+
     onAlreadyGet = () => {
         this.setState(state => ({
-            showAlreadyGetDetailed: !state.showAlreadyGetDetailed
+            showAlreadyGetDetailed: true,
+            isWillTake: true
         }));
     }
 
@@ -38,14 +50,6 @@ class InventoryItemWrapper extends Component {
     markItemAsEdit = () => {
         this.setState({
             isEdit: true
-        });
-        this.props.changeDisableEdit(true);
-    }
-
-    markItemAsWillTake = () => {
-        this.setState({
-            isEdit: true,
-            isWillTake: true
         });
         this.props.changeDisableEdit(true);
     }
@@ -82,7 +86,8 @@ class InventoryItemWrapper extends Component {
             quantity: Number(inventar.willTake)
         }
 
-        if (this.state.isWillTake) {
+        if (!this.state.isWillTake) {
+            this.onAlreadyGet()
             this.props.want_to_take(data);
         } else {
             this.props.edit_users_inventory(data);
@@ -101,6 +106,10 @@ class InventoryItemWrapper extends Component {
             inventoryId: inventar.id
         }
 
+        this.setState({
+            showAlreadyGetDetailed: false,
+            isWillTake: false
+        })
         this.props.delete_users_inventory(data);
     }
 
@@ -124,7 +133,11 @@ class InventoryItemWrapper extends Component {
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={alreadyGet - (this.state.isWillTake ? 0 : usersInventories.data.find(e => e.inventoryId === item.id).quantity || 0)}
+                    alreadyGet={alreadyGet - (usersInventories.data.reduce((acc, cur) => {
+                        if (cur.inventoryId === item.id && cur.userId === user.id)
+                            return acc + cur.quantity
+                        else return acc
+                    }, 0)) || 0}
                     initialValues={item}
                 />
             }
@@ -149,7 +162,6 @@ class InventoryItemWrapper extends Component {
                     onAlreadyGet={this.onAlreadyGet}
                     onWillNotTake={this.onWillNotTake}
                     markItemAsEdit={this.markItemAsEdit}
-                    markItemAsWillTake={this.markItemAsWillTake}
                     usersInventories={this.props.usersInventories}
                     user={user}/>
             }
