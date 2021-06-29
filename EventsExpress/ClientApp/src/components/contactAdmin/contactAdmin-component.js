@@ -11,7 +11,6 @@ import { maxLength30 } from '../helpers/validators/min-max-length-validators'
 const validate = values => {
     let errors = {};
     const requiredFields = [
-        'email',
         'title',
         'description'
     ];
