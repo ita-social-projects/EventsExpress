@@ -133,11 +133,9 @@ class InventoryItemWrapper extends Component {
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={alreadyGet - (usersInventories.data.reduce((acc, cur) => {
-                        if (cur.inventoryId === item.id && cur.userId === user.id)
-                            return acc + cur.quantity
-                        else return acc
-                    }, 0)) || 0}
+                    alreadyGet={alreadyGet - (usersInventories.data.find(e => e.userId === user.Id && e.inventoryId === item.id) === undefined
+                        ? 0
+                        : usersInventories.data.find(e => e.userId === user.Id && e.inventoryId === item.id).quantity)}
                     initialValues={item}
                 />
             }
