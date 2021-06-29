@@ -7,7 +7,7 @@ const history = createBrowserHistory({ forceRefresh: true });
 export default class ContactAdminDetails extends Component {
 
     handleClose = () => {
-        history.push(`/contactAdmin/issues`);
+        history.push(`/contactAdmin/issues?page=1`);
     }
 
     render() {
