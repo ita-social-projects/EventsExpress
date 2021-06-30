@@ -24,15 +24,13 @@ class InventoryItemWrapper extends Component {
         this.onWillTake = this.onWillTake.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.props === nextProps && this.state === nextState)
-            return false
-        if (this.props.usersInventories.isPending !== nextProps.usersInventories.isPending) {
-            const { item, user } = nextProps
-            if (!this.state.isWillTake && nextProps.usersInventories.data.some(e => e.userId === user.id && e.inventoryId === item.id))
+    componentDidUpdate(prevProps) {
+        const { usersInventories } = this.props
+        if (usersInventories.isPending !== prevProps.usersInventories.isPending) {
+            const { item, user } = this.props
+            if (!this.state.isWillTake && usersInventories.data.some(e => e.userId === user.id && e.inventoryId === item.id))
                 this.onAlreadyGet()
         }
-        return true
     }
 
     onAlreadyGet = () => {
@@ -113,6 +111,14 @@ class InventoryItemWrapper extends Component {
         this.props.delete_users_inventory(data);
     }
 
+    getItemsTakenByUserQuantity() {
+        const { item, user, usersInventories } = this.props
+        const itemsQuantity = usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id)
+        return itemsQuantity === undefined
+            ? 0
+            : itemsQuantity.quantity
+    }
+
     render() {
         const { item, user, usersInventories, isMyEvent, disabledEdit } = this.props;
         const alreadyGet = usersInventories.data.reduce((acc, cur) => {
@@ -133,9 +139,7 @@ class InventoryItemWrapper extends Component {
                 <VisitorEditItemForm
                     onSubmit={this.onWillTake}
                     onCancel={this.onCancel}
-                    alreadyGet={alreadyGet - (usersInventories.data.find(e => e.userId === user.Id && e.inventoryId === item.id) === undefined
-                        ? 0
-                        : usersInventories.data.find(e => e.userId === user.Id && e.inventoryId === item.id).quantity)}
+                    alreadyGet={alreadyGet - this.getItemsTakenByUserQuantity()}
                     initialValues={item}
                 />
             }
