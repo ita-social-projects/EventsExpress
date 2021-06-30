@@ -68,7 +68,7 @@ class ContactAdmin extends Component {
                                 className="form-control"
                                 component={renderTextArea}
                                 type="input"
-                                label="Description" />
+                               />
                         </div>
                         {error && <ErrorMessages error={error} className="text-center" />}
                         <Button
