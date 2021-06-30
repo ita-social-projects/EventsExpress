@@ -1,12 +1,5 @@
-export const requiredField = values => {
+export const fieldIsRequired = ( values, requiredFields) => {
     const errors = {};
-    const requiredFields = [
-        'title',
-        'description',
-        'categories',
-        'image'
-    ];
-
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'

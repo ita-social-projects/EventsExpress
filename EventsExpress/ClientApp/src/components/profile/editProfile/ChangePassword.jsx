@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderTextField } from '../../helpers/form-helpers';
+import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,15 +34,13 @@ const validate = values => {
         'newPassword',
         'repeatPassword',
     ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
     if (values.newPassword !== values.repeatPassword) {
         errors.repeatPassword = 'Passwords do not match';
     }
-    return errors
+    return {
+        ...fieldIsRequired(values, requiredFields),
+        ...errors
+    }
 }
 
 const ChangePassword = (props) => {

@@ -4,21 +4,21 @@ import Button from "@material-ui/core/Button";
 import moment from "moment";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderDatePicker } from '../../helpers/form-helpers';
+import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
 
 const validate = values => {
     const errors = {}
     const requiredFields = [
         'birthday'
     ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
+
     if (new Date(values.Birthday).getTime() >= Date.now()) {
         errors.Birthday = 'Date is incorrect';
     }
-    return errors
+    return {
+        ...fieldIsRequired(values, requiredFields),
+        ...errors
+    }
 }
 
 const EditBirthday = props => {

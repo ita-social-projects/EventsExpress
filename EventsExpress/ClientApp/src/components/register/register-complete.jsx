@@ -4,31 +4,31 @@ import Button from "@material-ui/core/Button";
 import { renderSelectField, renderPhoneInput, renderDatePicker, renderTextField} from '../helpers/form-helpers';
 import moment from "moment";
 import { isValidPhoneNumber } from 'react-phone-number-input';
-import { emailField } from '../helpers/validators/email-field-validator';
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
     let errors = {}
     const requiredFields = [
         'birthday',
         'userName',
+        'email',
         'phone',
         'gender'
     ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
+
     if (values.phone && !isValidPhoneNumber(values.phone)) {
         errors.phone = 'Invalid phone number'
     }
     if (values.gender && values.gender > 3) {
         errors.gender = 'Invalid gender'
     }
-    var emailErrors = emailField(values);
-    errors = { ...errors, ...emailErrors };
 
-    return errors
+    return {
+        ...errors,
+        ...fieldIsRequired(values, requiredFields),
+        ...isValidEmail(values.email)
+    }
 }
 
 class RegisterComplete extends Component {

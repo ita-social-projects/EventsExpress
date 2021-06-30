@@ -5,21 +5,21 @@ import Dialog from "@material-ui/core/Dialog";
 import { DialogContent } from '@material-ui/core';
 import { Field, reduxForm } from "redux-form";
 import { renderTextField } from '../helpers/form-helpers';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 export const validate = values => {
     const errors = {};
     const requiredFields = [
         'detailsString'
     ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    });
+
     if (values.detailsString && values.detailsString.length < 6) {
         errors.detailsString = `Must be minimum 6 symbols`;
     }
-    return errors;
+    return {
+        ...errors,
+        ...fieldIsRequired(values, requiredFields),
+    }
 }
 
 class SimpleModalWithDetails extends Component {

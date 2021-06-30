@@ -3,18 +3,15 @@ import {Field, reduxForm} from "redux-form";
 import { renderTextField } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import IconButton from "@material-ui/core/IconButton";
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
-    const errors = {};
     const requiredFields = [
-        'name',
+        'name'
     ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    });
-    return errors;
+    return {
+        ...fieldIsRequired(values, requiredFields)
+    }
 }
 
 class CategoryEdit extends Component {

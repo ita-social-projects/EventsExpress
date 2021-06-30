@@ -9,22 +9,18 @@ import ErrorMessages from '../shared/errorMessage';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { renderTextField } from '../helpers/form-helpers';
-import { emailField } from '../helpers/validators/email-field-validator';
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
-    let errors = {}
     const requiredFields = [
         'password',
+        'email'
     ]
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    })
-    var emailErrors = emailField(values);
-    errors = { ...errors, ...emailErrors };
-
-    return errors
+    return {
+        ...fieldIsRequired(values,requiredFields),
+        ...isValidEmail(values.email)
+    }
 }
 
 class Login extends Component {

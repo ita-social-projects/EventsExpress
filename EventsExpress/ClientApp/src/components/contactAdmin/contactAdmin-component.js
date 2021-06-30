@@ -5,27 +5,26 @@ import Button from '@material-ui/core/Button';
 import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 import issueTypeEnum from '../../constants/IssueTypeEnum ';
-import { emailField } from '../helpers/validators/email-field-validator';
-import { maxLength30 } from '../helpers/validators/min-max-length-validators'
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { maxLength30 } from '../helpers/validators/min-max-length-validators';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
     let errors = {};
     const requiredFields = [
         'title',
+        'email',
         'description'
     ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    });
     if (maxLength30(values.title)) {
         errors.title = `Title should be less 30 symbols`;
     }
-    
-    var emailErrors = emailField(values);
-    errors = { ...errors, ...emailErrors };
-    return errors;
+
+    return {
+        ...errors,
+        ...fieldIsRequired(values, requiredFields),
+        ...isValidEmail(values.email)
+    }
 }
 
 class ContactAdmin extends Component {

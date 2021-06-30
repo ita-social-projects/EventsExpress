@@ -4,19 +4,16 @@ import {Field, reduxForm} from "redux-form";
 import Button from "@material-ui/core/Button";
 import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-validators'
 import { renderTextField } from '../helpers/form-helpers';
-import { emailField } from '../helpers/validators/email-field-validator';
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
     let errors = {};
     const requiredFields = [
         'password',
+        'email',
         'RepeatPassword',
     ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'Required'
-        }
-    });
 
     if (values.password !== values.RepeatPassword) {
         errors.RepeatPassword = 'Passwords do not match';
@@ -26,10 +23,11 @@ const validate = values => {
         errors.repeatPassword = 'Passwords do not match';
     }
 
-    var emailErrors = emailField(values);
-    errors = { ...errors, ...emailErrors };
-
-    return errors;
+    return {
+        ...errors,
+        ...fieldIsRequired(values, requiredFields),
+        ...isValidEmail(values.email)
+    }
 }
 
 class Register extends Component {
