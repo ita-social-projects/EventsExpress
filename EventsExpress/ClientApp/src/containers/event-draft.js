@@ -6,7 +6,7 @@ import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues, reset, isPristine } from 'redux-form';
 import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
-import { validateEventForm } from '../components/helpers/helpers'
+import { validateEventForm } from './event-validate-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";

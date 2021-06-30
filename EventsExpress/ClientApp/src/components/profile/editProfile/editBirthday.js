@@ -1,12 +1,26 @@
 ﻿import React from "react";
 import { Field, reduxForm } from "redux-form";
-import Module from '../../helpers';
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderDatePicker } from '../../helpers/form-helpers';
+import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
 
-const { validate } = Module;
+const validate = values => {
+    const errors = {}
+    const requiredFields = [
+        'birthday'
+    ]
+
+    if (new Date(values.Birthday).getTime() >= Date.now()) {
+        errors.Birthday = 'Date is incorrect';
+    }
+    return {
+        ...fieldIsRequired(values, requiredFields),
+        ...errors
+    }
+}
+
 const EditBirthday = props => {
     const minValue = moment(new Date()).subtract(115, 'years')
     const maxValue = moment(new Date()).subtract(15, 'years')
