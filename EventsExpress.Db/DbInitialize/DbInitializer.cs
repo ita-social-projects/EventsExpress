@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
@@ -7,6 +8,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.DbInitialize
 {
+    [ExcludeFromCodeCoverage]
     public static class DbInitializer
     {
         public static void Seed(AppDbContext dbContext, IPasswordHasher passwordHasher)
@@ -96,16 +98,51 @@ namespace EventsExpress.Db.DbInitialize
 
             dbContext.Categories.AddRange(categories);
 
-            var categoriesOfMeasuring = new CategoryOfMeasuring[]
-           {
-                new CategoryOfMeasuring { CategoryName = "Weight" },
-                new CategoryOfMeasuring { CategoryName = "Liquids" },
-                new CategoryOfMeasuring { CategoryName = "Points" },
-                new CategoryOfMeasuring { CategoryName = "Length" },
-                new CategoryOfMeasuring { CategoryName = "Other" },
-           };
+            var unitsOfMeasuring = new UnitOfMeasuring[]
+            {
+                new UnitOfMeasuring
+                {
+                    UnitName = "Kilogram",
+                    ShortName = "kg",
+                    IsDeleted = false,
+                    Category = new CategoryOfMeasuring
+                    {
+                        CategoryName = "Weight",
+                    },
+                },
+                new UnitOfMeasuring
+                {
+                    UnitName = "Meter",
+                    ShortName = "m",
+                    IsDeleted = false,
+                    Category = new CategoryOfMeasuring
+                    {
+                        CategoryName = "Length",
+                    },
+                },
+                new UnitOfMeasuring
+                {
+                    UnitName = "Liter",
+                    ShortName = "l",
+                    IsDeleted = false,
+                    Category = new CategoryOfMeasuring
+                    {
+                        CategoryName = "Liquids",
+                    },
+                },
+                new UnitOfMeasuring
+                {
+                    UnitName = "Piece",
+                    ShortName = "pc",
+                    IsDeleted = false,
+                    Category = new CategoryOfMeasuring
+                    {
+                        CategoryName = "Quantity",
+                    },
+                },
+            };
 
-            dbContext.CategoriesOfMeasurings.AddRange(categoriesOfMeasuring);
+            dbContext.UnitOfMeasurings.AddRange(unitsOfMeasuring);
 
             var emailMessages = new[]
             {
