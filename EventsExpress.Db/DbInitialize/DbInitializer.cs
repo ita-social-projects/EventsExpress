@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
@@ -7,6 +8,7 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.DbInitialize
 {
+    [ExcludeFromCodeCoverage]
     public static class DbInitializer
     {
         public static void Seed(AppDbContext dbContext, IPasswordHasher passwordHasher)
