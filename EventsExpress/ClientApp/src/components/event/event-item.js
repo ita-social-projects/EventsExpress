@@ -39,7 +39,7 @@ export default class EventCard extends Component {
         photoService.getPreviewEventPhoto(this.props.item.id).then(
             eventPreviewImage => {
                 if (eventPreviewImage != null) {
-                    this.setState({eventImage: URL.createObjectURL(eventPreviewImage)});
+                    this.setState({ eventImage: URL.createObjectURL(eventPreviewImage) });
                 }
             }
         );
@@ -49,11 +49,9 @@ export default class EventCard extends Component {
         URL.revokeObjectURL(this.state.eventImage);
     }
 
-    renderCategories = (arr) => {
-        return arr.map((x) => (<div key={x.id}>#{x.name}</div>)
-        );
+    renderCategories = arr => {
+        return arr.map(x => <span key={x.id}>#{x.name}</span>);
     }
-
     render() {
         const classes = useStyles;
         const {
@@ -92,20 +90,20 @@ export default class EventCard extends Component {
                         title={title}>
                         <Link to={`/event/${id}/1`} id="LinkToEvent">
                             <img src={this.state.eventImage}
-                                 id={"eventPreviewPhotoImg" + id} alt="Event"
-                                 className="w-100"/>
+                                id={"eventPreviewPhotoImg" + id} alt="Event"
+                                className="w-100" />
                         </Link>
                     </CardMedia>
                     {(maxParticipants < INT32_MAX_VALUE) &&
-                    <CardContent>
-                        <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                        >
-                            {countVisitor}/{maxParticipants} Participants
+                        <CardContent>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                component="p"
+                            >
+                                {countVisitor}/{maxParticipants} Participants
                         </Typography>
-                    </CardContent>
+                        </CardContent>
                     }
                     <CardContent>
                         {description &&
@@ -119,38 +117,34 @@ export default class EventCard extends Component {
                     <CardActions disableSpacing>
                         <div className='w-100'>
                             {this.props.item.location &&
-                            <DisplayLocation
-                                location={this.props.item.location}
-                            />
+                                <DisplayLocation
+                                    location={this.props.item.location}
+                                />
                             }
-                            <br/>
+                            <br />
                             <div className="float-left">
-                                {this.renderCategories(categories.slice(0, 2))}
+                                {categories.length <= 2
+                                    ? this.renderCategories(categories.slice(0, 2))
+                                    : this.renderCategories(categories)
+                                }
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
-                                <Tooltip title="Private event">
-                                    <IconButton>
-                                        <Badge color="primary">
-                                            <i className="fa fa-key" />
-                                        </Badge>
-                                    </IconButton>
-                                </Tooltip>
-                                }
-                                <Link to={`/event/${id}/1`}>
-                                    <Tooltip title="View">
-                                        <IconButton aria-label="view">
-                                            <i className="fa fa-eye" />
+                                    <Tooltip title="Private event">
+                                        <IconButton>
+                                            <Badge color="primary">
+                                                <i className="fa fa-key" />
+                                            </Badge>
                                         </IconButton>
                                     </Tooltip>
-                                </Link>
+                                }
                                 <AuthComponent rolesMatch={Roles.Admin}>
                                     <EventActiveStatus
                                         key={this.props.item.id + this.props.item.eventStatus}
                                         eventStatus={this.props.item.eventStatus}
                                         eventId={this.props.item.id}
-                                        onBlock = {this.props.onBlock}
-                                        onUnBlock = {this.props.onUnBlock}/>
+                                        onBlock={this.props.onBlock}
+                                        onUnBlock={this.props.onUnBlock} />
                                 </AuthComponent>
                                 <SocialShareMenu href={`${window.location.protocol}//${window.location.host}/event/${id}/1`} />
                             </div>
