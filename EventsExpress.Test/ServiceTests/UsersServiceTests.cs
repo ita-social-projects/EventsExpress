@@ -14,6 +14,7 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -35,14 +36,6 @@ namespace EventsExpress.Test.ServiceTests
         private Guid userId = Guid.NewGuid();
         private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
 
-        private Category[] categories =
-        {
-            new Category { Id = Guid.NewGuid(), Name = "Sea" },
-            new Category { Id = Guid.NewGuid(), Name = "Mount" },
-            new Category { Id = Guid.NewGuid(), Name = "Summer" },
-            new Category { Id = Guid.NewGuid(), Name = "Golf" },
-        };
-
         private string name = "existingName";
         private string secondName = "secondName";
         private string existingEmail = "existingEmail@gmail.com";
@@ -52,6 +45,7 @@ namespace EventsExpress.Test.ServiceTests
         protected override void Initialize()
         {
             base.Initialize();
+            Context.UserCategory.Clear();
             mockPhotoService = new Mock<IPhotoService>();
             mockSecurityContext = new Mock<ISecurityContext>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
@@ -88,7 +82,11 @@ namespace EventsExpress.Test.ServiceTests
                     new UserCategory
                     {
                         UserId = userId,
-                        CategoryId = categories[0].Id,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
                     },
                 },
             };
@@ -111,7 +109,11 @@ namespace EventsExpress.Test.ServiceTests
                     new UserCategory
                     {
                         UserId = secondUserId,
-                        CategoryId = categories[1].Id,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
                     },
                 },
             };
@@ -139,14 +141,18 @@ namespace EventsExpress.Test.ServiceTests
                     new UserCategory
                     {
                         UserId = userId,
-                        CategoryId = categories[0].Id,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
                     },
                 },
             };
 
             Context.Users.Add(existingUser);
             Context.Users.Add(secondUser);
-            Context.Categories.AddRange(categories);
+
             Context.SaveChanges();
         }
 
@@ -313,6 +319,15 @@ namespace EventsExpress.Test.ServiceTests
             }
 
             return contentType;
+        }
+    }
+
+    public static class EntityExtensions
+    {
+        public static void Clear<T>(this DbSet<T> dbSet)
+            where T : class
+        {
+            dbSet.RemoveRange(dbSet);
         }
     }
 }
