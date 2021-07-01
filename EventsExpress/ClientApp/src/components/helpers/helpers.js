@@ -13,7 +13,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { renderFieldError } from './form-helpers';
 import moment from "moment";
 import './helpers.css'
-
+ 
 export const radioButton = ({ input, labels, ...rest }) => (
     <FormControl>
         <RadioGroup {...input} {...rest}>
@@ -61,7 +61,7 @@ export const validate = values => {
 
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'Required'
+            errors[field] = 'Field is required';
         }
     });
 
