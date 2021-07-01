@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import 'moment-timezone';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -10,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import Badge from '@material-ui/core/Badge';
-
 import SocialShareMenu from './share/SocialShareMenu';
 import EventActiveStatus from './event-active-status';
 import DisplayLocation from './map/display-location';
@@ -68,6 +66,9 @@ export default class EventCard extends Component {
             members,
         } = this.props.item;
         const INT32_MAX_VALUE = null;
+        const categoriesNotDisplayed = categories.length - 2;
+        const restCategories = " ... " + categoriesNotDisplayed + " more";
+        const displayedCategories = this.renderCategories(categories.slice(0, 2));
 
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -124,9 +125,13 @@ export default class EventCard extends Component {
                             <br />
                             <div className="float-left">
                                 {categories.length <= 2
-                                    ? this.renderCategories(categories.slice(0, 2))
-                                    : this.renderCategories(categories)
+                                    ? displayedCategories
+                                    : [displayedCategories,
+                                        <Typography variant="body2" color="textSecondary" component="span">
+                                            {restCategories}
+                                        </Typography>]
                                 }
+
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 {!isPublic &&
