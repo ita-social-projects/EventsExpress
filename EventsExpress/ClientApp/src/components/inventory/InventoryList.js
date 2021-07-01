@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import { connect } from 'react-redux';
-import  get_unitsOfMeasuring  from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
+import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 import IconButton from "@material-ui/core/IconButton";
 import { get_inventories_by_event_id, update_inventories } from '../../actions/inventory/inventory-list-action';
 import InventoryItemWrapper from '../../containers/inventory-item';
@@ -77,25 +77,25 @@ class InventoryList extends Component {
 
 
                 { this.state.isOpen &&
-                <div>
-                    {isMyEvent &&
-                        <IconButton
-                            disabled = {this.state.disabledEdit}
-                            onClick = {this.addItemToList.bind(this)}
-                            size = "small">
-                            <span className="icon"><i className="fa-sm fas fa-plus" /></span> &nbsp; Add item
+                    <div>
+                        {isMyEvent &&
+                            <IconButton
+                                disabled={this.state.disabledEdit}
+                                onClick={this.addItemToList.bind(this)}
+                                size="small">
+                                <span className="icon"><i className="fa-sm fas fa-plus"></i></span> &nbsp; Add item
                         </IconButton>
-                    }
+                        }
                         <div className="container">
                             <div className="row p-1">
-                                <div className="col col-md-4"><b>Item name</b></div>
+                                <div className="col col-md-3"><b>Item name</b></div>
                                 <div className="col"><b>Already get</b></div>
                                 {!isMyEvent &&
-                                <div className="col col-md-2"><b>Will take</b></div>
+                                    <div className="col col-md-1"><b>Will take</b></div>
                                 }
-                                <div className="col col-md-1"><b>Count</b></div>
-                                <div className="col col-md-1" />
-                                <div className="col col-md-2" />
+                                <div className="col col-md-2"><b>Count</b></div>
+                                <div className="col col-md-2"><b>Units</b></div>
+                                <div className="col col-md-2"></div>
                             </div>
                             {this.state.isNew &&
                                 <InventoryItemWrapper
@@ -132,7 +132,7 @@ class InventoryList extends Component {
                                 );
                             })}
                         </div>
-                </div>
+                    </div>
                 }
             </>
         );
