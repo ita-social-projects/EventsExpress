@@ -56,6 +56,8 @@ namespace EventsExpress.Test.ServiceTests
             mockSecurityContext = new Mock<ISecurityContext>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
+            MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
+                .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
 
             service = new UserService(
                 Context,
@@ -193,11 +195,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GetUserNotificationTypes_True()
         {
-            var mockMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new NotificationTypeMapperProfile());
-            });
-            MockMapper.Setup(s => s.ConfigurationProvider).Returns(mockMapperConfig);
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             var res = service.GetUserNotificationTypes();
             Assert.AreEqual(2, res.Count());
@@ -206,11 +203,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GetUserCategories_True()
         {
-            var mockMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new CategoryMapperProfile());
-            });
-            MockMapper.Setup(s => s.ConfigurationProvider).Returns(mockMapperConfig);
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             var res = service.GetUserCategories();
             Assert.AreEqual(1, res.Count());

@@ -73,24 +73,22 @@ namespace EventsExpress.Core.Services
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            return Context.UserNotificationTypes
-                    .Include(u => u.NotificationType)
-                    .Where(u => u.UserId == userId)
-                    .ProjectTo<NotificationTypeDto>(Mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .ToList();
+            return Mapper.Map<IEnumerable<NotificationTypeDto>>(Context.UserNotificationTypes
+                            .Include(u => u.NotificationType)
+                            .Where(u => u.UserId == userId)
+                            .AsNoTracking()
+                            .ToList());
         }
 
         public IEnumerable<CategoryDto> GetUserCategories()
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            return Context.UserCategory
-                    .Include(u => u.Category)
-                    .Where(uc => uc.UserId == userId)
-                    .ProjectTo<CategoryDto>(Mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .ToList();
+            return Mapper.Map<IEnumerable<CategoryDto>>(Context.UserCategory
+                            .Include(u => u.Category)
+                            .Where(uc => uc.UserId == userId)
+                            .AsNoTracking()
+                            .ToList());
         }
 
         public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count)
