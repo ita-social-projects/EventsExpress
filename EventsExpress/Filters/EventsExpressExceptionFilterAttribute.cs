@@ -19,7 +19,7 @@ namespace EventsExpress.Filters
                         { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
-                if (eventsExpressException.ValidationErrors != null && eventsExpressException.ValidationErrors.Count > 0)
+                if (eventsExpressException.ValidationErrors?.Count > 0)
                 {
                     foreach (var x in eventsExpressException.ValidationErrors)
                     {

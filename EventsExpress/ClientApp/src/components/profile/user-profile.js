@@ -14,6 +14,7 @@ import RatingAverage from '../rating/rating-average';
 import './User-profile.css';
 import Events from './events';
 import AuthComponent from "../../security/authComponent";
+import { getAge } from '../helpers/helpers';
 
 class UserItemView extends Component {
 
@@ -39,18 +40,6 @@ class UserItemView extends Component {
 
     componentDidUpdate = () => {
         this.state.value = this.indexToTabName[this.splitPath(this.props.history.location.pathname)]
-    }
-
-    getAge = birthday => {
-        let today = new Date();
-        let birthDate = new Date(birthday);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        let month = today.getMonth() - birthDate.getMonth();
-        if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-            age = age - 1;
-        }
-        if (age > 150) return '---';
-        return age;
     }
 
     renderCategories = arr => arr.map(item => <div key={item.id}>#{item.name}</div>)
@@ -128,7 +117,7 @@ class UserItemView extends Component {
                 </AuthComponent>
                 <div className='col-sm-12  col-md-6'>
                     {render_prop('User Name', name)}
-                    {render_prop('Age', this.getAge(birthday))}
+                    {render_prop('Age', getAge(birthday))}
                     {render_prop('Gender', genders[gender])}
                     {render_prop('Email', email)}
                     {render_prop('Interests', categories_list)}

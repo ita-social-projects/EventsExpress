@@ -1,12 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { reset } from 'redux-form';
-import add_category,
-{
-    setCategoryPending,
-    setCategorySuccess,
-    set_edited_category
-} from '../../actions/category/category-add-action';
+import add_category, { setCategoryEdited }from '../../actions/category/category-add-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
@@ -14,15 +8,6 @@ class CategoryAddWrapper extends React.Component {
 
     submit = values => {
         return this.props.add({ ...values });
-    }
-
-    componentWillUpdate = () => {
-        const { isCategorySuccess } = this.props.status;
-
-        if (isCategorySuccess) {
-            this.props.reset();
-            this.props.edit_cancel();
-        }
     }
 
     render() {
@@ -51,23 +36,18 @@ class CategoryAddWrapper extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        status: state.add_category,
-        editedCategory: state.categories.editedCategory
+        editedCategory: state.categories.editedCategory,
+        counter: state.requestCount.counter
     }
 };
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
         add: (data) => dispatch(add_category(data)),
-        set_category_edited: () => dispatch(set_edited_category(props.item.id)),
+        set_category_edited: () => dispatch(setCategoryEdited(props.item.id)),
         edit_cancel: () => {
-            dispatch(set_edited_category(null));
+            dispatch(setCategoryEdited(null));
         },
-        reset: () => {
-            dispatch(reset('add-form'));
-            dispatch(setCategoryPending(false));
-            dispatch(setCategorySuccess(false));
-        }
     };
 };
 

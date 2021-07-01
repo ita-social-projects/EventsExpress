@@ -2,6 +2,7 @@ import { UserService } from '../../services';
 import { setSuccessAllert} from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers.js'
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const changeAvatar = {
     PENDING: "SET_CHANGE_AVATAR_PENDING",
@@ -13,13 +14,13 @@ const api_serv = new UserService();
 
 export default function change_avatar(data) {
     return async dispatch => {
-        dispatch(setAvatarPending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.setAvatar(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setAvatarSuccess(true));
+        dispatch(getRequestDec());
         dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar is successfully updated'));
         return Promise.resolve();
@@ -31,20 +32,6 @@ export default function change_avatar(data) {
 export function updateAvatar() {
     return {
         type: changeAvatar.UPDATE,
-    };
-}
-
-function setAvatarPending(data) {
-    return {
-        type: changeAvatar.PENDING,
-        payload: data
-    };
-}
-
-function setAvatarSuccess(data) {
-    return {
-        type: changeAvatar.SUCCESS,
-        payload: data
     };
 }
 

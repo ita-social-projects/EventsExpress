@@ -1,9 +1,7 @@
 ﻿import React from "react";
 import CommentForm from '../components/comment/comment-form';
 import {connect} from "react-redux";
-import addComment,
-{setCommentPending, setCommentSuccess} from "../actions/comment/comment-add-action";
-import {reset} from 'redux-form';
+import addComment from "../actions/comment/comment-add-action";
 
 class CommentWrapper extends React.Component {
     
@@ -16,10 +14,6 @@ class CommentWrapper extends React.Component {
         });
     };
 
-    componentWillUnmount = () => {
-        this.props.reset();
-        this.props.resetCommentStatus();
-    }
 
     render() {
 
@@ -37,13 +31,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     add: (data) => dispatch(addComment(data)),
-    reset: () => {
-        dispatch(reset('add-comment'));
-    },
-    resetCommentStatus: () => {
-        dispatch(setCommentPending(true));
-        dispatch(setCommentSuccess(false));
-    }
 });
 
 export default connect(

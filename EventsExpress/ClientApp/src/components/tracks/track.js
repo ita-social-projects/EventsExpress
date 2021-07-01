@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import TrackList from './track-list';
 import TracksFilter from './tracks-filter';
 import Spinner from '../spinner';
-import getAllTracks, {getEntityNames} from '../../actions/tracks/track-list-action';
-import {getFormValues, reset} from 'redux-form';
-import {connect} from 'react-redux';
+import getAllTracks, { getEntityNames } from '../../actions/tracks/track-list-action';
+import { getFormValues, reset } from 'redux-form';
+import { connect } from 'react-redux';
 
 class Tracks extends Component {
 
@@ -29,14 +29,14 @@ class Tracks extends Component {
         let currentFilters = this.props.form_values || {};
         await this.handleFunc(currentFilters, page);
     }
-    
+
     onReset = async () => {
         this.props.reset_filters();
         await this.handleFunc({}, 1);
     }
 
     handleFunc = async (data, pages) => {
-        const {entityNames = [], changesType, dateFrom, dateTo} = data;
+        const { entityNames = [], changesType, dateFrom, dateTo } = data;
         await this.props.getAllTracks({
             entityName: !!entityNames ? entityNames.map(x => x.entityName) : null,
             changesType: changesType,
@@ -47,33 +47,32 @@ class Tracks extends Component {
     }
 
     render() {
-        const {isPending, data, entityNames} = this.props.tracks;
-        return <div>
+        const { data, entityNames } = this.props.tracks;
+        return <Spinner showContent={data != undefined}>
             <table className="table w-100 m-auto">
                 <tbody>
-                <div className="d-flex">
-                    {!isPending &&
-                    data?.items &&
-                    <div className="w-75">
-                        <TrackList
-                            data_list={data}
-                            handlePageChange={this.handlePageChange}
-                        />
+                    <div className="d-flex">
+                        {data?.items &&
+                            <div className="w-75">
+                                <TrackList
+                                    data_list={data}
+                                    handlePageChange={this.handlePageChange}
+                                />
+                            </div>
+                        }
+                        <div className="w-25">
+                            <TracksFilter
+                                entityNames={entityNames}
+                                onSubmit={this.handleSubmit}
+                                onReset={this.onReset}
+                                form_values={this.props.form_values}
+                            />
+                        </div>
                     </div>
-                    }
-                    <div className="w-25">
-                        <TracksFilter
-                            entityNames={entityNames}
-                            onSubmit={this.handleSubmit}
-                            onReset={this.onReset}
-                            form_values={this.props.form_values}
-                        />
-                    </div>
-                </div>
                 </tbody>
             </table>
-            {isPending ? <Spinner/> : null}
-        </div>
+
+        </Spinner>
     }
 }
 

@@ -1,23 +1,16 @@
 import { event } from '../actions/event/event-item-view-action';
 import initialState from '../store/initialState';
 import {
-    SET_EVENTS_PENDING,
-    GET_EVENTS_SUCCESS,
+    GET_EVENTS_DATA,
     RESET_EVENTS,
     UPDATE_EVENTS_FILTERS
 } from '../actions/event/event-list-action';
 
 export const reducer = (state = initialState.events, action) => {
     switch (action.type) {
-        case SET_EVENTS_PENDING:
+        case GET_EVENTS_DATA:      
             return {
                 ...state,
-                isPending: true
-            };
-        case GET_EVENTS_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
                 data: action.payload
             };
         case event.CHANGE_STATUS:

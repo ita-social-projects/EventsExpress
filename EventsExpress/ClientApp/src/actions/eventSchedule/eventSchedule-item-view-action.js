@@ -1,5 +1,6 @@
 import { EventScheduleService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const GET_EVENT_SCHEDULE_PENDING = "GET_EVENT_SCHEDULE_PENDING";
 export const GET_EVENT_SCHEDULE_SUCCESS = "GET_EVENT_SCHEDULE_SUCCESS";
@@ -9,13 +10,14 @@ const api_serv = new EventScheduleService();
 
 export default function getEventSchedule(id) {
     return async dispatch => {
-        dispatch(getEventSchedulePending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getEventSchedule(id);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(get_eventSchedule(jsonRes));
         return Promise.resolve();
     }

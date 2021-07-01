@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import SelectCategories from '../../components/SelectCategories/SelectCategories';
 import setUserCategory from '../../actions/redactProfile/userCategory-add-action';
 import get_categories from '../../actions/category/category-list-action';
+import get_userCategories from '../../actions/category/userCategory-action';
 
 class SelectCategoriesWrapper extends Component {
     constructor(props) {
@@ -10,10 +11,13 @@ class SelectCategoriesWrapper extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount = () => this.props.get_categories();
+    componentDidMount = () => {
+        this.props.getuserCategories();
+        this.props.get_categories();
+    }
 
     handleSubmit(event) {
-       return this.props.setUserCategory({
+        return this.props.setUserCategory({
             categories: event.categories
         });
     }
@@ -36,7 +40,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setUserCategory: (data) => dispatch(setUserCategory(data)),
-        get_categories: () => dispatch(get_categories())
+        get_categories: () => dispatch(get_categories()),
+        getuserCategories: () => dispatch(get_userCategories())
     }
 };
 
