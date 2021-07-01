@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { renderMultiselect } from '../helpers/helpers'
+import { renderMultiselect } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 
 class SelectCategories extends Component {

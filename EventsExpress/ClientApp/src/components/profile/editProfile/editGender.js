@@ -10,6 +10,7 @@ let EditGender = props => {
         <form name= "EditGender" onSubmit={handleSubmit}>
             <div>
                 <Field
+                    minWidth={210}
                     name="gender"
                     component={renderSelectField}
                     label="Gender"
