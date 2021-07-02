@@ -1,4 +1,4 @@
-import { getErrorMessege } from '../components/helpers/action-helpers';
+import { getErrorMessage } from '../components/helpers/action-helpers';
 
 export const _alert = {
     SET: "SET_ALERT",
@@ -14,7 +14,7 @@ export function setAlert(data) {
 
 export function setErrorAllertFromResponse(responsePromise) {
     return async dispatch => {
-        const errorText = await getErrorMessege(responsePromise);
+        const errorText = await getErrorMessage(responsePromise);
         const alert = buildAlertWithError(errorText);
         dispatch(setAlert(alert));
     }
