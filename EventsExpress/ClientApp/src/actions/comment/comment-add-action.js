@@ -6,7 +6,7 @@ import { getRequestInc, getRequestDec } from "../request-count-action";
 
 const api_serv = new CommentService();
 
-export default function addComment(data) {
+export default function (data) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.setComment(data);

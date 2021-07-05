@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CommentList from '../components/comment/comment-list';
-import Spinner from '../components/spinner';
 import getComments from '../actions/comment/comment-list-action';
 
 
@@ -11,7 +10,6 @@ class CommentListWrapper extends Component {
     componentWillMount() {
         const { page } = this.props.match.params;
         this.props.getComments(this.props.eventId, page);
-
     }
 
     render() {

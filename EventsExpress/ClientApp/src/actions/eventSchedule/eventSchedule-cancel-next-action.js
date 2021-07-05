@@ -6,7 +6,7 @@ import { getRequestInc, getRequestDec } from "../request-count-action";
 const api_serv = new EventScheduleService();
 const history = createBrowserHistory({ forceRefresh: true });
 
-export default function cancel_next_eventSchedule(eventId) {
+export default function (eventId) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.setNextEventScheduleCancel(eventId);
