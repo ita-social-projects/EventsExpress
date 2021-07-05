@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat/chat-action';
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
-import { renderTextArea } from '../helpers/helpers';
+import { renderTextArea } from '../helpers/form-helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Msg from './msg';
@@ -87,7 +87,7 @@ class Chat extends Component {
                                     <ButtonBase>
                                         <CustomAvatar size={"Small"}
                                             userId={sender.id}
-                                            name={sender.name}/>
+                                            name={sender.name} />
                                     </ButtonBase>
                                 }
                                 <div className="user_info">
