@@ -16,14 +16,14 @@ export const buildValidationState = async (responseData) => {
     return result;
 }
 
-export const getErrorMessege = async (responseData) => {
+export const getErrorMessage = async (responseData) => {
     let jsonRes = await responseData.json();
 
-    for (const [key, value] of Object.entries(jsonRes.errors)) {
-        if (key == "") {
-            return `Error : ${value[0]}!`;
+    for (const [key, value] of Object.entries(jsonRes[""].errors)) {
+        if (key === "0") {
+            return `Error : ${value["errorMessage"]}`;
         }
-        return `Error for ${key}: ${value[0]}!`;
+        return `Error for ${key}: ${value["errorMessage"]}`;
     }
-    return "Something went wrong";
+    return "Something went wrong.";
 }
