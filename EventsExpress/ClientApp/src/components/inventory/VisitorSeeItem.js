@@ -63,7 +63,7 @@ export default class VisitorSeeItem extends Component {
                                 <Tooltip title="Will take" placement="right-start">
                                     <IconButton
                                         disabled={disabledEdit}
-                                        onClick={this.props.markItemAsWillTake}>
+                                        onClick={markItemAsEdit}>
                                         <i className="fa-sm fas fa-plus text-success" />
                                     </IconButton>
                                 </Tooltip>
