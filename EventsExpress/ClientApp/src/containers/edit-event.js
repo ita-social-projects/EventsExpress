@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import { edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
-import { validate, validateEventForm  } from '../components/helpers/helpers'
+import { validate } from './event-edit-validate-form '
+import { validateEventForm } from './event-validate-form'
 import Button from "@material-ui/core/Button";
 
 class EditEventWrapper extends Component {

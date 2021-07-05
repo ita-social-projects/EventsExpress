@@ -1,11 +1,34 @@
 import React, {Component} from "react";
 import DialogActions from "@material-ui/core/DialogActions";
-import Module from '../helpers';
 import {Field, reduxForm} from "redux-form";
 import Button from "@material-ui/core/Button";
-import {minLength2, maxLength15} from '../helpers/helpers'
+import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-validators'
+import { renderTextField } from '../helpers/form-helpers';
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
-const {validate, renderTextField} = Module;
+const validate = values => {
+    let errors = {};
+    const requiredFields = [
+        'password',
+        'email',
+        'RepeatPassword',
+    ];
+
+    if (values.password !== values.RepeatPassword) {
+        errors.RepeatPassword = 'Passwords do not match';
+    }
+
+    if (values.newPassword !== values.repeatPassword) {
+        errors.repeatPassword = 'Passwords do not match';
+    }
+
+    return {
+        ...errors,
+        ...fieldIsRequired(values, requiredFields),
+        ...isValidEmail(values.email)
+    }
+}
 
 class Register extends Component {
 
@@ -28,7 +51,7 @@ class Register extends Component {
                             component={renderTextField}
                             label="Password:"
                             type="password"
-                            validate={[maxLength15, minLength2]}
+                            validate={[maxLength15, minLength6]}
                         />
                     </div>
                     <div>
@@ -37,7 +60,7 @@ class Register extends Component {
                             component={renderTextField}
                             label="Repeat password:"
                             type="password"
-                            validate={[maxLength15, minLength2]}
+                            validate={[maxLength15, minLength6]}
                         />
                     </div>
                     <div>

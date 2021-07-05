@@ -3,18 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { renderFieldError } from './';
+import { renderFieldError } from '.';
 
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        minWidth: 210,
-    },
-}));
-
-export default ({ input, label, meta: { touched, error, invalid }, children }) => {
-    const classes = useStyles();
+export default ({ input, label, meta: { touched, error, invalid }, minWidth, children }) => {
+    const useStyles = makeStyles((theme) => ({
+        formControl: {  minWidth: minWidth }
+    }));
     return (
-        <FormControl variant="outlined" className={classes.formControl} >
+        <FormControl variant="outlined" className={useStyles().formControl} >
             <InputLabel>{label}</InputLabel>
             <Select
                 {...input}
@@ -26,7 +22,6 @@ export default ({ input, label, meta: { touched, error, invalid }, children }) =
                 error={touched && invalid}
             >
             </Select>
-            
             {renderFieldError({ touched, error })}
         </FormControl>
     );
