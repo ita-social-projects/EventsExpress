@@ -4,31 +4,16 @@ import EventForm from '../components/event/event-form';
 import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
-import { getFormValues, reset, isPristine } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
+import { getFormValues , isPristine} from 'redux-form';
+import { edit_event, publish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from './event-validate-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import get_categories from '../actions/category/category-list-action';
 import './css/Draft.css';
 
 class EventDraftWrapper extends Component {
-
-    componentWillMount = () => {
-        this.props.get_categories();
-    }
-
-    componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
-            this.props.reset();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.reset();
-    }
 
     onPublish = async (values) => {
         if (!this.props.pristine)
@@ -120,6 +105,7 @@ const mapStateToProps = (state) => ({
     form_values: getFormValues('event-form')(state),
     pristine: isPristine('event-form')(state),
     event: state.event.data,
+    counter: state.requestCount.counter
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -129,11 +115,6 @@ const mapDispatchToProps = (dispatch) => {
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-        reset: () => {
-            dispatch(reset('event-form'));
-            dispatch(setEventPending(true));
-            dispatch(setEventSuccess(false));
-        }
     }
 };
 

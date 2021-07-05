@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { eventsForNotification } from '../../actions/events/events-for-notification-action'; 
+import { eventsForNotification } from '../../actions/events/events-for-notification-action';
 import EventList from '../event/events-for-profile';
 import Spinner from '../spinner';
 
@@ -11,25 +11,21 @@ class NotificationEvents extends Component {
 
     render() {
         const { current_user } = this.props;
-        const { data, isPending } = this.props.events;
+        const { data } = this.props.events;
         const { items } = this.props.events.data;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventList
+
+        return <Spinner showContent={data != undefined}>
+            {items.length == 0 &&
+                <p className="text-center h3">You don't have notifications</p>
+            }
+            <EventList
                 current_user={current_user}
                 notification_events={this.props.notification.events}
                 data_list={items} page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 callback={this.props.get_events}
             />
-            : null;
-
-        return <>
-            {spinner || content}
-            {!spinner && items.length == 0 &&
-                <p className="text-center h3">You don't have notifications</p>
-            }
-        </>
+        </Spinner>
     }
 }
 

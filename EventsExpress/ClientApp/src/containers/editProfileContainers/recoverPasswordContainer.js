@@ -4,11 +4,6 @@ import { connect } from "react-redux";
 import recover_Password from "../../actions/redactProfile/password-recover-action";
 
 class RecoverPasswordContainer extends React.Component {
-    componentDidUpdate(prevOps, prevState) {
-        if (this.props.isRecoverPasswordSuccess) {
-            this.props.handleClose();
-        }
-    }
 
     submit = value => {
         return this.props.recoverPassword(value);
@@ -21,7 +16,7 @@ class RecoverPasswordContainer extends React.Component {
 
         return <>
             <RecoverPassword onSubmit={this.submit} />
-            {status.isSucces &&
+            {!status.isError &&
                 <p className="text-success text-center">New password sent by your email.<br />Please use it to sign in.</p>
 
             }

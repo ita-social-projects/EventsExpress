@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import UnitOfMeasuringItem from "../../components/unitOfMeasuring/unitOfMeasuring-item";
 import UnitOfMeasuringEdit from "../../components/unitOfMeasuring/unitOfMeasuring-edit";
-import { add_unitOfMeasuring, set_edited_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
+import { add_unitOfMeasuring, setUnitOfMeasuringEdited } from "../../actions/unitOfMeasuring/unitOfMeasuring-add-action";
 import { delete_unitOfMeasuring } from "../../actions/unitOfMeasuring/unitOfMeasuring-delete-action";
 import { confirmAlert } from 'react-confirm-alert';
 import get_categoriesOfMeasuring from "../../actions/categoryOfMeasuring/categoryOfMeasuring-list-action";
@@ -20,18 +20,6 @@ class UnitOfMeasuringItemWrapper extends Component {
            return this.props.save_unitOfMeasuring({ ...values, id: this.props.item.id });
         }
     };
-
-    componentWillMount() {
-        this.props.get_categoriesOfMeasuring();
-    }
-
-    componentWillUpdate = () => {
-        const {isUnitOfMeasuringSuccess } = this.props.status;
-
-        if (isUnitOfMeasuringSuccess) {
-            this.props.edit_cancel();
-        }
-    }
 
     isDeleteConfirm = () => {
         const { unitName, shortName, id } = this.props.item;
@@ -95,8 +83,8 @@ const mapDispatchToProps = (dispatch, props) => {
         get_categoriesOfMeasuring: () => dispatch(get_categoriesOfMeasuring()),
         delete_unitOfMeasuring: () => dispatch(delete_unitOfMeasuring(props.item.id)),
         save_unitOfMeasuring: (data) => dispatch(add_unitOfMeasuring(data)),
-        set_unitOfMeasuring_edited: () => dispatch(set_edited_unitOfMeasuring(props.item.id)),
-        edit_cancel: () => dispatch(set_edited_unitOfMeasuring(null))
+        set_unitOfMeasuring_edited: () => dispatch(setUnitOfMeasuringEdited(props.item.id)),
+        edit_cancel: () => dispatch(setUnitOfMeasuringEdited(null))
     };
 };
 

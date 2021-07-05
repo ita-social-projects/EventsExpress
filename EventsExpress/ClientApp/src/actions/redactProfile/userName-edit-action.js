@@ -2,10 +2,9 @@
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
 export const editUsername = {
-    PENDING : "SET_EDITUSERNAME_PENDING",
-    SUCCESS : "SET_EDITUSERNAME_SUCCESS",
     UPDATE: "UPDATE_USERNAME"
 }
 
@@ -13,12 +12,12 @@ const api_serv = new UserService();
 
 export default function edit_Username(data) {
     return async dispatch => {
-        dispatch(setEditUsernamePending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setUsername(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setEditUsernameSuccess(true));
+        dispatch(getRequestDec());
         dispatch(updateUsername(data));
         dispatch(setSuccessAllert('Username is changed'));
         return Promise.resolve();
@@ -31,18 +30,3 @@ function updateUsername(data) {
         payload: data
     };
 }
-
-function setEditUsernamePending(data) {
-    return {
-        type: editUsername.PENDING,
-        payload: data
-    };
-}
-
-function setEditUsernameSuccess(data) {
-    return {
-        type: editUsername.SUCCESS,
-        payload: data
-    };
-}
-

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { renderTextField, renderTextArea  } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
-import issueTypeEnum from '../../constants/IssueTypeEnum ';
+import issueTypeEnum from '../../constants/issueTypeEnum ';
 import { isValidEmail } from '../helpers/validators/email-address-validator';
 import { maxLength30 } from '../helpers/validators/min-max-length-validators';
 import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
