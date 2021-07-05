@@ -10,6 +10,11 @@ import { parse as queryStringParse } from 'query-string';
 import filterHelper from '../helpers/filterHelper';
 
 class EventList extends Component {
+    componentDidMount() {
+        if (this.props.totalPages >1 && this.props.history.location.search == "")
+            this.props.history.push(this.props.history.location.pathname + `?page=1`);
+    }
+
     handlePageChange = (page) => {
         if (this.props.history.location.search == "")
             this.props.history.push(this.props.history.location.pathname + `?page=${page}`);
@@ -20,8 +25,7 @@ class EventList extends Component {
             this.props.history.push(this.props.history.location.pathname + this.props.history.location.search);
         }
     };
-
-
+   
     renderSingleItem = (item) => (
         <EventCard
             key={item.id + item.Active}
