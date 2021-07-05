@@ -1,7 +1,4 @@
 import initialState from '../../store/initialState';
-import {
-     SET_UNIT_OF_MEASURING_PENDING, SET_UNIT_OF_MEASURING_SUCCESS
-} from '../../actions/unitOfMeasuring/unitOfMeasuring-add-action';
 
 export const reducer = (state = initialState.add_unitOfMeasuring, action) => {
 

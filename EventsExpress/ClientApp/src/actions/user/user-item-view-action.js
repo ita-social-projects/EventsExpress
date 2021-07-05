@@ -1,17 +1,18 @@
-﻿﻿import { UserService } from '../../services';
+﻿import { UserService } from '../../services';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 import { setErrorAllertFromResponse } from '../alert-action';
 
-export const GET_PROFILE_PENDING = "GET_PROFILE_PENDING";
-export const GET_PROFILE_SUCCESS = "GET_PROFILE_SUCCESS";
+export const GET_PROFILE_DATA = "GET_PROFILE_DATA";
 export const RESET_USER = "RESET_USER";
 
 const api_serv = new UserService();
 
 export default function get_user(id) {
     return async dispatch => {
-        dispatch(getProfilePending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.getUserById(id);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -38,16 +39,9 @@ export function setAttitude(data) {
     }
 }
 
-function getProfilePending(data) {
-    return {
-        type: GET_PROFILE_PENDING,
-        payload: data
-    }
-}
-
 function getProfile(data) {
     return {
-        type: GET_PROFILE_SUCCESS,
+        type: GET_PROFILE_DATA,
         payload: data
     }
 }

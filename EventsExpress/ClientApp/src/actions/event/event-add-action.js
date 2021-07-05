@@ -3,23 +3,23 @@ import { EventService } from '../../services';
 import get_event, { getEvent } from './event-item-view-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { createBrowserHistory } from 'history';
-import { setSuccessAllert } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
+import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 
-export const SET_EVENT_SUCCESS = "SET_EVENT_SUCCESS";
-export const SET_EVENT_PENDING = "SET_EVENT_PENDING";
 export const EVENT_WAS_CREATED = "EVENT_WAS_CREATED";
 
 const api_serv = new EventService();
 const history = createBrowserHistory({ forceRefresh: true });
 
-export default function add_event(data) {
+export default function add_event() {
     return async dispatch => {
-        dispatch(setEventPending(true));
-        let response = await api_serv.setEvent(data);
+        dispatch(getRequestInc());
+        let response = await api_serv.setEvent();
+        dispatch(getRequestDec());
         if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
         }
-        dispatch(setEventSuccess(true));
         const event = await response.json();
         dispatch(setSuccessAllert('Your event was successfully created!'));
         dispatch(history.push(`/editEvent/${event.id}`));
@@ -29,23 +29,23 @@ export default function add_event(data) {
 
 export function edit_event(data) {
     return async dispatch => {
-        dispatch(setEventPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.editEvent(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setEventSuccess(true));
         dispatch(getEvent(data));
+        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }
 
 export function publish_event(eventId) {
     return async dispatch => {
-        dispatch(setEventPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.publishEvent(eventId);
+        dispatch(getRequestDec());
         if (response.ok) {
-            dispatch(setEventSuccess(true));
             dispatch(get_event(eventId));
             dispatch(setSuccessAllert('Your event has been successfully published!'));
             dispatch(history.push(`/event/${eventId}/1`));
@@ -65,18 +65,5 @@ function eventWasCreated(eventId) {
     }
 }
 
-export function setEventSuccess(data) {
-    return {
-        type: SET_EVENT_SUCCESS,
-        payload: data
-    };
-}
-
-export function setEventPending(data) {
-    return {
-        type: SET_EVENT_PENDING,
-        payload: data
-    };
-}
 
 

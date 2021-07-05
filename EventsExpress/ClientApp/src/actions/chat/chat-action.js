@@ -2,9 +2,9 @@ import { ChatService } from '../../services';
 import * as SignalR from '@aspnet/signalr';
 import { setErrorAllertFromResponse, setAlert } from '../alert-action';
 import { jwtStorageKey } from '../../constants/constants';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_CHAT_PENDING = "GET_CHAT_PENDING";
-export const GET_CHAT_SUCCESS = "GET_CHAT_SUCCESS";
+export const GET_CHAT_DATA = "GET_CHAT_DATA";
 export const INITIAL_CONNECTION = "INITIAL_CONNECTION";
 export const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
 export const RECEIVE_NOTIFICATION = "RECEIVE_NOTIFICATION";
@@ -21,15 +21,16 @@ const api_serv = new ChatService();
 export default function get_chat(chatId) {
 
     return async dispatch => {
-        dispatch(getChatPending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.getChat(chatId);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getChatSuccess({ isSuccess: true, data: jsonRes }));
+        dispatch(getChatSuccess(jsonRes));
         return Promise.resolve();
     }
 }
@@ -120,14 +121,7 @@ export function reset() {
 
 export function getChatSuccess(data) {
     return {
-        type: GET_CHAT_SUCCESS,
-        payload: data
-    };
-}
-
-export function getChatPending(data) {
-    return {
-        type: GET_CHAT_PENDING,
+        type: GET_CHAT_DATA,
         payload: data
     };
 }

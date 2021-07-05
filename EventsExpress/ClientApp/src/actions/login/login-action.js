@@ -8,6 +8,8 @@ import { updateEventsFilters } from '../event/event-list-action';
 import { initialConnection } from '../chat/chat-action';
 import { getUnreadMessages } from '../chat/chats-action';
 import { jwtStorageKey } from '../../constants/constants';
+import { getRequestInc, getRequestDec } from "../request-count-action";
+
 
 export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
 export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
@@ -94,20 +96,6 @@ export function getUserInfo() {
     }
 }
 
-export function setLoginPending(isLoginPending) {
-    return {
-        type: SET_LOGIN_PENDING,
-        isLoginPending
-    };
-}
-
-export function setLoginSuccess(isLoginSuccess) {
-    return {
-        type: SET_LOGIN_SUCCESS,
-        isLoginSuccess
-    };
-}
-
 export function setUser(data) {
     return {
         type: SET_USER,
@@ -117,8 +105,9 @@ export function setUser(data) {
 
 function loginResponseHandler(call) {
     return async dispatch => {
-        dispatch(setLoginPending(true));
+        dispatch(getRequestInc());
         let response = await call();
+        dispatch(getRequestDec());
         if (!response.ok) {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
@@ -130,7 +119,7 @@ function loginResponseHandler(call) {
 async function setUserInfo(response, dispatch) {
     let jsonRes = await response.json();
     localStorage.setItem(jwtStorageKey, jsonRes.token);
+
     dispatch(getUserInfo());
-    dispatch(setLoginSuccess(true));
     return Promise.resolve();
 }

@@ -1,8 +1,8 @@
 import { ChatService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_CHATS_PENDING = "GET_CHATS_PENDING";
-export const GET_CHATS_SUCCESS = "GET_CHATS_SUCCESS";
+export const GET_CHATS_DATA = "GET_CHATS_DATA";
 export const GET_UNREAD_MESSAGES = "GET_UNREAD_MESSAGES";
 export const RESET_NOTIFICATION = "RESET_NOTIFICATION";
 
@@ -11,14 +11,15 @@ const api_serv = new ChatService();
 export default function get_chats() {
 
     return async dispatch => {
-        dispatch(getChatsPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getChats();
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
-        dispatch(getChatsSuccess({ isSuccess: true, data: jsonRes }));
+        dispatch(getChatsSuccess(jsonRes));
         return Promise.resolve();
     }
 }
@@ -41,15 +42,7 @@ export function getUnreadMessages(userId) {
 
 export function getChatsSuccess(data) {
     return {
-        type: GET_CHATS_SUCCESS,
+        type: GET_CHATS_DATA,
         payload: data
     };
 }
-
-export function getChatsPending(data) {
-    return {
-        type: GET_CHATS_PENDING,
-        payload: data
-    };
-}
-

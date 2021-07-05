@@ -2,6 +2,8 @@ import initialState from '../store/initialState';
 import { SET_USER } from '../actions/login/login-action';
 import { SET_LOGOUT } from '../actions/login/logout-action';
 import { addUserCategory, addUserNotificationType, editBirthday, editGender, editUsername, changeAvatar } from '../actions/redactProfile/index';
+import { GET_USER_NOTIFICATION_TYPES_DATA } from '../actions/notificationType/userNotificationType-action';
+import { GET_USER_CATEGORIES_DATA } from '../actions/category/userCategory-action';
 
 export const reducer = (state = initialState.user, action) => {
     switch (action.type) {
@@ -11,12 +13,12 @@ export const reducer = (state = initialState.user, action) => {
         case SET_LOGOUT:
             return initialState.user;
 
-        case addUserCategory.UPDATE:
+        case addUserCategory.UPDATE || GET_USER_CATEGORIES_DATA:
             return {
                 ...state,
                 categories: action.payload
             }
-        case addUserNotificationType.UPDATE:
+        case addUserNotificationType.UPDATE || GET_USER_NOTIFICATION_TYPES_DATA:
             return {
                  ...state,
                 notificationTypes: action.payload

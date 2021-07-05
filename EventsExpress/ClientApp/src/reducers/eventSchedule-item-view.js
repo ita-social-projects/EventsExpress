@@ -1,7 +1,5 @@
 import initialState from '../store/initialState';
-import {
-    GET_EVENT_SCHEDULE_PENDING, GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE
-} from '../actions/eventSchedule/eventSchedule-item-view-action';
+import { GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE } from '../actions/eventSchedule/eventSchedule-item-view-action';
 
 
 export const reducer = (
@@ -9,15 +7,9 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_SCHEDULE_PENDING:
-            return {
-                ...state,
-                isPending: action.payload
-            }
         case GET_EVENT_SCHEDULE_SUCCESS:
             return {
                 ...state,
-                isPending: false,
                 data: action.payload
             }
         case RESET_EVENT_SCHEDULE:
@@ -27,4 +19,4 @@ export const reducer = (
         default:
             return state;
     }
-} 
+}
