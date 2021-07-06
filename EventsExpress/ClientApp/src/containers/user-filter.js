@@ -40,20 +40,18 @@ class UsersFilterWrapper extends Component {
                 case 'blocked':
                     search_string += '&Blocked=' + true;
                     status = accountStatus.Blocked;
-                    this.props.get_count(status);
                     break;
                 case 'active':
                     search_string += '&Unblocked=' + true;
                     status = accountStatus.Activated;
-                    this.props.get_count(status);
                     break;
                 default:
                     search_string += '&All=' + true;
                     status = accountStatus.All;
-                    this.props.get_count(status);
             }
 
             this.props.changeStatus(status);
+            this.props.get_count(status);
 
             if (filters.PageSize != null) {
                 search_string += '&PageSize=' + filters.PageSize;
@@ -65,29 +63,26 @@ class UsersFilterWrapper extends Component {
     }
 
     renderCount = (status) => {
-        const { count, countOfBlocked, countOfUnblocked } = this.props;
-        let countElement, label, total;
+        const { count } = this.props;
+        let label;
 
         switch(status)
         {
             case accountStatus.Activated:
                 label = "Active users:";
-                total = countOfUnblocked;
                 break;
             case accountStatus.Blocked:
                 label = "Blocked users:";
-                total = countOfBlocked;
                 break;
             default:
                 label = "All users:";
-                total = count;
         }
-        
+
         return <>
-            <span className="ml-2">{label} {total}</span><br/>
+            <span className="ml-2">{label} {count}</span><br/>
         </>
     }
-    
+
     render() {
         const { status } = this.props;
 
@@ -100,9 +95,7 @@ class UsersFilterWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     status: state.users.status,
-    count: state.users.count,
-    countOfBlocked: state.users.countOfBlocked,
-    countOfUnblocked: state.users.countOfUnblocked
+    count: state.users.count
 });
 
 const mapDispatchToProps = (dispatch) => {

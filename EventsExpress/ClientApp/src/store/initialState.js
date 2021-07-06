@@ -72,8 +72,6 @@ const initialState = {
     users: {
         status: null,
         count: null,
-        countOfBlocked: null,
-        countOfUnblocked: null,
         isPending: true,
         editedUser: null,
         userSearchFilter: null,
@@ -244,7 +242,7 @@ const initialState = {
         id: null,
         title: null,
         subject: null,
-        message: null  
+        message: null
     },
     config: {
         facebookClientId: null,

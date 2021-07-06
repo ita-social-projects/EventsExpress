@@ -67,23 +67,13 @@ export function get_count(status) {
     return async dispatch => {
         const response = await api_serv.getCount(status);
 
-        if(!response.ok) {
+        if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
 
         const jsonRes = await response.json();
-
-        switch (status) {
-            case accountStatus.Blocked:
-                dispatch(getBlockedCount(jsonRes));
-                break;
-            case accountStatus.Activated:
-                dispatch(getUnblockedCount(jsonRes));
-                break;
-            default:
-                dispatch(getCount(jsonRes));
-        }
+        dispatch(getCount(jsonRes));
 
         return Promise.resolve();
     }
@@ -93,12 +83,15 @@ export function get_users(filters) {
     return async dispatch => {
         dispatch(getUsersPending(true));
         let response = await api_serv.getUsers(filters);
+
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
+
         let jsonRes = await response.json();
         dispatch(getUsers(jsonRes));
+
         return Promise.resolve();
     }
 }

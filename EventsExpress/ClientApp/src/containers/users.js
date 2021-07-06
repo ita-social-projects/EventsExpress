@@ -13,7 +13,7 @@ class UsersWrapper extends Component {
     componentWillUnmount = () => {
         this.props.reset_users();
     }
-    
+
     getUsers = (page) => this.props.get_users(page);
 
     render() {
