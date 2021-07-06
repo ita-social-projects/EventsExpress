@@ -1,22 +1,14 @@
 import initialState from '../store/initialState';
-import { GET_USERS_PENDING, GET_USERS_SUCCESS, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users-action';
+import { GET_USERS_DATA, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users-action';
 import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user-action';
 
 export const reducer = (state = initialState.users, action) => {
     switch(action.type) {
-        case GET_USERS_SUCCESS:
+        case GET_USERS_DATA:
             return{
                 ...state,
-                isPending: false,
                 data: action.payload
             }
-
-        case GET_USERS_PENDING:
-            return{
-                ...state,
-                isPending: action.payload
-            }
-
         case RESET_USERS:
             return initialState.users;
 

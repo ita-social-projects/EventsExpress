@@ -1,20 +1,12 @@
 
 import initialState from '../../store/initialState';
-import {
-    SET_NOTIFICATION_TYPES_PENDING, GET_NOTIFICATION_TYPES_SUCCESS
-} from '../../actions/notificationType/notificationType-list-action';
+import { GET_NOTIFICATION_TYPES_DATA } from '../../actions/notificationType/notificationType-list-action';
 
 export const reducer = (state = initialState.notificationTypes, action) => {
     switch (action.type) {
-        case SET_NOTIFICATION_TYPES_PENDING:
+        case GET_NOTIFICATION_TYPES_DATA:
             return {
                 ...state,
-                isPending: action.payload
-            }
-        case GET_NOTIFICATION_TYPES_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
                 data: action.payload
             }
         default:

@@ -3,6 +3,9 @@
 import filterHelper from '../components/helpers/filterHelper';
 
 const initialState = {
+    requestCount:{
+        counter: 0,
+    },
     account:{
         linkedAuths:[],
     },
@@ -23,45 +26,21 @@ const initialState = {
         notificationTypes: [],
     },
     roles: {
-        isPending: false,
         data: []
     },
     login: {
         isLoginSuccess: false,
     },
-    register: {
-        isRegisterPending: false,
-        isRegisterSuccess: false,
-    },
     unitsOfMeasuring: {
-        isPending: true,
         units: [],
         editedUnitOfMeasuring: null,
         isAdded: false,
 
     },
-    add_unitOfMeasuring: {
-        isUnitOfMeasuringPending: false,
-        isUnitOfMeasuringSuccess: false,
-    },
     change_avatar: {
-        isPending: false,
-        isSuccess: false,
         Update:0,
     },
-    editUsername: {
-        isEditUsernamePending: false,
-        isEditUsernameSuccess: false,
-    },
-    SelectCategories: {
-        IsSelectCategoriesSeccess: false,
-    },
-    add_category: {
-        isCategoryPending: false,
-        isCategorySuccess: false,
-    },
     categories: {
-        isPending: false,
         editedCategory: null,
         data: []
     },
@@ -70,7 +49,6 @@ const initialState = {
         data: []
     },
     users: {
-        isPending: true,
         editedUser: null,
         userSearchFilter: null,
         data: {
@@ -78,33 +56,18 @@ const initialState = {
             pageViewModel: {}
         }
     },
-    add_comment: {
-        isCommentPending: false,
-        isCommentSuccess: false,
-    },
     comments: {
-        isPending: false,
         data: {
             items: [],
             pageViewModel: {},
         }
     },
-    delete_comment: {
-        isCommentDeletePending: false,
-        isCommentDeleteSuccess: false,
-    },
     event: {
-        isPending: true,
         cancelationModalStatus: false,
         cancelation: {},
-        data: {
-            dateFrom: null,
-            dateTo: null,
-            photoUrl: null,
-        }
+        data: [],
     },
     eventSchedule: {
-        isPending: true,
         cancelationModalStatus: false,
         cancelation: {},
         data: {
@@ -112,28 +75,11 @@ const initialState = {
             nextRun: null,
         }
     },
-    add_event: {
-        isEventPending: false,
-        isEventSuccess: false,
-    },
-    add_copy_event: {
-        isCopyEventPending: false,
-        isCopyEventSuccess: false,
-    },
     edit_event_from_parent: {
         isEventFromParentPending: false,
         isEventFromParentSuccess: false,
     },
-    cancel_next_eventSchedule: {
-        isCancelNextEventSchedulePending: false,
-        isCancelNextEventScheduleSuccess: false,
-    },
-    cancel_eventSchedules: {
-        isCancelEventSchedulesPending: false,
-        isCancelEventSchedulesSuccess: false,
-    },
     events: {
-        isPending: true,
         data: {
             items: [],
             pageViewModel: {},
@@ -141,7 +87,6 @@ const initialState = {
         filter: filterHelper.getDefaultEventFilter(),
     },
     tracks: {
-        isPending: false,
         isError: false,
         data: {
             items:{},
@@ -149,47 +94,35 @@ const initialState = {
         },
     },
     inventories: {
-        isPending: true,
         items: []
     },
     usersInventories: {
-        isPending: true,
         data: []
     },
     eventSchedules: {
-        isPending: true,
         data: {
             items: [],
         },
     },
     profile: {
-        isPending: true,
         data: null
     },
     events_for_profile: {
-        isPending: true,
         data: {
             items: [],
             pageViewModel: {},
         }
     },
     changePassword: {
-        isPending: false,
         data: []
     },
     recoverPassword: {
-        isPending: false,
-        isSucces: null,
     },
     authenticate: {
-        isPending: false,
-        isSucces: false,
         data: []
     },
     hubConnection: null,
     chat: {
-        isPending: false,
-        isSuccess: false,
         data: {
             messages: [],
             users: [],
@@ -197,8 +130,6 @@ const initialState = {
         }
     },
     chats: {
-        isPending: false,
-        isSuccess: false,
         data: []
     },
     alert: {
@@ -208,11 +139,9 @@ const initialState = {
         open: false
     },
     contactAdmin: {
-        isPending: false,
         data: []
     },
     contactAdminList: {
-        isPending: true,
         data: {
             items: [],
             pageViewModel: {},
@@ -220,7 +149,6 @@ const initialState = {
         filter: filterHelper.getDefaultContactAdminFilter(),
     },
     contactAdminItem: {
-        isPending: false,
         data: []
     },
     notification:
@@ -230,7 +158,6 @@ const initialState = {
         events: []
     },
     notificationTypes: {
-        isPending: false,
         data: []
     },
     notificationTemplates: {

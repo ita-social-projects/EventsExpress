@@ -2,6 +2,8 @@
 import { setSuccessAllert } from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers';
+import { getRequestInc, getRequestDec } from "../request-count-action";
+
 
 
 export const addUserCategory = {
@@ -14,12 +16,12 @@ const api_serv = new UserService();
 
 export default function setUserCategory(data) {
     return async dispatch => {
-        dispatch(setAddUserCategoryPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.setUserCategory(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setAddUserCategorySuccess(true));
+        dispatch(getRequestDec());
         dispatch(updateCategories(data));
         dispatch(setSuccessAllert('Favorite categories are updated'));
         return Promise.resolve();
@@ -30,20 +32,6 @@ function updateCategories(data) {
     return {
         type: addUserCategory.UPDATE,
         payload: data.categories,
-    };
-}
-
-function setAddUserCategoryPending(data) {
-    return {
-        type: addUserCategory.PENDING,
-        payload: data
-    };
-}
-
-function setAddUserCategorySuccess(data) {
-    return {
-        type: addUserCategory.SUCCESS,
-        payload: data
     };
 }
 

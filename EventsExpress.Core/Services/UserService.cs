@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
@@ -66,6 +65,28 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault(x => x.Id == userId));
 
             return user;
+        }
+
+        public IEnumerable<NotificationTypeDto> GetUserNotificationTypes()
+        {
+            var userId = _securityContext.GetCurrentUserId();
+
+            return Mapper.Map<IEnumerable<NotificationTypeDto>>(Context.UserNotificationTypes
+                            .Include(u => u.NotificationType)
+                            .Where(u => u.UserId == userId)
+                            .AsNoTracking()
+                            .ToList());
+        }
+
+        public IEnumerable<CategoryDto> GetUserCategories()
+        {
+            var userId = _securityContext.GetCurrentUserId();
+
+            return Mapper.Map<IEnumerable<CategoryDto>>(Context.UserCategory
+                            .Include(u => u.Category)
+                            .Where(uc => uc.UserId == userId)
+                            .AsNoTracking()
+                            .ToList());
         }
 
         public IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count)

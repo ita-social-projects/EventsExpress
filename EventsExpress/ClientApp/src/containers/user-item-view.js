@@ -73,10 +73,11 @@ class UserItemViewWrapper extends Component {
     }
 
     render() {
-        const { data, isPending } = this.props.profile;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <Profile
+        const { data } = this.props.profile;
+
+
+        return <Spinner showContent={data != null}>
+            <Profile
                 onLike={this.onLike}
                 onDislike={this.onDislike}
                 onReset={this.onReset}
@@ -89,12 +90,7 @@ class UserItemViewWrapper extends Component {
                 current_user={this.props.current_user}
                 history={this.props.history}
             />
-            : null;
-
-        return <>
-            {spinner}
-            {content}
-        </>
+        </Spinner>
     }
 }
 

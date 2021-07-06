@@ -27,7 +27,7 @@ export default class HeaderProfile extends Component {
             <div className='header-profile-root'>
                 <div className='d-inline-block'>
                     {!id && (
-                        <ModalWind reset={this.props.reset} />
+                        <ModalWind />
                     )}
                     <AuthComponent>
                         <div className="d-flex flex-column align-items-center">

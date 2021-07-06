@@ -43,7 +43,6 @@ function ModalWind(props) {
   
   const handleClose = () => { 
     props.setStatus(false); 
-    props.reset();
   }
 
   return (

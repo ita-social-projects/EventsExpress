@@ -31,11 +31,11 @@ class EventDraftListWrapper extends Component {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending } = this.props.events;
+        const { data } = this.props.events;
         const { items } = this.props.events.data;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = 
-             <DraftList
+             
+        return <Spinner showContent={data != undefined}>
+            <DraftList
                 current_user={current_user}
                 data_list={items}
                 filter={this.props.events.filter}
@@ -45,11 +45,7 @@ class EventDraftListWrapper extends Component {
                 get_drafts={this.props.get_drafts}
                 match={this.props.match}
             />
-        return <>
-            {
-                 spinner || content
-            }
-        </>
+        </Spinner>
     }
 }
 
