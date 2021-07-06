@@ -13,12 +13,14 @@ export const reducer = (state = initialState.user, action) => {
         case SET_LOGOUT:
             return initialState.user;
 
-        case addUserCategory.UPDATE || GET_USER_CATEGORIES_DATA:
+        case addUserCategory.UPDATE:
+        case GET_USER_CATEGORIES_DATA:
             return {
                 ...state,
                 categories: action.payload
             }
-        case addUserNotificationType.UPDATE || GET_USER_NOTIFICATION_TYPES_DATA:
+        case addUserNotificationType.UPDATE:
+        case GET_USER_NOTIFICATION_TYPES_DATA:
             return {
                  ...state,
                 notificationTypes: action.payload

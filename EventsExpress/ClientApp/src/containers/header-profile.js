@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderProfile from '../components/header-profile';
 import logout from '../actions/login/logout-action';
-import { getRequestInc, getRequestDec } from '../actions/request-count-action';
 import add_event from '../actions/event/event-add-action';
 
 class HeaderProfileWrapper extends Component {
@@ -20,7 +19,6 @@ class HeaderProfileWrapper extends Component {
       user={this.props.user}
       filter={this.props.events.filter}
       onClick={this.logout_reset}
-      reset={this.props.reset}
       notification={this.props.notification.events.length}
       onSubmit={this.onSubmit} />
   }
@@ -40,10 +38,6 @@ const mapDispatchToProps = dispatch => {
   return {
     add_event: () => dispatch(add_event()),
     logout: () => { dispatch(logout()) },
-    reset: () => {
-        dispatch(getRequestInc());
-        dispatch(getRequestDec());
-    }
   };
 };
 

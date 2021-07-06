@@ -105,7 +105,6 @@ const mapStateToProps = (state) => ({
     form_values: getFormValues('event-form')(state),
     pristine: isPristine('event-form')(state),
     event: state.event.data,
-    counter: state.requestCount.counter
 });
 
 const mapDispatchToProps = (dispatch) => {

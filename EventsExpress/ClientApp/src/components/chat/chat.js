@@ -74,7 +74,7 @@ class Chat extends Component {
     render() {
         var sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
         const { data } = this.props.chat;
-        return <Spinner showContent={data != undefined}>
+        return <Spinner showContent={data !== undefined}>
             <div className="row justify-content-center h-100 mt-2">
                 <div className="col-md-8 col-xl-8 chat">
                     <div className="card">

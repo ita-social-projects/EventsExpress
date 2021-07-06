@@ -7,9 +7,9 @@ class Spinner extends Component {
     render() {
         const { counter, showContent } = this.props;
 
-        const spinner = <div id="notfound">
-            <div className="notfound">
-                <div className="lds-css ng-scopex notfound-404">
+        const spinner = <div id="spinner-align">
+            <div className="spinner-align">
+                <div className="lds-css ng-scopex">
                     <div className="lds-rolling">
                         <div></div>
                     </div>

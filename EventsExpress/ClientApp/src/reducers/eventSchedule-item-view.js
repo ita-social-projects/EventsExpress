@@ -1,5 +1,5 @@
 import initialState from '../store/initialState';
-import { GET_EVENT_SCHEDULE_SUCCESS, RESET_EVENT_SCHEDULE } from '../actions/eventSchedule/eventSchedule-item-view-action';
+import { GET_EVENT_SCHEDULE_DATA, RESET_EVENT_SCHEDULE } from '../actions/eventSchedule/eventSchedule-item-view-action';
 
 
 export const reducer = (
@@ -7,7 +7,7 @@ export const reducer = (
     action
 ) => {
     switch (action.type) {
-        case GET_EVENT_SCHEDULE_SUCCESS:
+        case GET_EVENT_SCHEDULE_DATA:
             return {
                 ...state,
                 data: action.payload
