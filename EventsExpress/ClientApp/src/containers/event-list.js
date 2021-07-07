@@ -42,21 +42,18 @@ class EventListWrapper extends Component {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending } = this.props.events;
+        const { data } = this.props.events;
         const { items } = this.props.events.data;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventList
+
+        return <Spinner showContent = { data!= undefined}>
+            <EventList
                 current_user={current_user}
                 data_list={items}
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
             />
-            : null;
-        return <>
-            {spinner || content}
-        </>
+        </Spinner>
     }
 }
 

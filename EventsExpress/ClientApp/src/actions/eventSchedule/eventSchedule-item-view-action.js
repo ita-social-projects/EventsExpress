@@ -1,16 +1,17 @@
 import { EventScheduleService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_EVENT_SCHEDULE_PENDING = "GET_EVENT_SCHEDULE_PENDING";
-export const GET_EVENT_SCHEDULE_SUCCESS = "GET_EVENT_SCHEDULE_SUCCESS";
+export const GET_EVENT_SCHEDULE_DATA = "GET_EVENT_SCHEDULE_DATA";
 export const RESET_EVENT_SCHEDULE = "RESET_EVENT_SCHEDULE";
 
 const api_serv = new EventScheduleService();
 
 export default function getEventSchedule(id) {
     return async dispatch => {
-        dispatch(getEventSchedulePending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getEventSchedule(id);
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -28,16 +29,9 @@ export function resetEventSchedule() {
     }
 }
 
-function getEventSchedulePending(data) {
-    return {
-        type: GET_EVENT_SCHEDULE_PENDING,
-        payload: data
-    }
-}
-
 function get_eventSchedule(data) {
     return {
-        type: GET_EVENT_SCHEDULE_SUCCESS,
+        type: GET_EVENT_SCHEDULE_DATA,
         payload: data
     }
 }

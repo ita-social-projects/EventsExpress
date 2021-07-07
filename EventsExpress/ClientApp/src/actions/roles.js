@@ -1,9 +1,10 @@
 import { RoleService } from '../services';
 import { setErrorAllertFromResponse } from './alert-action';
+import { getRequestInc, getRequestDec } from "./request-count-action";
+
 
 export const getRoles = {
-    PENDING: 'ROLES_PENDING',
-    SUCCESS: 'ROLES_SUCCESS',
+    DATA: 'ROLES_SUCCESS',
 }
 
 
@@ -12,9 +13,9 @@ const api_serv = new RoleService();
 
 export default function get_roles() {
     return async dispatch => {
-        dispatch(setRolesPending(true));
+        dispatch(getRequestInc());
         const response = await api_serv.getRoles();
-
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -23,20 +24,12 @@ export default function get_roles() {
         let jsonRes = await response.json();
         dispatch(setRolesSuccess(jsonRes));
         return Promise.resolve();
-
-    }
-}
-
-function setRolesPending(data) {
-    return {
-        type: getRoles.PENDING,
-        payload: data
     }
 }
 
 function setRolesSuccess(data) {
     return {
-        type: getRoles.SUCCESS,
+        type: getRoles.DATA,
         payload: data
     }
 }

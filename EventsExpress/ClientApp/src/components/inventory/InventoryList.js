@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import InventoryHeaderButton from './InventoryHeaderButton';
 import { connect } from 'react-redux';
-import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
 import IconButton from "@material-ui/core/IconButton";
-import { get_inventories_by_event_id, update_inventories } from '../../actions/inventory/inventory-list-action';
+import { getInventoryData } from '../../actions/inventory/inventory-list-action';
 import InventoryItemWrapper from '../../containers/inventory-item';
-import { get_users_inventories_by_event_id, edit_users_inventory } from '../../actions/users/users-inventories-action';
+import { edit_users_inventory } from '../../actions/users/users-inventories-action';
 
 class InventoryList extends Component {
 
@@ -20,13 +19,7 @@ class InventoryList extends Component {
         this.handleOnClickCaret = this.handleOnClickCaret.bind(this);
     }
 
-    componentDidMount() {
-        this.props.get_unitsOfMeasuring();
-        this.props.get_inventories_by_event_id(this.props.eventId);
-        this.props.get_users_inventories_by_event_id(this.props.eventId);
-    }
-
-    addItemToList = () => {
+    addItemToList = () => {        
         this.setState({
             disabledEdit: true,
             isNew: true
@@ -148,10 +141,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
-        get_inventories: (inventories) => dispatch(update_inventories(inventories)),
-        get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
-        get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
+        get_inventories: (inventories) => dispatch(getInventoryData(inventories)),
         edit_users_inventory: (data) => dispatch(edit_users_inventory(data))
     }
 };

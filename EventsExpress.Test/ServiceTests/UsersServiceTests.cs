@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -9,8 +11,10 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -21,24 +25,33 @@ namespace EventsExpress.Test.ServiceTests
     internal class UsersServiceTests : TestInitializer
     {
         private static Mock<IPhotoService> mockPhotoService;
+        private Guid secondUserId = Guid.NewGuid();
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
 
         private UserDto existingUserDTO;
         private User existingUser;
+        private User secondUser;
 
         private Guid userId = Guid.NewGuid();
         private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
-        private UserNotificationType userNotificationType;
+
         private string name = "existingName";
+        private string secondName = "secondName";
         private string existingEmail = "existingEmail@gmail.com";
+        private string secondEmail = "secondEmail@gmail.com";
 
         [SetUp]
         protected override void Initialize()
         {
             base.Initialize();
+            Context.UserCategory.Clear();
             mockPhotoService = new Mock<IPhotoService>();
             mockSecurityContext = new Mock<ISecurityContext>();
+            MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
+                .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
+            MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
+                .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
 
             service = new UserService(
                 Context,
@@ -51,6 +64,58 @@ namespace EventsExpress.Test.ServiceTests
                 Id = userId,
                 Name = name,
                 Email = existingEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.OwnEvent,
+                    },
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = userId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
+                    },
+                },
+            };
+
+            secondUser = new User
+            {
+                Id = secondUserId,
+                Name = secondName,
+                Email = secondEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                },
             };
 
             existingUserDTO = new UserDto
@@ -58,17 +123,36 @@ namespace EventsExpress.Test.ServiceTests
                 Id = userId,
                 Name = name,
                 Email = existingEmail,
-            };
-
-            userNotificationType = new UserNotificationType
-            {
-                UserId = userId,
-                User = existingUser,
-                NotificationTypeId = NotificationChange.OwnEvent,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.OwnEvent,
+                    },
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = userId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
+                    },
+                },
             };
 
             Context.Users.Add(existingUser);
-            Context.UserNotificationTypes.Add(userNotificationType);
+            Context.Users.Add(secondUser);
+
             Context.SaveChanges();
         }
 
@@ -112,6 +196,22 @@ namespace EventsExpress.Test.ServiceTests
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
             Assert.DoesNotThrowAsync(async () => await service.EditFavoriteNotificationTypes(notificationTypes));
+        }
+
+        [Test]
+        public void GetUserNotificationTypes_True()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            var res = service.GetUserNotificationTypes();
+            Assert.AreEqual(2, res.Count());
+        }
+
+        [Test]
+        public void GetUserCategories_True()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            var res = service.GetUserCategories();
+            Assert.AreEqual(1, res.Count());
         }
 
         [Test]
@@ -219,6 +319,15 @@ namespace EventsExpress.Test.ServiceTests
             }
 
             return contentType;
+        }
+    }
+
+    public static class EntityExtensions
+    {
+        public static void Clear<T>(this DbSet<T> dbSet)
+            where T : class
+        {
+            dbSet.RemoveRange(dbSet);
         }
     }
 }

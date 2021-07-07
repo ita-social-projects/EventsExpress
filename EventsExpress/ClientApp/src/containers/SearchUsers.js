@@ -6,7 +6,7 @@ import UserItemList from '../components/users/user-item';
 import UserSearchFilterWrapper from '../containers/UserSearchFilterWrapper';
 import history from '../history';
 import { reset } from 'redux-form';
-import {getQueryStringByUsersFilter} from '../components/helpers/userHelper';
+import { getQueryStringByUsersFilter } from '../components/helpers/userHelper';
 
 class SearchUsers extends Component {
     componentDidUpdate(prevProps, prevState) {
@@ -33,20 +33,18 @@ class SearchUsers extends Component {
     getUsers = (page) => this.props.get_SearchUsers(page);
 
     render() {
-        const { isPending } = this.props.users;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending 
-            ? <UserItemList users={this.props.users.data.items} 
-                page={this.props.users.data.pageViewModel.pageNumber} 
-                totalPages={this.props.users.data.pageViewModel.totalPages} 
-                callback={this.getUsers} />
-           : null;
+        const { data } = this.props.users;
 
         return <>
             <div className="row">
                 <div className='col-12'>
-                        < UserSearchFilterWrapper onReset={this.onReset}/>
-                        {spinner || content}
+                    < UserSearchFilterWrapper onReset={this.onReset} /> 
+                    <Spinner showContent={data != undefined}>
+                        <UserItemList users={this.props.users.data.items}
+                            page={this.props.users.data.pageViewModel.pageNumber}
+                            totalPages={this.props.users.data.pageViewModel.totalPages}
+                            callback={this.getUsers} />
+                    </Spinner>
                 </div>
             </div>
         </>

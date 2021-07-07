@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import setUserNotificationTypes from '../../actions/redactProfile/userNotificationType-add-action';
 import get_notificationTypes from '../../actions/notificationType/notificationType-list-action';
 import SelectNotificationType from '../../components/SelectNotificationTypes/SelectNotificationType';
+import get_userNotificationTypes from '../../actions/notificationType/userNotificationType-action';
 
 class SelectNotificationTypesWrapper extends Component {
     constructor(props) {
@@ -10,8 +11,9 @@ class SelectNotificationTypesWrapper extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount = () => {
+    componentWillMount = () => {
         this.props.get_notificationTypes();
+        this.props.getuserNotificationTypes();
     }
 
     handleSubmit(event) {
@@ -39,7 +41,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setUserNotificationTypes: (data) => dispatch(setUserNotificationTypes(data)),
-        get_notificationTypes: () => dispatch(get_notificationTypes())
+        get_notificationTypes: () => dispatch(get_notificationTypes()),
+        getuserNotificationTypes: () => dispatch(get_userNotificationTypes())
     }
 };
 
