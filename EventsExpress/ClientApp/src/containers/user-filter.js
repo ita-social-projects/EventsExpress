@@ -9,14 +9,20 @@ import {
     closeConnection,
     change_status } from '../actions/users/users-action';
 import history from '../history';
+import { parse } from 'query-string';
 
 class UsersFilterWrapper extends Component {
 
     componentDidMount() {
-        let status = accountStatus.All;
+        const { Unblocked, Blocked } = parse(this.props.location.search);
+        const status = Unblocked
+            ? accountStatus.Activated
+            : Blocked
+                ? accountStatus.Blocked
+                : accountStatus.All;
 
-        this.props.get_count(status);
         this.props.changeStatus(status);
+        this.props.get_count(status);
         this.props.initialConnection();
     }
 
