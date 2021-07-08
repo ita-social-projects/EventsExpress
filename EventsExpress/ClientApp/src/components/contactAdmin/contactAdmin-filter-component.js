@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import Button from "@material-ui/core/Button";
+import Button from '@material-ui/core/Button';
 import { MultiCheckbox, renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import './contactAdmin-filter.css';
-import issueStatusEnum from '../../constants/issueStatusEnum';
+import issueStatusEnum from '../../constants/issue-status-enum';
 
 class ContactAdminFilter extends Component {
     constructor(props) {
@@ -34,9 +34,9 @@ class ContactAdminFilter extends Component {
         const { form_values, submitting, onReset } = this.props;
         let values = form_values || {};
         let options = [
-            { value: issueStatusEnum.Open, text: "Open" },
-            { value: issueStatusEnum.InProgress, text: "In progress" },
-            { value: issueStatusEnum.Resolve, text: "Resolve" }
+            { value: issueStatusEnum.Open, text: 'Open' },
+            { value: issueStatusEnum.InProgress, text: 'In progress' },
+            { value: issueStatusEnum.Resolve, text: 'Resolve' }
         ];
 
         return <>
@@ -45,16 +45,16 @@ class ContactAdminFilter extends Component {
                     {<>
                         <div className="form-group">
                             <Field
-                                name='dateFrom'
-                                label='From'
+                                name="dateFrom"
+                                label="From"
                                 minValue={new Date(2000, 1, 1, 12, 0, 0)}
                                 component={renderDatePicker}
                             />
                         </div>
                         <div className="form-group">
                             <Field
-                                name='dateTo'
-                                label='To'
+                                name="dateTo"
+                                label="To"
                                 minValue={new Date(values.dateFrom)}
                                 component={renderDatePicker}
                             />
