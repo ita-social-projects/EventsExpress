@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, change } from 'redux-form';
 import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
@@ -14,7 +14,6 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
-import { change } from "redux-form";
 
 momentLocaliser(moment);
 
