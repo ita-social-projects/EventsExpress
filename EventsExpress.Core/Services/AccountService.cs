@@ -58,7 +58,6 @@ namespace EventsExpress.Core.Services
 
             Update(account);
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new UserRoleChangedMessage());
         }
 
         public async Task AddAuth(Guid accountId, string email, AuthExternalType type)
