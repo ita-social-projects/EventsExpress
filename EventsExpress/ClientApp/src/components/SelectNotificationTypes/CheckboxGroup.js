@@ -18,7 +18,7 @@ class CheckboxGroup extends React.Component {
                                     if (event.target.checked) {
                                         newValue.push(option);
                                     } else {
-                                        newValue.splice(newValue.indexOf(option), 1);
+                                        newValue.splice(newValue.findIndex(op => op.id === option.id), 1);
                                     }
                                     return input.onChange(newValue);
                                 }}
