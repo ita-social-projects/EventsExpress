@@ -1,8 +1,10 @@
 import { UserService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 import * as SignalR from '@aspnet/signalr';
 import { jwtStorageKey } from "../../constants/constants";
 
+export const GET_USERS_DATA = "GET_USERS_DATA";
 export const SET_USERS_HUB = "CONNECT_USERS_HUB";
 export const RESET_USERS_HUB = "RESET_USERS_HUB";
 export const GET_USERS_PENDING = "GET_USERS_PENDING";
@@ -10,8 +12,6 @@ export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const RESET_USERS = "RESET_USERS";
 export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
 export const GET_USERS_COUNT = "GET_USERS_COUNT";
-export const GET_BLOCKED_USERS_COUNT = "GET_BLOCKED_USERS_COUNT";
-export const GET_UNBLOCKED_USERS_COUNT = "GET_UNBLOCKED_USERS_COUNT";
 export const CHANGE_STATUS = "CHANGE_STATUS";
 export const accountStatus = {
     All: 0,
@@ -66,8 +66,9 @@ export function get_count(status) {
 
 export function get_users(filters) {
     return async dispatch => {
-        dispatch(getUsersPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getUsers(filters);
+        dispatch(getRequestDec());
 
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
@@ -95,13 +96,14 @@ export function change_Filter(filters) {
 
 export function get_SearchUsers(filters) {
     return async dispatch => {
-        dispatch(getUsersPending(true));
+        dispatch(getRequestInc());
         let response = await api_serv.getSearchUsers(filters);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
         let jsonRes = await response.json();
+        dispatch(getRequestDec());
         dispatch(getUsers(jsonRes));
         return Promise.resolve();
     }
@@ -110,13 +112,6 @@ export function get_SearchUsers(filters) {
 export function reset_users() {
     return {
         type: RESET_USERS
-    }
-}
-
-function getUsersPending(data) {
-    return {
-        type: GET_USERS_PENDING,
-        payload: data
     }
 }
 
@@ -129,7 +124,7 @@ function getCount(data) {
 
 function getUsers(data) {
     return {
-        type: GET_USERS_SUCCESS,
+        type: GET_USERS_DATA,
         payload: data
     }
 }

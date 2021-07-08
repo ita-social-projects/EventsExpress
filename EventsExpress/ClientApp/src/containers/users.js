@@ -17,28 +17,23 @@ class UsersWrapper extends Component {
     getUsers = (page) => this.props.get_users(page);
 
     render() {
-        const { users: { isPending, data }, location } = this.props;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <Users
-                users={data.items}
-                page={data.pageViewModel.pageNumber}
-                totalPages={data.pageViewModel.totalPages}
-                callback={this.getUsers}
-            />
-            : null;
-        const filter = <UsersFilterWrapper location={location} />;
+        const { users: { data }, location } = this.props;
 
-        return <>
+        return <Spinner showContent={data != undefined}>
             <div className="row">
                 <div className='col-9'>
-                    {spinner || content}
+                    <Users
+                        users={data.items}
+                        page={data.pageViewModel.pageNumber}
+                        totalPages={data.pageViewModel.totalPages}
+                        callback={this.getUsers}
+                    />
                 </div>
                 <div className="col-3">
-                    {filter}
+                    < UsersFilterWrapper location={location} />
                 </div>
             </div>
-        </>
+        </Spinner>
     }
 }
 

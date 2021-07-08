@@ -1,17 +1,19 @@
 import NotificationTypeService from '../../services/NotificationTypeService';
 import { setErrorAllertFromResponse } from './../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const SET_NOTIFICATION_TYPES_PENDING = "SET_NOTIFICATION_TYPES_PENDING";
-export const GET_NOTIFICATION_TYPES_SUCCESS = "GET_NOTIFICATION_TYPES_SUCCESS";
+export const GET_NOTIFICATION_TYPES_DATA = "GET_NOTIFICATION_TYPES_DATA";
+export const GET_USER_NOTIFICATION_TYPES_DATA = "GET_USER_NOTIFICATION_TYPES_DATA";
 
 const api_serv = new NotificationTypeService();
 
 export default function get_notificationTypes() {
 
     return async dispatch => {
-        dispatch(setNotificationTypesPending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.getAllNotificationTypes();
+        dispatch(getRequestDec());
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
@@ -22,16 +24,9 @@ export default function get_notificationTypes() {
     }
 }
 
-function setNotificationTypesPending(data) {
-    return {
-        type: SET_NOTIFICATION_TYPES_PENDING,
-        payload: data
-    }
-}
-
 function getNotificationTypes(data) {
     return {
-        type: GET_NOTIFICATION_TYPES_SUCCESS,
+        type: GET_NOTIFICATION_TYPES_DATA,
         payload: data
     }
 }

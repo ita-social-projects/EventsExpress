@@ -25,6 +25,7 @@ namespace EventsExpress.Test
         protected virtual void Cleanup()
         {
             TestContext.WriteLine("Cleanup test data");
+            Context.Dispose();
         }
     }
 }

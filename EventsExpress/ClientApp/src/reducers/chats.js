@@ -1,7 +1,5 @@
 import initialState from '../store/initialState';
-import {
-    GET_CHATS_PENDING, GET_CHATS_SUCCESS
-} from '../actions/chat/chats-action';
+import { GET_CHATS_DATA } from '../actions/chat/chats-action';
 import { RECEIVE_MESSAGE } from '../actions/chat/chat-action';
 
 export const reducer = (
@@ -21,17 +19,10 @@ export const reducer = (
                 ...state,
                 data: newChats
             }
-        case GET_CHATS_PENDING:
+        case GET_CHATS_DATA:
             return {
                 ...state,
-                isPending: action.payload
-            }
-        case GET_CHATS_SUCCESS:
-            return {
-                ...state,
-                isPending: false,
-                isSuccess: action.payload.isSuccess,
-                data: action.payload.data
+                data: action.payload
             }
         default:
             return state;

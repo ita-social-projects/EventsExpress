@@ -46,3 +46,26 @@
     -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
     transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
   }
+
+#spinner-align {
+    position: relative;
+    height: 60vh;
+}
+
+    #spinner-align .spinner-align {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+.spinner-align {
+    max-width: 310px;
+    width: 100%;
+    text-align: center;
+    height: 180px;
+    position: relative;
+    z-index: -1;
+}

@@ -10,7 +10,7 @@ export default class VisitorSeeItem extends Component {
             <>
                 {!item.isEdit &&
                     <>
-                        <div className="col col-md-4 d-flex align-items-center">
+                        <div className="col col-md-3 d-flex align-items-center">
                             <span className="item" onClick={() => onAlreadyGet(item)}>{item.itemName}</span>
                         </div>
                         <div className="col align-items-center" key={item.id}>
@@ -33,13 +33,13 @@ export default class VisitorSeeItem extends Component {
                                 </>
                             }
                         </div>
-                        <div className="col col-md-2 d-flex align-items-center">
+                        <div className="col col-md-1 d-flex align-items-center">
                         {usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id) === undefined
                             ? 0
                             : usersInventories.data.find(e => e.userId === user.id && e.inventoryId === item.id).quantity}
                         </div>
-                        <div className="col col-md-1 d-flex align-items-center">{item.needQuantity}</div>
-                        <div className="col col-md-1 d-flex align-items-center">{item.unitOfMeasuring.shortName}</div>
+                        <div className="col col-md-2 d-flex align-items-center">{item.needQuantity}</div>
+                        <div className="col col-md-2 d-flex align-items-center">{item.unitOfMeasuring.shortName}</div>
 
                         <div className='col col-md-2'>
                             {item.isTaken &&
@@ -63,7 +63,7 @@ export default class VisitorSeeItem extends Component {
                                 <Tooltip title="Will take" placement="right-start">
                                     <IconButton
                                         disabled={disabledEdit}
-                                        onClick={this.props.markItemAsWillTake}>
+                                        onClick={markItemAsEdit}>
                                         <i className="fa-sm fas fa-plus text-success" />
                                     </IconButton>
                                 </Tooltip>

@@ -2,7 +2,6 @@ import {
   SET_LOGIN_PENDING,
   SET_LOGIN_SUCCESS
 } from "../actions/login/login-action";
-import { SET_LOGOUT } from '../actions/login/logout-action';
 import initialState from '../store/initialState';
 
 export const reducer = (
@@ -20,11 +19,6 @@ export const reducer = (
         isLoginSuccess: action.isLoginSuccess,
         loginError: null,
         isLoginPending: false,
-      });
-
-    case SET_LOGOUT:
-      return Object.assign({}, state, {
-        isLoginSuccess: !action.isLoginSuccess
       });
     default:
       return state;

@@ -23,6 +23,10 @@ namespace EventsExpress.Core.IServices
 
         UserDto GetCurrentUserInfo();
 
+        IEnumerable<NotificationTypeDto> GetUserNotificationTypes();
+
+        IEnumerable<CategoryDto> GetUserCategories();
+
         ProfileDto GetProfileById(Guid id);
 
         IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count);

@@ -19,6 +19,9 @@ namespace EventsExpress.Mapping
                  .ForMember(
                     dest => dest.Name,
                     opts => opts.MapFrom(src => src.Name)).ReverseMap();
+            CreateMap<UserNotificationType, NotificationTypeDto>()
+                            .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.NotificationType.Id))
+                            .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.NotificationType.Name));
         }
     }
 }

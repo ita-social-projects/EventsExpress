@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { MultiCheckbox, renderDatePicker } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import './contactAdmin-filter.css';
-import issueStatusEnum from '../../constants/IssueStatusEnum';
+import issueStatusEnum from '../../constants/issueStatusEnum';
 
 class ContactAdminFilter extends Component {
     constructor(props) {

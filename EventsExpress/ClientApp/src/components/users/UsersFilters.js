@@ -1,8 +1,9 @@
 ﻿import React, { Component } from 'react';
-import { renderTextField, radioButton } from '../helpers/helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import { renderSelectField } from '../helpers/helpers'
+import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { renderSelectField, renderTextField, radioButton } from '../helpers/form-helpers';
 
 class UsersFilters extends Component {
     render() {
@@ -10,7 +11,7 @@ class UsersFilters extends Component {
             <form onSubmit={this.props.handleSubmit} className="box">
                 <Field name='search' component={renderTextField} type="input" label="Search:" />
                 <Field
-                    fullWidth={true}
+                    minWidth={150}
                     name="role"
                     component={renderSelectField}
                     label="Role"
@@ -21,7 +22,8 @@ class UsersFilters extends Component {
                 </Field>
                 <br/>
                 <Field
-                    name='PageSize' 
+                    minWidth={150}
+                    name='PageSize'
                     component={renderSelectField}
                     label="PageSize"
                 >
@@ -31,7 +33,11 @@ class UsersFilters extends Component {
                     <option value={"15"}>15</option>
                 </Field>
                 <br/>
-                <Field name="status" component={radioButton} />
+                <Field name="status" component={radioButton}>
+                    <FormControlLabel value="blocked" control={<Radio />} label="Blocked" />
+                    <FormControlLabel value="active" control={<Radio />} label="Active" />
+                    <FormControlLabel value="all" control={<Radio />} label="All" />
+                </Field>
                 <Button fullWidth={true} type="submit"  color="primary" disabled={this.props.submitting}>
                     Search
                 </Button>

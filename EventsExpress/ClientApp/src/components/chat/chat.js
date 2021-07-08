@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import getChat, { initialConnection, reset, concatNewMsg, deleteOldNotififcation } from '../../actions/chat/chat-action';
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
-import { renderTextArea } from '../helpers/helpers';
+import { renderTextArea } from '../helpers/form-helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Msg from './msg';
@@ -16,10 +16,6 @@ class Chat extends Component {
     }
 
     componentDidUpdate = () => {
-        if (!this.props.chat.isPending) {
-            document.getElementsByClassName('card-body')[0].scrollTop = document.getElementsByClassName('card-body')[0].scrollHeight;
-        }
-
         let newMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && !this.props.chat.data.messages.map(y => y.id).includes(x.id));
 
         if (newMsg.length > 0) {
@@ -57,7 +53,7 @@ class Chat extends Component {
     }
 
     renderMessages = (arr) => {
-        if (this.props.chat.isSuccess) {
+        if (this.props.chat.data) {
             return arr.messages.map(x => {
                 let sender = arr.users.find(y => y.id == x.senderId);
                 if (arr.id == x.chatRoomId) {
@@ -76,8 +72,8 @@ class Chat extends Component {
 
     render() {
         let sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
-        const { isPending } = this.props.chat;
-        return isPending ? <Spinner /> : <>
+        const { data } = this.props.chat;
+        return <Spinner showContent={data !== undefined}>
             <div className="row justify-content-center h-100 mt-2">
                 <div className="col-md-8 col-xl-8 chat">
                     <div className="card">
@@ -87,7 +83,7 @@ class Chat extends Component {
                                     <ButtonBase>
                                         <CustomAvatar size={"Small"}
                                             userId={sender.id}
-                                            name={sender.name}/>
+                                            name={sender.name} />
                                     </ButtonBase>
                                 }
                                 <div className="user_info">
@@ -111,7 +107,7 @@ class Chat extends Component {
                     </div>
                 </div>
             </div>
-        </>
+        </Spinner>
     }
 }
 

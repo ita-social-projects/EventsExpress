@@ -2,14 +2,8 @@
 import PagePagination from '../shared/pagePagination';
 
 class RenderList extends Component {
-
     renderItems = arr =>
-        arr.map(item => this.props.renderSingleItem(item));
-
-    constructor(props)
-    {
-        super(props)
-    }
+        arr.map(item => this.props.renderSingleItem(item))   
 
     render() {
         const { page, totalPages, data_list } = this.props;

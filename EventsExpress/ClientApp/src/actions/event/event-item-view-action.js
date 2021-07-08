@@ -1,8 +1,8 @@
 import { EventService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
+import { getRequestInc, getRequestDec } from "../request-count-action";
 
-export const GET_EVENT_PENDING = "GET_EVENT_PENDING";
-export const GET_EVENT_SUCCESS = "GET_EVENT_SUCCESS";
+export const GET_EVENT_DATA = "GET_EVENT_DATA";
 export const RESET_EVENT = "RESET_EVENT";
 
 export const event = {
@@ -13,7 +13,7 @@ const api_serv = new EventService();
 
 export default function get_event(id) {
     return async dispatch => {
-        dispatch(getEventPending(true));
+        dispatch(getRequestInc());
 
         let response = await api_serv.getEvent(id);
         if (!response.ok) {
@@ -22,6 +22,7 @@ export default function get_event(id) {
         }
         let jsonRes = await response.json();
         dispatch(getEvent(jsonRes));
+        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }
@@ -129,16 +130,9 @@ export function resetEvent() {
     }
 }
 
-function getEventPending(data) {
-    return {
-        type: GET_EVENT_PENDING,
-        payload: data
-    }
-}
-
 export function getEvent(data) {
     return {
-        type: GET_EVENT_SUCCESS,
+        type: GET_EVENT_DATA,
         payload: data
     }
 }

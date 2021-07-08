@@ -2,12 +2,18 @@
 import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import Module from '../helpers';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import ErrorMessages from '../shared/errorMessage';
+import { renderTextField } from '../helpers/form-helpers';
+import { isValidEmail } from '../helpers/validators/email-address-validator';
+import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
-
-const { validate, renderTextField } = Module;
+const validate = values => {
+    return {
+        ...fieldIsRequired(values, requiredFields),
+        ...isValidEmail(values.email)
+    }
+}
 
 class RecoverPassword extends React.Component {
 
