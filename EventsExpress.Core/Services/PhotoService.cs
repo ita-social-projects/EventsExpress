@@ -42,14 +42,6 @@ namespace EventsExpress.Core.Services
             await UploadPhotoToBlob(photo, $"events/{id}/full.png");
         }
 
-        public async Task ChangeTempToImagePhoto(Guid id)
-        {
-            byte[] photo = await GetPhotoFromAzureBlob($"events/{id}/previewTemp.png");
-            await UploadPhotoToBlob(photo, $"events/{id}/preview.png");
-            photo = await GetPhotoFromAzureBlob($"events/{id}/fullTemp.png");
-            await UploadPhotoToBlob(photo, $"events/{id}/full.png");
-        }
-
         public async Task AddUserPhoto(IFormFile uploadedFile, Guid id)
         {
             var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);

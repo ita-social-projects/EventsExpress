@@ -72,7 +72,6 @@ export default class DropZoneField extends Component {
             if (!response.ok) {
                 err = await response.json();
                 err = err.errors[`Photo`];
-               // this.setState({ errors: x.errors[`Photo`] });
             }
             
         }
@@ -114,7 +113,7 @@ export default class DropZoneField extends Component {
                                 >
                                     {props =>
                                         imagefile && imagefile.length > 0 ? (
-                                            <ImagePreview imagefile={imagefile} shape={cropShape} />
+                                            <ImagePreview imagefile={imagefile} shape={cropShape} error={errors} touched={touched} />
                                         ) : (
 
                                                 <Placeholder {...props} error={errors} touched={touched} />
@@ -134,11 +133,7 @@ export default class DropZoneField extends Component {
                         Clear
                     </Button>
                 </div>
-                {error && touched ? (
-                    <span className="error-text">
-                        {error}
-                    </span>
-                ) : null}
+                {renderFieldError({ touched, error })}
             </Fragment>
         )
     }
