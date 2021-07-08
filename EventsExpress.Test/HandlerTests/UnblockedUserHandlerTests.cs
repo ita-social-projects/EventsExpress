@@ -7,7 +7,9 @@ using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
+using EventsExpress.Hubs.Clients;
 using EventsExpress.NotificationHandlers;
+using Microsoft.AspNetCore.SignalR;
 using Moq;
 using NUnit.Framework;
 
@@ -15,7 +17,7 @@ namespace EventsExpress.Test.HandlerTests
 {
     internal class UnblockedUserHandlerTests
     {
-        private UsersHub _usersHub;
+        private Mock<IHubContext<UsersHub, IUsersClient>> _usersHubContext;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
         private Mock<ICacheHelper> _cacheHelper;
@@ -35,9 +37,7 @@ namespace EventsExpress.Test.HandlerTests
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
             _cacheHelper = new Mock<ICacheHelper>();
-            _usersHub = new UsersHub(
-                _cacheHelper.Object,
-                _userService.Object);
+            _usersHubContext = new Mock<IHubContext<UsersHub, IUsersClient>>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
             _notificationTemplateService
@@ -49,10 +49,10 @@ namespace EventsExpress.Test.HandlerTests
                 .Returns(string.Empty);
 
             _unBlockedUserHandler = new UnblockedUserHandler(
-                _usersHub,
                 _emailService.Object,
                 _userService.Object,
-                _notificationTemplateService.Object);
+                _notificationTemplateService.Object,
+                _usersHubContext.Object);
 
             _account = new Account
             {

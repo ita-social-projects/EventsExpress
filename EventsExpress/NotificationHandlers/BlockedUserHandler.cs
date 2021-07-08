@@ -9,25 +9,27 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
+using EventsExpress.Hubs.Clients;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.NotificationHandlers
 {
     public class BlockedUserHandler : INotificationHandler<BlockedAccountMessage>
     {
-        private readonly UsersHub _hub;
+        private readonly IHubContext<UsersHub, IUsersClient> _usersHubContext;
         private readonly IEmailService _sender;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.Profile;
 
         public BlockedUserHandler(
-            UsersHub hub,
             IEmailService sender,
             IUserService userService,
-            INotificationTemplateService notificationTemplateService)
+            INotificationTemplateService notificationTemplateService,
+            IHubContext<UsersHub, IUsersClient> usersHubContext)
         {
-            _hub = hub;
+            _usersHubContext = usersHubContext;
             _sender = sender;
             _userService = userService;
             _notificationTemplateService = notificationTemplateService;
@@ -57,7 +59,7 @@ namespace EventsExpress.NotificationHandlers
                     });
                 }
 
-                await _hub.SendCountOfUsersAsync(AccountStatus.Blocked);
+                await _usersHubContext.Clients.All.CountUsers();
             }
             catch (Exception ex)
             {

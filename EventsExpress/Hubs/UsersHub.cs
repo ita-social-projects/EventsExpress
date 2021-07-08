@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs.Clients;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.Hubs
 {
-    public class UsersHub : Hub
+    public class UsersHub : Hub<IUsersClient>
     {
         public static readonly string AdminsCacheKey = Guid.NewGuid().ToString();
 
@@ -47,19 +47,6 @@ namespace EventsExpress.Hubs
 
                 return admins;
             }
-        }
-
-        public async Task SendCountOfUsersAsync(AccountStatus accountStatus)
-        {
-            var numberOfUsers = await _userService.CountUsersAsync(accountStatus);
-            var method = accountStatus switch
-            {
-                AccountStatus.Blocked => "CountBlockedUsers",
-                AccountStatus.Activated => "CountUnblockedUsers",
-                _ => "CountUsers"
-            };
-
-            await Clients.Users(Admins).SendAsync(method, numberOfUsers);
         }
     }
 }
