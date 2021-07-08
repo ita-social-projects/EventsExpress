@@ -17,20 +17,20 @@ class UsersWrapper extends Component {
     getUsers = (page) => this.props.get_users(page);
 
     render() {
-        const { data } = this.props.users;
+        const { users: { data }, location } = this.props;
 
         return <Spinner showContent={data != undefined}>
             <div className="row">
                 <div className='col-9'>
                     <Users
-                        users={this.props.users.data.items}
-                        page={this.props.users.data.pageViewModel.pageNumber}
-                        totalPages={this.props.users.data.pageViewModel.totalPages}
+                        users={data.items}
+                        page={data.pageViewModel.pageNumber}
+                        totalPages={data.pageViewModel.totalPages}
                         callback={this.getUsers}
                     />
                 </div>
                 <div className="col-3">
-                    < UsersFilterWrapper />
+                    < UsersFilterWrapper location={location} />
                 </div>
             </div>
         </Spinner>
