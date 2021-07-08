@@ -6,11 +6,13 @@ import Placeholder from "./Placeholder";
 import ImageResizer from '../event/image-resizer';
 import Button from "@material-ui/core/Button";
 
+
 export default class DropZoneField extends Component {
 
     state = {
         imagefile: [],
-        cropped: false
+        cropped: false,
+        errors: null
     };
 
     componentDidMount() {
@@ -34,7 +36,7 @@ export default class DropZoneField extends Component {
 
     handleOnClear = () => {
         this.revokeImageUrl();
-        this.setState({ cropped: false, imagefile: [] });
+        this.setState({ cropped: false, imagefile: [] , errors : null });
         this.props.input.onChange(null);
     }
 
@@ -55,7 +57,8 @@ export default class DropZoneField extends Component {
         }
     }
 
-    handleOnCrop = (croppedImage) => {
+    handleOnCrop = async (croppedImage) => {
+        let err;
         URL.revokeObjectURL(this.state.imagefile[0].preview);
         const file = new File(croppedImage, "image.jpg", { type: "image/jpeg" });
         const imagefile = {
@@ -63,7 +66,18 @@ export default class DropZoneField extends Component {
             name: "image.jpg",
             preview: croppedImage[0]
         };
-        this.setState({ imagefile: [imagefile], cropped: true },
+        if (this.props.uploadImage !== undefined && typeof (this.props.uploadImage) === `function` ) {
+            let response = await this.props.uploadImage(file);
+
+            if (!response.ok) {
+                err = await response.json();
+                err = err.errors[`Photo`];
+               // this.setState({ errors: x.errors[`Photo`] });
+            }
+            
+        }
+
+        this.setState({ imagefile: [imagefile], cropped: true, errors: err },
             () => this.props.input.onChange(imagefile));
     }
 
@@ -75,7 +89,7 @@ export default class DropZoneField extends Component {
             meta: { error, touched },
             input: { onChange }
         } = this.props;
-        const { imagefile, cropped } = this.state;
+        const { errors, imagefile, cropped } = this.state;
         const { handleOnCrop, handleOnDrop, handleOnClear } = this;
         const containerClass = error && touched ? "invalid" : "valid";
         return (
@@ -102,7 +116,8 @@ export default class DropZoneField extends Component {
                                         imagefile && imagefile.length > 0 ? (
                                             <ImagePreview imagefile={imagefile} shape={cropShape} />
                                         ) : (
-                                                <Placeholder {...props} error={error} touched={touched} />
+
+                                                <Placeholder {...props} error={errors} touched={touched} />
                                             )
                                     }
                                 </DropZone>

@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+﻿import React, { Component, useEffect } from 'react';
+import { reduxForm, Field, change } from 'redux-form';
 import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
@@ -32,13 +32,33 @@ class EventForm extends Component {
         }));
     }
 
+    saveImage = (eventId) => {
+        let id = eventId;
+       return async (file) => photoService.setEventTempPhoto(id, file);
+        
+    }
+
+    checkLocation = (location, x) => {
+        if (location.type == enumLocationType.map) {
+            location.latitude = null;
+            location.longitude = null;
+            change(`event-form`, `location`, location);
+        }
+
+        if (location.type == enumLocationType.online) {
+            location.onlineMeeting = null;
+            change(`event-form`, `location.onlineMeeting`, location);
+        }
+            
+    }
+
+
+
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
         
-        if (this.props.initialValues.location != null) {
-            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
-        }
+        
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
@@ -52,6 +72,7 @@ class EventForm extends Component {
                         crop={true}
                         cropShape='rect'
                         loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
+                        uploadImage={this.saveImage(this.props.eventId)}
                     />
                     <div className="mt-2">
                         <Field 
@@ -150,7 +171,7 @@ class EventForm extends Component {
                             placeholder='#hashtags' 
                         />
                     </div>
-                    <Field name="location.type" component={radioLocationType} />
+                    <Field name="location.type" component={radioLocationType} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location )} />
                     {this.props.form_values
                         && this.props.form_values.location
                         && this.props.form_values.location.type == enumLocationType.map &&
@@ -159,6 +180,7 @@ class EventForm extends Component {
                             <Field
                                 name='location'
                                 component={LocationMapWithMarker}
+
                             />
                         </div>
                     }

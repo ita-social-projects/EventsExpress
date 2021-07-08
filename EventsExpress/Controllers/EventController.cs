@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,19 +27,34 @@ namespace EventsExpress.Controllers
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
+        private readonly IValidator<IFormFile> _validator;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService, IValidator<IFormFile> validator)
         {
             _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
+            _validator = validator;
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
         public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] IFormFile photo)
         {
-            if (eventId == null || photo == null)
+            var validPhoto = _validator.Validate(photo);
+            if (!validPhoto.IsValid)
+            {
+                Dictionary<string, string> exept = new Dictionary<string, string>();
+                var p = validPhoto.Errors.Select(e => new KeyValuePair<string, string>("Photo", e.ErrorMessage));
+                foreach (var x in p)
+                {
+                    exept.Add(x.Key, x.Value);
+                }
+
+                throw new EventsExpressException("validation failed", exept);
+            }
+
+            if (eventId == Guid.Empty)
             {
                 return BadRequest();
             }
@@ -107,7 +125,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
+        public async Task<IActionResult> Edit(Guid eventId, EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {

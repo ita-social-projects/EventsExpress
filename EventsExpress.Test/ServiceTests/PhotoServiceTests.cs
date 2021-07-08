@@ -60,7 +60,15 @@ namespace EventsExpress.Test.ServiceTests
                 .Setup(c => c.GetBlobClient(It.IsAny<string>()))
                 .Returns(BlobClientMock.Object);
 
-            PhotoService = new PhotoService(mockOpt.Object, HttpClientFactoryMock.Object, mockBlobServiceClient.Object);
+            PhotoService = new PhotoService(mockOpt.Object, mockBlobServiceClient.Object);
+        }
+
+        [Test]
+        public void ChangeTempPhoto_PushToBlob()
+        {
+            Assert.DoesNotThrowAsync(async () => await PhotoService.ChangeTempToImagePhoto(Guid.NewGuid()));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+            BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Exactly(2));
         }
 
         [Test]

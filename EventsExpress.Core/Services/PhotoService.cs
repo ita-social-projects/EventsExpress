@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -18,29 +22,24 @@ namespace EventsExpress.Core.Services
     {
         private readonly BlobContainerClient _blobContainerClient;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
+        private readonly IValidator<IFormFile> _validator;
 
         public PhotoService(
             IOptions<ImageOptionsModel> opt,
-            BlobServiceClient blobServiceClient)
+            BlobServiceClient blobServiceClient,
+            IValidator<IFormFile> validator)
         {
             _widthOptions = opt;
             _blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
+            _validator = validator;
         }
 
-        private static bool IsValidImage(IFormFile file) => file != null && file.IsImage();
-
-        public async Task AddEventPhoto(IFormFile uploadedFile, Guid id)
+        public async Task ChangeTempToImagePhoto(Guid id)
         {
-            if (!IsValidImage(uploadedFile))
-            {
-                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
-            }
-
-            var previewPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
-            await UploadPhotoToBlob(previewPhoto, $"events/{id}/preview.png");
-
-            var fullPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image);
-            await UploadPhotoToBlob(fullPhoto, $"events/{id}/full.png");
+            byte[] photo = await GetPhotoFromAzureBlob($"events/{id}/previewTemp.png");
+            await UploadPhotoToBlob(photo, $"events/{id}/preview.png");
+            photo = await GetPhotoFromAzureBlob($"events/{id}/fullTemp.png");
+            await UploadPhotoToBlob(photo, $"events/{id}/full.png");
         }
 
         public async Task ChangeTempToImagePhoto(Guid id)
@@ -53,11 +52,6 @@ namespace EventsExpress.Core.Services
 
         public async Task AddUserPhoto(IFormFile uploadedFile, Guid id)
         {
-            if (!IsValidImage(uploadedFile))
-            {
-                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
-            }
-
             var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
 
             await UploadPhotoToBlob(photo, $"users/{id}/photo.png");
@@ -122,11 +116,6 @@ namespace EventsExpress.Core.Services
 
         public async Task AddEventTempPhoto(IFormFile uploadedFile, Guid id)
         {
-            if (!IsValidImage(uploadedFile))
-            {
-                throw new ArgumentException("The upload file should be a valid image", nameof(uploadedFile));
-            }
-
             var previewPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
             await UploadPhotoToBlob(previewPhoto, $"events/{id}/previewTemp.png");
 
