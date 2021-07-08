@@ -20,14 +20,14 @@ class Chat extends Component {
             document.getElementsByClassName('card-body')[0].scrollTop = document.getElementsByClassName('card-body')[0].scrollHeight;
         }
 
-        var newMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && !this.props.chat.data.messages.map(y => y.id).includes(x.id));
+        let newMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && !this.props.chat.data.messages.map(y => y.id).includes(x.id));
 
         if (newMsg.length > 0) {
             this.props.concatNewMsg(newMsg);
             this.props.deleteOldNotififcation(newMsg.map(x => x.id));
         }
 
-        var msgIds = this.props.chat.data.messages.filter(x => (!x.seen && x.senderId != this.props.current_user.id)).map(x => x.id);
+        let msgIds = this.props.chat.data.messages.filter(x => (!x.seen && x.senderId != this.props.current_user.id)).map(x => x.id);
 
         if (msgIds.length > 0) {
             this.props.hubConnection
@@ -35,7 +35,7 @@ class Chat extends Component {
                 .catch(err => { console.log('error'); console.error(err) });
         }
 
-        var deleteMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && this.props.chat.data.messages.map(y => y.id).includes(x.id));
+        let deleteMsg = this.props.notification.messages.filter(x => x.chatRoomId == this.props.chat.data.id && this.props.chat.data.messages.map(y => y.id).includes(x.id));
 
         if (deleteMsg.length > 0) {
             this.props.deleteOldNotififcation(deleteMsg.map(x => x.id));
@@ -59,7 +59,7 @@ class Chat extends Component {
     renderMessages = (arr) => {
         if (this.props.chat.isSuccess) {
             return arr.messages.map(x => {
-                var sender = arr.users.find(y => y.id == x.senderId);
+                let sender = arr.users.find(y => y.id == x.senderId);
                 if (arr.id == x.chatRoomId) {
                     return <>
                         <Msg key={x.id + x.seen} user={sender} seenItem={x.seen} item={x} />
@@ -75,7 +75,7 @@ class Chat extends Component {
     }
 
     render() {
-        var sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
+        let sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
         const { isPending } = this.props.chat;
         return isPending ? <Spinner /> : <>
             <div className="row justify-content-center h-100 mt-2">
@@ -101,7 +101,7 @@ class Chat extends Component {
                             {this.renderMessages(this.props.chat.data)}
                         </div>
                         <div className="card-footer">
-                            <form className="w-100 d-flex" autocomplete="off" onSubmit={this.Send}>
+                            <form className="w-100 d-flex" autoComplete="off" onSubmit={this.Send}>
                                 <Field name='msg' component={renderTextArea} type="input" autocomplete="off" label="Type your message..." />
                                 <Button fullWidth={true} type="submit" color="primary" className="w-25">
                                     Send
@@ -117,7 +117,7 @@ class Chat extends Component {
 
 const mapStateToProps = (state) => ({
     current_user: state.user,
-    hubConnection: state.hubConnection,
+    hubConnection: state.hubConnections.chatHub,
     chat: state.chat,
     notification: state.notification
 });

@@ -188,7 +188,10 @@ const initialState = {
         isSucces: false,
         data: []
     },
-    hubConnection: null,
+    hubConnections: {
+      chatHub: null,
+      usersHub: null
+    },
     chat: {
         isPending: false,
         isSuccess: false,

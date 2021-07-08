@@ -32,7 +32,7 @@ const mapStateToProps = state => {
     ...state,
     user: state.user,
     register: state.register,
-    hub: state.hubConnection,
+    hub: state.hubConnections.chatHub,
     notification: state.notification
   };
 };

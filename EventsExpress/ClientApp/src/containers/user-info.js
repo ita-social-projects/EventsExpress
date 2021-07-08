@@ -9,7 +9,6 @@ class UserInfoWrapper extends Component {
 
     constructor(props) {
         super(props);
-
         this.isCurrentUser = props.user.id === props.currentUser
     }
 
