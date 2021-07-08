@@ -153,9 +153,9 @@ class EventForm extends Component {
                             placeholder='#hashtags'
                         />
                     </div>
-                    <Field name="location.type" component={radioButton}>
-                        <FormControlLabel value="0" control={<Radio />} label="Map" />
-                        <FormControlLabel value="1" control={<Radio />} label="Online" />
+                    <Field name="location.type" component={radioButton} parse={Number}>
+                        <FormControlLabel value={0} control={<Radio />} label="Map" />
+                        <FormControlLabel value={1} control={<Radio />} label="Online" />
                     </Field>
                         {this.props.form_values
                             && this.props.form_values.location
