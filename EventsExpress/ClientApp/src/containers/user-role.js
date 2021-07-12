@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { UserRoleDisplay } from './../components/user-info/user-role-display';
+import { UserRoleDisplay } from '../components/user-info/user-role-display';
 import UserRoleEdit from './../components/user-info/user-role-edit';
-import { change_user_role, set_edited_user } from './../actions/user/user-action';
+import { change_user_role, set_edited_user } from '../actions/user/user-action';
 
-class UserRoleWpapper extends Component {
+class UserRoleWrapper extends Component {
 
     saveChanges = async values => {
         let { roles } = values;
@@ -27,4 +27,4 @@ const mapDispatchToProps = (dispatch, props) => ({
     set_mode_edit: () => dispatch(set_edited_user(props.user.id))
 });
 
-export default connect(null, mapDispatchToProps)(UserRoleWpapper);
+export default connect(null, mapDispatchToProps)(UserRoleWrapper);

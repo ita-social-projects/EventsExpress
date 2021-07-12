@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using AutoMapper;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -11,13 +11,12 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.Mapping;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -28,6 +27,7 @@ namespace EventsExpress.Test.ServiceTests
         private Guid secondUserId = Guid.NewGuid();
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
+        private Mock<IMediator> mockMediator;
 
         private UserDto existingUserDTO;
         private User existingUser;
@@ -47,6 +47,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             Context.UserCategory.Clear();
             mockPhotoService = new Mock<IPhotoService>();
+            mockMediator = new Mock<IMediator>();
             mockSecurityContext = new Mock<ISecurityContext>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
@@ -56,6 +57,7 @@ namespace EventsExpress.Test.ServiceTests
             service = new UserService(
                 Context,
                 MockMapper.Object,
+                mockMediator.Object,
                 mockPhotoService.Object,
                 mockSecurityContext.Object);
 
@@ -154,6 +156,19 @@ namespace EventsExpress.Test.ServiceTests
             Context.Users.Add(secondUser);
 
             Context.SaveChanges();
+        }
+
+        [Test]
+        public async Task GetUsersCount_ReturnsValid()
+        {
+            // Arrange
+            var expected = await Context.Users.CountAsync();
+
+            // Act
+            var actual = await service.CountUsersAsync(AccountStatus.All);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]

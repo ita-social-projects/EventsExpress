@@ -6,7 +6,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using Microsoft.AspNetCore.SignalR;
 
-namespace EventsExpress.Core.ChatHub
+namespace EventsExpress.Hubs
 {
     public class ChatRoom : Hub
     {
