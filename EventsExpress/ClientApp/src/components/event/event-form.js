@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, change } from 'redux-form';
 import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
@@ -32,6 +32,20 @@ class EventForm extends Component {
     periodicityListOptions = (periodicity.map((item) =>
         <option value={item.value} key={item.value}> {item.label} </option>
     ));
+
+    checkLocation = (location) => {
+        if (location.type == enumLocationType.map) {
+            location.latitude = null;
+            location.longitude = null;
+            change(`event-form`, `location`, location);
+        }
+
+        if (location.type == enumLocationType.online) {
+            location.onlineMeeting = null;
+            change(`event-form`, `location.onlineMeeting`, location);
+        }
+
+    }
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
@@ -153,9 +167,9 @@ class EventForm extends Component {
                             placeholder='#hashtags'
                         />
                     </div>
-                    <Field name="location.type" component={radioButton}>
-                        <FormControlLabel value="0" control={<Radio />} label="Map" />
-                        <FormControlLabel value="1" control={<Radio />} label="Online" />
+                    <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
+                        <FormControlLabel value={0} control={<Radio />} label="Map" />
+                        <FormControlLabel value={1} control={<Radio />} label="Online" />
                     </Field>
                         {this.props.form_values
                             && this.props.form_values.location
