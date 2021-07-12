@@ -119,7 +119,7 @@ namespace EventsExpress.Test.ControllerTests
                 .ReturnsAsync(count);
 
             // Act
-            var actionResult = (OkObjectResult)(await _usersController.Count((int)It.IsAny<AccountStatus>())).Result;
+            var actionResult = (OkObjectResult)(await _usersController.Count(It.IsAny<AccountStatus>())).Result;
             var actual = (int)actionResult.Value;
 
             // Assert
@@ -130,7 +130,7 @@ namespace EventsExpress.Test.ControllerTests
         public async Task GetUsersCount_CalledMethodOfService()
         {
             // Act
-            await _usersController.Count((int)It.IsAny<AccountStatus>());
+            await _usersController.Count(It.IsAny<AccountStatus>());
 
             // Assert
             _userService.Verify(service => service.CountUsersAsync(It.IsAny<AccountStatus>()), Times.Once);

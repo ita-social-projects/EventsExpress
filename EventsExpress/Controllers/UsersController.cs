@@ -73,11 +73,11 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns edited gender.</returns>
         /// <response code="200">Edit is successful.</response>
         /// <response code="400">Edit process failed.</response>
-        [HttpGet("[action]")]
+        [HttpGet("[action]/{accountStatus}")]
         [Authorize(Policy = PolicyNames.AdminPolicyName)]
-        public async Task<ActionResult<int>> Count([FromQuery] int accountStatus)
+        public async Task<ActionResult<int>> Count(AccountStatus accountStatus)
         {
-            var count = await _userService.CountUsersAsync((AccountStatus)accountStatus);
+            var count = await _userService.CountUsersAsync(accountStatus);
             return Ok(count);
         }
 
