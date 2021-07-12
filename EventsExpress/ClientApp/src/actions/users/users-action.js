@@ -1,18 +1,16 @@
 import { UserService } from '../../services';
 import { setErrorAllertFromResponse } from '../alert-action';
-import { getRequestInc, getRequestDec } from "../request-count-action";
+import { getRequestInc, getRequestDec } from '../request-count-action';
 import * as SignalR from '@aspnet/signalr';
-import { jwtStorageKey } from "../../constants/constants";
+import { jwtStorageKey } from '../../constants/constants';
 
-export const GET_USERS_DATA = "GET_USERS_DATA";
-export const SET_USERS_HUB = "CONNECT_USERS_HUB";
-export const RESET_USERS_HUB = "RESET_USERS_HUB";
-export const GET_USERS_PENDING = "GET_USERS_PENDING";
-export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
-export const RESET_USERS = "RESET_USERS";
-export const CHANGE_USERS_FILTER = "CHANGE_USERS_FILTER";
-export const GET_USERS_COUNT = "GET_USERS_COUNT";
-export const CHANGE_STATUS = "CHANGE_STATUS";
+export const GET_USERS_DATA = 'GET_USERS_DATA';
+export const SET_USERS_HUB = 'CONNECT_USERS_HUB';
+export const RESET_USERS_HUB = 'RESET_USERS_HUB';
+export const RESET_USERS = 'RESET_USERS';
+export const CHANGE_USERS_FILTER = 'CHANGE_USERS_FILTER';
+export const GET_USERS_COUNT = 'GET_USERS_COUNT';
+export const CHANGE_STATUS = 'CHANGE_STATUS';
 export const accountStatus = {
     All: 0,
     Activated: 1,
@@ -28,7 +26,7 @@ export function initialConnection() {
 
         try {
             await hubConnection.start();
-            hubConnection.on("CountUsers", () => {
+            hubConnection.on('CountUsers', () => {
                 dispatch(get_count(getState().users.status ?? accountStatus.All));
             });
         } catch(err) {

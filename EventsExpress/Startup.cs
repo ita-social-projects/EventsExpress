@@ -231,7 +231,6 @@ namespace EventsExpress
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
-            services.AddScoped<UsersHub>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

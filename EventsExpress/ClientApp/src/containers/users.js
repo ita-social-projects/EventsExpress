@@ -6,6 +6,7 @@ import Spinner from '../components/spinner';
 import UsersFilterWrapper from '../containers/user-filter';
 
 class UsersWrapper extends Component {
+
     componentDidMount() {
         this.getUsers(this.props.location.search);
     }
@@ -19,21 +20,21 @@ class UsersWrapper extends Component {
     render() {
         const { users: { data }, location } = this.props;
 
-        return <Spinner showContent={data != undefined}>
-            <div className="row">
-                <div className='col-9'>
+        return <div className="row">
+            <div className="col-9">
+                <Spinner showContent={data !== undefined}>
                     <Users
                         users={data.items}
                         page={data.pageViewModel.pageNumber}
                         totalPages={data.pageViewModel.totalPages}
                         callback={this.getUsers}
                     />
-                </div>
-                <div className="col-3">
-                    < UsersFilterWrapper location={location} />
-                </div>
+                </Spinner>
             </div>
-        </Spinner>
+            <div className="col-3">
+                <UsersFilterWrapper location={location} />
+            </div>
+        </div>
     }
 }
 

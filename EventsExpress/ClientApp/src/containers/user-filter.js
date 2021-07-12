@@ -1,15 +1,16 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UsersFilters from '../components/users/UsersFilters';
+import history from '../history';
+import { parse } from 'query-string';
 import {
     accountStatus,
     get_users,
     get_count,
     initialConnection,
     closeConnection,
-    change_status } from '../actions/users/users-action';
-import history from '../history';
-import { parse } from 'query-string';
+    change_status
+} from '../actions/users/users-action';
 
 class UsersFilterWrapper extends Component {
 
@@ -72,20 +73,19 @@ class UsersFilterWrapper extends Component {
         const { count } = this.props;
         let label;
 
-        switch(status)
-        {
+        switch (status) {
             case accountStatus.Activated:
-                label = "Active users:";
+                label = 'Active users:';
                 break;
             case accountStatus.Blocked:
-                label = "Blocked users:";
+                label = 'Blocked users:';
                 break;
             default:
-                label = "All users:";
+                label = 'All users:';
         }
 
         return <>
-            <span className="ml-2">{label} {count}</span><br/>
+            <span className="ml-2">{label} {count}</span><br />
         </>
     }
 
