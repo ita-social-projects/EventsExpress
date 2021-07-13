@@ -39,7 +39,7 @@ class EventFilter extends Component {
 
     render() {
         const {all_categories, form_values, current_user} = this.props;
-        let values = form_values || {};
+        let values = form_values || {selectedPos: {} };
         let options = [
             {value: eventStatusEnum.Active, text: "Active"},
             {value: eventStatusEnum.Blocked, text: "Blocked"},
@@ -99,7 +99,7 @@ class EventFilter extends Component {
                             <MapModal
                                 initialize={this.props.initialize}
                                 values={values}
-                                reset={this.props.onReset} />
+                               reset={this.props.onReset} />
                         </div>
                         <div className="d-flex">
                             {
