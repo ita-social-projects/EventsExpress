@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import {Field, reduxForm} from "redux-form";
+import { Field, reduxForm, getFormValues } from "redux-form";
+import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
 import { renderSelectField, renderPhoneInput, renderDatePicker, renderTextField} from '../helpers/form-helpers';
 import moment from "moment";
@@ -34,7 +35,7 @@ const validate = values => {
 class RegisterComplete extends Component {
 
     render() {
-        const {pristine, submitting, handleSubmit} = this.props;
+        const { pristine, submitting, handleSubmit, email, name } = this.props;
         return (
             <>
                 <div className="row">
@@ -43,7 +44,7 @@ class RegisterComplete extends Component {
                 <div className="row">
                     <form onSubmit={handleSubmit} className="col-md-6">
                         <div className="form-group">
-                            <Field
+                            < Field
                                 name="email"
                                 component={renderTextField}
                                 label="E-mail:"
@@ -51,7 +52,7 @@ class RegisterComplete extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            <Field
+                            < Field
                                 name="userName"
                                 component={renderTextField}
                                 label="User name"
@@ -76,7 +77,7 @@ class RegisterComplete extends Component {
                                     label="Gender"
                                     parse={Number}
                                 >
-                                    <option aria-label="None" value={0}/>
+                                    <option aria-label="None" value={0} />
                                     <option value={1}>Male</option>
                                     <option value={2}>Female</option>
                                     <option value={3}>Other</option>
@@ -102,9 +103,23 @@ class RegisterComplete extends Component {
     }
 }
 
-RegisterComplete = reduxForm({
-    form: "register-complete-form",
-    validate
-})(RegisterComplete);
+const mapStateToProps = (state) => {
+    const profile = 'profile' in state.routing.location.state ? state.routing.location.state.profile : null;
+    if (profile)
+        return {
+            initialValues: {
+                email: 'email' in profile ? profile.email : null,
+                userName: 'name' in profile ? profile.name : null,
+                birthday: 'birthday' in profile ? profile.birthday: null,
+                gender: 'gender' in profile ? profile.gender : null
+            },
+            form_values: getFormValues('register-complete-form')(state),
+        }
+    else return
+}
 
-export default RegisterComplete;
+export default connect(mapStateToProps)(reduxForm({
+    form: "register-complete-form",
+    validate,
+    enableReinitialize: true
+})(RegisterComplete));
