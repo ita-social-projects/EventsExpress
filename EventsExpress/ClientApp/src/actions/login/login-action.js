@@ -40,7 +40,7 @@ export function loginFacebook(profile) {
     const call = () => api_serv.setFacebookLogin({
         Email: profile.email,
         Name: profile.name,
-        PhotoUrl: profile.picture
+        PhotoUrl: profile.picture.data.url
     });
     return loginResponseHandler(call, {email: profile.email, name: profile.name, birthday: profile.birthday, gender: profile.gender});
 }
