@@ -5,6 +5,7 @@ import ImagePreview from "./ImagePreview";
 import Placeholder from "./Placeholder";
 import ImageResizer from '../event/image-resizer';
 import Button from "@material-ui/core/Button";
+import renderFieldError from './form-helpers/render-field-error';
 
 
 export default class DropZoneField extends Component {
@@ -85,15 +86,15 @@ export default class DropZoneField extends Component {
             submitting,
             crop,
             cropShape,
-            meta: { error, touched },
+            meta: {  touched },
             input: { onChange }
         } = this.props;
         const { errors, imagefile, cropped } = this.state;
         const { handleOnCrop, handleOnDrop, handleOnClear } = this;
-        const containerClass = error && touched ? "invalid" : "valid";
+        const containerClass = errors && touched ? "invalid" : "valid";
         return (
-            <Fragment>
-                <div className={`preview-container ${containerClass}`}>  
+            <Fragment className={`preview-container ${containerClass}`}>
+                <div >  
                     {imagefile.length && crop && !cropped ? (
                         <div>
                             <ImageResizer
@@ -133,14 +134,13 @@ export default class DropZoneField extends Component {
                         Clear
                     </Button>
                 </div>
-                {renderFieldError({ touched, error })}
+                {renderFieldError({ touched, errors})}
             </Fragment>
         )
     }
 }
 
 DropZoneField.propTypes = {
-    error: PropTypes.string,
     imagefile: PropTypes.arrayOf(
         PropTypes.shape({
             file: PropTypes.file,

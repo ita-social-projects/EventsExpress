@@ -38,18 +38,19 @@ class EventForm extends Component {
         
     }
 
-    checkLocation = (location, x) => {
-        if (location.type == enumLocationType.map) {
-            location.latitude = null;
-            location.longitude = null;
-            change(`event-form`, `location`, location);
-        }
+    checkLocation = (location) => {
+        if (location !== null) {
+            if (location.type == enumLocationType.map) {
+                location.latitude = null;
+                location.longitude = null;
+                change(`event-form`, `location`, location);
+            }
 
-        if (location.type == enumLocationType.online) {
-            location.onlineMeeting = null;
-            change(`event-form`, `location.onlineMeeting`, location);
+            if (location.type == enumLocationType.online) {
+                location.onlineMeeting = null;
+                change(`event-form`, `location.onlineMeeting`, location);
+            }
         }
-            
     }
 
 
@@ -210,5 +211,6 @@ class EventForm extends Component {
 
 export default reduxForm({
     form: 'event-form',
-    enableReinitialize: true
+    enableReinitialize: true,
+    touchOnChange: true,
 })(EventForm);

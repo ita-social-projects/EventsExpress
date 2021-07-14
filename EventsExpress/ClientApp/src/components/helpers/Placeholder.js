@@ -10,7 +10,7 @@ const Placeholder = ({ getInputProps, getRootProps, error, touched }) => {
     }
     const spanStyle = {}
     
-    if (error /*&& touched*/) {
+    if (error && touched) {
         iconStyle.color = "#f44336";
         spanStyle.color = "#f44336";
     }
@@ -18,7 +18,7 @@ const Placeholder = ({ getInputProps, getRootProps, error, touched }) => {
     return (
         <div
             {...getRootProps()}
-            className={`placeholder-preview ${error /*&& touched*/ ? "has-error" : ""}`}
+            className={`placeholder-preview ${error && touched ? "has-error" : ""}`}
         >
             <input {...getInputProps()} />
             <div className='cursor-pointer d-flex align-items-center justify-content-center'>

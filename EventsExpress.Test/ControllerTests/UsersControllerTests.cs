@@ -161,20 +161,17 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ChangeAvatar")]
         public async Task ChangeAvatar_CorrectUser_OkObjectResult()
         {
-            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(_userDto.Id);
-            _userService.Setup(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()));
-            _usersController.ControllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
-            _usersController.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection { file });
 
-            var res = await _usersController.ChangeAvatar();
+            PhotoViewModel photoModel = new PhotoViewModel() { Photo = file };
+
+            var res = await _usersController.ChangeAvatar(_userDto.Id, photoModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _securityContextService.Verify(aut => aut.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 

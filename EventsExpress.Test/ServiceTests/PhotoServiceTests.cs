@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -91,27 +92,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCase(@"./Images/invalidFile.txt")]
-        [TestCase(@"./Images/invalidFile.html")]
-        [TestCase(@"./Images/tooSmallImage.jpg")]
-        public void AddEventTempPhoto_WithInvalidImages_ShouldThrow(string testFilePath)
-        {
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
-            Guid id = Guid.NewGuid();
-
-            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddEventTempPhoto(file, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
-        }
-
-        [Test]
         public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
             string testFilePath = @"./Images/valid-image.jpg";
@@ -134,21 +114,18 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase(@"./Images/invalidFile.txt")]
         [TestCase(@"./Images/invalidFile.html")]
         [TestCase(@"./Images/tooSmallImage.jpg")]
-        public void AddUserPhoto_InValidFormFile_WillThrows(string testFilePath)
+        public void IsImage_FalseValidation(string testFilePath)
         {
             byte[] bytes = File.ReadAllBytes(testFilePath);
             string base64 = Convert.ToBase64String(bytes);
             string fileName = Path.GetFileName(testFilePath);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
+            IFormFile file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
                 Headers = new HeaderDictionary(),
                 ContentType = GetContentType(fileName),
             };
-            Guid id = Guid.NewGuid();
-
-            Assert.ThrowsAsync<ArgumentException>(async () => await PhotoService.AddUserPhoto(file, id));
-            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Never);
+            Assert.IsFalse(file.IsImage());
         }
 
         [Test]
@@ -158,7 +135,7 @@ namespace EventsExpress.Test.ServiceTests
             BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
         }
 
-        private string GetContentType(string fileName)
+        public string GetContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(fileName, out var contentType))

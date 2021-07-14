@@ -22,16 +22,13 @@ namespace EventsExpress.Core.Services
     {
         private readonly BlobContainerClient _blobContainerClient;
         private readonly IOptions<ImageOptionsModel> _widthOptions;
-        private readonly IValidator<IFormFile> _validator;
 
         public PhotoService(
             IOptions<ImageOptionsModel> opt,
-            BlobServiceClient blobServiceClient,
-            IValidator<IFormFile> validator)
+            BlobServiceClient blobServiceClient)
         {
             _widthOptions = opt;
             _blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
-            _validator = validator;
         }
 
         public async Task ChangeTempToImagePhoto(Guid id)

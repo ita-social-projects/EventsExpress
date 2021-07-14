@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import '../event/event-form.css';
 import './helpers.css';
 
-const ImagePreview = ({ imagefile, shape }) =>
+const ImagePreview = ({ imagefile, shape, error, touched }) =>
     imagefile.map(({ name, preview }) => (
         <div key={name} className={` render-preview ${error && touched ? "has-error" : ""} `} >
         <div className="image-container d-flex align-items-center justify-content-center">

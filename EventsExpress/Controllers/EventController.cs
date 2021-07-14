@@ -27,39 +27,19 @@ namespace EventsExpress.Controllers
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
-        private readonly IValidator<IFormFile> _validator;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService, IValidator<IFormFile> validator)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
         {
             _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
-            _validator = validator;
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
-        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] IFormFile photo)
+        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] PhotoViewModel photo)
         {
-            var validPhoto = _validator.Validate(photo);
-            if (!validPhoto.IsValid)
-            {
-                Dictionary<string, string> exept = new Dictionary<string, string>();
-                var p = validPhoto.Errors.Select(e => new KeyValuePair<string, string>("Photo", e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
-
-            if (eventId == Guid.Empty)
-            {
-                return BadRequest();
-            }
-
-            await _photoService.AddEventTempPhoto(photo, eventId);
+            await _photoService.AddEventTempPhoto(photo.Photo, eventId);
 
             return Ok();
         }
