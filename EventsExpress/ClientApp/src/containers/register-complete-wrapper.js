@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import RegisterBindAccount from "../components/register/register-bind-account";
+import registerBindAccount from "../actions/register/register-bind-account-action";
 import RegisterComplete from '../components/register/register-complete';
 import registerComplete from "../actions/register/register-complete-action";
 
@@ -11,7 +13,8 @@ class RegisterCompleteWrapper extends Component {
 
     render() {
         return <>
-            <RegisterComplete onSubmit={this.props.submit} profile={this.profile}/>
+            {typeof this.profile !== undefined && <RegisterBindAccount onSubmit={this.props.bind}/>}
+            <RegisterComplete onSubmit={this.props.submit}/>
         </>
     }
 }
@@ -19,6 +22,7 @@ class RegisterCompleteWrapper extends Component {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch) => ({
+    bind: (data) => dispatch(registerBindAccount(data)),
     submit: (data) => dispatch(registerComplete(data))
 });
 

@@ -33,7 +33,7 @@ export function loginGoogle(tokenId, profile) {
         Name: profile.name,
         PhotoUrl: profile.imageUrl
     });
-    return loginResponseHandler(call, {email: profile.email, name: profile.name});
+    return loginResponseHandler(call, {email: profile.email, name: profile.name, type: 0});
 }
 
 export function loginFacebook(profile) {
@@ -42,7 +42,7 @@ export function loginFacebook(profile) {
         Name: profile.name,
         PhotoUrl: profile.picture.data.url
     });
-    return loginResponseHandler(call, {email: profile.email, name: profile.name, birthday: profile.birthday, gender: profile.gender});
+    return loginResponseHandler(call, {email: profile.email, name: profile.name, birthday: profile.birthday, gender: profile.gender, type: 1});
 }
 
 export function loginTwitter(data) {
@@ -54,7 +54,7 @@ export function loginTwitter(data) {
         Name: typeof data.name !== 'undefined' ? data.name : data.screen_name,
         PhotoUrl: data.image_url,
     });
-    return loginResponseHandler(res, {email: data.email, name: typeof data.name !== 'undefined' ? data.name : data.screen_name});
+    return loginResponseHandler(res, {email: data.email, name: typeof data.name !== 'undefined' ? data.name : data.screen_name, type: 2});
 }
 
 export function loginAfterEmailConfirmation(data) {

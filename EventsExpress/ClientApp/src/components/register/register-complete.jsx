@@ -35,7 +35,7 @@ const validate = values => {
 class RegisterComplete extends Component {
 
     render() {
-        const { pristine, submitting, handleSubmit, email, name } = this.props;
+        const { pristine, submitting, handleSubmit } = this.props;
         return (
             <>
                 <div className="row">
