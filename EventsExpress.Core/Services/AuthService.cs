@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -111,6 +112,65 @@ namespace EventsExpress.Core.Services
 
             // save refresh token
             account.RefreshTokens.Add(refreshToken);
+            await Context.SaveChangesAsync();
+            return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
+        }
+
+        public async Task<AuthenticateResponseModel> BindExternalAccount(RegisterBindDto registerBindDto)
+        {
+            var localAccount = Context.Accounts
+                .Include(a => a.AuthLocal)
+                .Include(a => a.AuthExternal)
+                .Include(a => a.RefreshTokens)
+                .Include(a => a.AccountRoles)
+                    .ThenInclude(ar => ar.Role)
+                .Where(a => a.AuthLocal.Email == registerBindDto.Email)
+                .FirstOrDefault();
+            if (localAccount == null)
+            {
+                throw new EventsExpressException("Incorrect login or password");
+            }
+
+            if (localAccount.IsBlocked)
+            {
+                throw new EventsExpressException("Your account was blocked.");
+            }
+
+            if (!localAccount.AuthLocal.EmailConfirmed)
+            {
+                throw new EventsExpressException($"{registerBindDto.Email} is not confirmed, please confirm");
+            }
+
+            if (!VerifyPassword(localAccount.AuthLocal, registerBindDto.Password))
+            {
+                throw new EventsExpressException("Incorrect login or password");
+            }
+
+            if (localAccount.AuthExternal.Any(a => a.Type == registerBindDto.Type))
+            {
+                throw new EventsExpressException($"Account already have binded {Enum.GetName(typeof(AuthExternalType), registerBindDto.Type)} account");
+            }
+
+            var externalAccount = Context.Accounts
+                .Include(a => a.AuthExternal)
+                .Include(a => a.RefreshTokens)
+                .Include(a => a.AccountRoles)
+                .Where(a => a.Id == _securityContext.GetCurrentAccountId())
+                .FirstOrDefault();
+
+            var authExternal = externalAccount.AuthExternal.First();
+            authExternal.AccountId = localAccount.Id;
+            localAccount.AuthExternal.Append(authExternal);
+
+            Context.Accounts.Remove(externalAccount);
+
+            await Context.SaveChangesAsync();
+
+            var jwtToken = _tokenService.GenerateAccessToken(localAccount);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            // save refresh token
+            localAccount.RefreshTokens.Add(refreshToken);
             await Context.SaveChangesAsync();
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
