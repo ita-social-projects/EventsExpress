@@ -140,6 +140,18 @@ namespace EventsExpress.Controllers
 
         [Authorize]
         [HttpPost("[action]")]
+        public async Task<IActionResult> RegisterBindExternalAccount(RegisterBindViewModel authRequest)
+        {
+            var accountData = _mapper.Map<RegisterBindDto>(authRequest);
+            var authResponseModel = await _authService.BindExternalAccount(accountData);
+
+            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+
+            return Ok(new { Token = authResponseModel.JwtToken });
+        }
+
+        [Authorize]
+        [HttpPost("[action]")]
         public async Task<IActionResult> RegisterComplete(RegisterCompleteViewModel authRequest)
         {
             var profileData = _mapper.Map<RegisterCompleteDto>(authRequest);
