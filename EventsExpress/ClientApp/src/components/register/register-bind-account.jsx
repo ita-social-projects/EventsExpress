@@ -4,7 +4,7 @@ import { Field, reduxForm, getFormValues } from "redux-form";
 import { connect } from 'react-redux';
 import Button from "@material-ui/core/Button";
 import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-validators'
-import { renderSelectField, renderTextField } from '../helpers/form-helpers';
+import { renderTextField } from '../helpers/form-helpers';
 import { isValidEmail } from '../helpers/validators/email-address-validator';
 import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
