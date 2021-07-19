@@ -54,19 +54,6 @@ class EventForm extends Component {
         <option value={item.value} key={item.value}> {item.label} </option>
     ));
 
-    checkLocation = (location) => {
-        if (location.type == enumLocationType.map) {
-            location.latitude = null;
-            location.longitude = null;
-            change(`event-form`, `location`, location);
-        }
-
-        if (location.type == enumLocationType.online) {
-            location.onlineMeeting = null;
-            change(`event-form`, `location.onlineMeeting`, location);
-        }
-
-    }
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
@@ -100,7 +87,7 @@ class EventForm extends Component {
                         />
                     </div>
                     <div className="mt-2">
-                        <Field
+                        <Field parse={Number}
                             name='maxParticipants'
                             component={renderTextField}
                             type="number"
