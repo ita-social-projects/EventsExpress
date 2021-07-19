@@ -109,6 +109,7 @@ export default class EventItemView extends Component {
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && eventStatus !== eventStatusEnum.Canceled;
         let canUncancel = isFutureEvent && isMyEvent && eventStatus === eventStatusEnum.Canceled;
         let isMyPrivateEvent = isMyEvent && !isPublic;
+        let canDeleted = isMyEvent && eventStatus === eventStatusEnum.Canceled;
 
         return <>
             <div className="container-fluid mt-1">
@@ -166,6 +167,11 @@ export default class EventItemView extends Component {
                                 {canCancel && <SimpleModalWithDetails
                                     button={<button className="btn btn-edit">Cancel</button>}
                                     submitCallback={this.props.onCancel}
+                                    data="Are you sure?"
+                                />}
+                                {canDeleted && <SimpleModalWithDetails
+                                    button={<button className="btn btn-edit">Delete</button>}
+                                    submitCallback={this.props.onDelete}
                                     data="Are you sure?"
                                 />}
                                 {(canUncancel) && <SimpleModalWithDetails
