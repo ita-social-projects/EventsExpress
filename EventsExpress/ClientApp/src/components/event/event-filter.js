@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
-import {
-    renderTextField,
-    renderMultiselect
-} from '../helpers/helpers';
-import { renderDatePicker, MultiCheckbox } from '../helpers/form-helpers';
+import { renderDatePicker, MultiCheckbox, renderTextField, renderMultiselect } from '../helpers/form-helpers';
 import filterHelper from '../helpers/filterHelper';
 import MapModal from './map-modal';
 import './event-filter.css';
@@ -43,7 +39,7 @@ class EventFilter extends Component {
 
     render() {
         const {all_categories, form_values, current_user} = this.props;
-        let values = form_values || {};
+        let values = form_values || {selectedPos: {} };
         let options = [
             {value: eventStatusEnum.Active, text: "Active"},
             {value: eventStatusEnum.Blocked, text: "Blocked"},
@@ -103,7 +99,7 @@ class EventFilter extends Component {
                             <MapModal
                                 initialize={this.props.initialize}
                                 values={values}
-                                reset={this.props.onReset} />
+                               reset={this.props.onReset} />
                         </div>
                         <div className="d-flex">
                             {

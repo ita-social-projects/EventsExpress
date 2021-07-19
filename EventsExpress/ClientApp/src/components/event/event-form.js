@@ -1,22 +1,19 @@
-﻿import React, { Component, useEffect } from 'react';
+﻿import React, { Component } from 'react';
 import { reduxForm, Field, change } from 'redux-form';
 import moment from 'moment';
 import 'react-widgets/dist/css/react-widgets.css'
 import momentLocaliser from 'react-widgets-moment';
 import DropZoneField from '../helpers/DropZoneField';
-    import PhotoService from '../../services/PhotoService';
+import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
-    renderMultiselect,
-    renderTextArea,
-    renderSelectPeriodicityField,
-    renderCheckbox,
-    renderTextField,
-    radioLocationType
-} from '../helpers/helpers';
-import { renderDatePicker, LocationMapWithMarker } from '../helpers/form-helpers';
+    renderDatePicker, LocationMapWithMarker, renderCheckbox, radioButton,
+    renderSelectField, renderTextField, renderTextArea, renderMultiselect
+} from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
 
 momentLocaliser(moment);
 
@@ -53,13 +50,31 @@ class EventForm extends Component {
         }
     }
 
+    periodicityListOptions = (periodicity.map((item) =>
+        <option value={item.value} key={item.value}> {item.label} </option>
+    ));
 
+    checkLocation = (location) => {
+        if (location.type == enumLocationType.map) {
+            location.latitude = null;
+            location.longitude = null;
+            change(`event-form`, `location`, location);
+        }
+
+        if (location.type == enumLocationType.online) {
+            location.onlineMeeting = null;
+            change(`event-form`, `location.onlineMeeting`, location);
+        }
+
+    }
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
-        
-        
+
+        if (this.props.initialValues.location != null) {
+            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
+        }
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
@@ -76,7 +91,7 @@ class EventForm extends Component {
                         uploadImage={this.saveImage(this.props.eventId)}
                     />
                     <div className="mt-2">
-                        <Field 
+                        <Field
                             name='title'
                             component={renderTextField}
                             type="input"
@@ -100,26 +115,28 @@ class EventForm extends Component {
                                 name='isReccurent'
                                 component={renderCheckbox}
                                 checked={checked}
-                                onChange={this.handleChange} 
+                                onChange={this.handleChange}
                             />
                         </div>
                     }
                     {this.props.haveReccurentCheckBox && checked &&
                         <div>
                             <div className="mt-2">
-                                <Field
+                            <Field
+                                    minWidth={200}
                                     name="periodicity"
                                     text="Periodicity"
-                                    data={periodicity}
-                                    component={renderSelectPeriodicityField} 
-                                />
+                                    component={renderSelectField}
+                                >
+                                {this.periodicityListOptions}
+                                </Field>
                             </div>
                             <div className="mt-2">
                                 <Field
                                     name='frequency'
                                     type="number"
                                     component={renderTextField}
-                                    label="Frequency" 
+                                    label="Frequency"
                                 />
                             </div>
                         </div>
@@ -169,37 +186,39 @@ class EventForm extends Component {
                             valueField={"id"}
                             textField={"name"}
                             className="form-control"
-                            placeholder='#hashtags' 
+                            placeholder='#hashtags'
                         />
                     </div>
-                    <Field name="location.type" component={radioLocationType} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location )} />
-                    {this.props.form_values
-                        && this.props.form_values.location
-                        && this.props.form_values.location.type == enumLocationType.map &&
+                    <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
+                        <FormControlLabel value={0} control={<Radio />} label="Map" />
+                        <FormControlLabel value={1} control={<Radio />} label="Online" />
+                    </Field>
+                        {this.props.form_values
+                            && this.props.form_values.location
+                            && this.props.form_values.location.type == enumLocationType.map &&
 
-                        <div className="mt-2">
-                            <Field
-                                name='location'
-                                component={LocationMapWithMarker}
+                            <div className="mt-2">
+                                <Field
+                                    name='location'
+                                    component={LocationMapWithMarker}
+                                />
+                            </div>
+                        }
+                        {this.props.form_values
+                            && this.props.form_values.location
+                            && this.props.form_values.location.type == enumLocationType.online &&
 
-                            />
-                        </div>
-                    }
-                    {this.props.form_values
-                        && this.props.form_values.location
-                        && this.props.form_values.location.type == enumLocationType.online &&
-
-                        <div className="mt-2">
-                            <label htmlFor="url">Enter an https:// URL:</label>
-                            <Field
-                                name='location.onlineMeeting'
-                                component={renderTextField}
-                                type="url"
-                                label="Url"
-                                id="url"
-                            />
-                        </div>
-                    }
+                            <div className="mt-2">
+                                <label htmlFor="url">Enter an https:// URL:</label>
+                                <Field
+                                    name='location.onlineMeeting'
+                                    component={renderTextField}
+                                    type="url"
+                                    label="Url"
+                                    id="url"
+                                />
+                            </div>
+                        }                 
                 </div>
                 <div className="row my-4">
                     {this.props.children}

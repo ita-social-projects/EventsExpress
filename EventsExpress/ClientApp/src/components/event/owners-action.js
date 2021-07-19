@@ -17,7 +17,7 @@ const OwnersActions = (props) => {
                         button={
                             <Tooltip title="Delete from owners">
                                 <IconButton aria-label="delete">
-                                    <i className="far fa-trash-alt"></i>
+                                    <i className="far fa-trash-alt" />
                                 </IconButton>
                             </Tooltip>
                         }
@@ -38,5 +38,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnersActions);
-
-

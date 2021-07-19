@@ -22,13 +22,12 @@ export default class EventsExpressService {
 
     getPhoto = async (url) => {
         const call = _url => fetch(this._baseUrl + url);
-
         let res = await call(url);
 
-        if(res.ok){
+        if (res.ok) {
             return res.blob();
         }
-        else{
+        else {
             return null;
         }
     }
@@ -79,19 +78,22 @@ export default class EventsExpressService {
     }
 
     refreshHandler = async () => {
-        localStorage.removeItem("token");
-        var response = await fetch('api/token/refresh-token', {
+        localStorage.removeItem(jwtStorageKey);
+        let response = await fetch('api/token/refresh-token', {
             method: "POST"
         });
+
         if (!response.ok) {
             return false;
         }
+
         let rest = await response.json();
         localStorage.setItem(jwtStorageKey, rest.jwtToken);
+
         return true;
     }
-    setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
+    setWantToTake = data => this.setResource(`UserEventInventory/MarkItemAsTakenByUser`, data);
 
     getUsersInventories = eventId => this.getResource(`UserEventInventory/GetAllMarkItemsByEventId/?eventId=${eventId}`);
 }

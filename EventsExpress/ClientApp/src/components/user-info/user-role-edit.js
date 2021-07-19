@@ -8,6 +8,7 @@ import { renderMultiselect } from '../helpers/form-helpers';
 import ErrorMessages from '../shared/errorMessage';
 
 class UserRoleEdit extends Component {
+
     componentDidMount = () => {
         this.props.get_roles();
     }
@@ -32,10 +33,10 @@ class UserRoleEdit extends Component {
             <td className="align-middle align-items-stretch">
                 <div className="d-flex align-items-center">
                     <IconButton className="text-success" size="small" type="submit" form='user-role' disabled={pristine || submitting} >
-                        <i className="fas fa-check"></i>
+                        <i className="fas fa-check" />
                     </IconButton>
                     <IconButton className="text-danger" size="small" onClick={this.props.cancel}>
-                        <i className="fas fa-times"></i>
+                        <i className="fas fa-times" />
                     </IconButton>
                 </div>
             </td>

@@ -11,7 +11,7 @@ export default class ContactAdminItem extends Component {
 
         return (<>
             <td>
-                <i className="fas fa-hashtag mr-1"></i>
+                <i className="fas fa-hashtag mr-1" />
                 {item.title}
             </td>
             <td className="d-flex align-items-center justify-content-center">
@@ -24,7 +24,7 @@ export default class ContactAdminItem extends Component {
                 <Link to={`/contactAdmin/${item.messageId}/UpdateStatus`}>
                     <Tooltip title="View">
                         <IconButton style={{ fontSize: 16 }} aria-label="view" >
-                            <i className="fa fa-eye "></i>
+                            <i className="fa fa-eye " />
                         </IconButton>
                     </Tooltip>
                 </Link>

@@ -56,7 +56,7 @@ export default function SocialShareMenu(props) {
                     aria-haspopup="true"
                     onClick={handleClick}
                 >
-                    <i className="fas fa-share-alt"></i>
+                    <i className="fas fa-share-alt" />
                 </IconButton>
             </Tooltip>
             <StyledMenu

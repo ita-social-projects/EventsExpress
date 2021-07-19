@@ -9,11 +9,12 @@ import { localLoginAdd } from '../../actions/redactProfile/linked-auths-add-acti
 import '../css/Auth.css';
 
 class LocalLoginAdd extends Component {
+
     constructor(props){
         super(props);
         this.state = {isOpen:false};
     }
-    
+
     handleClick = () => {
         this.setState({isOpen:true})
     }
@@ -31,7 +32,7 @@ class LocalLoginAdd extends Component {
         return (
             <div>
                 <button className="btnGoogle" onClick={this.handleClick} disabled={false}>
-                    <i className="fas fa-at fa-lg blue"></i>
+                    <i className="fas fa-at fa-lg blue" />
                     <span>Log in</span>
                 </button>
                 <Dialog

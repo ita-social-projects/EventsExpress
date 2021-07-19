@@ -268,6 +268,26 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        [Category("GetNotificationTypes")]
+        public void GetNotifications_OkResult()
+        {
+            _userService.Setup(user => user.GetUserNotificationTypes()).Returns(new NotificationTypeDto[] { firstNotificationTypeDto });
+            var res = _usersController.GetNotificationTypes();
+
+            Assert.IsInstanceOf<OkObjectResult>(res);
+        }
+
+        [Test]
+        [Category("GetCategories")]
+        public void GetCategories_OkResult()
+        {
+            _userService.Setup(user => user.GetUserCategories()).Returns(new CategoryDto[] { _firstCategoryDto });
+            var res = _usersController.GetCategories();
+
+            Assert.IsInstanceOf<OkObjectResult>(res);
+        }
+
+        [Test]
         [Category("SearchUsers")]
         public void SearchUsers_NotNull_Exception()
         {

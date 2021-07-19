@@ -32,7 +32,7 @@ import Forbidden from '../Route guard/403';
 import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
-import getConfigs from '../../actions/config/get-configs-action';
+import getConfig from '../../actions/config/get-config-action';
 
 class App extends Component {
     constructor(props){
@@ -97,7 +97,7 @@ class App extends Component {
 let mapDispatchToProps = (dispatch) => {
     return {
         authUser: () => dispatch(AuthUser()),
-        getConfig: () => dispatch(getConfigs())
+        getConfig: () => dispatch(getConfig())
     }
 }
 

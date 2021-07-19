@@ -2,7 +2,7 @@
 import { Field, reduxForm } from "redux-form";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import { renderTextField } from '../helpers/helpers';
+import { renderTextField } from '../helpers/form-helpers';
 import './Comment.css';
 import ErrorMessages from '../shared/errorMessage';
 

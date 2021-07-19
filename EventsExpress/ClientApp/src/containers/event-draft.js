@@ -4,33 +4,18 @@ import EventForm from '../components/event/event-form';
 import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
-import { getFormValues, reset, isPristine } from 'redux-form';
-import { setEventPending, setEventSuccess, edit_event, publish_event } from '../actions/event/event-add-action';
-import { validateEventForm } from '../components/helpers/helpers'
+import { getFormValues , isPristine} from 'redux-form';
+import { edit_event, publish_event} from '../actions/event/event-add-action';
+import { validateEventForm } from './event-validate-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import get_categories from '../actions/category/category-list-action';
 import './css/Draft.css';
 
 class EventDraftWrapper extends Component {
 
-    componentWillMount = () => {
-        this.props.get_categories();
-    }
-
-    componentDidUpdate = () => {
-        if (!this.props.add_event_status.errorEvent && this.props.add_event_status.isEventSuccess) {
-            this.props.reset();
-        }
-    }
-
-    componentWillUnmount() {
-        this.props.reset();
-    }
-
-    onPublish = async (values) => { 
+    onPublish = async (values) => {
         if (!this.props.pristine)
         {
             await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
@@ -40,7 +25,7 @@ class EventDraftWrapper extends Component {
 
     onSave = async () => {
         await this.props.edit_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-        this.props.alert('Your event has been successfully saved!');    
+        this.props.alert('Your event has been successfully saved!');
     }
 
     onDelete = async (reason) => {
@@ -48,7 +33,7 @@ class EventDraftWrapper extends Component {
         this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
     }
-  
+
     render() {
         return <>
             <div className="pl-md-4">
@@ -56,7 +41,7 @@ class EventDraftWrapper extends Component {
                     <div className="row">
                         <div className="col-12 py-3">
                             <div className="float-left">
-                                <h1>Edit event draft</h1>                  
+                                <h1>Edit event draft</h1>
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
                                 <SimpleModalWithDetails
@@ -64,7 +49,7 @@ class EventDraftWrapper extends Component {
                                     data="Are you sure?"
                                     button={
                                         <IconButton className="text-danger" size="medium">
-                                            <i className="fas fa-trash"></i>
+                                            <i className="fas fa-trash" />
                                         </IconButton>
                                     }
                                 />
@@ -129,11 +114,6 @@ const mapDispatchToProps = (dispatch) => {
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-        reset: () => {
-            dispatch(reset('event-form'));
-            dispatch(setEventPending(true));
-            dispatch(setEventSuccess(false));
-        }
     }
 };
 

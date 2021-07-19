@@ -11,22 +11,18 @@ class EventSchedulesListWrapper extends Component {
     }
 
     render() {
-        
+
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending } = this.props.eventSchedules;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventSchedulesList
+        const { data } = this.props.eventSchedules;
+
+        return <Spinner showContent={data != undefined}>
+            <EventSchedulesList
                 current_user={current_user}
                 data_list={data.items}
             />
-            : null;
-
-        return <>
-            { spinner || content }
-        </>
+        </Spinner>
     }
 }
 

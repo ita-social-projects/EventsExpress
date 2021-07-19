@@ -15,18 +15,19 @@ class UnitsOfMeasuring extends Component {
             <table className="table w-100 m-auto">
                 <tbody>
                     <UnitOfMeasuringAddWrapper
-                        item={{ id: "00000000-0000-0000-0000-000000000000", unitName: "", shortName: "" }}
+                        item={{ id: "00000000-0000-0000-0000-000000000000", unitName: "", shortName: "", category: "" }}
                     />
-                    {!unitsOfMeasuring.isPending ? <UnitOfMeasuringListWrapper data={unitsOfMeasuring.units} /> : null}
+                    <Spinner showContent={unitsOfMeasuring != undefined}>
+                        <UnitOfMeasuringListWrapper data={unitsOfMeasuring} />
+                    </Spinner>
                 </tbody>
             </table>
-            {unitsOfMeasuring.isPending ? <Spinner /> : null}
         </div>
     }
 }
 
 const mapStateToProps = (state) => ({
-    unitsOfMeasuring: state.unitsOfMeasuring
+    unitsOfMeasuring: state.unitsOfMeasuring.units
 });
 
 const mapDispatchToProps = (dispatch) => {

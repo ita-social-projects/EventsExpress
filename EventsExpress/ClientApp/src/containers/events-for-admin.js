@@ -13,22 +13,18 @@ class AdminEventListWrapper extends Component {
         let current_user = this.props.current_user.id !== null
             ? this.props.current_user
             : {};
-        const { data, isPending } = this.props.events;
+        const { data } = this.props.events;
         const { items } = data;
-        const spinner = isPending ? <Spinner /> : null;
-        const content = !isPending
-            ? <EventList
+
+        return <Spinner showContent={data != undefined}>
+            <EventList
                 current_user={current_user}
                 data_list={items}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 callback={this.props.get_events}
             />
-            : null;
-
-        return <>
-            { spinner || content }
-        </>
+        </Spinner>
     }
 }
 

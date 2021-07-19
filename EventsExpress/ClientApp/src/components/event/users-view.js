@@ -5,16 +5,13 @@ import CustomAvatar from '../avatar/custom-avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
 import './users-view.css';
-import { getAge } from '../helpers/helpers';
+import { getAge } from '../helpers/get-age-string';
 
 export default class UserView extends Component{
-    constructor() {
-        super();
-    }
 
     render() {
         const { user } = this.props;
-        const att = user.attitude; 
+        const att = user.attitude;
 
         return( <div>
             <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(att)} >
@@ -29,14 +26,14 @@ export default class UserView extends Component{
                             {user.attitude === 0 &&
                                 <Tooltip title="You like this user" placement="bottom" TransitionComponent={Zoom}>
                                     <div className="retraet">
-                                        <i class="far fa-thumbs-up cancel-text"></i>
+                                        <i className="far fa-thumbs-up cancel-text" />
                                     </div>
                                 </Tooltip>
                             }
                             {user.attitude === 1 &&
                                 <Tooltip title="You dislike this user" placement="bottom" TransitionComponent={Zoom}>
                                     <div className="retraet">
-                                        <i class="far fa-thumbs-down cancel-text"></i>
+                                        <i className="far fa-thumbs-down cancel-text" />
                                     </div>
                                 </Tooltip>
                             }

@@ -1,9 +1,9 @@
-import React from "react";
-import { connect } from "react-redux";
-import ContactAdminDetails from "../../components/contactAdmin/contactAdmin-details-component";
+import React from 'react';
+import { connect } from 'react-redux';
+import ContactAdminDetails from '../../components/contactAdmin/contactAdmin-details-component';
 import change_issue_status from '../../actions/contactAdmin/contact-admin-issue-status-action';
 import get_message_by_id from '../../actions/contactAdmin/contact-admin-item-action';
-import issueStatusEnum from '../../constants/IssueStatusEnum';
+import issueStatusEnum from '../../constants/issue-status-enum';
 
 class ContactAdminDetailsContainer extends React.Component {
     componentWillMount = () => {

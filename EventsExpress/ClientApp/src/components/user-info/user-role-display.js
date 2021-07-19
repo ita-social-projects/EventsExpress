@@ -9,9 +9,9 @@ export function UserRoleDisplay(props) {
             <td className="align-middle">{roles}</td>
 
             <td className="align-middle">
-                { (!props.isCurrentUser) 
+                { (!props.isCurrentUser)
                     ? <IconButton  className="text-info"  size="small" onClick={props.callback}>
-                        <i className="fas fa-edit"></i>
+                        <i className="fas fa-edit" />
                      </IconButton> : null
                 }
             </td>

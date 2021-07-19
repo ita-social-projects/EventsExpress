@@ -11,6 +11,7 @@ import {
 import './css/linked-auths.css';
 
 class LinkedAuthsWrapper extends Component {
+
     componentDidMount() {
         this.props.loadData();
     }
@@ -18,13 +19,13 @@ class LinkedAuthsWrapper extends Component {
     render() {
         const { linkedAuths } = this.props.data;
         return <>
-            {linkedAuths.map(item => <LinkedAuths item={item} />)
+            {linkedAuths.map(item => <LinkedAuths item={item} key={`${item.type}${item.email}` } />)
             }
             <h6><span>Add more:</span></h6>
             <div className="d-flex justify-content-around mb-3">
                 <GoogleLoginAdd />
                 <FacebookLoginAdd />
-                {this.props.config.keys.twitterLoginEnabled && <TwitterLoginAdd />}
+                {this.props.config.twitterLoginEnabled && <TwitterLoginAdd />}
                 <LocalLoginAdd />
             </div>
         </>

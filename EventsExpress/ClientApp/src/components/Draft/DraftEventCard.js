@@ -23,6 +23,7 @@ const useStyles = useStyle;
 const photoService = new PhotoService();
 
 export default class DraftEventCard extends Component {
+
     constructor(props) {
         super(props);
 
@@ -102,7 +103,7 @@ export default class DraftEventCard extends Component {
                                     data="Are you sure?"
                                     button={
                                         <IconButton className="text-danger" size="medium">
-                                            <i className="fas fa-trash"></i>
+                                            <i className="fas fa-trash" />
                                         </IconButton>
                                     }
                                 />

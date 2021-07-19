@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { renderTextField } from '../helpers/helpers';
+import { renderTextField } from '../helpers/form-helpers';
 import { reduxForm, Field } from 'redux-form';
 import Button from "@material-ui/core/Button";
 import DialogActions from "@material-ui/core/DialogActions";
