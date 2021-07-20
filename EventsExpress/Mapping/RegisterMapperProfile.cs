@@ -12,6 +12,7 @@ namespace EventsExpress.Mapping
         public RegisterMapperProfile()
         {
             CreateMap<LoginViewModel, RegisterDto>();
+            CreateMap<RegisterBindViewModel, RegisterBindDto>();
             CreateMap<RegisterCompleteViewModel, RegisterCompleteDto>();
 
             CreateMap<RegisterDto, Account>()
