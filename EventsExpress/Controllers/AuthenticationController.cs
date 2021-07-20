@@ -154,6 +154,11 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> RegisterComplete(RegisterCompleteViewModel authRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var profileData = _mapper.Map<RegisterCompleteDto>(authRequest);
 
             await _authService.RegisterComplete(profileData);

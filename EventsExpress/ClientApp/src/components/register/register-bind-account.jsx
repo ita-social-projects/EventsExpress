@@ -25,35 +25,39 @@ class RegisterBindAccount extends Component {
     render() {
         const { pristine, submitting } = this.props;
         return (
-            <div className="register">
-                <h2>Already have an account?</h2>
-                <form onSubmit={this.props.handleSubmit}>
-                    <div>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="E-mail:"
-                            type="email"
-                        />
-                    </div>
-                    <div>
-                        <Field
-                            name="password"
-                            component={renderTextField}
-                            label="Password:"
-                            type="password"
-                            validate={[maxLength15, minLength6]}
-                        />
-                    </div>
-                    <div>
-                        <DialogActions>
-                            <Button fullWidth={true} type="submit" color="primary" disabled={pristine || submitting}>
-                                Bind
-                            </Button>
-                        </DialogActions>
-                    </div>
-                </form>
-            </div>
+            <>
+                <div className="row">
+                    <h5 className="m-3">Already have an account?</h5>
+                </div>
+                <div className="row">
+                    <form onSubmit={this.props.handleSubmit} className="col-md-6">
+                        <div className="form-group">
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="E-mail:"
+                                type="email"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <Field
+                                name="password"
+                                component={renderTextField}
+                                label="Password:"
+                                type="password"
+                                validate={[maxLength15, minLength6]}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <DialogActions>
+                                <Button fullWidth={true} type="submit" color="primary" disabled={pristine || submitting}>
+                                    Bind
+                                </Button>
+                            </DialogActions>
+                        </div>
+                    </form>
+                </div>
+            </>
         );
     }
 }
