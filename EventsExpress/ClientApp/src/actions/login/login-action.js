@@ -26,23 +26,23 @@ export default function login(email, password) {
     return loginResponseHandler(call);
 }
 
-export function loginGoogle(tokenId, email, name, imageUrl) {
+export function loginGoogle(tokenId, profile) {
     const call = () => api_serv.setGoogleLogin({
         TokenId: tokenId,
-        Email: email,
-        Name: name,
-        PhotoUrl: imageUrl
+        Email: profile.email,
+        Name: profile.name,
+        PhotoUrl: profile.imageUrl
     });
-    return loginResponseHandler(call);
+    return loginResponseHandler(call, {email: profile.email, name: profile.name, type: 0});
 }
 
-export function loginFacebook(email, name, picture) {
+export function loginFacebook(profile) {
     const call = () => api_serv.setFacebookLogin({
-        Email: email,
-        Name: name,
-        PhotoUrl: picture
+        Email: profile.email,
+        Name: profile.name,
+        PhotoUrl: profile.picture.data.url
     });
-    return loginResponseHandler(call);
+    return loginResponseHandler(call, {email: profile.email, name: profile.name, birthday: profile.birthday, gender: profile.gender, type: 1});
 }
 
 export function loginTwitter(data) {
@@ -54,7 +54,7 @@ export function loginTwitter(data) {
         Name: typeof data.name !== 'undefined' ? data.name : data.screen_name,
         PhotoUrl: data.image_url,
     });
-    return loginResponseHandler(res);
+    return loginResponseHandler(res, {email: data.email, name: typeof data.name !== 'undefined' ? data.name : data.screen_name, type: 2});
 }
 
 export function loginAfterEmailConfirmation(data) {
@@ -68,7 +68,7 @@ export function loginAfterEmailConfirmation(data) {
     }
 }
 
-export function getUserInfo() {
+export function getUserInfo(profile) {
     return async dispatch => {
         let response = await api_serv.getUserInfo();
         if (!response.ok) {
@@ -77,7 +77,7 @@ export function getUserInfo() {
         }
 
         if (response.status == 204 && history.location.pathname != '/registerComplete') {
-            history.push('/registerComplete')
+            history.push('/registerComplete', { profile: profile})
             return Promise.resolve();
         }
 
@@ -103,7 +103,7 @@ export function setUser(data) {
     };
 }
 
-function loginResponseHandler(call) {
+function loginResponseHandler(call, profile) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await call();
@@ -112,14 +112,14 @@ function loginResponseHandler(call) {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
         }
-        return setUserInfo(response, dispatch);
+        return setUserInfo(response, profile, dispatch);
     }
 }
 
-async function setUserInfo(response, dispatch) {
+async function setUserInfo(response, profile, dispatch) {
     let jsonRes = await response.json();
     localStorage.setItem(jwtStorageKey, jsonRes.token);
 
-    dispatch(getUserInfo());
+    dispatch(getUserInfo(profile));
     return Promise.resolve();
 }
