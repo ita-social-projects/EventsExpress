@@ -34,15 +34,17 @@ class EventForm extends Component {
     ));
 
     checkLocation = (location) => {
-        if (location.type == enumLocationType.map) {
-            location.latitude = null;
-            location.longitude = null;
-            change(`event-form`, `location`, location);
-        }
+        if (location) {
+            if (location.type == enumLocationType.map) {
+                location.latitude = null;
+                location.longitude = null;
+                change(`event-form`, `location`, location);
+            }
 
-        if (location.type == enumLocationType.online) {
-            location.onlineMeeting = null;
-            change(`event-form`, `location.onlineMeeting`, location);
+            if (location.type == enumLocationType.online) {
+                location.onlineMeeting = null;
+                change(`event-form`, `location.onlineMeeting`, location);
+            }
         }
 
     }
