@@ -158,28 +158,35 @@ export default class EventItemView extends Component {
                                 }
                                 {categories_list}
                             </div>
-                            <div className="button-block">
-                                {canEdit &&
-                                    <Link to={`/editEvent/${id}`}>
-                                        <button className="btn btn-edit mb-1">Edit</button>
-                                    </Link>
-                                }
-                                {canCancel && <SimpleModalWithDetails
-                                    button={<button className="btn btn-edit">Cancel</button>}
-                                    submitCallback={this.props.onCancel}
-                                    data="Are you sure?"
-                                />}
-                                {canDeleted && <SimpleModalWithDetails
-                                    button={<button className="btn btn-edit">Delete</button>}
-                                    submitCallback={this.props.onDelete}
-                                    data="Are you sure?"
-                                />}
-                                {(canUncancel) && <SimpleModalWithDetails
-                                    button={<button className="btn btn-edit">Undo cancel</button>}
-                                    submitCallback={this.props.onUnCancel}
-                                    data="Are you sure?"
-                                />}
+                            <div class="btn-group dropup change-event">
+                                <button type="button" class="btn btn-danger dropdown-toggle btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Change Event Status
+                                    </button>
+                                <div class="dropdown-menu">
+                                        {canEdit &&
+                                            <Link to={`/editEvent/${id}`}>
+                                        <button className="btn btn-danger mb-1">Edit</button>
+                                            </Link>
+                                        }
+                                        {canCancel && <SimpleModalWithDetails
+                                        button={<button className="btn btn-danger ">Cancel</button>}
+                                            submitCallback={this.props.onCancel}
+                                            data="Are you sure?"
+                                        />}
+                                        {canDeleted && <SimpleModalWithDetails
+                                        button={<button className="btn btn-danger ">Delete</button>}
+                                            submitCallback={this.props.onDelete}
+                                            data="Are you sure?"
+                                        />}
+                                        {(canUncancel) && <SimpleModalWithDetails
+                                        button={<button className="btn btn-danger ">Undo cancel</button>}
+                                            submitCallback={this.props.onUnCancel}
+                                            data="Are you sure?"
+                                        />}
+                                  
+                                 </div>
                             </div>
+                            
                         </div>
 
                         {!isFutureEvent &&
