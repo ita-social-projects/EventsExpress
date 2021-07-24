@@ -247,6 +247,31 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        [Category("RegisterBindExternalAccount")]
+        public void RegisterBind_CantBindAccount_ThrowExceptionAsync()
+        {
+            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).Throws<EventsExpressException>();
+
+            Assert.ThrowsAsync<EventsExpressException>(() =>
+            _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel()));
+            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        [Category("RegisterBindExternalAccount")]
+        public async Task RegisterBind_AllOk_DoesNotThrowExceptionAsync()
+        {
+            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).ReturnsAsync(new AuthenticateResponseModel(It.IsAny<string>(), It.IsAny<string>()));
+
+            var res = await _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel());
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<OkObjectResult>(res);
+            _authService.Verify(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>()), Times.Once);
+            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
         [Category("RegisterComplete")]
         public void RegisterComplete_CantMap_ThrowException()
         {

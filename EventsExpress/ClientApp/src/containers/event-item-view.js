@@ -42,6 +42,9 @@ class EventItemViewWrapper extends Component {
     onUnCancel = (reason, eventStatus) => {
         this.props.unCancel(this.props.event.data.id, reason, eventStatus);
     }
+    onDelete = (reason, eventStatus) => {
+        this.props.delete(this.props.event.data.id, reason, eventStatus);
+    }
 
     render() {
         const { data } = this.props.event;
@@ -54,6 +57,7 @@ class EventItemViewWrapper extends Component {
                 onJoin={this.onJoin}
                 onCancel={this.onCancel}
                 onUnCancel={this.onUnCancel}
+                onDelete={this.onDelete}
                 current_user={this.props.current_user}
             />
         </Spinner>
@@ -71,6 +75,7 @@ const mapDispatchToProps = (dispatch) => ({
     leave: (userId, eventId) => dispatch(leave(userId, eventId)),
     cancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Canceled)),
     unCancel: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Active)),
+    delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
     get_users_inventories_by_event_id: (eventId) => dispatch(get_users_inventories_by_event_id(eventId)),
     get_inventories_by_event_id: (eventId) => dispatch(get_inventories_by_event_id(eventId)),
     get_unitsOfMeasuring: () => dispatch(get_unitsOfMeasuring()),
