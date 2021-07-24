@@ -12,8 +12,7 @@ export default class DropZoneField extends Component {
 
     state = {
         imagefile: [],
-        cropped: false,
-        errors: null
+        cropped: false
     };
 
     componentDidMount() {
@@ -37,7 +36,7 @@ export default class DropZoneField extends Component {
 
     handleOnClear = () => {
         this.revokeImageUrl();
-        this.setState({ cropped: false, imagefile: [] , errors : null });
+        this.setState({ cropped: false, imagefile: []  });
         this.props.input.onChange(null);
     }
 
@@ -66,18 +65,9 @@ export default class DropZoneField extends Component {
             file: file,
             name: "image.jpg",
             preview: croppedImage[0]
-        };
-        if (this.props.uploadImage !== undefined && typeof (this.props.uploadImage) === `function` ) {
-            let response = await this.props.uploadImage(file);
-
-            if (!response.ok) {
-                err = await response.json();
-                err = err.errors[`Photo`];
-            }
-            
         }
 
-        this.setState({ imagefile: [imagefile], cropped: true, errors: err },
+        this.setState({ imagefile: [imagefile], cropped: true },
             () => this.props.input.onChange(imagefile));
     }
 
@@ -86,12 +76,12 @@ export default class DropZoneField extends Component {
             submitting,
             crop,
             cropShape,
-            meta: {  touched },
+            meta: {  touched, error },
             input: { onChange }
         } = this.props;
-        const { errors, imagefile, cropped } = this.state;
+        const { imagefile, cropped } = this.state;
         const { handleOnCrop, handleOnDrop, handleOnClear } = this;
-        const containerClass = errors && touched ? "invalid" : "valid";
+        const containerClass = error && touched ? "invalid" : "valid";
         return (
             <Fragment className={`preview-container ${containerClass}`}>
                 <div >  
@@ -114,10 +104,10 @@ export default class DropZoneField extends Component {
                                 >
                                     {props =>
                                         imagefile && imagefile.length > 0 ? (
-                                            <ImagePreview imagefile={imagefile} shape={cropShape} error={errors} touched={touched} />
+                                            <ImagePreview imagefile={imagefile} shape={cropShape} error={error} touched={touched} />
                                         ) : (
 
-                                                <Placeholder {...props} error={errors} touched={touched} />
+                                                <Placeholder {...props} error={error} touched={touched} />
                                             )
                                     }
                                 </DropZone>
@@ -134,7 +124,7 @@ export default class DropZoneField extends Component {
                         Clear
                     </Button>
                 </div>
-                {renderFieldError({ touched, errors})}
+                {renderFieldError({ touched, error})}
             </Fragment>
         )
     }

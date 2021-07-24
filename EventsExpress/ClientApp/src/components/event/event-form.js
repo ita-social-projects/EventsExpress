@@ -14,6 +14,7 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import asyncValidate from '../../containers/async-validate-photo';
 
 momentLocaliser(moment);
 
@@ -59,9 +60,6 @@ class EventForm extends Component {
         const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
 
-        if (this.props.initialValues.location != null) {
-            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
-        }
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
@@ -205,7 +203,8 @@ class EventForm extends Component {
                                     id="url"
                                 />
                             </div>
-                        }                 
+                        }
+                    
                 </div>
                 <div className="row my-4">
                     {this.props.children}
@@ -219,4 +218,6 @@ export default reduxForm({
     form: 'event-form',
     enableReinitialize: true,
     touchOnChange: true,
+    asyncValidate,
+    asyncChangeFields: ['photo']
 })(EventForm);
