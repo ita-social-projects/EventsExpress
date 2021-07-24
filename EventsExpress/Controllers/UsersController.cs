@@ -182,14 +182,10 @@ namespace EventsExpress.Controllers
         /// <returns>The method returns edited profile photo.</returns>
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeAvatar()
+        [HttpPost("[action]/{userId:Guid}")]
+        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] PhotoViewModel file)
         {
-            var userId = _securityContext.GetCurrentUserId();
-
-            var newAva = HttpContext.Request.Form.Files[0];
-
-            await _userService.ChangeAvatar(userId, newAva);
+            await _userService.ChangeAvatar(userId, file.Photo);
 
             var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
 

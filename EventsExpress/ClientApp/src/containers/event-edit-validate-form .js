@@ -7,8 +7,7 @@ export const validate = values => {
     const requiredFields = [
         'title',
         'description',
-        'categories',
-        'image',
+        'categories'
     ];
     occurenceFields.forEach(field => {
         if ('occurenceFields'.checked && !values[field]) {
@@ -25,8 +24,13 @@ export const validate = values => {
     if (values.maxParticipants && values.maxParticipants < 1) {
         errors.maxParticipants = `Invalid data`;
     }
-    if (values.image != null && values.image.file != null && values.image.file.size < 4096)
-        errors.image = "Image is too small";
+
+    if (values.location !== null && values.location.type === 1 && values.location.onlineMeeting === null) {
+        errors.location = {};
+        errors.location.onlineMeeting = "URL cannot be empty";
+    }
+
+
     return {
         ...errors,
         ...numberField(values),
