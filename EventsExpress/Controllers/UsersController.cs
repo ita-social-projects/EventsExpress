@@ -174,6 +174,8 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This metod is to change user avatar.
         /// </summary>
+        /// <param name="userId">Param id defines the user identifier.</param>
+        /// <param name="avatar">Param avatar defines the PhotoViewModel model.</param>
         /// <returns>The method returns edited profile photo.</returns>
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
