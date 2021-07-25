@@ -12,71 +12,17 @@ export default class EventService {
           
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);
 
-    setEventTemplate = (data, path) => {
-        let file = new FormData();
-        if (data.id != null) {
-            file.append('Id', data.id);
-        }
-
-        if (data.photo != null) {
-            file.append('Photo', data.photo.file);
-        }
-
-        file.append('EventStatus', data.eventStatus);
-        
-        if (data.isReccurent) {
-            file.append('IsReccurent', data.isReccurent);
-            file.append('Periodicity', data.periodicity);
-            file.append('Frequency', data.frequency);
-        }
-
-        if (data.location) {
-            file.append('Location.Type', data.location.type)
-            if (data.location.latitude) {
-                file.append('Location.Latitude', data.location.latitude);
-                file.append('Location.Longitude', data.location.longitude);
-            }
-            if (data.location.onlineMeeting) {
-                file.append('Location.OnlineMeeting', data.location.onlineMeeting);
-            }
-        }
-
-        file.append('Title', data.title);
-        file.append('Description', data.description);
-        file.append('User.Id', data.user_id);
-        file.append('IsPublic', data.isPublic);
-        file.append('MaxParticipants', data.maxParticipants);
-        file.append('DateFrom', new Date(data.dateFrom).toDateString());
-        file.append('DateTo', new Date(data.dateTo).toDateString());
-
-        if (data.inventories) {
-            data.inventories.map((item, key) => {
-                file.append(`Inventories[${key}].NeedQuantity`, item.needQuantity);
-                file.append(`Inventories[${key}].ItemName`, item.itemName);
-                file.append(`Inventories[${key}].UnitOfMeasuring.id`, item.unitOfMeasuring.id);
-            });
-        }
-
-        let i = 0;
-        if (data.categories != null) {
-            data.categories.map(x => {
-                return file.append(`Categories[${i++}].Id`, x.id);
-            });
-        }
-           
-        return baseService.setResourceWithData(path, file);
-    }
-
-    setEvent = () => baseService.setResource(`event/create`);
-
+    setEvent = data => baseService.setResource(`event/create`, data);
+    
     setCopyEvent = eventId =>
         baseService.setResourceWithData(`event/CreateNextFromParent/${eventId}`);
 
-    setEventFromParent = data =>
-        this.setEventTemplate(data, `event/CreateNextFromParentWithEdit/${data.id}`);
+    setEventFromParent = async (data) => {
+        return baseService.setResource( `event/CreateNextFromParentWithEdit/${data.id}`, data);
+    }
     
     editEvent = async (data) => {
-        return this.setEventTemplate(data,`event/${data.id}/edit`)
+        return baseService.setResource(`event/${data.id}/edit`, data)
     }
     publishEvent = (id) => {
        return baseService.setResource(`event/${id}/publish`)
