@@ -37,6 +37,7 @@ class EventForm extends Component {
     }
 
     checkLocation = (location) => {
+
         if (location !== null) {
             if (location.type == enumLocationType.map) {
                 location.latitude = null;
