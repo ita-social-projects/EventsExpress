@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -12,7 +11,6 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
@@ -23,20 +21,17 @@ namespace EventsExpress.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ISecurityContext _securityContext;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
             IMapper mapper,
-            IPhotoService photoService,
-            ISecurityContext securityContext)
+            IPhotoService photoService)
         {
             _userService = userSrv;
             _photoService = photoService;
             _mapper = mapper;
-            _securityContext = securityContext;
         }
 
         /// <summary>
@@ -183,9 +178,9 @@ namespace EventsExpress.Controllers
         /// <response code="200">Changing is succesful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]/{userId:Guid}")]
-        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] PhotoViewModel file)
+        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] PhotoViewModel avatar)
         {
-            await _userService.ChangeAvatar(userId, file.Photo);
+            await _userService.ChangeAvatar(userId, avatar.Photo);
 
             var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
 

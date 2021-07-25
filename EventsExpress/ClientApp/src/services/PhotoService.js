@@ -12,6 +12,6 @@ export default class PhotoService {
     setEventTempPhoto = async (id, data) => {
         let photo = new FormData();
         photo.append(`Photo`, data);
-        return await baseService.setResourceWithData(`event/SetEventTempPhoto/${id}`, photo)
+        return baseService.setResourceWithData(`event/SetEventTempPhoto/${id}`, photo)
     };
 }

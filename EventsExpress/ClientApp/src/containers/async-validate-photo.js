@@ -13,7 +13,7 @@ const asyncValidate = async (values) => {
         if (!response.ok) {
             err = await response.json();
             err = err.errors[`Photo`];
-            throw {photo: err[0]}
+            throw new Error({ photo: err[0] });
         }
     }
 }

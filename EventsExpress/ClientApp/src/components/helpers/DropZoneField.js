@@ -58,7 +58,6 @@ export default class DropZoneField extends Component {
     }
 
     handleOnCrop = async (croppedImage) => {
-        let err;
         URL.revokeObjectURL(this.state.imagefile[0].preview);
         const file = new File(croppedImage, "image.jpg", { type: "image/jpeg" });
         const imagefile = {

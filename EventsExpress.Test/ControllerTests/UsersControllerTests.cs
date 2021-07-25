@@ -27,7 +27,6 @@ namespace EventsExpress.Test.ControllerTests
     {
         private Mock<IUserService> _userService;
         private Mock<IPhotoService> _photoService;
-        private Mock<ISecurityContext> _securityContextService;
         private Mock<IMapper> _mapper;
         private UsersController _usersController;
         private UserDto _userDto;
@@ -54,10 +53,9 @@ namespace EventsExpress.Test.ControllerTests
         {
             _userService = new Mock<IUserService>();
             _photoService = new Mock<IPhotoService>();
-            _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
 
-            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
+            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -259,7 +257,6 @@ namespace EventsExpress.Test.ControllerTests
         public void Get_NotNull_OkObjectResult()
         {
             int count = 0;
-            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(_userDto.Id);
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count)).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.Get(_usersFilterViewModel);
