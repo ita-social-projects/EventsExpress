@@ -14,6 +14,7 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import asyncValidate from '../../containers/async-validate-photo';
 
 momentLocaliser(moment);
 
@@ -29,12 +30,15 @@ class EventForm extends Component {
         }));
     }
 
-    periodicityListOptions = (periodicity.map((item) =>
-        <option value={item.value} key={item.value}> {item.label} </option>
-    ));
+    saveImage = (eventId) => {
+        let id = eventId;
+       return async (file) => photoService.setEventTempPhoto(id, file);
+        
+    }
 
     checkLocation = (location) => {
-        if (location) {
+
+        if (location !== null) {
             if (location.type == enumLocationType.map) {
                 location.latitude = null;
                 location.longitude = null;
@@ -46,16 +50,17 @@ class EventForm extends Component {
                 change(`event-form`, `location.onlineMeeting`, location);
             }
         }
-
     }
+
+    periodicityListOptions = (periodicity.map((item) =>
+        <option value={item.value} key={item.value}> {item.label} </option>
+    ));
+
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
 
-        if (this.props.initialValues.location != null) {
-            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
-        }
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
@@ -69,6 +74,7 @@ class EventForm extends Component {
                         crop={true}
                         cropShape='rect'
                         loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
+                        uploadImage={this.saveImage(this.props.eventId)}
                     />
                     <div className="mt-2">
                         <Field
@@ -80,7 +86,7 @@ class EventForm extends Component {
                         />
                     </div>
                     <div className="mt-2">
-                        <Field
+                        <Field parse={Number}
                             name='maxParticipants'
                             component={renderTextField}
                             type="number"
@@ -198,7 +204,8 @@ class EventForm extends Component {
                                     id="url"
                                 />
                             </div>
-                        }                 
+                        }
+                    
                 </div>
                 <div className="row my-4">
                     {this.props.children}
@@ -210,5 +217,8 @@ class EventForm extends Component {
 
 export default reduxForm({
     form: 'event-form',
-    enableReinitialize: true
+    enableReinitialize: true,
+    touchOnChange: true,
+    asyncValidate,
+    asyncChangeFields: ['photo']
 })(EventForm);
