@@ -30,11 +30,6 @@ class EventForm extends Component {
         }));
     }
 
-    saveImage = (eventId) => {
-        let id = eventId;
-       return async (file) => photoService.setEventTempPhoto(id, file);
-        
-    }
 
     checkLocation = (location) => {
 
@@ -74,7 +69,6 @@ class EventForm extends Component {
                         crop={true}
                         cropShape='rect'
                         loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
-                        uploadImage={this.saveImage(this.props.eventId)}
                     />
                     <div className="mt-2">
                         <Field
