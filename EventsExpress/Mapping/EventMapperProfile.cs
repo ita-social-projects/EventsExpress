@@ -86,6 +86,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
                 .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
+                .ForMember(dest => dest.Photo, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
             CreateMap<EventCreateViewModel, EventDto>()

@@ -27,7 +27,6 @@ namespace EventsExpress.Test.ControllerTests
     {
         private Mock<IUserService> _userService;
         private Mock<IPhotoService> _photoService;
-        private Mock<ISecurityContext> _securityContextService;
         private Mock<IMapper> _mapper;
         private UsersController _usersController;
         private UserDto _userDto;
@@ -54,10 +53,9 @@ namespace EventsExpress.Test.ControllerTests
         {
             _userService = new Mock<IUserService>();
             _photoService = new Mock<IPhotoService>();
-            _securityContextService = new Mock<ISecurityContext>();
             _mapper = new Mock<IMapper>();
 
-            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object, _securityContextService.Object);
+            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -161,20 +159,17 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ChangeAvatar")]
         public async Task ChangeAvatar_CorrectUser_OkObjectResult()
         {
-            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(_userDto.Id);
-            _userService.Setup(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()));
-            _usersController.ControllerContext.HttpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
             var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
-            _usersController.ControllerContext.HttpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection { file });
 
-            var res = await _usersController.ChangeAvatar();
+            PhotoViewModel photoModel = new PhotoViewModel() { Photo = file };
+
+            var res = await _usersController.ChangeAvatar(_userDto.Id, photoModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _securityContextService.Verify(aut => aut.GetCurrentUserId(), Times.Exactly(1));
             _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
@@ -262,7 +257,6 @@ namespace EventsExpress.Test.ControllerTests
         public void Get_NotNull_OkObjectResult()
         {
             int count = 0;
-            _securityContextService.Setup(a => a.GetCurrentUserId()).Returns(_userDto.Id);
             _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count)).Returns(new UserDto[] { _userDto });
 
             var res = _usersController.Get(_usersFilterViewModel);

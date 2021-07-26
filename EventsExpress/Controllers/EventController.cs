@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
@@ -19,15 +23,25 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
+        private readonly IPhotoService _photoService;
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
         {
+            _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
+        }
+
+        [HttpPost("[action]/{eventId:Guid}")]
+        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] PhotoViewModel photo)
+        {
+            await _photoService.AddEventTempPhoto(photo.Photo, eventId);
+
+            return Ok();
         }
 
         /// <summary>
@@ -91,7 +105,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, [FromForm] EventEditViewModel model)
+        public async Task<IActionResult> Edit(Guid eventId, EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {

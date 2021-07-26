@@ -2,3 +2,6 @@
 input.invalid {
     border: 2px solid #f44336 !important;
 }
+div.has-error {
+    border: 2px solid #f44336 !important;
+}
