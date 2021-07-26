@@ -2,7 +2,7 @@
 
 const photoService = new PhotoService();
 
-const asyncValidate = async (values) => {
+const asyncValidatePhoto = async (values) => {
 
     var err;
 
@@ -17,4 +17,4 @@ const asyncValidate = async (values) => {
         }
     }
 }
-export default asyncValidate;
+export default asyncValidatePhoto;

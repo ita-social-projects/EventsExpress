@@ -14,7 +14,7 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
-import asyncValidate from '../../containers/async-validate-photo';
+import asyncValidatePhoto from '../../containers/async-validate-photo';
 
 momentLocaliser(moment);
 
@@ -213,6 +213,6 @@ export default reduxForm({
     form: 'event-form',
     enableReinitialize: true,
     touchOnChange: true,
-    asyncValidate,
+    asyncValidate: asyncValidatePhoto,
     asyncChangeFields: ['photo']
 })(EventForm);
