@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -73,6 +74,20 @@ namespace EventsExpress.Test.HandlerTests
         {
             var result = _blockedUserHandler.Handle(_blockedUserMessage, CancellationToken.None);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task UsersHub_Sends_ToAllUsers()
+        {
+            // Arrange
+            _usersHubContext.Setup(s => s.Clients.All.CountUsers())
+                .Returns(Task.CompletedTask);
+
+            // Act
+            await _blockedUserHandler.Handle(_blockedUserMessage, CancellationToken.None);
+
+            // Assert
+            _usersHubContext.Verify(s => s.Clients.All.CountUsers(), Times.Once);
         }
     }
 }
