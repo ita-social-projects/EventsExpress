@@ -41,23 +41,22 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Invalid Roles");
             }
 
-            var a = Context.Accounts
+            var account = Context.Accounts
                 .Include(a => a.AccountRoles)
                 .SingleOrDefault(a => a.UserId == userId);
 
-            if (a == null)
+            if (account == null)
             {
                 throw new EventsExpressException("Invalid user Id");
             }
 
             var newRoles = roles
-                .Select(ar => new AccountRole { AccountId = a.Id, RoleId = ar.Id })
+                .Select(role => new AccountRole { AccountId = account.Id, RoleId = role.Id })
                 .ToList();
 
-            a.AccountRoles = newRoles;
+            account.AccountRoles = newRoles;
 
-            Update(a);
-
+            Update(account);
             await Context.SaveChangesAsync();
         }
 

@@ -23,7 +23,7 @@ class UsersFilters extends Component {
                 <br/>
                 <Field
                     minWidth={150}
-                    name='PageSize' 
+                    name='PageSize'
                     component={renderSelectField}
                     label="PageSize"
                 >

@@ -6,19 +6,16 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
-using EventsExpress.Core;
-using EventsExpress.Core.ChatHub;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
-using EventsExpress.Db.IBaseService;
 using EventsExpress.Filters;
+using EventsExpress.Hubs;
 using EventsExpress.Mapping;
+using EventsExpress.NotificationHandlers;
 using EventsExpress.Policies;
 using EventsExpress.Validation;
 using FluentValidation;
@@ -184,6 +181,7 @@ namespace EventsExpress
             });
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(UserCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 
@@ -275,6 +273,7 @@ namespace EventsExpress
             {
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatRoom>("/chatRoom");
+                endpoints.MapHub<UsersHub>("/usersHub");
             });
 
             app.UseSwagger();

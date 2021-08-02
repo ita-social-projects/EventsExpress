@@ -1,5 +1,5 @@
 import CategoryOfMeasuringService from '../../services/CategoryOfMeasuringService';
-import { setErrorAllertFromResponse } from './../alert-action';
+import { setErrorAllertFromResponse } from '../alert-action';
 
 export const SET_CATEGORIES_OF_MEASURING_PENDING = "SET_CATEGORIES_OF_MEASURING_PENDING";
 export const GET_CATEGORIES_OF_MEASURING_SUCCESS = "GET_CATEGORIES_OF_MEASURING_SUCCESS";

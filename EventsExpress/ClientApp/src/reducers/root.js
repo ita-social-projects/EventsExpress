@@ -63,7 +63,7 @@ const rootReducers = {
     recoverPassword: RecoverPassword.reducer,
     chats: Chats.reducer,
     chat: Chat.reducer,
-    hubConnection: Hub.reducer,
+    hubConnections: Hub.reducer,
     alert: Alert.reducer,
     contactAdmin: ContactAdmin.reducer,
     contactAdminList: ContactAdminList.reducer,
