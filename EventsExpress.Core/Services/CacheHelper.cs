@@ -7,33 +7,33 @@ namespace EventsExpress.Core.Services
 {
     public class CacheHelper : ICacheHelper
     {
+        private readonly MemoryCache _memoryCache;
+
+        public CacheHelper()
+        {
+            _memoryCache = MemoryCache.Default;
+        }
+
         public CacheDto GetValue(string key)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-
-            return memoryCache.Get(key) as CacheDto;
+            return _memoryCache.Get(key) as CacheDto;
         }
 
         public bool Add(CacheDto value)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-
-            return memoryCache.Add(value.Key, value, DateTime.Now.AddDays(10));
+            return _memoryCache.Add(value.Key, value, DateTime.Now.AddDays(10));
         }
 
         public void Update(CacheDto value)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-            memoryCache.Set(value.Key, value, DateTime.Now.AddDays(10));
+            _memoryCache.Set(value.Key, value, DateTime.Now.AddDays(10));
         }
 
         public void Delete(string key)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-
-            if (memoryCache.Contains(key))
+            if (_memoryCache.Contains(key))
             {
-                memoryCache.Remove(key);
+                _memoryCache.Remove(key);
             }
         }
     }
