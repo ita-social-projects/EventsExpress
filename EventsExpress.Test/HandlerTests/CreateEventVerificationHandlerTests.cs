@@ -143,6 +143,8 @@ namespace EventsExpress.Test.HandlerTests
         public void Handle_Catches_exception()
         {
             // Arrange
+            _trackService.Setup(s => s.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(_changeInfo);
             _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
                 .ThrowsAsync(new Exception("Some reason!"));
 
