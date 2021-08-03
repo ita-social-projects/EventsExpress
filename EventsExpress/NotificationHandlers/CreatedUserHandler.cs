@@ -8,16 +8,16 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace EventsExpress.NotificationHandlers
 {
-    public class UserCreatedHandler : INotificationHandler<UserCreatedMessage>
+    public class CreatedUserHandler : INotificationHandler<CreatedUserMessage>
     {
         private readonly IHubContext<UsersHub, IUsersClient> _usersHubContext;
 
-        public UserCreatedHandler(IHubContext<UsersHub, IUsersClient> usersHubContext)
+        public CreatedUserHandler(IHubContext<UsersHub, IUsersClient> usersHubContext)
         {
             _usersHubContext = usersHubContext;
         }
 
-        public async Task Handle(UserCreatedMessage notification, CancellationToken cancellationToken)
+        public async Task Handle(CreatedUserMessage notification, CancellationToken cancellationToken)
         {
             await _usersHubContext.Clients.All.CountUsers();
         }

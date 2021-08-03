@@ -181,7 +181,6 @@ namespace EventsExpress
             });
 
             services.AddMediatR(typeof(EventCreatedHandler).Assembly);
-            services.AddMediatR(typeof(UserCreatedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 

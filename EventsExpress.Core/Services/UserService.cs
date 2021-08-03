@@ -56,7 +56,7 @@ namespace EventsExpress.Core.Services
 
             await Context.SaveChangesAsync();
 
-            await _mediator.Publish(new UserCreatedMessage());
+            await _mediator.Publish(new CreatedUserMessage());
         }
 
         public async Task<int> CountUsersAsync(AccountStatus status)

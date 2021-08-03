@@ -5,8 +5,5 @@ namespace EventsExpress.Hubs
 {
     public class UsersHub : Hub<IUsersClient>
     {
-        public UsersHub()
-        {
-        }
     }
 }
