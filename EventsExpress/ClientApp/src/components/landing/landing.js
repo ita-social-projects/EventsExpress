@@ -4,33 +4,7 @@ import './landing.css';
 
 export default class Landing extends Component {
     render() {
-        var events = [
-            [
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
+        var event = {
                     id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
                     img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
                     date: "01.01.2000 00:00 GTM+0",
@@ -38,42 +12,9 @@ export default class Landing extends Component {
                     author: "Sample Author",
                     part: 10000
                 }
-            ],
-            [
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                },
-                {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
-                }
-            ]
-        ]
+        var eventsBlock = [event, event, event, event]
+        var events = [eventsBlock, eventsBlock, eventsBlock]
+        
         return (<>
             <div className="main">
                 <article className="head-article">
