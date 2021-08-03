@@ -70,10 +70,24 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_AllUser_AllSubscribingUsers()
+        public async Task Handle_AllUser_AllSubscribingUsers()
         {
-            var result = _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
+            await _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public async Task UsersHub_Sends_ToAllUsers()
+        {
+            // Arrange
+            _usersHubContext.Setup(s => s.Clients.All.CountUsers())
+                .Returns(Task.CompletedTask);
+
+            // Act
+            await _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
+
+            // Assert
+            _usersHubContext.Verify(s => s.Clients.All.CountUsers(), Times.Once);
         }
 
         [Test]
