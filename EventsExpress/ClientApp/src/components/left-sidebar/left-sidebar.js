@@ -36,7 +36,7 @@ class LeftSidebar extends Component {
                         <hr />
                         <ul className="list-unstyled">
                             <NavItem
-                                to={'/'}
+                                to={'/home'}
                                 icon={'fa fa-home'}
                                 text={"Home"}
                             />
