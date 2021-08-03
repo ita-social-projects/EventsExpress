@@ -39,7 +39,7 @@ namespace EventsExpress.Core.NotificationHandlers
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
             var token = Guid.NewGuid().ToString();
-            string theEmailLink = $"<a \" target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
+            string theEmailLink = $"<a target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
 
             _cacheHelper.Add(new CacheDto
             {
