@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -73,6 +74,20 @@ namespace EventsExpress.Test.HandlerTests
         {
             var result = _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void Handle_Catches_exception()
+        {
+            // Arrange
+            _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
+                .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
         }
     }
 }

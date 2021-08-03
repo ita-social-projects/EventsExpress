@@ -16,6 +16,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
+    using System;
+
     [TestFixture]
     internal class RegisterVerificationHandlerTests
     {
@@ -98,6 +100,20 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService.Verify(
                 service => service.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()),
                 Times.AtLeast(2));
+        }
+
+        [Test]
+        public void Handle_Catches_exception()
+        {
+            // Arrange
+            _sender.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
+                .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _registerVerificationHandler.Handle(_message, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
         }
     }
 }

@@ -110,5 +110,47 @@ namespace EventsExpress.Test.HandlerTests
             _userService.Verify(u => u.GetUsersByNotificationTypes(It.IsAny<NotificationChange>(), It.IsAny<IEnumerable<Guid>>()), Times.Exactly(0));
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
+
+        [Test]
+        public async Task Handle_Ends_work_if_changeInfo_is_null()
+        {
+            // Arrange
+            _trackService.Setup(s => s.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync((ChangeInfo)null);
+
+            // Act
+            await _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
+
+            // Assert
+            _emailService.Verify(s => s.SendEmailAsync(It.IsAny<EmailDto>()), Times.Never);
+        }
+
+        [Test]
+        public async Task Handle_continue_work_if_changeInfo_is_not_null()
+        {
+            // Arrange
+            _trackService.Setup(s => s.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(_changeInfo);
+
+            // Act
+            await _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
+
+            // Assert
+            _emailService.Verify(s => s.SendEmailAsync(It.IsAny<EmailDto>()), Times.Once);
+        }
+
+        [Test]
+        public void Handle_Catches_exception()
+        {
+            // Arrange
+            _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
+                .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
+        }
     }
 }
