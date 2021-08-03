@@ -21,10 +21,6 @@ export const reducer = (state = initialState.hubConnections, action) => {
                 chatHub: null
             }
         case SET_USERS_HUB:
-            return {
-                ...state,
-                usersHub: action.payload
-            }
         case RESET_USERS_HUB:
             return {
                 ...state,
