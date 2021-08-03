@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Hubs;
+using EventsExpress.Hubs.Clients;
+using EventsExpress.NotificationHandlers;
+using Microsoft.AspNetCore.SignalR;
 using Moq;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
-    internal class UnBlockedUserHandlerTests
+    internal class UnblockedUserHandlerTests
     {
+        private Mock<IHubContext<UsersHub, IUsersClient>> _usersHubContext;
         private Mock<IEmailService> _emailService;
         private Mock<IUserService> _userService;
+        private Mock<ICacheHelper> _cacheHelper;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private UnblockedUserHandler _unBlockedUserHandler;
         private Guid _idUser = Guid.NewGuid();
@@ -31,6 +37,8 @@ namespace EventsExpress.Test.HandlerTests
         {
             _emailService = new Mock<IEmailService>();
             _userService = new Mock<IUserService>();
+            _cacheHelper = new Mock<ICacheHelper>();
+            _usersHubContext = new Mock<IHubContext<UsersHub, IUsersClient>>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
             _notificationTemplateService
@@ -40,7 +48,13 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService
                 .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
                 .Returns(string.Empty);
-            _unBlockedUserHandler = new UnblockedUserHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object);
+
+            _unBlockedUserHandler = new UnblockedUserHandler(
+                _emailService.Object,
+                _userService.Object,
+                _notificationTemplateService.Object,
+                _usersHubContext.Object);
+
             _account = new Account
             {
                 UserId = _idUser,
@@ -60,6 +74,20 @@ namespace EventsExpress.Test.HandlerTests
         {
             var result = _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void Handle_Catches_exception()
+        {
+            // Arrange
+            _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
+                .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _unBlockedUserHandler.Handle(_unBlockedUserMessage, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
         }
     }
 }

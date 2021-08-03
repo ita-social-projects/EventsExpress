@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -13,7 +12,7 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
     public class EventCreatedHandler : INotificationHandler<EventCreatedMessage>
     {
