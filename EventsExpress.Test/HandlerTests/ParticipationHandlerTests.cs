@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;

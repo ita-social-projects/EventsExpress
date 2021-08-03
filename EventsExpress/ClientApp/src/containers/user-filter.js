@@ -16,13 +16,14 @@ class UsersFilterWrapper extends Component {
 
     componentDidMount() {
         const { Unblocked, Blocked } = parse(this.props.location.search);
+        let status;
 
         if(Unblocked) {
-            const status = accountStatus.Activated;
+            status = accountStatus.Activated;
         } else if (Blocked) {
-            const status = accountStatus.Blocked;
+            status = accountStatus.Blocked;
         } else {
-            const status = accountStatus.All;
+            status = accountStatus.All;
         }
 
         this.props.changeStatus(status);
