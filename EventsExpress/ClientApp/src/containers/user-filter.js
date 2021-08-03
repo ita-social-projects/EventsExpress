@@ -113,7 +113,7 @@ const mapDispatchToProps = (dispatch) => {
         changeStatus: (status) => dispatch(change_status(status)),
         closeConnection: () => dispatch(closeConnection()),
         initialConnection: () => dispatch(initialConnection()),
-        get_count: (accountStatus) => dispatch(get_count(accountStatus)),
+        get_count: (status) => dispatch(get_count(status)),
         search: (values) => dispatch(get_users(values))
     }
 };
