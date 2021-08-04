@@ -91,6 +91,11 @@ namespace EventsExpress.Test.ServiceTests
                         },
                     },
                 },
+                Account = new Account
+                {
+                    UserId = userId,
+                    IsBlocked = true,
+                },
             };
 
             secondUser = new User
@@ -117,6 +122,11 @@ namespace EventsExpress.Test.ServiceTests
                             Name = "Mount",
                         },
                     },
+                },
+                Account = new Account
+                {
+                    UserId = secondUserId,
+                    IsBlocked = false,
                 },
             };
 
@@ -158,14 +168,21 @@ namespace EventsExpress.Test.ServiceTests
             Context.SaveChanges();
         }
 
-        [Test]
-        public async Task GetUsersCount_ReturnsValid()
+        [TestCase(AccountStatus.All)]
+        [TestCase(AccountStatus.Activated)]
+        [TestCase(AccountStatus.Blocked)]
+        public async Task GetUsersCount_ReturnsValid(AccountStatus status)
         {
             // Arrange
-            var expected = await Context.Users.CountAsync();
+            var expected = status switch
+            {
+                AccountStatus.Activated => await Context.Users.CountAsync(u => !u.Account.IsBlocked),
+                AccountStatus.Blocked => await Context.Users.CountAsync(u => u.Account.IsBlocked),
+                _ => await Context.Users.CountAsync()
+            };
 
             // Act
-            var actual = await service.CountUsersAsync(AccountStatus.All);
+            var actual = await service.CountUsersAsync(status);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -251,7 +268,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-
         public void Create_ValidDto_ReturnTrue()
         {
             var correctAccountId = Guid.NewGuid();
