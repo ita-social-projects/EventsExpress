@@ -49,6 +49,8 @@ const initialState = {
         data: []
     },
     users: {
+        status: null,
+        count: null,
         editedUser: null,
         userSearchFilter: null,
         data: {
@@ -121,7 +123,10 @@ const initialState = {
     authenticate: {
         data: []
     },
-    hubConnection: null,
+    hubConnections: {
+      chatHub: null,
+      usersHub: null
+    },
     chat: {
         data: {
             messages: [],
@@ -167,7 +172,7 @@ const initialState = {
         id: null,
         title: null,
         subject: null,
-        message: null  
+        message: null
     },
     config: {
         facebookClientId: null,

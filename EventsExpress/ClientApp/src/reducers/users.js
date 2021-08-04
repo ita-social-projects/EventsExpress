@@ -1,5 +1,11 @@
 import initialState from '../store/initialState';
-import { GET_USERS_DATA, RESET_USERS, CHANGE_USERS_FILTER } from '../actions/users/users-action';
+import {
+    GET_USERS_DATA,
+    RESET_USERS,
+    CHANGE_USERS_FILTER,
+    GET_USERS_COUNT,
+    CHANGE_STATUS
+} from '../actions/users/users-action';
 import { blockUser, unBlockUser, changeUserRole } from '../actions/user/user-action';
 
 export const reducer = (state = initialState.users, action) => {
@@ -37,7 +43,7 @@ export const reducer = (state = initialState.users, action) => {
             });
             return newState;
         }
-            
+
         case changeUserRole.SET_EDITED: {
             return {
                 ...state,
@@ -59,11 +65,25 @@ export const reducer = (state = initialState.users, action) => {
         }
 
         case CHANGE_USERS_FILTER: {
-                return {
-                    ...state,
-                    userSearchFilter: action.payload
-                }
+            return {
+                ...state,
+                userSearchFilter: action.payload
             }
+        }
+
+        case GET_USERS_COUNT: {
+            return {
+                ...state,
+                count: action.payload
+            }
+        }
+
+        case CHANGE_STATUS: {
+            return {
+                ...state,
+                status: action.payload
+            }
+        }
 
         default:
             return state;

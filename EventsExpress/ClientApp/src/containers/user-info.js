@@ -5,27 +5,28 @@ import UserInfo from '../components/user-info';
 import { UserBlock } from '../components/user-info/user-block';
 import UserRoleWrapper from './user-role';
 
-
 class UserInfoWrapper extends Component {
+
     constructor(props) {
         super(props);
-
         this.isCurrentUser = props.user.id === props.currentUser
     }
+
     block = () => this.props.block(this.props.user.id);
+
     unblock = () => this.props.unblock(this.props.user.id)
 
     render() {
         const { user, editedUser } = this.props;
 
         return (
-            <tr className={(user.isBlocked == true) ? "bg-warning" : ""}>
+            <tr className={(user.isBlocked) ? "bg-warning" : ""}>
                 <UserInfo key={user.id} user={user} />
 
                 <UserRoleWrapper
                     key={this.props.key}
-                    user={user} 
-                    isCurrentUser={this.isCurrentUser} 
+                    user={user}
+                    isCurrentUser={this.isCurrentUser}
                     isEdit={user.id === editedUser}
                 />
 
