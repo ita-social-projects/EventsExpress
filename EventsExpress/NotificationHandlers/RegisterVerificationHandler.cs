@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -12,7 +11,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
     public class RegisterVerificationHandler : INotificationHandler<RegisterVerificationMessage>
     {
@@ -43,8 +42,8 @@ namespace EventsExpress.Core.NotificationHandlers
 
             _cacheHelper.Add(new CacheDto
             {
-                AuthLocalId = notification.AuthLocal.Id,
-                Token = token,
+                Key = notification.AuthLocal.Id.ToString(),
+                Value = token,
             });
 
             var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.RegisterVerification);
