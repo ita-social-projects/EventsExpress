@@ -44,10 +44,6 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
 
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
-
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
             _participationHandler = new ParticipationHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);

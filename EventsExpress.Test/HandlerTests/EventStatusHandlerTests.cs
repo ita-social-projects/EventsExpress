@@ -121,10 +121,6 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
 
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
-
             _eventStatusHistoryCanceled = new EventStatusHistory
             {
                 Reason = _reason,

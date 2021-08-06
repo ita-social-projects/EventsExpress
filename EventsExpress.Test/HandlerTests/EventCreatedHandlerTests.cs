@@ -48,10 +48,6 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.GetByIdAsync(templateId))
                 .ReturnsAsync(new NotificationTemplateDto { Id = templateId });
 
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
-
             _eventCreatedHandler = new EventCreatedHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
             _user = new User
             {

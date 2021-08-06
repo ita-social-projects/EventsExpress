@@ -1,4 +1,5 @@
 ﻿using EventsExpress.Core.DTOs;
+using EventsExpress.Core.NotificationModels;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
@@ -8,8 +9,11 @@ namespace EventsExpress.Core.Notifications
         public EventCreatedMessage(EventDto eventDTO)
         {
             Event = eventDTO;
+            Model = new EventCreatedNotificationModel();
         }
 
         public EventDto Event { get; }
+
+        public EventCreatedNotificationModel Model { get; }
    }
 }

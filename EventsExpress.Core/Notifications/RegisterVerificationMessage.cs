@@ -1,4 +1,4 @@
-﻿using EventsExpress.Core.DTOs;
+﻿using EventsExpress.Core.NotificationModels;
 using EventsExpress.Db.Entities;
 using MediatR;
 
@@ -9,8 +9,11 @@ namespace EventsExpress.Core.Notifications
         public RegisterVerificationMessage(AuthLocal auth)
         {
             AuthLocal = auth;
+            Model = new RegisterVerificationNotificationModel();
         }
 
         public AuthLocal AuthLocal { get; }
+
+        public RegisterVerificationNotificationModel Model { get; }
     }
 }

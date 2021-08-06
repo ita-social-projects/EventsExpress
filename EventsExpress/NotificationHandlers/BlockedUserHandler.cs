@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -7,6 +6,7 @@ using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
 using EventsExpress.Hubs.Clients;
@@ -37,25 +37,22 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(BlockedAccountMessage notification, CancellationToken cancellationToken)
         {
+            var model = notification.Model;
+
             try
             {
                 var userIds = new[] { notification.Account.UserId.Value };
-                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
+                var userEmail = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email).SingleOrDefault();
 
                 if (userEmail != null)
                 {
-                    Dictionary<string, string> pattern = new Dictionary<string, string>
-                    {
-                        { "(UserName)", userEmail },
-                    };
-
                     var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.BlockedUser);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
+                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
+                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
 

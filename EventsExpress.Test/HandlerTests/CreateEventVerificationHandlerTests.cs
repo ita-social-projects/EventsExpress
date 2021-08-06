@@ -52,10 +52,6 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
 
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
-
             _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
             _eventScheduleDto = new EventScheduleDto
             {

@@ -18,7 +18,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static readonly object[] PerformReplacementTestCases =
         {
-            new object[] { null, new Dictionary<string, string>() },
+            new object[] { null, new TestClass { TestProperty = string.Empty } },
             new object[] { string.Empty, null },
         };
 
@@ -101,17 +101,17 @@ namespace EventsExpress.Test.ServiceTests
         public void PerformReplacement_IsValid()
         {
             string text = string.Empty;
-            var pattern = new Dictionary<string, string>();
+            var model = new TestClass { TestProperty = string.Empty };
 
-            var result = _service.PerformReplacement(text, pattern);
+            var result = NotificationTemplateService.PerformReplacement(text, model);
 
             Assert.IsInstanceOf<string>(result);
         }
 
         [TestCaseSource(nameof(PerformReplacementTestCases))]
-        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, Dictionary<string, string> pattern)
+        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, object model)
         {
-            Assert.Throws<ArgumentNullException>(() => _service.PerformReplacement(text, pattern));
+            Assert.Throws<ArgumentNullException>(() => NotificationTemplateService.PerformReplacement(text, model));
         }
 
         [Test]
@@ -166,6 +166,11 @@ namespace EventsExpress.Test.ServiceTests
                     It.IsAny<NotificationTemplateDto>(),
                     It.IsAny<NotificationTemplate>()),
                 Times.Once());
+        }
+
+        private class TestClass
+        {
+            public string TestProperty { get; set; }
         }
     }
 }

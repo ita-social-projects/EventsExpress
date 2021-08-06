@@ -14,7 +14,5 @@ namespace EventsExpress.Core.IServices
         public Task<NotificationTemplateDto> GetByIdAsync(NotificationProfile id);
 
         public Task UpdateAsync(NotificationTemplateDto notificationTemplateDto);
-
-        public string PerformReplacement(string text, Dictionary<string, string> pattern);
     }
 }

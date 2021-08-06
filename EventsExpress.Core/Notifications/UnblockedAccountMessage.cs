@@ -1,4 +1,5 @@
-﻿using EventsExpress.Db.Entities;
+﻿using EventsExpress.Core.NotificationModels;
+using EventsExpress.Db.Entities;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
@@ -8,8 +9,11 @@ namespace EventsExpress.Core.Notifications
         public UnblockedAccountMessage(Account account)
         {
             Account = account;
+            Model = new UnblockedAccountNotificationModel();
         }
 
         public Account Account { get; }
+
+        public UnblockedAccountNotificationModel Model { get; }
     }
 }

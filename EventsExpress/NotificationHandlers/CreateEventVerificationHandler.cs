@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,14 +6,14 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.Services;
 using EventsExpress.Db.Enums;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace EventsExpress.NotificationHandlers
 {
-    using Microsoft.Extensions.Logging;
-
     public class CreateEventVerificationHandler : INotificationHandler<CreateEventVerificationMessage>
     {
         private readonly ILogger<CreateEventVerificationHandler> _logger;
@@ -43,6 +42,7 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
+            var model = notification.Model;
             var changeInfos = await _trackService.GetChangeInfoByScheduleIdAsync(notification.EventSchedule.Id);
 
             if (changeInfos == null)
@@ -53,25 +53,21 @@ namespace EventsExpress.NotificationHandlers
             try
             {
                 var usersId = new[] { changeInfos.UserId };
-                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersId).Select(x => x.Email).SingleOrDefault();
+                var userEmail = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, usersId)
+                    .Select(x => x.Email)
+                    .SingleOrDefault();
 
                 var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.CreateEventVerification);
 
                 if (userEmail != null)
                 {
-                    string link = $"{_urlOptions.Value.Host}/eventSchedule/{notification.EventSchedule.Id}";
-
-                    Dictionary<string, string> pattern = new Dictionary<string, string>
-                    {
-                        { "(UserName)", userEmail },
-                        { "(link)", link },
-                    };
+                    model.EventScheduleLink = $"{_urlOptions.Value.Host}/eventSchedule/{notification.EventSchedule.Id}";
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
+                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
+                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }

@@ -20,6 +20,47 @@ namespace EventsExpress.Core.Services
         {
         }
 
+        public static string PerformReplacement<T>(string text, T model)
+            where T : class
+        {
+            string paramName = default;
+
+            if (text == null)
+            {
+                paramName = nameof(text);
+            }
+            else if (model == null)
+            {
+                paramName = nameof(model);
+            }
+
+            if (paramName != default)
+            {
+                throw new ArgumentNullException(paramName, "parameter can't be null");
+            }
+
+            var pattern = GetPropertiesFromObject(model);
+
+            return pattern.Aggregate(text, (current, element) => current
+                .Replace(element.Key, element.Value));
+        }
+
+        private static Dictionary<string, string> GetPropertiesFromObject<T>(T model)
+        {
+            var type = model.GetType();
+            var pattern = new Dictionary<string, string>();
+
+            foreach (var propInfo in type.GetProperties())
+            {
+                var key = "{{" + propInfo.Name + "}}";
+                var value = propInfo.GetValue(model)?.ToString();
+
+                pattern.Add(key, value);
+            }
+
+            return pattern;
+        }
+
         public async Task<IEnumerable<NotificationTemplateDto>> GetAllAsync()
         {
             var templatesDto = Mapper.Map<IEnumerable<NotificationTemplateDto>>(await Entities.ToListAsync());
@@ -37,17 +78,6 @@ namespace EventsExpress.Core.Services
             }
 
             return Mapper.Map<NotificationTemplateDto>(template);
-        }
-
-        public string PerformReplacement(string text, Dictionary<string, string> pattern)
-        {
-            if (text == null)
-            {
-                throw new ArgumentNullException(nameof(text), "parameter can't be null");
-            }
-
-            return pattern.Aggregate(text, (current, element) => current
-                .Replace(element.Key, element.Value));
         }
 
         public async Task UpdateAsync(NotificationTemplateDto notificationTemplateDto)
