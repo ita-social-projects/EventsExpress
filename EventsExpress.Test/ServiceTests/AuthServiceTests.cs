@@ -139,7 +139,7 @@ namespace EventsExpress.Test.ServiceTests
             Context.SaveChanges();
 
             mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
             var res = await service.Authenticate(existingEmail, Db.Enums.AuthExternalType.Google);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
@@ -242,7 +242,7 @@ namespace EventsExpress.Test.ServiceTests
             Context.SaveChanges();
 
             mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
             var res = await service.Authenticate(existingEmail, validPassword);
 
@@ -370,7 +370,7 @@ namespace EventsExpress.Test.ServiceTests
             mockTokenService.Setup(ts => ts.GenerateAccessToken(It.IsAny<Account>()))
                 .Returns("AccessToken");
             mockTokenService.Setup(ts => ts.GenerateRefreshToken())
-                .Returns(new RefreshToken());
+                .Returns(new UserToken());
 
             AsyncTestDelegate methodInvoke = async () =>
                 await service.EmailConfirmAndAuthenticate(cache.AuthLocalId, cache.Token);
