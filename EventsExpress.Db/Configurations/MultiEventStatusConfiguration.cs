@@ -10,10 +10,12 @@
         {
             builder.HasOne(e => e.ParentEvent)
               .WithMany(ec => ec.ChildEvents)
-              .HasForeignKey(e => e.ParentId);
+              .HasForeignKey(e => e.ParentId)
+             .OnDelete(DeleteBehavior.ClientCascade);
             builder.HasOne(e => e.ChildEvent)
               .WithMany(ec => ec.ParentEvents)
-              .HasForeignKey(e => e.ChildId);
+              .HasForeignKey(e => e.ChildId)
+              .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

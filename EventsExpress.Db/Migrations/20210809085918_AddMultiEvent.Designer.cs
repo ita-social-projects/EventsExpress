@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210803070219_AddMultiEvent")]
+    [Migration("20210809085918_AddMultiEvent")]
     partial class AddMultiEvent
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -487,7 +487,7 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChildId")
+                    b.Property<Guid?>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -1011,13 +1011,12 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.Event", "ChildEvent")
                         .WithMany("ParentEvents")
                         .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("EventsExpress.Db.Entities.Event", "ParentEvent")
                         .WithMany("ChildEvents")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

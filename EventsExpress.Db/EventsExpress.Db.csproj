@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210809082522_MultiEventConfigurations.cs" />
+    <Compile Remove="Migrations\20210809082522_MultiEventConfigurations.Designer.cs" />
+    <Compile Remove="Migrations\20210809083119_AddMultiEvent.cs" />
+    <Compile Remove="Migrations\20210809083119_AddMultiEvent.Designer.cs" />
+  </ItemGroup>    
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />

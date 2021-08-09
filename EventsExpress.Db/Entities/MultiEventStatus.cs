@@ -19,6 +19,6 @@ namespace EventsExpress.Db.Entities
         public virtual Event ParentEvent { get; set; }
 
         [Track]
-        public Guid ChildId { get; set; }
+        public Guid? ChildId { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: false),
-                    ChildId = table.Column<Guid>(nullable: false),
+                    ChildId = table.Column<Guid>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -28,13 +28,13 @@ namespace EventsExpress.Db.Migrations
                         column: x => x.ChildId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_MultiEventStatus_Events_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
