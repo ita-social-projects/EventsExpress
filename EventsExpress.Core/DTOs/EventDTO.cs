@@ -48,5 +48,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Guid> OwnerIds { get; set; }
 
         public IEnumerable<User> Owners { get; set; }
+
+        public bool? IsMultiEvent { get; set; }
     }
 }

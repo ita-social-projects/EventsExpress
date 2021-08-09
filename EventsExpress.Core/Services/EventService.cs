@@ -343,6 +343,28 @@ namespace EventsExpress.Core.Services
             }
         }
 
+        public async Task<Guid> MultiPublish(Guid[] eventsId)
+        {
+            Guid answer = eventsId[0];
+            for (int i = 0; i < eventsId.Length; i++)
+            {
+               await Publish(eventsId[i]);
+               if (i != 0)
+                {
+                    Context.MultiEventStatus.Add(
+                        new MultiEventStatus
+                        {
+                            ParentId = answer,
+                            ChildId = eventsId[i],
+                        });
+                }
+
+               await Context.SaveChangesAsync();
+            }
+
+            return answer;
+        }
+
         public async Task<Guid> EditNextEvent(EventDto eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
