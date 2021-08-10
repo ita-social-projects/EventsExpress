@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './users.css';
-import UserInfoWpapper from '../../containers/user-info';
+import UserInfoWrapper from '../../containers/user-info';
 import PagePagination from '../shared/pagePagination';
 
 export default class Users extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             currentPage: 1
         };
@@ -22,7 +22,7 @@ export default class Users extends Component {
         const reducer = (accumulator, currentValue) => accumulator + currentValue.id;
         const key = user => user.id + user.isBlocked + user.roles.reduce(reducer)
         return arr.map(user =>
-            <UserInfoWpapper
+            <UserInfoWrapper
                 key={key(user)}
                 user={user}
             />
