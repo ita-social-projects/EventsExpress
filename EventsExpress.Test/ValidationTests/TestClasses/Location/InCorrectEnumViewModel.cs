@@ -6,8 +6,8 @@
 
     public class InCorrectEnumViewModel : IEnumerable
     {
-        private readonly LocationViewModel firstIncorrectView = new LocationViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = (LocationType)8 };
-        private readonly LocationViewModel secondIncorrectView = new LocationViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = (LocationType)9 };
+        private readonly MapViewModel firstIncorrectView = new MapViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = (LocationType)8 };
+        private readonly MapViewModel secondIncorrectView = new MapViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = (LocationType)9 };
 
         public IEnumerator GetEnumerator()
         {

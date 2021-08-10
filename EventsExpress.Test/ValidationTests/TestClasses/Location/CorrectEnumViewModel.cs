@@ -7,8 +7,8 @@
 
     public class CorrectEnumViewModel : IEnumerable
     {
-       private readonly LocationViewModel modelMap = new LocationViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = LocationType.Map };
-       private readonly LocationViewModel modelOnline = new LocationViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = LocationType.Online };
+       private readonly MapViewModel modelMap = new MapViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = LocationType.Map };
+       private readonly MapViewModel modelOnline = new MapViewModel { Latitude = 7.7, Longitude = 8.8, OnlineMeeting = "https://example.com/", Type = LocationType.Online };
 
        public IEnumerator GetEnumerator()
         {

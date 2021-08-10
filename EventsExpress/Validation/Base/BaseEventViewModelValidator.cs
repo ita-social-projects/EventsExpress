@@ -2,6 +2,7 @@
 {
     using System;
     using EventsExpress.Core.IServices;
+    using EventsExpress.Db.Enums;
     using EventsExpress.ViewModels.Base;
     using FluentValidation;
 
@@ -27,7 +28,27 @@
                 RuleFor(x => x.Frequency).GreaterThan(0).WithMessage("Frequency must be greater then 0!");
                 RuleFor(x => x.Periodicity).IsInEnum().WithMessage("Field is required!");
             });
-            RuleFor(x => x.Location).SetValidator(new LocationViewModelValidator());
+            RuleFor(x => x.LocationType).IsInEnum().WithMessage("Field Location Type is required!");
+            When(x => x.LocationType == LocationType.Map, () =>
+            {
+                RuleFor(x => x.Map.Latitude).NotEmpty().WithMessage("Field is required!");
+                RuleFor(x => x.Map.Longitude).NotEmpty().WithMessage("Field is required!");
+            }).Otherwise(() =>
+            {
+                RuleFor(x => x.OnlineMeeting).Must(LinkMustBeAUri)
+               .WithMessage("Link '{PropertyValue}' must be a valid URI. eg: http://www.SomeWebSite.com.au");
+            });
+        }
+
+        private bool LinkMustBeAUri(string link)
+        {
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
+            return Uri.TryCreate(link, UriKind.Absolute, out Uri outUri)
+                   && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

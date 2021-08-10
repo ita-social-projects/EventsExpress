@@ -232,7 +232,7 @@ namespace EventsExpress.Test.MapperTests
                         Rating = 8,
                     },
                 },
-                Location = new LocationViewModel
+                Location = new MapViewModel
                 {
                     Type = LocationType.Online,
                     OnlineMeeting = "http://basin.example.com/#branch",
@@ -271,7 +271,7 @@ namespace EventsExpress.Test.MapperTests
                         Rating = 8,
                     },
                 },
-                Location = new LocationViewModel
+                Location = new MapViewModel
                 {
                     Type = LocationType.Map,
                     Latitude = 0.8,

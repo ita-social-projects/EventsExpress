@@ -20,7 +20,7 @@
         {
             for (int i = 0; i < urlArr.Length; i++)
             {
-                yield return new object[] { new LocationViewModel { Type = type, OnlineMeeting = urlArr[i] } };
+                yield return new object[] { new MapViewModel { Type = type, OnlineMeeting = urlArr[i] } };
             }
         }
     }
