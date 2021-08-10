@@ -18,7 +18,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: false),
-                    ChildId = table.Column<Guid>(nullable: true),
+                    ChildId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -28,7 +28,7 @@ namespace EventsExpress.Db.Migrations
                         column: x => x.ChildId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MultiEventStatus_Events_ParentId",
                         column: x => x.ParentId,

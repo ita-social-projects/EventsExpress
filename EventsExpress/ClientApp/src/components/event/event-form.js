@@ -172,6 +172,7 @@ class EventForm extends Component {
                     <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
                         <FormControlLabel value={0} control={<Radio />} label="Map" />
                         <FormControlLabel value={1} control={<Radio />} label="Online" />
+                        <FormControlLabel value={2} control={<Radio />} label="MultiEvent" />
                     </Field>
                         {this.props.form_values
                             && this.props.form_values.location
@@ -198,7 +199,17 @@ class EventForm extends Component {
                                     id="url"
                                 />
                             </div>
-                        }                 
+                    }
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type == enumLocationType.multiEvent&
+                    <Field name="location.type1" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
+                        <FormControlLabel value={0} control={<Radio />} label="Map" />
+                        <FormControlLabel value={1} control={<Radio />} label="Online" />
+                        <FormControlLabel value={2} control={<Radio />} label="MultiEvent" />
+                    </Field>
+                       
+                    }
                 </div>
                 <div className="row my-4">
                     {this.props.children}

@@ -485,7 +485,7 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ChildId")
+                    b.Property<Guid>("ChildId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -1009,7 +1009,8 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.Event", "ChildEvent")
                         .WithMany("ParentEvents")
                         .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
 
                     b.HasOne("EventsExpress.Db.Entities.Event", "ParentEvent")
                         .WithMany("ChildEvents")

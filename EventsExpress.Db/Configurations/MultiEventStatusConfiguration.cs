@@ -15,7 +15,7 @@
             builder.HasOne(e => e.ChildEvent)
               .WithMany(ec => ec.ParentEvents)
               .HasForeignKey(e => e.ChildId)
-              .OnDelete(DeleteBehavior.SetNull);
+              .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }
