@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -12,7 +11,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace EventsExpress.Core.NotificationHandlers
+namespace EventsExpress.NotificationHandlers
 {
     public class RegisterVerificationHandler : INotificationHandler<RegisterVerificationMessage>
     {
@@ -41,8 +40,8 @@ namespace EventsExpress.Core.NotificationHandlers
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var emailConfirmToken = Guid.NewGuid().ToString();
-            string theEmailLink = $"<a \" target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{emailConfirmToken}\">link</a>";
+            var token = Guid.NewGuid().ToString();
+            string theEmailLink = $"<a target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
 
             await _tokenService.GenerateEmailConfirmationToken(emailConfirmToken, notification.AuthLocal.AccountId);
 

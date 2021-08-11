@@ -4,6 +4,8 @@ const baseService = new EventsExpressService();
 
 export default class UserService {
 
+    getCount = accountStatus => baseService.getResource(`users/Count/${accountStatus}`);
+
     getUserById = id => baseService.getResource(`users/GetUserProfileById?id=${id}`);
 
     getUsers = filter => baseService.getResource(`users/get${filter}`);
@@ -12,8 +14,8 @@ export default class UserService {
 
     setAvatar = async(data) => {
         let file = new FormData();
-        file.append('newAva', data.image.file);
-        return baseService.setResourceWithData('users/changeAvatar', file);
+        file.append('Photo', data.image.file);
+        return baseService.setResourceWithData(`users/changeAvatar/${data.userId}`, file);
     }
 
     setChangeUserRole = data =>

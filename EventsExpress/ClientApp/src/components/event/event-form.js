@@ -14,6 +14,7 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import asyncValidatePhoto from '../../containers/async-validate-photo';
 
 momentLocaliser(moment);
 
@@ -29,31 +30,32 @@ class EventForm extends Component {
         }));
     }
 
+
+    checkLocation = (location) => {
+
+        if (location !== null) {
+            if (location.type == enumLocationType.map) {
+                location.latitude = null;
+                location.longitude = null;
+                change(`event-form`, `location`, location);
+            }
+
+            if (location.type == enumLocationType.online) {
+                location.onlineMeeting = null;
+                change(`event-form`, `location.onlineMeeting`, location);
+            }
+        }
+    }
+
     periodicityListOptions = (periodicity.map((item) =>
         <option value={item.value} key={item.value}> {item.label} </option>
     ));
 
-    checkLocation = (location) => {
-        if (location.type == enumLocationType.map) {
-            location.latitude = null;
-            location.longitude = null;
-            change(`event-form`, `location`, location);
-        }
-
-        if (location.type == enumLocationType.online) {
-            location.onlineMeeting = null;
-            change(`event-form`, `location.onlineMeeting`, location);
-        }
-
-    }
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
         const { checked } = this.state;
 
-        if (this.props.initialValues.location != null) {
-            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
-        }
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
@@ -78,7 +80,7 @@ class EventForm extends Component {
                         />
                     </div>
                     <div className="mt-2">
-                        <Field
+                        <Field parse={Number}
                             name='maxParticipants'
                             component={renderTextField}
                             type="number"
@@ -196,7 +198,8 @@ class EventForm extends Component {
                                     id="url"
                                 />
                             </div>
-                        }                 
+                        }
+                    
                 </div>
                 <div className="row my-4">
                     {this.props.children}
@@ -208,5 +211,8 @@ class EventForm extends Component {
 
 export default reduxForm({
     form: 'event-form',
-    enableReinitialize: true
+    enableReinitialize: true,
+    touchOnChange: true,
+    asyncValidate: asyncValidatePhoto,
+    asyncChangeFields: ['photo']
 })(EventForm);

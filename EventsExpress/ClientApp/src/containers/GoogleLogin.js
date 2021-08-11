@@ -14,9 +14,7 @@ class LoginGoogle extends Component {
 
         this.props.loginGoogle(
             response.tokenId,
-            response.profileObj.email,
-            response.profileObj.name,
-            response.profileObj.imageUrl
+            response.profileObj
         );
     }
 
@@ -37,7 +35,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loginGoogle: (tokenId, email, name, imageUrl) => dispatch(loginGoogle(tokenId, email, name, imageUrl))
+        loginGoogle: (tokenId, profile) => dispatch(loginGoogle(tokenId, profile))
     }
 };
 
