@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import ModalWind from '../modal-wind';
 import './landing.css';
 
 export default class Landing extends Component {
@@ -14,7 +15,8 @@ export default class Landing extends Component {
                 }
         var eventsBlock = [event, event, event, event]
         var events = [eventsBlock, eventsBlock, eventsBlock]
-        
+        const { id } = this.props.user;
+
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -23,10 +25,7 @@ export default class Landing extends Component {
                             <h1>EventsExpress</h1>
                         </div>
                         <div className="col-md-1">
-                            <a className="nav-link" href="/">Log in</a>
-                        </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Sign up</a>
+                            <ModalWind />
                         </div>
                     </nav>
                     <div className="button-container text-center">
