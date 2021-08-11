@@ -5,7 +5,7 @@ import Landing from '../components/landing';
 
 class LandingWrapper extends Component {
     render() {
-        return <Landing user={this.state.user} />
+        return <Landing user={this.props.user} />
     }
 }
 

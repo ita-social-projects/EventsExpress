@@ -25,7 +25,9 @@ export default class Landing extends Component {
                             <h1>EventsExpress</h1>
                         </div>
                         <div className="col-md-1">
-                            <ModalWind />
+                            {
+                                !id && (<ModalWind />)
+                            }
                         </div>
                     </nav>
                     <div className="button-container text-center">
