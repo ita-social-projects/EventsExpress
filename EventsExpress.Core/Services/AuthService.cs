@@ -255,11 +255,6 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Token is null or empty");
             }
 
-            // var cachedDto = _cacheHelper.GetValue(cacheDto.AuthLocalId);
-            // if (cachedDto == null || cachedDto.Token != cacheDto.Token)
-            // {
-            //    throw new EventsExpressException("Validation failed");
-            // }
             var authLocal = Context.AuthLocal
                 .Include(al => al.Account)
                     .ThenInclude(a => a.AccountRoles)
@@ -275,7 +270,6 @@ namespace EventsExpress.Core.Services
             authLocal.EmailConfirmed = true;
             await Context.SaveChangesAsync();
 
-            // _cacheHelper.Delete(cacheDto.AuthLocalId);
             return authLocal.Account;
         }
     }
