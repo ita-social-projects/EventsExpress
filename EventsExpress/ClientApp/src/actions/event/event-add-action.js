@@ -21,7 +21,6 @@ export default function add_event() {
             return Promise.reject();
         }
         const event = await response.json();
-        dispatch(setSuccessAllert('Your event was successfully created!'));
         dispatch(history.push(`/editEvent/${event.id}`));
         return Promise.resolve();
     }
