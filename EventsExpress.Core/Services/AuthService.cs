@@ -161,7 +161,7 @@ namespace EventsExpress.Core.Services
             var authExternal = externalAccount.AuthExternal.First();
             authExternal.AccountId = localAccount.Id;
 
-            Context.RefreshTokens.RemoveRange(externalAccount.RefreshTokens);
+            Context.UserTokens.RemoveRange(externalAccount.RefreshTokens);
             Context.Accounts.Remove(externalAccount);
 
             await Context.SaveChangesAsync();
