@@ -28,7 +28,6 @@ namespace EventsExpress.Test.ServiceTests
 
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
-        private Mock<ICacheHelper> mockCacheHelper;
         private Mock<IEmailService> mockEmailService;
         private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
@@ -37,6 +36,8 @@ namespace EventsExpress.Test.ServiceTests
 
         private UserDto existingUserDto;
         private User existingUser;
+        private UserToken userToken;
+        private string nullToken = null;
 
         [SetUp]
         protected override void Initialize()
@@ -45,7 +46,6 @@ namespace EventsExpress.Test.ServiceTests
 
             mockUserService = new Mock<IUserService>();
             mockTokenService = new Mock<ITokenService>();
-            mockCacheHelper = new Mock<ICacheHelper>();
             mockEmailService = new Mock<IEmailService>();
             mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
@@ -55,7 +55,6 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object,
                 mockUserService.Object,
                 mockTokenService.Object,
-                mockCacheHelper.Object,
                 mockEmailService.Object,
                 mockMediator.Object,
                 mockPasswordHasherService.Object,
@@ -75,7 +74,15 @@ namespace EventsExpress.Test.ServiceTests
                 Email = ExistingEmail,
             };
 
+            userToken = new UserToken
+            {
+                Type = TokenType.EmailConfirmationToken,
+                Token = nullToken,
+                AccountId = existingUser.Id,
+            };
+
             Context.Users.Add(existingUser);
+            Context.UserTokens.Add(userToken);
             Context.SaveChanges();
 
             mockPasswordHasherService.Setup(s => s.GenerateSalt()).Returns("salt");
@@ -482,64 +489,9 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
+        public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse()
         {
-            CacheDto cache = new CacheDto()
-            {
-                Key = existingUser.Id.ToString(),
-                Value = token,
-            };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(Guid.Parse(cache.Key), token));
-        }
-
-        [Test]
-        public void ConfirmEmail_ValidCacheDto_ReturnTrue()
-        {
-            // Arrange
-            CacheDto cache = new CacheDto()
-            {
-                Key = existingUser.Id.ToString(),
-                Value = "validToken",
-            };
-
-            var authLocal = new AuthLocal
-            {
-                Id = AuthLocalId,
-                Account = new Account(),
-            };
-
-            Context.AuthLocal.Add(authLocal);
-            Context.SaveChanges();
-
-            mockCacheHelper.Setup(ch => ch.GetValue(cache.Key))
-                .Returns(new CacheDto { Value = cache.Value });
-            mockTokenService.Setup(ts => ts.GenerateAccessToken(It.IsAny<Account>()))
-                .Returns("AccessToken");
-            mockTokenService.Setup(ts => ts.GenerateRefreshToken())
-                .Returns(new UserToken());
-
-            // Act
-            async Task MethodInvoke() => await service.EmailConfirmAndAuthenticate(Guid.Parse(cache.Key), (string)cache.Value);
-
-            // Assert
-            Assert.DoesNotThrowAsync(MethodInvoke);
-        }
-
-        [Test]
-        [TestCaseSource(typeof(ConfirmEmail), nameof(ConfirmEmail.TestCases))]
-        public void ConfirmEmail_CachingFailed_Throws(Guid id, string token)
-        {
-            // Arrange
-            mockCacheHelper.Setup(u => u.GetValue(It.IsAny<string>()));
-
-            // Act
-            async Task MethodInvoke() => await service.EmailConfirmAndAuthenticate(id, token);
-
-            // Assert
-            Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(existingUser.Id, nullToken));
         }
 
         [Test]

@@ -22,7 +22,6 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly ICacheHelper _cacheHelper;
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
         private readonly IPasswordHasher _passwordHasher;
@@ -33,7 +32,6 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IUserService userSrv,
             ITokenService tokenService,
-            ICacheHelper cacheHelper,
             IEmailService emailService,
             IMediator mediator,
             IPasswordHasher passwordHasher,
@@ -42,7 +40,6 @@ namespace EventsExpress.Core.Services
         {
             _userService = userSrv;
             _tokenService = tokenService;
-            _cacheHelper = cacheHelper;
             _emailService = emailService;
             _mediator = mediator;
             _passwordHasher = passwordHasher;
@@ -178,7 +175,6 @@ namespace EventsExpress.Core.Services
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token)
         {
             var userToken = Context.UserTokens
-                            .Include(rt => rt.Token)
                             .First(rt => rt.Token == token && rt.AccountId == authLocalId);
 
             var account = await ConfirmEmail(userToken);
