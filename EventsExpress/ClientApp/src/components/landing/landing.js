@@ -1,20 +1,45 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import CarouselEventCard from './CarouselEventCard';
+import EventService from '../../services/EventService';
 import './landing.css';
 
+const eventService = new EventService()
+
 export default class Landing extends Component {
-    render() {
-        var event = {
-                    id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
-                    img: "https://c.pxhere.com/photos/da/5a/silhouette_in_xinjiang_ghost_city_people_sunset_joke_together-454504.jpg!d",
-                    date: "01.01.2000 00:00 GTM+0",
-                    name: "Sample Name",
-                    author: "Sample Author",
-                    part: 10000
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            events: []
                 }
-        var eventsBlock = [event, event, event, event]
-        var events = [eventsBlock, eventsBlock, eventsBlock]
+    }
+
+    splitDataIntoBlocks(itemsArray) {
+        return itemsArray.reduce((acc, c, i) => {
+            if ((i & 3) === 0) acc.push([])
+            acc[acc.length - 1].push(c)
+            return acc
+        }, [])
+    }
+
+    async componentDidMount() {
+        let events = await eventService.getAllEvents("?Page=1")
+        events = (await events.json()).items
+        if (events.length !== 0) {
+            this.setState({ events: this.splitDataIntoBlocks(events) })
+        }
+    }
+
+    renderCarouselBlock = (eventBlock) => (
+        <div className="carousel-block wd-100">
+            {eventBlock.map((event) => <CarouselEventCard key={event.id} event={event} />)}
+        </div>
+    )
         
+    render() {
+        const { events } = this.state
+        const carouselNavIsVisible = events.length > 1
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -67,6 +92,7 @@ export default class Landing extends Component {
                         <button className="btn btn-warning">Join EventsExpress</button>
                     </div>
                 </article>
+                {events.length !== 0 &&
                 <article className="events-article">
                     <div className="row">
                         <div className="col-md-10">
@@ -82,45 +108,20 @@ export default class Landing extends Component {
                             animation={"slide"}
                             interval={1000}
                             indicators={false}
-                            navButtonsAlwaysVisible={true}
+                                navButtonsAlwaysVisible={carouselNavIsVisible}
+                                navButtonsAlwaysInvisible={!carouselNavIsVisible}
+
                             NextIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-right"></i>}
                             PrevIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-left"></i>}
                         >
                             {
-                                events.map((block, i) => 
-                                    <>
-                                        <div className="carousel-block wd-100">
-                                            {block.map((event, j) => <Card key={block.length * i + j} event={event} />)}
-                                        </div>
-                                    </>
-                                )
+                                    events.map((block) => this.renderCarouselBlock(block))
                             }
                         </Carousel>
                     </div>
                 </article>
+                }
             </div>
         </>);
     }
-}
-
-function Card(props) {
-    return (<>
-        <div className="card">
-            <img className="card-img-top" src={props.event.img} alt="Card image cap" />
-            <div className="card-body">
-                <p className="card-text text-muted">{props.event.date}</p>
-                <p className="card-text">{props.event.name}</p>
-                <p className="card-text text-muted">{props.event.author}</p>
-                <div className="row">
-                    <div className="col-md-6">
-                        Participants: {props.event.part}
-                    </div>
-                    <div className="col-md-6">
-                        <a href={`/home/events/${props.event.id}`} className="link">Join event</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </>
-    )
 }
