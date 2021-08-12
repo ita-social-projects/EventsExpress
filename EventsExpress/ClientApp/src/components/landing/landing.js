@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import { Link } from 'react-router-dom';
 import './landing.css';
 
 export default class Landing extends Component {
@@ -33,7 +34,7 @@ export default class Landing extends Component {
                         <h2>What do you want to do?</h2>
                         <div className="buttons">
                             <button className="btn btn-warning">Create event</button>
-                            <button className="btn btn-warning">Find event</button>
+                            <Link to={"home/events"} className="btn btn-warning">Find event</Link>
                         </div>
                     </div>
                 </article>
