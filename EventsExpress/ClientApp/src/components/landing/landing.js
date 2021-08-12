@@ -15,24 +15,20 @@ export default class Landing extends Component {
                 }
     }
 
-    splitData(data) {
-        return data.reduce((acc, c, i) => {
+    splitDataIntoBlocks(itemsArray) {
+        return itemsArray.reduce((acc, c, i) => {
             if ((i & 3) === 0) acc.push([])
             acc[acc.length - 1].push(c)
             return acc
         }, [])
     }
 
-    componentDidMount() {
-        eventService.getAllEvents("")
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                var items = data.items
-                if (items.length !== 0) {
-                    this.setState({ events: this.splitData(items) })
-                }
-            })
+    async componentDidMount() {
+        let events = await eventService.getAllEvents("?Page=1")
+        events = (await events.json()).items
+        if (events.length !== 0) {
+            this.setState({ events: this.splitDataIntoBlocks(events) })
+        }
     }
 
     renderCarouselBlock = (eventBlock) => (

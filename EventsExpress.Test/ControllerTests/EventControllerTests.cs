@@ -113,14 +113,5 @@ namespace EventsExpress.Test.ControllerTests
             var expected = eventController.AllDraft();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
-
-        [Test]
-        public void GetAllWithEmpyFilter_OkResult()
-        {
-            service.Setup(s => s.GetAll(It.IsAny<EventFilterViewModel>(), out It.Ref<int>.IsAny)).Returns(new List<EventDto>());
-
-            var result = eventController.All(new EventFilterViewModel());
-            Assert.IsInstanceOf<OkObjectResult>(result);
-        }
     }
 }

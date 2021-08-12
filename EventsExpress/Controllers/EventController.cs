@@ -152,11 +152,6 @@ namespace EventsExpress.Controllers
             filter.OwnerId = null;
             filter.VisitorId = null;
 
-            if (filter.Page <= 0)
-            {
-                filter.Page = 1;
-            }
-
             if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)
             {
                 filter.DateFrom = DateTime.Today;
