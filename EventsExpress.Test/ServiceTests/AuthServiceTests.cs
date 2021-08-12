@@ -390,7 +390,7 @@ namespace EventsExpress.Test.ServiceTests
 
             mockSecurityContext.Setup(s => s.GetCurrentAccountId()).Returns(existingExternalAccount.Id);
             mockTokenService.Setup(s => s.GenerateAccessToken(existingLocalAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
             var res = await service.BindExternalAccount(new RegisterBindDto
                 { Email = ExistingEmail, Password = ValidPassword, Type = existingExternalType });
