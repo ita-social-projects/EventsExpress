@@ -77,12 +77,10 @@ namespace EventsExpress.Core.Services
                 : contactAdminMessages;
 
             count = contactAdminMessages.Count();
-            var result = model.Page == 0
-                ? contactAdminMessages.ToList()
-                : contactAdminMessages
-                    .OrderBy(x => x.DateCreated)
-                    .Skip((model.Page - 1) * model.PageSize)
-                    .Take(model.PageSize).ToList();
+            var result = contactAdminMessages
+                .OrderBy(x => x.DateCreated)
+                .Skip((model.Page - 1) * model.PageSize)
+                .Take(model.PageSize).ToList();
 
             return Mapper.Map<IEnumerable<ContactAdmin>, IEnumerable<ContactAdminDto>>(result);
         }
