@@ -300,6 +300,28 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
+        public async Task<Guid> MultiEdit(EventDto parent, IEnumerable<EventDto> childsEvent)
+        {
+            parent.Id = CreateDraft();
+            EventDto[] childs = childsEvent.ToArray();
+            for (int i = 0; i < childs.Length; i++)
+            {
+                    childs[i].Id = CreateDraft();
+
+                    await Edit(childs[i]);
+                    Context.MultiEventStatus.Add(
+                  new MultiEventStatus
+                  {
+                      ParentId = parent.Id,
+                      ChildId = childs[i].Id,
+                  });
+
+                    await Context.SaveChangesAsync();
+            }
+
+            return parent.Id;
+        }
+
         public async Task<Guid> Publish(Guid eventId)
         {
             var ev = Context.Events
@@ -343,26 +365,16 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<Guid> MultiPublish(Guid[] eventsId)
+        public async Task<Guid> MultiPublish(Guid parentId, Guid[] childsId)
         {
-            Guid answer = eventsId[0];
-            for (int i = 0; i < eventsId.Length; i++)
-            {
-               await Publish(eventsId[i]);
-               if (i != 0)
-                {
-                    Context.MultiEventStatus.Add(
-                        new MultiEventStatus
-                        {
-                            ParentId = answer,
-                            ChildId = eventsId[i],
-                        });
-                }
+            await Publish(parentId);
 
-               await Context.SaveChangesAsync();
+            for (int i = 0; i < childsId.Length; i++)
+            {
+                await Publish(childsId[i]);
             }
 
-            return answer;
+            return parentId;
         }
 
         public async Task<Guid> EditNextEvent(EventDto eventDTO)

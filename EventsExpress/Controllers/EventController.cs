@@ -105,6 +105,20 @@ namespace EventsExpress.Controllers
 
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
+        public async Task<IActionResult> MultiEdit(Guid eventId, [FromBody] EventEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _eventService.MultiEdit(_mapper.Map<EventDto>(model), _mapper.Map<IEnumerable<EventDto>>(model.Events));
+
+            return Ok(result);
+        }
+
+        [HttpPost("{eventId:Guid}/[action]")]
+        [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Publish(Guid eventId)
         {
             var result = await _eventService.Publish(eventId);

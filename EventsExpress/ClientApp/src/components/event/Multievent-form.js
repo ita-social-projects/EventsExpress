@@ -18,8 +18,7 @@ import Radio from '@material-ui/core/Radio';
 momentLocaliser(moment);
 
 const photoService = new PhotoService();
-
-class EventForm extends Component {
+class MultiEventForm extends Component {
 
     state = { checked: this.props.initialValues.isReccurent };
 
@@ -102,13 +101,13 @@ class EventForm extends Component {
                     {this.props.haveReccurentCheckBox && checked &&
                         <div>
                             <div className="mt-2">
-                            <Field
+                                <Field
                                     minWidth={200}
                                     name="periodicity"
                                     text="Periodicity"
                                     component={renderSelectField}
                                 >
-                                {this.periodicityListOptions}
+                                    {this.periodicityListOptions}
                                 </Field>
                             </div>
                             <div className="mt-2">
@@ -172,40 +171,34 @@ class EventForm extends Component {
                     <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
                         <FormControlLabel value={0} control={<Radio />} label="Map" />
                         <FormControlLabel value={1} control={<Radio />} label="Online" />
-                        <FormControlLabel value={2} control={<Radio />} label="MultiEvent" />
                     </Field>
-                        {this.props.form_values
-                            && this.props.form_values.location
-                            && this.props.form_values.location.type == enumLocationType.map &&
+                    {this.props.form_values
+                        && this.props.form_values.location
+                        && this.props.form_values.location.type == enumLocationType.map &&
 
-                            <div className="mt-2">
-                                <Field
-                                    name='location'
-                                    component={LocationMapWithMarker}
-                                />
-                            </div>
-                        }
-                        {this.props.form_values
-                            && this.props.form_values.location
-                            && this.props.form_values.location.type == enumLocationType.online &&
-
-                            <div className="mt-2">
-                                <label htmlFor="url">Enter an https:// URL:</label>
-                                <Field
-                                    name='location.onlineMeeting'
-                                    component={renderTextField}
-                                    type="url"
-                                    label="Url"
-                                    id="url"
-                                />
-                            </div>
+                        <div className="mt-2">
+                            <Field
+                                name='location'
+                                component={LocationMapWithMarker}
+                            />
+                        </div>
                     }
                     {this.props.form_values
                         && this.props.form_values.location
-                        && this.props.form_values.location.type == enumLocationType.multiEvent &&
-                  <MultiEventForm  / >
-                       
+                        && this.props.form_values.location.type == enumLocationType.online &&
+
+                        <div className="mt-2">
+                            <label htmlFor="url">Enter an https:// URL:</label>
+                            <Field
+                                name='location.onlineMeeting'
+                                component={renderTextField}
+                                type="url"
+                                label="Url"
+                                id="url"
+                            />
+                        </div>
                     }
+                  
                 </div>
                 <div className="row my-4">
                     {this.props.children}
@@ -218,4 +211,4 @@ class EventForm extends Component {
 export default reduxForm({
     form: 'event-form',
     enableReinitialize: true
-})(EventForm);
+})(MultiEventForm);
