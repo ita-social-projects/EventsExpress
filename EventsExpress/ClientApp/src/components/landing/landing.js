@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import AuthComponent from '../../security/authComponent';
 import './landing.css';
 
 export default class Landing extends Component {
@@ -15,6 +16,8 @@ export default class Landing extends Component {
         var eventsBlock = [event, event, event, event]
         var events = [eventsBlock, eventsBlock, eventsBlock]
         
+        const { onLogoutClick } = this.props;
+
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -22,12 +25,19 @@ export default class Landing extends Component {
                         <div className="col-md-10">
                             <h1>EventsExpress</h1>
                         </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Log in</a>
-                        </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Sign up</a>
-                        </div>
+                        <AuthComponent onlyAnonymous>
+                            <div className="col-md-1">
+                                <a className="nav-link" href="/">Log in</a>
+                            </div>
+                            <div className="col-md-1">
+                                <a className="nav-link" href="/">Sign up</a>
+                            </div>
+                        </AuthComponent>
+                        <AuthComponent>
+                            <div className="col-md-2 text-right">
+                                <div onClick={onLogoutClick} className="btn">Log out</div>
+                            </div>
+                        </AuthComponent>
                     </nav>
                     <div className="button-container text-center">
                         <h2>What do you want to do?</h2>
