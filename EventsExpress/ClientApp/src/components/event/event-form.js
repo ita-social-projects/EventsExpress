@@ -14,6 +14,7 @@ import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import MultiEventForm from './Multievent-form'
 
 momentLocaliser(moment);
 
@@ -203,7 +204,7 @@ class EventForm extends Component {
                     {this.props.form_values
                         && this.props.form_values.location
                         && this.props.form_values.location.type == enumLocationType.multiEvent &&
-                  <MultiEventForm  / >
+                        <MultiEventForm {...this.props } / >
                        
                     }
                 </div>
