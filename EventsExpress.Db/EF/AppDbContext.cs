@@ -35,7 +35,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Permission> Permissions { get; set; }
 
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
 
         public DbSet<User> Users { get; set; }
 

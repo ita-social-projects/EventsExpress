@@ -16,35 +16,31 @@ namespace EventsExpress.NotificationHandlers
     public class RegisterVerificationHandler : INotificationHandler<RegisterVerificationMessage>
     {
         private readonly IEmailService _sender;
-        private readonly ICacheHelper _cacheHelper;
         private readonly ILogger<RegisterVerificationHandler> _logger;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IOptions<AppBaseUrlModel> _urlOptions;
+        private readonly ITokenService _tokenService;
 
         public RegisterVerificationHandler(
             IEmailService sender,
-            ICacheHelper cacheHelper,
             ILogger<RegisterVerificationHandler> logger,
             INotificationTemplateService notificationTemplateService,
-            IOptions<AppBaseUrlModel> urlOptions)
+            IOptions<AppBaseUrlModel> urlOptions,
+            ITokenService tokenService)
         {
             _sender = sender;
-            _cacheHelper = cacheHelper;
             _logger = logger;
             _notificationTemplateService = notificationTemplateService;
             _urlOptions = urlOptions;
+            _tokenService = tokenService;
         }
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var token = Guid.NewGuid().ToString();
-            string theEmailLink = $"<a target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
+            var emailConfirmToken = Guid.NewGuid().ToString();
+            string theEmailLink = $"<a target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{emailConfirmToken}\">link</a>";
 
-            _cacheHelper.Add(new CacheDto
-            {
-                Key = notification.AuthLocal.Id.ToString(),
-                Value = token,
-            });
+            await _tokenService.GenerateEmailConfirmationToken(emailConfirmToken, notification.AuthLocal.AccountId);
 
             var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.RegisterVerification);
 

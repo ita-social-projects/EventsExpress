@@ -1,9 +1,12 @@
 ﻿using System;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
-    public class RefreshToken : BaseEntity
+    public class UserToken : BaseEntity
     {
+        public TokenType Type { get; set; }
+
         public string Token { get; set; }
 
         public DateTime Expires { get; set; }
@@ -17,5 +20,9 @@ namespace EventsExpress.Db.Entities
         public string CreatedByIp { get; set; }
 
         public string RevokedByIp { get; set; }
+
+        public Guid AccountId { get; set; }
+
+        public Account Account { get; set; }
     }
 }

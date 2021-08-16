@@ -1,9 +1,13 @@
 ﻿using System;
+using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
 {
     public class RefreshTokenDto
     {
+        public TokenType Type { get; set; }
+
         public string Token { get; set; }
 
         public DateTime Expires { get; set; }
