@@ -239,7 +239,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Return profileDto.</response>
         /// <response code="400">Attitude set failed.</response>
         [HttpGet("[action]")]
-        [Authorize(Policy = PolicyNames.UserPolicyName)]
+        [Authorize(Policy = PolicyNames.AdminAndUserPolicyName)]
         public IActionResult GetUserProfileById(Guid id)
         {
             var res = _mapper.Map<ProfileViewModel>(_userService.GetProfileById(id));
