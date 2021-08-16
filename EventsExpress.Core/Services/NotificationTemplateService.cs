@@ -6,6 +6,7 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -20,8 +21,51 @@ namespace EventsExpress.Core.Services
         {
         }
 
-        public static string PerformReplacement<T>(string text, T model)
-            where T : class
+        private static Dictionary<NotificationProfile, Func<INotificationTemplateModel>> Dependencies { get; } =
+            new Dictionary<NotificationProfile, Func<INotificationTemplateModel>>
+            {
+                { NotificationProfile.BlockedUser, () => new AccountStatusNotificationTemplateModel() },
+                { NotificationProfile.EventCreated, () => new EventCreatedNotificationTemplateModel() },
+                { NotificationProfile.ParticipationApproved, () => new ParticipationNotificationTemplateModel() },
+                { NotificationProfile.ParticipationDenied, () => new ParticipationNotificationTemplateModel() },
+                { NotificationProfile.RegisterVerification, () => new RegisterVerificationNotificationTemplateModel() },
+                { NotificationProfile.UnblockedUser, () => new AccountStatusNotificationTemplateModel() },
+                { NotificationProfile.CreateEventVerification, () => new CreateEventVerificationNotificationTemplateModel() },
+                { NotificationProfile.EventStatusActivated, () => new EventStatusNotificationTemplateModel() },
+                { NotificationProfile.EventStatusBlocked, () => new EventStatusNotificationTemplateModel() },
+                { NotificationProfile.EventStatusCanceled, () => new EventStatusNotificationTemplateModel() },
+            };
+
+        private static string AddBraces(string property)
+        {
+            return $"{{{{{property}}}}}";
+        }
+
+        public TModelType GetModelByTemplateId<TModelType>(NotificationProfile id)
+             where TModelType : class, INotificationTemplateModel => (TModelType)Dependencies
+            .Where(d => d.Key == id)
+            .Select(d => d.Value)
+            .First()
+            .Invoke();
+
+        private static Dictionary<string, string> GetPropertiesAndValuesFromObject<T>(T model)
+        {
+            var type = model.GetType();
+            var dictionary = new Dictionary<string, string>();
+
+            foreach (var propInfo in type.GetProperties())
+            {
+                var key = AddBraces(propInfo.Name);
+                var value = propInfo.GetValue(model)?.ToString();
+
+                dictionary.Add(key, value);
+            }
+
+            return dictionary;
+        }
+
+        public string PerformReplacement<T>(string text, T model)
+            where T : class, INotificationTemplateModel
         {
             string paramName = default;
 
@@ -39,26 +83,19 @@ namespace EventsExpress.Core.Services
                 throw new ArgumentNullException(paramName, "parameter can't be null");
             }
 
-            var pattern = GetPropertiesFromObject(model);
+            var pattern = GetPropertiesAndValuesFromObject(model);
 
             return pattern.Aggregate(text, (current, element) => current
                 .Replace(element.Key, element.Value));
         }
 
-        private static Dictionary<string, string> GetPropertiesFromObject<T>(T model)
+        public IEnumerable<string> GetModelPropertiesByTemplateId(NotificationProfile id)
         {
-            var type = model.GetType();
-            var pattern = new Dictionary<string, string>();
+            var model = this.GetModelByTemplateId<INotificationTemplateModel>(id);
 
-            foreach (var propInfo in type.GetProperties())
-            {
-                var key = "{{" + propInfo.Name + "}}";
-                var value = propInfo.GetValue(model)?.ToString();
-
-                pattern.Add(key, value);
-            }
-
-            return pattern;
+            return model.GetType()
+                .GetProperties()
+                .Select(prop => AddBraces(prop.Name));
         }
 
         public async Task<IEnumerable<NotificationTemplateDto>> GetAllAsync()

@@ -1,6 +1,6 @@
-﻿namespace EventsExpress.Core.NotificationModels
+﻿namespace EventsExpress.Core.NotificationTemplateModels
 {
-    public class EventStatusNotificationModel
+    public class EventStatusNotificationTemplateModel : INotificationTemplateModel
     {
         public string Title { get; set; }
 

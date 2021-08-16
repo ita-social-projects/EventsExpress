@@ -6,7 +6,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -42,7 +42,8 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(CreateEventVerificationMessage notification, CancellationToken cancellationToken)
         {
-            var model = notification.Model;
+            const NotificationProfile profile = NotificationProfile.CreateEventVerification;
+            var model = _notificationTemplateService.GetModelByTemplateId<CreateEventVerificationNotificationTemplateModel>(profile);
             var changeInfos = await _trackService.GetChangeInfoByScheduleIdAsync(notification.EventSchedule.Id);
 
             if (changeInfos == null)
@@ -57,7 +58,7 @@ namespace EventsExpress.NotificationHandlers
                     .Select(x => x.Email)
                     .SingleOrDefault();
 
-                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.CreateEventVerification);
+                var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
                 if (userEmail != null)
                 {
@@ -65,9 +66,9 @@ namespace EventsExpress.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = userEmail,
-                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }

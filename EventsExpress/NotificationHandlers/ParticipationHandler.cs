@@ -7,7 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -36,10 +36,14 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(ParticipationMessage notification, CancellationToken cancellationToken)
         {
+            var templateId = notification.Status.Equals(UserStatusEvent.Approved) ?
+                NotificationProfile.ParticipationApproved
+                : NotificationProfile.ParticipationDenied;
+            var model = _notificationTemplateService.GetModelByTemplateId<ParticipationNotificationTemplateModel>(templateId);
+            var usersIds = new[] { notification.UserId };
+
             try
             {
-                var usersIds = new[] { notification.UserId };
-                var model = notification.Model;
                 var email = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, usersIds)
                     .Select(x => x.Email)
                     .SingleOrDefault();
@@ -48,17 +52,13 @@ namespace EventsExpress.NotificationHandlers
                 {
                     model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.Id}/1";
 
-                    var templateId = notification.Status.Equals(UserStatusEvent.Approved) ?
-                        NotificationProfile.ParticipationApproved
-                        : NotificationProfile.ParticipationDenied;
-
                     var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = email,
-                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }

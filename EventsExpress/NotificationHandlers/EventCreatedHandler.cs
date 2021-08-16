@@ -7,7 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -36,7 +36,8 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
         {
-            var model = notification.Model;
+            const NotificationProfile profile = NotificationProfile.EventCreated;
+            var model = _notificationTemplateService.GetModelByTemplateId<EventCreatedNotificationTemplateModel>(profile);
 
             try
             {
@@ -44,7 +45,7 @@ namespace EventsExpress.NotificationHandlers
                     .Select(x => x.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds)
                     .Select(x => x.Email);
-                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
+                var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
                 model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.Event.Id}/1";
 
@@ -54,9 +55,9 @@ namespace EventsExpress.NotificationHandlers
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = email,
-                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }

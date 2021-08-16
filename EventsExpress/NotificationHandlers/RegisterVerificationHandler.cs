@@ -5,7 +5,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -37,8 +37,9 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(RegisterVerificationMessage notification, CancellationToken cancellationToken)
         {
+            const NotificationProfile profile = NotificationProfile.RegisterVerification;
             var token = Guid.NewGuid().ToString();
-            var model = notification.Model;
+            var model = _notificationTemplateService.GetModelByTemplateId<RegisterVerificationNotificationTemplateModel>(profile);
 
             model.EmailLink = $"<a target=\"_blank\" href=\"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{token}\">link</a>";
 
@@ -48,15 +49,15 @@ namespace EventsExpress.NotificationHandlers
                 Value = token,
             });
 
-            var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.RegisterVerification);
+            var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
             try
             {
                 await _sender.SendEmailAsync(new EmailDto
                 {
-                    Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                    Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
                     RecepientEmail = notification.AuthLocal.Email,
-                    MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
+                    MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                 });
             }
             catch (Exception ex)

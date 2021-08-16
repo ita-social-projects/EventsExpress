@@ -1,19 +1,15 @@
 ﻿using EventsExpress.Core.DTOs;
-using EventsExpress.Core.NotificationModels;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
 {
     public class EventCreatedMessage : INotification
     {
-        public EventCreatedMessage(EventDto eventDTO)
+        public EventCreatedMessage(EventDto eventDto)
         {
-            Event = eventDTO;
-            Model = new EventCreatedNotificationModel();
+            Event = eventDto;
         }
 
         public EventDto Event { get; }
-
-        public EventCreatedNotificationModel Model { get; }
    }
 }

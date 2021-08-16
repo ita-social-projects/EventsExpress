@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.Services;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
 using EventsExpress.Hubs.Clients;
@@ -38,24 +38,25 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(UnblockedAccountMessage notification, CancellationToken cancellationToken)
         {
+            const NotificationProfile profile = NotificationProfile.UnblockedUser;
+            var model = _notificationTemplateService.GetModelByTemplateId<AccountStatusNotificationTemplateModel>(profile);
+
             try
             {
                 var userIds = new[] { notification.Account.UserId.Value };
-                var model = notification.Model;
-
                 var email = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, userIds)
                     .Select(x => x.Email)
                     .SingleOrDefault();
 
                 if (email != null)
                 {
-                    var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.UnblockedUser);
+                    var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = NotificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
                         RecepientEmail = email,
-                        MessageText = NotificationTemplateService.PerformReplacement(templateDto.Message, model),
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
 

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ServiceTests.TestClasses.NotificationTemplate;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +20,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static readonly object[] PerformReplacementTestCases =
         {
-            new object[] { null, new TestClass { TestProperty = string.Empty } },
+            new object[] { null, new NotificationTemplateModel { TestProperty = string.Empty } },
             new object[] { string.Empty, null },
         };
 
@@ -101,17 +103,17 @@ namespace EventsExpress.Test.ServiceTests
         public void PerformReplacement_IsValid()
         {
             string text = string.Empty;
-            var model = new TestClass { TestProperty = string.Empty };
+            var model = new NotificationTemplateModel { TestProperty = string.Empty };
 
-            var result = NotificationTemplateService.PerformReplacement(text, model);
+            var result = _service.PerformReplacement(text, model);
 
             Assert.IsInstanceOf<string>(result);
         }
 
         [TestCaseSource(nameof(PerformReplacementTestCases))]
-        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, object model)
+        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, INotificationTemplateModel model)
         {
-            Assert.Throws<ArgumentNullException>(() => NotificationTemplateService.PerformReplacement(text, model));
+            Assert.Throws<ArgumentNullException>(() => _service.PerformReplacement(text, model));
         }
 
         [Test]
@@ -166,11 +168,6 @@ namespace EventsExpress.Test.ServiceTests
                     It.IsAny<NotificationTemplateDto>(),
                     It.IsAny<NotificationTemplate>()),
                 Times.Once());
-        }
-
-        private class TestClass
-        {
-            public string TestProperty { get; set; }
         }
     }
 }

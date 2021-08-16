@@ -1,5 +1,4 @@
 ﻿using System;
-using EventsExpress.Core.NotificationModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 
@@ -12,7 +11,6 @@ namespace EventsExpress.Core.Notifications
             UserId = userId;
             Id = id;
             Status = status;
-            Model = new ParticipationNotificationModel();
         }
 
         public Guid UserId { get; }
@@ -20,7 +18,5 @@ namespace EventsExpress.Core.Notifications
         public Guid Id { get; }
 
         public UserStatusEvent Status { get; set; }
-
-        public ParticipationNotificationModel Model { get; }
     }
 }
