@@ -78,6 +78,12 @@ namespace EventsExpress.Test.ServiceTests
             {
                 Type = TokenType.EmailConfirmationToken,
                 Token = nullToken,
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now,
+                CreatedByIp = "0.0.0.1",
+                ReplacedByToken = null,
+                Revoked = null,
+                RevokedByIp = null,
                 AccountId = existingUser.Id,
             };
 

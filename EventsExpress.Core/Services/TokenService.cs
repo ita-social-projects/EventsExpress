@@ -198,7 +198,6 @@ namespace EventsExpress.Core.Services
                 Token = token,
                 Expires = DateTime.Now.AddDays(7),
                 Created = DateTime.Now,
-                CreatedByIp = IpAddress,
                 AccountId = accountId,
             };
 
