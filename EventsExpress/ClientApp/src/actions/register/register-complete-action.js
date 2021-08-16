@@ -17,7 +17,6 @@ export default function registerComplete(data) {
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-
         let jsonRes = await response.json();
         localStorage.setItem(jwtStorageKey, jsonRes.token);
         dispatch(setSuccessAllert('Your profile was updated'));

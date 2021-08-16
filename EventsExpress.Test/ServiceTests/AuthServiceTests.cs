@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
@@ -19,26 +17,27 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class AuthServiceTests : TestInitializer
     {
+        private const string Name = "existingName";
+        private const string ExistingEmail = "existingEmail@gmail.com";
+        private const string ValidPassword = "validPassword";
+        private const string InvalidPassword = "invalidPassword";
         private static readonly Guid AuthLocalId = ConfirmEmail.AuthLocalId;
-        private readonly string name = "existingName";
-        private readonly string existingEmail = "existingEmail@gmail.com";
-        private readonly string validPassword = "validPassword";
-        private readonly string invalidPassword = "invalidPassword";
+        private readonly Guid idUser = Guid.NewGuid();
+        private readonly Guid idAccount = Guid.NewGuid();
         private readonly AuthExternalType existingExternalType = AuthExternalType.Google;
 
         private Mock<IUserService> mockUserService;
         private Mock<ITokenService> mockTokenService;
-        private Mock<ICacheHelper> mockCacheHelper;
         private Mock<IEmailService> mockEmailService;
         private Mock<IPasswordHasher> mockPasswordHasherService;
         private Mock<IMediator> mockMediator;
         private Mock<ISecurityContext> mockSecurityContext;
         private AuthService service;
-        private Guid idUser = Guid.NewGuid();
-        private Guid idAccount = Guid.NewGuid();
 
-        private UserDto existingUserDTO;
+        private UserDto existingUserDto;
         private User existingUser;
+        private UserToken userToken;
+        private string nullToken = null;
 
         [SetUp]
         protected override void Initialize()
@@ -47,7 +46,6 @@ namespace EventsExpress.Test.ServiceTests
 
             mockUserService = new Mock<IUserService>();
             mockTokenService = new Mock<ITokenService>();
-            mockCacheHelper = new Mock<ICacheHelper>();
             mockEmailService = new Mock<IEmailService>();
             mockPasswordHasherService = new Mock<IPasswordHasher>();
             mockMediator = new Mock<IMediator>();
@@ -57,7 +55,6 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object,
                 mockUserService.Object,
                 mockTokenService.Object,
-                mockCacheHelper.Object,
                 mockEmailService.Object,
                 mockMediator.Object,
                 mockPasswordHasherService.Object,
@@ -66,32 +63,45 @@ namespace EventsExpress.Test.ServiceTests
             existingUser = new User
             {
                 Id = AuthLocalId,
-                Name = name,
-                Email = existingEmail,
+                Name = Name,
+                Email = ExistingEmail,
             };
 
-            existingUserDTO = new UserDto
+            existingUserDto = new UserDto
             {
                 Id = AuthLocalId,
-                Name = name,
-                Email = existingEmail,
+                Name = Name,
+                Email = ExistingEmail,
+            };
+
+            userToken = new UserToken
+            {
+                Type = TokenType.EmailConfirmationToken,
+                Token = nullToken,
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now,
+                CreatedByIp = "0.0.0.1",
+                ReplacedByToken = null,
+                Revoked = null,
+                RevokedByIp = null,
+                AccountId = existingUser.Id,
             };
 
             Context.Users.Add(existingUser);
+            Context.UserTokens.Add(userToken);
             Context.SaveChanges();
 
             mockPasswordHasherService.Setup(s => s.GenerateSalt()).Returns("salt");
-            mockPasswordHasherService.Setup(s => s.GenerateHash(validPassword, "salt")).Returns("hash");
+            mockPasswordHasherService.Setup(s => s.GenerateHash(ValidPassword, "salt")).Returns("hash");
         }
 
         [Test]
         [Category("Authenticate With External Provider")]
         public void Authenticate_AccountNotFound_ThrowException()
         {
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate("InvalidEmail", Db.Enums.AuthExternalType.Google);
+            async Task MethodInvoke() => await service.Authenticate("InvalidEmail", AuthExternalType.Google);
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Account not found"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -107,18 +117,17 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     new AuthExternal
                     {
-                        Email = existingEmail,
-                        Type = Db.Enums.AuthExternalType.Google,
+                        Email = ExistingEmail,
+                        Type = AuthExternalType.Google,
                     },
                 },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate(existingEmail, Db.Enums.AuthExternalType.Google);
+            async Task MethodInvoke() => await service.Authenticate(ExistingEmail, AuthExternalType.Google);
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Your account was blocked"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -133,18 +142,18 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     new AuthExternal
                     {
-                        Email = existingEmail,
-                        Type = Db.Enums.AuthExternalType.Google,
+                        Email = ExistingEmail,
+                        Type = AuthExternalType.Google,
                     },
                 },
             };
             Context.Accounts.Add(existingAccount);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
             mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
-            var res = await service.Authenticate(existingEmail, Db.Enums.AuthExternalType.Google);
+            var res = await service.Authenticate(ExistingEmail, AuthExternalType.Google);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<AuthenticateResponseModel>(res);
         }
@@ -153,30 +162,28 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Authenticate With Local Provider")]
         public void AuthenticateLocal_AccountNotFound_ThrowException()
         {
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate("InvalidEmail", invalidPassword);
+            async Task MethodInvoke() => await service.Authenticate("InvalidEmail", InvalidPassword);
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
 
         [Test]
         [Category("Authenticate With Local Provider")]
-        public void AuthenticateLocal_AccountIsBloked_ThrowException()
+        public void AuthenticateLocal_AccountIsBlocked_ThrowException()
         {
             var existingAccount = new Account
             {
                 IsBlocked = true,
-                AuthLocal = new AuthLocal { Email = existingEmail },
+                AuthLocal = new AuthLocal { Email = ExistingEmail },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate(existingEmail, "anyPassword");
+            async Task MethodInvoke() => await service.Authenticate(ExistingEmail, "anyPassword");
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Your account was blocked."));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -187,16 +194,15 @@ namespace EventsExpress.Test.ServiceTests
         {
             var existingAccount = new Account
             {
-                AuthLocal = new AuthLocal { Email = existingEmail, EmailConfirmed = false },
+                AuthLocal = new AuthLocal { Email = ExistingEmail, EmailConfirmed = false },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate(existingEmail, "anyPassword");
+            async Task MethodInvoke() => await service.Authenticate(ExistingEmail, "anyPassword");
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains($"{existingEmail} is not confirmed, please confirm"));
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
+            Assert.That(ex.Message.Contains($"{ExistingEmail} is not confirmed, please confirm"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
 
@@ -209,19 +215,18 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AuthLocal = new AuthLocal
                 {
-                    Email = existingEmail,
+                    Email = ExistingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.Authenticate(existingEmail, invalidPassword);
+            async Task MethodInvoke() => await service.Authenticate(ExistingEmail, InvalidPassword);
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -235,19 +240,19 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AuthLocal = new AuthLocal
                 {
-                    Email = existingEmail,
+                    Email = ExistingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
             mockTokenService.Setup(s => s.GenerateAccessToken(existingAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
-            var res = await service.Authenticate(existingEmail, validPassword);
+            var res = await service.Authenticate(ExistingEmail, ValidPassword);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<AuthenticateResponseModel>(res);
@@ -257,10 +262,10 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Bind an external account when registering")]
         public void BindExternalAccount_AccountNotFound_ThrowException()
         {
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.BindExternalAccount(new RegisterBindDto { Email = "InvalidEmail", Password = invalidPassword, Type = It.IsAny<AuthExternalType>() });
+            async Task MethodInvoke() => await service.BindExternalAccount(new RegisterBindDto
+                { Email = "InvalidEmail", Password = InvalidPassword, Type = It.IsAny<AuthExternalType>() });
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -272,15 +277,15 @@ namespace EventsExpress.Test.ServiceTests
             var existingAccount = new Account
             {
                 IsBlocked = true,
-                AuthLocal = new AuthLocal { Email = existingEmail },
+                AuthLocal = new AuthLocal { Email = ExistingEmail },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.BindExternalAccount(new RegisterBindDto { Email = existingEmail, Password = "anyPassword", Type = It.IsAny<AuthExternalType>() });
+            async Task MethodInvoke() => await service.BindExternalAccount(new RegisterBindDto
+                { Email = ExistingEmail, Password = "anyPassword", Type = It.IsAny<AuthExternalType>() });
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Your account was blocked"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -291,16 +296,16 @@ namespace EventsExpress.Test.ServiceTests
         {
             var existingAccount = new Account
             {
-                AuthLocal = new AuthLocal { Email = existingEmail, EmailConfirmed = false },
+                AuthLocal = new AuthLocal { Email = ExistingEmail, EmailConfirmed = false },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.BindExternalAccount(new RegisterBindDto { Email = existingEmail, Password = "anyPassword", Type = It.IsAny<AuthExternalType>() });
+            async Task MethodInvoke() => await service.BindExternalAccount(new RegisterBindDto
+                { Email = ExistingEmail, Password = "anyPassword", Type = It.IsAny<AuthExternalType>() });
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
-            Assert.That(ex.Message.Contains($"{existingEmail} is not confirmed, please confirm"));
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
+            Assert.That(ex.Message.Contains($"{ExistingEmail} is not confirmed, please confirm"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
 
@@ -313,19 +318,19 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AuthLocal = new AuthLocal
                 {
-                    Email = existingEmail,
+                    Email = ExistingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                 },
             };
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.BindExternalAccount(new RegisterBindDto { Email = existingEmail, Password = invalidPassword, Type = It.IsAny<AuthExternalType>() });
+            async Task MethodInvoke() => await service.BindExternalAccount(new RegisterBindDto
+                { Email = ExistingEmail, Password = InvalidPassword, Type = It.IsAny<AuthExternalType>() });
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains("Incorrect login or password"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -339,10 +344,10 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AuthLocal = new AuthLocal
                 {
-                    Email = existingEmail,
+                    Email = ExistingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                 },
                 AuthExternal = new[]
                 {
@@ -356,10 +361,10 @@ namespace EventsExpress.Test.ServiceTests
             Context.Accounts.Add(existingAccount);
             Context.SaveChanges();
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.BindExternalAccount(new RegisterBindDto { Email = existingEmail, Password = validPassword, Type = existingExternalType });
+            async Task MethodInvoke() => await service.BindExternalAccount(new RegisterBindDto
+                { Email = ExistingEmail, Password = ValidPassword, Type = existingExternalType });
 
-            var ex = Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            var ex = Assert.ThrowsAsync<EventsExpressException>(MethodInvoke);
             Assert.That(ex.Message.Contains($"Account already have binded {existingExternalType} account"));
             mockTokenService.Verify(s => s.GenerateRefreshToken(), Times.Never);
         }
@@ -373,10 +378,10 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AuthLocal = new AuthLocal
                 {
-                    Email = existingEmail,
+                    Email = ExistingEmail,
                     EmailConfirmed = true,
                     Salt = salt,
-                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                    PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                 },
             };
             Context.Accounts.Add(existingLocalAccount);
@@ -394,13 +399,14 @@ namespace EventsExpress.Test.ServiceTests
             };
             Context.Accounts.Add(existingExternalAccount);
 
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
             mockSecurityContext.Setup(s => s.GetCurrentAccountId()).Returns(existingExternalAccount.Id);
             mockTokenService.Setup(s => s.GenerateAccessToken(existingLocalAccount)).Returns("AccessToken");
-            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new RefreshToken());
+            mockTokenService.Setup(s => s.GenerateRefreshToken()).Returns(new UserToken());
 
-            var res = await service.BindExternalAccount(new RegisterBindDto { Email = existingEmail, Password = validPassword, Type = existingExternalType });
+            var res = await service.BindExternalAccount(new RegisterBindDto
+                { Email = ExistingEmail, Password = ValidPassword, Type = existingExternalType });
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<AuthenticateResponseModel>(res);
@@ -420,7 +426,7 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         Id = AuthLocalId,
                         Salt = salt,
-                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(validPassword, salt),
+                        PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
                     },
                 },
             };
@@ -430,21 +436,20 @@ namespace EventsExpress.Test.ServiceTests
 
             mockSecurityContext.Setup(s => s.GetCurrentAccountId()).Returns(idAccount);
 
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.ChangePasswordAsync(validPassword, "newPassword");
+            async Task MethodInvoke() => await service.ChangePasswordAsync(ValidPassword, "newPassword");
 
-            Assert.DoesNotThrowAsync(methodInvoke);
+            Assert.DoesNotThrowAsync(MethodInvoke);
         }
 
         [Test]
         [Category("CanRegister")]
         public async Task CanRegister_AccountExist_ReturnFalse()
         {
-            var existAuthLocal = new AuthLocal { Email = existingEmail };
+            var existAuthLocal = new AuthLocal { Email = ExistingEmail };
             Context.AuthLocal.Add(existAuthLocal);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
 
-            var res = await service.CanRegister(existingEmail);
+            var res = await service.CanRegister(ExistingEmail);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.False(res);
@@ -454,7 +459,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("CanRegister")]
         public async Task CanRegister_AccountNotExist_ReturnTrue()
         {
-            var res = await service.CanRegister(existingEmail);
+            var res = await service.CanRegister(ExistingEmail);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.True(res);
@@ -490,58 +495,9 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse(string token)
+        public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse()
         {
-            CacheDto cache = new CacheDto()
-            {
-                AuthLocalId = existingUser.Id,
-                Token = token,
-            };
-
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(cache.AuthLocalId, token));
-        }
-
-        [Test]
-        public void ConfirmEmail_ValidCacheDto_ReturnTrue()
-        {
-            CacheDto cache = new CacheDto()
-            {
-                AuthLocalId = existingUser.Id,
-                Token = "validToken",
-            };
-
-            var authLocal = new AuthLocal
-            {
-                Id = AuthLocalId,
-                Account = new Account(),
-            };
-
-            Context.AuthLocal.Add(authLocal);
-            Context.SaveChanges();
-
-            mockCacheHelper.Setup(ch => ch.GetValue(cache.AuthLocalId))
-                .Returns(new CacheDto { Token = cache.Token });
-            mockTokenService.Setup(ts => ts.GenerateAccessToken(It.IsAny<Account>()))
-                .Returns("AccessToken");
-            mockTokenService.Setup(ts => ts.GenerateRefreshToken())
-                .Returns(new RefreshToken());
-
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.EmailConfirmAndAuthenticate(cache.AuthLocalId, cache.Token);
-            Assert.DoesNotThrowAsync(methodInvoke);
-        }
-
-        [Test]
-        [TestCaseSource(typeof(ConfirmEmail), nameof(ConfirmEmail.TestCases))]
-        public void ConfirmEmail_CachingFailed_Throws(Guid id, string token)
-        {
-            mockCacheHelper.Setup(u => u.GetValue(It.IsAny<Guid>()));
-
-            AsyncTestDelegate methodInvoke = async () =>
-                await service.EmailConfirmAndAuthenticate(id, token);
-            Assert.ThrowsAsync<EventsExpressException>(methodInvoke);
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(existingUser.Id, nullToken));
         }
 
         [Test]
@@ -553,17 +509,22 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void PasswordRecovery_ValidUserDto_ReturnTrue()
         {
+            // Arrange
             var authLocal = new AuthLocal
             {
                 Id = AuthLocalId,
                 Account = new Account(),
-                Email = existingUserDTO.Email,
+                Email = existingUserDto.Email,
             };
 
             Context.AuthLocal.Add(authLocal);
             Context.SaveChanges();
 
-            Assert.DoesNotThrowAsync(async () => await service.PasswordRecover(existingUserDTO.Email));
+            // Act
+            async Task MethodInvoke() => await service.PasswordRecover(existingUserDto.Email);
+
+            // Assert
+            Assert.DoesNotThrowAsync(MethodInvoke);
         }
     }
 }

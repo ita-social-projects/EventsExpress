@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.NotificationHandlers;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.NotificationHandlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,10 +21,10 @@ namespace EventsExpress.Test.HandlerTests
     internal class RegisterVerificationHandlerTests
     {
         private Mock<IEmailService> _sender;
-        private Mock<ICacheHelper> _cacheHelper;
         private Mock<ILogger<RegisterVerificationHandler>> _logger;
         private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
         private Mock<INotificationTemplateService> _notificationTemplateService;
+        private Mock<ITokenService> _tockenServiece;
         private RegisterVerificationHandler _registerVerificationHandler;
         private RegisterVerificationMessage _message;
 
@@ -32,10 +32,10 @@ namespace EventsExpress.Test.HandlerTests
         public void Initialize()
         {
             _sender = new Mock<IEmailService>();
-            _cacheHelper = new Mock<ICacheHelper>();
             _logger = new Mock<ILogger<RegisterVerificationHandler>>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
             _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
+            _tockenServiece = new Mock<ITokenService>();
 
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
@@ -52,9 +52,6 @@ namespace EventsExpress.Test.HandlerTests
                     Message = "testMessage",
                 });
 
-            _cacheHelper.Setup(h => h.Add(It.IsAny<CacheDto>()))
-                .Returns(true);
-
             _message = new RegisterVerificationMessage(new AuthLocal
             {
                 Id = default,
@@ -68,10 +65,10 @@ namespace EventsExpress.Test.HandlerTests
 
             _registerVerificationHandler = new RegisterVerificationHandler(
                 _sender.Object,
-                _cacheHelper.Object,
                 _logger.Object,
                 _notificationTemplateService.Object,
-                _appBaseUrl.Object);
+                _appBaseUrl.Object,
+                _tockenServiece.Object);
 
             var httpContext = new Mock<IHttpContextAccessor>();
             httpContext.Setup(h => h.HttpContext).Returns(new DefaultHttpContext());
@@ -99,6 +96,20 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService.Verify(
                 service => service.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()),
                 Times.AtLeast(2));
+        }
+
+        [Test]
+        public void Handle_Catches_exception()
+        {
+            // Arrange
+            _sender.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
+                .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _registerVerificationHandler.Handle(_message, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
         }
     }
 }

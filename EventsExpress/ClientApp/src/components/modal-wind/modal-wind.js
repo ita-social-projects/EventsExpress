@@ -47,7 +47,7 @@ function ModalWind(props) {
 
   return (
     <div className='d-inline-block'>
-      <Button className='mt-5' variant="outlined" color="primary" onClick={handleClickOpen}>
+          <Button className='mt-5 btn btn-warning' variant="contained" onClick={handleClickOpen}>
         Sign In/Up
       </Button>
       <Dialog

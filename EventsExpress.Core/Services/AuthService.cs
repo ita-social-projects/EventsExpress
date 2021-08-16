@@ -22,7 +22,6 @@ namespace EventsExpress.Core.Services
     {
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly ICacheHelper _cacheHelper;
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
         private readonly IPasswordHasher _passwordHasher;
@@ -33,7 +32,6 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IUserService userSrv,
             ITokenService tokenService,
-            ICacheHelper cacheHelper,
             IEmailService emailService,
             IMediator mediator,
             IPasswordHasher passwordHasher,
@@ -42,7 +40,6 @@ namespace EventsExpress.Core.Services
         {
             _userService = userSrv;
             _tokenService = tokenService;
-            _cacheHelper = cacheHelper;
             _emailService = emailService;
             _mediator = mediator;
             _passwordHasher = passwordHasher;
@@ -161,7 +158,7 @@ namespace EventsExpress.Core.Services
             var authExternal = externalAccount.AuthExternal.First();
             authExternal.AccountId = localAccount.Id;
 
-            Context.RefreshTokens.RemoveRange(externalAccount.RefreshTokens);
+            Context.UserTokens.RemoveRange(externalAccount.RefreshTokens);
             Context.Accounts.Remove(externalAccount);
 
             await Context.SaveChangesAsync();
@@ -177,9 +174,10 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token)
         {
-            var cache = new CacheDto { Token = token, AuthLocalId = authLocalId };
+            var userToken = Context.UserTokens
+                            .First(rt => rt.Token == token && rt.AccountId == authLocalId);
 
-            var account = await ConfirmEmail(cache);
+            var account = await ConfirmEmail(userToken);
             var jwtToken = _tokenService.GenerateAccessToken(account);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
@@ -246,17 +244,11 @@ namespace EventsExpress.Core.Services
         private bool VerifyPassword(AuthLocal authLocal, string actualPassword) =>
            authLocal.PasswordHash == _passwordHasher.GenerateHash(actualPassword, authLocal.Salt);
 
-        private async Task<Account> ConfirmEmail(CacheDto cacheDto)
+        private async Task<Account> ConfirmEmail(UserToken userToken)
         {
-            if (string.IsNullOrEmpty(cacheDto.Token))
+            if (string.IsNullOrEmpty(userToken.Token))
             {
                 throw new EventsExpressException("Token is null or empty");
-            }
-
-            var cachedDto = _cacheHelper.GetValue(cacheDto.AuthLocalId);
-            if (cachedDto == null || cachedDto.Token != cacheDto.Token)
-            {
-                throw new EventsExpressException("Validation failed");
             }
 
             var authLocal = Context.AuthLocal
@@ -265,7 +257,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(ar => ar.Role)
                 .Include(al => al.Account)
                     .ThenInclude(a => a.RefreshTokens)
-                .FirstOrDefault(al => al.Id == cacheDto.AuthLocalId);
+                .FirstOrDefault(al => al.Id == userToken.AccountId);
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user Id");
@@ -273,7 +265,7 @@ namespace EventsExpress.Core.Services
 
             authLocal.EmailConfirmed = true;
             await Context.SaveChangesAsync();
-            _cacheHelper.Delete(cacheDto.AuthLocalId);
+
             return authLocal.Account;
         }
     }
