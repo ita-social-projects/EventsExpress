@@ -17,6 +17,6 @@ namespace EventsExpress.Db.Entities
 
         public IEnumerable<AccountRole> AccountRoles { get; set; }
 
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        public ICollection<UserToken> RefreshTokens { get; set; }
     }
 }
