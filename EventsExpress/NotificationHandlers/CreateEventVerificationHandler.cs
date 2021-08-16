@@ -54,20 +54,20 @@ namespace EventsExpress.NotificationHandlers
             try
             {
                 var usersId = new[] { changeInfos.UserId };
-                var userEmail = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, usersId)
+                model.UserEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersId)
                     .Select(x => x.Email)
                     .SingleOrDefault();
 
                 var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
-                if (userEmail != null)
+                if (model.UserEmail != null)
                 {
                     model.EventScheduleLink = $"{_urlOptions.Value.Host}/eventSchedule/{notification.EventSchedule.Id}";
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
-                        RecepientEmail = userEmail,
+                        RecepientEmail = model.UserEmail,
                         MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }

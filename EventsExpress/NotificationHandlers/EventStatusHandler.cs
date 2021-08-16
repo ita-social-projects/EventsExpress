@@ -57,7 +57,7 @@ namespace EventsExpress.NotificationHandlers
 
                     model.Title = _eventService.EventById(notification.EventId).Title;
                     model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.EventId}/1";
-                    model.UserName = email;
+                    model.UserEmail = email;
 
                     var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
 

@@ -2,7 +2,7 @@
 {
     public class ParticipationNotificationTemplateModel : INotificationTemplateModel
     {
-        public string UserName { get; set; }
+        public string UserEmail { get; set; }
 
         public string EventLink { get; set; }
     }

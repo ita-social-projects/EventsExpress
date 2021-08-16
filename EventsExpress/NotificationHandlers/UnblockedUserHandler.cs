@@ -44,18 +44,18 @@ namespace EventsExpress.NotificationHandlers
             try
             {
                 var userIds = new[] { notification.Account.UserId.Value };
-                var email = model.UserName = _userService.GetUsersByNotificationTypes(_nameNotification, userIds)
+                model.UserEmail = _userService.GetUsersByNotificationTypes(_nameNotification, userIds)
                     .Select(x => x.Email)
                     .SingleOrDefault();
 
-                if (email != null)
+                if (model.UserEmail != null)
                 {
                     var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
-                        RecepientEmail = email,
+                        RecepientEmail = model.UserEmail,
                         MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
