@@ -172,7 +172,8 @@ const initialState = {
         id: null,
         title: null,
         subject: null,
-        message: null
+        message: null,
+        necessaryProperties: null
     },
     config: {
         facebookClientId: null,
