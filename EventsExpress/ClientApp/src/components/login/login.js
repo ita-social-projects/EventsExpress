@@ -54,7 +54,7 @@ class Login extends Component {
                             </Button >
                             <Button fullWidth={true} type="submit" value="Login" color="primary">
                                 Sign In
-                                <Redirect to='/home' />
+                                <Redirect to='/landing' />
                             </Button>
                         </DialogActions>
                     </div>

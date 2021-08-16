@@ -142,7 +142,8 @@ namespace EventsExpress.Core.Services
 
             count = users.Count();
 
-            var usersList = users.Skip((model.Page - 1) * model.PageSize)
+            var usersList = users
+                .Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
 
             var result = Mapper.Map<IEnumerable<UserDto>>(usersList);

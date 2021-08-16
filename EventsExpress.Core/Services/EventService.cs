@@ -426,8 +426,7 @@ namespace EventsExpress.Core.Services
             var result = events
                 .OrderBy(x => x.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize)
-                .ToList();
+                .Take(model.PageSize).ToList();
 
             return Mapper.Map<IEnumerable<EventDto>>(result);
         }

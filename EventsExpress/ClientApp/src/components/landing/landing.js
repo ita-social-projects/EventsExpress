@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom"
+import ModalWind from '../modal-wind';
 import './landing.css';
 
 export default class Landing extends Component {
+    handleClick = () => {
+        this.props.onSubmit();
+
+    }
     render() {
         var event = {
                     id: "157cf1f2-5d0d-4ca5-6b2f-08d950fd9320/1",
@@ -15,7 +20,8 @@ export default class Landing extends Component {
                 }
         var eventsBlock = [event, event, event, event]
         var events = [eventsBlock, eventsBlock, eventsBlock]
-        
+        const { id } = this.props.user;
+
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -24,16 +30,15 @@ export default class Landing extends Component {
                             <h1>EventsExpress</h1>
                         </div>
                         <div className="col-md-1">
-                            <a className="nav-link" href="/">Log in</a>
-                        </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Sign up</a>
+                            {
+                                !id && (<ModalWind />)
+                            }
                         </div>
                     </nav>
                     <div className="button-container text-center">
                         <h2>What do you want to do?</h2>
                         <div className="buttons">
-                            <button className="btn btn-warning">Create event</button>
+                            <button className="btn btn-warning" onClick={this.handleClick}>Create event</button>
                             <Link to={"home/events"} className="btn btn-warning">Find event</Link>
                         </div>
                     </div>
