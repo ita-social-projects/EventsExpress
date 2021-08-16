@@ -10,7 +10,7 @@ export const reducer = (state = initialState.notificationTemplate, action) => {
     } else if(action.type === GET_TEMPLATE_PROPERTIES_SUCCESS) {
         return {
             ...state,
-            necessaryProperties: action.payload
+            availableProperties: action.payload
         }
     }
 

@@ -18,12 +18,12 @@ class NotificationInfoWrapper extends Component {
 
     render() {
         const { notificationTemplate,
-            notificationTemplate: { necessaryProperties } } = this.props;
+            notificationTemplate: { availableProperties } } = this.props;
 
         return <>
             <NotificationTemplateForm
                 initialValues={notificationTemplate}
-                necessaryProps={necessaryProperties}
+                availableProps={availableProperties}
                 onSubmit={this.handleSubmit}
             />
         </>

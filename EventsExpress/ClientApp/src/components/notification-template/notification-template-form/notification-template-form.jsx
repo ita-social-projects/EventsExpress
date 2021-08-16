@@ -21,14 +21,14 @@ class NotificationTemplateForm extends Component {
         <div>
             <span>Available properties:</span>
             <ul className="mt-1">
-                {properties?.map(property => <li key={templateId + property}>{property}</li>)}
+                {properties.map(property => <li key={templateId + property}>{property}</li>)}
             </ul>
         </div>
     )
 
     render() {
         const { handleSubmit, submitting, reset, pristine,
-            initialValues: { id: templateId }, necessaryProps
+            initialValues: { id: templateId }, availableProps
         } = this.props;
 
         return (
@@ -74,7 +74,7 @@ class NotificationTemplateForm extends Component {
                             onClick={reset}>Reset</Button>
                     </div>
                 </form>
-                {necessaryProps && this.renderProperties(templateId, necessaryProps)}
+                {availableProps && this.renderProperties(templateId, availableProps)}
             </div>
         )
     }
