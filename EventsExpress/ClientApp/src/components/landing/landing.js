@@ -2,6 +2,9 @@
 import Carousel from 'react-material-ui-carousel';
 import CarouselEventCard from './CarouselEventCard';
 import EventService from '../../services/EventService';
+import { Link } from "react-router-dom"
+import ModalWind from '../modal-wind';
+import AuthComponent from '../../security/authComponent';
 import './landing.css';
 
 const eventService = new EventService()
@@ -13,6 +16,10 @@ export default class Landing extends Component {
         this.state = {
             events: []
                 }
+    }
+
+    handleClick = () => {
+        this.props.onSubmit();
     }
 
     splitDataIntoBlocks(itemsArray) {
@@ -40,6 +47,9 @@ export default class Landing extends Component {
     render() {
         const { events } = this.state
         const carouselNavIsVisible = events.length > 1
+        const { onLogoutClick } = this.props;
+        const { id } = this.props.user;
+      
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -47,18 +57,24 @@ export default class Landing extends Component {
                         <div className="col-md-10">
                             <h1>EventsExpress</h1>
                         </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Log in</a>
+                        <AuthComponent onlyAnonymous>
+                            <div className="col-md-1">
+                            {
+                                !id && (<ModalWind />)
+                            }
                         </div>
-                        <div className="col-md-1">
-                            <a className="nav-link" href="/">Sign up</a>
-                        </div>
+                        </AuthComponent>
+                        <AuthComponent>
+                            <div className="col-md-2 text-right">
+                                <div onClick={onLogoutClick} className="btn">Log out</div>
+                            </div>
+                        </AuthComponent>
                     </nav>
                     <div className="button-container text-center">
                         <h2>What do you want to do?</h2>
                         <div className="buttons">
-                            <button className="btn btn-warning">Create event</button>
-                            <button className="btn btn-warning">Find event</button>
+                            <button className="btn btn-warning" onClick={this.handleClick}>Create event</button>
+                            <Link to={"home/events"} className="btn btn-warning">Find event</Link>
                         </div>
                     </div>
                 </article>

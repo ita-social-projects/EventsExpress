@@ -5,7 +5,8 @@ import {
     Redirect,
     Switch
 } from 'react-router-dom';
-import Landing from '../landing'
+
+import LandingWrapper from '../../containers/landing-wrapper';
 import Home from '../home';
 import Issues from '../contactAdmin/issues';
 import Profile from '../profile';
@@ -50,7 +51,7 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route path="/landing" component={Landing} />
+                    <Route path="/landing" component={LandingWrapper} />
                     <Route
                         exact
                         path="/"
