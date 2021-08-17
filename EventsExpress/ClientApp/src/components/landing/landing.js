@@ -51,7 +51,7 @@ export default class Landing extends Component {
                         <h2>What do you want to do?</h2>
                         <div className="buttons">
                             <button className="btn btn-warning" onClick={this.handleClick}>Create event</button>
-                            <button className="btn btn-warning">Find event</button>
+                            <Link to={"home/events"} className="btn btn-warning">Find event</Link>
                         </div>
                     </div>
                 </article>
