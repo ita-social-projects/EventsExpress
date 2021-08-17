@@ -45,7 +45,6 @@ namespace EventsExpress.Controllers
         [Authorize(Policy = PolicyNames.UserPolicyName)]
         public IActionResult SearchUsers([FromQuery] UsersFilterViewModel filter)
         {
-            filter.PageSize = 12;
             filter.IsConfirmed = true;
             try
             {

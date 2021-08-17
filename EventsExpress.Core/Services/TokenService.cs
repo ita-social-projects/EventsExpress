@@ -11,6 +11,7 @@ using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -18,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EventsExpress.Core.Services
 {
-    public class TokenService : BaseService<RefreshToken>, ITokenService
+    public class TokenService : BaseService<UserToken>, ITokenService
     {
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
         private readonly IOptions<JwtOptionsModel> _jwtOptions;
@@ -118,14 +119,15 @@ namespace EventsExpress.Core.Services
             return claims.ToArray();
         }
 
-        public RefreshToken GenerateRefreshToken()
+        public UserToken GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
 
-            return new RefreshToken
+            return new UserToken
             {
+                Type = TokenType.RefreshToken,
                 Token = Convert.ToBase64String(randomNumber),
                 Expires = DateTime.Now.AddDays(7),
                 Created = DateTime.Now,
@@ -159,7 +161,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<bool> RevokeToken(string token)
         {
-            var refreshToken = Context.RefreshTokens.SingleOrDefault(rt => rt.Token == token);
+            var refreshToken = Context.UserTokens.SingleOrDefault(rt => rt.Token == token);
 
             // return false if token is not active
             if (refreshToken == null || !_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
@@ -186,6 +188,22 @@ namespace EventsExpress.Core.Services
             };
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
             _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);
+        }
+
+        public async Task GenerateEmailConfirmationToken(string token, Guid accountId)
+        {
+            var emailToken = new UserToken
+            {
+                Type = TokenType.EmailConfirmationToken,
+                Token = token,
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now,
+                AccountId = accountId,
+            };
+
+            Context.UserTokens.Add(emailToken);
+
+            await Context.SaveChangesAsync();
         }
     }
 }

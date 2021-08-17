@@ -10,7 +10,9 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ServiceTests
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
+    using System.Threading.Tasks;
 
     [TestFixture]
     internal class TokenServiceTests : TestInitializer
@@ -22,6 +24,8 @@ namespace EventsExpress.Test.ServiceTests
         private TokenService _service;
         private List<Claim> _claims;
         private Account _existingAccount;
+        private User _existingUser;
+        private string _token;
 
         [SetUp]
         protected override void Initialize()
@@ -31,6 +35,7 @@ namespace EventsExpress.Test.ServiceTests
             _mockJwtOptions = new Mock<IOptions<JwtOptionsModel>>();
             _mockSigningEncodingKey = new Mock<IJwtSigningEncodingKey>();
             _httpContextAccessor = new Mock<IHttpContextAccessor>();
+
             _service = new TokenService(
                 Context,
                 MockMapper.Object,
@@ -38,17 +43,32 @@ namespace EventsExpress.Test.ServiceTests
                 _mockSigningEncodingKey.Object,
                 _httpContextAccessor.Object);
 
+            _token = Guid.NewGuid().ToString();
+
+            _existingUser = new User
+            {
+                Id = Guid.NewGuid(),
+                Account = _existingAccount,
+            };
+
             _existingAccount = new Account
             {
                 Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                UserId = _existingUser.Id,
                 AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } },
             };
 
             _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
 
+            Context.Users.Add(_existingUser);
             Context.Accounts.Add(_existingAccount);
             Context.SaveChanges();
+        }
+
+        [Test]
+        public void GenerateEmailConfirmToken_DoesNotThrows()
+        {
+            Assert.DoesNotThrowAsync(async () => await _service.GenerateEmailConfirmationToken(_token, _existingUser.Id));
         }
     }
 }

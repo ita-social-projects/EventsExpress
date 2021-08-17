@@ -54,8 +54,6 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All([FromQuery] ContactAdminFilterViewModel filter)
         {
-            filter.PageSize = 8;
-
             try
             {
                 var viewModel = new IndexViewModel<ContactAdminViewModel>
