@@ -13,6 +13,7 @@ export default class ParticipantGroup extends Component {
         const { label,
             disabled,
             users,
+            renderUserActions
         } = this.props;
 
         return (
@@ -30,7 +31,7 @@ export default class ParticipantGroup extends Component {
                             users.map(user => (
                                 <UserView user={user}>
                                     {
-                                        this.props.children
+                                        renderUserActions(user) 
                                     }
                                 </UserView>
                             ))
