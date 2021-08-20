@@ -154,7 +154,7 @@ namespace EventsExpress.Db.DbInitialize
                 new NotificationTemplate { Id = NotificationProfile.EventStatusActivated, Title = "EventStatusActivated", Subject = "The event you have been joined was activated",  Message = "Dear (UserName), the event you have been joined was ACTIVATED. The reason is: (reason) \"<a href='(link)'>(title)</a>\"" },
                 new NotificationTemplate { Id = NotificationProfile.ParticipationApproved, Title = "ParticipationApproved", Subject = "Approving participation", Message = "Dear (UserName), you have been approved to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</a>\"" },
                 new NotificationTemplate { Id = NotificationProfile.ParticipationDenied, Title = "ParticipationDenied", Subject = "Denying participation", Message = "Dear (UserName), you have been denied to join to this event. To check it, please, visit \"<a href='(link)'>EventExpress</a>\"" },
-                new NotificationTemplate { Id = NotificationProfile.RegisterVerification, Title = "RegisterVerification", Subject = "EventExpress registration", Message = "For confirm your email please follow the <a href='(link)'>link</a>" },
+                new NotificationTemplate { Id = NotificationProfile.RegisterVerification, Title = "RegisterVerification", Subject = "EventExpress registration", Message = "For confirm your email please follow the \"<a href='(link)'>link</a>\"" },
                 new NotificationTemplate { Id = NotificationProfile.UnblockedUser, Title = "UnblockedUser", Subject = "Your account was Unblocked", Message = "Dear (UserName), congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress" },
             };
 
