@@ -25,16 +25,18 @@ class NotificationTemplateForm extends Component {
         }, 1000);
     }
 
-    renderField = ({ input, meta: { error }, ...props }) => (
-        <div className="form-group">
-            <TextField
-                {...input}
-                {...props}
-                error={Boolean(error)}
-                helperText={error}
-            />
-        </div>
-    );
+    renderField = ({ input, meta: { error }, ...props }) => {
+        return (
+            <div className="form-group">
+                <TextField
+                    {...input}
+                    {...props}
+                    error={Boolean(error)}
+                    helperText={error}
+                />
+            </div>
+        );
+    }
 
     renderProperties = (properties) => (
         <div className="ml-3">
@@ -61,10 +63,8 @@ class NotificationTemplateForm extends Component {
     );
 
     render() {
-        const {
-            handleSubmit, submitting, reset, pristine,
-            initialValues: { id: templateId }, availableProps
-        } = this.props;
+        const { handleSubmit, submitting, reset, pristine, availableProps } = this.props;
+        const { renderField, renderProperties } = this;
 
         return (
             <div className="d-flex">
@@ -73,7 +73,7 @@ class NotificationTemplateForm extends Component {
                     <Field
                         name="title"
                         type="text"
-                        component={this.renderField}
+                        component={renderField}
                         label="Title"
                         InputProps={{
                             readOnly: true,
@@ -83,7 +83,7 @@ class NotificationTemplateForm extends Component {
                         name="subject"
                         className="form-control"
                         type="text"
-                        component={this.renderField}
+                        component={renderField}
                         label="Subject"
                         inputProps={{
                             required: true,
@@ -93,7 +93,7 @@ class NotificationTemplateForm extends Component {
                     <Field
                         name="message"
                         className="form-control"
-                        component={this.renderField}
+                        component={renderField}
                         type="text"
                         rows={15}
                         label="Message"
@@ -111,7 +111,7 @@ class NotificationTemplateForm extends Component {
                         </Button>
                     </div>
                 </form>
-                {availableProps && this.renderProperties(availableProps)}
+                {availableProps && renderProperties(availableProps)}
             </div>
         )
     }
