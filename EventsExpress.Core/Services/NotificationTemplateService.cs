@@ -42,11 +42,14 @@ namespace EventsExpress.Core.Services
         }
 
         public TModelType GetModelByTemplateId<TModelType>(NotificationProfile id)
-             where TModelType : class, INotificationTemplateModel => (TModelType)Dependencies
-            .Where(d => d.Key == id)
-            .Select(d => d.Value)
-            .First()
-            .Invoke();
+            where TModelType : class, INotificationTemplateModel
+        {
+            return (TModelType)Dependencies
+                .Where(d => d.Key == id)
+                .Select(d => d.Value)
+                .First()
+                .Invoke();
+        }
 
         private static Dictionary<string, string> GetPropertiesAndValuesFromObject<T>(T model)
         {

@@ -100,7 +100,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void PerformReplacement_IsValid()
+        public void PerformReplacement_ReturnsValid()
         {
             string text = string.Empty;
             var model = new NotificationTemplateModel { TestProperty = string.Empty };

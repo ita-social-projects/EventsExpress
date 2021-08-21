@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
@@ -41,6 +41,9 @@ namespace EventsExpress.Test.HandlerTests
             _usersHubContext = new Mock<IHubContext<UsersHub, IUsersClient>>();
             _notificationTemplateService = new Mock<INotificationTemplateService>();
 
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<AccountStatusNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new AccountStatusNotificationTemplateModel());
             _notificationTemplateService
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.NotificationHandlers;
@@ -39,6 +39,9 @@ namespace EventsExpress.Test.HandlerTests
 
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<RegisterVerificationNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new RegisterVerificationNotificationTemplateModel());
             _notificationTemplateService.Setup(
                 service => service.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync((NotificationProfile id) => new NotificationTemplateDto

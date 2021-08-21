@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Hubs;
@@ -66,9 +66,17 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_AllUser_AllSubscribingUsers()
+        public async Task Handle_AllUser_AllSubscribingUsers()
         {
-            var result = _blockedUserHandler.Handle(_blockedUserMessage, CancellationToken.None);
+            // Arrange
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<AccountStatusNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new AccountStatusNotificationTemplateModel());
+
+            // Act
+            await _blockedUserHandler.Handle(_blockedUserMessage, CancellationToken.None);
+
+            // Assert
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
         }
 
@@ -78,6 +86,9 @@ namespace EventsExpress.Test.HandlerTests
             // Arrange
             _usersHubContext.Setup(s => s.Clients.All.CountUsers())
                 .Returns(Task.CompletedTask);
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<AccountStatusNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new AccountStatusNotificationTemplateModel());
 
             // Act
             await _blockedUserHandler.Handle(_blockedUserMessage, CancellationToken.None);

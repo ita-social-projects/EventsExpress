@@ -6,6 +6,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.NotificationHandlers;
@@ -48,8 +49,11 @@ namespace EventsExpress.Test.HandlerTests
 
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
-            _notificationTemplateService
-                .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<CreateEventVerificationNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new CreateEventVerificationNotificationTemplateModel());
+            _notificationTemplateService.Setup(s =>
+                    s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
 
             _eventVerificationHandler = new CreateEventVerificationHandler(_logger.Object, _emailService.Object, _userService.Object, _trackService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
@@ -84,10 +88,13 @@ namespace EventsExpress.Test.HandlerTests
         [Test]
         public void Handle_AllUser_AllSubscribingUsers()
         {
+            // Arrange
             _trackService.Setup(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(_changeInfo));
 
+            // Act
             var result = _eventVerificationHandler.Handle(_createEventVerificationMessage, CancellationToken.None);
 
+            // Assert
             Assert.IsInstanceOf<Task>(result);
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
             _trackService.Verify(track => track.GetChangeInfoByScheduleIdAsync(It.IsAny<Guid>()), Times.Exactly(1));
