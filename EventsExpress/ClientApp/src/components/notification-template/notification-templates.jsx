@@ -2,14 +2,14 @@
 import NotificationTemplateItem from './notification-template-item';
 
 export default class NotificationTemplates extends Component {
-    
+
     renderTemplates = (arr) => arr.map(
         template => <NotificationTemplateItem key={template.id} template={template} />
     );
 
     render() {
-        const { templates } = this.props; 
-        
+        const { templates } = this.props;
+
         return (
             <table className="table table-hover">
                 <thead className="thead-dark">
