@@ -68,6 +68,8 @@ namespace EventsExpress
                         policy.Requirements.Add(new RoleRequirement(PolicyNames.AdminRole)));
                     options.AddPolicy(PolicyNames.UserPolicyName, policy =>
                         policy.Requirements.Add(new RoleRequirement(PolicyNames.UserRole)));
+                    options.AddPolicy(PolicyNames.AdminAndUserPolicyName, policy =>
+                        policy.RequireRole(PolicyNames.AdminRole, PolicyNames.UserRole));
                 })
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

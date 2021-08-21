@@ -6,9 +6,9 @@ namespace EventsExpress.Core.DTOs
 {
     public class ContactAdminFilterViewModel
     {
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
 
-        public int PageSize { get; set; }
+        public int PageSize { get; set; } = 8;
 
         public DateTime DateFrom { get; set; }
 

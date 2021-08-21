@@ -81,6 +81,7 @@ namespace EventsExpress.Core.Services
                 .OrderBy(x => x.DateCreated)
                 .Skip((model.Page - 1) * model.PageSize)
                 .Take(model.PageSize).ToList();
+
             return Mapper.Map<IEnumerable<ContactAdmin>, IEnumerable<ContactAdminDto>>(result);
         }
     }

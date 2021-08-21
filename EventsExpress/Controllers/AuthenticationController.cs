@@ -150,6 +150,12 @@ namespace EventsExpress.Controllers
             return Ok(new { Token = authResponseModel.JwtToken });
         }
 
+        /// <summary>
+        /// This method allows complete registration.
+        /// </summary>
+        /// <param name="authRequest">Param authRequest defines LoginViewModel.</param>
+        /// <returns>The method performs RegisterComplete operation.</returns>
+        /// <response code="200">Register complete.</response>
         [Authorize]
         [HttpPost("[action]")]
         public async Task<IActionResult> RegisterComplete(RegisterCompleteViewModel authRequest)
