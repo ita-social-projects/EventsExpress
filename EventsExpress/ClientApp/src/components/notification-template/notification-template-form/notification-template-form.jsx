@@ -1,10 +1,11 @@
-﻿import React, { Component, useState } from 'react';
+﻿import React, { Component } from 'react';
 import { Field, reduxForm, reset } from 'redux-form';
 import { connect } from 'react-redux';
 import { TextField, Button, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { minLength10, minLength20 } from '../../helpers/validators/min-max-length-validators';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { MdContentCopy, MdCheck } from "react-icons/md";
+import "./notification-template-form.css";
 
 class NotificationTemplateForm extends Component {
 
@@ -39,8 +40,8 @@ class NotificationTemplateForm extends Component {
     }
 
     renderProperties = (properties) => (
-        <div className="ml-3">
-            <Typography variant="h6" className="m-0 mb-1 mt-4 text-nowrap center">
+        <>
+            <Typography variant="h6" className="m-0 mb-1 text-nowrap center">
                 Available properties
             </Typography>
             <List className="d-flex flex-column align-items-center">
@@ -59,7 +60,7 @@ class NotificationTemplateForm extends Component {
                     </CopyToClipboard>
                 )}
             </List>
-        </div>
+        </>
     );
 
     render() {
@@ -111,7 +112,9 @@ class NotificationTemplateForm extends Component {
                         </Button>
                     </div>
                 </form>
-                {availableProps && renderProperties(availableProps)}
+                <div className="ml-4 mt-6">
+                    {availableProps && renderProperties(availableProps)}
+                </div>
             </div>
         )
     }
