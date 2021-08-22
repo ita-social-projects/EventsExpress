@@ -1,6 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Field, reduxForm, reset } from 'redux-form';
-import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 import { TextField, Button, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { minLength10, minLength20 } from '../../helpers/validators/min-max-length-validators';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -121,12 +120,8 @@ class NotificationTemplateForm extends Component {
 }
 
 NotificationTemplateForm = reduxForm({
-    form: 'notificationTemplateForm',
+    form: 'NotificationTemplateForm',
     enableReinitialize: true
 })(NotificationTemplateForm);
 
-const mapDispatchToProps = (dispatch) => ({
-    reset: () => dispatch(reset('NotificationTemplateForm'))
-});
-
-export default connect(mapDispatchToProps)(NotificationTemplateForm);
+export default NotificationTemplateForm;
