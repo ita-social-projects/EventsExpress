@@ -57,6 +57,26 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void GetModelPropertiesByTemplateId_ReturnsValid([Values]NotificationProfile profile)
+        {
+            // Act
+            var result = _service.GetModelPropertiesByTemplateId(profile);
+
+            // Assert
+            CollectionAssert.IsNotEmpty(result);
+        }
+
+        [Test]
+        public void GetModelByTemplateId_DoesNotThrowException([Values]NotificationProfile profile)
+        {
+            // Arrange
+            void ActMethod() => _service.GetModelByTemplateId<INotificationTemplateModel>(profile);
+
+            // Assert
+            Assert.DoesNotThrow(ActMethod);
+        }
+
+        [Test]
         public async Task GetAllAsync_UsedMapper()
         {
             MockMapper
