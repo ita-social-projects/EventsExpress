@@ -55,6 +55,42 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        public void GetTemplateProperties_Called_GetModelByTemplateId_Method()
+        {
+            // Arrange
+            _mockNotificationTemplateService.Setup(s =>
+                    s.GetModelPropertiesByTemplateId(It.IsAny<NotificationProfile>()))
+                .Returns(new List<string>());
+
+            // Act
+            _controller.GetTemplateProperties(It.IsAny<NotificationProfile>());
+
+            // Assert
+            _mockNotificationTemplateService.Verify(
+                s => s.GetModelPropertiesByTemplateId(It.IsAny<NotificationProfile>()), Times.Once);
+        }
+
+        [Test]
+        public void GetTemplateProperties_ReturnsValid()
+        {
+            // Arrange
+            IEnumerable<string> expectedProperties = new List<string> { "Test_Property_0", "Test_Property_1", "Test_Property_2", };
+
+            _mockNotificationTemplateService.Setup(
+                    s => s.GetModelPropertiesByTemplateId(It.IsAny<NotificationProfile>()))
+                .Returns(expectedProperties);
+
+            // Act
+            var actionResult = _controller.GetTemplateProperties(It.IsAny<NotificationProfile>());
+
+            var okResult = actionResult as OkObjectResult;
+            var actualProperties = okResult?.Value as IEnumerable<string>;
+
+            // Assert
+            CollectionAssert.AreEqual(expectedProperties, actualProperties);
+        }
+
+        [Test]
         public async Task GetAll_ReturnsValidType()
         {
             var result = await _controller.GetAll();

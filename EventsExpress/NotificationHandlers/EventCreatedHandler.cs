@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -8,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -36,28 +36,28 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(EventCreatedMessage notification, CancellationToken cancellationToken)
         {
+            const NotificationProfile profile = NotificationProfile.EventCreated;
+            var model = _notificationTemplateService.GetModelByTemplateId<EventCreatedNotificationTemplateModel>(profile);
+
             try
             {
-                var userIds = _userService.GetUsersByCategories(notification.Event.Categories).Select(x => x.Id);
-                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds).Select(x => x.Email);
+                var userIds = _userService.GetUsersByCategories(notification.Event.Categories)
+                    .Select(x => x.Id);
+                var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, userIds)
+                    .Select(x => x.Email);
+                var templateDto = await _notificationTemplateService.GetByIdAsync(profile);
 
-                var templateDto = await _notificationTemplateService.GetByIdAsync(NotificationProfile.EventCreated);
+                model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.Event.Id}/1";
 
-                foreach (var userEmail in usersEmails)
+                foreach (var email in usersEmails)
                 {
-                    string link = $"{_urlOptions.Value.Host}/event/{notification.Event.Id}/1";
-
-                    Dictionary<string, string> pattern = new Dictionary<string, string>
-                    {
-                        { "(UserName)", userEmail },
-                        { "(link)", link },
-                    };
+                    model.UserEmail = email;
 
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
-                        RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        RecepientEmail = email,
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }

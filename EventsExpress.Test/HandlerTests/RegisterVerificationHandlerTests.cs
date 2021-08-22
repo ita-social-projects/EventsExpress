@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.NotificationHandlers;
@@ -39,9 +39,9 @@ namespace EventsExpress.Test.HandlerTests
 
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 
-            _notificationTemplateService.Setup(
-                    service => service.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns("Replacement result");
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<RegisterVerificationNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new RegisterVerificationNotificationTemplateModel());
             _notificationTemplateService.Setup(
                 service => service.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync((NotificationProfile id) => new NotificationTemplateDto
@@ -84,18 +84,6 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService.Verify(
                 service => service.GetByIdAsync(It.IsAny<NotificationProfile>()),
                 Times.Once);
-        }
-
-        [Test]
-        public async Task NotificationTemplateService_PerformReplacement_IsInvoked()
-        {
-            // Act
-            await _registerVerificationHandler.Handle(_message, CancellationToken.None);
-
-            // Assert
-            _notificationTemplateService.Verify(
-                service => service.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()),
-                Times.AtLeast(2));
         }
 
         [Test]

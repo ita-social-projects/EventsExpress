@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { get_all_templates } from "../../actions/notification-templates";
-import NotificationTemplates from '../../components/notification_template';
+import NotificationTemplates from '../../components/notification-template';
 
 class NotificationTemplateWrapper extends Component {
 

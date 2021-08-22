@@ -5,9 +5,9 @@ namespace EventsExpress.Core.Notifications
 {
     public class EventCreatedMessage : INotification
     {
-        public EventCreatedMessage(EventDto eventDTO)
+        public EventCreatedMessage(EventDto eventDto)
         {
-            Event = eventDTO;
+            Event = eventDto;
         }
 
         public EventDto Event { get; }
