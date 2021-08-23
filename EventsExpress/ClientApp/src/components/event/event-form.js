@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import asyncValidatePhoto from '../../containers/async-validate-photo';
 import MultiEventForm from './Multievent-form'
+import FieldArraysForm from './MultiEvent1'
 
 momentLocaliser(moment);
 
@@ -144,7 +145,7 @@ class EventForm extends Component {
                                 <Field
                                     name='dateTo'
                                     label='To'
-                                    disabled={disabledDate}
+                                disabled={disabledDate}
                                     minValue={form_values.dateFrom}
                                     component={renderDatePicker}
                                 />
@@ -204,7 +205,7 @@ class EventForm extends Component {
                     {this.props.form_values
                         && this.props.form_values.location
                         && this.props.form_values.location.type == enumLocationType.multiEvent &&
-                        <MultiEventForm {...this.props } / >
+                        <FieldArraysForm {...this.props } />
                        
                     }
                 </div>

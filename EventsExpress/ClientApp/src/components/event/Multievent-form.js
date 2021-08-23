@@ -17,10 +17,9 @@ import Radio from '@material-ui/core/Radio';
 
 momentLocaliser(moment);
 
-const photoService = new PhotoService();
 class MultiEventForm extends Component {
 
-    state = { checked: this.props.initialValues.isReccurent };
+    state = { checked: false };
 
     handleChange = () => {
         this.setState(state => ({
@@ -28,9 +27,7 @@ class MultiEventForm extends Component {
         }));
     }
 
-    periodicityListOptions = (periodicity.map((item) =>
-        <option value={item.value} key={item.value}> {item.label} </option>
-    ));
+    
 
     checkLocation = (location) => {
         if (location) {
@@ -49,26 +46,17 @@ class MultiEventForm extends Component {
     }
 
     render() {
-        const { form_values, all_categories, disabledDate } = this.props;
-        const { checked } = this.state;
+        //const { form_values, all_categories, disabledDate } = this.props;
+        //const { checked } = this.state;
 
-        if (this.props.initialValues.location != null) {
-            this.props.initialValues.location.type = String(this.props.initialValues.location.type);
-        }
+        //if (this.props.initialValues.location != null) {
+        //    this.props.initialValues.location.type = String(this.props.initialValues.location.type);
+        //}
 
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
                 encType="multipart/form-data" autoComplete="off">
                 <div className="text text-2 pt-md-2">
-                    <Field
-                        id="image-field"
-                        name="photo"
-                        component={DropZoneField}
-                        type="file"
-                        crop={true}
-                        cropShape='rect'
-                        loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
-                    />
                     <div className="mt-2">
                         <Field
                             name='title'
@@ -79,47 +67,8 @@ class MultiEventForm extends Component {
                         />
                     </div>
                     <div className="mt-2">
-                        <Field
-                            name='maxParticipants'
-                            component={renderTextField}
-                            type="number"
-                            label="Max Count Of Participants"
-                        />
                     </div>
-                    {this.props.haveReccurentCheckBox &&
-                        <div className="mt-2">
-                            <Field
-                                type="checkbox"
-                                label="Recurrent Event"
-                                name='isReccurent'
-                                component={renderCheckbox}
-                                checked={checked}
-                                onChange={this.handleChange}
-                            />
-                        </div>
-                    }
-                    {this.props.haveReccurentCheckBox && checked &&
-                        <div>
-                            <div className="mt-2">
-                                <Field
-                                    minWidth={200}
-                                    name="periodicity"
-                                    text="Periodicity"
-                                    component={renderSelectField}
-                                >
-                                    {this.periodicityListOptions}
-                                </Field>
-                            </div>
-                            <div className="mt-2">
-                                <Field
-                                    name='frequency'
-                                    type="number"
-                                    component={renderTextField}
-                                    label="Frequency"
-                                />
-                            </div>
-                        </div>
-                    }
+
                     <div className="mt-2">
                         <Field
                             name='isPublic'
@@ -148,25 +97,6 @@ class MultiEventForm extends Component {
                                 />
                             </span>
                         }
-                    </div>
-                    <div className="mt-3">
-                        <Field
-                            name='description'
-                            component={renderTextArea}
-                            type="input"
-                            label="Description"
-                        />
-                    </div>
-                    <div className="mt-2">
-                        <Field
-                            name="categories"
-                            component={renderMultiselect}
-                            data={all_categories.data}
-                            valueField={"id"}
-                            textField={"name"}
-                            className="form-control"
-                            placeholder='#hashtags'
-                        />
                     </div>
                     <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
                         <FormControlLabel value={0} control={<Radio />} label="Map" />
@@ -198,17 +128,19 @@ class MultiEventForm extends Component {
                             />
                         </div>
                     }
-                  
+
                 </div>
                 <div className="row my-4">
                     {this.props.children}
                 </div>
             </form>
+              
+    
         );
     }
 }
 
 export default reduxForm({
-    form: 'event-form',
+    form: 'Multievent-form',
     enableReinitialize: true
 })(MultiEventForm);
