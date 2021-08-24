@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ServiceTests.TestClasses.NotificationTemplate;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +20,7 @@ namespace EventsExpress.Test.ServiceTests
     {
         private static readonly object[] PerformReplacementTestCases =
         {
-            new object[] { null, new Dictionary<string, string>() },
+            new object[] { null, new NotificationTemplateModel { TestProperty = string.Empty } },
             new object[] { string.Empty, null },
         };
 
@@ -52,6 +54,26 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object);
 
             Context.SaveChanges();
+        }
+
+        [Test]
+        public void GetModelPropertiesByTemplateId_ReturnsValid([Values]NotificationProfile profile)
+        {
+            // Act
+            var result = _service.GetModelPropertiesByTemplateId(profile);
+
+            // Assert
+            CollectionAssert.IsNotEmpty(result);
+        }
+
+        [Test]
+        public void GetModelByTemplateId_DoesNotThrowException([Values]NotificationProfile profile)
+        {
+            // Arrange
+            void ActMethod() => _service.GetModelByTemplateId<INotificationTemplateModel>(profile);
+
+            // Assert
+            Assert.DoesNotThrow(ActMethod);
         }
 
         [Test]
@@ -98,20 +120,20 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void PerformReplacement_IsValid()
+        public void PerformReplacement_ReturnsValid()
         {
             string text = string.Empty;
-            var pattern = new Dictionary<string, string>();
+            var model = new NotificationTemplateModel { TestProperty = string.Empty };
 
-            var result = _service.PerformReplacement(text, pattern);
+            var result = _service.PerformReplacement(text, model);
 
             Assert.IsInstanceOf<string>(result);
         }
 
         [TestCaseSource(nameof(PerformReplacementTestCases))]
-        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, Dictionary<string, string> pattern)
+        public void PerformReplacement_ThrowsArgumentNullExceptionForTextParameter(string text, INotificationTemplateModel model)
         {
-            Assert.Throws<ArgumentNullException>(() => _service.PerformReplacement(text, pattern));
+            Assert.Throws<ArgumentNullException>(() => _service.PerformReplacement(text, model));
         }
 
         [Test]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -8,6 +7,7 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -36,32 +36,29 @@ namespace EventsExpress.NotificationHandlers
 
         public async Task Handle(ParticipationMessage notification, CancellationToken cancellationToken)
         {
+            var templateId = notification.Status.Equals(UserStatusEvent.Approved) ?
+                NotificationProfile.ParticipationApproved
+                : NotificationProfile.ParticipationDenied;
+            var model = _notificationTemplateService.GetModelByTemplateId<ParticipationNotificationTemplateModel>(templateId);
+            var usersIds = new[] { notification.UserId };
+
             try
             {
-                var usersIds = new[] { notification.UserId };
-                var userEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersIds).Select(x => x.Email).SingleOrDefault();
+                model.UserEmail = _userService.GetUsersByNotificationTypes(_nameNotification, usersIds)
+                    .Select(x => x.Email)
+                    .SingleOrDefault();
 
-                if (userEmail != null)
+                if (model.UserEmail != null)
                 {
-                    string eventLink = $"{_urlOptions.Value.Host}/event/{notification.Id}/1";
-
-                    var templateId = notification.Status.Equals(UserStatusEvent.Approved) ?
-                        NotificationProfile.ParticipationApproved
-                        : NotificationProfile.ParticipationDenied;
+                    model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.Id}/1";
 
                     var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
 
-                    Dictionary<string, string> pattern = new Dictionary<string, string>
-                    {
-                        { "(UserName)", userEmail },
-                        { "(link)", eventLink },
-                    };
-
                     await _sender.SendEmailAsync(new EmailDto
                     {
-                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, pattern),
-                        RecepientEmail = userEmail,
-                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, pattern),
+                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
+                        RecepientEmail = model.UserEmail,
+                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
                     });
                 }
             }
