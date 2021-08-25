@@ -65,7 +65,7 @@ export default class Landing extends Component {
                                                 renderButton={(action) => (
                                                     <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
                                                         Sign In/Up
-                                                      </Button>
+                                                    </Button>
                                                 )}/>)
                             }
                         </div>
@@ -110,9 +110,16 @@ export default class Landing extends Component {
                             <h3>Have Fun Together</h3>
                         </div>
                     </div>
-                    <div className="text-center">
-                        <button className="btn btn-warning">Join EventsExpress</button>
-                    </div>
+                    <AuthComponent onlyAnonymous>
+                        <div className="text-center">
+                            <ModalWind
+                                renderButton={(action) => (
+                                    <button className="btn btn-warning" onClick={() => action()}>
+                                        Join EventsExpress
+                                    </button>
+                                )}/>
+                        </div>
+                    </AuthComponent>
                 </article>
                 {events.length !== 0 &&
                 <article className="events-article">
