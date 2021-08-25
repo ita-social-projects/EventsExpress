@@ -26,9 +26,13 @@ export default class HeaderProfile extends Component {
         return (
             <div className='header-profile-root'>
                 <div className='d-inline-block'>
-                    {!id && (
-                        <ModalWind />
-                    )}
+                    {!id && (<ModalWind
+                                renderButton={(action) => (
+                                    <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
+                                        Sign In/Up
+                                      </Button>
+                                )}/>)
+                    }
                     <AuthComponent>
                         <div className="d-flex flex-column align-items-center">
                             <CustomAvatar size="big" userId={id} name={this.props.user.name} />

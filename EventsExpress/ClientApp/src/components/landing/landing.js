@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import Button from "@material-ui/core/Button";
 import Carousel from 'react-material-ui-carousel';
 import CarouselEventCard from './CarouselEventCard';
 import EventService from '../../services/EventService';
@@ -59,8 +60,13 @@ export default class Landing extends Component {
                         </div>
                         <AuthComponent onlyAnonymous>
                             <div className="col-md-1">
-                            {
-                                !id && (<ModalWind />)
+                                {
+                                    !id && (<ModalWind
+                                                renderButton={(action) => (
+                                                    <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
+                                                        Sign In/Up
+                                                      </Button>
+                                                )}/>)
                             }
                         </div>
                         </AuthComponent>
