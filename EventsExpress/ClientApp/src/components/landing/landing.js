@@ -5,7 +5,17 @@ import EventService from '../../services/EventService';
 import { Link } from "react-router-dom"
 import ModalWind from '../modal-wind';
 import AuthComponent from '../../security/authComponent';
+import BackgroundSlider from 'react-background-slider';
 import './landing.css';
+import './ChangeBackground';
+import image_1 from './images/image-1.jpg';
+import image_2 from './images/image-2.jpg';
+import image_3 from './images/image-3.jpg';
+import image_4 from './images/image-4.jpg';
+import image_5 from './images/image-5.jpg';
+import image_6 from './images/image-6.jpg';
+import image_7 from './images/image-7.jpg';
+import image_8 from './images/image-8.jpg';
 
 const eventService = new EventService()
 
@@ -53,6 +63,17 @@ export default class Landing extends Component {
         return (<>
             <div className="main">
                 <article className="head-article">
+                    <BackgroundSlider
+                        images={[image_1,
+                            image_2,
+                            image_3,
+                            image_4,
+                            image_5,
+                            image_6,
+                            image_7,
+                            image_8
+                            ]}
+                        duration={5} transition={2} />
                     <nav className="row">
                         <div className="col-md-10">
                             <h1>EventsExpress</h1>
@@ -70,11 +91,15 @@ export default class Landing extends Component {
                             </div>
                         </AuthComponent>
                     </nav>
+                    
                     <div className="button-container text-center">
-                        <h2>What do you want to do?</h2>
-                        <div className="buttons">
-                            <button className="btn btn-warning" onClick={this.handleClick}>Create event</button>
-                            <Link to={"home/events"} className="btn btn-warning">Find event</Link>
+                        <div id="square"> </div>
+                        <div id="text-container">
+                            <h2>What do you want to do?</h2>
+                            <div className="buttons">
+                                <button className="btn btn-warning" onClick={this.handleClick}>Create event</button>
+                                <Link to={"home/events"} className="btn btn-warning">Find event</Link>
+                            </div>
                         </div>
                     </div>
                 </article>
