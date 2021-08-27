@@ -30,7 +30,7 @@ export default class Admin extends Component {
                                     <NavItem
                                         to={'/admin/unitsOfMeasuring/'}
                                         icon={'fa fa-plus'}
-                                        text={"UnitsOfMeasuring"}
+                                        text={"Units Of Measuring"}
                                     />
                                 </div>
                                 <div>

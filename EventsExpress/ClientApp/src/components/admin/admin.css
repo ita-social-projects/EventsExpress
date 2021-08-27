@@ -2,6 +2,10 @@ body {
     height: 100vh;
 }
 
+.row {
+    
+}
+
 #root {
     height: 100%;
 }
@@ -18,11 +22,13 @@ body {
 
 .admin-sidebar {
     background-color: rgba(114, 113, 113, 0.2);
+    height: 100em;
+    word-wrap: break-word;
 }
 
     .admin-sidebar ul li .link {
         padding: 10px;
-        font-size: 1.1em;
+        font-size: 1.5vw;
         color: rgba(0, 0, 0, 0.75);
         display: block;    
         width: 100%;
