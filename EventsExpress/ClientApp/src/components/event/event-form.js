@@ -15,8 +15,7 @@ import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import asyncValidatePhoto from '../../containers/async-validate-photo';
-import MultiEventForm from './Multievent-form'
-import FieldArraysForm from './MultiEvent1'
+import FieldArraysForm from './Multievent-form'
 
 momentLocaliser(moment);
 
