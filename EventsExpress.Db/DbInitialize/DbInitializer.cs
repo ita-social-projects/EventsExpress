@@ -77,6 +77,168 @@ namespace EventsExpress.Db.DbInitialize
                         },
                     },
                 },
+
+                new User
+                {
+                    Name = "BAUser1",
+                    Email = "bauser1@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "bauser1@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
+
+                new User
+                {
+                    Name = "BAUser2",
+                    Email = "bauser2@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "bauser2@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
+
+                new User
+                {
+                    Name = "QCUser1",
+                    Email = "qcuser1@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "qcuser1@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
+
+                new User
+                {
+                    Name = "QCUser2",
+                    Email = "qcuser2@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "qcuser2@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
+
+                new User
+                {
+                    Name = "QCUser3",
+                    Email = "qcuser3@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "qcuser3@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
+
+                new User
+                {
+                    Name = "QCUser4",
+                    Email = "qcuser4@gmail.com",
+                    Phone = "+380974293580",
+                    Birthday = DateTime.Parse("2000-01-01"),
+                    Gender = Gender.Male,
+                    Account = new Account
+                    {
+                        IsBlocked = false,
+                        AuthLocal = new AuthLocal
+                        {
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            Salt = saltDef,
+                            Email = "qcuser4@gmail.com",
+                            EmailConfirmed = true,
+                        },
+                        AccountRoles = new[]
+                        {
+                            new AccountRole
+                            {
+                                RoleId = Enums.Role.User,
+                            },
+                        },
+                    },
+                },
             };
 
             dbContext.Users.AddRange(users);
