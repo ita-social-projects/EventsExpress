@@ -82,15 +82,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "BAUser1",
                     Email = "bauser1@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
-                    Gender = Gender.Male,
+                    Phone = "+380974293581",
+                    Birthday = DateTime.Parse("2000-01-02"),
+                    Gender = Gender.Other,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz1", saltDef),
                             Salt = saltDef,
                             Email = "bauser1@gmail.com",
                             EmailConfirmed = true,
@@ -109,15 +109,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "BAUser2",
                     Email = "bauser2@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
-                    Gender = Gender.Male,
+                    Phone = "+380974293582",
+                    Birthday = DateTime.Parse("2000-01-03"),
+                    Gender = Gender.Female,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz2", saltDef),
                             Salt = saltDef,
                             Email = "bauser2@gmail.com",
                             EmailConfirmed = true,
@@ -136,15 +136,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "QCUser1",
                     Email = "qcuser1@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
+                    Phone = "+380974293583",
+                    Birthday = DateTime.Parse("2000-01-04"),
                     Gender = Gender.Male,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz3", saltDef),
                             Salt = saltDef,
                             Email = "qcuser1@gmail.com",
                             EmailConfirmed = true,
@@ -163,15 +163,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "QCUser2",
                     Email = "qcuser2@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
-                    Gender = Gender.Male,
+                    Phone = "+380974293584",
+                    Birthday = DateTime.Parse("2000-01-05"),
+                    Gender = Gender.Other,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz4", saltDef),
                             Salt = saltDef,
                             Email = "qcuser2@gmail.com",
                             EmailConfirmed = true,
@@ -190,15 +190,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "QCUser3",
                     Email = "qcuser3@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
-                    Gender = Gender.Male,
+                    Phone = "+380974293585",
+                    Birthday = DateTime.Parse("2000-01-06"),
+                    Gender = Gender.Female,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz5", saltDef),
                             Salt = saltDef,
                             Email = "qcuser3@gmail.com",
                             EmailConfirmed = true,
@@ -217,15 +217,15 @@ namespace EventsExpress.Db.DbInitialize
                 {
                     Name = "QCUser4",
                     Email = "qcuser4@gmail.com",
-                    Phone = "+380974293580",
-                    Birthday = DateTime.Parse("2000-01-01"),
+                    Phone = "+380974293586",
+                    Birthday = DateTime.Parse("2000-01-07"),
                     Gender = Gender.Male,
                     Account = new Account
                     {
                         IsBlocked = false,
                         AuthLocal = new AuthLocal
                         {
-                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz", saltDef),
+                            PasswordHash = passwordHasher.GenerateHash("1qaz1qaz6", saltDef),
                             Salt = saltDef,
                             Email = "qcuser4@gmail.com",
                             EmailConfirmed = true,
