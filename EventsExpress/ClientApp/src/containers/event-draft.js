@@ -18,7 +18,7 @@ class EventDraftWrapper extends Component {
     onPublish = async (values) => {
         if (!this.props.pristine)
         {
-            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
         }
         return this.props.publish(this.props.event.id);
     }
