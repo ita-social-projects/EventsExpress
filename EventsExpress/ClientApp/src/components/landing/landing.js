@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import Button from "@material-ui/core/Button";
 import Carousel from 'react-material-ui-carousel';
 import CarouselEventCard from './CarouselEventCard';
 import EventService from '../../services/EventService';
@@ -16,7 +15,7 @@ export default class Landing extends Component {
 
         this.state = {
             events: []
-                }
+        }
     }
 
     handleClick = () => {
@@ -44,13 +43,13 @@ export default class Landing extends Component {
             {eventBlock.map((event) => <CarouselEventCard key={event.id} event={event} />)}
         </div>
     )
-        
+
     render() {
         const { events } = this.state
         const carouselNavIsVisible = events.length > 1
         const { onLogoutClick } = this.props;
         const { id } = this.props.user;
-      
+
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -61,14 +60,9 @@ export default class Landing extends Component {
                         <AuthComponent onlyAnonymous>
                             <div className="col-md-1">
                                 {
-                                    !id && (<ModalWind
-                                                renderButton={(action) => (
-                                                    <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
-                                                        Sign In/Up
-                                                    </Button>
-                                                )}/>)
-                            }
-                        </div>
+                                    !id && (<ModalWind />)
+                                }
+                            </div>
                         </AuthComponent>
                         <AuthComponent>
                             <div className="col-md-2 text-right">
@@ -110,45 +104,38 @@ export default class Landing extends Component {
                             <h3>Have Fun Together</h3>
                         </div>
                     </div>
-                    <AuthComponent onlyAnonymous>
-                        <div className="text-center">
-                            <ModalWind
-                                renderButton={(action) => (
-                                    <button className="btn btn-warning" onClick={() => action()}>
-                                        Join EventsExpress
-                                    </button>
-                                )}/>
-                        </div>
-                    </AuthComponent>
+                    <div className="text-center">
+                        <button className="btn btn-warning">Join EventsExpress</button>
+                    </div>
                 </article>
                 {events.length !== 0 &&
-                <article className="events-article">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <h3>Upcoming events</h3>
+                    <article className="events-article">
+                        <div className="row">
+                            <div className="col-md-10">
+                                <h3>Upcoming events</h3>
+                            </div>
+                            <div style={{ textAlign: 'right' }} className="col-md-2">
+                                <a href="/home/events">Explore more events</a>
+                            </div>
                         </div>
-                        <div style={{ textAlign: 'right' }} className="col-md-2">
-                            <a href="/home/events">Explore more events</a>
-                        </div>
-                    </div>
-                    <div className="carousel-wrapper text-center">
-                        <Carousel
-                            autoPlay={false}
-                            animation={"slide"}
-                            interval={1000}
-                            indicators={false}
+                        <div className="carousel-wrapper text-center">
+                            <Carousel
+                                autoPlay={false}
+                                animation={"slide"}
+                                interval={1000}
+                                indicators={false}
                                 navButtonsAlwaysVisible={carouselNavIsVisible}
                                 navButtonsAlwaysInvisible={!carouselNavIsVisible}
 
-                            NextIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-right"></i>}
-                            PrevIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-left"></i>}
-                        >
-                            {
+                                NextIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-right"></i>}
+                                PrevIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-left"></i>}
+                            >
+                                {
                                     events.map((block) => this.renderCarouselBlock(block))
-                            }
-                        </Carousel>
-                    </div>
-                </article>
+                                }
+                            </Carousel>
+                        </div>
+                    </article>
                 }
             </div>
         </>);
