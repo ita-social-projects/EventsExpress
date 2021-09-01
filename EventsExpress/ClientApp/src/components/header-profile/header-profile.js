@@ -4,7 +4,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Zoom from '@material-ui/core/Zoom';
-import Button from "@material-ui/core/Button";
 import filterHelper from '../helpers/filterHelper';
 import ModalWind from '../modal-wind';
 import CustomAvatar from '../avatar/custom-avatar';
@@ -27,13 +26,9 @@ export default class HeaderProfile extends Component {
         return (
             <div className='header-profile-root'>
                 <div className='d-inline-block'>
-                    {!id && (<ModalWind
-                                renderButton={(action) => (
-                                    <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
-                                        Sign In/Up
-                                      </Button>
-                                )}/>)
-                    }
+                    {!id && (
+                        <ModalWind />
+                    )}
                     <AuthComponent>
                         <div className="d-flex flex-column align-items-center">
                             <CustomAvatar size="big" userId={id} name={this.props.user.name} />
