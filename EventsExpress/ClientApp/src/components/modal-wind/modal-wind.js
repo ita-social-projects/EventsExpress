@@ -15,85 +15,86 @@ import { TogleOpenWind } from '../../actions/modalWind-action';
 import Modalwind2 from '../recoverPassword/modalwind2';
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
+    return (
+        <Typography component="div" style={{ padding: 8 * 3 }}>
+            {props.children}
+        </Typography>
+    );
 }
 
 const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-    maxWidth: 500
-  }
+    root: {
+        flexGrow: 1,
+        maxWidth: 500
+    }
 });
 
 function ModalWind(props) {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-    
-  const handleChange = (event, newValue) => { 
-    setValue(newValue); 
-  }
+    const classes = useStyles();
+    const [value, setValue] = React.useState(0);
 
-  const handleClickOpen = () => { 
-    props.setStatus(true); 
-  }
-  
-  const handleClose = () => { 
-    props.setStatus(false); 
-  }
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    }
 
-  return (
-    <div className='d-inline-block'>
-      {
-          props.renderButton(handleClickOpen)
-      }
-      <Dialog
-        open={props.status.isOpen}
-        onClose={handleClose}
-      >
-        <Paper square className={classes.root}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab icon={<LockOpen />} label="Login" />
-            <Tab icon={<PersonPinIcon />} label="Register" />
-          </Tabs>
-          
-          {value === 0 && (
-            <TabContainer>
-              <LoginWrapper  />
-            </TabContainer>
-          )}
-          {value === 1 && (
-            <TabContainer>
-              <RegisterWrapper handleClose={handleClose} />
-            </TabContainer>
-          )}
+    const handleClickOpen = () => {
+        props.setStatus(true);
+    }
 
-          <div className="text-center">
-            <Modalwind2 />
-          </div>
-          <Button fullWidth onClick={handleClose} color="primary">
-            Cancel
+    const handleClose = () => {
+        props.setStatus(false);
+    }
+
+    return (
+        <div className='d-inline-block'>
+            <Button className='mt-5 btn btn-warning' variant="contained" onClick={handleClickOpen}>
+                Sign In/Up
+      </Button>
+            <Dialog
+                open={props.status.isOpen}
+                onClose={handleClose}
+            >
+                <Paper square className={classes.root}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        indicatorColor="primary"
+                        textColor="primary"
+                    >
+                        <Tab icon={<LockOpen />} label="Login" />
+                        <Tab icon={<PersonPinIcon />} label="Register" />
+                    </Tabs>
+
+                    {value === 0 && (
+                        <TabContainer>
+                            <LoginWrapper />
+                        </TabContainer>
+                    )}
+                    {value === 1 && (
+                        <TabContainer>
+                            <RegisterWrapper handleClose={handleClose} />
+                        </TabContainer>
+                    )}
+
+                    <div className="text-center">
+                        <Modalwind2 />
+                    </div>
+                    <Button fullWidth onClick={handleClose} color="primary">
+                        Cancel
           </Button>
-        </Paper>
-      </Dialog>
-    </div>
-)}
+                </Paper>
+            </Dialog>
+        </div>
+    )
+}
 
 const mapStateToProps = (state) => ({
-  status: state.modal
+    status: state.modal
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setStatus: (data) => dispatch(TogleOpenWind(data))
+    setStatus: (data) => dispatch(TogleOpenWind(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalWind)
