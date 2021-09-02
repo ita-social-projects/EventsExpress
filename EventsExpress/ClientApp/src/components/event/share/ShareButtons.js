@@ -10,7 +10,7 @@ export class ShareButtons extends Component {
         return (
             <>
                 <FacebookProvider appId={this.props.config.facebookClientId}>
-                    <ShareButton className="btn" href={this.props.href} >
+                    <ShareButton className="btn btn-link" href={this.props.href} >
                         <div id="fb-share-button">
                             <i className="fab fa-facebook text-white" />
                         </div>
