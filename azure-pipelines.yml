@@ -50,18 +50,18 @@ stages:
         projects: '$(solution)'
         arguments: '--configuration $(buildConfiguration)'
     
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: test
-        projects: '**/EventsExpress.Test.csproj'
-        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    # - task: DotNetCoreCLI@2
+    #   displayName: Test
+    #   inputs:
+    #     command: test
+    #     projects: '**/EventsExpress.Test.csproj'
+    #     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
     
-    - task: SonarCloudAnalyze@1
-      displayName: 'Run Code Analysis'
+    # - task: SonarCloudAnalyze@1
+    #   displayName: 'Run Code Analysis'
     
-    - task: SonarCloudPublish@1
-      displayName: 'Publish Quality Gate Result'
+    # - task: SonarCloudPublish@1
+    #   displayName: 'Publish Quality Gate Result'
     
     - task: DotNetCoreCLI@2
       displayName: Publish
@@ -95,6 +95,7 @@ stages:
               azureSubscription: 'Visual Studio Enterprise Subscription – MPN (1e23f758-8256-46e3-8ee8-b0bd24fbbc5e)'
               ConnectionType: AzureRM
               appType: webApp
+              Package: '**/drop/EventsExpress.zip'
               WebAppName: 'eventsexpress-test'
               enableCustomDeployment: true
               ExcludeFilesFromAppDataFlag: false
