@@ -53,7 +53,7 @@ class EventForm extends Component {
 
 
     render() {
-        const { form_values, all_categories, disabledDate } = this.props;
+        const { form_values, all_categories, disabledDate, user_name } = this.props;
         const { checked } = this.state;
 
 
@@ -70,6 +70,15 @@ class EventForm extends Component {
                         cropShape='rect'
                         loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
                     />
+                    <div className="mt-2">
+                        <Field
+                            name='organizer'
+                            component={renderTextField}
+                            type='input'
+                            label='Organizer'
+                            inputProps={{ value: user_name }}
+                        />
+                    </div>
                     <div className="mt-2">
                         <Field
                             name='title'
