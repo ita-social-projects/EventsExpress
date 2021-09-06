@@ -7,5 +7,7 @@ namespace EventsExpress.Db.Bridge
         Guid GetCurrentUserId();
 
         Guid GetCurrentAccountId();
+
+        bool UserIsAuthentificated();
     }
 }

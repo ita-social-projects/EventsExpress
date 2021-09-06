@@ -421,6 +421,10 @@ namespace EventsExpress.Core.Services
                         categoryIds.Contains(category.CategoryId)));
             }
 
+            events = !_securityContextService.UserIsAuthentificated()
+                ? events.Where(x => x.IsPublic == true)
+                : events;
+
             count = events.Count();
 
             var result = events
