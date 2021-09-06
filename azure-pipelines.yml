@@ -1,7 +1,4 @@
-# ASP.NET Core (.NET Framework)
-# Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
 - development
@@ -12,14 +9,18 @@ pool:
   vmImage: 'windows-latest'
 
 stages:
-- stage: 'Build'
+- stage: 'build'
+  displayName: 'Build App'
   variables:
     solution: '**/EventsExpress.sln'
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
+  
   jobs:
   - job: 'main'
+    displayName: 'build & test'
     steps:
+    
     - task: SonarCloudPrepare@1
       displayName: 'Prepare analysis on SonarCloud'
       inputs:
@@ -29,33 +30,39 @@ stages:
         projectName: EventsExpress
         scannerMode: MSBuild
         extraProperties: |
-          # Exclude some files from analizys
+          # Exclude some files from analyze
           sonar.cpd.exclusions=**/Migrations/**/*.*
           sonar.coverage.exclusions=**/ClientApp/**/*.*,**/Migrations/**/*.*,**/Startup.cs
           sonar.issue.ignore.multicriteria=e1
           sonar.issue.ignore.multicriteria.e1.ruleKey=javascript:S1788
           sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/*.js
+    
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
         command: 'restore'
         projects: '$(solution)'
+    
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: 'build'
         projects: '$(solution)'
         arguments: '--configuration $(buildConfiguration)'
+    
     - task: DotNetCoreCLI@2
       displayName: Test
       inputs:
         command: test
         projects: '**/EventsExpress.Test.csproj'
         arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    
     - task: SonarCloudAnalyze@1
       displayName: 'Run Code Analysis'
+    
     - task: SonarCloudPublish@1
       displayName: 'Publish Quality Gate Result'
+    
     - task: DotNetCoreCLI@2
       displayName: Publish
       inputs:
@@ -63,25 +70,32 @@ stages:
         publishWebProjects: True
         arguments: '--configuration $(buildConfiguration) --output "$(Build.artifactstagingdirectory)"'
         zipAfterPublish: True
+    
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
       inputs:
         PathtoPublish: '$(Build.artifactstagingdirectory)'
       condition: ne(variables['Build.Reason'], 'PullRequest')
 
-- stage: 'Deploy'
-  displayName: 'Deploy Artifacts to azure app service'
+- stage: 'deploy'
+  displayName: 'Deploy Artifacts'
   dependsOn: Build
-  condition: ne(variables['Build.Reason'], 'PullRequest')
+#  condition: ne(variables['Build.Reason'], 'PullRequest')
   jobs:
-  - job: 'test'
-    steps:
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Deploy Azure App Service'
-      inputs:
-        azureSubscription: 'Visual Studio Enterprise Subscription – MPN (1e23f758-8256-46e3-8ee8-b0bd24fbbc5e)'
-        ConnectionType: AzureRM
-        appType: webApp
-        WebAppName: 'eventsexpress-test'
-        enableCustomDeployment: true
-        ExcludeFilesFromAppDataFlag: false
+  - deployment: 'test'
+    displayName: deploy to test
+    environment: 'events-express-test'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy Azure App Service'
+            inputs:
+              azureSubscription: 'Visual Studio Enterprise Subscription – MPN (1e23f758-8256-46e3-8ee8-b0bd24fbbc5e)'
+              ConnectionType: AzureRM
+              appType: webApp
+              Package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              WebAppName: 'eventsexpress-test'
+              enableCustomDeployment: true
+              ExcludeFilesFromAppDataFlag: false
