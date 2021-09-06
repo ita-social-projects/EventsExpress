@@ -104,5 +104,3 @@ stages:
               appType: webApp
               WebAppName: 'eventsexpress-test'
               Package: '$(Pipeline.Workspace)/artifact/**/EventsExpress.zip'
-              # enableCustomDeployment: true
-              # ExcludeFilesFromAppDataFlag: false
