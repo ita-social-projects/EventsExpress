@@ -90,17 +90,19 @@ stages:
       runOnce:
         deploy:
           steps:
+
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: 'EventsExpress'
               path: '$(Pipeline.Workspace)/artifact/'
+          
           - task: AzureRmWebAppDeployment@4
             displayName: 'Deploy Azure App Service'
             inputs:
               azureSubscription: 'Visual Studio Enterprise Subscription – MPN (1e23f758-8256-46e3-8ee8-b0bd24fbbc5e)'
               ConnectionType: AzureRM
               appType: webApp
-              Package: '$(Pipeline.Workspace)/artifact/**/EventsExpress.zip'
               WebAppName: 'eventsexpress-test'
-              enableCustomDeployment: true
-              ExcludeFilesFromAppDataFlag: false
+              Package: '$(Pipeline.Workspace)/artifact/**/EventsExpress.zip'
+              # enableCustomDeployment: true
+              # ExcludeFilesFromAppDataFlag: false
