@@ -100,7 +100,7 @@ class EventDraftWrapper extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user,
+    user_id: state.user.id,
     user_name: state.user.name,
     add_event_status: state.add_event,
     all_categories: state.categories,
