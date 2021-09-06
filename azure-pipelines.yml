@@ -75,7 +75,7 @@ stages:
       displayName: 'Publish Artifact'
       inputs:
         PathtoPublish: '$(Build.artifactstagingdirectory)'
-      condition: ne(variables['Build.Reason'], 'PullRequest')
+#        condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - stage: 'deploy'
   displayName: 'Deploy Artifacts'
@@ -95,7 +95,6 @@ stages:
               azureSubscription: 'Visual Studio Enterprise Subscription – MPN (1e23f758-8256-46e3-8ee8-b0bd24fbbc5e)'
               ConnectionType: AzureRM
               appType: webApp
-              Package: '$(System.DefaultWorkingDirectory)/**/*.zip'
               WebAppName: 'eventsexpress-test'
               enableCustomDeployment: true
               ExcludeFilesFromAppDataFlag: false
