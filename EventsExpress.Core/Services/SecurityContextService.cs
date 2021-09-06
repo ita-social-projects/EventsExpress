@@ -38,5 +38,24 @@ namespace EventsExpress.Core.Services
 
             return result;
         }
+
+        public bool UserIsAuthentificated()
+        {
+            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
+
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid result))
+            {
+                return false;
+            }
+
+            guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
+
+            if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid res))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
