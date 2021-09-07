@@ -65,6 +65,12 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                         component={renderDatePicker}
                     />
                 </span>
+                <div className="mt-2">
+                    <Field
+                        name={`${member}.location`}
+                        component={LocationMapWithMarker}
+                    />
+                </div>
             </li>
         ))}
     </ul>
