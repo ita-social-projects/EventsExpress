@@ -22,6 +22,10 @@ export default class EventService {
     }
     
     editEvent = async (data) => {
+        if (data.location.type == 2) {
+            return baseService.setResource(`event/${data.id}/multiedit`, data)
+        }
+        else
         return baseService.setResource(`event/${data.id}/edit`, data)
     }
     publishEvent = (id) => {
