@@ -267,7 +267,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
-           // ev.IsMultiEvent = e.IsMultiEvent;
+            ev.IsMultiEvent = e.IsMultiEvent;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
@@ -282,11 +282,13 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> MultiEdit(EventDto parent, IEnumerable<EventDto> childsEvent)
         {
             parent.Id = CreateDraft();
+            parent.IsMultiEvent = true;
             await Edit(parent);
             EventDto[] childs = childsEvent.ToArray();
             for (int i = 0; i < childs.Length; i++)
             {
                     childs[i].Id = CreateDraft();
+                    childs[i].IsMultiEvent = true;
 
                     await Edit(childs[i]);
                     Context.MultiEventStatus.Add(
