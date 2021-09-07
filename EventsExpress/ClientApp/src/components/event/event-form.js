@@ -206,8 +206,9 @@ class EventForm extends Component {
                         && this.props.form_values.location.type == enumLocationType.multiEvent &&
                          <div className="mt-2">
                                 <Field
-                                    name='location'
-                                    component={FieldArraysForm}
+                            name='location.MultiEvent'
+                            component={FieldArraysForm}
+                            form_values={form_values }
                                 />
                             </div>
                  

@@ -21,7 +21,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, form_values }) => (
     <ul>
         <li>
-            <button type="button" onClick={() => fields.push({})}>
+            <button type="button" className="btn btn-success" onClick={() => fields.push({})}>
                 Add Event
       </button>
             {submitFailed && error && <span>{error}</span>}
@@ -31,6 +31,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                 <button
                     type="button"
                     title="Remove Member"
+                    className="btn btn-danger"
                     onClick={() => fields.remove(index)}>
                     x
                     </button>
@@ -49,7 +50,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                 />
                 <span >
                     <Field
-                        name='dateFrom'
+                        name={`${member}.dateFrom`}
                         label='From'
                         disabled={disabledDate}
                         component={renderDatePicker}
@@ -57,7 +58,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                 </span>
                 <span className="retreat">
                     <Field
-                        name='dateTo'
+                        name={`${member}.dateTo`}
                         label='To'
                         disabled={disabledDate}
                         minValue={form_values.dateFrom}
@@ -70,22 +71,11 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
 )
 
 const FieldArraysForm = props => {
-    const { handleSubmit, pristine, reset, submitting, form_values, disabledDate } = props
+    const { form_values, disabledDate } = props
     return (
-        <form onSubmit={handleSubmit}>
-            <FieldArray name="members" component={renderMembers} disabledDate={disabledDate} form_values={form_values} />
-            <div>
-                <button type="submit" disabled={submitting}>
-                    Submit
-        </button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}>
-                    Clear Values
-        </button>
-            </div>
-        </form>
+            <FieldArray name="Events" component={renderMembers} disabledDate={disabledDate} form_values={form_values} />
+            
     )
 }
 
-export default reduxForm({
-    form: 'fieldArrays', // a unique identifier for this form
-})(FieldArraysForm)
+export default FieldArraysForm;
