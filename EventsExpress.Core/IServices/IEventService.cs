@@ -20,6 +20,8 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> Publish(Guid eventId);
 
+        Task<Guid> MultiPublish(Guid eventId);
+
         EventDto EventById(Guid eventId);
 
         IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count);

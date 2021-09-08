@@ -347,9 +347,14 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<Guid> MultiPublish(Guid parentId, Guid[] childsId)
+        public async Task<Guid> MultiPublish(Guid parentId)
         {
             await Publish(parentId);
+
+            var childsId = Context.MultiEventStatus
+                .Where(x => x.ParentId == parentId)
+                .Select(x => x.ChildId)
+                .ToArray();
 
             for (int i = 0; i < childsId.Length; i++)
             {
