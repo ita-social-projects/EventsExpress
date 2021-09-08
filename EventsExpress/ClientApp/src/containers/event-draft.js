@@ -5,7 +5,7 @@ import SimpleModalWithDetails from '../components/helpers/simple-modal-with-deta
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues , isPristine} from 'redux-form';
-import { edit_event, publish_event} from '../actions/event/event-add-action';
+import { edit_event, publish_event, multiPublish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from './event-validate-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
@@ -18,13 +18,13 @@ class EventDraftWrapper extends Component {
     onPublish = async (values) => {
         if (!this.props.pristine)
         {
-            if (values.location.type == 2)
-            {
-                return this.props.publish(this.props.event.id);
-            }
-
             await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
         }
+
+        if (values.location.type == 2) {
+            return this.props.multipublish(this.props.event.id);
+        }
+
         return this.props.publish(this.props.event.id);
     }
 
@@ -117,6 +117,7 @@ const mapDispatchToProps = (dispatch) => {
         edit_event: (data) => dispatch(edit_event(data)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
         publish: (data) => dispatch(publish_event(data)),
+        multipublish: (data) => dispatch(multiPublish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
     }

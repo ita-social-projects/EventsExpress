@@ -57,6 +57,26 @@ export function publish_event(eventId) {
     }
 }
 
+export function multiPublish_event(eventId) {
+    return async dispatch => {
+        dispatch(getRequestInc());
+        let response = await api_serv.multiPublishEvent(eventId);
+        dispatch(getRequestDec());
+        if (response.ok) {
+            dispatch(get_event(eventId));
+            dispatch(setSuccessAllert('Your event has been successfully published!'));
+            dispatch(history.push(`/event/${eventId}/1`));
+            dispatch(eventWasCreated(eventId));
+            return Promise.resolve();
+        }
+        else {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+    }
+}
+
+
+
 function eventWasCreated(eventId) {
     return {
         type: EVENT_WAS_CREATED,
