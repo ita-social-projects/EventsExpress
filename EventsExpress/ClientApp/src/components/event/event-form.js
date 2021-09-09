@@ -77,6 +77,7 @@ class EventForm extends Component {
                             type='input'
                             label='Organizer'
                             inputProps={{ value: user_name }}
+                            readOnly
                         />
                     </div>
                     <div className="mt-2">
