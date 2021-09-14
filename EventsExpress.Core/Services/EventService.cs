@@ -229,7 +229,6 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
-
             if (e.OnlineMeeting != null || e.Point != null)
             {
                 var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
@@ -289,7 +288,11 @@ namespace EventsExpress.Core.Services
             {
                     childs[i].Id = CreateDraft();
                     childs[i].IsMultiEvent = true;
-
+                    childs[i].Inventories = parent.Inventories;
+                    childs[i].IsPublic = parent.IsPublic;
+                    childs[i].IsReccurent = parent.IsReccurent;
+                    childs[i].MaxParticipants = parent.MaxParticipants;
+                    childs[i].Categories = parent.Categories;
                     await Edit(childs[i]);
                     Context.MultiEventStatus.Add(
                   new MultiEventStatus
