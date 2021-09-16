@@ -204,14 +204,22 @@ class EventForm extends Component {
                     {this.props.form_values
                         && this.props.form_values.location
                         && this.props.form_values.location.type == enumLocationType.multiEvent &&
-                         <div className="mt-2">
+                        <div>
+                             <div className="mt-2">
+                                <Field
+                                    name='location'
+                                    component={LocationMapWithMarker}
+                                />
+                            </div>
+
+                            <div className="mt-2">
                                 <Field
                             name='location.MultiEvent'
                             component={FieldArraysForm}
                             form_values={form_values }
                                 />
                             </div>
-                 
+                       </ div>
                        
                     }
                 </div>

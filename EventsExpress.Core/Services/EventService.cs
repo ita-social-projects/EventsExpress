@@ -229,7 +229,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
-            if (e.OnlineMeeting != null || e.Point != null)
+            if (e.OnlineMeeting != null || e.Point != null || true)
             {
                 var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
                 var locationId = await _locationService.AddLocationToEvent(locationDTO);
@@ -280,7 +280,6 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> MultiEdit(EventDto parent, IEnumerable<EventDto> childsEvent)
         {
-            parent.Id = CreateDraft();
             parent.IsMultiEvent = true;
             await Edit(parent);
             EventDto[] childs = childsEvent.ToArray();
