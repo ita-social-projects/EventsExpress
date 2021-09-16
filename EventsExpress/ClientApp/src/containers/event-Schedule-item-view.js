@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EventScheduleItemView from '../components/eventSchedule/eventSchedule-item-view';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import getEventSchedule, {
     resetEventSchedule
 } from '../actions/eventSchedule/eventSchedule-item-view-action';
@@ -18,12 +18,12 @@ class EventScheduleItemViewWrapper extends Component {
 
     render() {
         const { data } = this.props.eventSchedule;
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             <EventScheduleItemView
                 eventSchedule={this.props.eventSchedule}
                 current_user={this.props.current_user}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

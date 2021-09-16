@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import get_chats from '../../actions/chat/chats-action';
 import { connect } from 'react-redux';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 import './user_chats.css';
 import CustomAvatar from "../avatar/custom-avatar";
 
@@ -46,11 +46,11 @@ class UserChats extends Component {
             return new Date(a.lastMessageTime).getTime() - new Date(b.lastMessageTime).getTime();
         });
 
-        return <Spinner showContent={ data != undefined}>
+        return <SpinnerWrapper showContent={ data != undefined}>
             <div className="row shadow mt-5 p-5 mb-5 bg-white rounded limit-width">
                 {this.renderChats(data)}
             </div>
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

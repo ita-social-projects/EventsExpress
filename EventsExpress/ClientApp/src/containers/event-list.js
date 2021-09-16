@@ -3,7 +3,7 @@ import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import EventList from '../components/event/event-list';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import filterHelper from '../components/helpers/filterHelper';
 import { withRouter } from "react-router";
@@ -45,7 +45,7 @@ class EventListWrapper extends Component {
         const { data } = this.props.events;
         const { items } = this.props.events.data;
 
-        return <Spinner showContent = { data!= undefined}>
+        return <SpinnerWrapper showContent = { data!= undefined}>
             <EventList
                 current_user={current_user}
                 data_list={items}
@@ -53,7 +53,7 @@ class EventListWrapper extends Component {
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

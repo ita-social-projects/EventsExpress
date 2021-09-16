@@ -34,9 +34,11 @@ import * as Account from './account';
 import * as NotificationTemplates from "./notification-templates/notification-templates";
 import * as NotificationTemplate from "./notification-templates/notification-template";
 import * as Config from './config';
-import * as RequestCount from "./request-index-count"
+import * as RequestCount from "./request-index-count";
+import * as RequestLocalCount from "./request-index-local-count";
 
 const rootReducers = {
+    requestLocalCount: RequestLocalCount.reducer,
     requestCount: RequestCount.reducer,
     account : Account.reducer,
     modal: ModalWind.reducer,

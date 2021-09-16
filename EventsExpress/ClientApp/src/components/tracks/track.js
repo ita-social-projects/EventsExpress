@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TrackList from './track-list';
 import TracksFilter from './tracks-filter';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 import getAllTracks, { getEntityNames } from '../../actions/tracks/track-list-action';
 import { getFormValues, reset } from 'redux-form';
 import { connect } from 'react-redux';
@@ -48,7 +48,7 @@ class Tracks extends Component {
 
     render() {
         const { data, entityNames } = this.props.tracks;
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             <table className="table w-100 m-auto">
                 <tbody>
                     <div className="d-flex">
@@ -72,7 +72,7 @@ class Tracks extends Component {
                 </tbody>
             </table>
 
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

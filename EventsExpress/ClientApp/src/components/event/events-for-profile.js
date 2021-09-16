@@ -1,6 +1,8 @@
 ﻿import React, { Component } from 'react';
 import Event from './event-item';
 import PagePagination from '../shared/pagePagination';
+import LocalSpinnerWrapper from '../../containers/local-spinner';
+import localSpinner from '../../containers/local-spinner';
 
 export default class EventsForProfile extends Component {
     constructor() {
@@ -8,9 +10,11 @@ export default class EventsForProfile extends Component {
         this.state = {
             currentPage: 1
         };
+        
     }
 
-    componentDidMount = (props) =>{
+    componentDidMount = (props) => {
+        
         if (this.props.notification_events == null) {
             this.props.callback( this.state.currentPage);          
         }
@@ -44,17 +48,20 @@ export default class EventsForProfile extends Component {
         const { page, totalPages } = this.props;
 
         return <>
-            <div className="row">
-                {items}
-            </div>
-            <br />
-            {totalPages > 1 &&
-                <PagePagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    callback={this.handlePageChange}
-                />
-            }
+            <LocalSpinnerWrapper showContent={ data_list !== null}>
+                <div className="row">
+                    {items}
+                </div>
+            
+                <br />
+                {totalPages > 1 &&
+                    <PagePagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        callback={this.handlePageChange}
+                    />
+                }   
+            </LocalSpinnerWrapper>
         </>
     }
 }
