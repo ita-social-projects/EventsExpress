@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import EventsForProfile from '../event/events-for-profile';
 import 'moment-timezone';
 import './User-profile.css';
-import LocalSpinnerWrapper from '../../containers/local-spinner';
 
 export default class Events extends Component {
     render() {

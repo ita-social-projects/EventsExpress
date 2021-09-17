@@ -15,7 +15,6 @@ import './User-profile.css';
 import Events from './events';
 import AuthComponent from "../../security/authComponent";
 import { getAge } from '../helpers/get-age-string';
-import LocalSpinnerWrapper from '../../containers/local-spinner';
 
 class UserItemView extends Component {
 

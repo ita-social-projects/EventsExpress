@@ -2,7 +2,6 @@
 import Event from './event-item';
 import PagePagination from '../shared/pagePagination';
 import LocalSpinnerWrapper from '../../containers/local-spinner';
-import localSpinner from '../../containers/local-spinner';
 
 export default class EventsForProfile extends Component {
     constructor() {
@@ -14,11 +13,9 @@ export default class EventsForProfile extends Component {
     }
 
     componentDidMount = (props) => {
-        
         if (this.props.notification_events == null) {
             this.props.callback( this.state.currentPage);          
         }
-       
     }
 
     handlePageChange = (page, e) => {
