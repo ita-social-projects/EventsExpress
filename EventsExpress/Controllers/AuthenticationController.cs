@@ -6,6 +6,7 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,7 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Login(LoginViewModel authRequest)
         {
             var authResponseModel = await _authService.Authenticate(authRequest.Email, authRequest.Password);
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }
@@ -71,7 +72,7 @@ namespace EventsExpress.Controllers
             await _accountService.EnsureExternalAccountAsync(userView.Email, AuthExternalType.Facebook);
             var authResponseModel = await _authService.Authenticate(userView.Email, AuthExternalType.Facebook);
 
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }
@@ -92,7 +93,7 @@ namespace EventsExpress.Controllers
             await _accountService.EnsureExternalAccountAsync(payload.Email, AuthExternalType.Google);
             var authResponseModel = await _authService.Authenticate(payload.Email, AuthExternalType.Google);
 
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }
@@ -111,7 +112,7 @@ namespace EventsExpress.Controllers
             await _accountService.EnsureExternalAccountAsync(model.Email, AuthExternalType.Twitter);
             var authResponseModel = await _authService.Authenticate(model.Email, AuthExternalType.Twitter);
 
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }
@@ -145,7 +146,7 @@ namespace EventsExpress.Controllers
             var accountData = _mapper.Map<RegisterBindDto>(authRequest);
             var authResponseModel = await _authService.BindExternalAccount(accountData);
 
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }
@@ -216,7 +217,7 @@ namespace EventsExpress.Controllers
 
             var authResponseModel = await _authService.EmailConfirmAndAuthenticate(id, token);
 
-            _tokenService.SetTokenCookie(authResponseModel.RefreshToken);
+            HttpContext.SetTokenCookie(authResponseModel);
 
             return Ok(new { Token = authResponseModel.JwtToken });
         }

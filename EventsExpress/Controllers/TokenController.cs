@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
+using EventsExpress.ExtensionMethods;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,7 +39,7 @@ namespace EventsExpress.Controllers
                 return Unauthorized();
             }
 
-            _tokenService.SetTokenCookie(response.RefreshToken);
+            HttpContext.SetTokenCookie(response);
             return Ok(new { jwtToken = response.JwtToken });
         }
 

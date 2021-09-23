@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
@@ -9,17 +12,13 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-
     [TestFixture]
     internal class TokenServiceTests : TestInitializer
     {
         private Mock<IJwtSigningEncodingKey> _mockSigningEncodingKey;
         private Mock<IOptions<JwtOptionsModel>> _mockJwtOptions;
         private Mock<IHttpContextAccessor> _httpContextAccessor;
+        private Mock<IIpProviderService> _iIpProviderService;
 
         private TokenService _service;
         private List<Claim> _claims;
@@ -35,13 +34,15 @@ namespace EventsExpress.Test.ServiceTests
             _mockJwtOptions = new Mock<IOptions<JwtOptionsModel>>();
             _mockSigningEncodingKey = new Mock<IJwtSigningEncodingKey>();
             _httpContextAccessor = new Mock<IHttpContextAccessor>();
+            _iIpProviderService = new Mock<IIpProviderService>();
 
             _service = new TokenService(
                 Context,
                 MockMapper.Object,
                 _mockJwtOptions.Object,
                 _mockSigningEncodingKey.Object,
-                _httpContextAccessor.Object);
+                _httpContextAccessor.Object,
+                _iIpProviderService.Object);
 
             _token = Guid.NewGuid().ToString();
 

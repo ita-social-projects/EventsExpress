@@ -24,6 +24,7 @@ namespace EventsExpress.Core.Services
         private readonly IJwtSigningEncodingKey _signingEncodingKey;
         private readonly IOptions<JwtOptionsModel> _jwtOptions;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IIpProviderService _ipProviderService;
         private readonly IMapper _mapper;
 
         public TokenService(
@@ -31,27 +32,18 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IOptions<JwtOptionsModel> opt,
             IJwtSigningEncodingKey jwtSigningEncodingKey,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IIpProviderService ipProviderService)
             : base(context, mapper)
         {
             _jwtOptions = opt;
             _signingEncodingKey = jwtSigningEncodingKey;
             _httpContextAccessor = httpContextAccessor;
+            _ipProviderService = ipProviderService;
             _mapper = mapper;
         }
 
-        private string IpAddress
-        {
-            get
-            {
-                if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
-                {
-                    return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
-                }
-
-                return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-            }
-        }
+        private string IpAddress => _ipProviderService.GetIpAdress();
 
         public string GenerateAccessToken(Account account)
         {
@@ -176,18 +168,6 @@ namespace EventsExpress.Core.Services
             _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
 
             return true;
-        }
-
-        public void SetTokenCookie(string token)
-        {
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = DateTime.Now.AddDays(7),
-                Secure = true,
-            };
-            _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
-            _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
 
         public async Task GenerateEmailConfirmationToken(string token, Guid accountId)
