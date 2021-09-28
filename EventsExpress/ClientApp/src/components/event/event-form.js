@@ -23,7 +23,7 @@ const photoService = new PhotoService();
 
 class EventForm extends Component {
 
-    state = { checked: this.props.initialValues.isReccurent };
+    state = { checked: this.props.initialValues.isReccurent, MultiCheked: this.props.initialValues.isReccurent };
 
     handleChange = () => {
         this.setState(state => ({
@@ -31,6 +31,11 @@ class EventForm extends Component {
         }));
     }
 
+    MultiHandleChange = () => {
+        this.setState(state => ({
+            MultiCheked: !state.MultiCheked,
+        }));
+    }
 
     checkLocation = (location) => {
 
@@ -55,7 +60,7 @@ class EventForm extends Component {
 
     render() {
         const { form_values, all_categories, disabledDate } = this.props;
-        const { checked } = this.state;
+        const { checked, MultiCheked} = this.state;
 
 
         return (
@@ -99,6 +104,7 @@ class EventForm extends Component {
                                 onChange={this.handleChange}
                             />
                         </div>
+
                     }
                     {this.props.haveReccurentCheckBox && checked &&
                         <div>
@@ -173,7 +179,6 @@ class EventForm extends Component {
                     <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
                         <FormControlLabel value={0} control={<Radio />} label="Map" />
                         <FormControlLabel value={1} control={<Radio />} label="Online" />
-                        <FormControlLabel value={2} control={<Radio />} label="MultiEvent" />
                     </Field>
                         {this.props.form_values
                             && this.props.form_values.location
@@ -202,15 +207,8 @@ class EventForm extends Component {
                             </div>
                     }
                     {this.props.form_values
-                        && this.props.form_values.location
-                        && this.props.form_values.location.type == enumLocationType.multiEvent &&
-                        <div>
-                             <div className="mt-2">
-                                <Field
-                                    name='location'
-                                    component={LocationMapWithMarker}
-                                />
-                            </div>
+                        && MultiCheked &&
+                                
 
                             <div className="mt-2">
                                 <Field
@@ -219,9 +217,18 @@ class EventForm extends Component {
                             form_values={form_values }
                                 />
                             </div>
-                       </ div>
-                       
+                         
                     }
+                    <div className="mt-2">
+                        <Field
+                            type="checkbox"
+                            label="Multi Event"
+                            name='isMultiEvent'
+                            component={renderCheckbox}
+                            checked={checked}
+                            onChange={this.MultiHandleChange}
+                        />
+                    </div>
                 </div>
                 <div className="row my-4">
                     {this.props.children}

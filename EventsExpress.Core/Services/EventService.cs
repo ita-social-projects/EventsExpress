@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -229,7 +230,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
-            if (e.OnlineMeeting != null || e.Point != null || true)
+            if (e.OnlineMeeting != null || e.Point != null)
             {
                 var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
                 var locationId = await _locationService.AddLocationToEvent(locationDTO);
@@ -306,7 +307,7 @@ namespace EventsExpress.Core.Services
             return parent.Id;
         }
 
-        public async Task<Guid> Publish(Guid eventId)
+        private async Task<Guid> SubPublish(Guid eventId)
         {
             var ev = Context.Events
                .Include(e => e.EventLocation)
@@ -349,18 +350,21 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<Guid> MultiPublish(Guid parentId)
+        public async Task<Guid> Publish(Guid parentId)
         {
-            await Publish(parentId);
-
-            var childsId = Context.MultiEventStatus
-                .Where(x => x.ParentId == parentId)
-                .Select(x => x.ChildId)
-                .ToArray();
-
-            for (int i = 0; i < childsId.Length; i++)
+            var ev = Context.Events.FirstOrDefault(x => x.Id == parentId);
+            await SubPublish(parentId);
+            if (ev.IsMultiEvent == true)
             {
-                await Publish(childsId[i]);
+                var childsId = Context.MultiEventStatus
+                    .Where(x => x.ParentId == parentId)
+                    .Select(x => x.ChildId)
+                    .ToArray();
+
+                foreach (var item in childsId)
+                {
+                    await Publish(item);
+                }
             }
 
             return parentId;

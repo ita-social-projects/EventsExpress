@@ -105,29 +105,16 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, EventEditViewModel model)
+        public async Task<IActionResult> Edit(Guid eventId, [FromBody] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventService.Edit(_mapper.Map<EventDto>(model));
-
-            return Ok(result);
-        }
-
-        [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> MultiEdit(Guid eventId, [FromBody] EventEditViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _eventService.MultiEdit(_mapper.Map<EventDto>(model), _mapper.Map<IEnumerable<EventDto>>(model.Events));
-
+            Guid result = model.Events == null
+                ? await _eventService.Edit(_mapper.Map<EventDto>(model))
+                : await _eventService.MultiEdit(_mapper.Map<EventDto>(model), _mapper.Map<IEnumerable<EventDto>>(model.Events));
             return Ok(result);
         }
 
@@ -136,15 +123,6 @@ namespace EventsExpress.Controllers
         public async Task<IActionResult> Publish(Guid eventId)
         {
             var result = await _eventService.Publish(eventId);
-
-            return Ok(new { id = result });
-        }
-
-        [HttpPost("{eventId:Guid}/[action]")]
-        [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> MultiPublish(Guid eventId)
-        {
-            var result = await _eventService.MultiPublish(eventId);
 
             return Ok(new { id = result });
         }
