@@ -1,5 +1,4 @@
-﻿using EventsExpress.Core.DTOs;
-using EventsExpress.Db.Entities;
+﻿using EventsExpress.Db.Entities;
 using MediatR;
 
 namespace EventsExpress.Core.Notifications
