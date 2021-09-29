@@ -222,7 +222,7 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        public async Task<Guid> Edit(EventDto e)
+        private async Task<Guid> InternalEdit(EventDto e)
         {
             var ev = Context.Events
                 .Include(e => e.EventLocation)
@@ -279,13 +279,19 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
-        public async Task<Guid> MultiEdit(EventDto parent, IEnumerable<EventDto> childsEvent)
+        public async Task<Guid> Edit(EventDto parent)
         {
-            parent.IsMultiEvent = true;
-            await Edit(parent);
-            EventDto[] childs = childsEvent.ToArray();
-            for (int i = 0; i < childs.Length; i++)
+            if (parent.Events.CollectionIsNullOrEmpty())
             {
+                await InternalEdit(parent);
+            }
+            else
+            {
+                parent.IsMultiEvent = true;
+                await InternalEdit(parent);
+                EventDto[] childs = parent.Events.ToArray();
+                for (int i = 0; i < childs.Length; i++)
+                {
                     childs[i].Id = CreateDraft();
                     childs[i].IsMultiEvent = true;
                     childs[i].Inventories = parent.Inventories;
@@ -293,21 +299,20 @@ namespace EventsExpress.Core.Services
                     childs[i].IsReccurent = parent.IsReccurent;
                     childs[i].MaxParticipants = parent.MaxParticipants;
                     childs[i].Categories = parent.Categories;
-                    await Edit(childs[i]);
                     Context.MultiEventStatus.Add(
                   new MultiEventStatus
                   {
                       ParentId = parent.Id,
                       ChildId = childs[i].Id,
                   });
-
-                    await Context.SaveChangesAsync();
+                    await InternalEdit(childs[i]);
+                }
             }
 
             return parent.Id;
         }
 
-        private async Task<Guid> SubPublish(Guid eventId)
+        private Guid InternalPublish(Guid eventId)
         {
             var ev = Context.Events
                .Include(e => e.EventLocation)
@@ -333,9 +338,7 @@ namespace EventsExpress.Core.Services
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-                await Context.SaveChangesAsync();
-                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-                await _mediator.Publish(new EventCreatedMessage(dtos));
+
                 return ev.Id;
             }
             else
@@ -353,7 +356,7 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Publish(Guid parentId)
         {
             var ev = Context.Events.FirstOrDefault(x => x.Id == parentId);
-            await SubPublish(parentId);
+            InternalPublish(parentId);
             if (ev.IsMultiEvent == true)
             {
                 var childsId = Context.MultiEventStatus
@@ -363,10 +366,13 @@ namespace EventsExpress.Core.Services
 
                 foreach (var item in childsId)
                 {
-                    await Publish(item);
+                    InternalPublish(item);
                 }
             }
 
+            await Context.SaveChangesAsync();
+            EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+            await _mediator.Publish(new EventCreatedMessage(dtos));
             return parentId;
         }
 

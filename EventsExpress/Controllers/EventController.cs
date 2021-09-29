@@ -112,9 +112,8 @@ namespace EventsExpress.Controllers
                 return BadRequest(ModelState);
             }
 
-            Guid result = model.Events == null
-                ? await _eventService.Edit(_mapper.Map<EventDto>(model))
-                : await _eventService.MultiEdit(_mapper.Map<EventDto>(model), _mapper.Map<IEnumerable<EventDto>>(model.Events));
+            var result = await _eventService.Edit(_mapper.Map<EventDto>(model));
+
             return Ok(result);
         }
 

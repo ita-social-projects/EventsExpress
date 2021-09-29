@@ -16,8 +16,6 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> Edit(EventDto e);
 
-        Task<Guid> MultiEdit(EventDto parent, IEnumerable<EventDto> childs);
-
         Task<Guid> Publish(Guid eventId);
 
         EventDto EventById(Guid eventId);
