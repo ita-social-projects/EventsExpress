@@ -16,62 +16,42 @@ class EventVisitors extends Component {
                     disabled={false}
                     users={admins}
                     label="Admin"
-                >
-                    {
-                        admins.map(user => (
-                            < OwnersActions
-                                user={user}
-                                isMyEvent={isMyEvent}
-                            />
-                        ))
-                    }
-                </ParticipantGroup>
+                    renderUserActions={(user) => (<OwnersActions
+                                                        user={user}
+                                                        isMyEvent={isMyEvent}
+                                                  />)}
+                />
                 <ParticipantGroup
                     disabled={visitors.approvedUsers.length == 0}
                     users={visitors.approvedUsers}
                     label="Visitors"
-                >
-                    {
-                        visitors.approvedUsers.map(user => (
-                            <ApprovedUsersActions
-                                user={user}
-                                isMyEvent={isMyEvent}
-                                isMyPrivateEvent={isMyPrivateEvent}
-                            />
-                        ))
-                    }
-                </ParticipantGroup>
+                    renderUserActions={(user) => (<ApprovedUsersActions
+                                                        user={user}
+                                                        isMyEvent={isMyEvent}
+                                                        isMyPrivateEvent={isMyPrivateEvent}
+                                                  />)}
+                />
                 {isMyPrivateEvent &&
                     <ParticipantGroup
                         disabled={visitors.pendingUsers.length == 0}
                         users={visitors.pendingUsers}
                         label="Pending users"
-                    >
-                        {
-                            visitors.pendingUsers.map(user => (
-                                <PendingUsersActions
-                                    user={user}
-                                    isMyEvent={isMyEvent}
-                                />
-                            ))
-                        }
-                    </ParticipantGroup>
+                        renderUserActions={(user) => (<PendingUsersActions
+                                                            user={user}
+                                                            isMyEvent={isMyEvent}
+                                                      />)}
+                    />
                 }
                 {isMyPrivateEvent &&
                     <ParticipantGroup
-                        disabled={visitors.deniedUsers.length == 0}
-                        users={visitors.deniedUsers}
-                        label="Denied users"
-                    >
-                        {
-                            visitors.deniedUsers.map(user => (
-                                <DeniedUsersActions
-                                    user={user}
-                                    isMyEvent={isMyEvent}
-                                />
-                            ))
-                        }
-                    </ParticipantGroup>
+                    disabled={visitors.deniedUsers.length == 0}
+                    users={visitors.deniedUsers}
+                    label="Denied users"
+                    renderUserActions={(user) => (<DeniedUsersActions
+                                                        user={user}
+                                                        isMyEvent={isMyEvent}
+                                                  />)}
+                    />
                 }
             </div>
         )

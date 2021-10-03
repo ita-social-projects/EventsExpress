@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.NotificationHandlers;
@@ -40,13 +40,12 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService = new Mock<INotificationTemplateService>();
             _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
 
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<ParticipationNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new ParticipationNotificationTemplateModel());
             _notificationTemplateService
                 .Setup(s => s.GetByIdAsync(It.IsAny<NotificationProfile>()))
                 .ReturnsAsync(new NotificationTemplateDto { Id = It.IsAny<NotificationProfile>() });
-
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
 
             _appBaseUrl.Setup(x => x.Value.Host).Returns("https://localhost:44344");
 

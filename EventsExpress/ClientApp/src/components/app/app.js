@@ -5,6 +5,7 @@ import {
     Redirect,
     Switch
 } from 'react-router-dom';
+
 import LandingWrapper from '../../containers/landing-wrapper';
 import Home from '../home';
 import Issues from '../contactAdmin/issues';
@@ -74,7 +75,7 @@ class App extends Component {
                                 <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                                 <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
                                 <Route path="/eventSchedule/:id" component={EventScheduleViewWrapper} />
-                                <Route path="/user/:id" component={this.UserRoleSecurity(UserItemViewWrapper)} />
+                                <Route path="/user/:id" component={this.AdminAndUserRoleSecurity(UserItemViewWrapper)} />
                                 <Route path="/admin" component={this.AdminRoleSecurity(Admin)} />
                                 <Route path="/search/users" component={this.UserRoleSecurity(SearchUserWrapper)} />
                                 <Route path="/user_chats" component={this.AdminAndUserRoleSecurity(UserChats)} />

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
+using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.NotificationHandlers;
@@ -48,10 +48,6 @@ namespace EventsExpress.Test.HandlerTests
                 .Setup(s => s.GetByIdAsync(templateId))
                 .ReturnsAsync(new NotificationTemplateDto { Id = templateId });
 
-            _notificationTemplateService
-                .Setup(s => s.PerformReplacement(It.IsAny<string>(), It.IsAny<Dictionary<string, string>>()))
-                .Returns(string.Empty);
-
             _eventCreatedHandler = new EventCreatedHandler(_emailService.Object, _userService.Object, _notificationTemplateService.Object, _appBaseUrl.Object);
             _user = new User
             {
@@ -76,9 +72,17 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_AllUser_AllSubscribingUsers()
+        public async Task Handle_AllUser_AllSubscribingUsers()
         {
-            var result = _eventCreatedHandler.Handle(_eventCreatedMessage, CancellationToken.None);
+            // Arrange
+            _notificationTemplateService.Setup(s =>
+                    s.GetModelByTemplateId<EventCreatedNotificationTemplateModel>(It.IsAny<NotificationProfile>()))
+                .Returns(new EventCreatedNotificationTemplateModel());
+
+            // Act
+            await _eventCreatedHandler.Handle(_eventCreatedMessage, CancellationToken.None);
+
+            // Assert
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(1));
         }
 

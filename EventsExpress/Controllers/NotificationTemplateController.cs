@@ -30,7 +30,15 @@ namespace EventsExpress.Controllers
             return Ok(await _notificationTemplateService.GetAllAsync());
         }
 
-        [HttpGet("{id:int}/Get")]
+        [HttpGet("{profile}/[action]")]
+        public IActionResult GetTemplateProperties(NotificationProfile profile)
+        {
+            var properties = _notificationTemplateService.GetModelPropertiesByTemplateId(profile);
+
+            return Ok(properties);
+        }
+
+        [HttpGet("{id}/Get")]
         public async Task<ActionResult<NotificationTemplateDto>> GetById(NotificationProfile id)
         {
             var notificationTemplate = await _notificationTemplateService.GetByIdAsync(id);

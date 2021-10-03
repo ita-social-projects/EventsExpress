@@ -47,9 +47,9 @@ function ModalWind(props) {
 
   return (
     <div className='d-inline-block'>
-          <Button className='mt-5 btn btn-warning' variant="contained" onClick={handleClickOpen}>
-        Sign In/Up
-      </Button>
+      {
+          props.renderButton(handleClickOpen)
+      }
       <Dialog
         open={props.status.isOpen}
         onClose={handleClose}

@@ -18,7 +18,7 @@ class EventDraftWrapper extends Component {
     onPublish = async (values) => {
         if (!this.props.pristine)
         {
-            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
         }
 
         return this.props.publish(this.props.event.id);
@@ -60,6 +60,7 @@ class EventDraftWrapper extends Component {
                     <hr className="gradient mt-0 mb-3"/>
                 </header>
                 <EventForm
+                    user_name={this.props.user_name}
                     all_categories={this.props.all_categories}
                     onSubmit={this.onPublish}
                     initialValues={this.props.event}
@@ -101,6 +102,7 @@ class EventDraftWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
+    user_name: state.user.name,
     add_event_status: state.add_event,
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),
