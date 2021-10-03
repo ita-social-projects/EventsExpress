@@ -23,6 +23,7 @@ namespace EventsExpress.Mapping
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
+               .ForMember(dest => dest.Events, opts => opts.Ignore())
                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
@@ -47,6 +48,9 @@ namespace EventsExpress.Mapping
                    })))
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
+                 .ForMember(dest => dest.ChildEvents, opt => opt.Ignore())
+                 .ForMember(dest => dest.ParentEvents, opt => opt.Ignore())
+                  .ForMember(dest => dest.IsMultiEvent, opt => opt.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
                 .ForMember(dest => dest.EventLocationId, opts => opts.Ignore())
@@ -86,6 +90,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
                 .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
+                .ForMember(dest => dest.Events, opts => opts.MapFrom(src => src.Events))
+                .ForMember(dest => dest.IsMultiEvent, opts => opts.Ignore())
                 .ForMember(dest => dest.Photo, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
@@ -98,6 +104,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
+                .ForMember(dest => dest.IsMultiEvent, opts => opts.Ignore())
+                .ForMember(dest => dest.Events, opts => opts.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
