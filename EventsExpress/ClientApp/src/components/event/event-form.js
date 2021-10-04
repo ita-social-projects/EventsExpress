@@ -224,7 +224,7 @@ class EventForm extends Component {
                             <div className="mt-2">
                                 <Field
                             name='location.MultiEvent'
-                            component={FieldArraysForm}
+                            component={Multievent-form}
                             form_values={form_values }
                                 />
                             </div>
