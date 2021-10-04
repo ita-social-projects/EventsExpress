@@ -15,7 +15,7 @@ import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import asyncValidatePhoto from '../../containers/async-validate-photo';
-import FieldArraysForm from './Multievent-form'
+import MultieventForm from './MultieventForm'
 
 momentLocaliser(moment);
 
@@ -224,7 +224,7 @@ class EventForm extends Component {
                             <div className="mt-2">
                                 <Field
                             name='location.MultiEvent'
-                            component={Multievent-form}
+                            component={MultieventForm}
                             form_values={form_values }
                                 />
                             </div>

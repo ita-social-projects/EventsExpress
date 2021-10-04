@@ -75,7 +75,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
     </ul>
 )
 
-const FieldArraysForm = props => {
+const MultieventForm = props => {
     const { form_values, disabledDate } = props
     return (
             <FieldArray name="Events" component={renderMembers} disabledDate={disabledDate} form_values={form_values} />
@@ -83,4 +83,4 @@ const FieldArraysForm = props => {
     )
 }
 
-export default Multievent-form;
+export default MultieventForm;
