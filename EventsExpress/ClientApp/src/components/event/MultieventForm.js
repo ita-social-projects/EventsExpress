@@ -1,7 +1,9 @@
 ﻿import React from 'react'
+import "./MultieventForm.css";
+import IconButton from "@material-ui/core/IconButton";
 import { Field, FieldArray} from 'redux-form'
 import {
-    renderDatePicker, LocationMapWithMarker
+    renderDatePicker, LocationMapWithMarker, renderTextField, renderTextArea
 } from '../helpers/form-helpers';
 
 
@@ -19,34 +21,39 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 
 const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, form_values }) => (
     <ul>
-        <li>
-            <button type="button" className="btn btn-success" onClick={() => fields.push({})}>
-                Add Event
-      </button>
+       
+            
             {submitFailed && error && <span>{error}</span>}
-        </li>
+   
         {fields.map((member, index) => (
-            <li key={index}>
+            <li key={index} className="childEvent">
                 <button
                     type="button"
                     title="Remove Member"
-                    className="btn btn-danger"
+                    className="float-right btn btn-danger"
                     onClick={() => fields.remove(index)}>
-                    x
-                    </button>
-                <h4>Event #{index + 1}</h4>
+                    <i className="fa fa-trash"></i>
+                </button>
+                <div className="mt-2">
+                    <h4>Event #{index + 1}</h4>
+                </div>
+                <div className="mt-2">
                 <Field
                     name={`${member}.Title`}
                     type="text"
-                    component={renderField}
+                    component={renderTextField}
                     label="Title"
-                />
+                    />
+                </div>
+                <div className="mt-3">
                 <Field
                     name={`${member}.description`}
                     type="text"
-                    component={renderField}
+                    component={renderTextArea}
                     label="Description"
-                />
+                    />
+                </div>
+                <div className="mt-2">
                 <span >
                     <Field
                         name={`${member}.dateFrom`}
@@ -63,7 +70,8 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                         minValue={form_values.dateFrom}
                         component={renderDatePicker}
                     />
-                </span>
+                    </span>
+               </div>
                 <div className="mt-2">
                     <Field
                         name={`${member}.location`}
@@ -72,6 +80,11 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                 </div>
             </li>
         ))}
+        <IconButton
+            onClick={() => fields.push({})}
+            size="small">
+            <span className="icon"><i className="fa-sm fas fa-plus"></i></span> Add Event
+        </IconButton>
     </ul>
 )
 

@@ -312,7 +312,7 @@ namespace EventsExpress.Core.Services
             return eventInstance.Id;
         }
 
-        private Guid InternalPublish(Guid eventId)
+        private void InternalPublish(Guid eventId)
         {
             var ev = Context.Events
                .Include(e => e.EventLocation)
@@ -338,8 +338,6 @@ namespace EventsExpress.Core.Services
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-
-                return ev.Id;
             }
             else
             {
