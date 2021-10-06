@@ -1,35 +1,46 @@
 ﻿import React from 'react';
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from "@material-ui/styles";
 import { connect } from 'react-redux';
 import { promoteToOwner, approveUser } from '../../actions/event/event-item-view-action';
 
+const useStyles = makeStyles((theme) => ({
+    success: {
+        color: '#fff',
+        backgroundColor: '#4caf50',
+        '&:hover': {
+            backgroundColor: '#388e3c'
+        }
+    },
+    danger: {
+        color: '#fff',
+        backgroundColor: '#f44336',
+        '&:hover': {
+            backgroundColor: '#d32f2f'
+        }
+    }
+}));
+
 const PendingUsersActions = (props) => {
     const { user, isMyEvent } = props;
+    const classes = useStyles();
+
     return (
         <>
-            {(isMyEvent) &&
-                <div>
-                <IconButton aria-label="delete" onClick={() => props.promoteToOwner(user.id, props.eventId)}>
-                        <DeleteIcon />
-                    </IconButton>
-                </div>
-            }
             <Button
-                variant="outlined"
-                color="success"
+                variant="contained"
+                className={classes.success}
                 onClick={() => props.approveUser(user.id, props.eventId, true)}
             >
                 Approve
-                        </Button>
+            </Button>
             <Button
+                variant="contained"
+                className={classes.danger}
                 onClick={() => props.approveUser(user.id, props.eventId, false)}
-                variant="outlined"
-                color="danger"
             >
                 Deny
-        </Button>
+            </Button>
         </>
     )
 }
