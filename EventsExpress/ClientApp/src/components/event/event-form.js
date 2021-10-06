@@ -23,20 +23,7 @@ const photoService = new PhotoService();
 
 class EventForm extends Component {
 
-    state = { checked: this.props.initialValues.isReccurent, MultiCheked: this.props.initialValues.isReccurent };
-
-    handleChange = () => {
-        this.setState(state => ({
-            checked: !state.checked,
-        }));
-    }
-
-    MultiHandleChange = () => {
-        this.setState(state => ({
-            MultiCheked: !state.MultiCheked,
-        }));
-    }
-
+    
     checkLocation = (location) => {
 
         if (location !== null) {
@@ -61,9 +48,7 @@ class EventForm extends Component {
     render() {
 
         const { form_values, all_categories, disabledDate, user_name } = this.props;
-        const { checked, MultiCheked } = this.state;
-
-
+   
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
                 encType="multipart/form-data" autoComplete="off">
@@ -106,18 +91,16 @@ class EventForm extends Component {
                     </div>
                     {this.props.haveReccurentCheckBox &&
                         <div className="mt-2">
-                            <Field
-                                type="checkbox"
-                                label="Recurrent Event"
-                                name='isReccurent'
-                                component={renderCheckbox}
-                                checked={checked}
-                                onChange={this.handleChange}
-                            />
+                        <Field
+                            name='isReccurent'
+                            component={renderCheckbox}
+                            type="checkbox"
+                            label="IsReccurent"
+                        />
                         </div>
 
                     }
-                    {this.props.haveReccurentCheckBox && checked &&
+                    {this.props.haveReccurentCheckBox && form_values && form_values.isReccurent &&
                         <div>
                             <div className="mt-2">
                             <Field
@@ -141,7 +124,7 @@ class EventForm extends Component {
                     }
                     <div className="mt-2">
                         <Field
-                            name='isPublic'
+                            name="isPublic"
                             component={renderCheckbox}
                             type="checkbox"
                             label="Public"
@@ -161,7 +144,7 @@ class EventForm extends Component {
                                 <Field
                                     name='dateTo'
                                     label='To'
-                                disabled={disabledDate}
+                                    disabled={disabledDate}
                                     minValue={form_values.dateFrom}
                                     component={renderDatePicker}
                                 />
@@ -217,8 +200,24 @@ class EventForm extends Component {
                                 />
                             </div>
                     }
+                    <div className="mt-2">
+                        <Field
+                            type="checkbox"
+                            label="Multi Event"
+                            name='isMultiEvent'
+                            component={renderCheckbox}
+                        />
+                        <div className="mt-2">
+                            <Field
+                                name='isReccurent'
+                                component={renderCheckbox}
+                                type="checkbox"
+                                label='IsReccurent'
+                            />
+                        </div>
+                    </div>
                     {this.props.form_values
-                        && MultiCheked &&
+                        && this.props.form_values.isMultiEvent &&
                                 
 
                             <div className="mt-2">
@@ -230,16 +229,7 @@ class EventForm extends Component {
                             </div>
                          
                     }
-                    <div className="mt-2">
-                        <Field
-                            type="checkbox"
-                            label="Multi Event"
-                            name='isMultiEvent'
-                            component={renderCheckbox}
-                            checked={checked}
-                            onChange={this.MultiHandleChange}
-                        />
-                    </div>
+                    
                 </div>
                 <div className="row my-4">
                     {this.props.children}

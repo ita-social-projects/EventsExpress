@@ -59,6 +59,8 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                         name={`${member}.dateFrom`}
                         label='From'
                         disabled={disabledDate}
+                        minValue={form_values.dateFrom}
+                        maxValue={form_values.dateTo}
                         component={renderDatePicker}
                     />
                 </span>
@@ -68,6 +70,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                         label='To'
                         disabled={disabledDate}
                         minValue={form_values.dateFrom}
+                        maxValue={form_values.dateTo}
                         component={renderDatePicker}
                     />
                     </span>
