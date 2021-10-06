@@ -27,20 +27,24 @@ const PendingUsersActions = (props) => {
 
     return (
         <>
-            <Button
-                variant="contained"
-                className={classes.success}
-                onClick={() => props.approveUser(user.id, props.eventId, true)}
-            >
-                Approve
-            </Button>
-            <Button
-                variant="contained"
-                className={classes.danger}
-                onClick={() => props.approveUser(user.id, props.eventId, false)}
-            >
-                Deny
-            </Button>
+            {(isMyEvent) &&
+                <>
+                    <Button
+                        variant="contained"
+                        className={classes.success}
+                        onClick={() => props.approveUser(user.id, props.eventId, true)}
+                    >
+                        Approve
+                    </Button>
+                    <Button
+                        variant="contained"
+                        className={classes.danger}
+                        onClick={() => props.approveUser(user.id, props.eventId, false)}
+                    >
+                            Deny
+                    </Button>
+                </>
+            }
         </>
     )
 }
