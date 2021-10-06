@@ -207,14 +207,7 @@ class EventForm extends Component {
                             name='isMultiEvent'
                             component={renderCheckbox}
                         />
-                        <div className="mt-2">
-                            <Field
-                                name='isReccurent'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label='IsReccurent'
-                            />
-                        </div>
+                       
                     </div>
                     {this.props.form_values
                         && this.props.form_values.isMultiEvent &&
