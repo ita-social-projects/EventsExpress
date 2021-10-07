@@ -69,7 +69,7 @@ const renderMembers = ({ fields, meta: { error, submitFailed }, disabledDate, fo
                         name={`${member}.dateTo`}
                         label='To'
                         disabled={disabledDate}
-                        minValue={form_values.dateFrom}
+                        minValue={form_values.Events[index].dateFrom}
                         maxValue={form_values.dateTo}
                         component={renderDatePicker}
                     />
