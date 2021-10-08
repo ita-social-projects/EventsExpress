@@ -200,16 +200,16 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is for email confirmation.
         /// </summary>
-        /// <param name="authLocalId">Param userid defines user identifier.</param>
+        /// <param name="accountId">Param userid defines user identifier.</param>
         /// <param name="token">Param token defines access token.</param>
         /// <returns>The method performs mail confirmation operation.</returns>
         /// <response code="200">Return UserInfo model.</response>
         /// <response code="400">If email confirm process failed.</response>
         [AllowAnonymous]
-        [HttpPost("verify/{authLocalId}/{token}")]
-        public async Task<IActionResult> EmailConfirm(string authLocalId, string token)
+        [HttpPost("verify/{accountId}/{token}")]
+        public async Task<IActionResult> EmailConfirm(string accountId, string token)
         {
-            if (!Guid.TryParse(authLocalId, out Guid id))
+            if (!Guid.TryParse(accountId, out Guid id))
             {
                 throw new EventsExpressException("User not found");
             }

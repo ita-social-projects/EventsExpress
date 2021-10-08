@@ -40,7 +40,7 @@ namespace EventsExpress.NotificationHandlers
             var emailConfirmToken = Guid.NewGuid().ToString();
             const NotificationProfile profile = NotificationProfile.RegisterVerification;
             var model = _notificationTemplateService.GetModelByTemplateId<RegisterVerificationNotificationTemplateModel>(profile);
-            model.EmailLink = $"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.Id}/{emailConfirmToken}";
+            model.EmailLink = $"{_urlOptions.Value.Host}/authentication/{notification.AuthLocal.AccountId}/{emailConfirmToken}";
 
             await _tokenService.GenerateEmailConfirmationToken(emailConfirmToken, notification.AuthLocal.AccountId);
 
