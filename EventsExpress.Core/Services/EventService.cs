@@ -326,29 +326,13 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Not found");
             }
 
-            Dictionary<string, string> exept = new Dictionary<string, string>();
-            var result = _validator.Validate(ev);
-
-            if (result.IsValid)
-            {
-                ev.StatusHistory.Add(
+            ev.StatusHistory.Add(
                     new EventStatusHistory
                     {
                         EventStatus = EventStatus.Active,
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-            }
-            else
-            {
-                var p = result.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
         }
 
         public async Task<Guid> Publish(Guid eventId)

@@ -27,13 +27,15 @@ namespace EventsExpress.Controllers
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
+        private readonly IValidator<EventDto> _validator;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService, IValidator<EventDto> validator)
         {
             _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
+            _validator = validator;
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
@@ -119,11 +121,28 @@ namespace EventsExpress.Controllers
 
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Publish(Guid eventId)
+        public async Task<IActionResult> Publish(Guid eventId, [FromBody] EventEditViewModel model)
         {
-            var result = await _eventService.Publish(eventId);
+            var eventDTo = _mapper.Map<EventDto>(model);
+            Dictionary<string, string> exept = new Dictionary<string, string>();
+            var resultValidation = _validator.Validate(eventDTo);
 
-            return Ok(new { id = result });
+            if (resultValidation.IsValid)
+            {
+                var result = await _eventService.Publish(eventId);
+
+                return Ok(new { id = result });
+            }
+            else
+            {
+                var p = resultValidation.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
+                foreach (var x in p)
+                {
+                    exept.Add(x.Key, x.Value);
+                }
+
+                throw new EventsExpressException("validation failed", exept);
+            }
         }
 
         /// <summary>

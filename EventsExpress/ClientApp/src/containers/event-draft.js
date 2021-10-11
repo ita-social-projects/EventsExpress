@@ -21,7 +21,7 @@ class EventDraftWrapper extends Component {
             await this.props.edit_event({ ...normalizeEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
         }
 
-        return this.props.publish(this.props.event.id);
+        return this.props.publish(this.props.event.id, this.props.event);
     }
 
     onSave = async () => {
@@ -114,7 +114,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         edit_event: (data) => dispatch(edit_event(data)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
-        publish: (data) => dispatch(publish_event(data)),
+        publish: (eventId, data) => dispatch(publish_event(eventId,data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
     }

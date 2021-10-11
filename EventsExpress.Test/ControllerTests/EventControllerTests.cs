@@ -34,6 +34,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<ISecurityContext> mockSecurityContextService;
         private Mock<IPhotoService> mockPhotoservice;
         private Mock<IValidator<IFormFile>> mockValidator;
+        private Mock<IValidator<EventDto>> mockEventDtolValidator;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
         private string _userEmal = "user@gmail.com";
@@ -50,7 +51,8 @@ namespace EventsExpress.Test.ControllerTests
             mockPhotoservice = new Mock<IPhotoService>();
             service = new Mock<IEventService>();
             mockValidator = new Mock<IValidator<IFormFile>>();
-            eventController = new EventController(service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
+            mockEventDtolValidator = new Mock<IValidator<EventDto>>();
+            eventController = new EventController(service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object, mockEventDtolValidator.Object);
             eventController.ControllerContext = new ControllerContext();
             eventController.ControllerContext.HttpContext = new DefaultHttpContext();
 
