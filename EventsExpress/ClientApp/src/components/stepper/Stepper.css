@@ -15,18 +15,18 @@
 .step-number {
     border-radius: 50%;
     border: 1px solid grey;
-    width: 20px;
-    height: 20px;
-    padding: 3px;
+    width: 25px;
+    height: 25px;
+    padding: 2px;
     text-align: center;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
 .divider-line {
     height: 1px;
     background-color: #bdbdbd;
     position: absolute;
-    top: 22%;
+    top: 20%;
     left: 70%
 }
 
