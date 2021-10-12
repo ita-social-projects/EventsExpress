@@ -35,6 +35,7 @@ import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
+import RegistrationForm from '../RegistrationForm';
 
 class App extends Component {
     constructor(props) {
@@ -59,6 +60,7 @@ class App extends Component {
                             <Redirect to="/landing" />
                         )}
                     />
+                    <Route path='/registrationForm' component={RegistrationForm} />
                     <Route>
                         <Layout>
                             <Switch>
