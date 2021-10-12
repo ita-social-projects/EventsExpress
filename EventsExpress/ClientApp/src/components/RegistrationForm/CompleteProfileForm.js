@@ -1,17 +1,28 @@
-import React, { Component } from "react";
-import { TextField, Grid, Avatar, IconButton } from "@material-ui/core";
+import React, { Component, useState } from "react";
+import {
+  TextField,
+  Grid,
+  Avatar,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@material-ui/core";
+import DateMomentUtils from "@date-io/moment";
+import {
+  KeyboardDatePicker,
+  DatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 
-export class AdditionalInfoForm extends Component {
-
-
+export class CompleteProfileForm extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
       <>
         <div style={{ width: "97%", padding: "10px" }}>
           <Grid container spacing={3}>
-
-
             <Grid item sm={6}>
               <h1 style={{ fontSize: 20 }}>Step 2: Complete your profile. </h1>
             </Grid>
@@ -51,7 +62,7 @@ export class AdditionalInfoForm extends Component {
             </Grid>
             <Grid item sm={2}></Grid>
             <Grid item sm={4}>
-              <h1>DatePicker</h1>
+
             </Grid>
             <Grid item xs={3}>
               <TextField
@@ -75,9 +86,21 @@ export class AdditionalInfoForm extends Component {
                 fullWidth
               />
             </Grid>
-            <Grid item sm={2}></Grid>
-            <Grid item sm={4}>
-              <h1>GenderPicker</h1>
+            <Grid item sm={3}></Grid>
+            <Grid item sm={3}>
+              <FormControl
+                variant="filled"
+                defaultValue={values.gender}
+                margin="normal"
+                fullWidth
+              >
+                <InputLabel>Gender</InputLabel>
+                <Select onChange={handleChange("gender")}>
+                  <MenuItem value={1}>Male</MenuItem>
+                  <MenuItem value={2}>Female</MenuItem>
+                  <MenuItem value={3}>Other</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </div>
@@ -86,4 +109,4 @@ export class AdditionalInfoForm extends Component {
   }
 }
 
-export default AdditionalInfoForm;
+export default CompleteProfileForm;
