@@ -4,7 +4,6 @@ import Stepper from "../stepper/Stepper";
 import { UserForm } from "./UserForm";
 import { Button } from "@material-ui/core";
 
-
 export default class App extends Component {
   constructor() {
     super();
@@ -65,7 +64,7 @@ export default class App extends Component {
             ) : (
               ""
             )}
-            {currentStep == 5  ? (
+            {currentStep == 5 ? (
               <Button
                 color="primary"
                 variant="contained"
@@ -86,8 +85,8 @@ export default class App extends Component {
 
 const stepsArray = [
   "Register",
-  "Additional info",
-  "Reasons to join",
-  "Concreete reasons",
-  "Complete",
+  "Complete Profile",
+  "Step 3",
+  "Step 4",
+  "Confirm",
 ];
