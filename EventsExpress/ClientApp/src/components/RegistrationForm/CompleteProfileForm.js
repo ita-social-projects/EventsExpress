@@ -8,13 +8,9 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  FormHelperText,
 } from "@material-ui/core";
-import DateMomentUtils from "@date-io/moment";
-import {
-  KeyboardDatePicker,
-  DatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import DatePickerRegForm from "./DatePickerRegForm";
 
 export class CompleteProfileForm extends Component {
   render() {
@@ -60,9 +56,9 @@ export class CompleteProfileForm extends Component {
                 fullWidth
               />
             </Grid>
-            <Grid item sm={2}></Grid>
-            <Grid item sm={4}>
-
+            <Grid item sm={3}></Grid>
+            <Grid item sm={3}>
+              <DatePickerRegForm />
             </Grid>
             <Grid item xs={3}>
               <TextField
@@ -88,17 +84,18 @@ export class CompleteProfileForm extends Component {
             </Grid>
             <Grid item sm={3}></Grid>
             <Grid item sm={3}>
-              <FormControl
-                variant="filled"
-                defaultValue={values.gender}
-                margin="normal"
-                fullWidth
-              >
-                <InputLabel>Gender</InputLabel>
-                <Select onChange={handleChange("gender")}>
-                  <MenuItem value={1}>Male</MenuItem>
-                  <MenuItem value={2}>Female</MenuItem>
-                  <MenuItem value={3}>Other</MenuItem>
+              <FormControl margin="normal" fullWidth>
+                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={values.gender}
+                  label="Gender"
+                  onChange={handleChange("gender")}
+                >
+                  <MenuItem value={0}>Male</MenuItem>
+                  <MenuItem value={1}>Female</MenuItem>
+                  <MenuItem value={2}>Other</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
