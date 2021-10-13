@@ -33,7 +33,7 @@ export class AdditionalInfoForm extends Component {
             <Grid item xs={3}>
               <List>
                 <ListItem>
-                  <ListItemText primary="Gender" secondary={gender} />
+                  <ListItemText primary="Gender" secondary={gendersArray[gender]} />
                 </ListItem>
                 <ListItem>
                   <ListItemText primary="Country" secondary={country} />
@@ -52,5 +52,12 @@ export class AdditionalInfoForm extends Component {
     );
   }
 }
+
+
+const gendersArray = [
+  "Male",
+  "Female",
+  "Other",
+];
 
 export default AdditionalInfoForm;
