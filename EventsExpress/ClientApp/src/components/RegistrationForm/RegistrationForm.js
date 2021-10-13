@@ -4,7 +4,7 @@ import Stepper from "../stepper/Stepper";
 import { UserForm } from "./UserForm";
 import { Button } from "@material-ui/core";
 
-export default class App extends Component {
+export default class RegistrationForm extends Component {
   constructor() {
     super();
     this.state = {
