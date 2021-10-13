@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AdditionalInfoForm from "./AdditionalInfoForm";
+import CompleteProfileForm from "./CompleteProfileForm";
 import ConfirmForm from "./ConfirmForm";
 import Success from "./Success";
 import PropTypes from "prop-types";
@@ -24,14 +24,15 @@ export class UserForm extends Component {
 
   render() {
     const { currentStepNumber } = this.props;
-    const { firstName, lastName, city, country, gender, birthDate } = this.state;
-    const values = { firstName, lastName, city, country, gender };
+    const { email, firstName, lastName, city, country, gender, birthDate } =
+      this.state;
+    const values = { email, firstName, lastName, city, country, gender, birthDate };
     switch (currentStepNumber) {
       case 1:
         return <h1>1 stage</h1>;
       case 2:
         return (
-          <AdditionalInfoForm
+          <CompleteProfileForm
             handleChange={this.handleChange}
             values={values}
           />
@@ -41,13 +42,9 @@ export class UserForm extends Component {
       case 4:
         return <h1>4 stage</h1>;
       case 5:
-        return (
-          <ConfirmForm
-            values={values}
-          />
-        );
+        return <ConfirmForm values={values} />;
       case 6:
-        return <Success/>;
+        return <Success />;
       default:
         return <h1>Something went wrong</h1>;
     }
