@@ -15,7 +15,7 @@ namespace EventsExpress.Core.IServices
 
         Task<AuthenticateResponseModel> BindExternalAccount(RegisterBindDto registerBindDto);
 
-        Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token);
+        Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token);
 
         Task<bool> CanRegister(string email);
 
