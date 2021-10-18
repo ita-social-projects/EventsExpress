@@ -145,8 +145,15 @@ namespace EventsExpress.Mapping
 
         private static Point PointOrNullEdit(EventEditViewModel editViewModel)
         {
-            return editViewModel.Location?.Type == LocationType.Map ?
+            if (editViewModel.Location.Latitude == null || editViewModel.Location.Longitude == null)
+            {
+                return null;
+            }
+            else
+            {
+                return editViewModel.Location?.Type == LocationType.Map ?
                  new Point(editViewModel.Location.Latitude.Value, editViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
+            }
         }
 
         private static Uri OnlineMeetingOrNullCreate(EventCreateViewModel eventCreateViewModel)
@@ -157,8 +164,8 @@ namespace EventsExpress.Mapping
 
         private static Point PointOrNullCreate(EventCreateViewModel createViewModel)
         {
-            return createViewModel.Location.Type == LocationType.Map ?
-                 new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
+                return createViewModel.Location.Type == LocationType.Map ?
+                     new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
         }
 
         private static string UserName(User user)
