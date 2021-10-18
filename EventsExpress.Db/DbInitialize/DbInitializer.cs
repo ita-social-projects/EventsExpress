@@ -81,19 +81,38 @@ namespace EventsExpress.Db.DbInitialize
 
             dbContext.Users.AddRange(users);
 
+            // var categories = new Category[]
+            // {
+            //     new Category { Name = "Sea" },
+            //     new Category { Name = "Mount" },
+            //     new Category { Name = "Summer" },
+            //     new Category { Name = "Golf" },
+            //     new Category { Name = "Team-Building" },
+            //     new Category { Name = "Swimming" },
+            //     new Category { Name = "Gaming" },
+            //     new Category { Name = "Fishing" },
+            //     new Category { Name = "Trips" },
+            //     new Category { Name = "Meeting" },
+            //     new Category { Name = "Sport" },
+            // };
+
+            // dbContext.Categories.AddRange(categories);
+            var categoryGroups = new CategoryGroup[]
+            {
+                new CategoryGroup { Title = "Art&Craft" },
+                new CategoryGroup { Title = "Wellness, Health&Fitness" },
+            };
+
+            dbContext.CategoryGroups.AddRange(categoryGroups);
+
+            // let's check those groups of categories
             var categories = new Category[]
             {
-                new Category { Name = "Sea" },
-                new Category { Name = "Mount" },
-                new Category { Name = "Summer" },
-                new Category { Name = "Golf" },
-                new Category { Name = "Team-Building" },
-                new Category { Name = "Swimming" },
-                new Category { Name = "Gaming" },
-                new Category { Name = "Fishing" },
-                new Category { Name = "Trips" },
-                new Category { Name = "Meeting" },
-                new Category { Name = "Sport" },
+                new Category { Name = "Drawing", CategoryGroup = categoryGroups[0] },
+                new Category { Name = "Pottery", CategoryGroup = categoryGroups[0] },
+                new Category { Name = "Climbing", CategoryGroup = categoryGroups[1] },
+                new Category { Name = "Football", CategoryGroup = categoryGroups[1] },
+                new Category { Name = "Volleyball", CategoryGroup = categoryGroups[1] },
             };
 
             dbContext.Categories.AddRange(categories);
