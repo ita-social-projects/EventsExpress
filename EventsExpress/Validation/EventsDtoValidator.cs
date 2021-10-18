@@ -27,7 +27,13 @@ namespace EventsExpress.Validation
             {
                 RuleFor(x => x.OnlineMeeting).NotEmpty().OverridePropertyName("location.type").WithMessage("Field is required!");
             });
-            RuleForEach(x => x.Events).SetValidator(new EventPropertyDtoValidator());
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.Title).NotEmpty().WithMessage("Field is required!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.Title).MaximumLength(60).WithMessage("Title length exceeded the recommended length of 60 character!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.Description).NotEmpty().WithMessage("Field is required!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.DateFrom).NotEmpty().WithMessage("Field is required!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.DateFrom).GreaterThan(DateTime.Today).WithMessage("Date from must be older than the current date!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.DateTo).NotEmpty().WithMessage("Field is required!"); });
+            RuleForEach(x => x.Events).ChildRules(eve => { eve.RuleFor(x => x.DateTo).GreaterThan(x => x.DateFrom).WithMessage("Date to must be older than date from!"); });
         }
     }
 }
