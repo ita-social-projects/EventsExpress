@@ -4,19 +4,30 @@ import {
   Grid,
   Avatar,
   IconButton,
+  Button,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
 } from "@material-ui/core";
 import DatePickerRegForm from "./DatePickerRegForm";
+import { reduxForm, Field, formValueSelector } from "redux-form";
+import {
+  renderDatePicker,
+  MultiCheckbox,
+  renderTextField,
+  renderMultiselect,
+  renderSelectField,
+} from "../helpers/form-helpers";
+import validate from "./validate";
+import moment from "moment";
 
-export class CompleteProfileForm extends Component {
-  render() {
-    const { values, handleChange } = this.props;
-    return (
-      <>
-        <div style={{ width: "97%", padding: "10px" }}>
+const CompleteProfileForm = (props) => {
+  const { handleSubmit } = props;
+  return (
+    <>
+      <div style={{ width: "97%", padding: "10px" }}>
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item sm={6}>
               <h1 style={{ fontSize: 20 }}>Step 2: Complete your profile. </h1>
@@ -34,75 +45,89 @@ export class CompleteProfileForm extends Component {
               </IconButton>
             </Grid>
             <Grid item sm={3}>
-              <TextField
+              <Field
+                name="firstName"
                 variant="outlined"
-                placeholder="Enter Your First Name"
+                component={renderTextField}
+                type="input"
                 label="First Name"
-                onChange={handleChange("firstName")}
-                defaultValue={values.firstName}
-                margin="normal"
-                fullWidth
               />
             </Grid>
             <Grid item sm={3}>
-              <TextField
+              <Field
+                name="lastName"
                 variant="outlined"
-                placeholder="Enter Your Last Name"
+                component={renderTextField}
+                type="input"
                 label="Last Name"
-                onChange={handleChange("lastName")}
-                defaultValue={values.lastName}
-                margin="normal"
-                fullWidth
               />
             </Grid>
             <Grid item sm={3}></Grid>
             <Grid item sm={3}>
-              <DatePickerRegForm />
-            </Grid>
-            <Grid item xs={3}>
-              <TextField
-                variant="outlined"
-                placeholder="Enter Your Contry"
-                label="Country"
-                onChange={handleChange("country")}
-                defaultValue={values.country}
-                margin="normal"
-                fullWidth
+              <Field
+                name="birthday"
+                id="date"
+                label="Birthday"
+                minValue={moment(new Date()).subtract(115, "years")}
+                maxValue={moment(new Date()).subtract(15, "years")}
+                component={renderDatePicker}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
             <Grid item xs={3}>
-              <TextField
+              <Field
+                name="country"
                 variant="outlined"
-                placeholder="Enter Your City"
+                component={renderTextField}
+                type="input"
+                label="County"
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Field
+                name="city"
+                variant="outlined"
+                component={renderTextField}
+                type="input"
                 label="City"
-                onChange={handleChange("city")}
-                defaultValue={values.city}
-                margin="normal"
-                fullWidth
               />
             </Grid>
             <Grid item sm={3}></Grid>
             <Grid item sm={3}>
-              <FormControl margin="normal" fullWidth>
-                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={values.gender}
-                  label="Gender"
-                  onChange={handleChange("gender")}
-                >
-                  <MenuItem value={0}>Male</MenuItem>
-                  <MenuItem value={1}>Female</MenuItem>
-                  <MenuItem value={2}>Other</MenuItem>
-                </Select>
-              </FormControl>
+              <Field
+                minWidth={140}
+                name="gender"
+                component={renderSelectField}
+                label="Gender"
+              >
+                <option aria-label="None" value="" />
+                <option value="1">Male</option>
+                <option value="2">Female</option>
+                <option value="3">Other</option>
+              </Field>
+            </Grid>
+            <Grid item sm={12} justify="space-around">
+              <Button
+                type="submit"
+                className="next"
+                color="primary"
+                variant="contained"
+                size="large"
+              >
+                Continue
+              </Button>
             </Grid>
           </Grid>
-        </div>
-      </>
-    );
-  }
-}
+        </form>
+      </div>
+    </>
+  );
+};
 
-export default CompleteProfileForm;
+export default reduxForm({
+  form: "registrationForm",
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true,
+})(CompleteProfileForm);
