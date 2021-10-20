@@ -497,7 +497,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(existingUser.Id, nullToken));
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.EmailConfirmAndAuthenticate(existingUser.Id, nullToken));
         }
 
         [Test]
