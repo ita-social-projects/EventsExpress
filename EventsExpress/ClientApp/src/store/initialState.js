@@ -6,6 +6,9 @@ const initialState = {
     requestCount:{
         counter: 0,
     },
+    requestLocalCount: {
+        localCounter: 0,
+    },
     account:{
         linkedAuths:[],
     },

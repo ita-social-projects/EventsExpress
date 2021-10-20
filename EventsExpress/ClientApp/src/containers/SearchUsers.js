@@ -1,7 +1,7 @@
 ﻿import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { get_SearchUsers, reset_users } from '../actions/users/users-action';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import UserItemList from '../components/users/user-item';
 import UserSearchFilterWrapper from '../containers/UserSearchFilterWrapper';
 import history from '../history';
@@ -39,12 +39,12 @@ class SearchUsers extends Component {
             <div className="row">
                 <div className='col-12'>
                     < UserSearchFilterWrapper onReset={this.onReset} /> 
-                    <Spinner showContent={data != undefined}>
+                    <SpinnerWrapper showContent={data != undefined}>
                         <UserItemList users={this.props.users.data.items}
                             page={this.props.users.data.pageViewModel.pageNumber}
                             totalPages={this.props.users.data.pageViewModel.totalPages}
                             callback={this.getUsers} />
-                    </Spinner>
+                    </SpinnerWrapper>
                 </div>
             </div>
         </>

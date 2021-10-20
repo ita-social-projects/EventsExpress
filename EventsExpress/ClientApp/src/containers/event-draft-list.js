@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DraftList from '../components/Draft/Draft-list';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import { get_drafts, reset_events } from '../actions/event/event-list-action';
 import filterHelper from '../components/helpers/filterHelper';
 
@@ -34,7 +34,7 @@ class EventDraftListWrapper extends Component {
         const { data } = this.props.events;
         const { items } = this.props.events.data;
              
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             <DraftList
                 current_user={current_user}
                 data_list={items}
@@ -45,7 +45,7 @@ class EventDraftListWrapper extends Component {
                 get_drafts={this.props.get_drafts}
                 match={this.props.match}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 
