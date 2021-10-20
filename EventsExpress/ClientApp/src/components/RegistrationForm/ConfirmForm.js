@@ -98,14 +98,6 @@ const gendersArray = ["", "Male", "Female", "Other"];
 
 const mapStateToProps = (state) => {
   return {
-    initialValues: {
-      firstName: state.registereFields,
-      lastName: state.registereFields,
-      birthday: state.registereFields,
-      country: state.registereFields,
-      city: state.registereFields,
-      gender: state.registereFields,
-    },
     formValues: getFormValues("registrationForm")(state),
   };
 };
