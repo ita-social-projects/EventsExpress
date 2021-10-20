@@ -58,7 +58,7 @@ export default class RegistrationForm extends Component {
               {currentStep === 5 && (
                 <ConfirmForm
                   previousPage={this.previousPage}
-                  onSubmit={this.nextPage}
+                  onSubmit={this.onSubmit}
                 />
               )}
               {currentStep === 6 && <Success />}

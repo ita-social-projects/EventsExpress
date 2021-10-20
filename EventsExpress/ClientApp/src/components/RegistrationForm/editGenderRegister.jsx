@@ -4,7 +4,7 @@ import { renderSelectField } from "../helpers/form-helpers";
 import ErrorMessages from "../shared/errorMessage";
 
 let editGenderRegister = (props) => {
-  const { handleSubmit, pristine, submitting } = props;
+  const { handleSubmit } = props;
   return render(
     <form name="editGenderRegister" onSubmit={handleSubmit}>
       <div>
