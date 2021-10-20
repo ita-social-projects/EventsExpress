@@ -1,30 +1,32 @@
 import "./RegistrationForm.css";
 import React, { Component } from "react";
 import Stepper from "../stepper/Stepper";
-import { UserForm } from "./UserForm";
-import { Button } from "@material-ui/core";
+import CompleteProfileForm from "./CompleteProfileForm";
+import ConfirmForm from "./ConfirmForm";
+import Success from "./Success";
+import PlaceHolder from "./PlaceHolder";
+import PropTypes from "prop-types";
 
 export default class RegistrationForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.nextPage = this.nextPage.bind(this);
+    this.previousPage = this.previousPage.bind(this);
     this.state = {
       currentStep: 2,
     };
   }
 
-  handleClick = (clickType) => {
-    const { currentStep } = this.state;
-    let newStep = currentStep;
-    clickType === "next" ? newStep++ : newStep--;
+  nextPage() {
+    this.setState({ currentStep: this.state.currentStep + 1 });
+  }
 
-    if (newStep > 1 && newStep <= 6) {
-      this.setState({
-        currentStep: newStep,
-      });
-    }
-  };
+  previousPage() {
+    this.setState({ currentStep: this.state.currentStep - 1 });
+  }
 
   render() {
+    const { onSubmit } = this.props;
     const { currentStep } = this.state;
 
     return (
@@ -37,45 +39,30 @@ export default class RegistrationForm extends Component {
           />
           <br />
           <div className="buttons-container">
-            <UserForm currentStepNumber={currentStep} />
-          </div>
-          <div className="buttons-container">
-            {currentStep > 2 && currentStep < 6 ? (
-              <Button
-                color="primary"
-                variant="text"
-                onClick={() => this.handleClick()}
-              >
-                Back
-              </Button>
-            ) : (
-              ""
-            )}
-
-            {currentStep < 5 ? (
-              <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                onClick={() => this.handleClick("next")}
-              >
-                Continue
-              </Button>
-            ) : (
-              ""
-            )}
-            {currentStep == 5 ? (
-              <Button
-                color="primary"
-                variant="contained"
-                size="large"
-                onClick={() => this.handleClick("next")}
-              >
-                Confirm
-              </Button>
-            ) : (
-              ""
-            )}
+            <div>
+              {currentStep === 2 && (
+                <CompleteProfileForm onSubmit={this.nextPage} />
+              )}
+              {currentStep === 3 && (
+                <PlaceHolder
+                  previousPage={this.previousPage}
+                  onSubmit={this.nextPage}
+                />
+              )}
+              {currentStep === 4 && (
+                <PlaceHolder
+                  previousPage={this.previousPage}
+                  onSubmit={this.nextPage}
+                />
+              )}
+              {currentStep === 5 && (
+                <ConfirmForm
+                  previousPage={this.previousPage}
+                  onSubmit={this.onSubmit}
+                />
+              )}
+              {currentStep === 6 && <Success />}
+            </div>
           </div>
         </div>
       </>
@@ -90,3 +77,7 @@ const stepsArray = [
   "Step 4",
   "Confirm",
 ];
+
+RegistrationForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
