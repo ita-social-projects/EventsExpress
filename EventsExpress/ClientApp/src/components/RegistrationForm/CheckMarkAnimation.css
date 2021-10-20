@@ -35,15 +35,18 @@
     stroke-dashoffset: 0;
   }
 }
+
 @keyframes scale {
   0%,
   100% {
     transform: none;
   }
+
   50% {
     transform: scale3d(1.11, 1.11, 1);
   }
 }
+
 @keyframes fill {
   100% {
     box-shadow: inset 0px 0px 0px 100px #7ac142;

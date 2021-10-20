@@ -8,76 +8,76 @@ import PlaceHolder from "./PlaceHolder";
 import PropTypes from "prop-types";
 
 export default class RegistrationForm extends Component {
-  constructor(props) {
-    super(props);
-    this.nextPage = this.nextPage.bind(this);
-    this.previousPage = this.previousPage.bind(this);
-    this.state = {
-      currentStep: 2,
-    };
-  }
+    constructor(props) {
+        super(props);
+        this.nextPage = this.nextPage.bind(this);
+        this.previousPage = this.previousPage.bind(this);
+        this.state = {
+            currentStep: 2,
+        };
+    }
 
-  nextPage() {
-    this.setState({ currentStep: this.state.currentStep + 1 });
-  }
+    nextPage() {
+        this.setState({ currentStep: this.state.currentStep + 1 });
+    }
 
-  previousPage() {
-    this.setState({ currentStep: this.state.currentStep - 1 });
-  }
+    previousPage() {
+        this.setState({ currentStep: this.state.currentStep - 1 });
+    }
 
-  render() {
-    const { onSubmit } = this.props;
-    const { currentStep } = this.state;
+    render() {
+        const { onSubmit } = this.props;
+        const { currentStep } = this.state;
 
-    return (
-      <>
-        <div className="stepper-container-horizontal">
-          <Stepper
-            currentStepNumber={currentStep - 1}
-            steps={stepsArray}
-            stepColor="#ff9900"
-          />
-          <br />
-          <div className="buttons-container">
-            <div>
-              {currentStep === 2 && (
-                <CompleteProfileForm onSubmit={this.nextPage} />
-              )}
-              {currentStep === 3 && (
-                <PlaceHolder
-                  previousPage={this.previousPage}
-                  onSubmit={this.nextPage}
-                />
-              )}
-              {currentStep === 4 && (
-                <PlaceHolder
-                  previousPage={this.previousPage}
-                  onSubmit={this.nextPage}
-                />
-              )}
-              {currentStep === 5 && (
-                <ConfirmForm
-                  previousPage={this.previousPage}
-                  onSubmit={this.nextPage}
-                />
-              )}
-              {currentStep === 6 && <Success />}
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+        return (
+            <>
+                <div className="stepper-container-horizontal">
+                    <Stepper
+                        currentStepNumber={currentStep - 1}
+                        steps={stepsArray}
+                        stepColor="#ff9900"
+                    />
+                    <br />
+                    <div className="buttons-container">
+                        <div>
+                            {currentStep === 2 && (
+                                <CompleteProfileForm onSubmit={this.nextPage} />
+                            )}
+                            {currentStep === 3 && (
+                                <PlaceHolder
+                                    previousPage={this.previousPage}
+                                    onSubmit={this.nextPage}
+                                />
+                            )}
+                            {currentStep === 4 && (
+                                <PlaceHolder
+                                    previousPage={this.previousPage}
+                                    onSubmit={this.nextPage}
+                                />
+                            )}
+                            {currentStep === 5 && (
+                                <ConfirmForm
+                                    previousPage={this.previousPage}
+                                    onSubmit={this.nextPage}
+                                />
+                            )}
+                            {currentStep === 6 && <Success />}
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+    }
 }
 
 const stepsArray = [
-  "Register",
-  "Complete Profile",
-  "Step 3",
-  "Step 4",
-  "Confirm",
+    "Register",
+    "Complete Profile",
+    "Step 3",
+    "Step 4",
+    "Confirm",
 ];
 
 RegistrationForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 };

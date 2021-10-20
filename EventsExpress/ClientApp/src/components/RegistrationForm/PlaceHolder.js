@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Grid, Button } from "@material-ui/core";
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
 
 const PlaceHolder = (props) => {
   const { handleSubmit, previousPage } = props;
