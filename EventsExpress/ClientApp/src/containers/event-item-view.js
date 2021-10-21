@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EventItemView from '../components/event/event-item-view';
 import eventStatusEnum from '../constants/eventStatusEnum';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import get_event, {
     join,
     leave,
@@ -49,7 +49,7 @@ class EventItemViewWrapper extends Component {
     render() {
         const { data } = this.props.event;
 
-        return <Spinner showContent={data!=undefined}>
+        return <SpinnerWrapper showContent={data!=undefined}>
             <EventItemView
                 event={this.props.event}
                 match={this.props.match}
@@ -60,7 +60,7 @@ class EventItemViewWrapper extends Component {
                 onDelete={this.onDelete}
                 current_user={this.props.current_user}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

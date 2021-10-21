@@ -1,6 +1,6 @@
 ﻿import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import EventDraftWrapper from './event-draft';
 import EditEventWrapper from './edit-event';
 import eventStatusEnum from '../constants/eventStatusEnum';
@@ -34,11 +34,11 @@ class EventEditWrapper extends Component{
     render() {   
         const { data } = this.props.event;
 
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             {data.eventStatus == eventStatusEnum.Active
                 ? <EditEventWrapper />
                 : <EventDraftWrapper />}
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

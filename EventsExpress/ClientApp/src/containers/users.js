@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get_users, reset_users } from '../actions/users/users-action';
 import { connect } from 'react-redux';
 import Users from '../components/users';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import UsersFilterWrapper from '../containers/user-filter';
 
 class UsersWrapper extends Component {
@@ -22,14 +22,14 @@ class UsersWrapper extends Component {
 
         return <div className="row">
             <div className="col-9">
-                <Spinner showContent={data !== undefined}>
+                <SpinnerWrapper showContent={data !== undefined}>
                     <Users
                         users={data.items}
                         page={data.pageViewModel.pageNumber}
                         totalPages={data.pageViewModel.totalPages}
                         callback={this.getUsers}
                     />
-                </Spinner>
+                </SpinnerWrapper>
             </div>
             <div className="col-3">
                 <UsersFilterWrapper location={location} />

@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import UnitOfMeasuringAddWrapper from '../../containers/unitsOfMeasuring/unitOfMeasuring-add';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 import UnitOfMeasuringListWrapper from '../../containers/unitsOfMeasuring/UnitOfMeasuringListWrapper';
 import { connect } from 'react-redux';
 import get_unitsOfMeasuring from '../../actions/unitOfMeasuring/unitsOfMeasuring-list-action';
@@ -17,9 +17,9 @@ class UnitsOfMeasuring extends Component {
                     <UnitOfMeasuringAddWrapper
                         item={{ id: "00000000-0000-0000-0000-000000000000", unitName: "", shortName: "", category: "" }}
                     />
-                    <Spinner showContent={unitsOfMeasuring != undefined}>
+                    <SpinnerWrapper showContent={unitsOfMeasuring != undefined}>
                         <UnitOfMeasuringListWrapper data={unitsOfMeasuring} />
-                    </Spinner>
+                    </SpinnerWrapper>
                 </tbody>
             </table>
         </div>
