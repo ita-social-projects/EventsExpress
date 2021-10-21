@@ -6,8 +6,7 @@ const asyncValidatePhoto = async (values) => {
 
     var err;
 
-    if (values.photo !== null)
-    {
+    if (values.photo !== undefined) {
         let response = await photoService.setEventTempPhoto(values.id, values.photo.file);
 
         if (!response.ok) {
@@ -15,6 +14,9 @@ const asyncValidatePhoto = async (values) => {
             err = err.errors[`Photo`];
             throw { photo: err[0] };
         }
+    }
+    else {
+        throw { photo: "Please, upload the photo." }
     }
 }
 export default asyncValidatePhoto;

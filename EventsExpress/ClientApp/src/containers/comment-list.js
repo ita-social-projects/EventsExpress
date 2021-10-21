@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import CommentList from '../components/comment/comment-list';
 import getComments from '../actions/comment/comment-list-action';
+import LocalSpinnerWrapper from './local-spinner';
 
 
 
@@ -16,13 +17,15 @@ class CommentListWrapper extends Component {
 
         const { data } = this.props.comments;
 
-        return <CommentList
+        return <LocalSpinnerWrapper showContent={data !== null}>
+            <CommentList
                 evId={this.props.eventId}
                 data_list={data.items}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
                 callback={this.props.getComments}
             />
+        </LocalSpinnerWrapper>
     }
 }
 

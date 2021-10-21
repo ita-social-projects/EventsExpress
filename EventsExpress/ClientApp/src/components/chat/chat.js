@@ -6,7 +6,7 @@ import { renderTextArea } from '../helpers/form-helpers';
 import { reduxForm, Field, reset as resetForm } from 'redux-form';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Msg from './msg';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 import CustomAvatar from "../avatar/custom-avatar";
 
 class Chat extends Component {
@@ -73,7 +73,7 @@ class Chat extends Component {
     render() {
         let sender = this.props.chat.data.users.find(y => y.id != this.props.current_user.id);
         const { data } = this.props.chat;
-        return <Spinner showContent={data !== undefined}>
+        return <SpinnerWrapper showContent={data !== undefined}>
             <div className="row justify-content-center h-100 mt-2">
                 <div className="col-md-8 col-xl-8 chat">
                     <div className="card">
@@ -107,7 +107,7 @@ class Chat extends Component {
                     </div>
                 </div>
             </div>
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

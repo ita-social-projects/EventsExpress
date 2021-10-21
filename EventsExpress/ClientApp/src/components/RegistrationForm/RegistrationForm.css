@@ -1,0 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.stepper-container-horizontal {
+    border: 1px solid rgb(255, 153, 0);
+    box-shadow: 0 0 13px #333;
+    border-radius: 3px;
+    margin: 40px auto;
+    padding: 30px;
+    width: 60%;
+}
+
+.buttons-container {
+    text-align: center;
+    margin: 40px auto;
+    padding: 30px;
+}
+
+button {
+    margin: 0 2rem;
+    width: 100px;
+    padding: 4px;
+    background-color: rgb(255, 153, 0);
+    border: none;
+}

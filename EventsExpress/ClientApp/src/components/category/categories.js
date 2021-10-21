@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CategoryAddWrapper from '../../containers/categories/category-add';
 import CategoryListWrapper from '../../containers/categories/category-list';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 import get_categories from '../../actions/category/category-list-action';
 import { connect } from 'react-redux';
 
@@ -17,9 +17,9 @@ class Categories extends Component {
                     <CategoryAddWrapper
                         item={{ name: "", id: "00000000-0000-0000-0000-000000000000" }}
                     />
-                    <Spinner showContent={data != undefined}>
+                    <SpinnerWrapper showContent={data != undefined}>
                         <CategoryListWrapper data={data} />
-                    </Spinner>
+                    </SpinnerWrapper>
                 </tbody>
             </table>
         </div>

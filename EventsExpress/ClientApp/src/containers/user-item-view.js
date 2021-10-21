@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Profile from '../components/profile/user-profile';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import get_user, { setAttitude, reset_user } from '../actions/user/user-item-view-action';
 import {
     get_future_events,
@@ -76,7 +76,7 @@ class UserItemViewWrapper extends Component {
         const { data } = this.props.profile;
 
 
-        return <Spinner showContent={data != null}>
+        return <SpinnerWrapper showContent={data !== null}>
             <Profile
                 onLike={this.onLike}
                 onDislike={this.onDislike}
@@ -90,7 +90,7 @@ class UserItemViewWrapper extends Component {
                 current_user={this.props.current_user}
                 history={this.props.history}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 
