@@ -8,6 +8,8 @@ namespace EventsExpress.ViewModels
 
         public string Name { get; set; }
 
+        public Guid CategoryGroupId { get; set; }
+
         public int CountOfUser { get; set; }
 
         public int CountOfEvents { get; set; }

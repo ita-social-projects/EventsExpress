@@ -7,10 +7,14 @@ namespace EventsExpress.Validation
     public class CategoryEditViewModelValidator : AbstractValidator<CategoryEditViewModel>
     {
         private readonly ICategoryService _categoryService;
+        private readonly ICategoryGroupService _categoryGroupService;
 
-        public CategoryEditViewModelValidator(ICategoryService categoryService)
+        public CategoryEditViewModelValidator(
+            ICategoryService categoryService,
+            ICategoryGroupService categoryGroupService)
         {
             _categoryService = categoryService;
+            _categoryGroupService = categoryGroupService;
 
             RuleFor(x => x.Name)
                 .NotNull()
@@ -27,6 +31,10 @@ namespace EventsExpress.Validation
             RuleFor(x => x.Id)
                 .Must(id => _categoryService.Exists(id))
                 .WithMessage("The category not exists!");
+
+            RuleFor(x => x.CategoryGroupId)
+                .Must(categoryGroupId => _categoryGroupService.Exists(categoryGroupId))
+                .WithMessage("The category group does not exist!");
         }
     }
 }

@@ -25,6 +25,7 @@ namespace EventsExpress.Mapping
             CreateMap<UserCategory, CategoryDto>()
               .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Category.Id))
               .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Category.Name))
+              .ForMember(dest => dest.CategoryGroupId, opts => opts.MapFrom(src => src.Category.CategoryGroupId))
               .ForAllOtherMembers(x => x.Ignore());
         }
     }

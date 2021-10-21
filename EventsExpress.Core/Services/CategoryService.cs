@@ -33,6 +33,7 @@ namespace EventsExpress.Core.Services
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
+                                    CategoryGroupId = x.CategoryGroupId,
                                     CountOfEvents = x.Events.Count(),
                                     CountOfUser = x.Users.Count(),
                                 })
@@ -41,9 +42,9 @@ namespace EventsExpress.Core.Services
             return categories;
         }
 
-        public async Task Create(string title)
+        public async Task Create(string title, Guid categoryGroupId)
         {
-            Insert(new Category { Name = title });
+            Insert(new Category { Name = title, CategoryGroupId = categoryGroupId });
             await Context.SaveChangesAsync();
         }
 
@@ -56,6 +57,7 @@ namespace EventsExpress.Core.Services
             }
 
             oldCategory.Name = category.Name;
+            oldCategory.CategoryGroupId = category.CategoryGroupId;
             await Context.SaveChangesAsync();
         }
 
@@ -84,5 +86,24 @@ namespace EventsExpress.Core.Services
 
         public bool ExistsAll(IEnumerable<Guid> ids) =>
             Context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
+
+        public IEnumerable<CategoryDto> GetCategoriesByGroup(Guid categoryGroupId)
+        {
+            var categories = Context.Categories
+                                .Include(c => c.Users)
+                                .Include(c => c.Events)
+                                .Where(c => c.CategoryGroupId == categoryGroupId)
+                                .Select(c => new CategoryDto
+                                {
+                                    Id = c.Id,
+                                    Name = c.Name,
+                                    CategoryGroupId = c.CategoryGroupId,
+                                    CountOfEvents = c.Events.Count(),
+                                    CountOfUser = c.Users.Count(),
+                                })
+                                .OrderBy(c => c.Name);
+
+            return categories;
+        }
     }
 }

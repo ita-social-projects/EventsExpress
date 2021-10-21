@@ -39,6 +39,17 @@ namespace EventsExpress.Controllers
             Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(_categoryService.GetAllCategories()));
 
         /// <summary>
+        /// This method have to return all categories filtered by ID of their category group.
+        /// </summary>
+        /// <param name="id">Param id defines category group identifier.</param>
+        /// <returns>The method returns all filtered by category group identifier categories.</returns>
+        /// <response code="200">Return IEnumerable CategoryDto model.</response>
+        [HttpGet("[action]/{id}")]
+        [AllowAnonymous]
+        public IActionResult AllByGroup(Guid id) =>
+            Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(_categoryService.GetCategoriesByGroup(id)));
+
+        /// <summary>
         /// This method is for create categories.
         /// </summary>
         /// <param name="model">Param model defines CategoryCreateViewModel model.</param>
@@ -48,7 +59,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([ModelBinder(typeof(TrimModelBinder))] CategoryCreateViewModel model)
         {
-            await _categoryService.Create(model.Name);
+            await _categoryService.Create(model.Name, model.CategoryGroupId);
             return Ok();
         }
 

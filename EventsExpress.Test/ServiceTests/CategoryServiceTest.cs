@@ -15,6 +15,7 @@ namespace EventsExpress.Test.ServiceTests
         private Category category;
         private CategoryDto categoryDTO;
         private Guid categoryId = Guid.NewGuid();
+        private Guid categoryGroupId = Guid.NewGuid();
 
         [SetUp]
         protected override void Initialize()
@@ -25,6 +26,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 Id = categoryId,
                 Name = "RandomName",
+                CategoryGroupId = categoryGroupId,
             };
 
             Context.Categories.Add(category);
@@ -56,6 +58,14 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Get_ExistingGroup_ReturnEntity()
+        {
+            var res = service.GetCategoriesByGroup(categoryGroupId);
+
+            Assert.IsNotEmpty(res);
+        }
+
+        [Test]
         public void Delete_ExistingId_Success()
         {
             Assert.DoesNotThrowAsync(async () => await service.Delete(category.Id));
@@ -64,7 +74,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_newCategory_Success()
         {
-            Assert.DoesNotThrowAsync(async () => await service.Create("CorrectName"));
+            Assert.DoesNotThrowAsync(async () => await service.Create("CorrectName", categoryGroupId));
         }
 
         [Test]
@@ -88,8 +98,8 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Create_RepeatTitle_ReturnFalseAsync()
         {
-            Category newCategory = new Category() { Name = "RandomName" };
-            Assert.DoesNotThrowAsync(async () => await service.Create(newCategory.Name));
+            Category newCategory = new Category() { Name = "RandomName", CategoryGroupId = categoryGroupId };
+            Assert.DoesNotThrowAsync(async () => await service.Create(newCategory.Name, newCategory.CategoryGroupId));
         }
 
         [Test]

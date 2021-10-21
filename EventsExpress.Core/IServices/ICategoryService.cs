@@ -10,9 +10,11 @@ namespace EventsExpress.Core.IServices
     {
         IEnumerable<CategoryDto> GetAllCategories();
 
+        IEnumerable<CategoryDto> GetCategoriesByGroup(Guid categoryGroupId);
+
         Category GetById(Guid id);
 
-        Task Create(string title);
+        Task Create(string title, Guid categoryGroupId);
 
         Task Edit(CategoryDto category);
 

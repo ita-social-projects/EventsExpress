@@ -7,5 +7,7 @@ namespace EventsExpress.ViewModels
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public Guid CategoryGroupId { get; set; }
     }
 }

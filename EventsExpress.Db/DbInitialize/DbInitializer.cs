@@ -81,19 +81,25 @@ namespace EventsExpress.Db.DbInitialize
 
             dbContext.Users.AddRange(users);
 
+            var categoryGroups = new CategoryGroup[]
+            {
+                new CategoryGroup { Title = "Art&Craft" },
+                new CategoryGroup { Title = "Education&Training" },
+                new CategoryGroup { Title = "Wellness, Health&Fitness" },
+            };
+
+            dbContext.CategoryGroups.AddRange(categoryGroups);
+
             var categories = new Category[]
             {
-                new Category { Name = "Sea" },
-                new Category { Name = "Mount" },
-                new Category { Name = "Summer" },
-                new Category { Name = "Golf" },
-                new Category { Name = "Team-Building" },
-                new Category { Name = "Swimming" },
-                new Category { Name = "Gaming" },
-                new Category { Name = "Fishing" },
-                new Category { Name = "Trips" },
-                new Category { Name = "Meeting" },
-                new Category { Name = "Sport" },
+                new Category { Name = "Drawing", CategoryGroup = categoryGroups[0] },
+                new Category { Name = "Pottery", CategoryGroup = categoryGroups[0] },
+                new Category { Name = "Self-education", CategoryGroup = categoryGroups[1] },
+                new Category { Name = "Public Speaking", CategoryGroup = categoryGroups[1] },
+                new Category { Name = "Book Club", CategoryGroup = categoryGroups[1] },
+                new Category { Name = "Climbing", CategoryGroup = categoryGroups[2] },
+                new Category { Name = "Volleyball", CategoryGroup = categoryGroups[2] },
+                new Category { Name = "Football", CategoryGroup = categoryGroups[2] },
             };
 
             dbContext.Categories.AddRange(categories);
