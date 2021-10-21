@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { eventsForNotification } from '../../actions/events/events-for-notification-action';
 import EventList from '../event/events-for-profile';
-import Spinner from '../spinner';
+import SpinnerWrapper from '../../containers/spinner';
 
 class NotificationEvents extends Component {
     componentWillMount = () => {
@@ -14,7 +14,7 @@ class NotificationEvents extends Component {
         const { data } = this.props.events;
         const { items } = this.props.events.data;
 
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             {items.length == 0 &&
                 <p className="text-center h3">You don't have notifications</p>
             }
@@ -25,7 +25,7 @@ class NotificationEvents extends Component {
                 totalPages={data.pageViewModel.totalPages}
                 callback={this.props.get_events}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 
