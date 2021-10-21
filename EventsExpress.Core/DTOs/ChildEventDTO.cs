@@ -7,11 +7,9 @@ using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.DTOs
 {
-    public class EventDto
+    public class ChildEventDto
     {
         public Guid Id { get; set; }
-
-        public bool IsReccurent { get; set; }
 
         public string Title { get; set; }
 
@@ -21,36 +19,14 @@ namespace EventsExpress.Core.DTOs
 
         public DateTime? DateTo { get; set; }
 
-        public int? MaxParticipants { get; set; }
-
-        public int Frequency { get; set; }
-
-        public Periodicity Periodicity { get; set; }
-
-        public IFormFile Photo { get; set; }
-
-        public bool? IsPublic { get; set; }
-
         public Point Point { get; set; }
 
         public LocationType Type { get; set; }
 
         public Uri OnlineMeeting { get; set; }
 
-        public IEnumerable<CategoryDto> Categories { get; set; }
-
         public EventStatus EventStatus { get; set; }
 
-        public IEnumerable<UserEvent> Visitors { get; set; }
-
-        public IEnumerable<InventoryDto> Inventories { get; set; }
-
-        public IEnumerable<Guid> OwnerIds { get; set; }
-
-        public IEnumerable<User> Owners { get; set; }
-
         public bool? IsMultiEvent { get; set; }
-
-        public IEnumerable<ChildEventDto> Events { get; set; }
     }
 }

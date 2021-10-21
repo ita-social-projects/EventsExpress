@@ -289,9 +289,11 @@ namespace EventsExpress.Core.Services
             {
                 eventInstance.IsMultiEvent = true;
                 await InternalEdit(eventInstance);
-                EventDto[] childs = eventInstance.Events.ToArray();
-                for (int i = 0; i < childs.Length; i++)
+                ChildEventDto[] childEventDtos = eventInstance.Events.ToArray();
+                EventDto[] childs = new EventDto[childEventDtos.Length];
+                for (int i = 0; i < childEventDtos.Length; i++)
                 {
+                    childs[i] = Mapper.Map<ChildEventDto, EventDto>(childEventDtos[i]);
                     childs[i].Id = CreateDraft();
                     childs[i].IsMultiEvent = true;
                     childs[i].Inventories = eventInstance.Inventories;

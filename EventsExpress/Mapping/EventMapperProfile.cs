@@ -1,21 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using AutoMapper;
-using Azure.Storage.Blobs;
-using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
-using EventsExpress.Db.Entities;
-using EventsExpress.Db.Enums;
-using EventsExpress.ValueResolvers;
-using EventsExpress.ViewModels;
-using EventsExpress.ViewModels.Base;
-using NetTopologySuite.Geometries;
-
-namespace EventsExpress.Mapping
+﻿namespace EventsExpress.Mapping
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using EventsExpress.Core.DTOs;
+    using EventsExpress.Core.IServices;
+    using EventsExpress.Db.Entities;
+    using EventsExpress.Db.Enums;
+    using EventsExpress.ValueResolvers;
+    using EventsExpress.ViewModels;
+    using EventsExpress.ViewModels.Base;
+    using NetTopologySuite.Geometries;
+
     public class EventMapperProfile : Profile
     {
         public EventMapperProfile()
@@ -23,7 +20,7 @@ namespace EventsExpress.Mapping
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
-               .ForMember(dest => dest.Events, opts => opts.Ignore())
+               .ForMember(dest => dest.Events, opts => opts.MapFrom(src => MapEventsDtoFromMultiEventStatus(src.ChildEvents)))
                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
@@ -39,6 +36,12 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.OwnerIds, opts => opts.Ignore())
                .ForMember(dest => dest.Photo, opts => opts.Ignore());
 
+            CreateMap<Event, ChildEventDto>()
+              .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
+              .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
+              .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
+              .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus));
+
             CreateMap<EventDto, Event>()
                 .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Owners.Select(x =>
                    new EventOwner
@@ -48,7 +51,7 @@ namespace EventsExpress.Mapping
                    })))
                 .ForMember(dest => dest.Visitors, opt => opt.Ignore())
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
-                 .ForMember(dest => dest.ChildEvents, opt => opt.Ignore())
+                 .ForMember(dest => dest.ChildEvents, opt => opt.MapFrom(src => src.Events))
                  .ForMember(dest => dest.ParentEvents, opt => opt.Ignore())
                   .ForMember(dest => dest.IsMultiEvent, opt => opt.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -94,6 +97,25 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.IsMultiEvent, opts => opts.Ignore())
                 .ForMember(dest => dest.Photo, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
+
+            CreateMap<ChildEventDto, EventDto>()
+                .ForMember(dest => dest.Categories, opts => opts.Ignore())
+                .ForMember(dest => dest.Inventories, opts => opts.Ignore())
+                .ForMember(dest => dest.Owners, opts => opts.Ignore())
+                .ForMember(dest => dest.OwnerIds, opts => opts.Ignore())
+                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.Point))
+                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.OnlineMeeting))
+                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Events, opts => opts.Ignore())
+                .ForMember(dest => dest.IsMultiEvent, opts => opts.Ignore())
+                .ForMember(dest => dest.Photo, opts => opts.Ignore())
+                .ForMember(dest => dest.Visitors, opts => opts.Ignore());
+
+            CreateMap<EventEditViewModel, ChildEventDto>()
+               .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
+               .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
+               .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
+               .ForMember(dest => dest.IsMultiEvent, opts => opts.Ignore());
 
             CreateMap<EventCreateViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
@@ -164,8 +186,8 @@ namespace EventsExpress.Mapping
 
         private static Point PointOrNullCreate(EventCreateViewModel createViewModel)
         {
-                return createViewModel.Location.Type == LocationType.Map ?
-                     new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
+            return createViewModel.Location.Type == LocationType.Map ?
+                 new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
         }
 
         private static string UserName(User user)
@@ -182,8 +204,8 @@ namespace EventsExpress.Mapping
         {
             return new CategoryDto
             {
-                    Id = categoryViewModel.Id,
-                    Name = categoryViewModel.Name,
+                Id = categoryViewModel.Id,
+                Name = categoryViewModel.Name,
             };
         }
 
@@ -268,6 +290,22 @@ namespace EventsExpress.Mapping
                 NeedQuantity = inventory.NeedQuantity,
                 UnitOfMeasuring = MapInventoryToUnitOfMeasuringDto(inventory),
             };
+        }
+
+        private static IEnumerable<ChildEventDto> MapEventsDtoFromMultiEventStatus(ICollection<MultiEventStatus> childEvents)
+        {
+            if (childEvents == null)
+            {
+                return null;
+            }
+
+            var list = new List<ChildEventDto>();
+            foreach (var item in childEvents)
+            {
+                list.Add(Mapper.Map<Event, ChildEventDto>(item.ChildEvent));
+            }
+
+            return list;
         }
 
         private UserPreviewViewModel MapUserToUserPreviewViewModel(User user)

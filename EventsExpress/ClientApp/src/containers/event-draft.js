@@ -114,7 +114,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         edit_event: (data) => dispatch(edit_event(data)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
-        publish: (eventId, data) => dispatch(publish_event(eventId,data)),
+        publish: (eventId) => dispatch(publish_event(eventId)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
     }

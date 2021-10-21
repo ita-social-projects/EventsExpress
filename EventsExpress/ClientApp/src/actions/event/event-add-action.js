@@ -39,10 +39,10 @@ export function edit_event(data) {
     }
 }
 
-export function publish_event(eventId, data) {
+export function publish_event(eventId) {
     return async dispatch => {
         dispatch(getRequestInc());
-        let response = await api_serv.publishEvent(eventId, data);
+        let response = await api_serv.publishEvent(eventId);
         dispatch(getRequestDec());
         if (response.ok) {
             dispatch(get_event(eventId));

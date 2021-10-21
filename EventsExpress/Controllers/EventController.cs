@@ -121,9 +121,9 @@ namespace EventsExpress.Controllers
 
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Publish(Guid eventId, [FromBody] EventEditViewModel model)
+        public async Task<IActionResult> Publish(Guid eventId)
         {
-            var eventDTo = _mapper.Map<EventDto>(model);
+            var eventDTo = _eventService.EventById(eventId);
             Dictionary<string, string> exept = new Dictionary<string, string>();
             var resultValidation = _validator.Validate(eventDTo);
 
