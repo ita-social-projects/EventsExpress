@@ -174,9 +174,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId1, string token)
         {
-            var accountId = Context.AuthLocal.First(al => al.Id == accountId1).AccountId;
+            var accountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId1)?.AccountId;
             var userToken = Context.UserTokens
-                            .First(rt => rt.Token == token && rt.AccountId == accountId);
+                            .FirstOrDefault(rt => rt.Token == token && rt.AccountId == accountId);
 
             var account = await ConfirmEmail(userToken);
             var jwtToken = _tokenService.GenerateAccessToken(account);
