@@ -10,6 +10,8 @@ namespace EventsExpress.Db.Entities
 
         public Account Account { get; set; }
 
+        public UserMoreInfo UserMoreInfo { get; set; }
+
         public string Email { get; set; }
 
         public string Phone { get; set; }
