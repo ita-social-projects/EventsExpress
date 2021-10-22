@@ -18,7 +18,7 @@ namespace EventsExpress.Db.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ParentId = table.Column<Guid>(nullable: false),
-                    ChildId = table.Column<Guid>(nullable: false)
+                    ChildId = table.Column<Guid>(nullable: false),
                 },
                 constraints: table =>
                 {
