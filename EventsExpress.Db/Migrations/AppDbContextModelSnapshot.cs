@@ -279,9 +279,6 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid?>("EventLocationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("IsMultiEvent")
-                        .HasColumnType("bit");
-
                     b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
 
@@ -477,27 +474,6 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Message");
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.MultiEventStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChildId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChildId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("MultiEventStatus");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
@@ -1004,21 +980,6 @@ namespace EventsExpress.Db.Migrations
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.MultiEventStatus", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "ChildEvent")
-                        .WithMany("ParentEvents")
-                        .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.Event", "ParentEvent")
-                        .WithMany("ChildEvents")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
