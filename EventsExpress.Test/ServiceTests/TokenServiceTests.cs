@@ -74,15 +74,9 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void RefreshToken_DoesNotReturnAuthRespModel()
+        public void GenerateRefreshToken_DoesNotThrows()
         {
-            Assert.That(_service.RefreshToken(It.IsAny<string>()).GetType() != typeof(AuthenticateResponseModel));
-        }
-
-        [Test]
-        public void RevokeToken_ReturnFalse()
-        {
-            Assert.That(_service.RevokeToken(_token).Result == false);
+            Assert.DoesNotThrow(() => _service.GenerateRefreshToken());
         }
     }
 }
