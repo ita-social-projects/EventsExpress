@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -70,6 +71,18 @@ namespace EventsExpress.Test.ServiceTests
         public void GenerateEmailConfirmToken_DoesNotThrows()
         {
             Assert.DoesNotThrowAsync(async () => await _service.GenerateEmailConfirmationToken(_token, _existingUser.Id));
+        }
+
+        [Test]
+        public void RefreshToken_DoesNotReturnAuthRespModel()
+        {
+            Assert.That(_service.RefreshToken(It.IsAny<string>()).GetType() != typeof(AuthenticateResponseModel));
+        }
+
+        [Test]
+        public void RevokeToken_ReturnFalse()
+        {
+            Assert.That(_service.RevokeToken(_token).Result == false);
         }
     }
 }
