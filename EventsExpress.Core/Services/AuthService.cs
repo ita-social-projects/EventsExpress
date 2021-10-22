@@ -172,10 +172,10 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid authLocalId, string token)
+        public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
             var userToken = Context.UserTokens
-                            .First(rt => rt.Token == token && rt.AccountId == authLocalId);
+                            .First(rt => rt.Token == token && rt.AccountId == accountId);
 
             var account = await ConfirmEmail(userToken);
             var jwtToken = _tokenService.GenerateAccessToken(account);
@@ -257,7 +257,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(ar => ar.Role)
                 .Include(al => al.Account)
                     .ThenInclude(a => a.RefreshTokens)
-                .FirstOrDefault(al => al.Id == userToken.AccountId);
+                .FirstOrDefault(al => al.AccountId == userToken.AccountId);
             if (authLocal == null)
             {
                 throw new EventsExpressException("Invalid user Id");

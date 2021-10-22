@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import SimpleModal from './simple-modal';
+import Button from "@material-ui/core/Button";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from 'react-redux';

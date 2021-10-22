@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import EventSchedulesList from '../components/eventSchedule/eventSchedule-list';
-import Spinner from '../components/spinner';
+import SpinnerWrapper from './spinner';
 import { getEventSchedules } from '../actions/eventSchedule/eventSchedule-list-action';
 
 class EventSchedulesListWrapper extends Component {
@@ -17,12 +17,12 @@ class EventSchedulesListWrapper extends Component {
             : {};
         const { data } = this.props.eventSchedules;
 
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             <EventSchedulesList
                 current_user={current_user}
                 data_list={data.items}
             />
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 

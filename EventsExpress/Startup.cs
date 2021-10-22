@@ -17,6 +17,7 @@ using EventsExpress.Hubs;
 using EventsExpress.Mapping;
 using EventsExpress.NotificationHandlers;
 using EventsExpress.Policies;
+using EventsExpress.SwaggerSettings;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -222,6 +223,7 @@ namespace EventsExpress
                         },
                     });
 
+                c.DocumentFilter<ApplyDocumentExtension>();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 

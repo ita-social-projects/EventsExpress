@@ -88,10 +88,10 @@ namespace EventsExpress.Core.Services
                 .FirstOrDefault();
 
             userEvent.UserStatusEvent = status;
-            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
 
             Context.UserEvent.Update(userEvent);
             await Context.SaveChangesAsync();
+            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
         }
 
         public async Task DeleteUserFromEvent(Guid userId, Guid eventId)

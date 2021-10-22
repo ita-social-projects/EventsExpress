@@ -171,32 +171,38 @@ class UserItemView extends Component {
                             to={`/user/${userId}/EventsToGo`} />
                     </Tabs>
                 </AppBar>
+                
                 <Switch>
                     <Route
                         exact
                         path='/user/:id'
                         render={() =>
                             <Redirect to={`/user/${userId}/FutureEvents`} />} />
+                                            
+
                     <Route
                         path='/user/:id/FutureEvents'
-                        render={() => <Events
-                            events={this.props.events}
-                            current_user={this.props.current_user}
-                            typeOfEvents={this.props.onFuture} />} />
-
+                        render={() =>
+                            <Events
+                                events={this.props.events}
+                                current_user={this.props.current_user}
+                                typeOfEvents={this.props.onFuture} />}/>
+                        
+                                     
                     <Route path='/user/:id/ArchiveEvents'
                         render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
-                            typeOfEvents={this.props.onPast} />} />
-
+                                typeOfEvents={this.props.onPast} />} />
+                    
+                    
                     <Route
                         path='/user/:id/VisitedEvents'
                         render={() => <Events
                             events={this.props.events}
                             current_user={this.props.current_user}
                             typeOfEvents={this.props.onVisited} />} />
-
+                    
                     <Route
                         path='/user/:id/EventsToGo'
                         render={() => <Events

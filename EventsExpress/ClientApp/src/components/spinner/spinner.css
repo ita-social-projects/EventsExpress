@@ -34,7 +34,7 @@
     -webkit-animation: lds-rolling 1s linear infinite;
     animation: lds-rolling 1s linear infinite;
     top: 100px;
-    left: 100px;
+    left: 50%;
   }
   .lds-rolling div:after {
     -webkit-transform: rotate(90deg);
@@ -62,10 +62,10 @@
     }
 
 .spinner-align {
-    max-width: 310px;
+    max-width: 180px;
     width: 100%;
     text-align: center;
     height: 180px;
     position: relative;
-    z-index: -1;
+    z-index: 0;
 }

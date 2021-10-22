@@ -4,7 +4,7 @@ import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { parse as queryStringParse } from 'query-string';
 import ContactAdminList from '../../components/contactAdmin/contactAdmin-list-component';
-import Spinner from '../../components/spinner';
+import SpinnerWrapper from '../spinner';
 import getIssues from '../../actions/contactAdmin/contact-admin-list-action';
 import filterHelper from '../../components/helpers/filterHelper';
 
@@ -42,7 +42,7 @@ class ContactAdminListWrapper extends Component {
     render() {
         const { data } = this.props.contactAdminList;
         const { items } = this.props.contactAdminList.data;
-        return <Spinner showContent={data != undefined}>
+        return <SpinnerWrapper showContent={data != undefined}>
             <div>
                 <table className="table w-100 m-auto">
                     <tbody>
@@ -55,7 +55,7 @@ class ContactAdminListWrapper extends Component {
                     </tbody>
                 </table>
             </div>
-        </Spinner>
+        </SpinnerWrapper>
     }
 }
 
