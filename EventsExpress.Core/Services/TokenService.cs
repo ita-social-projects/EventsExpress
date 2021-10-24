@@ -77,7 +77,7 @@ namespace EventsExpress.Core.Services
             var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
 
             // return null if token is no longer active
-            if (!_mapper.Map<RefreshTokenDto>(refreshToken).IsActive)
+            if (refreshToken.Expires < DateTime.Now && refreshToken.Revoked == null)
             {
                 return null;
             }

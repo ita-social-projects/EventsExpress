@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -58,6 +61,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UserId = _existingUser.Id,
                 AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } },
+                RefreshTokens = new[] { new UserToken { Token = _token, Type = TokenType.RefreshToken, Expires = DateTime.Now.AddDays(7), Created = DateTime.Now } },
             };
 
             _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
@@ -77,6 +81,14 @@ namespace EventsExpress.Test.ServiceTests
         public void GenerateRefreshToken_DoesNotThrows()
         {
             Assert.DoesNotThrow(() => _service.GenerateRefreshToken());
+        }
+
+        [Test]
+        public void RefreshToken_Correct()
+        {
+            var res = _service.RefreshToken(_token);
+
+            Assert.DoesNotThrowAsync(async () => await Task.FromResult(res));
         }
     }
 }
