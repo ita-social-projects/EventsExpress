@@ -3,6 +3,7 @@ import { Grid, Avatar, IconButton, Button } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
 import {
   renderDatePicker,
+  renderBirthDatePicker,
   renderTextField,
   renderSelectField,
 } from "../helpers/form-helpers";
@@ -55,8 +56,8 @@ const CompleteProfileForm = (props) => {
                 label="Birth Date"
                 minValue={moment(new Date()).subtract(115, "years")}
                 maxValue={moment(new Date()).subtract(15, "years")}
-                component={renderDatePicker}
-                <Field/>
+                component={renderBirthDatePicker}
+              />
             </Grid>
             <Grid item xs={3}>
               <Field

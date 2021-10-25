@@ -23,7 +23,7 @@ const ConfirmForm = (props) => {
                 <ListItem>
                   <ListItemText
                     primary="First Name"
-                                      secondary={props.formValues.firstName}
+                    secondary={props.formValues.firstName}
                   />
                 </ListItem>
                 <ListItem>
