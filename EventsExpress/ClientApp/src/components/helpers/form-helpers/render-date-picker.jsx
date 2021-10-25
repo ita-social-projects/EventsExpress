@@ -1,28 +1,38 @@
-﻿import React from 'react';
-import TextField from "@material-ui/core/TextField";
-import moment from 'moment';
+﻿import React, { Fragment } from "react";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+  DatePicker,
+} from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
+export default ({
+  input: { onChange, value },
+  meta: { touched, invalid, error },
+  minValue,
+  maxValue,
+  label,
+  disabled,
+}) => {
+  return (
+    <Fragment>
+      <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+        <DatePicker
+          fullWidth
+          label={label}
+          value={value ? moment(value) : null}
+          format="DD-MM-YYYY"
+          error={touched && invalid}
+          helperText={touched && error}
+          onChange={onChange}
+          disabled={disabled}
+          minDate={minValue ? moment(minValue) : null}
+          minDateMessage
+          maxDate={maxValue ? moment(maxValue) : null}
+          maxDateMessage
 
-export default ({ input: { onChange, value }, meta: { touched, invalid, error }, 
-    minValue, maxValue, label, disabled }) => {
-
-    if (value !== null && value !== undefined && value !== '') {
-        if (new Date(value) < new Date(minValue)) {
-            onChange(moment(minValue).format('L'))
-        }
-    }
-
-    return <TextField
-        type="date"
-        label={label}
-        selected={moment(value).format('L')}
-        value={moment(value).format('YYYY-MM-DD')}
-        error={touched && invalid}
-        helperText={touched && error}
-        onChange={onChange}
-        disabled={disabled}
-        inputProps={{
-            min: minValue ? moment(minValue).format('YYYY-MM-DD') : null,
-            max: maxValue ? moment(maxValue).format('YYYY-MM-DD') : null
-        }}
-    />
-}
+        />
+      </MuiPickersUtilsProvider>
+    </Fragment>
+  );
+};

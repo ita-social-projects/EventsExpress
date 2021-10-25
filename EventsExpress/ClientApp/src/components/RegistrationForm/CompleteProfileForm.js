@@ -51,16 +51,12 @@ const CompleteProfileForm = (props) => {
             <Grid item sm={3}></Grid>
             <Grid item sm={3}>
               <Field
-                name="birthday"
-                id="date"
-                label="Birthday"
+                name="birthDate"
+                label="Birth Date"
                 minValue={moment(new Date()).subtract(115, "years")}
                 maxValue={moment(new Date()).subtract(15, "years")}
                 component={renderDatePicker}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+                <Field/>
             </Grid>
             <Grid item xs={3}>
               <Field
