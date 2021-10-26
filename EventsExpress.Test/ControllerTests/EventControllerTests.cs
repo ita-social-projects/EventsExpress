@@ -113,5 +113,14 @@ namespace EventsExpress.Test.ControllerTests
             var expected = eventController.AllDraft();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
+
+        [Test]
+        public void GetUpcomingEvents_OkResult()
+        {
+            int x = 1;
+            service.Setup(e => e.GetAll(new EventFilterViewModel(), out x)).Returns(new List<EventDto>());
+            var expected = eventController.GetUpcomingEvents();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
     }
 }
