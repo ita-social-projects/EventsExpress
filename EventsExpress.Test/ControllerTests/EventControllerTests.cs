@@ -131,5 +131,13 @@ namespace EventsExpress.Test.ControllerTests
             var expected = eventController.All(new EventFilterViewModel());
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
+
+        [Test]
+        public void PastEvents_OkResult()
+        {
+            service.Setup(e => e.PastEventsByUserId(_idUser, new PaginationViewModel() { PageSize = 3, Page = 1 }));
+            var expected = eventController.PastEvents(_idUser);
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
     }
 }
