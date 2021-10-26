@@ -173,6 +173,37 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method have to return upcoming events.
+        /// </summary>
+        /// <param name="filter">Param filter provides the ability to filter the list of events.</param>
+        /// <returns>The method returns filtered events.</returns>
+        /// <response code="200">Return IEnumerable EventPreviewDto.</response>
+        /// <response code="400">If return failed.</response>
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public IActionResult GetUpcomingEvents([FromQuery] EventFilterViewModel filter)
+        {
+            filter.OwnerId = null;
+            filter.VisitorId = null;
+            filter.DateFrom = DateTime.Today;
+
+            try
+            {
+                var viewModel = new IndexViewModel<EventPreviewViewModel>
+                {
+                    Items = _mapper.Map<IEnumerable<EventPreviewViewModel>>(
+                        _eventService.GetAll(filter, out int count)),
+                    PageViewModel = new PageViewModel(count, filter.Page, filter.PageSize),
+                };
+                return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
         /// This method have to return all events.
         /// </summary>
         /// <returns>The method returns filltered events.</returns>

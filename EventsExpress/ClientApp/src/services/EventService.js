@@ -8,6 +8,8 @@ export default class EventService {
 
     getAllEvents = filters => baseService.getResource(`event/all${filters}`);
 
+    getUpcomingEvents = filtres => baseService.getResource(`event/GetUpcomingEvents${filtres}`)
+
     getAllDrafts = (page) => baseService.getResource(`event/AllDraft/${page}`);
           
     getEvents = (eventIds, page) => baseService.setResource(`event/getEvents?page=${page}`, eventIds);

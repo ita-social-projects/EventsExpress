@@ -32,7 +32,7 @@ export default class Landing extends Component {
     }
 
     async componentDidMount() {
-        let events = await eventService.getAllEvents("?Page=1")
+        let events = await eventService.getUpcomingEvents("?Page=1")
         events = (await events.json()).items
         if (events.length !== 0) {
             this.setState({ events: this.splitDataIntoBlocks(events) })
