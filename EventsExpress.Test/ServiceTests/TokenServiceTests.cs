@@ -11,6 +11,7 @@ using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
 using NUnit.Framework;
 
@@ -86,8 +87,11 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public async Task RefreshToken_Correct()
         {
-            // Mock Jwt Options, SetUp
-            _mockJwtOptions.Object.Value.LifeTime = 5d;
+            _mockJwtOptions.Setup(opt => opt.Value.LifeTime).Returns(1800);
+            _mockJwtOptions.Setup(opt => opt.Value).Returns(new JwtOptionsModel() {LifeTime = 1 });
+            SigningSymmetricKey signingSymmetricKey = new SigningSymmetricKey("ItIsSomeKeyToAssignToSigninSymetricKeyForTestingRefreshTokenMehtod");
+            _mockSigningEncodingKey.Setup(opt => opt.GetKey()).Returns(signingSymmetricKey.GetKey());
+            _mockSigningEncodingKey.Setup(opt => opt.SigningAlgorithm).Returns(SecurityAlgorithms.HmacSha256);
             var res = await _service.RefreshToken(_token);
             Assert.IsInstanceOf<AuthenticateResponseModel>(res);
         }
