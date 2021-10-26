@@ -4,7 +4,7 @@
     {
         public string SecretKey { get; set; }
 
-        public virtual double LifeTime { get; set; }
+        public double LifeTime { get; set; }
 
         public string GoogleClientId { get; set; }
 

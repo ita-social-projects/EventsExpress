@@ -87,8 +87,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public async Task RefreshToken_Correct()
         {
-            _mockJwtOptions.Setup(opt => opt.Value.LifeTime).Returns(1800);
-            _mockJwtOptions.Setup(opt => opt.Value).Returns(new JwtOptionsModel() {LifeTime = 1 });
+            _mockJwtOptions.Setup(opt => opt.Value).Returns(new JwtOptionsModel() { LifeTime = 1800 });
             SigningSymmetricKey signingSymmetricKey = new SigningSymmetricKey("ItIsSomeKeyToAssignToSigninSymetricKeyForTestingRefreshTokenMehtod");
             _mockSigningEncodingKey.Setup(opt => opt.GetKey()).Returns(signingSymmetricKey.GetKey());
             _mockSigningEncodingKey.Setup(opt => opt.SigningAlgorithm).Returns(SecurityAlgorithms.HmacSha256);
