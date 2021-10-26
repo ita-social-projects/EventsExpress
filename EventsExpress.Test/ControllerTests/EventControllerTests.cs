@@ -155,5 +155,35 @@ namespace EventsExpress.Test.ControllerTests
             var expected = eventController.GetCurrentRate(_eventId);
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
+
+        [Test]
+        public void SetEventTempPhoto_OkResult()
+        {
+            var expected = eventController.SetEventTempPhoto(_eventId, new PhotoViewModel());
+            Assert.IsInstanceOf<OkResult>(expected.Result);
+        }
+
+        [Test]
+        public void CreateNextFromParentWithEdit_OkResult()
+        {
+            service.Setup(e => e.EditNextEvent(new EventDto())).Returns(Task.FromResult(Guid.NewGuid()));
+            var expected = eventController.CreateNextFromParentWithEdit(_eventId, new EventEditViewModel());
+            Assert.IsInstanceOf<OkObjectResult>(expected.Result);
+        }
+
+        [Test]
+        public void Edit_OkResult()
+        {
+            service.Setup(e => e.Edit(new EventDto())).Returns(Task.FromResult(Guid.NewGuid()));
+            var expected = eventController.Edit(_eventId, new EventEditViewModel());
+            Assert.IsInstanceOf<OkObjectResult>(expected.Result);
+        }
+
+        [Test]
+        public void VisitedEvents_OkResult()
+        {
+            var expected = eventController.VisitedEvents(_idUser, 1);
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
     }
 }
