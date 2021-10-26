@@ -61,7 +61,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UserId = _existingUser.Id,
                 AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } },
-                RefreshTokens = new[] { new UserToken { Token = _token, Type = TokenType.RefreshToken, Expires = DateTime.Now.AddDays(7), Created = DateTime.Now } },
+                RefreshTokens = new List<UserToken> { new UserToken { Token = _token, Type = TokenType.RefreshToken, Expires = DateTime.Now.AddDays(7), Created = DateTime.Now } },
             };
 
             _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
@@ -80,15 +80,16 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void GenerateRefreshToken_DoesNotThrows()
         {
-            Assert.DoesNotThrow(() => _service.GenerateRefreshToken());
+             Assert.DoesNotThrow(() => _service.GenerateRefreshToken());
         }
 
         [Test]
-        public void RefreshToken_Correct()
+        public async Task RefreshToken_Correct()
         {
-            var res = _service.RefreshToken(_token);
-
-            Assert.DoesNotThrowAsync(async () => await Task.FromResult(res));
+            // Mock Jwt Options, SetUp
+            _mockJwtOptions.Object.Value.LifeTime = 5d;
+            var res = await _service.RefreshToken(_token);
+            Assert.IsInstanceOf<AuthenticateResponseModel>(res);
         }
     }
 }
