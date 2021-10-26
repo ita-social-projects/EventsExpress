@@ -36,6 +36,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IValidator<IFormFile>> mockValidator;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
+        private Guid _eventId = Guid.NewGuid();
         private string _userEmal = "user@gmail.com";
 
         public PhotoService PhotoService { get; set; }
@@ -135,8 +136,23 @@ namespace EventsExpress.Test.ControllerTests
         [Test]
         public void PastEvents_OkResult()
         {
-            service.Setup(e => e.PastEventsByUserId(_idUser, new PaginationViewModel() { PageSize = 3, Page = 1 }));
+            service.Setup(e => e.PastEventsByUserId(_idUser, new PaginationViewModel() { PageSize = 3, Page = 1 })).Returns(new List<EventDto>());
             var expected = eventController.PastEvents(_idUser);
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void AddUserToEvent_OkResult()
+        {
+            var expected = eventController.AddUserToEvent(_eventId, _idUser);
+            Assert.IsInstanceOf<OkResult>(expected.Result);
+        }
+
+        [Test]
+        public void GetCurrentRate_OkResult()
+        {
+            service.Setup(e => e.Exists(_eventId)).Returns(true);
+            var expected = eventController.GetCurrentRate(_eventId);
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
     }
