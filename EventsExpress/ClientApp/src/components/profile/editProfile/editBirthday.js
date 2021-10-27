@@ -3,7 +3,7 @@ import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 import ErrorMessages from '../../shared/errorMessage';
-import { renderDatePicker } from '../../helpers/form-helpers';
+import { renderBirthDatePicker } from '../../helpers/form-helpers';
 import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
 
 const validate = values => {
@@ -30,14 +30,11 @@ const EditBirthday = props => {
             <div>
                 <Field
                     name="birthday"
-                    id="date"
                     label="Birthday"
                     minValue={minValue}
                     maxValue={maxValue}
-                    component={renderDatePicker}
-                    InputLabelProps={{
-                        shrink: true
-                    }}
+                    component={renderBirthDatePicker}
+
                 />
                 {
                     props.error &&
