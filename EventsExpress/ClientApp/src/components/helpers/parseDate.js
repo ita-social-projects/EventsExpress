@@ -8,5 +8,5 @@
     hours = hours.slice(12, hours.length - 6);
 
     let gmt = date.getTimezoneOffset();
-    return weekday + ', ' + month + ' ' + ddate + ' @' + hours + ' ' + ampm + ' GMT' + gmt;
+    return weekday + ', ' + month + ' ' + ddate + ' @' + hours + ' ' + ampm + ' GMT' + gmt/60;
 }
