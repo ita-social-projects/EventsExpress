@@ -8,7 +8,7 @@ import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderDateRangePicker,renderDatePicker, LocationMapWithMarker, renderCheckbox, radioButton,
-    renderSelectField, renderTextField, renderTextArea, renderMultiselect, renderBirthDatePicker
+    renderSelectField, renderTextField, renderTextArea, renderMultiselect, renderDatePicker
 } from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
@@ -145,7 +145,7 @@ class EventForm extends Component {
                                 name='dateFrom'
                                 label='From'
                                 minValue={moment(new Date())}
-                                component={renderBirthDatePicker}
+                                component={renderDatePicker}
                             />
                         </span>
                         {form_values && form_values.dateFrom &&
@@ -154,7 +154,7 @@ class EventForm extends Component {
                                     name='dateTo'
                                     label='To'
                                     minValue={form_values.dateFrom}
-                                    component={renderBirthDatePicker}
+                                    component={renderDatePicker}
                                 />
                             </span>
                         }
