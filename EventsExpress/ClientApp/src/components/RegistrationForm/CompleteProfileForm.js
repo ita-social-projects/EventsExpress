@@ -77,8 +77,10 @@ const CompleteProfileForm = (props) => {
                 label="City"
               />
             </Grid>
+
             <Grid item sm={2}></Grid>
             <Grid item sm={4}>
+
               <Field
                 minWidth={140}
                 name="gender"

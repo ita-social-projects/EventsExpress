@@ -6,6 +6,9 @@ import { connect } from "react-redux";
 const ConfirmForm = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
 
+
+
+
   return (
     <>
       <div style={{ width: "97%", padding: "10px" }}>
@@ -35,11 +38,14 @@ const ConfirmForm = (props) => {
                 <ListItem>
                   <ListItemText
                     primary="Birth Date"
+
                     secondary={
                       props.formValues.birthDate
                         ? props.formValues.birthDate.toISOString().split("T")[0]
                         : "Not entered."
                     }
+
+
                   />
                 </ListItem>
               </List>
