@@ -16,17 +16,16 @@ export default ({
         <KeyboardDatePicker
       {...inputProps}
           label={label}
-          value={value ? moment(value) : undefined}
-          autoOk
+          selected={moment(value).format('L')}
+          value={value ? moment(value).format('YYYY-MM-DD') : undefined}
+          autoOK
           format="DD-MM-YYYY"
           error={touched && error && invalid}
           helperText={touched && error}
           onChange={onChange}
           disabled={disabled}
           minDate={minValue ? moment(minValue) : undefined}
-          minDateMessage
           maxDate={maxValue ? moment(maxValue) : undefined}
-          minDateMessage
         />
       </MuiPickersUtilsProvider>
     </Fragment>
