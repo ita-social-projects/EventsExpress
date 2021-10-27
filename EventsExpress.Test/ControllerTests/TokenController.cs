@@ -85,26 +85,5 @@ namespace EventsExpress.Test.ControllerTests
 
             _tokenController = new Controllers.TokenController(_tokenService);
         }
-
-        [Test]
-        public void Refresh_Correct_ReturnOk()
-        {
-            _tokenController.ControllerContext = new ControllerContext();
-            _tokenController.ControllerContext.HttpContext = new DefaultHttpContext();
-            _tokenController.ControllerContext.HttpContext.Request.Cookies.Keys.Add("refreshToken");
-
-            // _tokenController.ControllerContext.HttpContext.Request.Cookies["refreshToken"] = _token;
-            var res = _tokenController.Refresh();
-            Assert.IsNotInstanceOf<OkObjectResult>(res);
-        }
-
-        [Test]
-        public void Revoke_Correct_ReturnOk()
-        {
-            _tokenController.ControllerContext = new ControllerContext();
-            _tokenController.ControllerContext.HttpContext = new DefaultHttpContext();
-            var res = _tokenController.Revoke();
-            Assert.IsNotInstanceOf<OkObjectResult>(res);
-        }
     }
 }
