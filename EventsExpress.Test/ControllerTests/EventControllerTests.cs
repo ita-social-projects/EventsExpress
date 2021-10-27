@@ -125,6 +125,15 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        public void GetUpcomingEvents_ReturnBadRequest()
+        {
+            int x = 1;
+            service.Setup(e => e.GetAll(new EventFilterViewModel(), out x)).Throws<ArgumentOutOfRangeException>();
+            var expected = eventController.GetUpcomingEvents();
+            Assert.IsInstanceOf<BadRequestResult>(expected);
+        }
+
+        [Test]
         public void AllEvents_OkResult()
         {
             int x = 1;
