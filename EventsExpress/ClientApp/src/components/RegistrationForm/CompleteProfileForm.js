@@ -7,7 +7,9 @@ import {
   renderSelectField,
 } from "../helpers/form-helpers";
 import moment from "moment";
+
 import ChangeAvatarWrapper from "../../containers/editProfileContainers/change-avatar";
+
 
 const CompleteProfileForm = (props) => {
   const { handleSubmit } = props;
@@ -49,6 +51,7 @@ const CompleteProfileForm = (props) => {
                 label="Last Name"
               />
             </Grid>
+
             <Grid item sm={2} />
             <Grid item sm={4}>
               <Field
@@ -57,6 +60,7 @@ const CompleteProfileForm = (props) => {
                 minValue={moment(new Date()).subtract(115, "years")}
                 maxValue={moment(new Date()).subtract(14, "years")}
                 component={renderDatePicker}
+
               />
             </Grid>
             <Grid item xs={3}>
@@ -77,8 +81,10 @@ const CompleteProfileForm = (props) => {
                 label="City"
               />
             </Grid>
+
             <Grid item sm={2}></Grid>
             <Grid item sm={4}>
+
               <Field
                 minWidth={140}
                 name="gender"
@@ -91,6 +97,8 @@ const CompleteProfileForm = (props) => {
                 <option value="3">Other</option>
               </Field>
             </Grid>
+
+
 
             <Grid item sm={12} justify="space-around">
               <Button
@@ -110,11 +118,13 @@ const CompleteProfileForm = (props) => {
   );
 };
 
+
 const mapStateToProps = (state) => {
   return {
     formValues: getFormValues("registrationForm")(state),
   };
 };
+
 
 
 export default reduxForm({
