@@ -1,5 +1,8 @@
 import React, { Fragment } from "react";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 export default ({
@@ -14,13 +17,13 @@ export default ({
     <Fragment>
       <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
         <KeyboardDatePicker
-      {...inputProps}
+          {...inputProps}
           label={label}
-          selected={moment(value).format('L')}
-          value={value ? moment(value).format('YYYY-MM-DD') : undefined}
+          selected={moment(value).format("L")}
+          value={value ? moment(value).format("YYYY-MM-DD") : undefined}
           autoOK
           format="DD-MM-YYYY"
-          error={touched && error && invalid}
+          error={touched && invalid}
           helperText={touched && error}
           onChange={onChange}
           disabled={disabled}
