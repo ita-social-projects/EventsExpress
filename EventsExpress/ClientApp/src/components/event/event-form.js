@@ -53,7 +53,7 @@ class EventForm extends Component {
 
 
     render() {
-        const { form_values, all_categories, disabledDate, user_name } = this.props;
+        const { form_values, all_categories, user_name } = this.props;
         const { checked } = this.state;
 
 

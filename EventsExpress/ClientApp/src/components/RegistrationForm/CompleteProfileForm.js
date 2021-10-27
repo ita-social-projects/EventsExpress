@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Avatar, IconButton, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
 import {
   renderDatePicker,
@@ -115,7 +115,6 @@ const mapStateToProps = (state) => {
     formValues: getFormValues("registrationForm")(state),
   };
 };
-
 
 export default reduxForm({
   form: "registrationForm",
