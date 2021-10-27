@@ -7,8 +7,8 @@ import DropZoneField from '../helpers/DropZoneField';
 import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
-    renderDateRangePicker,renderDatePicker, LocationMapWithMarker, renderCheckbox, radioButton,
-    renderSelectField, renderTextField, renderTextArea, renderMultiselect, renderDatePicker
+    renderDatePicker, LocationMapWithMarker, renderCheckbox, radioButton,
+    renderSelectField, renderTextField, renderTextArea, renderMultiselect,
 } from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
