@@ -55,7 +55,7 @@ const CompleteProfileForm = (props) => {
                 name="birthDate"
                 label="Birth Date"
                 minValue={moment(new Date()).subtract(115, "years")}
-                maxValue={moment(new Date()).subtract(15, "years")}
+                maxValue={moment(new Date()).subtract(14, "years")}
                 component={renderBirthDatePicker}
               />
             </Grid>
