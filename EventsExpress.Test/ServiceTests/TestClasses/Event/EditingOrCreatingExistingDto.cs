@@ -102,6 +102,72 @@
             Type = LocationType.Map,
         };
 
+        private static EventDto multiEventDTOReccurentDraft = new EventDto
+        {
+            Id = GetEventExistingId.ThirdEventId,
+            DateFrom = DateTime.Today,
+            DateTo = DateTime.Today,
+            Description = "Multi event",
+            Owners = new List<User>()
+            {
+                new User
+                {
+                    Id = Guid.NewGuid(),
+                },
+            },
+            Title = "MultiEvent",
+            IsPublic = true,
+            IsReccurent = true,
+            Frequency = 1,
+            Periodicity = Periodicity.Weekly,
+            EventStatus = EventStatus.Draft,
+            Categories = new List<CategoryDto>()
+            {
+                new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Category#1",
+                },
+            },
+            Point = new Point(50.45, 35.34),
+            MaxParticipants = 14,
+            Type = LocationType.Map,
+            Events = new List<EventDto>()
+            {
+                new EventDto
+        {
+            Id = GetEventExistingId.SecondEventId,
+            DateFrom = DateTime.Today,
+            DateTo = DateTime.Today,
+            Description = "Child event",
+            Owners = new List<User>()
+            {
+                new User
+                {
+                    Id = Guid.NewGuid(),
+                },
+            },
+            Title = "Child",
+            IsPublic = true,
+            IsReccurent = true,
+            Frequency = 1,
+            Periodicity = Periodicity.Weekly,
+            EventStatus = EventStatus.Draft,
+            Categories = new List<CategoryDto>()
+            {
+                new CategoryDto
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Category#1",
+                },
+            },
+            Point = new Point(50.45, 35.34),
+            MaxParticipants = 14,
+            Type = LocationType.Map,
+        },
+            },
+        };
+
         public static EventDto EventDTOMap
         {
             get => eventDTOMap;
@@ -117,11 +183,17 @@
             get => eventDTOReccurentDraft;
         }
 
+        public static EventDto MultiEventDTOReccurentDraft
+        {
+            get => multiEventDTOReccurentDraft;
+        }
+
         public IEnumerator GetEnumerator()
         {
             yield return new object[] { EventDTOMap };
             yield return new object[] { EventDTOOnline };
             yield return new object[] { EventDTOReccurentDraft };
+            yield return new object[] { MultiEventDTOReccurentDraft };
         }
     }
 }

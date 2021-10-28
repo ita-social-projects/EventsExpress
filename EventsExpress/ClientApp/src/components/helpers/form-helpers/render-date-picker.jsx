@@ -9,6 +9,9 @@ export default ({ input: { onChange, value }, meta: { touched, invalid, error },
         if (new Date(value) < new Date(minValue)) {
             onChange(moment(minValue).format('L'))
         }
+        if (new Date(value) > new Date(maxValue)) {
+            onChange(moment(maxValue).format('L'))
+        }
     }
 
     return <TextField

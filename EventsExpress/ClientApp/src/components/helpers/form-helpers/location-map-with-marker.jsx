@@ -8,10 +8,7 @@ export default function LocationMapWithMarker(props) {
     if (props.input.value.latitude != undefined) {
         initialPos = { lat: props.input.value.latitude, lng: props.input.value.longitude };
     }
-    else {
-        props.input.value.latitude = initialPos.lat;
-        props.input.value.longitude = initialPos.lng;
-    }
+   
     const [location, setLocation] = React.useState(initialPos);
 
     function handleChange(latlng) {

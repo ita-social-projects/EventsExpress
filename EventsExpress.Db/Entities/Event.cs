@@ -29,6 +29,9 @@ namespace EventsExpress.Db.Entities
         [Track]
         public Guid? EventLocationId { get; set; }
 
+        [Track]
+        public bool? IsMultiEvent { get; set; }
+
         public virtual EventSchedule EventSchedule { get; set; }
 
         public virtual EventLocation EventLocation { get; set; }
@@ -44,5 +47,9 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
+
+        public virtual ICollection<MultiEventStatus> ChildEvents { get; set; }
+
+        public virtual ICollection<MultiEventStatus> ParentEvents { get; set; }
     }
 }

@@ -6,7 +6,7 @@ import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
 import { getFormValues , isPristine} from 'redux-form';
 import { edit_event, publish_event} from '../actions/event/event-add-action';
-import { validateEventForm } from './event-validate-form'
+import { normalizeEventForm } from './event-normalize-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";
@@ -18,13 +18,14 @@ class EventDraftWrapper extends Component {
     onPublish = async (values) => {
         if (!this.props.pristine)
         {
-            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
+            await this.props.edit_event({ ...normalizeEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
         }
+
         return this.props.publish(this.props.event.id);
     }
 
     onSave = async () => {
-        await this.props.edit_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
+        await this.props.edit_event({ ...normalizeEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
         this.props.alert('Your event has been successfully saved!');
     }
 

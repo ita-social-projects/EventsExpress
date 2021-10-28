@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -221,7 +222,7 @@ namespace EventsExpress.Core.Services
             return createResult;
         }
 
-        public async Task<Guid> Edit(EventDto e)
+        private async Task<Guid> InternalEdit(EventDto e)
         {
             var ev = Context.Events
                 .Include(e => e.EventLocation)
@@ -229,7 +230,6 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
-
             if (e.OnlineMeeting != null || e.Point != null)
             {
                 var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
@@ -267,6 +267,7 @@ namespace EventsExpress.Core.Services
             ev.DateFrom = e.DateFrom;
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
+            ev.IsMultiEvent = e.IsMultiEvent;
 
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
@@ -278,7 +279,40 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
-        public async Task<Guid> Publish(Guid eventId)
+        public async Task<Guid> Edit(EventDto eventInstance)
+        {
+            if (eventInstance.Events.CollectionIsNullOrEmpty())
+            {
+                await InternalEdit(eventInstance);
+            }
+            else
+            {
+                eventInstance.IsMultiEvent = true;
+                await InternalEdit(eventInstance);
+                EventDto[] childs = eventInstance.Events.ToArray();
+                for (int i = 0; i < childs.Length; i++)
+                {
+                    childs[i].Id = CreateDraft();
+                    childs[i].IsMultiEvent = true;
+                    childs[i].Inventories = eventInstance.Inventories;
+                    childs[i].IsPublic = eventInstance.IsPublic;
+                    childs[i].IsReccurent = eventInstance.IsReccurent;
+                    childs[i].MaxParticipants = eventInstance.MaxParticipants;
+                    childs[i].Categories = eventInstance.Categories;
+                    Context.MultiEventStatus.Add(
+                  new MultiEventStatus
+                  {
+                      ParentId = eventInstance.Id,
+                      ChildId = childs[i].Id,
+                  });
+                    await InternalEdit(childs[i]);
+                }
+            }
+
+            return eventInstance.Id;
+        }
+
+        private void InternalPublish(Guid eventId)
         {
             var ev = Context.Events
                .Include(e => e.EventLocation)
@@ -304,10 +338,6 @@ namespace EventsExpress.Core.Services
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-                await Context.SaveChangesAsync();
-                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-                await _mediator.Publish(new EventCreatedMessage(dtos));
-                return ev.Id;
             }
             else
             {
@@ -319,6 +349,29 @@ namespace EventsExpress.Core.Services
 
                 throw new EventsExpressException("validation failed", exept);
             }
+        }
+
+        public async Task<Guid> Publish(Guid eventId)
+        {
+            var ev = Context.Events.FirstOrDefault(x => x.Id == eventId);
+            InternalPublish(eventId);
+            if (ev.IsMultiEvent == true)
+            {
+                var childsId = Context.MultiEventStatus
+                    .Where(x => x.ParentId == eventId)
+                    .Select(x => x.ChildId)
+                    .ToArray();
+
+                foreach (var item in childsId)
+                {
+                    InternalPublish(item);
+                }
+            }
+
+            await Context.SaveChangesAsync();
+            EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+            await _mediator.Publish(new EventCreatedMessage(dtos));
+            return eventId;
         }
 
         public async Task<Guid> EditNextEvent(EventDto eventDTO)

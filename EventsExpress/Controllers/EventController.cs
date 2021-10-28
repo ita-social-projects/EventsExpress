@@ -105,7 +105,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, EventEditViewModel model)
+        public async Task<IActionResult> Edit(Guid eventId, [FromBody] EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {

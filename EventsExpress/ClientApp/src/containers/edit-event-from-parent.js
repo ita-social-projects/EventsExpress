@@ -9,7 +9,7 @@ import edit_event_from_parent, {
     from '../actions/event/event-copy-with-edit-action';
 import * as moment from 'moment';
 import { validate } from './event-edit-validate-form '
-import { validateEventForm } from './event-validate-form'
+import { normalizeEventForm } from './event-normalize-form'
 import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
 
@@ -34,7 +34,7 @@ class EditFromParentEventWraper extends Component {
         if (values.isReccurent) {
             values.isReccurent = false;
         }
-        this.props.edit_event_from_parent({ ...validateEventForm(values), user_id: this.props.user_id });
+        this.props.edit_event_from_parent({ ...normalizeEventForm(values), user_id: this.props.user_id });
     }
 
     render() {

@@ -6,13 +6,13 @@ import { getFormValues } from 'redux-form';
 import { edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
 import { validate } from './event-edit-validate-form '
-import { validateEventForm } from './event-validate-form'
+import { normalizeEventForm } from './event-normalize-form'
 import Button from "@material-ui/core/Button";
 
 class EditEventWrapper extends Component {
 
     onSubmit = async (values) => {
-        await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
+        await this.props.edit_event({ ...normalizeEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
         this.props.alert('Your event has been successfully saved!');    
         this.props.history.goBack();
     }

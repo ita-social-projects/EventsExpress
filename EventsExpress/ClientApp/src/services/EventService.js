@@ -25,7 +25,7 @@ export default class EventService {
         return baseService.setResource(`event/${data.id}/edit`, data)
     }
     publishEvent = (id) => {
-       return baseService.setResource(`event/${id}/publish`)
+        return baseService.setResource(`event/${id}/publish`)
     }
 
     setEventStatus = data =>  baseService.setResource(`EventStatusHistory/${data.EventId}/SetStatus`, data);

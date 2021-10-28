@@ -1,5 +1,5 @@
 
-export const validateEventForm = values => {
+export const normalizeEventForm = values => {
 
     if (!values)
         return values;

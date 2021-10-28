@@ -17,5 +17,7 @@ namespace EventsExpress.ViewModels
         public EventStatus EventStatus { get; set; }
 
         public IEnumerable<InventoryViewModel> Inventories { get; set; }
+
+        public IEnumerable<EventEditViewModel> Events { get; set; }
     }
 }

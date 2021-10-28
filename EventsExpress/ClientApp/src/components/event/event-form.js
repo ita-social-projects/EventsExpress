@@ -15,6 +15,7 @@ import "./event-form.css";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import asyncValidatePhoto from '../../containers/async-validate-photo';
+import MultieventForm from './MultieventForm'
 
 momentLocaliser(moment);
 
@@ -22,15 +23,7 @@ const photoService = new PhotoService();
 
 class EventForm extends Component {
 
-    state = { checked: this.props.initialValues.isReccurent };
-
-    handleChange = () => {
-        this.setState(state => ({
-            checked: !state.checked,
-        }));
-    }
-
-
+    
     checkLocation = (location) => {
 
         if (location !== null) {
@@ -53,10 +46,9 @@ class EventForm extends Component {
 
 
     render() {
+
         const { form_values, all_categories, disabledDate, user_name } = this.props;
-        const { checked } = this.state;
-
-
+   
         return (
             <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}
                 encType="multipart/form-data" autoComplete="off">
@@ -99,17 +91,16 @@ class EventForm extends Component {
                     </div>
                     {this.props.haveReccurentCheckBox &&
                         <div className="mt-2">
-                            <Field
-                                type="checkbox"
-                                label="Recurrent Event"
-                                name='isReccurent'
-                                component={renderCheckbox}
-                                checked={checked}
-                                onChange={this.handleChange}
-                            />
+                        <Field
+                            name='isReccurent'
+                            component={renderCheckbox}
+                            type="checkbox"
+                            label="IsReccurent"
+                        />
                         </div>
+
                     }
-                    {this.props.haveReccurentCheckBox && checked &&
+                    {this.props.haveReccurentCheckBox && form_values && form_values.isReccurent &&
                         <div>
                             <div className="mt-2">
                             <Field
@@ -133,7 +124,7 @@ class EventForm extends Component {
                     }
                     <div className="mt-2">
                         <Field
-                            name='isPublic'
+                            name="isPublic"
                             component={renderCheckbox}
                             type="checkbox"
                             label="Public"
@@ -208,7 +199,29 @@ class EventForm extends Component {
                                     id="url"
                                 />
                             </div>
-                        }
+                    }
+                    <div className="mt-2">
+                        <Field
+                            type="checkbox"
+                            label="Multi Event"
+                            name='isMultiEvent'
+                            component={renderCheckbox}
+                        />
+                       
+                    </div>
+                    {this.props.form_values
+                        && this.props.form_values.isMultiEvent &&
+                                
+
+                            <div className="mt-2">
+                                <Field
+                            name='location.MultiEvent'
+                            component={MultieventForm}
+                            form_values={form_values }
+                                />
+                            </div>
+                         
+                    }
                     
                 </div>
                 <div className="row my-4">

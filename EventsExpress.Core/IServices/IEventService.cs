@@ -14,7 +14,7 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> EditNextEvent(EventDto eventDTO);
 
-        Task<Guid> Edit(EventDto e);
+        Task<Guid> Edit(EventDto eventInstance);
 
         Task<Guid> Publish(Guid eventId);
 

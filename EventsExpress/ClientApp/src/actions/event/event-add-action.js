@@ -57,6 +57,8 @@ export function publish_event(eventId) {
     }
 }
 
+
+
 function eventWasCreated(eventId) {
     return {
         type: EVENT_WAS_CREATED,

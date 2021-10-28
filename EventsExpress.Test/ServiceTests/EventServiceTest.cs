@@ -519,13 +519,6 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [Category("Edit Event")]
-        public void EditEvent_InvalidEvent_Failed()
-        {
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.Edit(null));
-        }
-
-        [Test]
         [TestCaseSource(typeof(GetEventExistingId), nameof(GetEventExistingId.TestCasesForAddUserToEvent))]
         [Category("Add user to event")]
         public void AddUserToEvent_ReturnTrue(Guid id)
