@@ -6,6 +6,7 @@ import ConfirmForm from "./ConfirmForm";
 import Success from "./Success";
 import PlaceHolder from "./PlaceHolder";
 import PropTypes from "prop-types";
+import ChooseActivities from "./ChooseActivities";
 
 export default class RegistrationForm extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class RegistrationForm extends Component {
                 <CompleteProfileForm onSubmit={this.nextPage} />
               )}
               {currentStep === 3 && (
-                <PlaceHolder
+                <ChooseActivities
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />

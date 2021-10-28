@@ -6,6 +6,8 @@ export default class CategoryService {
 
     getAllCategories = () => baseService.getResource('category/all');
 
+    getCategoriesByGroup = (id) => baseService.getResource(`category/${id}`);
+
     getUserCategories = () => baseService.getResource('Users/GetCategories');
 
     setCategory = data => baseService.setResource('category/create', {

@@ -8,9 +8,7 @@ namespace EventsExpress.Core.IServices
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDto> GetAllCategories();
-
-        IEnumerable<CategoryDto> GetCategoriesByGroup(Guid categoryGroupId);
+        IEnumerable<CategoryDto> GetAllCategories(Guid? groupId);
 
         Category GetById(Guid id);
 
