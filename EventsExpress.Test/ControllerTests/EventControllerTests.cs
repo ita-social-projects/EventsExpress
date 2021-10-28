@@ -116,20 +116,20 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        public void GetUpcomingEvents_OkResult()
+        public void Upcoming_OkResult()
         {
             int x = 1;
             service.Setup(e => e.GetAll(new EventFilterViewModel(), out x)).Returns(new List<EventDto>());
-            var expected = eventController.GetUpcomingEvents();
+            var expected = eventController.Upcoming();
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
 
         [Test]
-        public void GetUpcomingEvents_ReturnBadRequest()
+        public void Upcoming_ReturnBadRequest()
         {
             int count = 1;
             service.Setup(e => e.GetAll(It.IsAny<EventFilterViewModel>(), out count)).Throws<ArgumentOutOfRangeException>();
-            var expected = eventController.GetUpcomingEvents();
+            var expected = eventController.Upcoming();
             Assert.IsInstanceOf<BadRequestResult>(expected);
         }
 

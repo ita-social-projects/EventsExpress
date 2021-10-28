@@ -180,11 +180,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">If return failed.</response>
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public IActionResult GetUpcomingEvents()
+        public IActionResult Upcoming()
         {
             var filter = new EventFilterViewModel();
-            filter.OwnerId = null;
-            filter.VisitorId = null;
             filter.DateFrom = DateTime.Today;
 
             try
