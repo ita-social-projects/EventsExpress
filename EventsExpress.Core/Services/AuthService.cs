@@ -172,11 +172,11 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId1, string token)
+        public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
-            var accountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId1)?.AccountId;
+            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId)?.AccountId;
             var userToken = Context.UserTokens
-                            .FirstOrDefault(rt => rt.Token == token && rt.AccountId == accountId);
+                            .FirstOrDefault(rt => rt.Token == token && rt.AccountId == localAccountId);
 
             var account = await ConfirmEmail(userToken);
             var jwtToken = _tokenService.GenerateAccessToken(account);
