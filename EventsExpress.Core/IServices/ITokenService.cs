@@ -19,7 +19,5 @@ namespace EventsExpress.Core.IServices
         Task<bool> RevokeToken(string token);
 
         Task GenerateEmailConfirmationToken(string token, Guid accountId);
-
-        void SetTokenCookie(string token);
     }
 }

@@ -64,7 +64,7 @@ export function loginAfterEmailConfirmation(data) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
-        return setUserInfo(response, dispatch);
+        return setUserInfo(response, null, dispatch);
     }
 }
 

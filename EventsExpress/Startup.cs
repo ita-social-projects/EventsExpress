@@ -140,6 +140,7 @@ namespace EventsExpress
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
             services.AddScoped<IContactAdminService, ContactAdminService>();
+            services.AddScoped<IIpProviderService, IpProviderService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();

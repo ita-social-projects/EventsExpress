@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Controllers;
@@ -17,7 +12,6 @@ using EventsExpress.ViewModels;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
 
@@ -62,13 +56,15 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.Login(new LoginViewModel()));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         [Category("Login")]
         public async Task Login_CorrectReqest_DoesNotThrowExceptionAsync()
         {
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
+
             var loginReqest = new LoginViewModel
             {
                 Email = SomeEmail,
@@ -78,13 +74,10 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Setup(s => s.Authenticate(loginReqest.Email, loginReqest.Password))
                 .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
 
-            _tokenService.Setup(s => s.SetTokenCookie(It.IsAny<string>()));
-
             var res = await _authenticationController.Login(loginReqest);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -97,13 +90,14 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.FacebookLogin(new AccountViewModel()));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         [Category("FacebookLogin")]
         public async Task FacebookLogin_AllOk_DoesNotThrowExceptionAsync()
         {
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             var fb = AuthExternalType.Facebook;
             var accountWiew = new AccountViewModel
             {
@@ -115,13 +109,11 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Setup(s =>
                 s.Authenticate(accountWiew.Email, fb))
                 .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-            _tokenService.Setup(s => s.SetTokenCookie(It.IsAny<string>()));
 
             var res = await _authenticationController.FacebookLogin(accountWiew);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -133,13 +125,14 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.GoogleLogin(new AccountViewModel()));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         [Category("GoogleLogin")]
         public async Task GoogleLogin_AllOk_DoesNotThrowExceptionAsync()
         {
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             var g = AuthExternalType.Google;
             var accountWiew = new AccountViewModel
             {
@@ -156,13 +149,11 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Setup(s =>
                 s.Authenticate(payload.Email, g))
                 .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-            _tokenService.Setup(s => s.SetTokenCookie(RefreshToken));
 
             var res = await _authenticationController.GoogleLogin(accountWiew);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -177,13 +168,14 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.TwitterLogin(new AccountViewModel()));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         [Category("TwitterLogin")]
         public async Task TwitterLogin_AllOk_DoesNotThrowExceptionAsync()
         {
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             var fb = AuthExternalType.Twitter;
             var accountWiew = new AccountViewModel
             {
@@ -195,13 +187,11 @@ namespace EventsExpress.Test.ControllerTests
             _authService.Setup(s =>
                 s.Authenticate(accountWiew.Email, fb))
                 .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-            _tokenService.Setup(s => s.SetTokenCookie(It.IsAny<string>()));
 
             var res = await _authenticationController.TwitterLogin(accountWiew);
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -254,21 +244,21 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
             _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel()));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
         [Category("RegisterBindExternalAccount")]
         public async Task RegisterBind_AllOk_DoesNotThrowExceptionAsync()
         {
-            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).ReturnsAsync(new AuthenticateResponseModel(It.IsAny<string>(), It.IsAny<string>()));
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
+            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
 
             var res = await _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel());
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
             _authService.Verify(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>()), Times.Once);
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -355,7 +345,6 @@ namespace EventsExpress.Test.ControllerTests
         {
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.EmailConfirm("InvalidAuthLocalId", "Token"));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -368,23 +357,22 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.ThrowsAsync<EventsExpressException>(() =>
                 _authenticationController.EmailConfirm(Guid.NewGuid().ToString(), "Token"));
-            _tokenService.Verify(s => s.SetTokenCookie(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
         [Category("EmailConfirm")]
         public async Task EmailConfirm_AllOk_DoesNotThrowExceptionAsync()
         {
+            _authenticationController.ControllerContext = new ControllerContext();
+            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             _authService.Setup(s =>
                 s.EmailConfirmAndAuthenticate(It.IsAny<Guid>(), It.IsAny<string>()))
                 .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-            _tokenService.Setup(s => s.SetTokenCookie(It.IsAny<string>()));
 
             var res = await _authenticationController.EmailConfirm(Guid.NewGuid().ToString(), "Token");
 
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkObjectResult>(res);
-            _tokenService.Verify(a => a.SetTokenCookie(It.IsAny<string>()), Times.Once);
         }
 
         [Test]
