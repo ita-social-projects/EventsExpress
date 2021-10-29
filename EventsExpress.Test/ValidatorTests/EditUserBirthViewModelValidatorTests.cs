@@ -1,12 +1,12 @@
-﻿namespace EventsExpress.Test.ValidatorTests
-{
-    using System;
-    using EventsExpress.Validation;
-    using EventsExpress.ViewModels;
-    using FluentValidation;
-    using FluentValidation.TestHelper;
-    using NUnit.Framework;
+﻿using System;
+using EventsExpress.Validation;
+using EventsExpress.ViewModels;
+using FluentValidation;
+using FluentValidation.TestHelper;
+using NUnit.Framework;
 
+namespace EventsExpress.Test.ValidatorTests
+{
     [TestFixture]
     internal class EditUserBirthViewModelValidatorTests
     {
