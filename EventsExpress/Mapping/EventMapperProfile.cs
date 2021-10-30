@@ -292,6 +292,23 @@
             };
         }
 
+        private static ChildEventDto MapChildEventDtoFromMultiEvent(Event chieldEvent)
+        {
+            return new ChildEventDto
+            {
+                Id = chieldEvent.Id,
+                Point = chieldEvent.EventLocation.Point,
+                Type = chieldEvent.EventLocation.Type,
+                OnlineMeeting = chieldEvent.EventLocation.OnlineMeeting,
+                EventStatus = chieldEvent.StatusHistory.LastOrDefault().EventStatus,
+                Title = chieldEvent.Title,
+                Description = chieldEvent.Description,
+                IsMultiEvent = chieldEvent.IsMultiEvent,
+                DateFrom = chieldEvent.DateFrom,
+                DateTo = chieldEvent.DateTo,
+            };
+        }
+
         private static IEnumerable<ChildEventDto> MapEventsDtoFromMultiEventStatus(ICollection<MultiEventStatus> childEvents)
         {
             if (childEvents == null)
@@ -302,7 +319,7 @@
             var list = new List<ChildEventDto>();
             foreach (var item in childEvents)
             {
-                list.Add(Mapper.Map<Event, ChildEventDto>(item.ChildEvent));
+                list.Add(MapChildEventDtoFromMultiEvent(item.ChildEvent));
             }
 
             return list;

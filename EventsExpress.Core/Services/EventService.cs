@@ -379,8 +379,7 @@ namespace EventsExpress.Core.Services
 
         public EventDto EventById(Guid eventId)
         {
-            var res = Mapper.Map<EventDto>(
-                Context.Events
+          var request = Context.Events
                 .Include(e => e.EventLocation)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
@@ -394,9 +393,13 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.EventSchedule)
-                .FirstOrDefault(x => x.Id == eventId));
+                .Include(e => e.ChildEvents)
+                    .ThenInclude(e => e.ChildEvent)
+                        .ThenInclude(e => e.EventLocation)
+                .FirstOrDefault(x => x.Id == eventId);
 
-            return res;
+          var res = Mapper.Map<EventDto>(request);
+          return res;
         }
 
         public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
