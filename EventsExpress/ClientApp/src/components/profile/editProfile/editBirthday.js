@@ -23,21 +23,18 @@ const validate = values => {
 
 const EditBirthday = props => {
     const minValue = moment(new Date()).subtract(115, 'years')
-    const maxValue = moment(new Date()).subtract(15, 'years')
+    const maxValue = moment(new Date()).subtract(14, 'years')
     const { handleSubmit, pristine, reset, submitting } = props;
     return (
         <form onSubmit={handleSubmit}>
             <div>
                 <Field
                     name="birthday"
-                    id="date"
                     label="Birthday"
                     minValue={minValue}
                     maxValue={maxValue}
                     component={renderDatePicker}
-                    InputLabelProps={{
-                        shrink: true
-                    }}
+
                 />
                 {
                     props.error &&
