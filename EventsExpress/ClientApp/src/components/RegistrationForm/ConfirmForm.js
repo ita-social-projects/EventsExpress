@@ -2,6 +2,7 @@ import React from "react";
 import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
+import moment from "moment";
 
 const ConfirmForm = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
@@ -41,7 +42,7 @@ const ConfirmForm = (props) => {
 
                     secondary={
                       props.formValues.birthDate
-                        ? props.formValues.birthDate.toISOString().split("T")[0]
+                        ? moment(props.formValues.birthDate).format("DD-MM-YYYY")
                         : "Not entered."
                     }
 
