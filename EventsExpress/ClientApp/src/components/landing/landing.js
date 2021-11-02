@@ -7,16 +7,13 @@ import { Link } from "react-router-dom"
 import ModalWind from '../modal-wind';
 import AuthComponent from '../../security/authComponent';
 import './landing.css';
-
+import { get_upcoming_events } from '../../actions/event/event-list-action';
+import { connect } from 'react-redux';
 const eventService = new EventService()
 
-export default class Landing extends Component {
+class Landing extends Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            events: []
-                }
     }
 
     handleClick = () => {
@@ -31,12 +28,8 @@ export default class Landing extends Component {
         }, [])
     }
 
-    async componentDidMount() {
-        let events = await eventService.getAllEvents("?Page=1")
-        events = (await events.json()).items
-        if (events.length !== 0) {
-            this.setState({ events: this.splitDataIntoBlocks(events) })
-        }
+    componentDidMount() {
+        this.props.get_upcoming_events();
     }
 
     renderCarouselBlock = (eventBlock) => (
@@ -44,13 +37,18 @@ export default class Landing extends Component {
             {eventBlock.map((event) => <CarouselEventCard key={event.id} event={event} />)}
         </div>
     )
-        
+
     render() {
-        const { events } = this.state
+        let { id } = this.props.user.id !== null
+            ? this.props.user
+            : {};
+        console.log(id);
+        const { items } = this.props.events.data;
+        const events = this.splitDataIntoBlocks(items);
+
         const carouselNavIsVisible = events.length > 1
         const { onLogoutClick } = this.props;
-        const { id } = this.props.user;
-      
+
         return (<>
             <div className="main">
                 <article className="head-article">
@@ -62,13 +60,13 @@ export default class Landing extends Component {
                             <div className="col-md-1">
                                 {
                                     !id && (<ModalWind
-                                                renderButton={(action) => (
-                                                    <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
-                                                        Sign In/Up
-                                                    </Button>
-                                                )}/>)
-                            }
-                        </div>
+                                        renderButton={(action) => (
+                                            <Button className='mt-5 btn btn-warning' variant="contained" onClick={action}>
+                                                Sign In/Up
+                                            </Button>
+                                        )}/>)
+                                }
+                            </div>
                         </AuthComponent>
                         <AuthComponent>
                             <div className="col-md-2 text-right">
@@ -122,35 +120,53 @@ export default class Landing extends Component {
                     </AuthComponent>
                 </article>
                 {events.length !== 0 &&
-                <article className="events-article">
-                    <div className="row">
-                        <div className="col-md-10">
-                            <h3>Upcoming events</h3>
+                    <article className="events-article">
+                        <div className="row">
+                            <div className="col-md-10">
+                                <h3>Upcoming events</h3>
+                            </div>
+                            <div style={{ textAlign: 'right' }} className="col-md-2">
+                                <a href="/home/events">Explore more events</a>
+                            </div>
                         </div>
-                        <div style={{ textAlign: 'right' }} className="col-md-2">
-                            <a href="/home/events">Explore more events</a>
-                        </div>
-                    </div>
-                    <div className="carousel-wrapper text-center">
-                        <Carousel
-                            autoPlay={false}
-                            animation={"slide"}
-                            interval={1000}
-                            indicators={false}
+                        <div className="carousel-wrapper text-center">
+                            <Carousel
+                                autoPlay={false}
+                                animation={"slide"}
+                                interval={1000}
+                                indicators={false}
                                 navButtonsAlwaysVisible={carouselNavIsVisible}
                                 navButtonsAlwaysInvisible={!carouselNavIsVisible}
 
-                            NextIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-right"></i>}
-                            PrevIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-left"></i>}
-                        >
-                            {
+                                NextIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-right"></i>}
+                                PrevIcon={<i style={{ width: 32 + 'px', height: 32 + 'px' }} className="fas fa-angle-left"></i>}
+                            >
+                                {
                                     events.map((block) => this.renderCarouselBlock(block))
-                            }
-                        </Carousel>
-                    </div>
-                </article>
+                                }
+                            </Carousel>
+                        </div>
+                    </article>
                 }
             </div>
         </>);
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        events: state.events,
+        user: state.user,
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        get_upcoming_events: () => dispatch(get_upcoming_events()),
+    }
+};
+
+export default(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Landing));
