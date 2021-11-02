@@ -183,6 +183,7 @@ namespace EventsExpress.Controllers
         public IActionResult Upcoming()
         {
             var filter = new EventFilterViewModel();
+            filter.PageSize = 5;
             filter.DateFrom = DateTime.Today;
 
             try

@@ -7,7 +7,6 @@ import { Link } from "react-router-dom"
 import ModalWind from '../modal-wind';
 import AuthComponent from '../../security/authComponent';
 import './landing.css';
-import { withRouter } from "react-router";
 import { get_upcoming_events } from '../../actions/event/event-list-action';
 import { connect } from 'react-redux';
 const eventService = new EventService()
@@ -167,7 +166,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default withRouter(connect(
+export default(connect(
     mapStateToProps,
     mapDispatchToProps
 )(Landing));
