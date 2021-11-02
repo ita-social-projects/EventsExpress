@@ -58,3 +58,18 @@ export function updateEventsFilters(data) {
         payload: data
     }
 }
+
+export function get_upcoming_events(filters) {
+    return async dispatch => {
+        dispatch(getRequestInc());
+        let response = await api_serv.getUpcomingEvents();
+        dispatch(getRequestDec());
+        if (!response.ok) {
+            dispatch(setErrorAllertFromResponse(response));
+            return Promise.reject();
+        }
+        let jsonRes = await response.json();
+        dispatch(getEvents(jsonRes));
+        return Promise.resolve();
+    }
+}
