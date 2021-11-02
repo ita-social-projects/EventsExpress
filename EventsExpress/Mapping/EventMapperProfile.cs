@@ -297,15 +297,15 @@
             return new ChildEventDto
             {
                 Id = chieldEvent.Id,
+                Title = chieldEvent.Title,
+                Description = chieldEvent.Description,
+                DateFrom = chieldEvent.DateFrom,
+                DateTo = chieldEvent.DateTo,
                 Point = chieldEvent.EventLocation.Point,
                 Type = chieldEvent.EventLocation.Type,
                 OnlineMeeting = chieldEvent.EventLocation.OnlineMeeting,
                 EventStatus = chieldEvent.StatusHistory.LastOrDefault().EventStatus,
-                Title = chieldEvent.Title,
-                Description = chieldEvent.Description,
                 IsMultiEvent = chieldEvent.IsMultiEvent,
-                DateFrom = chieldEvent.DateFrom,
-                DateTo = chieldEvent.DateTo,
             };
         }
 
