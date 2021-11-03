@@ -22,7 +22,7 @@ namespace EventsExpress.Test.ValidationTests
         [Category("Latitude is null")]
         public void Should_have_error_when_Latitude_is_null()
         {
-            var model = new LocationViewModel { Type = LocationType.Map, Latitude = null, Longitude = 7.7 };
+            var model = new MapViewModel { Type = LocationType.Map, Latitude = null, Longitude = 7.7 };
             var result = validator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.Latitude).WithErrorMessage("Field is required!");
         }
@@ -31,14 +31,14 @@ namespace EventsExpress.Test.ValidationTests
         [Category("Longitude is null")]
         public void Should_have_error_when_Longitude_is_null()
         {
-            var model = new LocationViewModel { Type = LocationType.Map, Latitude = 8.8, Longitude = null };
+            var model = new MapViewModel { Type = LocationType.Map, Latitude = 8.8, Longitude = null };
             var result = validator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x.Longitude).WithErrorMessage("Field is required!");
         }
 
         [TestCaseSource(typeof(CorrectMap))]
         [Category("Correct Longitude and Latitude")]
-        public void Should_not_have_error_when_Correct_Map(LocationViewModel model)
+        public void Should_not_have_error_when_Correct_Map(MapViewModel model)
         {
             var result = validator.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.Latitude);
@@ -47,7 +47,7 @@ namespace EventsExpress.Test.ValidationTests
 
         [TestCaseSource(typeof(CorrectUrl))]
         [Category("Correct Url")]
-        public void Should_not_have_error_when_Correct__URL(LocationViewModel model)
+        public void Should_not_have_error_when_Correct__URL(MapViewModel model)
         {
             var result = validator.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(x => x.OnlineMeeting);
@@ -56,7 +56,7 @@ namespace EventsExpress.Test.ValidationTests
         [TestCaseSource(typeof(InCorrectUrl))]
         [Category("InCorrect Url")]
         [Test]
-        public void Should_have_error_when_InCorrect__URL(LocationViewModel model)
+        public void Should_have_error_when_InCorrect__URL(MapViewModel model)
         {
             string modelRes = $"Link '{model.OnlineMeeting}' must be a valid URI. eg: http://www.SomeWebSite.com.au";
             var result = validator.TestValidate(model);
@@ -66,7 +66,7 @@ namespace EventsExpress.Test.ValidationTests
 
         [TestCaseSource(typeof(CorrectEnumViewModel))]
         [Category("Correct Enum")]
-        public void SetLocationTypeForEvent_ValidType_ValidationErrorIsNotReturn(LocationViewModel model)
+        public void SetLocationTypeForEvent_ValidType_ValidationErrorIsNotReturn(MapViewModel model)
         {
             var result = validator.TestValidate(model);
             result.ShouldNotHaveValidationErrorFor(e => e.Type);
@@ -74,7 +74,7 @@ namespace EventsExpress.Test.ValidationTests
 
         [TestCaseSource(typeof(InCorrectEnumViewModel))]
         [Category("InCorrect Enum")]
-        public void SetLocationTypeForEvent_InvalidLocation_ReturnError(LocationViewModel model)
+        public void SetLocationTypeForEvent_InvalidLocation_ReturnError(MapViewModel model)
         {
             var result = validator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(e => e.Type);

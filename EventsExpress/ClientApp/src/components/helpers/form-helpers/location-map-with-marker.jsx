@@ -12,7 +12,7 @@ export default function LocationMapWithMarker(props) {
         props.input.value.latitude = initialPos.lat;
         props.input.value.longitude = initialPos.lng;
     }
-    const [location, setLocation] = React.useState(initialPos);
+    const [map, setLocation] = React.useState(initialPos);
 
     function handleChange(latlng) {
         setLocation(latlng);
@@ -25,17 +25,17 @@ export default function LocationMapWithMarker(props) {
 
     return (
         <Field
-            name='location'
-            location = {location}
+            name='map'
+            location = {map}
             onUpdate = {handleChange}
             component={LocationMap}
         >
-            <Marker position={location}
+            <Marker position={map}
                 draggable={true}
                 onDragend={updateMarker}>
-                <Popup position={location}>
+                <Popup position={map}>
                     <pre>
-                        {JSON.stringify(location, null, 2)}
+                        {JSON.stringify(map, null, 2)}
                     </pre>
                 </Popup>
             </Marker>

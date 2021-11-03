@@ -31,21 +31,6 @@ class EventForm extends Component {
     }
 
 
-    checkLocation = (location) => {
-
-        if (location !== null) {
-            if (location.type == enumLocationType.map) {
-                location.latitude = null;
-                location.longitude = null;
-                change(`event-form`, `location`, location);
-            }
-
-            if (location.type == enumLocationType.online) {
-                location.onlineMeeting = null;
-                change(`event-form`, `location.onlineMeeting`, location);
-            }
-        }
-    }
 
     periodicityListOptions = (periodicity.map((item) =>
         <option value={item.value} key={item.value}> {item.label} </option>
@@ -178,29 +163,27 @@ class EventForm extends Component {
                             placeholder='#hashtags'
                         />
                     </div>
-                    <Field name="location.type" component={radioButton} parse={Number} onChange={() => this.checkLocation(this.props.form_values.location)}>
+                    <Field name="locationType" component={radioButton} parse={Number} >
                         <FormControlLabel value={0} control={<Radio />} label="Map" />
                         <FormControlLabel value={1} control={<Radio />} label="Online" />
                     </Field>
                         {this.props.form_values
-                            && this.props.form_values.location
-                            && this.props.form_values.location.type == enumLocationType.map &&
+                            && this.props.form_values.locationType === enumLocationType.map &&
 
                             <div className="mt-2">
                                 <Field
-                                    name='location'
+                                    name='map'
                                     component={LocationMapWithMarker}
                                 />
                             </div>
                         }
                         {this.props.form_values
-                            && this.props.form_values.location
-                            && this.props.form_values.location.type == enumLocationType.online &&
+                            && this.props.form_values.locationType === enumLocationType.online &&
 
                             <div className="mt-2">
                                 <label htmlFor="url">Enter an https:// URL:</label>
                                 <Field
-                                    name='location.onlineMeeting'
+                                    name='onlineMeeting'
                                     component={renderTextField}
                                     type="url"
                                     label="Url"

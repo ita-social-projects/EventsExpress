@@ -22,7 +22,11 @@ namespace EventsExpress.ViewModels.Base
 
         public Periodicity Periodicity { get; set; }
 
-        public LocationViewModel Location { get; set; }
+        public MapViewModel Map { get; set; }
+
+        public string OnlineMeeting { get; set; }
+
+        public LocationType LocationType { get; set; }
 
         public bool? IsPublic { get; set; }
 

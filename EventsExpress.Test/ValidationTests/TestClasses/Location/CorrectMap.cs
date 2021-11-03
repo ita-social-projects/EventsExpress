@@ -21,7 +21,7 @@
         {
             for (int i = 0; i < pointArr.GetLength(0); i++)
             {
-                yield return new object[] { new LocationViewModel { Type = type, Latitude = pointArr[i, 0], Longitude = pointArr[i, 1] } };
+                yield return new object[] { new MapViewModel { Type = type, Latitude = pointArr[i, 0], Longitude = pointArr[i, 1] } };
             }
         }
     }
