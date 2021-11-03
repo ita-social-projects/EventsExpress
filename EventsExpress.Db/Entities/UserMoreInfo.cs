@@ -11,13 +11,13 @@ namespace EventsExpress.Db.Entities
 
         public ParentStatus ParentStatus { get; set; }
 
-        public EventType EventType { get; set; }
+        public UserMoreInfoEventType EventType { get; set; }
 
         public RelationShipStatus RelationShipStatus { get; set; }
 
         public TheTypeOfLeisure TheTypeOfLeisure { get; set; }
 
-        public ReasonsForUsingTheSite ReasonsForUsingTheSite { get; set; }
+        public UserMoreInfoReasonsForUsingTheSite ReasonsForUsingTheSite { get; set; }
 
         public string AditionalInfoAboutUser { get; set; }
     }

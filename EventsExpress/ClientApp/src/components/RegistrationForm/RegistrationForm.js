@@ -5,6 +5,7 @@ import CompleteProfileForm from "./CompleteProfileForm";
 import ConfirmForm from "./ConfirmForm";
 import Success from "./Success";
 import PlaceHolder from "./PlaceHolder";
+import TellUsMoreAboutYourself from "./TellUsMoreAboutYourself";
 import PropTypes from "prop-types";
 
 export default class RegistrationForm extends Component {
@@ -50,7 +51,7 @@ export default class RegistrationForm extends Component {
                 />
               )}
               {currentStep === 4 && (
-                <PlaceHolder
+                <TellUsMoreAboutYourself
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />

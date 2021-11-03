@@ -763,13 +763,7 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("AditionalInfoAboutUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EventType")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParentStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReasonsForUsingTheSite")
                         .HasColumnType("int");
 
                     b.Property<int>("RelationShipStatus")
@@ -787,6 +781,46 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique();
 
                     b.ToTable("UserMoreInfo");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoEventType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserMoreInfoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserMoreInfoId")
+                        .IsUnique();
+
+                    b.ToTable("UserMoreInfoEventType");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoReasonsForUsingTheSite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ReasonsForUsingTheSite")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserMoreInfoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserMoreInfoId")
+                        .IsUnique();
+
+                    b.ToTable("UserMoreInfoReasonsForUsingTheSite");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
@@ -1122,6 +1156,24 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithOne("UserMoreInfo")
                         .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoEventType", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.UserMoreInfo", "UserMoreInfo")
+                        .WithOne("EventType")
+                        .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfoEventType", "UserMoreInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoReasonsForUsingTheSite", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.UserMoreInfo", "UserMoreInfo")
+                        .WithOne("ReasonsForUsingTheSite")
+                        .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfoReasonsForUsingTheSite", "UserMoreInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

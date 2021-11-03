@@ -2,6 +2,11 @@ import React from "react";
 import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
+import parentStatusEnum from '../../constants/parentStatusEnum';
+import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
+import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
+import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
+import eventTypeEnum from '../../constants/eventTypeEnum';
 
 const ConfirmForm = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
@@ -14,7 +19,7 @@ const ConfirmForm = (props) => {
               <h1 style={{ fontSize: 20 }}>Step 5: Confirm your user data.</h1>
             </Grid>
             <Grid item sm={5} />
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <List>
                 <ListItem>
                   <ListItemText primary="Email" />
@@ -39,8 +44,8 @@ const ConfirmForm = (props) => {
                 </ListItem>
               </List>
             </Grid>
-            <Grid item xs={3}>
-              <List>
+            <Grid item xs={6}>
+                <List>
                 <ListItem>
                   <ListItemText
                     primary="Gender"
@@ -59,10 +64,56 @@ const ConfirmForm = (props) => {
                     secondary={props.formValues.city}
                   />
                 </ListItem>
+                </List>
+                </Grid>
+                <Grid item xs={6}>
+                <List>
+                    <ListItem>
+                        <ListItemText primary="Parent status:" />
+                    </ListItem>
+                    <ListItem>
+                        <ListItemText secondary={props.formValues.parentstatus} />
+                    </ListItem>
+
+                <ListItem>
+                    <ListItemText primary="Reasons for using the site:"/>
+                </ListItem>
+
+                <ListItem>
+                    <AddListItemText value={props.formValues.isBeMoreActive} stringValue={reasonsForUsingTheSiteEnum.BeMoreActive} />
+                    <AddListItemText value={props.formValues.isDevelopASkill} stringValue={reasonsForUsingTheSiteEnum.DevelopASkill} />
+                    <AddListItemText value={props.formValues.isMeetPeopleLikeMe} stringValue={reasonsForUsingTheSiteEnum.MeetPeopleLikeMe} />
+                </ListItem>
+                
+                <ListItem>
+                    <ListItemText primary="Event type:" />
+                </ListItem>
+
+                <ListItem>
+                    <AddListItemText value={props.formValues.isAnyDistance} stringValue={eventTypeEnum.AnyDistance} />
+                    <AddListItemText value={props.formValues.isFree} stringValue={eventTypeEnum.Free} />
+                    <AddListItemText value={props.formValues.isNearMe} stringValue={eventTypeEnum.NearMe} />
+                    <AddListItemText value={props.formValues.isOffline} stringValue={eventTypeEnum.Offline} />
+                    <AddListItemText value={props.formValues.isOnline} stringValue={eventTypeEnum.Online} />
+                    <AddListItemText value={props.formValues.isPaid} stringValue={eventTypeEnum.Paid} />
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemText primary="Relationship status:" />
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemText secondary={props.formValues.relationshipstatus} />
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemText primary="The type of leisure status:" />
+                    </ListItem>
+
+                    <ListItem>
+                        <ListItemText secondary={props.formValues.thetypeofleisure} />
+                    </ListItem>
               </List>
-            </Grid>
-            <Grid item xs={5}>
-              <h5>Some step 3/4 data</h5>
             </Grid>
 
             <Grid item sm={12} justify="center">
@@ -101,6 +152,16 @@ const mapStateToProps = (state) => {
     formValues: getFormValues("registrationForm")(state),
   };
 };
+
+function AddListItemText(props) {
+    if (props.value) {
+        return <ListItem>
+            <ListItemText secondary={props.stringValue} />
+        </ListItem>
+        
+    }
+    return null
+}
 
 export default connect(mapStateToProps)(
   reduxForm({

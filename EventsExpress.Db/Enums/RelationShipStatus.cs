@@ -2,7 +2,7 @@
 {
     public enum RelationShipStatus
     {
-        Single,
-        InARelationship,
+        Single = 0,
+        InARelationship = 1,
     }
 }

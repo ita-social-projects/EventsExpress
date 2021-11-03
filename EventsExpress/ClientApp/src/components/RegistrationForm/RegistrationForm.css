@@ -4,6 +4,15 @@
     font-size: 14px;
 }
 
+.stepper-tellusmore-block {
+    border: 1px solid rgb(255, 153, 0);
+    box-shadow: 0 0 5px rgb(255, 153, 0);
+    border-radius: 3px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: ghostwhite;
+}
+
 .stepper-container-horizontal {
     border: 1px solid rgb(255, 153, 0);
     box-shadow: 0 0 13px #333;
@@ -25,4 +34,8 @@ button {
     padding: 4px;
     background-color: rgb(255, 153, 0);
     border: none;
+}
+
+h1 {
+    font-size: 20px;
 }
