@@ -12,7 +12,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.Birthday).Must(BeOver14).WithMessage("Must be over then 14 years old");
         }
 
-        protected bool BeOver14(DateTime date) => date <= DateTime.Today.AddYears(-14);
+        protected bool BeOver14(DateTime date) => date <= DateTime.Today.AddYears(-14).AddHours(11).AddMinutes(59).AddSeconds(59);
 
         protected bool BeLess115(DateTime date) => date >= DateTime.Today.AddYears(-115);
     }

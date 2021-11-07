@@ -36,6 +36,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<IValidator<IFormFile>> mockValidator;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
+        private Guid _eventId = Guid.NewGuid();
         private string _userEmal = "user@gmail.com";
 
         public PhotoService PhotoService { get; set; }
@@ -111,6 +112,86 @@ namespace EventsExpress.Test.ControllerTests
             int x = 1;
             service.Setup(e => e.GetAllDraftEvents(1, 1, out x)).Returns(new List<EventDto>());
             var expected = eventController.AllDraft();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void Upcoming_OkResult()
+        {
+            int x = 1;
+            service.Setup(e => e.GetAll(new EventFilterViewModel(), out x)).Returns(new List<EventDto>());
+            var expected = eventController.Upcoming();
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void Upcoming_ReturnBadRequest()
+        {
+            int count = 1;
+            service.Setup(e => e.GetAll(It.IsAny<EventFilterViewModel>(), out count)).Throws<ArgumentOutOfRangeException>();
+            var expected = eventController.Upcoming();
+            Assert.IsInstanceOf<BadRequestResult>(expected);
+        }
+
+        [Test]
+        public void AllEvents_OkResult()
+        {
+            int x = 1;
+            service.Setup(e => e.GetAll(new EventFilterViewModel(), out x)).Returns(new List<EventDto>());
+            var expected = eventController.All(new EventFilterViewModel());
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void PastEvents_OkResult()
+        {
+            service.Setup(e => e.PastEventsByUserId(_idUser, new PaginationViewModel() { PageSize = 3, Page = 1 })).Returns(new List<EventDto>());
+            var expected = eventController.PastEvents(_idUser);
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void AddUserToEvent_OkResult()
+        {
+            var expected = eventController.AddUserToEvent(_eventId, _idUser);
+            Assert.IsInstanceOf<OkResult>(expected.Result);
+        }
+
+        [Test]
+        public void GetCurrentRate_OkResult()
+        {
+            service.Setup(e => e.Exists(_eventId)).Returns(true);
+            var expected = eventController.GetCurrentRate(_eventId);
+            Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void SetEventTempPhoto_OkResult()
+        {
+            var expected = eventController.SetEventTempPhoto(_eventId, new PhotoViewModel());
+            Assert.IsInstanceOf<OkResult>(expected.Result);
+        }
+
+        [Test]
+        public void CreateNextFromParentWithEdit_OkResult()
+        {
+            service.Setup(e => e.EditNextEvent(new EventDto())).Returns(Task.FromResult(Guid.NewGuid()));
+            var expected = eventController.CreateNextFromParentWithEdit(_eventId, new EventEditViewModel());
+            Assert.IsInstanceOf<OkObjectResult>(expected.Result);
+        }
+
+        [Test]
+        public void Edit_OkResult()
+        {
+            service.Setup(e => e.Edit(new EventDto())).Returns(Task.FromResult(Guid.NewGuid()));
+            var expected = eventController.Edit(_eventId, new EventEditViewModel());
+            Assert.IsInstanceOf<OkObjectResult>(expected.Result);
+        }
+
+        [Test]
+        public void VisitedEvents_OkResult()
+        {
+            var expected = eventController.VisitedEvents(_idUser, 1);
             Assert.IsInstanceOf<OkObjectResult>(expected);
         }
     }

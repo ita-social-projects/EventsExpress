@@ -8,7 +8,7 @@ import PhotoService from '../../services/PhotoService';
 import periodicity from '../../constants/PeriodicityConstants'
 import {
     renderDatePicker, LocationMapWithMarker, renderCheckbox, radioButton,
-    renderSelectField, renderTextField, renderTextArea, renderMultiselect
+    renderSelectField, renderTextField, renderTextArea, renderMultiselect,
 } from '../helpers/form-helpers';
 import { enumLocationType } from '../../constants/EventLocationType';
 import "./event-form.css";
@@ -53,7 +53,7 @@ class EventForm extends Component {
 
 
     render() {
-        const { form_values, all_categories, disabledDate, user_name } = this.props;
+        const { form_values, all_categories, user_name } = this.props;
         const { checked } = this.state;
 
 
@@ -144,7 +144,7 @@ class EventForm extends Component {
                             <Field
                                 name='dateFrom'
                                 label='From'
-                                disabled={disabledDate}
+                                minValue={moment(new Date())}
                                 component={renderDatePicker}
                             />
                         </span>
@@ -153,7 +153,6 @@ class EventForm extends Component {
                                 <Field
                                     name='dateTo'
                                     label='To'
-                                    disabled={disabledDate}
                                     minValue={form_values.dateFrom}
                                     component={renderDatePicker}
                                 />

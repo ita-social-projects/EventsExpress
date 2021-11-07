@@ -18,9 +18,9 @@ const validate = values => {
         'gender'
     ]
 
-    if (values.userName.length < 3)
+    if (values.userName && values.userName.length < 3)
         errors.userName = 'User name too short'
-    else if (values.userName.length > 50)
+    else if (values.userName && values.userName.length > 50)
         errors.userName = 'User name too long'
 
     if (values.phone && !isValidPhoneNumber(values.phone)) {

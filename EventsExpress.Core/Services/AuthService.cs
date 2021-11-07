@@ -174,8 +174,9 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
+            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId)?.AccountId;
             var userToken = Context.UserTokens
-                            .First(rt => rt.Token == token && rt.AccountId == accountId);
+                            .FirstOrDefault(rt => rt.Token == token && rt.AccountId == localAccountId);
 
             var account = await ConfirmEmail(userToken);
             var jwtToken = _tokenService.GenerateAccessToken(account);
@@ -246,7 +247,7 @@ namespace EventsExpress.Core.Services
 
         private async Task<Account> ConfirmEmail(UserToken userToken)
         {
-            if (string.IsNullOrEmpty(userToken.Token))
+            if (string.IsNullOrEmpty(userToken?.Token))
             {
                 throw new EventsExpressException("Token is null or empty");
             }
