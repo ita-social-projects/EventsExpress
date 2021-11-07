@@ -7,8 +7,9 @@
     align-self: auto;
 }
 
-.tile-wrapper p {
-    margin: 10px auto 0 12px;
-    font-size: 20px;
+.tile-label {
+    margin: 5px auto 0 10px;
+    text-align: left;
+    font-size: 0.9vw;
     font-weight: bold;
 }
