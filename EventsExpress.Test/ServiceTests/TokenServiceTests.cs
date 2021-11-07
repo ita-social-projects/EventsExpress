@@ -1,25 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
+using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-
     [TestFixture]
     internal class TokenServiceTests : TestInitializer
     {
         private Mock<IJwtSigningEncodingKey> _mockSigningEncodingKey;
         private Mock<IOptions<JwtOptionsModel>> _mockJwtOptions;
         private Mock<IHttpContextAccessor> _httpContextAccessor;
+        private Mock<IIpProviderService> _iIpProviderService;
 
         private TokenService _service;
         private List<Claim> _claims;
@@ -35,13 +39,15 @@ namespace EventsExpress.Test.ServiceTests
             _mockJwtOptions = new Mock<IOptions<JwtOptionsModel>>();
             _mockSigningEncodingKey = new Mock<IJwtSigningEncodingKey>();
             _httpContextAccessor = new Mock<IHttpContextAccessor>();
+            _iIpProviderService = new Mock<IIpProviderService>();
 
             _service = new TokenService(
                 Context,
                 MockMapper.Object,
                 _mockJwtOptions.Object,
                 _mockSigningEncodingKey.Object,
-                _httpContextAccessor.Object);
+                _httpContextAccessor.Object,
+                _iIpProviderService.Object);
 
             _token = Guid.NewGuid().ToString();
 
@@ -56,6 +62,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = Guid.NewGuid(),
                 UserId = _existingUser.Id,
                 AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } },
+                RefreshTokens = new List<UserToken> { new UserToken { Token = _token, Type = TokenType.RefreshToken, Expires = DateTime.Now.AddDays(7), Created = DateTime.Now } },
             };
 
             _claims = new List<Claim> { new Claim(ClaimTypes.Name, $"{_existingAccount.UserId}") };
@@ -69,6 +76,23 @@ namespace EventsExpress.Test.ServiceTests
         public void GenerateEmailConfirmToken_DoesNotThrows()
         {
             Assert.DoesNotThrowAsync(async () => await _service.GenerateEmailConfirmationToken(_token, _existingUser.Id));
+        }
+
+        [Test]
+        public void GenerateRefreshToken_DoesNotThrows()
+        {
+             Assert.DoesNotThrow(() => _service.GenerateRefreshToken());
+        }
+
+        [Test]
+        public async Task RefreshToken_Correct()
+        {
+            _mockJwtOptions.Setup(opt => opt.Value).Returns(new JwtOptionsModel() { LifeTime = 1800 });
+            SigningSymmetricKey signingSymmetricKey = new SigningSymmetricKey("ItIsSomeKeyToAssignToSigninSymetricKeyForTestingRefreshTokenMehtod");
+            _mockSigningEncodingKey.Setup(opt => opt.GetKey()).Returns(signingSymmetricKey.GetKey());
+            _mockSigningEncodingKey.Setup(opt => opt.SigningAlgorithm).Returns(SecurityAlgorithms.HmacSha256);
+            var res = await _service.RefreshToken(_token);
+            Assert.IsInstanceOf<AuthenticateResponseModel>(res);
         }
     }
 }

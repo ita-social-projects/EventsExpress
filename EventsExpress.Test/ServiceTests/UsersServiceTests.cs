@@ -178,7 +178,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 AccountStatus.Activated => await Context.Users.CountAsync(u => !u.Account.IsBlocked),
                 AccountStatus.Blocked => await Context.Users.CountAsync(u => u.Account.IsBlocked),
-                _ => await Context.Users.CountAsync()
+                _ => await Context.Users.CountAsync(),
             };
 
             // Act

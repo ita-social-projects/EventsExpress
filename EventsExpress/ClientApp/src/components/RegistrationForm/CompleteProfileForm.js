@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Avatar, IconButton, Button } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
 import {
   renderDatePicker,
@@ -7,6 +7,7 @@ import {
   renderSelectField,
 } from "../helpers/form-helpers";
 import moment from "moment";
+import ChangeAvatarWrapper from "../../containers/editProfileContainers/change-avatar";
 
 const CompleteProfileForm = (props) => {
   const { handleSubmit } = props;
@@ -18,18 +19,18 @@ const CompleteProfileForm = (props) => {
             <Grid item sm={6}>
               <h1 style={{ fontSize: 20 }}>Step 2: Complete your profile. </h1>
             </Grid>
-            <Grid item sm={12}>
-              <IconButton>
-                <Avatar
-                  src="/images/example.jpg"
-                  style={{
-                    margin: "15px",
-                    width: "90px",
-                    height: "90px",
-                  }}
-                />
-              </IconButton>
+            <Grid item sm={6} />
+
+            <Grid item sm={3}>
+              Choose your avatar:
             </Grid>
+            <Grid item sm={9}>
+              <ChangeAvatarWrapper />
+            </Grid>
+            <Grid item sm={0} />
+
+            <Grid item sm={12} />
+
             <Grid item sm={3}>
               <Field
                 name="firstName"
@@ -48,18 +49,14 @@ const CompleteProfileForm = (props) => {
                 label="Last Name"
               />
             </Grid>
-            <Grid item sm={3}></Grid>
-            <Grid item sm={3}>
+            <Grid item sm={2} />
+            <Grid item sm={4}>
               <Field
-                name="birthday"
-                id="date"
-                label="Birthday"
+                name="birthDate"
+                label="Birth Date"
                 minValue={moment(new Date()).subtract(115, "years")}
-                maxValue={moment(new Date()).subtract(15, "years")}
+                maxValue={moment(new Date()).subtract(14, "years")}
                 component={renderDatePicker}
-                InputLabelProps={{
-                  shrink: true,
-                }}
               />
             </Grid>
             <Grid item xs={3}>
@@ -80,8 +77,10 @@ const CompleteProfileForm = (props) => {
                 label="City"
               />
             </Grid>
-            <Grid item sm={3}></Grid>
-            <Grid item sm={3}>
+
+            <Grid item sm={2}></Grid>
+            <Grid item sm={4}>
+
               <Field
                 minWidth={140}
                 name="gender"
@@ -94,6 +93,7 @@ const CompleteProfileForm = (props) => {
                 <option value="3">Other</option>
               </Field>
             </Grid>
+
             <Grid item sm={12} justify="space-around">
               <Button
                 type="submit"
@@ -110,6 +110,12 @@ const CompleteProfileForm = (props) => {
       </div>
     </>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    formValues: getFormValues("registrationForm")(state),
+  };
 };
 
 export default reduxForm({

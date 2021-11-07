@@ -8,12 +8,14 @@ import registerComplete from "../actions/register/register-complete-action";
 class RegisterCompleteWrapper extends Component {
     constructor(props) {
         super(props);
-        this.profile = props.location.state.profile !== undefined ? this.props.location.state.profile : undefined
+        let userProfile = this.props.location.state.profile
+        this.profile = userProfile !== undefined || userProfile !== null ? userProfile : null
     }
 
     render() {
+        var profile = this.profile
         return <>
-            {typeof this.profile !== undefined && <RegisterBindAccount onSubmit={this.props.bind}/>}
+            {this.profile !== null && <RegisterBindAccount onSubmit={this.props.bind}/>}
             <RegisterComplete onSubmit={this.props.submit}/>
         </>
     }
