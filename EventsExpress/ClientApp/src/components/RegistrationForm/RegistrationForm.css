@@ -4,6 +4,11 @@
     font-size: 14px;
 }
 
+.stepper-submit {
+    width: 97%;
+    padding: 10px;
+}
+
 .stepper-tellusmore-block {
     border: 1px solid rgb(255, 153, 0);
     box-shadow: 0 0 5px rgb(255, 153, 0);
