@@ -39,6 +39,12 @@ a {
   transform: translate(-50%, -50%);
 }
 
+.button-container > h2 {
+    color: white;
+    text-align: center;
+    filter: drop-shadow(0.05em 0.05em orange);
+}
+
 .btn {
   width: fit-content;
   font-size: 1.3em;
