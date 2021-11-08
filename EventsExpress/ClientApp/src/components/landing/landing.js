@@ -8,7 +8,6 @@ import "./landing.css";
 import HeadArticle from "./HeadArticle";
 
 const eventService = new EventService();
-var preloadedPictures = [];
 
 export default class Landing extends Component {
   constructor(props) {
@@ -55,11 +54,7 @@ export default class Landing extends Component {
     return (
       <>
         <div className="main">
-          <HeadArticle
-            preloadedPictures={preloadedPictures}
-            onLogoutClick={onLogoutClick}
-            id={id}
-          />
+          <HeadArticle onLogoutClick={onLogoutClick} id={id} />
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>

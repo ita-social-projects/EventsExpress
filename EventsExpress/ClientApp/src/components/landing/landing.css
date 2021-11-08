@@ -40,9 +40,9 @@ a {
 }
 
 .button-container > h2 {
-    color: white;
-    text-align: center;
-    filter: drop-shadow(0.05em 0.05em orange);
+  color: white;
+  text-align: center;
+  filter: drop-shadow(0.05em 0.05em orange);
 }
 
 .btn {

@@ -29,16 +29,18 @@ export default class HeadArticle extends Component {
     super(props);
     this.state = {
       currentImage: image1,
+      preloadedPictures: [],
     };
   }
 
   async componentDidMount() {
-
-    imagesPreload.forEach((image) => {
+    var preloadedData = imagesPreload.map((image) => {
       const newImage = new Image();
       newImage.src = image;
-      this.props.preloadedPictures[image] = newImage;
+      return newImage;
     });
+
+    this.setState.preloadedPictures = preloadedData;
 
     this.interval = setInterval(() => {
       this.setState({
