@@ -1,23 +1,19 @@
 ﻿import "./RegistrationForm.css";
-import React, { useState } from "react";
+import React from "react";
 import { Grid, Button } from "@material-ui/core";
-import { reduxForm, Field, getFormValues } from "redux-form";
+import { reduxForm, Field } from "redux-form";
 import parentStatusEnum from '../../constants/parentStatusEnum';
 import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
 import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
 import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../constants/eventTypeEnum';
-import { renderCheckbox, radioButton, MultiCheckbox } from '../helpers/form-helpers';
+import { renderCheckbox, radioButton } from '../helpers/form-helpers';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 
 const TellUsMoreAbotYourself = (props) => {
     const { handleSubmit, previousPage } = props;
 
-    let options = [
-        { text: eventTypeEnum.AnyDistance, name: 'isAnyDistance' },
-        { text: eventTypeEnum.Free, name: 'isFree' }
-    ];
 
     return (
         <div className="Step4">

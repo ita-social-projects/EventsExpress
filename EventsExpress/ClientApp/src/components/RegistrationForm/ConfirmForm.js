@@ -3,9 +3,6 @@ import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 
-import parentStatusEnum from '../../constants/parentStatusEnum';
-import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
-import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
 import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../constants/eventTypeEnum';
 
