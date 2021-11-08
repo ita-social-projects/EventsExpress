@@ -41,6 +41,7 @@
         "react-google-login": "5.0.5",
         "react-icons": "3.7.0",
         "react-images-upload": "1.2.7",
+        "react-lazyload": "^3.2.0",
         "react-leaflet": "2.7.0",
         "react-leaflet-search": "2.0.1",
         "react-material-ui-carousel": "2.2.7",

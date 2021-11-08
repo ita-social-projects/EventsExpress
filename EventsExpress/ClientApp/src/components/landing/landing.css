@@ -6,38 +6,6 @@ a {
   font-size: 1.5em;
 }
 
-.head-article-1 {
-  background: url(landing-images/1.jpg);
-}
-
-.head-article-2 {
-  background: url(landing-images/2.jpg);
-}
-
-.head-article-3 {
-  background: url(landing-images/3.jpg);
-}
-
-.head-article-4 {
-  background: url(landing-images/4.jpg);
-}
-
-.head-article-5 {
-  background: url(landing-images/5.jpg);
-}
-
-.head-article-6 {
-  background: url(landing-images/6.jpg);
-}
-
-.head-article-7 {
-  background: url(landing-images/7.jpg);
-}
-
-.head-article-8 {
-  background: url(landing-images/8.jpg);
-}
-
 .row {
   margin: 0 !important;
   padding: 0 !important;
