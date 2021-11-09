@@ -5,16 +5,15 @@ import EventService from "../../services/EventService";
 import ModalWind from "../modal-wind";
 import AuthComponent from "../../security/authComponent";
 import "./landing.css";
+import { get_upcoming_events } from "../../actions/event/event-list-action";
+import { connect } from "react-redux";
 import HeadArticle from "./HeadArticle";
 
 const eventService = new EventService();
 
-export default class Landing extends Component {
+class Landing extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      events: [],
-    };
   }
 
   handleClick = () => {
@@ -29,12 +28,8 @@ export default class Landing extends Component {
     }, []);
   }
 
-  async componentDidMount() {
-    let events = await eventService.getAllEvents("?Page=1");
-    events = (await events.json()).items;
-    if (events.length !== 0) {
-      this.setState({ events: this.splitDataIntoBlocks(events) });
-    }
+  componentDidMount() {
+    this.props.get_upcoming_events();
   }
 
   renderCarouselBlock = (eventBlock) => (
@@ -46,15 +41,18 @@ export default class Landing extends Component {
   );
 
   render() {
-    const { events } = this.state;
+    let { id } = this.props.user.id !== null ? this.props.user : {};
+    console.log(id);
+    const { items } = this.props.events.data;
+    const events = this.splitDataIntoBlocks(items);
+
     const carouselNavIsVisible = events.length > 1;
     const { onLogoutClick } = this.props;
-    const { id } = this.props.user;
 
     return (
       <>
         <div className="main">
-          <HeadArticle onLogoutClick={onLogoutClick} id={id} />
+          <HeadArticle id={id} onLogoutClick={onLogoutClick} />
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>
@@ -137,3 +135,18 @@ export default class Landing extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    events: state.events,
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    get_upcoming_events: () => dispatch(get_upcoming_events()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);

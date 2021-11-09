@@ -31,9 +31,6 @@ export default class HeadArticle extends Component {
       currentImage: image1,
       preloadedPictures: [],
     };
-  }
-
-  async componentDidMount() {
     var preloadedData = imagesPreload.map((image) => {
       const newImage = new Image();
       newImage.src = image;
@@ -41,7 +38,9 @@ export default class HeadArticle extends Component {
     });
 
     this.setState.preloadedPictures = preloadedData;
+  }
 
+  async componentDidMount() {
     this.interval = setInterval(() => {
       this.setState({
         currentImage:
