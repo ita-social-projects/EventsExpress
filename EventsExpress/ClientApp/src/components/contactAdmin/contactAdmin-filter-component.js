@@ -47,7 +47,7 @@ class ContactAdminFilter extends Component {
                             <Field
                                 name="dateFrom"
                                 label="From"
-                                minValue={new Date(2000, 1, 1, 12, 0, 0)}
+                                minValue={new Date(2000, 1, 1)}
                                 component={renderDatePicker}
                             />
                         </div>

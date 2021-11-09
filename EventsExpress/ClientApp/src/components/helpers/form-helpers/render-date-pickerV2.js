@@ -19,12 +19,11 @@ export default ({
         <KeyboardDatePicker
           {...inputProps}
           label={label}
-          selected={moment(value).format("L")}
           value={value ? moment(value).format("YYYY-MM-DD") : undefined}
           autoOK
-          format="DD-MM-YYYY"
+          format="YYYY-MM-DD"
           error={touched && invalid}
-          helperText={touched && error}
+          helperText={"YYYY-MM-DD" ||touched && error}
           onChange={onChange}
           disabled={disabled}
           minDate={minValue ? moment(minValue) : undefined}
