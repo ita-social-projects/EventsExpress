@@ -42,7 +42,7 @@ const Tile = (props) => {
 
   return (
     <div
-      className={`tile tile-cover_${props.groupId}`}
+      className={`tile tile-cover cover_${props.groupId}`}
       onClick={() => props.handleTileToggleAction()}
     >
       <ThreeStateCheckbox
