@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
+import SelectedActivitiesList from "./SelectedActivitiesList";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -95,34 +96,7 @@ const ConfirmForm = (props) => {
             </Grid>
 
             {areCategoriesSelected() && (
-              <Grid container spacing={3}>
-                <Grid item sm={8}>
-                  <h5 align="left">Selected activities</h5>
-                </Grid>
-                <Grid item sm={4} />
-                <Grid item xs={3}>
-                  <List>
-                    {getSelectedCategories().map((el) => {
-                      return (
-                        <ListItem>
-                          <ListItemText primary={el.group} />
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </Grid>
-                <Grid item xs={5}>
-                  <List>
-                    {getSelectedCategories().map((el) => {
-                      return (
-                        <ListItem>
-                          <ListItemText primary={el.categories.join(", ")} />
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                </Grid>
-              </Grid>
+              <SelectedActivitiesList data={getSelectedCategories()} />
             )}
 
             <Grid item sm={12} justify="center">

@@ -30,6 +30,10 @@ const ChooseActivities = (props) => {
         <h1 style={{ textAlign: "left", marginBottom: "20px" }}>
           What are your reasons for joining EventsExpress?
         </h1>
+        <h4 style={{ textAlign: "left" }}>
+          (you can skip this step and choose activities later in Profile
+          Settings)
+        </h4>
         <form onSubmit={handleSubmit}>
           <TileGroup data={mapToCategories()} />
           <Grid container spacing={3}>
