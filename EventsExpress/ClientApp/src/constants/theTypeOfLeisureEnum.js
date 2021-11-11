@@ -1,6 +1,6 @@
 ﻿const theTypeOfLeisureEnum = {
-    Active: "Active",
-    Passive: "Passive",
+    Active: 0,
+    Passive: 1,
 }
 
 export default theTypeOfLeisureEnum;

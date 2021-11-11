@@ -1,7 +1,7 @@
 ﻿const reasonsForUsingTheSiteEnum = {
-    DevelopASkill: "Develop a skill",
-    MeetPeopleLikeMe: "Meet people like me",
-    BeMoreActive: "Be more active",
+    DevelopASkill: 0,
+    MeetPeopleLikeMe: 1,
+    BeMoreActive: 2,
 }
 
 export default reasonsForUsingTheSiteEnum ;

@@ -75,6 +75,8 @@ namespace EventsExpress.Db.EF
 
         public DbSet<UnitOfMeasuring> UnitOfMeasurings { get; set; }
 
+        public DbSet<UserMoreInfo> UserMoreInfos { get; set; }
+
         public DbSet<ChangeInfo> ChangeInfos { get; set; }
 
         public DbSet<NotificationType> NotificationTypes { get; set; }

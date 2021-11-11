@@ -1,6 +1,6 @@
 ﻿const relationShipStatusEnum = {
-    Single: "Single",
-    InARelationship: "In a relationship",
+    Single: 0,
+    InARelationship: 1,
 }
 
 export default relationShipStatusEnum ;

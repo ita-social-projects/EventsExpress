@@ -1,6 +1,6 @@
 ﻿const parentStatusEnum = {
-    Kids: "Kids",
-    NoKids: "No kids",
+    Kids: 0,
+    NoKids: 1,
 }
 
 export default parentStatusEnum ;

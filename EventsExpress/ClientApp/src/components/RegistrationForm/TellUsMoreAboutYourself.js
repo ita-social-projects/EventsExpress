@@ -7,13 +7,27 @@ import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
 import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
 import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../constants/eventTypeEnum';
-import { renderCheckbox, radioButton } from '../helpers/form-helpers';
+import { renderCheckbox, radioButton, MultiCheckbox } from '../helpers/form-helpers';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 
 const TellUsMoreAbotYourself = (props) => {
     const { handleSubmit, previousPage } = props;
 
+    let options1 = [
+        { value: reasonsForUsingTheSiteEnum.BeMoreActive, text: "Be more active" },
+        { value: reasonsForUsingTheSiteEnum.DevelopASkill, text: "Develop a skill" },
+        { value: reasonsForUsingTheSiteEnum.MeetPeopleLikeMe, text: "Meet people like me" }
+    ];
+
+    let options2 = [
+        { value: eventTypeEnum.AnyDistance, text: "Any distance" },
+        { value: eventTypeEnum.Free, text: "Free" },
+        { value: eventTypeEnum.NearMe, text: "Near me" },
+        { value: eventTypeEnum.Offline, text: "Offline" },
+        { value: eventTypeEnum.Online, text: "Online" },
+        { value: eventTypeEnum.Paid, text: "Paid" }
+    ];
 
     return (
         <div className="Step4">
@@ -27,37 +41,26 @@ const TellUsMoreAbotYourself = (props) => {
                             <Field
                                 name="parentstatus"
                                 component={radioButton}
-                                parse={String} >
+                                parse={parseInt} >
                                 <label className="font-weight-bold">Select parent status</label>
                                 <FormControlLabel
                                     value={parentStatusEnum.Kids}
                                     control={<Radio />}
-                                    label={parentStatusEnum.Kids} />
+                                    label={"Kids"} />
                                 <FormControlLabel
                                     value={parentStatusEnum.NoKids}
                                     control={<Radio />}
-                                    label={parentStatusEnum.NoKids} />
+                                    label={"No Kids"} />
                             </Field>
                         </div>
                         <div class="stepper-tellusmore-block">
                             <label className="font-weight-bold">Select reasons for using the site</label>
                             <Field
-                                name='isBeMoreActive'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={reasonsForUsingTheSiteEnum.BeMoreActive}
-                            />
-                            <Field
-                                name='isDevelopASkill'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={reasonsForUsingTheSiteEnum.DevelopASkill}
-                            />
-                            <Field
-                                name='isMeetPeopleLikeMe'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={reasonsForUsingTheSiteEnum.MeetPeopleLikeMe}
+                                options={options1}
+                                component={MultiCheckbox}
+                                name="reasonsForUsingTheSite"
+                                className="form-control mt-2"
+                                placeholder='reasonsForUsingTheSiteEnum'
                             />
                         </div>
                     </Grid>
@@ -65,40 +68,11 @@ const TellUsMoreAbotYourself = (props) => {
                         <div class="stepper-tellusmore-block">
                             <label className="font-weight-bold">Select event type</label>
                             <Field
-                                name='isAnyDistance'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.AnyDistance}
-                            />
-                            <Field
-                                name='isFree'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.Free}
-                            />
-                            <Field
-                                name='isNearMe'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.NearMe}
-                            />
-                            <Field
-                                name='isOffline'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.Offline}
-                            />
-                            <Field
-                                name='isOnline'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.Online}
-                            />
-                            <Field
-                                name='isPaid'
-                                component={renderCheckbox}
-                                type="checkbox"
-                                label={eventTypeEnum.Paid}
+                                options={options2}
+                                component={MultiCheckbox}
+                                name="eventType"
+                                className="form-control mt-2"
+                                placeholder='eventType'
                             />
                         </div>
                     </Grid>
@@ -107,32 +81,32 @@ const TellUsMoreAbotYourself = (props) => {
                             <Field
                                 name="relationshipstatus"
                                 component={radioButton}
-                                parse={String} >
+                                parse={parseInt} >
                                 <label className="font-weight-bold">Select relationship status</label>
                                 <FormControlLabel
                                     value={relationShipStatusEnum.Single}
                                     control={<Radio />}
-                                    label={relationShipStatusEnum.Single} />
+                                    label={"Single"} />
                                 <FormControlLabel
                                     value={relationShipStatusEnum.InARelationship}
                                     control={<Radio />}
-                                    label={relationShipStatusEnum.InARelationship} />
+                                    label={"In a relationship"} />
                             </Field>
                         </div>
                         <div class="stepper-tellusmore-block">
                             <Field
                                 name="thetypeofleisure"
                                 component={radioButton}
-                                parse={String} >
+                                parse={parseInt} >
                                 <label className="font-weight-bold">Select the type of leisure status</label>
                                 <FormControlLabel
                                     value={theTypeOfLeisureEnum.Active}
                                     control={<Radio />}
-                                    label={theTypeOfLeisureEnum.Active} />
+                                    label={"Active"} />
                                 <FormControlLabel
                                     value={theTypeOfLeisureEnum.Passive}
                                     control={<Radio />}
-                                    label={theTypeOfLeisureEnum.Passive} />
+                                    label={"Passive"} />
                             </Field>
                         </div>
                     </Grid>

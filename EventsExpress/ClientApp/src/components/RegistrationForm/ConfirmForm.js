@@ -84,7 +84,7 @@ const ConfirmForm = (props) => {
                         <ListItemText primary="Parent status:" />
                     </ListItem>
                     <ListItem>
-                        <ListItemText secondary={props.formValues.parentstatus} />
+                        <ListItemText secondary={props.formValues.parentstatus ? "No Kids" : "Kids"} />
                     </ListItem>
 
                 <ListItem>
@@ -92,9 +92,9 @@ const ConfirmForm = (props) => {
                 </ListItem>
 
                 <ListItem>
-                    <AddListItemText value={props.formValues.isBeMoreActive} stringValue={reasonsForUsingTheSiteEnum.BeMoreActive} />
-                    <AddListItemText value={props.formValues.isDevelopASkill} stringValue={reasonsForUsingTheSiteEnum.DevelopASkill} />
-                    <AddListItemText value={props.formValues.isMeetPeopleLikeMe} stringValue={reasonsForUsingTheSiteEnum.MeetPeopleLikeMe} />
+                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[0]}></AddReasonsForUsingTheSite>
+                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[1]}></AddReasonsForUsingTheSite>
+                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[2]}></AddReasonsForUsingTheSite>
                 </ListItem>
                 
                 <ListItem>
@@ -102,29 +102,28 @@ const ConfirmForm = (props) => {
                 </ListItem>
 
                 <ListItem>
-                    <AddListItemText value={props.formValues.isAnyDistance} stringValue={eventTypeEnum.AnyDistance} />
-                    <AddListItemText value={props.formValues.isFree} stringValue={eventTypeEnum.Free} />
-                    <AddListItemText value={props.formValues.isNearMe} stringValue={eventTypeEnum.NearMe} />
-                    <AddListItemText value={props.formValues.isOffline} stringValue={eventTypeEnum.Offline} />
-                    <AddListItemText value={props.formValues.isOnline} stringValue={eventTypeEnum.Online} />
-                    <AddListItemText value={props.formValues.isPaid} stringValue={eventTypeEnum.Paid} />
-                    </ListItem>
+                    <AddEventType number={props.formValues.eventType[0]}></AddEventType>
+                    <AddEventType number={props.formValues.eventType[1]}></AddEventType>
+                    <AddEventType number={props.formValues.eventType[2]}></AddEventType>
+                    <AddEventType number={props.formValues.eventType[3]}></AddEventType>
+                    <AddEventType number={props.formValues.eventType[4]}></AddEventType>
+                </ListItem>
 
-                    <ListItem>
-                        <ListItemText primary="Relationship status:" />
-                    </ListItem>
+                <ListItem>
+                    <ListItemText primary="Relationship status:" />
+                </ListItem>
 
-                    <ListItem>
-                        <ListItemText secondary={props.formValues.relationshipstatus} />
-                    </ListItem>
+                <ListItem>
+                    <ListItemText secondary={props.formValues.relationshipstatus ? "In a relationship" : "Single"} />
+                </ListItem>
 
-                    <ListItem>
-                        <ListItemText primary="The type of leisure status:" />
-                    </ListItem>
+                <ListItem>
+                    <ListItemText primary="The type of leisure status:" />
+                </ListItem>
 
-                    <ListItem>
-                        <ListItemText secondary={props.formValues.thetypeofleisure} />
-                    </ListItem>
+                <ListItem>
+                    <ListItemText secondary={props.formValues.thetypeofleisure ? "Passive" : "Active"} />
+                </ListItem>
               </List>
             </Grid>
 
@@ -165,14 +164,66 @@ const mapStateToProps = (state) => {
   };
 };
 
-function AddListItemText(props) {
-    if (props.value) {
-        return <ListItem>
-            <ListItemText secondary={props.stringValue} />
-        </ListItem>
-        
+function AddReasonsForUsingTheSite(props) {
+    const number = props.number;
+
+    const project = () => {
+        switch (number) {
+            case 0:
+                return <ListItem>
+                    <ListItemText secondary={"Develop a skill"} />
+                </ListItem>;
+            case 1:
+                return <ListItem>
+                    <ListItemText secondary={"Meet people like me"} />
+                </ListItem>;
+            case 2:
+                return <ListItem>
+                    <ListItemText secondary={"Be more active"} />
+                </ListItem>;
+            default:
+                return null;
+        }
     }
-    return null
+
+    return (<div>{project()} </div>);
+}
+
+function AddEventType(props) {
+    const number = props.number;
+
+    const project = () => {
+        switch (number) {
+            case 0:
+                return <ListItem>
+                    <ListItemText secondary={"Online"} />
+                </ListItem>;
+            case 1:
+                return <ListItem>
+                    <ListItemText secondary={"Offline"} />
+                </ListItem>;
+            case 2:
+                return <ListItem>
+                    <ListItemText secondary={"Free"} />
+                </ListItem>;
+            case 3:
+                return <ListItem>
+                    <ListItemText secondary={"Paid"} />
+                </ListItem>;
+            case 4:
+                return <ListItem>
+                    <ListItemText secondary={"Near me"} />
+                </ListItem>;
+            case 5:
+                return <ListItem>
+                    <ListItemText secondary={"Any distance"} />
+                </ListItem>;
+            default:
+                return null;
+        }
+    }
+
+    return (<div>{project()} </div>);
 }
 
 export default connect(mapStateToProps)(
