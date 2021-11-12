@@ -1,0 +1,68 @@
+﻿.checkbox-group {
+    margin: 0 10px;
+}
+
+h2 {
+    margin: 5px auto 10px 15px;
+    text-align: left;
+}
+
+.checkbox-group > div {
+    margin: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+} 
+
+.checkbox {
+  margin: 0 2.5vw 0 0.5vw;
+}
+
+.checkbox > label {
+  line-height: 1.3;
+  vertical-align: sub;   
+}
+
+.checkbox > label:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+label > input[type="checkbox"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0 0.25vw 0 0;
+  font: inherit;
+  color: #505050;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid #505050;
+  transform: translateY(0.03em);
+  display: inline-grid;
+  place-content: center;
+}
+
+label > input[type="checkbox"]:hover {
+  cursor: pointer;
+  border-color: rgb(255, 153, 0);
+}
+
+label > input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transform-origin: 50% 50%;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #fff;
+}
+
+label > input[type="checkbox"]:checked {
+  background-color: rgb(255, 153, 0);
+  border-color: rgb(255, 153, 0);
+}
+
+label > input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}

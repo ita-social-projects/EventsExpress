@@ -1,4 +1,5 @@
 ﻿import "./RegistrationForm.css";
+import "./CheckboxDesign.css";
 import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { reduxForm, Field } from "redux-form";
@@ -7,13 +8,13 @@ import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
 import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
 import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../constants/eventTypeEnum';
-import { renderCheckbox, radioButton, MultiCheckbox } from '../helpers/form-helpers';
+import { radioButton, MultiCheckbox } from '../helpers/form-helpers';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 
 const TellUsMoreAbotYourself = (props) => {
     const { handleSubmit, previousPage } = props;
-
+                                                        
     let options1 = [
         { value: reasonsForUsingTheSiteEnum.BeMoreActive, text: "Be more active" },
         { value: reasonsForUsingTheSiteEnum.DevelopASkill, text: "Develop a skill" },
