@@ -8,7 +8,7 @@ const SelectedActivitiesList = ({ data }) => {
         <h5 align="left">Selected activities</h5>
       </Grid>
       <Grid item sm={4} />
-      <Grid container xs={12}>
+      <Grid container spacing={3} xs={12}>
         {data.map((el) => (
           <Grid item lg={4} md={4} xs={6}>
             <b>{el.group}</b>
