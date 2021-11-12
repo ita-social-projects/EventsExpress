@@ -60,7 +60,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void Get_ExistingGroup_ReturnEntity()
         {
-            var res = service.GetCategoriesByGroup(categoryGroupId);
+            var res = service.GetAllCategories(categoryGroupId);
 
             Assert.IsNotEmpty(res);
         }
