@@ -11,6 +11,7 @@ import renderCheckbox from "./render-checkbox";
 import renderTextField from "./render-text-field";
 import renderTextArea from "./render-text-area";
 import radioButton from "./render-radio-button";
+import parseDate from "./parseDate";
 
 export {
   renderSelectField,
@@ -18,6 +19,7 @@ export {
   renderFieldError,
   renderMultiselect,
   renderDatePicker,
+  parseDate,
   LocationMap,
   LocationMapWithMarker,
   LocationMapWithCircle,

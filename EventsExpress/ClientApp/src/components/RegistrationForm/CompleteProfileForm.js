@@ -5,7 +5,9 @@ import {
   renderDatePicker,
   renderTextField,
   renderSelectField,
+  parseDate,
 } from "../helpers/form-helpers";
+
 import moment from "moment";
 import ChangeAvatarWrapper from "../../containers/editProfileContainers/change-avatar";
 
@@ -57,6 +59,7 @@ const CompleteProfileForm = (props) => {
                 minValue={moment(new Date()).subtract(115, "years")}
                 maxValue={moment(new Date()).subtract(14, "years")}
                 component={renderDatePicker}
+                parse={parseDate}
               />
             </Grid>
             <Grid item xs={3}>

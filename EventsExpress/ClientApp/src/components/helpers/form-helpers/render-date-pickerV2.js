@@ -5,6 +5,7 @@ import {
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
+
 export default ({
   input: { onChange, value, ...inputProps },
   meta: { touched, invalid, error },
@@ -19,11 +20,12 @@ export default ({
         <KeyboardDatePicker
           {...inputProps}
           label={label}
-          value={value ? moment(value).format("YYYY-MM-DD") : undefined}
-          autoOK
-          format="YYYY-MM-DD"
+          selected={moment(value).format("L")}
+          value={value ? moment(value).format("L") : undefined}
+          autoOK={true}
+          format="DD-MM-YYYY"
           error={touched && invalid}
-          helperText={"YYYY-MM-DD" ||touched && error}
+          helperText={touched && error}
           onChange={onChange}
           disabled={disabled}
           minDate={minValue ? moment(minValue) : undefined}
