@@ -43,8 +43,7 @@ export default class HeadArticle extends Component {
   async componentDidMount() {
     this.interval = setInterval(() => {
       this.setState({
-        currentImage:
-          imagesPreload[Math.floor(Math.random() * imagesPreload.length)],
+        currentImage: imagesPreload[currentImage++ % imagesPreload.length],
       });
     }, 5000);
   }
