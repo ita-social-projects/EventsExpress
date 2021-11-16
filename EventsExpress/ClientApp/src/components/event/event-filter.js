@@ -6,7 +6,7 @@ import {
   MultiCheckbox,
   renderTextField,
   renderMultiselect,
-  parseDate
+  parseEuDate
 } from "../helpers/form-helpers";
 import filterHelper from "../helpers/filterHelper";
 import MapModal from "./map-modal";
@@ -80,7 +80,7 @@ class EventFilter extends Component {
                     label="From"
                     minValue={new Date()}
                     component={renderDatePicker}
-                    parse={parseDate}
+                    parse={parseEuDate}
                   />
                 </div>
                 <div className="form-group">
@@ -89,7 +89,7 @@ class EventFilter extends Component {
                     label="To"
                     minValue={new Date(values.dateFrom)}
                     component={renderDatePicker}
-                    parse={parseDate}
+                    parse={parseEuDate}
                   />
                 </div>
                 <div className="form-group">

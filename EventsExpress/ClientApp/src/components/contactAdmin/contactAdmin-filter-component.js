@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import Button from "@material-ui/core/Button";
 import { MultiCheckbox, renderDatePicker } from "../helpers/form-helpers";
-import parseDate from "../helpers/form-helpers/parseDate";
+import parseEuDate from "../helpers/form-helpers/parseEuDate";
 import filterHelper from "../helpers/filterHelper";
 import "./contactAdmin-filter.css";
 import issueStatusEnum from "../../constants/issue-status-enum";
@@ -57,7 +57,7 @@ class ContactAdminFilter extends Component {
                     label="From"
                     minValue={new Date(2000, 1, 1)}
                     component={renderDatePicker}
-                    parse={parseDate}
+                    parse={parseEuDate}
                   />
                 </div>
                 <div className="form-group">
@@ -66,7 +66,7 @@ class ContactAdminFilter extends Component {
                     label="To"
                     minValue={new Date(values.dateFrom)}
                     component={renderDatePicker}
-                    parse={parseDate}
+                    parse={parseEuDate}
                   />
                 </div>
                 <div className="form-group">

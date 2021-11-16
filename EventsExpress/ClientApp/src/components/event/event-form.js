@@ -15,7 +15,7 @@ import {
   renderTextField,
   renderTextArea,
   renderMultiselect,
-  parseDate,
+  parseEuDate,
 } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";
 import "./event-form.css";
@@ -155,7 +155,7 @@ class EventForm extends Component {
                 label="From"
                 minValue={moment(new Date())}
                 component={renderDatePicker}
-                parse={parseDate}
+                parse={parseEuDate}
               />
             </span>
             {form_values && form_values.dateFrom && (
@@ -165,7 +165,7 @@ class EventForm extends Component {
                   label="To"
                   minValue={form_values.dateFrom}
                   component={renderDatePicker}
-                  parse={parseDate}
+                  parse={parseEuDate}
                 />
               </span>
             )}

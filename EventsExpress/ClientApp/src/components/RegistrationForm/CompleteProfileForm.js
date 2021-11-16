@@ -5,7 +5,7 @@ import {
   renderDatePicker,
   renderTextField,
   renderSelectField,
-  parseDate,
+  parseEuDate,
 } from "../helpers/form-helpers";
 
 import moment from "moment";
@@ -59,7 +59,7 @@ const CompleteProfileForm = (props) => {
                 minValue={moment(new Date()).subtract(115, "years")}
                 maxValue={moment(new Date()).subtract(14, "years")}
                 component={renderDatePicker}
-                parse={parseDate}
+                parse={parseEuDate}
               />
             </Grid>
             <Grid item xs={3}>

@@ -1,4 +1,4 @@
-const parseDate = (value) => {
+const parseEuDate = (value) => {
   if (!value) {
     return value;
   }
@@ -8,7 +8,7 @@ const parseDate = (value) => {
     return value;
   }
   // keyboard input
-  const onlyNums = value.toString().replace(/[^0-9]+/g, "");
+  const onlyNums = value.toString().replace(/[^D]+/g, "");
 
   const day = onlyNums.slice(0, 2);
   const month = onlyNums.slice(2, 4);
@@ -16,4 +16,4 @@ const parseDate = (value) => {
   return `${year}-${month}-${day}T00:00:00.000Z`;
 };
 
-export default parseDate;
+export default parseEuDate;

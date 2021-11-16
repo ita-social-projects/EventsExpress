@@ -3,7 +3,7 @@ import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 import ErrorMessages from "../../shared/errorMessage";
-import { renderDatePicker, parseDate } from "../../helpers/form-helpers";
+import { renderDatePicker, parseEuDate } from "../../helpers/form-helpers";
 import { fieldIsRequired } from "../../helpers/validators/required-fields-validator";
 
 const validate = (values) => {
@@ -32,7 +32,7 @@ const EditBirthday = (props) => {
           minValue={minValue}
           maxValue={maxValue}
           component={renderDatePicker}
-          parse={parseDate}
+          parse={parseEuDate}
         />
         {props.error && (
           <ErrorMessages error={props.error} className="text-center" />
