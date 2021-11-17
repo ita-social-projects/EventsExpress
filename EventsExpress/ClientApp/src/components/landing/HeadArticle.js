@@ -29,6 +29,7 @@ export default class HeadArticle extends Component {
     super(props);
     this.state = {
       currentImage: image1,
+      currentImageCounter: 0,
       preloadedPictures: [],
     };
     var preloadedData = imagesPreload.map((image) => {
@@ -43,7 +44,8 @@ export default class HeadArticle extends Component {
   async componentDidMount() {
     this.interval = setInterval(() => {
       this.setState({
-        currentImage: imagesPreload[currentImage++ % imagesPreload.length],
+        currentImageCounter: (this.state.currentImageCounter + 1) % imagesPreload.length,
+        currentImage: imagesPreload[this.state.currentImageCounter],
       });
     }, 5000);
   }
