@@ -60,10 +60,23 @@ namespace EventsExpress.Test.ControllerTests
             _service.Setup(item => item.GetAllGroups())
                     .Returns(GetCategoryGroups());
 
-            var expected = (_controller.All() as ObjectResult)
-                    .Value as IEnumerable<CategoryGroupViewModel>;
+            var response = _controller.All();
+            Assert.IsInstanceOf<ObjectResult>(response);
 
-            Assert.AreEqual(expected.Count(), GetCategoryGroups().Count());
+            var data = response as ObjectResult;
+            Assert.IsInstanceOf<IEnumerable<CategoryGroupViewModel>>(data.Value);
+
+            var expected = GetCategoryGroups();
+            var actual = data.Value as IEnumerable<CategoryGroupViewModel>;
+
+            foreach (var item in actual)
+            {
+                Guid id = item.Id;
+                string title = item.Title;
+
+                var expectedItem = expected.First(item => item.Id == id);
+                Assert.AreEqual(expectedItem.Title, title);
+            }
         }
 
         [Test]
@@ -80,10 +93,17 @@ namespace EventsExpress.Test.ControllerTests
             _service.Setup(item => item.GetById(testDto.Id))
                     .Returns(testDto);
 
-            var expected = (_controller.Get(testDto.Id) as ObjectResult)
-                    .Value as CategoryGroupViewModel;
+            var response = _controller.Get(testDto.Id);
+            Assert.IsInstanceOf<ObjectResult>(response);
 
-            Assert.AreEqual(expected.Id, testDto.Id);
+            var data = response as ObjectResult;
+            Assert.IsInstanceOf<CategoryGroupViewModel>(data.Value);
+
+            var expected = testDto;
+            var actual = data.Value as CategoryGroupViewModel;
+
+            Assert.AreEqual(expected.Id, actual.Id);
+            Assert.AreEqual(expected.Title, expected.Title);
         }
 
         [Test]

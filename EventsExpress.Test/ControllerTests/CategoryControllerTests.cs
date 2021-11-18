@@ -71,20 +71,19 @@ namespace EventsExpress.Test.ControllerTests
             var data = response as ObjectResult;
             Assert.IsInstanceOf<IEnumerable<CategoryViewModel>>(data.Value);
 
-            var expected = _mapper.Map<IEnumerable<CategoryViewModel>>(GetCategories());
+            var expected = GetCategories();
             var actual = data.Value as IEnumerable<CategoryViewModel>;
 
-            CollectionAssert.AreEquivalent(
-                expected.Select(i => i.Id).ToList(),
-                actual.Select(i => i.Id).ToList());
+            foreach (var item in actual)
+            {
+                Guid id = item.Id;
+                string name = item.Name;
+                Guid groupId = item.CategoryGroupId;
 
-            CollectionAssert.AreEquivalent(
-                expected.Select(i => i.Name).ToList(),
-                actual.Select(i => i.Name).ToList());
-
-            CollectionAssert.AreEquivalent(
-                expected.Select(i => i.CategoryGroupId).ToList(),
-                actual.Select(i => i.CategoryGroupId).ToList());
+                var expectedItem = expected.First(item => item.Id == id);
+                Assert.AreEqual(expectedItem.Name, name);
+                Assert.AreEqual(expectedItem.CategoryGroupId, groupId);
+            }
         }
 
         [Test]
@@ -108,17 +107,19 @@ namespace EventsExpress.Test.ControllerTests
             var data = response as ObjectResult;
             Assert.IsInstanceOf<IEnumerable<CategoryViewModel>>(data.Value);
 
-            var expected = _mapper.Map<IEnumerable<CategoryViewModel>>(
-                GetCategories().Where(i => i.CategoryGroupId == categoryGroupTestId));
+            var expected = GetCategories().Where(i => i.CategoryGroupId == categoryGroupTestId);
             var actual = data.Value as IEnumerable<CategoryViewModel>;
 
-            CollectionAssert.AreEquivalent(
-                expected.Select(i => i.Id).ToList(),
-                actual.Select(i => i.Id).ToList());
+            foreach (var item in actual)
+            {
+                Guid id = item.Id;
+                string name = item.Name;
+                Guid groupId = item.CategoryGroupId;
 
-            CollectionAssert.AreEquivalent(
-                expected.Select(i => i.Name).ToList(),
-                actual.Select(i => i.Name).ToList());
+                var expectedItem = expected.First(item => item.Id == id);
+                Assert.AreEqual(expectedItem.Name, name);
+                Assert.AreEqual(expectedItem.CategoryGroupId, groupId);
+            }
         }
 
         [Test]
