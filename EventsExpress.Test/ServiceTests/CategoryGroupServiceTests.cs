@@ -1,6 +1,4 @@
 ﻿using System;
-using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using NUnit.Framework;
@@ -39,6 +37,22 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Get_ExistingId_ReturnTrue()
+        {
+            var res = service.Exists(categoryGroupId);
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void Get_NotExistingId_ReturnFalse()
+        {
+            var res = service.Exists(Guid.NewGuid());
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
         public void Get_ExistingName_ReturnTrue()
         {
             var res = service.ExistsByTitle(categoryGroup.Title);
@@ -52,6 +66,13 @@ namespace EventsExpress.Test.ServiceTests
             var res = service.ExistsByTitle("CategoryGroup");
 
             Assert.IsFalse(res);
+        }
+
+        public void GetAll_ReturnNotNullList()
+        {
+            var res = service.GetAllGroups();
+
+            Assert.IsNotNull(res);
         }
     }
 }
