@@ -228,8 +228,8 @@ namespace EventsExpress
                     });
 
                 c.DocumentFilter<ApplyDocumentExtension>();
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
-                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
                 c.AddFluentValidationRules();
