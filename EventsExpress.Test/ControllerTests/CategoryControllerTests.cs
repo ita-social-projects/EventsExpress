@@ -140,9 +140,9 @@ namespace EventsExpress.Test.ControllerTests
 
             _service.Setup(item => item.Create(someViewModel.Name, someViewModel.CategoryGroupId))
                     .Returns(Task.FromResult(new CategoryDto()));
-            var expected = _controller.Create(someViewModel);
+            var expected = _controller.Create(someViewModel).Result;
 
-            Assert.IsInstanceOf<OkObjectResult>(expected);
+            Assert.IsInstanceOf<OkResult>(expected);
         }
     }
 }
