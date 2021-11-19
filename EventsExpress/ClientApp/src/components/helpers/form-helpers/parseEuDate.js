@@ -1,6 +1,5 @@
 import moment from "moment";
 
-
 const parseEuDate = (value) => {
   if (!value) {
     return value;
@@ -10,4 +9,3 @@ const parseEuDate = (value) => {
 };
 
 export default parseEuDate;
-

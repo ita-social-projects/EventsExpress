@@ -21,8 +21,9 @@ export default ({
           {...inputProps}
           label={label}
           selected={moment(value).format("L")}
-          value={value ? moment(value).format("L") : undefined}
+          value={value ? moment(value).format("L") : null}
           autoOK={true}
+          emptyLabel={""}
           format="DD-MM-YYYY"
           error={touched && invalid}
           helperText={touched && error}
