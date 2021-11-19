@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
@@ -11,13 +13,13 @@ namespace EventsExpress.Db.Entities
 
         public ParentStatus ParentStatus { get; set; }
 
-        public UserMoreInfoEventType EventType { get; set; }
+        public IEnumerable<UserMoreInfoEventType> EventTypes { get; set; }
 
         public RelationShipStatus RelationShipStatus { get; set; }
 
         public TheTypeOfLeisure TheTypeOfLeisure { get; set; }
 
-        public UserMoreInfoReasonsForUsingTheSite ReasonsForUsingTheSite { get; set; }
+        public IEnumerable<UserMoreInfoReasonsForUsingTheSite> ReasonsForUsingTheSite { get; set; }
 
         public string AditionalInfoAboutUser { get; set; }
     }

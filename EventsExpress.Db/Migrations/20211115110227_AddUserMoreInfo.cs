@@ -77,13 +77,13 @@ namespace EventsExpress.Db.Migrations
                 name: "IX_UserMoreInfoEventType_UserMoreInfoId",
                 table: "UserMoreInfoEventType",
                 column: "UserMoreInfoId",
-                unique: true);
+                unique: false);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserMoreInfoReasonsForUsingTheSite_UserMoreInfoId",
                 table: "UserMoreInfoReasonsForUsingTheSite",
                 column: "UserMoreInfoId",
-                unique: true);
+                unique: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

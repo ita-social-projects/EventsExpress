@@ -7,14 +7,6 @@ namespace EventsExpress.Core.IServices
 {
     public interface IUserMoreInfoService
     {
-        Task<Guid> Create(UserMoreInfoDTO userMoreInfoDTO);
-
-        Task<Guid> Edit(UserMoreInfoDTO userMoreInfoDTO);
-
-        IEnumerable<UserMoreInfoDTO> GetAll();
-
-        UserMoreInfoDTO GetById(Guid userMoreInfoId);
-
-        Task Delete(Guid id);
+        Task<Guid> CreateAsync(UserMoreInfoDto userMoreInfoDto);
     }
 }

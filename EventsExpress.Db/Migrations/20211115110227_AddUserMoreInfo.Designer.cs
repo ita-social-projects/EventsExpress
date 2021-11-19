@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211101204509_AddUserMoreInfo")]
+    [Migration("20211115110227_AddUserMoreInfo")]
     partial class AddUserMoreInfo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -799,8 +799,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserMoreInfoId")
-                        .IsUnique();
+                    b.HasIndex("UserMoreInfoId");
 
                     b.ToTable("UserMoreInfoEventType");
                 });
@@ -819,8 +818,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserMoreInfoId")
-                        .IsUnique();
+                    b.HasIndex("UserMoreInfoId");
 
                     b.ToTable("UserMoreInfoReasonsForUsingTheSite");
                 });
@@ -1165,8 +1163,8 @@ namespace EventsExpress.Db.Migrations
             modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoEventType", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.UserMoreInfo", "UserMoreInfo")
-                        .WithOne("EventType")
-                        .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfoEventType", "UserMoreInfoId")
+                        .WithMany("EventTypes")
+                        .HasForeignKey("UserMoreInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1174,8 +1172,8 @@ namespace EventsExpress.Db.Migrations
             modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfoReasonsForUsingTheSite", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.UserMoreInfo", "UserMoreInfo")
-                        .WithOne("ReasonsForUsingTheSite")
-                        .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfoReasonsForUsingTheSite", "UserMoreInfoId")
+                        .WithMany("ReasonsForUsingTheSite")
+                        .HasForeignKey("UserMoreInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

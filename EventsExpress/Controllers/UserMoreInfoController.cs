@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
-using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,8 @@ namespace EventsExpress.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserMoreInfoController
+    [AllowAnonymous]
+    public class UserMoreInfoController : ControllerBase
     {
         private readonly IUserMoreInfoService _userMoreInfoService;
         private readonly IMapper _mapper;
@@ -21,17 +22,14 @@ namespace EventsExpress.Controllers
             _mapper = mapper;
         }
 
-       /* Task<Guid> Create(UserMoreInfoDTO userMoreInfoDTO)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Create([FromBody] UserMoreInfoCreateViewModel userMoreInfo)
         {
+            var newuserMoreInfo = _mapper.Map<UserMoreInfoDto>(userMoreInfo);
 
+            await _userMoreInfoService.CreateAsync(newuserMoreInfo);
+
+            return Ok();
         }
-
-        Task<Guid> Edit(UserMoreInfoDTO userMoreInfoDTO);
-
-        IEnumerable<UserMoreInfoDTO> GetAll();
-
-        UserMoreInfoDTO GetById(Guid userMoreInfoId);
-
-        Task Delete(Guid id);*/
     }
 }

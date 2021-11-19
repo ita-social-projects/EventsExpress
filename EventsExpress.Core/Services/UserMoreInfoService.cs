@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using EventsExpress.Core.DTOs;
@@ -10,7 +11,7 @@
     using EventsExpress.Db.EF;
     using EventsExpress.Db.Entities;
 
-    public class UserMoreInfoService : BaseService<UserMoreInfo> // , IUserMoreInfoService
+    public class UserMoreInfoService : BaseService<UserMoreInfo>, IUserMoreInfoService
     {
         public UserMoreInfoService(
             AppDbContext context,
@@ -19,100 +20,25 @@
         {
         }
 
-        /*public IEnumerable<UnitOfMeasuringDto> GetAll()
+        public async Task<Guid> CreateAsync(UserMoreInfoDto userMoreInfoDto)
         {
-            return Mapper.Map<IEnumerable<UnitOfMeasuring>, IEnumerable<UnitOfMeasuringDto>>(
-               Context.UnitOfMeasurings.Include(c => c.Category)
-                                       .Where(item => !item.IsDeleted)
-                                       .OrderBy(unit => unit.Category.CategoryName)
-                                       .ThenBy(unit => unit.UnitName)
-                                       .ThenBy(unit => unit.ShortName));
-        }*/
-
-        public UnitOfMeasuringDto GetById(Guid unitOfMeasuringId)
-        {
-            var unitOfMeasuring = Context.UnitOfMeasurings.Find(unitOfMeasuringId);
-            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
+            if (Context.UserMoreInfo.Any(u => u.UserId == userMoreInfoDto.UserId))
             {
-                throw new EventsExpressException("Not found");
+                throw new EventsExpressException("Email already exists in database");
             }
 
-            return new UnitOfMeasuringDto
+            var userMoreInfo = Mapper.Map<UserMoreInfo>(userMoreInfoDto);
+            var newUserMoreInfo = Insert(userMoreInfo);
+            if (newUserMoreInfo.Id == Guid.Empty)
             {
-                Id = unitOfMeasuring.Id,
-                UnitName = unitOfMeasuring.UnitName,
-                ShortName = unitOfMeasuring.ShortName,
-                IsDeleted = unitOfMeasuring.IsDeleted,
-            };
-        }
-
-        public async Task Delete(Guid id)
-        {
-            var unitOfMeasuring = Context.UnitOfMeasurings.Find(id);
-            if (unitOfMeasuring == null || unitOfMeasuring.IsDeleted)
-            {
-                return;
+                throw new EventsExpressException("Inserting failed");
             }
 
-            unitOfMeasuring.IsDeleted = true;
-
-            await Context.SaveChangesAsync();
-        }
-
-       /* public bool ExistsByItems(string unitName, string shortName, Guid categoryId)
-        {
-            return Context.UnitOfMeasurings
-                  .Include(e => e.Category)
-                  .Any(x => (!x.IsDeleted) && (x.UnitName == unitName)
-                                           && (x.ShortName == shortName)
-                                           && (x.CategoryId == categoryId));
-        }*/
-
-        public async Task<Guid> Create(UserMoreInfoDTO userMoreInfoDTO)
-        {
-            if (userMoreInfoDTO == null)
-            {
-                throw new EventsExpressException("Null object");
-            }
-            else
-            {
-                var result = Insert(Mapper.Map<UserMoreInfoDTO, UserMoreInfo>(userMoreInfoDTO));
-                await Context.SaveChangesAsync();
-                return result.Id;
-            }
-        }
-
-        /*public async Task<Guid> Edit(UserMoreInfoDTO userMoreInfoDTO)
-        {
-            var entity = Context.UserMoreInfos
-                .Include(e => e.Category)
-                .FirstOrDefault(x => x.Id == unitOfMeasuringDTO.Id);
-            if (entity == null || entity.IsDeleted)
-            {
-                throw new EventsExpressException("Object not found");
-            }
-
-            entity.ShortName = unitOfMeasuringDTO.ShortName;
-            entity.UnitName = unitOfMeasuringDTO.UnitName;
-            entity.CategoryId = unitOfMeasuringDTO.Category.Id;
+            var user = await Context.Users.FindAsync(userMoreInfo.UserId);
+            user.UserMoreInfo = newUserMoreInfo;
             await Context.SaveChangesAsync();
 
-            return entity.Id;
-        }*/
-
-        /*IEnumerable<UserMoreInfoDTO> IUserMoreInfoService.GetAll()
-        {
-            throw new NotImplementedException();
+            return newUserMoreInfo.Id;
         }
-
-        UserMoreInfoDTO IUserMoreInfoService.GetById(Guid userMoreInfoId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IUserMoreInfoService.Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }*/
     }
 }
