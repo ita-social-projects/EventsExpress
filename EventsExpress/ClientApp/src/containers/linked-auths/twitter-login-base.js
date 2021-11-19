@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TwitterLogin from 'react-twitter-login';
 import oauth from 'oauth-sign';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { connect } from 'react-redux';
 import '../css/Auth.css';
 
