@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using EventsExpress.Db.Entities;
     using EventsExpress.Db.Enums;
 
+    [ExcludeFromCodeCoverage]
     public class UserMoreInfoDto
     {
         public Guid Id { get; set; }
