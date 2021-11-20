@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class UserMoreInfo : BaseEntity
     {
         public Guid UserId { get; set; }

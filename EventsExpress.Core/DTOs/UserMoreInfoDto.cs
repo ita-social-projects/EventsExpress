@@ -1,4 +1,4 @@
-﻿namespace EventsExpress.ViewModels
+﻿namespace EventsExpress.Core.DTOs
 {
     using System;
     using System.Collections.Generic;
@@ -7,11 +7,11 @@
     using EventsExpress.Db.Enums;
 
     [ExcludeFromCodeCoverage]
-    public class UserMoreInfoViewModel
+    public class UserMoreInfoDto
     {
         public Guid Id { get; set; }
 
-        public User User { get; set; }
+        public Guid UserId { get; set; }
 
         public ParentStatus ParentStatus { get; set; }
 

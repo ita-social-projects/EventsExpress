@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
@@ -10,6 +11,7 @@ namespace EventsExpress.Db.Entities
 
         public Account Account { get; set; }
 
+        [ExcludeFromCodeCoverage]
         public UserMoreInfo UserMoreInfo { get; set; }
 
         public string Email { get; set; }
