@@ -24,7 +24,7 @@
         {
             if (Context.UserMoreInfo.Any(u => u.UserId == userMoreInfoDto.UserId))
             {
-                throw new EventsExpressException("Email already exists in database");
+                throw new EventsExpressException("Additional info already exists about this user");
             }
 
             var userMoreInfo = Mapper.Map<UserMoreInfo>(userMoreInfoDto);
