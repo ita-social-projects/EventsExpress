@@ -24,6 +24,7 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class AccountServiceTests : TestInitializer
     {
+        // temporary comment for checking Sonar Analyzer, may be deleted
         private static Guid existingUserId = Guid.NewGuid();
         private Account existingAccount;
 
