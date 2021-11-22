@@ -8,7 +8,7 @@ import { getFormValues , isPristine} from 'redux-form';
 import { edit_event, publish_event} from '../actions/event/event-add-action';
 import { validateEventForm } from './event-validate-form'
 import { change_event_status } from '../actions/event/event-item-view-action';
-import { setSuccessAllert } from '../actions/alert-action';
+import { setErrorAlert, setSuccessAllert } from '../actions/alert-action';
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import './css/Draft.css';
@@ -32,6 +32,10 @@ class EventDraftWrapper extends Component {
         await this.props.delete(this.props.event.id, reason);
         this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
+    }
+
+    onError = error => {
+        this.props.errorAlert(error);
     }
 
     render() {
@@ -62,6 +66,7 @@ class EventDraftWrapper extends Component {
                     user_name={this.props.user_name}
                     all_categories={this.props.all_categories}
                     onSubmit={this.onPublish}
+                    onError={this.onError}
                     initialValues={this.props.event}
                     form_values={this.props.form_values}
                     haveReccurentCheckBox={true}
@@ -116,6 +121,7 @@ const mapDispatchToProps = (dispatch) => {
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
+        errorAlert: message => dispatch(setErrorAlert(message))
     }
 };
 

@@ -30,11 +30,11 @@ export function edit_event(data) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.editEvent(data);
+        dispatch(getRequestDec());
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(getEvent(data));
-        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }

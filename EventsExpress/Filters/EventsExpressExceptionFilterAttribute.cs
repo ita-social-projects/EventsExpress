@@ -19,6 +19,7 @@ namespace EventsExpress.Filters
                         { string.Empty, new[] { eventsExpressException.Message } },
                     },
                 };
+
                 if (eventsExpressException.ValidationErrors?.Count > 0)
                 {
                     foreach (var x in eventsExpressException.ValidationErrors)
@@ -33,10 +34,13 @@ namespace EventsExpress.Filters
             }
             else
             {
-                string message = "Unhandled exception occurred. Please try again. " +
-                    "If this error persists - contact system administrator.";
-                context.ModelState.AddModelError(string.Empty, message);
-                var result = new ObjectResult(context.ModelState) { StatusCode = 500 };
+                string message = "Unhandled exception occurred. Please try again. "
+                                 + "If this error persists - contact system administrator.";
+                var errors = new Dictionary<string, Array>
+                {
+                    { "_error", new[] { message } },
+                };
+                var result = new ObjectResult(new { Errors = errors }) { StatusCode = 500 };
                 context.Result = result;
                 context.ExceptionHandled = true;
             }
