@@ -1,24 +1,18 @@
 import 'react-widgets/dist/css/react-widgets.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export const buildValidationState = async (responseData) => {
-    let result = {};
-    let jsonRes = await responseData.json();
+export const buildValidationState = async responseData => (await responseData.json()).errors;
 
-    for (const [key, value] of Object.entries(jsonRes.errors)) {
-        result = { ...result, [key]: value };
+export const getErrorMessage = async responseData => {
+    const entries = Object.entries(await buildValidationState(responseData));
+    if (entries.length === 0) {
+        return 'Something went wrong.';
     }
-    return result;
-};
 
-export const getErrorMessage = async (responseData) => {
-    let jsonRes = await responseData.json();
-
-    for (const [key, value] of Object.entries(jsonRes.errors)) {
-        if (key === '0') {
-            return `Error : ${value['errorMessage']}`;
-        }
-        return `Error for ${key}: ${value['errorMessage']}`;
+    const [key, value] = entries[0];
+    if (key === '_error') {
+        return `Error : ${value[0]}`;
     }
-    return 'Something went wrong.';
+
+    return `Error for ${key}: ${value[0]}`;
 };

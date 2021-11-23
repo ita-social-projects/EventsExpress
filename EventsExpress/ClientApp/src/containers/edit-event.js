@@ -1,21 +1,28 @@
 ﻿import React, { Component } from 'react';
 import EventForm from '../components/event/event-form';
-import { withRouter } from "react-router";
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { getFormValues } from 'redux-form';
+import { getFormValues, SubmissionError } from 'redux-form';
 import { edit_event } from '../actions/event/event-add-action';
 import { setSuccessAllert } from '../actions/alert-action';
-import { validate } from './event-edit-validate-form '
-import { validateEventForm } from './event-validate-form'
-import Button from "@material-ui/core/Button";
+import { validate } from './event-edit-validate-form ';
+import { validateEventForm } from './event-validate-form';
+import Button from '@material-ui/core/Button';
+import { buildValidationState } from '../components/helpers/action-helpers';
 
 class EditEventWrapper extends Component {
 
     onSubmit = async (values) => {
-        await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id });
-        this.props.alert('Your event has been successfully saved!');    
+        await this.props.edit_event({
+            ...validateEventForm(values),
+            user_id: this.props.user_id,
+            id: this.props.event.id
+        }, async response => {
+            throw new SubmissionError(await buildValidationState(response));
+        });
+        this.props.alert('Your event has been successfully saved!');
         this.props.history.goBack();
-    }
+    };
 
     render() {
         return <>
@@ -48,7 +55,7 @@ class EditEventWrapper extends Component {
                     </div>
                 </EventForm>
             </div>
-        </>
+        </>;
     }
 }
 
@@ -62,13 +69,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        edit_event: (data) => dispatch(edit_event(data)),
+        edit_event: (data, onError, onSuccess) => dispatch(edit_event(data), onError, onSuccess),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-    }
+    };
 };
 
 export default withRouter(connect(
-    mapStateToProps, 
+    mapStateToProps,
     mapDispatchToProps
 )(EditEventWrapper));
 
