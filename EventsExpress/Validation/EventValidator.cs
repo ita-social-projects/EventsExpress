@@ -15,7 +15,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.DateFrom).GreaterThan(DateTime.Today).WithMessage("Date from must be older than the current date!");
             RuleFor(x => x.DateTo).NotEmpty().WithMessage("Field is required!");
             RuleFor(x => x.DateTo).GreaterThan(x => x.DateFrom).WithMessage("Date to must be older than date from!");
-            RuleFor(x => x.EventLocation).NotEmpty().OverridePropertyName("location.type").WithMessage("Field is required!");
+            RuleFor(x => x.EventLocation).NotEmpty().OverridePropertyName("location").WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Incorrect quantity of participants!");
             RuleFor(x => x.Categories).NotEmpty().WithMessage("Sellect at least 1 category");
             When(x => x.EventSchedule != null, () =>
