@@ -6,7 +6,6 @@
     using EventsExpress.Core.Services;
     using EventsExpress.Db.Entities;
     using EventsExpress.Db.Enums;
-    using Microsoft.EntityFrameworkCore;
     using Moq;
     using NUnit.Framework;
 

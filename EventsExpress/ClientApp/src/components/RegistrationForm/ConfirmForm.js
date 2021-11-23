@@ -3,9 +3,6 @@ import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 
-import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
-import eventTypeEnum from '../../constants/eventTypeEnum';
-
 import moment from "moment";
 
 

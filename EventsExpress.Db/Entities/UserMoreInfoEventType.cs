@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using EventsExpress.Db.Enums;
 
+    [ExcludeFromCodeCoverage]
     public class UserMoreInfoEventType : BaseEntity
     {
         public Guid UserMoreInfoId { get; set; }

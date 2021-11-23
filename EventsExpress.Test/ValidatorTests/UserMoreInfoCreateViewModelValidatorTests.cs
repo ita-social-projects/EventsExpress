@@ -1,7 +1,6 @@
 ﻿namespace EventsExpress.Test.ValidatorTests
 {
     using System;
-    using EventsExpress.Db.Entities;
     using EventsExpress.Validation;
     using EventsExpress.ViewModels;
     using FluentValidation;
