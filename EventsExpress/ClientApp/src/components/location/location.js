@@ -54,7 +54,6 @@ export default class Location extends Component {
                 name="onlineMeeting"
                 label="Url"
                 id="url"
-                type="url"
                 onChange={this.onUrlInputChange}
               />
             </div>
