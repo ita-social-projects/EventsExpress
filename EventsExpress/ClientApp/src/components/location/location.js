@@ -55,6 +55,12 @@ export default class Location extends Component {
                 label="Url"
                 id="url"
                 onChange={this.onUrlInputChange}
+                value={
+                  this.props.input.value != "" &&
+                  this.props.input.value.type == enumLocationType.online
+                    ? this.props.input.value.onlineMeeting
+                    : ""
+                }
               />
             </div>
             <br />

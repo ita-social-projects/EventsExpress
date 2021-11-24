@@ -145,7 +145,7 @@ namespace EventsExpress.Core.Services
                 },
             };
 
-            // ev.EventLocation = new EventLocation();
+            ev.EventLocation = new EventLocation();
             var result = Insert(ev);
             Context.SaveChanges();
 
