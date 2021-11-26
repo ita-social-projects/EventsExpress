@@ -12,6 +12,6 @@ namespace EventsExpress.Core.DTOs
 
         public string OnlineMeeting { get; set; }
 
-        public LocationType Type { get; set; }
+        public LocationType? Type { get; set; }
     }
 }

@@ -17,6 +17,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<ISecurityContext> mockSecurityContextService;
         private Mock<IPhotoService> mockPhotoservice;
         private Mock<IValidator<IFormFile>> mockValidator;
+        private Mock<IValidator<EventViewModel>> mockEventValidator;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
         private Guid _eventId = Guid.NewGuid();
@@ -51,7 +53,8 @@ namespace EventsExpress.Test.ControllerTests
             mockPhotoservice = new Mock<IPhotoService>();
             service = new Mock<IEventService>();
             mockValidator = new Mock<IValidator<IFormFile>>();
-            eventController = new EventController(service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
+            mockEventValidator = new Mock<IValidator<EventViewModel>>();
+            eventController = new EventController(mockEventValidator.Object, service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
             eventController.ControllerContext = new ControllerContext();
             eventController.ControllerContext.HttpContext = new DefaultHttpContext();
 

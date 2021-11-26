@@ -100,12 +100,27 @@ namespace EventsExpress.Mapping
 
         private static LocationDto MapLocation(EventEditViewModel e)
         {
-            LocationDto locationDto = new LocationDto()
+            LocationDto locationDto = null;
+
+            if (e.Location != null)
             {
-                Type = e.Location.Type,
-            };
-            locationDto.OnlineMeeting = e.Location.Type == LocationType.Online ? e.Location.OnlineMeeting : null;
-            locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullEdit(e) : null;
+                locationDto = new LocationDto();
+                if (e.Location.Type != null)
+                {
+                    locationDto.Type = e.Location.Type;
+                }
+
+                if (e.Location.OnlineMeeting != null && e.Location.Type == LocationType.Online)
+                {
+                    locationDto.OnlineMeeting = e.Location.OnlineMeeting;
+                }
+
+                if (e.Location.Type == LocationType.Map)
+                {
+                    locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullEdit(e) : null;
+                }
+            }
+
             return locationDto;
         }
 
@@ -113,7 +128,7 @@ namespace EventsExpress.Mapping
         {
             LocationDto locationDto = new LocationDto()
             {
-                Type = e.Location.Type,
+                Type = e.Location?.Type,
             };
             locationDto.OnlineMeeting = e.Location.Longitude == null && e.Location.Latitude == null ? e.Location.OnlineMeeting : null;
             locationDto.Point = e.Location.OnlineMeeting == null ? PointOrNullCreate(e) : null;

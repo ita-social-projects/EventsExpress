@@ -287,38 +287,17 @@ namespace EventsExpress.Core.Services
                    .ThenInclude(c => c.Category)
                .FirstOrDefault(x => x.Id == eventId);
 
-            if (ev == null)
-            {
-                throw new EventsExpressException("Not found");
-            }
-
-            Dictionary<string, string> exept = new Dictionary<string, string>();
-            var result = _validator.Validate(ev);
-
-            if (result.IsValid)
-            {
-                ev.StatusHistory.Add(
+            ev.StatusHistory.Add(
                     new EventStatusHistory
                     {
                         EventStatus = EventStatus.Active,
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-                await Context.SaveChangesAsync();
-                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-                await _mediator.Publish(new EventCreatedMessage(dtos));
-                return ev.Id;
-            }
-            else
-            {
-                var p = result.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
+            await Context.SaveChangesAsync();
+            EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+            await _mediator.Publish(new EventCreatedMessage(dtos));
+            return ev.Id;
         }
 
         public async Task<Guid> EditNextEvent(EventDto eventDTO)

@@ -7,10 +7,12 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,13 +29,15 @@ namespace EventsExpress.Controllers
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
+        private readonly IValidator<EventViewModel> _validator;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
+        public EventController(IValidator<EventViewModel> validator, IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
         {
             _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
+            _validator = validator;
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
@@ -121,6 +125,27 @@ namespace EventsExpress.Controllers
         [UserAccessTypeFilterAttribute]
         public async Task<IActionResult> Publish(Guid eventId)
         {
+            EventDto eventDto = _eventService.EventById(eventId);
+            if (eventDto == null)
+            {
+                throw new EventsExpressException("Event not found!");
+            }
+
+            EventViewModel ev = _mapper.Map<EventViewModel>(eventDto);
+
+            var validationResult = _validator.Validate(ev);
+            if (!validationResult.IsValid)
+            {
+                Dictionary<string, string> exept = new Dictionary<string, string>();
+                var p = validationResult.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
+                foreach (var x in p)
+                {
+                    exept.Add(x.Key, x.Value);
+                }
+
+                throw new EventsExpressException("validation failed", exept);
+            }
+
             var result = await _eventService.Publish(eventId);
 
             return Ok(new { id = result });
