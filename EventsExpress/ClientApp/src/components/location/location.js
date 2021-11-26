@@ -1,18 +1,13 @@
 import React, { Component } from "react";
-import { Field, change } from "redux-form";
+import { Field } from "redux-form";
 import "react-widgets/dist/css/react-widgets.css";
-import {
-  LocationMapWithMarker,
-  radioButton,
-  renderTextField,
-} from "../helpers/form-helpers";
+import { LocationMapWithMarker } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import { renderFieldError } from "../helpers/form-helpers";
 import FormControl from "@material-ui/core/FormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import { FieldFeedback, FieldFeedbacks } from "react-form-with-constraints";
 import TextField from "@material-ui/core/TextField";
 export default class Location extends Component {
   onChangeLocationType = (event) => {
@@ -22,47 +17,37 @@ export default class Location extends Component {
     } else if (type == enumLocationType.online) {
       this.props.input.onChange({ type, onlineMeeting: null });
     }
-    //console.log(this.props);
   };
+
   onUrlInputChange = (event) => {
     this.props.input.onChange({
       type: enumLocationType.online,
       onlineMeeting: event.target.value == "" ? null : event.target.value,
     });
   };
+
   returnLocationRender = () => {
-    if (this.props.input.value != null) {
-      if (
-        this.props.input.value != "" &&
-        this.props.input.value.type == enumLocationType.map
-      ) {
-        return (
-          <div className="mt-2">
-            <Field name="location" component={LocationMapWithMarker} />
-          </div>
-        );
-      } else if (
-        this.props.input.value != "" &&
-        this.props.input.value.type == enumLocationType.online
-      ) {
+    const { value } = this.props.input;
+    if (value != null) {
+      if (value != "" && value.type == enumLocationType.map) {
+        return <Field name="location" component={LocationMapWithMarker} />;
+      } else if (value != "" && value.type == enumLocationType.online) {
         return (
           <>
-            <div className="mt-2">
-              <label htmlFor="url">Enter an https:// URL:</label>
-              <br />
-              <TextField
-                name="onlineMeeting"
-                label="Url"
-                id="url"
-                onChange={this.onUrlInputChange}
-                value={
-                  this.props.input.value != "" &&
-                  this.props.input.value.type == enumLocationType.online
-                    ? this.props.input.value.onlineMeeting
-                    : ""
-                }
-              />
-            </div>
+            <label htmlFor="url">Enter an https:// URL:</label>
+            <br />
+            <TextField
+              name="onlineMeeting"
+              label="Url"
+              id="url"
+              fullWidth
+              onChange={this.onUrlInputChange}
+              value={
+                value != "" && value.type == enumLocationType.online
+                  ? value.onlineMeeting
+                  : ""
+              }
+            />
             <br />
           </>
         );
@@ -71,7 +56,7 @@ export default class Location extends Component {
   };
 
   render() {
-    //console.log("input from props", this.props.input);
+    const { value } = this.props.input;
     let renderedLocation = null;
     renderedLocation = this.returnLocationRender();
     return (
@@ -82,23 +67,17 @@ export default class Location extends Component {
               value={String(0)}
               control={<Radio />}
               label="Map"
-              checked={
-                this.props.input.value != "" &&
-                this.props.input.value.type == enumLocationType.map
-              }
+              checked={value != "" && value.type == enumLocationType.map}
             />
             <FormControlLabel
               value={String(1)}
               control={<Radio />}
               label="Online"
-              checked={
-                this.props.input.value != "" &&
-                this.props.input.value.type == enumLocationType.online
-              }
+              checked={value != "" && value.type == enumLocationType.online}
             />
           </RadioGroup>
         </FormControl>
-        {renderedLocation}
+        <div className="mt-2">{renderedLocation}</div>
         {renderFieldError({
           touched: this.props.meta.touched,
           error: this.props.meta.error,
