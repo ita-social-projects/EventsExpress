@@ -10,7 +10,7 @@ namespace EventsExpress.Core.DTOs
 
         public Point Point { get; set; }
 
-        public Uri OnlineMeeting { get; set; }
+        public string OnlineMeeting { get; set; }
 
         public LocationType Type { get; set; }
     }

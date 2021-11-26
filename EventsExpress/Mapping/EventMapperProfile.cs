@@ -21,9 +21,7 @@ namespace EventsExpress.Mapping
         public EventMapperProfile()
         {
             CreateMap<Event, EventDto>()
-               .ForMember(dest => dest.Point, opts => opts.MapFrom(src => src.EventLocation.Point))
-               .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.EventLocation.Type))
-               .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => src.EventLocation.OnlineMeeting))
+               .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.EventLocation))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
                     dest => dest.Categories,
@@ -83,9 +81,7 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
-                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullEdit(src)))
-                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullEdit(src)))
-                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
+                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Photo, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
@@ -93,9 +89,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
                 .ForMember(dest => dest.Owners, opts => opts.Ignore())
                 .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
-                .ForMember(dest => dest.Point, opts => opts.MapFrom(src => PointOrNullCreate(src)))
-                .ForMember(dest => dest.OnlineMeeting, opts => opts.MapFrom(src => OnlineMeetingOrNullCreate(src)))
-                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Location.Type))
+                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
@@ -104,47 +98,57 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
         }
 
+        private static LocationDto MapLocation(EventEditViewModel e)
+        {
+            LocationDto locationDto = new LocationDto()
+            {
+                Type = e.Location.Type,
+            };
+            locationDto.OnlineMeeting = e.Location.Type == LocationType.Online ? e.Location.OnlineMeeting : null;
+            locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullEdit(e) : null;
+            return locationDto;
+        }
+
+        private static LocationDto MapLocation(EventCreateViewModel e)
+        {
+            LocationDto locationDto = new LocationDto()
+            {
+                Type = e.Location.Type,
+            };
+            locationDto.OnlineMeeting = e.Location.Longitude == null && e.Location.Latitude == null ? e.Location.OnlineMeeting : null;
+            locationDto.Point = e.Location.OnlineMeeting == null ? PointOrNullCreate(e) : null;
+            return locationDto;
+        }
+
         private static LocationViewModel MapLocation(EventDto eventDto)
         {
-            if (eventDto.OnlineMeeting == null && eventDto.Point == null)
+            if (eventDto.Location == null)
             {
                 return null;
             }
 
-            return eventDto.Type == LocationType.Map ?
+            return eventDto.Location.Type == LocationType.Map ?
               new LocationViewModel
               {
-                  Latitude = eventDto.Point.X,
-                  Longitude = eventDto.Point.Y,
+                  Latitude = eventDto.Location.Point.X,
+                  Longitude = eventDto.Location.Point.Y,
                   OnlineMeeting = null,
-                  Type = eventDto.Type,
+                  Type = eventDto.Location.Type,
               }
                       :
                     new LocationViewModel
                     {
                         Latitude = null,
                         Longitude = null,
-                        OnlineMeeting = eventDto.OnlineMeeting.ToString(),
-                        Type = eventDto.Type,
+                        OnlineMeeting = eventDto.Location.OnlineMeeting,
+                        Type = eventDto.Location.Type,
                     };
-        }
-
-        private static Uri OnlineMeetingOrNullEdit(EventEditViewModel eventEditViewModel)
-        {
-            return eventEditViewModel.Location?.Type == LocationType.Online ?
-                 new Uri(eventEditViewModel.Location.OnlineMeeting) : null;
         }
 
         private static Point PointOrNullEdit(EventEditViewModel editViewModel)
         {
             return editViewModel.Location?.Type == LocationType.Map ?
                  new Point(editViewModel.Location.Latitude.Value, editViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
-        }
-
-        private static Uri OnlineMeetingOrNullCreate(EventCreateViewModel eventCreateViewModel)
-        {
-            return eventCreateViewModel.Location.Type == LocationType.Online ?
-                 new Uri(eventCreateViewModel.Location.OnlineMeeting) : null;
         }
 
         private static Point PointOrNullCreate(EventCreateViewModel createViewModel)

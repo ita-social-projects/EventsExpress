@@ -145,7 +145,6 @@ namespace EventsExpress.Core.Services
                 },
             };
 
-            ev.EventLocation = new EventLocation();
             var result = Insert(ev);
             Context.SaveChanges();
 
@@ -231,7 +230,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventSchedule)
                 .FirstOrDefault(x => x.Id == e.Id);
 
-            if (e.OnlineMeeting != null || e.Point != null)
+            if (e.Location != null)
             {
                 var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
                 var locationId = await _locationService.AddLocationToEvent(locationDTO);

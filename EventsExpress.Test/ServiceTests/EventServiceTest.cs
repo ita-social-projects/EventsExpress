@@ -54,21 +54,21 @@ namespace EventsExpress.Test.ServiceTests
 
         private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
         {
-            if (eventDto.Type == LocationType.Map)
+            if (eventDto.Location.Type == LocationType.Map)
             {
                 return new LocationDto
                 {
                     Id = Guid.NewGuid(),
-                    Point = eventDto.Point,
+                    Point = eventDto.Location.Point,
                     Type = LocationType.Map,
                 };
             }
-            else if (eventDto.Type == LocationType.Online)
+            else if (eventDto.Location.Type == LocationType.Online)
             {
                 return new LocationDto
                 {
                     Id = Guid.NewGuid(),
-                    OnlineMeeting = eventDto.OnlineMeeting,
+                    OnlineMeeting = eventDto.Location.OnlineMeeting,
                     Type = LocationType.Online,
                 };
             }
@@ -92,7 +92,7 @@ namespace EventsExpress.Test.ServiceTests
                 return new EventLocation
                 {
                     Id = Guid.NewGuid(),
-                    OnlineMeeting = locationDto.OnlineMeeting,
+                    OnlineMeeting = new Uri(string.Empty),
                     Type = LocationType.Online,
                 };
             }
@@ -133,9 +133,12 @@ namespace EventsExpress.Test.ServiceTests
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
-                Point = eventDto.Point,
                 MaxParticipants = eventDto.MaxParticipants,
-                Type = eventDto.Type,
+                Location = new LocationDto()
+                {
+                    Point = eventDto.Location.Point,
+                    Type = eventDto.Location.Type,
+                },
             };
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using FluentValidation;
 
 namespace EventsExpress.Validation
@@ -22,6 +23,26 @@ namespace EventsExpress.Validation
             {
                 RuleFor(x => x.EventSchedule.Frequency).GreaterThan(0).OverridePropertyName("frequency").WithMessage("Incorrect frequency!");
             });
+            When(x => x.EventLocation != null && x.EventLocation.Type == LocationType.Online && x.EventLocation.OnlineMeeting != null, () =>
+            {
+                RuleFor(x => x.EventLocation.OnlineMeeting.ToString()).Must(LinkMustBeAUri).OverridePropertyName("location")
+               .WithMessage("Link '{PropertyValue}' must be a valid URI. eg: http://www.SomeWebSite.com.au");
+            });
+            When(x => x.EventLocation != null && x.EventLocation.Type == LocationType.Online && x.EventLocation.OnlineMeeting == null, () =>
+            {
+                RuleFor(x => x.EventLocation.OnlineMeeting).NotEmpty().OverridePropertyName("location").WithMessage("Link is must not be empty");
+            });
+        }
+
+        private bool LinkMustBeAUri(string link)
+        {
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
+            return Uri.TryCreate(link, UriKind.Absolute, out Uri outUri)
+                   && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
         }
     }
 }
