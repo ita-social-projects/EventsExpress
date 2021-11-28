@@ -23,5 +23,7 @@ namespace EventsExpress.Core.IServices
         bool ExistsByName(string categoryName);
 
         bool ExistsAll(IEnumerable<Guid> ids);
+
+        bool IsDuplicate(CategoryDto category);
     }
 }

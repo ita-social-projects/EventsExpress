@@ -58,6 +58,24 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Get_DuplicateCategory_ReturnTrue()
+        {
+            var test = new CategoryDto { Id = category.Id, CategoryGroupId = category.CategoryGroupId };
+            var res = service.IsDuplicate(test);
+
+            Assert.IsTrue(res);
+        }
+
+        [Test]
+        public void Get_NonDuplicateCategory_ReturnFalse()
+        {
+            var test = new CategoryDto { Id = Guid.NewGuid(), CategoryGroupId = category.CategoryGroupId };
+            var res = service.IsDuplicate(test);
+
+            Assert.IsFalse(res);
+        }
+
+        [Test]
         public void Get_ExistingGroup_ReturnEntity()
         {
             var res = service.GetAllCategories(categoryGroupId);

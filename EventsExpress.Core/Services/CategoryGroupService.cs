@@ -22,12 +22,6 @@ namespace EventsExpress.Core.Services
         public bool Exists(Guid id) =>
             Context.CategoryGroups.Any(x => x.Id == id);
 
-        public bool ExistsAll(IEnumerable<Guid> ids) =>
-            Context.CategoryGroups.Count(x => ids.Contains(x.Id)) == ids.Count();
-
-        public bool ExistsByTitle(string title) =>
-            Context.CategoryGroups.Any(x => x.Title == title);
-
         public IEnumerable<CategoryGroupDto> GetAllGroups()
         {
             var groups = Context.CategoryGroups
@@ -46,7 +40,8 @@ namespace EventsExpress.Core.Services
         {
             var res = Context.CategoryGroups.Find(id);
 
-            return new CategoryGroupDto { Id = res.Id, Title = res.Title };
+            // return new CategoryGroupDto { Id = res.Id, Title = res.Title };
+            return Mapper.Map<CategoryGroup, CategoryGroupDto>(res);
         }
     }
 }

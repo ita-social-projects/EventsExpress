@@ -1,4 +1,6 @@
-﻿using EventsExpress.Core.IServices;
+﻿using AutoMapper;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Core.IServices;
 using EventsExpress.ViewModels;
 using FluentValidation;
 
@@ -8,13 +10,16 @@ namespace EventsExpress.Validation
     {
         private readonly ICategoryService _categoryService;
         private readonly ICategoryGroupService _categoryGroupService;
+        private readonly IMapper _mapper;
 
         public CategoryEditViewModelValidator(
             ICategoryService categoryService,
-            ICategoryGroupService categoryGroupService)
+            ICategoryGroupService categoryGroupService,
+            IMapper mapper)
         {
             _categoryService = categoryService;
             _categoryGroupService = categoryGroupService;
+            _mapper = mapper;
 
             RuleFor(x => x.Name)
                 .NotNull()
@@ -24,8 +29,8 @@ namespace EventsExpress.Validation
                 .Length(2, 20)
                 .WithMessage("Name length exceeded the recommended length of 20 characters!");
 
-            RuleFor(x => x.Name)
-                .Must(name => !_categoryService.ExistsByName(name))
+            RuleFor(x => x)
+                .Must(x => !_categoryService.ExistsByName(x.Name) || !_categoryService.IsDuplicate(_mapper.Map<CategoryDto>(x)))
                 .WithMessage("The same category already exists!");
 
             RuleFor(x => x.Id)

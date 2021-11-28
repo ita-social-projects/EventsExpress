@@ -9,7 +9,8 @@ namespace EventsExpress.Mapping
     {
         public CategoryGroupMapperProfile()
         {
-            CreateMap<CategoryGroup, CategoryGroupDto>()
+            CreateMap<CategoryGroupDto, CategoryGroup>()
+                .ForMember(dest => dest.Categories, opts => opts.Ignore())
                 .ReverseMap();
             CreateMap<CategoryGroupDto, CategoryGroupViewModel>()
                 .ReverseMap();

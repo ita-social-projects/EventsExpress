@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import add_category, { setCategoryEdited }from '../../actions/category/category-add-action';
+import add_category, { setCategoryEdited } from '../../actions/category/category-add-action';
 import CategoryEdit from "../../components/category/category-edit";
 
 
@@ -20,11 +20,12 @@ class CategoryAddWrapper extends React.Component {
                         </button>
                     </div>
                 </td>
-                <td width="55%"></td>
+                <td width="80%"></td>
             </tr>
             : <tr>
                 <CategoryEdit
                     item={this.props.item}
+                    groups={this.props.groups}
                     onSubmit={this.submit}
                     cancel={this.props.edit_cancel}
                 />
@@ -37,7 +38,7 @@ class CategoryAddWrapper extends React.Component {
 const mapStateToProps = state => {
     return {
         editedCategory: state.categories.editedCategory,
-        counter: state.requestCount.counter
+        counter: state.requestCount.counter,
     }
 };
 

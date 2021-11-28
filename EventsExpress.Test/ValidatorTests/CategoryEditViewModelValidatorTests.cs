@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using EventsExpress.Core.IServices;
 using EventsExpress.Test.ValidatorTests.TestClasses.Guid;
 using EventsExpress.Validation;
@@ -15,6 +16,7 @@ namespace EventsExpress.Test.ValidatorTests
         private CategoryEditViewModel _viewModel;
         private Mock<ICategoryService> _categoryService;
         private Mock<ICategoryGroupService> _categoryGroupService;
+        private Mock<IMapper> _mapper;
         private CategoryEditViewModelValidator _validator;
 
         [SetUp]
@@ -22,7 +24,8 @@ namespace EventsExpress.Test.ValidatorTests
         {
             _categoryService = new Mock<ICategoryService>();
             _categoryGroupService = new Mock<ICategoryGroupService>();
-            _validator = new CategoryEditViewModelValidator(_categoryService.Object, _categoryGroupService.Object);
+            _mapper = new Mock<IMapper>();
+            _validator = new CategoryEditViewModelValidator(_categoryService.Object, _categoryGroupService.Object, _mapper.Object);
 
             _viewModel = new CategoryEditViewModel
             {

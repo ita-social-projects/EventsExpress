@@ -87,5 +87,8 @@ namespace EventsExpress.Core.Services
 
         public bool ExistsAll(IEnumerable<Guid> ids) =>
             Context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
+
+        public bool IsDuplicate(CategoryDto category) =>
+            Context.Categories.Any(x => x.Id == category.Id && x.CategoryGroupId == category.CategoryGroupId);
     }
 }

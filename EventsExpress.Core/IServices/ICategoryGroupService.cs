@@ -11,9 +11,5 @@ namespace EventsExpress.Core.IServices
         CategoryGroupDto GetById(Guid id);
 
         bool Exists(Guid id);
-
-        bool ExistsByTitle(string title);
-
-        bool ExistsAll(IEnumerable<Guid> ids);
     }
 }

@@ -11,12 +11,14 @@ export default class CategoryService {
     getUserCategories = () => baseService.getResource('Users/GetCategories');
 
     setCategory = data => baseService.setResource('category/create', {
-        name: data.name
+        name: data.name,
+        categoryGroupId: data.categoryGroupId
     });
 
     editCategory = data => baseService.setResource('category/edit', {
         id: data.id,
-        name: data.name
+        name: data.name,
+        categoryGroupId: data.categoryGroupId
     });
 
     setCategoryDelete = data => baseService.setResource(`category/delete/${data}`);

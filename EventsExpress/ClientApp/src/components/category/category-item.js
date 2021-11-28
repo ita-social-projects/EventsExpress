@@ -11,6 +11,10 @@ export default class CategoryItem extends Component {
                 <i className="fas fa-hashtag mr-1" />
                 {item.name}
             </td>
+            <td>
+                <i className="justify-content-center" />
+                {item?.group?.title}
+            </td>
             <td className="d-flex align-items-center justify-content-center">
                 {item.countOfUser}
             </td>
