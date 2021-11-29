@@ -62,6 +62,10 @@ class EventForm extends Component {
     const { form_values, all_categories, user_name } = this.props;
     const { checked } = this.state;
 
+    if (this.props.error) {
+      this.props.onError(this.props.error);
+    }
+
     return (
       <form
         onSubmit={this.props.handleSubmit(this.props.onSubmit)}
