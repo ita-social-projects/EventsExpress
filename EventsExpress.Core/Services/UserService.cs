@@ -65,7 +65,7 @@ namespace EventsExpress.Core.Services
             {
                 AccountStatus.Activated => await Entities.Where(user => !user.Account.IsBlocked).CountAsync(),
                 AccountStatus.Blocked => await Entities.Where(user => user.Account.IsBlocked).CountAsync(),
-                _ => await Entities.CountAsync()
+                _ => await Entities.CountAsync(),
             };
 
             return count;
