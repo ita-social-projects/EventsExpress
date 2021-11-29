@@ -25,6 +25,7 @@ using FluentValidation.AspNetCore;
 using HotChocolate;
 using HotChocolate.Data;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -232,7 +233,6 @@ namespace EventsExpress
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
-                c.AddFluentValidationRules();
             });
 
             services
@@ -240,6 +240,7 @@ namespace EventsExpress
                 .AddAuthorization()
                 .AddQueryType<EventQuery>();
 
+            services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
