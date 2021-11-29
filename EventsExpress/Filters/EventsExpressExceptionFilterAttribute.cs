@@ -16,7 +16,7 @@ namespace EventsExpress.Filters
                 {
                     Errors = new Dictionary<string, Array>()
                     {
-                        { string.Empty, new[] { eventsExpressException.Message } },
+                        { "_error", new[] { eventsExpressException.Message } },
                     },
                 };
 

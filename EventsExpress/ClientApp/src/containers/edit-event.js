@@ -17,10 +17,8 @@ class EditEventWrapper extends Component {
             ...validateEventForm(values),
             user_id: this.props.user_id,
             id: this.props.event.id
-        }, async response => {
-            throw new SubmissionError(await buildValidationState(response));
         });
-        this.props.alert('Your event has been successfully saved!');
+
         this.props.history.goBack();
     };
 
@@ -69,8 +67,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        edit_event: (data, onError, onSuccess) => dispatch(edit_event(data), onError, onSuccess),
-        alert: (msg) => dispatch(setSuccessAllert(msg)),
+        edit_event: (data) => dispatch(edit_event(data, async response => {
+            throw new SubmissionError(await buildValidationState(response));
+        }, dispatch(setSuccessAllert(msg)))),
+        alert: (msg) => dispatch(setSuccessAllert(msg))
     };
 };
 

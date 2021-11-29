@@ -31,9 +31,9 @@ export function edit_event(data, onError, onSuccess) {
         dispatch(getRequestInc());
         let response = await api_serv.editEvent(data);
         dispatch(getRequestDec());
-        if (!response.ok && onError && typeof onError === 'function') {
+        if (!response.ok && onError) {
             await onError(response);
-        } else if (onSuccess && typeof onSuccess === 'function') {
+        } else if (response.ok && onSuccess) {
             onSuccess(response);
         }
         dispatch(getEvent(data));
