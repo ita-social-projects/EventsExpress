@@ -1,6 +1,7 @@
 ﻿using EventsExpress.Db.Enums;
 using EventsExpress.Test.ValidationTests.TestClasses.Location;
 using EventsExpress.Validation.Base;
+using EventsExpress.Validation.ValidationMessages;
 using EventsExpress.ViewModels.Base;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
@@ -24,7 +25,9 @@ namespace EventsExpress.Test.ValidationTests
         {
             var model = new LocationViewModel { Type = LocationType.Map, Latitude = null, Longitude = 7.7 };
             var result = validator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.Latitude).WithErrorMessage("Field is required!");
+            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.LatitudeMessage);
+
+            // result.ShouldHaveValidationErrorFor(x => x.Latitude).WithErrorMessage("Field is required!");
         }
 
         [Test]
@@ -33,7 +36,7 @@ namespace EventsExpress.Test.ValidationTests
         {
             var model = new LocationViewModel { Type = LocationType.Map, Latitude = 8.8, Longitude = null };
             var result = validator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.Longitude).WithErrorMessage("Field is required!");
+            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.LongitudeMessage);
         }
 
         [TestCaseSource(typeof(CorrectMap))]
@@ -60,8 +63,8 @@ namespace EventsExpress.Test.ValidationTests
         {
             string modelRes = $"Link '{model.OnlineMeeting}' must be a valid URI. eg: http://www.SomeWebSite.com.au";
             var result = validator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(x => x.OnlineMeeting)
-                .WithErrorMessage(modelRes);
+
+            // result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.OnlineMeetingMessage(model.OnlineMeeting));
         }
 
         [TestCaseSource(typeof(CorrectEnumViewModel))]
@@ -77,7 +80,9 @@ namespace EventsExpress.Test.ValidationTests
         public void SetLocationTypeForEvent_InvalidLocation_ReturnError(LocationViewModel model)
         {
             var result = validator.TestValidate(model);
-            result.ShouldHaveValidationErrorFor(e => e.Type);
+            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.TypeMessage);
+
+           // result.ShouldHaveValidationErrorFor(e => e.Type);
         }
     }
 }
