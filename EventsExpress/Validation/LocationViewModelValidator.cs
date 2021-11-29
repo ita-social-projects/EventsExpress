@@ -9,14 +9,14 @@
     {
         public LocationViewModelValidator()
         {
-            RuleFor(x => x.Type).IsInEnum().WithMessage("Field Location Type is required!");
+            RuleFor(x => x.Type).IsInEnum().OverridePropertyName(string.Empty).WithMessage("Field Location Type is required!");
             When(location => location.Type == LocationType.Map, () =>
             {
-                RuleFor(x => x.Latitude).NotEmpty().WithMessage("Field is required!");
-                RuleFor(x => x.Longitude).NotEmpty().WithMessage("Field is required!");
+                RuleFor(x => x.Latitude).NotEmpty().OverridePropertyName(string.Empty).WithMessage("Field is required!");
+                RuleFor(x => x.Longitude).NotEmpty().OverridePropertyName(string.Empty).WithMessage("Field is required!");
             }).Otherwise(() =>
             {
-                RuleFor(x => x.OnlineMeeting).Must(LinkMustBeAUri)
+                RuleFor(x => x.OnlineMeeting).Must(LinkMustBeAUri).OverridePropertyName(string.Empty)
                .WithMessage("Link '{PropertyValue}' must be a valid URI. eg: http://www.SomeWebSite.com.au");
             });
         }

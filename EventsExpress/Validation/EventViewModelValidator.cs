@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Db.Enums;
+using EventsExpress.Validation.Base;
 using EventsExpress.ViewModels;
 using FluentValidation;
 
@@ -19,26 +20,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.Location).NotEmpty().OverridePropertyName("location").WithMessage("Field is required!");
             RuleFor(x => x.MaxParticipants).GreaterThan(0).WithMessage("Incorrect quantity of participants!");
             RuleFor(x => x.Categories).NotEmpty().WithMessage("Sellect at least 1 category");
-            When(x => x.Location != null && x.Location.Type == LocationType.Online && x.Location.OnlineMeeting != null, () =>
-            {
-                RuleFor(x => x.Location.OnlineMeeting.ToString()).Must(LinkMustBeAUri).OverridePropertyName("location")
-               .WithMessage("Link '{PropertyValue}' must be a valid URI. eg: http://www.SomeWebSite.com.au");
-            });
-            When(x => x.Location != null && x.Location.Type == LocationType.Online && x.Location.OnlineMeeting == null, () =>
-            {
-                RuleFor(x => x.Location.OnlineMeeting).NotEmpty().OverridePropertyName("location").WithMessage("Link is must not be empty");
-            });
-        }
-
-        private bool LinkMustBeAUri(string link)
-        {
-            if (string.IsNullOrWhiteSpace(link))
-            {
-                return false;
-            }
-
-            return Uri.TryCreate(link, UriKind.Absolute, out Uri outUri)
-                   && (outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps);
+            RuleFor(x => x.Location).SetValidator(new LocationViewModelValidator());
         }
     }
 }

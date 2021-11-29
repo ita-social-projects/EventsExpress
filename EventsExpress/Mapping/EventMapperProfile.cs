@@ -126,12 +126,27 @@ namespace EventsExpress.Mapping
 
         private static LocationDto MapLocation(EventCreateViewModel e)
         {
-            LocationDto locationDto = new LocationDto()
+            LocationDto locationDto = null;
+
+            if (e.Location != null)
             {
-                Type = e.Location?.Type,
-            };
-            locationDto.OnlineMeeting = e.Location.Longitude == null && e.Location.Latitude == null ? e.Location.OnlineMeeting : null;
-            locationDto.Point = e.Location.OnlineMeeting == null ? PointOrNullCreate(e) : null;
+                locationDto = new LocationDto();
+                if (e.Location.Type != null)
+                {
+                    locationDto.Type = e.Location.Type;
+                }
+
+                if (e.Location.OnlineMeeting != null && e.Location.Type == LocationType.Online)
+                {
+                    locationDto.OnlineMeeting = e.Location.OnlineMeeting;
+                }
+
+                if (e.Location.Type == LocationType.Map)
+                {
+                    locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullCreate(e) : null;
+                }
+            }
+
             return locationDto;
         }
 
