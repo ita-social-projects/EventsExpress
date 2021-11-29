@@ -116,7 +116,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Location by Url")]
         public void LocationByUrl_ExistingUrl_ReturnLocationDTO()
         {
-            Uri uri = new Uri(locationOnline.OnlineMeeting.ToString());
+            string uri = locationOnline.OnlineMeeting;
             Guid id = locationOnline.Id;
 
             var actual = service.LocationByURI(uri);
@@ -128,7 +128,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Location by Url")]
         public void LocationByUrl_NotExistingUrl_ReturnLocationDTO()
         {
-            Uri uri = new Uri("http://basin.example.com/#branch");
+            string uri = "http://basin.example.com/#branch";
 
             var actual = service.LocationByURI(uri);
 

@@ -51,7 +51,7 @@ namespace EventsExpress.Core.Services
             return locationDTO;
         }
 
-        public LocationDto LocationByURI(Uri uri)
+        public LocationDto LocationByURI(string uri)
         {
             var locationDTO = Mapper.Map<LocationDto>(Context.EventLocations
                 .Where(e =>

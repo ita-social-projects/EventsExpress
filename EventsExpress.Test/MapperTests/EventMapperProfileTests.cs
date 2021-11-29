@@ -502,7 +502,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resDto.Location.Point, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Map ?
                  new Point(firstEventEditViewModel.Location.Latitude.Value, firstEventEditViewModel.Location.Longitude.Value) { SRID = 4326 } : null));
             Assert.That(resDto.Location.OnlineMeeting, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Online ?
-                 new Uri(firstEventEditViewModel.Location.OnlineMeeting) : null));
+                 firstEventEditViewModel.Location.OnlineMeeting : null));
             Assert.That(resDto.Location.Type, Is.EqualTo(firstEventEditViewModel.Location.Type));
             Assert.That(resDto.Visitors, Is.EqualTo(default(string)));
         }
@@ -525,7 +525,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resDto.Location.Point, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Map ?
                  new Point(firstEventCreateViewModel.Location.Latitude.Value, firstEventCreateViewModel.Location.Longitude.Value) { SRID = 4326 } : null));
             Assert.That(resDto.Location.OnlineMeeting, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Online ?
-                 new Uri(firstEventCreateViewModel.Location.OnlineMeeting) : null));
+                 firstEventCreateViewModel.Location.OnlineMeeting : null));
             Assert.That(resDto.Location.Type, Is.EqualTo(firstEventCreateViewModel.Location.Type));
             Assert.That(resDto.Periodicity, Is.EqualTo(firstEventCreateViewModel.Periodicity));
             Assert.That(resDto.IsReccurent, Is.EqualTo(firstEventCreateViewModel.IsReccurent));

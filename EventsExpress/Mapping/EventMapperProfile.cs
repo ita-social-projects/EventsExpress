@@ -21,7 +21,7 @@ namespace EventsExpress.Mapping
         public EventMapperProfile()
         {
             CreateMap<Event, EventDto>()
-               .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.EventLocation))
+               .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
                .ForMember(
                     dest => dest.Categories,
@@ -96,6 +96,17 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
                 .ForMember(dest => dest.Id, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
+        }
+
+        private static LocationDto MapLocation(Event e)
+        {
+            return new LocationDto()
+            {
+                Id = e.Id,
+                OnlineMeeting = e.EventLocation.OnlineMeeting,
+                Point = e.EventLocation.Point,
+                Type = e.EventLocation.Type,
+            };
         }
 
         private static LocationDto MapLocation(EventEditViewModel e)
