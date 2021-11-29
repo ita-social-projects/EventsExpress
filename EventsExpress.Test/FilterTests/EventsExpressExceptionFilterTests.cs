@@ -39,8 +39,9 @@ namespace EventsExpress.Test.FilterTests
             const int expected = StatusCodes.Status400BadRequest;
 
             filter.OnException(exceptionContext);
-            var result = exceptionContext.Result as ObjectResult;
-            var actual = result?.StatusCode;
+            Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
+            var result = (ObjectResult) exceptionContext.Result;
+            var actual = result.StatusCode;
 
             Assert.AreEqual(expected, actual);
         }
@@ -66,8 +67,9 @@ namespace EventsExpress.Test.FilterTests
             var expected = JsonConvert.SerializeObject(new { Errors = expectedErrors });
 
             filter.OnException(exceptionContext);
-            var result = exceptionContext.Result as ObjectResult;
-            var actual = JsonConvert.SerializeObject(result?.Value);
+            Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
+            var result = (ObjectResult) exceptionContext.Result;
+            var actual = JsonConvert.SerializeObject(result.Value);
 
             Assert.AreEqual(expected, actual);
         }
@@ -83,8 +85,9 @@ namespace EventsExpress.Test.FilterTests
             const int expected = StatusCodes.Status500InternalServerError;
 
             filter.OnException(exceptionContext);
-            var result = exceptionContext.Result as ObjectResult;
-            var actual = result?.StatusCode;
+            Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
+            var result = (ObjectResult) exceptionContext.Result;
+            var actual = result.StatusCode;
 
             Assert.AreEqual(expected, actual);
         }
@@ -106,8 +109,9 @@ namespace EventsExpress.Test.FilterTests
             var expected = JsonConvert.SerializeObject(new { Errors = expectedErrors });
 
             filter.OnException(exceptionContext);
-            var result = exceptionContext.Result as ObjectResult;
-            var actual = JsonConvert.SerializeObject(result?.Value);
+            Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
+            var result = (ObjectResult) exceptionContext.Result;
+            var actual = JsonConvert.SerializeObject(result.Value);
 
             Assert.AreEqual(expected, actual);
         }
