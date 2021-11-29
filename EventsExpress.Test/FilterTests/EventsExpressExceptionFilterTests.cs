@@ -40,7 +40,7 @@ namespace EventsExpress.Test.FilterTests
 
             filter.OnException(exceptionContext);
             Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
-            var result = (ObjectResult) exceptionContext.Result;
+            var result = (ObjectResult)exceptionContext.Result;
             var actual = result.StatusCode;
 
             Assert.AreEqual(expected, actual);
@@ -68,7 +68,7 @@ namespace EventsExpress.Test.FilterTests
 
             filter.OnException(exceptionContext);
             Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
-            var result = (ObjectResult) exceptionContext.Result;
+            var result = (ObjectResult)exceptionContext.Result;
             var actual = JsonConvert.SerializeObject(result.Value);
 
             Assert.AreEqual(expected, actual);
@@ -86,7 +86,7 @@ namespace EventsExpress.Test.FilterTests
 
             filter.OnException(exceptionContext);
             Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
-            var result = (ObjectResult) exceptionContext.Result;
+            var result = (ObjectResult)exceptionContext.Result;
             var actual = result.StatusCode;
 
             Assert.AreEqual(expected, actual);
@@ -110,7 +110,7 @@ namespace EventsExpress.Test.FilterTests
 
             filter.OnException(exceptionContext);
             Assert.IsInstanceOf<ObjectResult>(exceptionContext.Result);
-            var result = (ObjectResult) exceptionContext.Result;
+            var result = (ObjectResult)exceptionContext.Result;
             var actual = JsonConvert.SerializeObject(result.Value);
 
             Assert.AreEqual(expected, actual);
