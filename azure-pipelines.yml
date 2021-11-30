@@ -37,7 +37,7 @@ stages:
           sonar.issue.ignore.multicriteria=e1, e2, e3
 
           sonar.issue.ignore.multicriteria.e1.ruleKey=javascript:S1788
-          sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/*.js
+          sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/**/*.js
           
           sonar.issue.ignore.multicriteria.e2.ruleKey=roslyn:SA1210
           sonar.issue.ignore.multicriteria.e2.resourceKey=EventsExpress.Test/*.cs

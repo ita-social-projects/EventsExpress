@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.GraphQL.Queries;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -21,6 +22,8 @@ using EventsExpress.SwaggerSettings;
 using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using HotChocolate;
+using HotChocolate.Data;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -226,11 +229,16 @@ namespace EventsExpress
 
                 c.DocumentFilter<ApplyDocumentExtension>();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
                 c.AddFluentValidationRules();
             });
+
+            services
+                .AddGraphQLServer()
+                .AddAuthorization()
+                .AddQueryType<EventQuery>();
 
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
@@ -275,6 +283,7 @@ namespace EventsExpress
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL("/");
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<ChatRoom>("/chatRoom");
                 endpoints.MapHub<UsersHub>("/usersHub");

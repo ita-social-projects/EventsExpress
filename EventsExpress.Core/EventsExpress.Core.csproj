@@ -10,6 +10,7 @@
     <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     <PackageReference Include="FluentValidation" Version="9.5.1" />
     <PackageReference Include="Google.Apis.Auth" Version="1.40.3" />
+    <PackageReference Include="HotChocolate.Data" Version="12.3.2" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
