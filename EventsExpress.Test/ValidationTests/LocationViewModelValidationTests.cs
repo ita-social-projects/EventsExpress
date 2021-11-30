@@ -26,8 +26,6 @@ namespace EventsExpress.Test.ValidationTests
             var model = new LocationViewModel { Type = LocationType.Map, Latitude = null, Longitude = 7.7 };
             var result = validator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.LatitudeMessage);
-
-            // result.ShouldHaveValidationErrorFor(x => x.Latitude).WithErrorMessage("Field is required!");
         }
 
         [Test]
@@ -63,8 +61,6 @@ namespace EventsExpress.Test.ValidationTests
         {
             string modelRes = $"Link '{model.OnlineMeeting}' must be a valid URI. eg: http://www.SomeWebSite.com.au";
             var result = validator.TestValidate(model);
-
-            // result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.OnlineMeetingMessage(model.OnlineMeeting));
         }
 
         [TestCaseSource(typeof(CorrectEnumViewModel))]
@@ -81,8 +77,6 @@ namespace EventsExpress.Test.ValidationTests
         {
             var result = validator.TestValidate(model);
             result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(LocationValidationMessage.TypeMessage);
-
-           // result.ShouldHaveValidationErrorFor(e => e.Type);
         }
     }
 }
