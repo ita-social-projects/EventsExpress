@@ -128,7 +128,7 @@ namespace EventsExpress.Mapping
 
                 if (e.Location.Type == LocationType.Map)
                 {
-                    locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullEdit(e) : null;
+                    locationDto.Point = PointOrNullEdit(e);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace EventsExpress.Mapping
 
                 if (e.Location.Type == LocationType.Map)
                 {
-                    locationDto.Point = e.Location.Type == LocationType.Map ? PointOrNullCreate(e) : null;
+                    locationDto.Point = PointOrNullCreate(e);
                 }
             }
 
