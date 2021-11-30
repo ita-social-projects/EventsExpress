@@ -8,7 +8,6 @@ namespace EventsExpress.Core.DTOs
 
         public string Name { get; set; }
 
-        // public Guid CategoryGroupId { get; set; }
         public CategoryGroupDto CategoryGroup { get; set; }
 
         public int CountOfUser { get; set; }

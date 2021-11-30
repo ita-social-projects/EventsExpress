@@ -40,7 +40,6 @@ namespace EventsExpress.Core.Services
         {
             var res = Context.CategoryGroups.Find(id);
 
-            // return new CategoryGroupDto { Id = res.Id, Title = res.Title };
             return Mapper.Map<CategoryGroup, CategoryGroupDto>(res);
         }
     }

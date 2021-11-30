@@ -30,7 +30,7 @@ namespace EventsExpress.Validation
                 .WithMessage("Name length exceeded the recommended length of 20 characters!");
 
             RuleFor(x => x)
-                .Must(x => !_categoryService.ExistsByName(x.Name) || !_categoryService.IsDuplicate(_mapper.Map<CategoryDto>(x)))
+                .Must(x => !(_categoryService.ExistsByName(x.Name) && _categoryService.IsDuplicate(_mapper.Map<CategoryDto>(x))))
                 .WithMessage("The same category already exists!");
 
             RuleFor(x => x.Id)
