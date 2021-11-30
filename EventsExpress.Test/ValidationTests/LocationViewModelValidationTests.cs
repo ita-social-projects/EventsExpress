@@ -59,8 +59,9 @@ namespace EventsExpress.Test.ValidationTests
         [Test]
         public void Should_have_error_when_InCorrect__URL(LocationViewModel model)
         {
-            string modelRes = $"Link '{model.OnlineMeeting}' must be a valid URI. eg: http://www.SomeWebSite.com.au";
+            string modelRes = LocationValidationMessage.OnlineMeetingMessage(model.OnlineMeeting);
             var result = validator.TestValidate(model);
+            result.ShouldHaveValidationErrorFor(x => x).WithErrorMessage(modelRes);
         }
 
         [TestCaseSource(typeof(CorrectEnumViewModel))]
