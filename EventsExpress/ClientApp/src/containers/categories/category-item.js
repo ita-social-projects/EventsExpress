@@ -10,21 +10,8 @@ import { delete_category } from "../../actions/category/category-delete-action";
 
 class CategoryItemWrapper extends Component {
   save = (values) => {
-    if (values.name === this.props.item.name) {
-      this.props.edit_cansel();
-    } else {
-      return this.props.save_category({ ...values, id: this.props.item.id });
-    }
-  };
-
-  mapItemToFormValues = (item) => {
-    return {
-      id: item.id,
-      name: item.name,
-      categoryGroupId: item.group.id,
-      countOfUser: item.countOfUser,
-      countOfEvents: item.countOfEvents,
-    };
+    values.categoryGroup = JSON.parse(values.categoryGroup);
+    return this.props.save_category({ ...values, id: this.props.item.id });
   };
 
   render() {
@@ -35,7 +22,7 @@ class CategoryItemWrapper extends Component {
         {this.props.item.id === this.props.editedCategory ? (
           <CategoryEdit
             key={this.props.item.id + this.props.editedCategory}
-            initialValues={this.mapItemToFormValues(this.props.item)}
+            initialValues={this.props.item}
             groups={this.props.categoryGroups.data}
             onSubmit={this.save}
             cancel={edit_cansel}

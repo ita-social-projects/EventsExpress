@@ -20,7 +20,7 @@ const ChooseActivities = (props) => {
 
     return groups.map((el) => ({
       group: el,
-      categories: categories.filter((c) => c.categoryGroupId === el.id),
+      categories: categories.filter((c) => c.categoryGroup.id === el.id),
     }));
   };
 

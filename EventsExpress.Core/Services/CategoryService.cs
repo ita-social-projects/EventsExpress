@@ -34,18 +34,21 @@ namespace EventsExpress.Core.Services
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
-                                    CategoryGroupId = x.CategoryGroupId,
+                                    CategoryGroup = Mapper.Map<CategoryGroup, CategoryGroupDto>(x.CategoryGroup),
                                     CountOfEvents = x.Events.Count(),
                                     CountOfUser = x.Users.Count(),
                                 })
-                                .OrderBy(category => category.Name);
+                                .OrderBy(category => category.Name)
+                                .ToList();
 
             return categories;
         }
 
-        public async Task Create(string title, Guid categoryGroupId)
+        public async Task Create(CategoryDto category)
         {
-            Insert(new Category { Name = title, CategoryGroupId = categoryGroupId });
+            var newCategory = Mapper.Map<CategoryDto, Category>(category);
+            newCategory.CategoryGroup = Context.CategoryGroups.FirstOrDefault(group => group.Id == newCategory.CategoryGroup.Id);
+            Insert(newCategory);
             await Context.SaveChangesAsync();
         }
 
@@ -58,7 +61,7 @@ namespace EventsExpress.Core.Services
             }
 
             oldCategory.Name = category.Name;
-            oldCategory.CategoryGroupId = category.CategoryGroupId;
+            oldCategory.CategoryGroup = Context.CategoryGroups.FirstOrDefault(group => group.Id == category.CategoryGroup.Id);
             await Context.SaveChangesAsync();
         }
 
@@ -89,6 +92,6 @@ namespace EventsExpress.Core.Services
             Context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
 
         public bool IsDuplicate(CategoryDto category) =>
-            Context.Categories.Any(x => x.Id == category.Id && x.CategoryGroupId == category.CategoryGroupId);
+            Context.Categories.Any(x => x.Id == category.Id && x.CategoryGroup.Id == category.CategoryGroup.Id);
     }
 }

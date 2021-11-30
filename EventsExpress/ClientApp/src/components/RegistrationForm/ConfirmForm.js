@@ -23,7 +23,7 @@ const ConfirmForm = (props) => {
       .map((g) => ({
         group: g.title,
         categories: filteredCategories
-          .filter((c) => c.categoryGroupId === g.id)
+          .filter((c) => c.categoryGroup.id === g.id)
           .map((el) => el.name),
       }))
       .filter((el) => el.categories.length > 0);

@@ -37,8 +37,8 @@ namespace EventsExpress.Validation
                 .Must(id => _categoryService.Exists(id))
                 .WithMessage("The category not exists!");
 
-            RuleFor(x => x.CategoryGroupId)
-                .Must(categoryGroupId => _categoryGroupService.Exists(categoryGroupId))
+            RuleFor(x => x.CategoryGroup)
+                .Must(group => _categoryGroupService.Exists(group.Id))
                 .WithMessage("The category group does not exist!");
         }
     }

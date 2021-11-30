@@ -7,6 +7,7 @@ import "./CustomCheckbox.css";
 
 function CheckboxList(props) {
   const mapToValues = (arr) => {
+    console.log(arr);
     return arr.map((el) => ({ value: el.id, text: el.name }));
   };
 

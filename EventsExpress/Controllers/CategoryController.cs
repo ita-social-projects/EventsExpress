@@ -59,7 +59,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create([ModelBinder(typeof(TrimModelBinder))] CategoryCreateViewModel model)
         {
-            await _categoryService.Create(model.Name, model.CategoryGroupId);
+            await _categoryService.Create(_mapper.Map<CategoryCreateViewModel, CategoryDto>(model));
             return Ok();
         }
 

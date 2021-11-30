@@ -1,6 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.IServices;
-using EventsExpress.Test.ValidatorTests.TestClasses.Guid;
+using EventsExpress.Test.ValidatorTests.TestClasses.CategoryGroup;
 using EventsExpress.Validation;
 using EventsExpress.ViewModels;
 using FluentValidation.TestHelper;
@@ -23,62 +23,45 @@ namespace EventsExpress.Test.ValidatorTests
             _categoryGroupService = new Mock<ICategoryGroupService>();
             _validator = new CategoryCreateViewModelValidator(_categoryService.Object, _categoryGroupService.Object);
 
-            foreach (Guid id in CorrectId.Ids)
+            foreach (var group in CorrectCategoryGroup.Groups)
             {
-                _categoryGroupService.Setup(service => service.Exists(id))
+                _categoryGroupService.Setup(service => service.Exists(group.Id))
                                      .Returns(true);
             }
         }
 
-        [TestCaseSource(typeof(CorrectId))]
-        public void CategoryGroupId_NotNullOrExisting_IsValid(Guid groupId)
+        [TestCaseSource(typeof(CorrectCategoryGroup))]
+        public void CategoryGroupId_NotNullOrExisting_IsValid(CategoryGroupViewModel group)
         {
             // Arrange
             CategoryCreateViewModel model = new CategoryCreateViewModel
             {
                 Name = "Something",
-                CategoryGroupId = groupId,
+                CategoryGroup = group,
             };
 
             // Act
             var res = _validator.TestValidate(model);
 
             // Assert
-            res.ShouldNotHaveValidationErrorFor(m => m.CategoryGroupId);
+            res.ShouldNotHaveValidationErrorFor(m => m.CategoryGroup);
         }
 
-        [TestCase(null)]
-        public void CategoryGroupId_Null_ValidationError(Guid groupId)
+        [TestCaseSource(typeof(IncorrectCategoryGroup))]
+        public void CategoryGroupId_NotExisting_ValidationError(CategoryGroupViewModel group)
         {
             // Arrange
             CategoryCreateViewModel model = new CategoryCreateViewModel
             {
                 Name = "Something",
-                CategoryGroupId = groupId,
+                CategoryGroup = group,
             };
 
             // Act
             var res = _validator.TestValidate(model);
 
             // Assert
-            res.ShouldHaveValidationErrorFor(m => m.CategoryGroupId);
-        }
-
-        [TestCaseSource(typeof(IncorrectId))]
-        public void CategoryGroupId_NotExisting_ValidationError(Guid groupId)
-        {
-            // Arrange
-            CategoryCreateViewModel model = new CategoryCreateViewModel
-            {
-                Name = "Something",
-                CategoryGroupId = groupId,
-            };
-
-            // Act
-            var res = _validator.TestValidate(model);
-
-            // Assert
-            res.ShouldHaveValidationErrorFor(m => m.CategoryGroupId);
+            res.ShouldHaveValidationErrorFor(m => m.CategoryGroup);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace EventsExpress.Core.IServices
 
         Category GetById(Guid id);
 
-        Task Create(string title, Guid categoryGroupId);
+        Task Create(CategoryDto category);
 
         Task Edit(CategoryDto category);
 

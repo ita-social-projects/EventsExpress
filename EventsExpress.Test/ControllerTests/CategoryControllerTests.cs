@@ -23,29 +23,37 @@ namespace EventsExpress.Test.ControllerTests
 
         private CategoryDto testDto;
         private CategoryDto anotherDto;
-        private Guid categoryGroupTestId;
+        private CategoryGroupDto categoryGroupTestDto;
 
         [SetUp]
         public void Initialize()
         {
-            _mapper = new MapperConfiguration(config =>
-                    config.AddProfile(new CategoryMapperProfile()))
-                .CreateMapper();
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new CategoryMapperProfile());
+                cfg.AddProfile(new CategoryGroupMapperProfile());
+            });
+
+            _mapper = mapperConfig.CreateMapper();
             _service = new Mock<ICategoryService>();
             _controller = new CategoryController(_service.Object, _mapper);
 
-            categoryGroupTestId = Guid.NewGuid();
+            categoryGroupTestDto = new CategoryGroupDto
+            {
+                Id = Guid.NewGuid(),
+                Title = "Test Group",
+            };
             testDto = new CategoryDto
             {
                 Id = Guid.NewGuid(),
                 Name = "testCategory",
-                CategoryGroupId = categoryGroupTestId,
+                CategoryGroup = categoryGroupTestDto,
             };
             anotherDto = new CategoryDto
             {
                 Id = Guid.NewGuid(),
                 Name = "anotherCategory",
-                CategoryGroupId = categoryGroupTestId,
+                CategoryGroup = categoryGroupTestDto,
             };
         }
 
@@ -78,11 +86,11 @@ namespace EventsExpress.Test.ControllerTests
             {
                 Guid id = item.Id;
                 string name = item.Name;
-                Guid groupId = item.CategoryGroupId;
+                Guid groupId = item.CategoryGroup.Id;
 
                 var expectedItem = expected.First(item => item.Id == id);
                 Assert.AreEqual(expectedItem.Name, name);
-                Assert.AreEqual(expectedItem.CategoryGroupId, groupId);
+                Assert.AreEqual(expectedItem.CategoryGroup.Id, groupId);
             }
         }
 
@@ -97,35 +105,35 @@ namespace EventsExpress.Test.ControllerTests
         [Test]
         public void GetAll_ByCategoryGroupId_OkResult()
         {
-            _service.Setup(item => item.GetAllCategories(categoryGroupTestId))
+            _service.Setup(item => item.GetAllCategories(categoryGroupTestDto.Id))
                     .Returns(GetCategories().Where(i =>
-                        i.CategoryGroupId == categoryGroupTestId));
+                        i.CategoryGroup.Id == categoryGroupTestDto.Id));
 
-            var response = _controller.All(categoryGroupTestId);
+            var response = _controller.All(categoryGroupTestDto.Id);
             Assert.IsInstanceOf<ObjectResult>(response);
 
             var data = response as ObjectResult;
             Assert.IsInstanceOf<IEnumerable<CategoryViewModel>>(data.Value);
 
-            var expected = GetCategories().Where(i => i.CategoryGroupId == categoryGroupTestId);
+            var expected = GetCategories().Where(i => i.CategoryGroup.Id == categoryGroupTestDto.Id);
             var actual = data.Value as IEnumerable<CategoryViewModel>;
 
             foreach (var item in actual)
             {
                 Guid id = item.Id;
                 string name = item.Name;
-                Guid groupId = item.CategoryGroupId;
+                Guid groupId = item.CategoryGroup.Id;
 
                 var expectedItem = expected.First(item => item.Id == id);
                 Assert.AreEqual(expectedItem.Name, name);
-                Assert.AreEqual(expectedItem.CategoryGroupId, groupId);
+                Assert.AreEqual(expectedItem.CategoryGroup.Id, groupId);
             }
         }
 
         [Test]
         public void GetAll_ByCategoryGroupId_ReturnsStatusOk()
         {
-            var res = _controller.All(categoryGroupTestId);
+            var res = _controller.All(categoryGroupTestDto.Id);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
         }
@@ -136,10 +144,11 @@ namespace EventsExpress.Test.ControllerTests
             var someViewModel = new CategoryCreateViewModel
             {
                 Name = "someDto",
-                CategoryGroupId = categoryGroupTestId,
+                CategoryGroup = _mapper.Map<CategoryGroupDto, CategoryGroupViewModel>(categoryGroupTestDto),
             };
+            var someDto = _mapper.Map<CategoryCreateViewModel, CategoryDto>(someViewModel);
 
-            _service.Setup(item => item.Create(someViewModel.Name, someViewModel.CategoryGroupId))
+            _service.Setup(item => item.Create(someDto))
                     .Returns(Task.FromResult(new CategoryDto()));
             var expected = _controller.Create(someViewModel).Result;
 

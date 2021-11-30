@@ -28,12 +28,12 @@ namespace EventsExpress.Validation
                 .Must(name => !_categoryService.ExistsByName(name))
                 .WithMessage("The same category already exists!");
 
-            RuleFor(x => x.CategoryGroupId)
+            RuleFor(x => x.CategoryGroup)
                 .NotNull()
                 .WithMessage("Category group must have been chosen!");
 
-            RuleFor(x => x.CategoryGroupId)
-                .Must(categoryGroupId => _categoryGroupService.Exists(categoryGroupId))
+            RuleFor(x => x.CategoryGroup)
+                .Must(group => _categoryGroupService.Exists(group.Id))
                 .WithMessage("The category group does not exist!");
         }
     }
