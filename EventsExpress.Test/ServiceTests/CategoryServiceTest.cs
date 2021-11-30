@@ -169,6 +169,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 Id = category.Id,
                 Name = "RandomName3",
+                CategoryGroup = MockMapper.Object.Map<CategoryGroup, CategoryGroupDto>(category.CategoryGroup),
             };
 
             Assert.DoesNotThrowAsync(async () => await service.Edit(categoryDto));
@@ -181,6 +182,7 @@ namespace EventsExpress.Test.ServiceTests
             {
                 Name = "RandomName",
                 Id = category.Id,
+                CategoryGroup = MockMapper.Object.Map<CategoryGroup, CategoryGroupDto>(category.CategoryGroup),
             };
 
             Assert.DoesNotThrowAsync(async () => await service.Edit(newCategoryDto));
