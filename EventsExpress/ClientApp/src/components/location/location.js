@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Field } from "redux-form";
+import { Field, formValueSelector } from "redux-form";
 import "react-widgets/dist/css/react-widgets.css";
 import { LocationMapWithMarker } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";
@@ -12,9 +12,9 @@ import TextField from "@material-ui/core/TextField";
 export default class Location extends Component {
   onChangeLocationType = (event) => {
     const type = Number(event.target.value);
-    if (type == enumLocationType.map) {
+    if (type === enumLocationType.map) {
       this.props.input.onChange({ type, latitude: null, longitude: null });
-    } else if (type == enumLocationType.online) {
+    } else if (type === enumLocationType.online) {
       this.props.input.onChange({ type, onlineMeeting: null });
     }
   };
@@ -22,16 +22,28 @@ export default class Location extends Component {
   onUrlInputChange = (event) => {
     this.props.input.onChange({
       type: enumLocationType.online,
-      onlineMeeting: event.target.value == "" ? null : event.target.value,
+      onlineMeeting: event.target.value === "" ? null : event.target.value,
     });
   };
+
+  onMapLocationChange = (mapLocation) =>{
+    this.props.input.onChange({
+      type:enumLocationType.map,
+      latitude:mapLocation.latitude,
+      longitude:mapLocation.longitude
+    })
+  }
 
   returnLocationRender = () => {
     const { value } = this.props.input;
     if (value != null) {
-      if (value != "" && value.type == enumLocationType.map) {
-        return <Field name="location" component={LocationMapWithMarker} />;
-      } else if (value != "" && value.type == enumLocationType.online) {
+      if (value !== "" && value.type === enumLocationType.map) {
+        return <LocationMapWithMarker
+        latitude = {value.latitude !== null ? value.latitude : null}
+        longitude = {value.longitude !== null ? value.longitude : null}
+        onChangeValues = {this.onMapLocationChange}
+        />;
+      } else if (value !== "" && value.type === enumLocationType.online) {
         return (
           <>
             <label htmlFor="url">Enter an https:// URL:</label>
@@ -43,7 +55,7 @@ export default class Location extends Component {
               fullWidth
               onChange={this.onUrlInputChange}
               value={
-                value != "" && value.type == enumLocationType.online
+                value !== "" && value.type === enumLocationType.online
                   ? value.onlineMeeting
                   : ""
               }
@@ -67,13 +79,13 @@ export default class Location extends Component {
               value={String(0)}
               control={<Radio />}
               label="Map"
-              checked={value != "" && value.type == enumLocationType.map}
+              checked={value !== "" && value.type === enumLocationType.map}
             />
             <FormControlLabel
               value={String(1)}
               control={<Radio />}
               label="Online"
-              checked={value != "" && value.type == enumLocationType.online}
+              checked={value !== "" && value.type === enumLocationType.online}
             />
           </RadioGroup>
         </FormControl>
