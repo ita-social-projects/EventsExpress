@@ -43,12 +43,12 @@ stages:
         command: 'restore'
         projects: '$(solution)'
     
-    - task: DotNetCoreCLI@2
-      displayName: Build
+    - task: UseDotNet@2
       inputs:
-        command: 'build'
-        projects: '$(solution)'
-        arguments: '--configuration $(buildConfiguration)'
+        version: $(dotNetVersion)
+        includePreviewVersions: true
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'Build .NET 6 Application'
 
     - task: DotNetCoreCLI@2
       displayName: Test

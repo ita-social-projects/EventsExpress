@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<LangVersion>preview</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
@@ -8,7 +9,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FreeImage-dotnet-core" Version="4.3.6" />
     <PackageReference Include="GeoAPI.CoordinateSystems" Version="2.0.0-nuget005" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0-beta.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
     <PackageReference Include="FluentValidation" Version="10.3.4" />
     <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
     <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="8.4.0" />
@@ -26,13 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventsExpress.Db\EventsExpress.Db.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="StyleCop.Analyzers" Version="1.2.0-beta.354">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
 </Project>
