@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
 using EventsExpress.ViewModels;
@@ -10,16 +11,16 @@ namespace EventsExpress.Mapping
         public CategoryMapperProfile()
         {
             CreateMap<Category, CategoryDto>()
-                .ForMember(dest => dest.CountOfUser, opts => opts.Ignore())
-                .ForMember(dest => dest.CountOfEvents, opts => opts.Ignore())
+                .ForMember(dest => dest.CountOfUser, opts => opts.MapFrom(src => src.Users.Count()))
+                .ForMember(dest => dest.CountOfEvents, opts => opts.MapFrom(src => src.Events.Count()))
                 .ForMember(dest => dest.CategoryGroup, opts => opts.MapFrom(src =>
                     MapCategoryGroupDtoFromCategoryGroup(src.CategoryGroup)));
 
             CreateMap<CategoryDto, Category>()
                 .ForMember(dest => dest.Users, opts => opts.Ignore())
                 .ForMember(dest => dest.Events, opts => opts.Ignore())
-                .ForMember(dest => dest.CategoryGroup, opts => opts.MapFrom(src =>
-                    MapCategoryGroupFromCategoryGroupDto(src.CategoryGroup)));
+                .ForMember(dest => dest.CategoryGroup, opts => opts.Ignore())
+                .ForMember(dest => dest.CategoryGroupId, opts => opts.MapFrom(src => src.CategoryGroup.Id));
 
             CreateMap<CategoryDto, CategoryViewModel>()
                 .ForMember(dest => dest.CategoryGroup, opts => opts.MapFrom(src =>
@@ -48,15 +49,6 @@ namespace EventsExpress.Mapping
               .ForMember(dest => dest.CategoryGroup, opts => opts.MapFrom(src =>
                     MapCategoryGroupDtoFromCategoryGroup(src.Category.CategoryGroup)))
               .ForAllOtherMembers(x => x.Ignore());
-        }
-
-        private static CategoryGroup MapCategoryGroupFromCategoryGroupDto(CategoryGroupDto categoryGroup)
-        {
-            return new CategoryGroup
-            {
-                Id = categoryGroup.Id,
-                Title = categoryGroup.Title,
-            };
         }
 
         private static CategoryGroupDto MapCategoryGroupDtoFromCategoryGroup(CategoryGroup categoryGroup)

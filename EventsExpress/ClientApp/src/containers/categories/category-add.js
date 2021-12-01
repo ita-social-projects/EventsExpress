@@ -7,7 +7,10 @@ import CategoryEdit from "../../components/category/category-edit";
 
 class CategoryAddWrapper extends React.Component {
   submit = (values) => {
-    values.categoryGroup = JSON.parse(values.categoryGroup);
+    values.categoryGroup =
+      typeof values.categoryGroup === "string"
+        ? JSON.parse(values.categoryGroup)
+        : values.categoryGroup;
     return this.props.add({ ...values });
   };
 

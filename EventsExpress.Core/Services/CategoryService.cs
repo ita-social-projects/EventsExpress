@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -30,16 +31,8 @@ namespace EventsExpress.Core.Services
                                 .Include(c => c.Users)
                                 .Include(c => c.Events)
                                 .Where(c => !groupId.HasValue || c.CategoryGroupId == groupId)
-                                .Select(x => new CategoryDto
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    CategoryGroup = Mapper.Map<CategoryGroup, CategoryGroupDto>(x.CategoryGroup),
-                                    CountOfEvents = x.Events.Count(),
-                                    CountOfUser = x.Users.Count(),
-                                })
-                                .OrderBy(category => category.Name)
-                                .ToList();
+                                .ProjectTo<CategoryDto>(Mapper.ConfigurationProvider)
+                                .OrderBy(category => category.Name);
 
             return categories;
         }
@@ -47,7 +40,6 @@ namespace EventsExpress.Core.Services
         public async Task Create(CategoryDto category)
         {
             var newCategory = Mapper.Map<CategoryDto, Category>(category);
-            newCategory.CategoryGroup = Context.CategoryGroups.FirstOrDefault(group => group.Id == newCategory.CategoryGroup.Id);
             Insert(newCategory);
             await Context.SaveChangesAsync();
         }
@@ -61,7 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             oldCategory.Name = category.Name;
-            oldCategory.CategoryGroup = Context.CategoryGroups.FirstOrDefault(group => group.Id == category.CategoryGroup.Id);
+            oldCategory.CategoryGroupId = category.CategoryGroup.Id;
             await Context.SaveChangesAsync();
         }
 

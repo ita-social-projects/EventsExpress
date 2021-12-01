@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -26,11 +27,7 @@ namespace EventsExpress.Core.Services
         {
             var groups = Context.CategoryGroups
                                 .Include(cg => cg.Categories)
-                                .Select(cg => new CategoryGroupDto
-                                {
-                                    Id = cg.Id,
-                                    Title = cg.Title,
-                                })
+                                .ProjectTo<CategoryGroupDto>(Mapper.ConfigurationProvider)
                                 .OrderBy(cg => cg.Title);
 
             return groups;

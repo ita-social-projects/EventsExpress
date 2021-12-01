@@ -10,7 +10,10 @@ import { delete_category } from "../../actions/category/category-delete-action";
 
 class CategoryItemWrapper extends Component {
   save = (values) => {
-    values.categoryGroup = JSON.parse(values.categoryGroup);
+    values.categoryGroup =
+      typeof values.categoryGroup === "string"
+        ? JSON.parse(values.categoryGroup)
+        : values.categoryGroup;
     return this.props.save_category({ ...values, id: this.props.item.id });
   };
 
