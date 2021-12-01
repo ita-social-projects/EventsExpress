@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Field, formValueSelector } from "redux-form";
 import "react-widgets/dist/css/react-widgets.css";
 import { LocationMapWithMarker } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";

@@ -26,7 +26,6 @@ namespace EventsExpress.Core.Services
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
         private readonly IEventScheduleService _eventScheduleService;
-        private readonly IValidator<Event> _validator;
         private readonly ISecurityContext _securityContextService;
 
         public EventService(
@@ -44,7 +43,6 @@ namespace EventsExpress.Core.Services
             _locationService = locationService;
             _mediator = mediator;
             _eventScheduleService = eventScheduleService;
-            _validator = validator;
             _securityContextService = securityContextService;
         }
 

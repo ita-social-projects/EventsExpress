@@ -8,9 +8,7 @@ import PhotoService from "../../services/PhotoService";
 import periodicity from "../../constants/PeriodicityConstants";
 import {
   renderDatePicker,
-  LocationMapWithMarker,
   renderCheckbox,
-  radioButton,
   renderSelectField,
   renderTextField,
   renderTextArea,
@@ -19,8 +17,6 @@ import {
 } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";
 import "./event-form.css";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
 import asyncValidatePhoto from "../../containers/async-validate-photo";
 import Location from "../location";
 momentLocaliser(moment);
