@@ -36,19 +36,19 @@ stages:
           sonar.issue.ignore.multicriteria=e1
           sonar.issue.ignore.multicriteria.e1.ruleKey=javascript:S1788
           sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/*.js
-    
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: 'restore'
-        projects: '$(solution)'
-    
+
     - task: UseDotNet@2
       inputs:
         version: $(dotNetVersion)
         includePreviewVersions: true
     - script: dotnet build --configuration $(buildConfiguration)
-      displayName: 'Build .NET 6 Application'
+      displayName: 'Build .NET 6 Application'    
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: '$(solution)'
 
     - task: DotNetCoreCLI@2
       displayName: Test
