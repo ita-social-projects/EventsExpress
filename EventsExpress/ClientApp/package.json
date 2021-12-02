@@ -6,7 +6,7 @@
         "@aspnet/signalr": "1.1.4",
         "@material-ui/core": "4.2.0",
         "@material-ui/icons": "4.2.1",
-        "@material-ui/lab": "4.0.0-alpha.24",
+        "@material-ui/lab": "^4.0.0-alpha.60",
         "@material-ui/pickers": "3.2.0",
         "@material-ui/styles": "4.2.0",
         "bootstrap": "4.3.1",
@@ -68,8 +68,7 @@
         "redux-thunk": "2.3.0",
         "styled-components": "4.3.2",
         "tiny-custom-pagination": "1.0.5",
-        "ui": "0.2.4",
-        "uninstall-all-modules": "^1.0.5"
+        "ui": "0.2.4"
     },
     "devDependencies": {
         "@types/leaflet": "1.5.19",
