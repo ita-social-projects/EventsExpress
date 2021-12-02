@@ -8,16 +8,11 @@ pr:
 pool:
   vmImage: 'windows-latest'
 
-variables:
-  buildConfiguration: 'Release'
-  dotNetFramework: 'net6.0'
-  dotNetVersion: '6.0.x'
-
-
 stages:
 - stage: 'build'
   displayName: 'Build App'
   variables:
+    dotNetVersion: '6.0.x'
     solution: '**/EventsExpress.sln'
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
@@ -47,14 +42,18 @@ stages:
       inputs:
         version: $(dotNetVersion)
         includePreviewVersions: true
-    - script: dotnet build --configuration $(buildConfiguration)
-      displayName: 'Build .NET 6 Application'    
-
+        
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
         command: 'restore'
         projects: '$(solution)'
+
+    - task: CmdLine@2
+      displayName: 'Build'
+      inputs:
+        script: dotnet build --configuration $(buildConfiguration)
+      
 
     - task: DotNetCoreCLI@2
       displayName: Test
