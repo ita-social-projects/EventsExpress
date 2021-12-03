@@ -21,11 +21,11 @@ Describe feature functionality Add mockup if needed
 **Acceptance criteria**
 Notes about what the story must do in order for the product owner to accept it as complete  
 
-Given <...>  
+[Given] <...>  
 
-When <...>  
+[When] <...>  
 
-Then <...>  
+[Then] <...>  
 
 
 or 
