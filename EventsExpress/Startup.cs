@@ -1,50 +1,51 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Text.Json;
-using System.Threading.Tasks;
-using AutoMapper;
-using EventsExpress.Core.GraphQL.Queries;
-using EventsExpress.Core.HostedService;
-using EventsExpress.Core.Infrastructure;
-using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
-using EventsExpress.Db.Bridge;
-using EventsExpress.Db.EF;
-using EventsExpress.Filters;
-using EventsExpress.Hubs;
-using EventsExpress.Mapping;
-using EventsExpress.NotificationHandlers;
-using EventsExpress.Policies;
-using EventsExpress.SwaggerSettings;
-using EventsExpress.Validation;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using HotChocolate;
-using HotChocolate.Data;
-using MediatR;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
-
 namespace EventsExpress
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Reflection;
+    using System.Text.Json;
+    using System.Threading.Tasks;
+    using AutoMapper;
+    using EventsExpress.Core.GraphQL.ServiceExtension;
+    using EventsExpress.Core.HostedService;
+    using EventsExpress.Core.Infrastructure;
+    using EventsExpress.Core.IServices;
+    using EventsExpress.Core.Services;
+    using EventsExpress.Db.Bridge;
+    using EventsExpress.Db.EF;
+    using EventsExpress.Db.Entities;
+    using EventsExpress.Filters;
+    using EventsExpress.Hubs;
+    using EventsExpress.Mapping;
+    using EventsExpress.NotificationHandlers;
+    using EventsExpress.Policies;
+    using EventsExpress.SwaggerSettings;
+    using EventsExpress.Validation;
+    using FluentValidation;
+    using FluentValidation.AspNetCore;
+    using HotChocolate;
+    using HotChocolate.Data;
+    using MediatR;
+    using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Localization;
+    using Microsoft.AspNetCore.SignalR;
+    using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Azure;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -230,15 +231,12 @@ namespace EventsExpress
 
                 c.DocumentFilter<ApplyDocumentExtension>();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services
-                .AddGraphQLServer()
-                .AddAuthorization()
-                .AddQueryType<EventQuery>();
+            services.AddGraphQLService();
 
             services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerGenNewtonsoftSupport();
@@ -286,7 +284,7 @@ namespace EventsExpress
             {
                 endpoints.MapGraphQL("/");
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
-                endpoints.MapHub<ChatRoom>("/chatRoom");
+                endpoints.MapHub<Hubs.ChatRoom>("/chatRoom");
                 endpoints.MapHub<UsersHub>("/usersHub");
             });
 

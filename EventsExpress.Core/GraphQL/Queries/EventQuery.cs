@@ -10,15 +10,7 @@ namespace EventsExpress.Core.GraphQL.Queries
 {
     public class EventQuery
     {
-        // [AllowAnonymous]
-        [Serial]
-        public IQueryable<Event> GetEvents([Service] AppDbContext context)
-        {
-            return context.Events.AsQueryable();
-        }
-
-        // public TestItem GetTestItems() => new TestItem { Id = 1, Name = "Test Item" };
-
-        // public TestItem GetOneTestItem() => new TestItem { Id = 2, Name = "Test Item2" };
+        [UseProjection]
+        public IQueryable<Event> GetEvents([Service] AppDbContext context) => context.Events;
     }
 }
