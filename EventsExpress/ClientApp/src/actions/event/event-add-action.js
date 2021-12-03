@@ -26,15 +26,17 @@ export default function add_event() {
     }
 }
 
-export function edit_event(data) {
+export function edit_event(data, onError, onSuccess) {
     return async dispatch => {
         dispatch(getRequestInc());
         let response = await api_serv.editEvent(data);
-        if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
+        dispatch(getRequestDec());
+        if (!response.ok && onError) {
+            await onError(response);
+        } else if (response.ok && onSuccess) {
+            onSuccess(response);
         }
         dispatch(getEvent(data));
-        dispatch(getRequestDec());
         return Promise.resolve();
     }
 }
