@@ -2,7 +2,7 @@
 name: Test Case
 about: Create a test case to help us verify and improve
 summary: 'Verify that <some functional or non-functional part>'
-labels: test
+labels: test case
 assignees: ''
 
 ---
@@ -40,4 +40,8 @@ If applicable, add screenshots to help explain your test.
  - Version [e.g. 22]
 
 **Additional context**
-Add any other context about the test here.
+Add any other context about the test here.  
+ 
+ User story links E.g.: "User story #100 "
+
+Labels to be added "Test case", Priority ("pri: "), Type ("UI, "Functional"), "API" .

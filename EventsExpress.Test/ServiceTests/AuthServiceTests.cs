@@ -427,6 +427,7 @@ namespace EventsExpress.Test.ServiceTests
                         Id = AuthLocalId,
                         Salt = salt,
                         PasswordHash = mockPasswordHasherService.Object.GenerateHash(ValidPassword, salt),
+                        Email = "TestEmail",
                     },
                 },
             };
