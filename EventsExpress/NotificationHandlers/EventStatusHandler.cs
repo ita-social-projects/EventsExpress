@@ -50,7 +50,7 @@ namespace EventsExpress.NotificationHandlers
                     {
                         EventStatus.Canceled => NotificationProfile.EventStatusCanceled,
                         EventStatus.Blocked => NotificationProfile.EventStatusBlocked,
-                        _ => NotificationProfile.EventStatusActivated
+                        _ => NotificationProfile.EventStatusActivated,
                     };
 
                     var model = _notificationTemplateService.GetModelByTemplateId<EventStatusNotificationTemplateModel>(templateId);

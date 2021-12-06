@@ -56,6 +56,7 @@ namespace EventsExpress.Test.ValidatorTests
                 AccountId = accountId,
                 PasswordHash = passwordHash,
                 Salt = salt,
+                Email = "TestEmail",
             };
 
             context.Users.Add(user);

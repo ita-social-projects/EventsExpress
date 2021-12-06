@@ -159,43 +159,6 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        [Category("AddTwitterLogin")]
-        public void AddTwitterLogin_InvalidUser_ThrowException()
-        {
-            mockSecurityContextService.Setup(s =>
-                s.GetCurrentAccountId()).Throws<EventsExpressException>();
-
-            Assert.ThrowsAsync<EventsExpressException>(() =>
-                _accountController.AddTwitterLogin(new AuthExternalViewModel()));
-            _accountService.Verify(
-                s => s.AddAuth(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<AuthExternalType>()), Times.Never);
-        }
-
-        [Test]
-        [Category("AddTwitterLogin")]
-        public async Task AddTwitterLogin_AllOk_DoesNotThrowExceptionAsync()
-        {
-            var model = new AuthExternalViewModel
-            {
-                Email = SomeEmail,
-            };
-            var user = new UserDto
-            {
-                AccountId = Guid.NewGuid(),
-            };
-
-            _accountService.Setup(s =>
-                s.AddAuth(user.AccountId, model.Email, AuthExternalType.Twitter)).Returns(Task.CompletedTask);
-
-            var res = await _accountController.AddTwitterLogin(model);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkResult>(res);
-            _accountService.Verify(
-                s => s.AddAuth(It.IsAny<Guid>(), It.IsAny<string>(), AuthExternalType.Twitter), Times.Once);
-        }
-
-        [Test]
         [Category("AddLocalLogin")]
         public void AddLocalLogin_InvalidUser_ThrowException()
         {

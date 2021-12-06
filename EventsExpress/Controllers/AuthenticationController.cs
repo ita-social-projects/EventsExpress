@@ -99,25 +99,6 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to login with twitter account.
-        /// </summary>
-        /// <param name="model">Param userView defines AccountViewModel.</param>
-        /// <returns>The method performs Twitter Login operation.</returns>
-        /// <response code="200">Return UserInfo model.</response>
-        /// <response code="400">If login process failed.</response>
-        [AllowAnonymous]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> TwitterLogin([FromBody] AccountViewModel model)
-        {
-            await _accountService.EnsureExternalAccountAsync(model.Email, AuthExternalType.Twitter);
-            var authResponseModel = await _authService.Authenticate(model.Email, AuthExternalType.Twitter);
-
-            HttpContext.SetTokenCookie(authResponseModel);
-
-            return Ok(new { Token = authResponseModel.JwtToken });
-        }
-
-        /// <summary>
         /// This method allows register user.
         /// </summary>
         /// <param name="authRequest">Param authRequest defines LoginViewModel.</param>

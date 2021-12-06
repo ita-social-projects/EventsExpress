@@ -4,7 +4,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import GoogleLogin from '../../containers/GoogleLogin';
 import LoginFacebook from '../../containers/FacebookLogin';
-import TwitterLogin from '../../containers/TwitterLogin';
 import ErrorMessages from '../shared/errorMessage';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -27,7 +26,6 @@ class Login extends Component {
 
     render() {
         const { pristine, reset, submitting, error, handleSubmit } = this.props;
-        const { twitterLoginEnabled } = this.props.config;
 
         return (
             <div className="auth">
@@ -60,7 +58,6 @@ class Login extends Component {
                     </div>
                 </form>
                 <div className="d-flex justify-content-around mb-3">
-                    {twitterLoginEnabled && <TwitterLogin />}
                     <LoginFacebook />
                     <GoogleLogin />
                 </div>
