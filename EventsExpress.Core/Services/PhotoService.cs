@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -13,6 +11,7 @@ using EventsExpress.Core.Extensions;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using FluentValidation;
+using FreeImageAPI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -49,23 +48,19 @@ namespace EventsExpress.Core.Services
         public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
             using var memoryStream = file.ToMemoryStream();
-            var oldBitMap = new Bitmap(memoryStream);
-            var newSize = new Size
-            {
-                Width = newWidth,
-                Height = oldBitMap.Size.Height * newWidth / oldBitMap.Size.Width,
-            };
+            var oldBitMap = new FreeImageBitmap(memoryStream);
 
-            var newBitmap = new Bitmap(oldBitMap, newSize);
+            int width = newWidth;
+            int height = oldBitMap.Height * newWidth / oldBitMap.Width;
 
+            var newBitmap = new FreeImageBitmap(oldBitMap, width, height);
             return ImageToByteArray(newBitmap);
         }
 
-        private byte[] ImageToByteArray(Image imageIn)
+        private static byte[] ImageToByteArray(FreeImageBitmap imageIn)
         {
             using var ms = new MemoryStream();
-            imageIn.Save(ms, ImageFormat.Png);
-
+            imageIn.Save(ms, FREE_IMAGE_FORMAT.FIF_PNG);
             return ms.ToArray();
         }
 
