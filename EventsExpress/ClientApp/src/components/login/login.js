@@ -26,7 +26,6 @@ class Login extends Component {
 
     render() {
         const { pristine, reset, submitting, error, handleSubmit } = this.props;
-        const { twitterLoginEnabled } = this.props.config;
 
         return (
             <div className="auth">
