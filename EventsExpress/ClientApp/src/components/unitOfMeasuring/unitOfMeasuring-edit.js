@@ -15,10 +15,6 @@ class UnitOfMeasuringEdit extends Component {
         shortError: null,
         showAlert: false
     })
-    constructor(){
-        super();
-        this.categoriesList = null;
-    }
 
     showAlert = () => {
         this.setState({
@@ -31,19 +27,13 @@ class UnitOfMeasuringEdit extends Component {
             showAlert: false
         });
     };
-    async componentDidMount()
-    {
-        const response = await api_serv.getCategoriesOfMeasuring();
-        const categories = await response.json();
-        console.log(categories);
-        this.categoriesList = (
-            categories.map((item) =>
-                <option value={item.id} key={item.id}>
-                        {item.categoryName}
-                </option>
-                )
-        );
-    }
+    categoriesList = (
+        this.props.all_categories.data.map((item) =>
+            <option value={item.id} key={item.id}>
+                    {item.categoryName}
+            </option>
+            )
+    );
 
     render() {
         return <>
