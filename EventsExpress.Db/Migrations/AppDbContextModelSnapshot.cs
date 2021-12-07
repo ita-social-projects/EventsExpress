@@ -115,13 +115,32 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryGroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryGroupId");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.CategoryGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoryGroups");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.CategoryOfMeasuring", b =>
@@ -846,6 +865,15 @@ namespace EventsExpress.Db.Migrations
                         .WithOne("AuthLocal")
                         .HasForeignKey("EventsExpress.Db.Entities.AuthLocal", "AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.CategoryGroup", "CategoryGroup")
+                        .WithMany("Categories")
+                        .HasForeignKey("CategoryGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

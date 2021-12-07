@@ -129,6 +129,7 @@ namespace EventsExpress
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryGroupService, CategoryGroupService>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
