@@ -9,7 +9,7 @@ namespace EventsExpress.Core.Services
         public string GenerateHash(string password, string salt)
         {
             byte[] byteSourceText = Encoding.ASCII.GetBytes(salt + password);
-            using var hashProvider = new SHA256Managed();
+            using var hashProvider = SHA256.Create();
             byte[] byteHash = hashProvider.ComputeHash(byteSourceText);
 
             return Encoding.ASCII.GetString(byteHash);
@@ -17,10 +17,9 @@ namespace EventsExpress.Core.Services
 
         public string GenerateSalt()
         {
-            using var provider = new RNGCryptoServiceProvider();
+            using var provider = RandomNumberGenerator.Create();
             byte[] salt = new byte[16];
             provider.GetBytes(salt);
-
             return Encoding.ASCII.GetString(salt);
         }
     }

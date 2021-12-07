@@ -22,6 +22,7 @@ using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -230,9 +231,9 @@ namespace EventsExpress
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
-                c.AddFluentValidationRules();
             });
 
+            services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();

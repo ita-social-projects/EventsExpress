@@ -21,11 +21,9 @@ Describe feature functionality Add mockup if needed
 **Acceptance criteria**
 Notes about what the story must do in order for the product owner to accept it as complete  
 
-Given <...>  
-
-When <...>  
-
-Then <...>  
+[Given] <...>  
+[When] <...>  
+[Then] <...>  
 
 
 or 
@@ -39,6 +37,6 @@ or
 **Additional context**
 If applicable, add mockups to help explain your story.
 
-**Epic link** E.g.: Epic #100 Epic
+**Epic link** E.g.: Epic #100
 
-**Labels to be added** "User story", Correspondind Functionality (e.g. User), Priority ("pri: "), "Corresponding Epic"
+**Labels to be added** "User story", Corresponding Functionality (e.g. User), Priority ("pri: "), "Corresponding Epic"
