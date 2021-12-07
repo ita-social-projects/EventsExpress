@@ -52,7 +52,7 @@ class Landing extends Component {
     return (
       <>
         <div className="main">
-          <HeadArticle id={id} onLogoutClick={onLogoutClick} />
+          <HeadArticle id={id} onLogoutClick={onLogoutClick} onSubmit={this.props.onSubmit()}/>
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>

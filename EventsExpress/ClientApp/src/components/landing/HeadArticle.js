@@ -41,6 +41,10 @@ export default class HeadArticle extends Component {
     this.setState.preloadedPictures = preloadedData;
   }
 
+  handleClick = () => {
+    this.props.onSubmit();
+  };
+
   async componentDidMount() {
     this.interval = setInterval(() => {
       this.setState({
