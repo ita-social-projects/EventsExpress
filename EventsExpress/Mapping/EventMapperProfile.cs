@@ -100,13 +100,18 @@ namespace EventsExpress.Mapping
 
         private static LocationDto MapLocation(Event e)
         {
-            return new LocationDto()
+            if (e.EventLocation != null)
             {
-                Id = e.Id,
-                OnlineMeeting = e.EventLocation.OnlineMeeting,
-                Point = e.EventLocation.Point,
-                Type = e.EventLocation.Type,
-            };
+                return new LocationDto()
+                {
+                    Id = e.Id,
+                    OnlineMeeting = e.EventLocation.OnlineMeeting,
+                    Point = e.EventLocation.Point,
+                    Type = e.EventLocation.Type,
+                };
+            }
+
+            return null;
         }
 
         private static LocationDto MapLocation(EventEditViewModel e)

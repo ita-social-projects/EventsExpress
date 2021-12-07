@@ -230,8 +230,7 @@ namespace EventsExpress.Core.Services
 
             if (e.Location != null)
             {
-                var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
-                var locationId = await _locationService.AddLocationToEvent(locationDTO);
+                var locationId = await _locationService.AddLocationToEvent(e.Location);
                 ev.EventLocationId = locationId;
             }
 
