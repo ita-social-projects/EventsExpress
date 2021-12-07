@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Mapping.MappingHelpers;
 using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
@@ -116,54 +117,12 @@ namespace EventsExpress.Mapping
 
         private static LocationDto MapLocation(EventEditViewModel e)
         {
-            LocationDto locationDto = null;
-
-            if (e.Location != null)
-            {
-                locationDto = new LocationDto();
-                if (e.Location.Type != null)
-                {
-                    locationDto.Type = e.Location.Type;
-                }
-
-                if (e.Location.OnlineMeeting != null && e.Location.Type == LocationType.Online)
-                {
-                    locationDto.OnlineMeeting = e.Location.OnlineMeeting;
-                }
-
-                if (e.Location.Type == LocationType.Map)
-                {
-                    locationDto.Point = PointOrNullEdit(e);
-                }
-            }
-
-            return locationDto;
+            return MapToLocationDto<EventEditViewModel>.Map(e, PointOrNullEdit);
         }
 
         private static LocationDto MapLocation(EventCreateViewModel e)
         {
-            LocationDto locationDto = null;
-
-            if (e.Location != null)
-            {
-                locationDto = new LocationDto();
-                if (e.Location.Type != null)
-                {
-                    locationDto.Type = e.Location.Type;
-                }
-
-                if (e.Location.OnlineMeeting != null && e.Location.Type == LocationType.Online)
-                {
-                    locationDto.OnlineMeeting = e.Location.OnlineMeeting;
-                }
-
-                if (e.Location.Type == LocationType.Map)
-                {
-                    locationDto.Point = PointOrNullCreate(e);
-                }
-            }
-
-            return locationDto;
+            return MapToLocationDto<EventCreateViewModel>.Map(e, PointOrNullCreate);
         }
 
         private static LocationViewModel MapLocation(EventDto eventDto)
