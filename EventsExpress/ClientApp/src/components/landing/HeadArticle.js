@@ -65,7 +65,7 @@ export default class HeadArticle extends Component {
       >
         <nav className="row">
           <div className="col-md-10">
-            <h1>EventsExpress</h1>
+            <Link to={"/landing"} className="nav-link h1">EventsExpress</Link>
           </div>
           <AuthComponent onlyAnonymous>
             <div className="col-md-1">
