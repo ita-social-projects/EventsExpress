@@ -14,7 +14,15 @@ namespace EventsExpress.Db.DbInitialize
         public static void Seed(AppDbContext dbContext, IPasswordHasher passwordHasher)
         {
             dbContext.Database.EnsureCreated();
+            SeedUsers(dbContext, passwordHasher);
+            SeedCategories(dbContext);
+            SeedUnitsOfMeasuring(dbContext);
+            SeedEmailMessages(dbContext);
+            dbContext.SaveChanges();
+        }
 
+        private static void SeedUsers(AppDbContext dbContext, IPasswordHasher passwordHasher)
+        {
             // Look for any users
             if (dbContext.Users.Any())
             {
@@ -80,6 +88,14 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.Users.AddRange(users);
+        }
+
+        private static void SeedCategories(AppDbContext dbContext)
+        {
+            if (dbContext.Categories.Any())
+            {
+                return;
+            }
 
             var categories = new Category[]
             {
@@ -97,6 +113,14 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.Categories.AddRange(categories);
+        }
+
+        private static void SeedUnitsOfMeasuring(AppDbContext dbContext)
+        {
+            if (dbContext.UnitOfMeasurings.Any())
+            {
+                return;
+            }
 
             var unitsOfMeasuring = new UnitOfMeasuring[]
             {
@@ -143,6 +167,14 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.UnitOfMeasurings.AddRange(unitsOfMeasuring);
+        }
+
+        private static void SeedEmailMessages(AppDbContext dbContext)
+        {
+            if (dbContext.NotificationTemplates.Any())
+            {
+                return;
+            }
 
             var emailMessages = new[]
             {
@@ -159,8 +191,6 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.NotificationTemplates.AddRange(emailMessages);
-
-            dbContext.SaveChanges();
         }
     }
 }
