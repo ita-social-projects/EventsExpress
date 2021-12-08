@@ -3,11 +3,11 @@ import { Field, reduxForm } from "redux-form";
 import { renderTextField, renderSelectField } from '../helpers/form-helpers';
 import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
-import { CategoryOfMeasuringService } from "../../services";
+
 const divStyle = {
     width: "90wh"
 };
-const api_serv = new CategoryOfMeasuringService();
+
 class UnitOfMeasuringEdit extends Component {
 
     state = ({
@@ -27,6 +27,7 @@ class UnitOfMeasuringEdit extends Component {
             showAlert: false
         });
     };
+    
     categoriesList = (
         this.props.all_categories.data.map((item) =>
             <option value={item.id} key={item.id}>
