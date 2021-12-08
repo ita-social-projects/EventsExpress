@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using EventsExpress.Core.GraphQL.Resolvers;
 using EventsExpress.Db.Entities;
+using EventsExpress.Db.Enums;
 using HotChocolate.Types;
 using HotChocolate.Types.Spatial;
 using NetTopologySuite.Geometries;
@@ -12,6 +14,7 @@ namespace EventsExpress.Core.GraphQL.Types
         {
             descriptor.Field(f => f.Point).Type<GeoJsonPointType>();
             descriptor.Field(f => f.OnlineMeeting).Type<UrlType>();
+
             descriptor.Field(f => f.Type).Type<LocationTypeEnumType>();
         }
     }

@@ -5,5 +5,9 @@ namespace EventsExpress.Core.GraphQL.Types
 {
     public class GenderEnumType : EnumType<Gender>
     {
+        protected override void Configure(IEnumTypeDescriptor<Gender> descriptor)
+        {
+            descriptor.BindValues(BindingBehavior.Implicit);
+        }
     }
 }

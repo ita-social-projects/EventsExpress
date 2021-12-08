@@ -12,7 +12,10 @@ namespace EventsExpress.Core.GraphQL.ServiceExtension
         {
             services
                 .AddGraphQLServer()
+
+                .ModifyOptions(options => options.DefaultBindingBehavior = HotChocolate.Types.BindingBehavior.Explicit)
                 .AddSpatialTypes()
+                .AddType<EventQueryType>()
                 .AddType<EventType>()
                 .AddType<EventScheduleType>()
                 .AddType<EventCategoryType>()

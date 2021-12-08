@@ -11,6 +11,6 @@ namespace EventsExpress.Core.GraphQL.Queries
     public class EventQuery
     {
         [UseProjection]
-        public IQueryable<Event> GetEvents([Service] AppDbContext context) => context.Events;
+        public IQueryable<Event> GetEvents([Service] AppDbContext context) => context.Events.AsQueryable();
     }
 }
