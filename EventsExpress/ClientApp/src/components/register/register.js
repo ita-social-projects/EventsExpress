@@ -33,10 +33,11 @@ const validate = values => {
 class Register extends Component {
 
     render() {
-        const {pristine, reset, submitting} = this.props;
+        const {pristine, reset, submitting, error} = this.props;
+
         return (
             <div className="register">
-                <form onSubmit={this.props.handleSubmit}>
+                <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
                     <div>
                         <Field
                             name="email"
@@ -65,9 +66,9 @@ class Register extends Component {
                     </div>
                     <div>
                         <DialogActions>
-                            <Button 
-                                fullWidth={true} 
-                                type="button" color="primary" 
+                            <Button
+                                fullWidth={true}
+                                type="button" color="primary"
                                 disabled={pristine || submitting}
                                 onClick={reset}
                             >
@@ -75,18 +76,17 @@ class Register extends Component {
                             </Button>
                             <Button fullWidth={true} type="submit" color="primary">
                                 Sign Up
-                            </Button> 
+                            </Button>
                         </DialogActions>
                     </div>
+                    {error && <p className="text-danger text-center">{error}</p>}
                 </form>
             </div>
         );
     }
 }
 
-Register = reduxForm({
+export default reduxForm({
     form: "register-form",
     validate
 })(Register);
-
-export default Register;
