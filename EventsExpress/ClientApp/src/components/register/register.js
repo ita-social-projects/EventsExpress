@@ -6,6 +6,7 @@ import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-va
 import { renderTextField } from '../helpers/form-helpers';
 import { isValidEmail } from '../helpers/validators/email-address-validator';
 import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
+import ErrorMessages from '../shared/errorMessage';
 
 const validate = values => {
     let errors = {};
@@ -37,7 +38,7 @@ class Register extends Component {
 
         return (
             <div className="register">
-                <form onSubmit={this.props.handleSubmit(this.props.onSubmit)}>
+                <form onSubmit={this.props.handleSubmit}>
                     <div>
                         <Field
                             name="email"
@@ -79,7 +80,7 @@ class Register extends Component {
                             </Button>
                         </DialogActions>
                     </div>
-                    {error && <p className="text-danger text-center">{error}</p>}
+                    {error && <ErrorMessages error={error} className="text-center" />}
                 </form>
             </div>
         );
