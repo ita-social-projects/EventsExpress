@@ -1,24 +1,26 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace EventsExpress.Db.Migrations
 {
-    public partial class AddCategoryGroup : Migration
+    public partial class AddNullableCategoryGroup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<Guid>(
                 name: "CategoryGroupId",
                 table: "Categories",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                type: "uniqueidentifier",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "CategoryGroups",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 },
                 constraints: table =>
                 {
@@ -35,8 +37,7 @@ namespace EventsExpress.Db.Migrations
                 table: "Categories",
                 column: "CategoryGroupId",
                 principalTable: "CategoryGroups",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

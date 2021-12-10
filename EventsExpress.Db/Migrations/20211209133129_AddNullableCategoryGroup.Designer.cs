@@ -8,19 +8,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
+#nullable disable
+
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211018161440_AddCategoryGroup")]
-    partial class AddCategoryGroup
+    [Migration("20211209133129_AddNullableCategoryGroup")]
+    partial class AddNullableCategoryGroup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
                 {
@@ -100,8 +103,8 @@ namespace EventsExpress.Db.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(16)")
-                        .HasMaxLength(16);
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.HasKey("Id");
 
@@ -117,7 +120,7 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryGroupId")
+                    b.Property<Guid?>("CategoryGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -622,8 +625,8 @@ namespace EventsExpress.Db.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -835,6 +838,8 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "User")
                         .WithOne("Account")
                         .HasForeignKey("EventsExpress.Db.Entities.Account", "UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AccountRole", b =>
@@ -850,6 +855,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthExternal", b =>
@@ -859,6 +868,8 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthLocal", b =>
@@ -868,15 +879,17 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("EventsExpress.Db.Entities.AuthLocal", "AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.CategoryGroup", "CategoryGroup")
                         .WithMany("Categories")
-                        .HasForeignKey("CategoryGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryGroupId");
+
+                    b.Navigation("CategoryGroup");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
@@ -886,6 +899,8 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
@@ -905,6 +920,12 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ContactAdmin", b =>
@@ -916,6 +937,10 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId");
+
+                    b.Navigation("Assignee");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>
@@ -923,6 +948,8 @@ namespace EventsExpress.Db.Migrations
                     b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
                         .WithMany()
                         .HasForeignKey("EventLocationId");
+
+                    b.Navigation("EventLocation");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -938,6 +965,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventOwner", b =>
@@ -953,6 +984,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
@@ -962,6 +997,8 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("EventsExpress.Db.Entities.EventSchedule", "EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -977,6 +1014,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
@@ -992,6 +1033,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UnitOfMeasuringId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("UnitOfMeasuring");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
@@ -1011,6 +1056,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
@@ -1026,6 +1075,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserFromId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("UserFrom");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
@@ -1041,6 +1094,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserToId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("UserFrom");
+
+                    b.Navigation("UserTo");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
@@ -1050,6 +1107,8 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>
@@ -1065,6 +1124,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
@@ -1080,6 +1143,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
@@ -1095,6 +1162,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
@@ -1110,6 +1181,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId", "EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("UserEvent");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
@@ -1125,6 +1200,10 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("NotificationType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserToken", b =>
@@ -1134,6 +1213,111 @@ namespace EventsExpress.Db.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
+                {
+                    b.Navigation("AccountRoles");
+
+                    b.Navigation("AuthExternal");
+
+                    b.Navigation("AuthLocal");
+
+                    b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.CategoryGroup", b =>
+                {
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.CategoryOfMeasuring", b =>
+                {
+                    b.Navigation("UnitOfMeasurings");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.ChatRoom", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
+                {
+                    b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("EventSchedule");
+
+                    b.Navigation("Inventories");
+
+                    b.Navigation("Owners");
+
+                    b.Navigation("Rates");
+
+                    b.Navigation("StatusHistory");
+
+                    b.Navigation("Visitors");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
+                {
+                    b.Navigation("UserEventInventories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Role", b =>
+                {
+                    b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UnitOfMeasuring", b =>
+                {
+                    b.Navigation("Inventories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
+                {
+                    b.Navigation("Account");
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("ChangedStatusEvents");
+
+                    b.Navigation("Chats");
+
+                    b.Navigation("Events");
+
+                    b.Navigation("EventsToVisit");
+
+                    b.Navigation("NotificationTypes");
+
+                    b.Navigation("Rates");
+
+                    b.Navigation("Relationships");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
+                {
+                    b.Navigation("Inventories");
                 });
 #pragma warning restore 612, 618
         }
