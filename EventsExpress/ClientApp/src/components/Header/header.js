@@ -29,13 +29,13 @@ class Header extends Component {
             {!id && (
               <ModalWind
                 renderButton={(action) => (
-                  <Button
+                  <div className="btn btn-light" id="headbtn"
                     className="btn btn-light navbtns"
                     variant="contained"
                     onClick={action}
                   >
                     Sign In/Up
-                  </Button>
+                  </div>
                 )}
               />
             )}
@@ -43,7 +43,8 @@ class Header extends Component {
         </AuthComponent>
         <AuthComponent>
           <div className="col-md-2 text-right">
-            <div className="btn btn-light navbtns" onClick={this.logout_reset}>Log out</div>
+            <div className="btn btn-light" id="headbtn">Create Event</div>
+            <div className="btn btn-light" id="headbtn" onClick={this.logout_reset}>Log out</div>
           </div>
         </AuthComponent>
       </nav>

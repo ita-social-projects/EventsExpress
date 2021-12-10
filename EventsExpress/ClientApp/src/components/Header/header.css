@@ -1,15 +1,11 @@
-#bgcolornav{
-background-color: rgb(184, 184, 184);
+#bgcolornav {
+  background-color: rgb(184, 184, 184);
 }
 
-#EEButton{
-    font-weight: bold;
+#EEButton {
+  font-weight: bold;
 }
 
-.navbtns{
-    border-radius: 10px;
-}
-
-.eposition{
-    position: fixed;
+#headbtn{
+    border-radius: 15px;
 }
