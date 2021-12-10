@@ -5,17 +5,18 @@ import Button from "@material-ui/core/Button";
 import "./header.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import logout from './../../actions/login/logout-action'
+import logout from "./../../actions/login/logout-action";
+import CustomAvatar from "../avatar/custom-avatar";
+import { Roles } from "../../constants/userRoles";
 
 class Header extends Component {
-
   logout_reset = () => {
     this.props.hub.stop();
     this.props.logout();
   };
 
   render() {
-    const { id } = this.props.user.id !== null ? this.props.user : {};
+    const { id, name } = this.props.user.id !== null ? this.props.user : {};
 
     return (
       <nav className="row" id="bgcolornav">
@@ -24,12 +25,19 @@ class Header extends Component {
             EVENTS EXPRESS
           </Link>
         </div>
+        <div className="col-md-1 text-right">
+          <div className="btn btn-light" id="headbtn">
+            Create Event
+          </div>
+        </div>
         <AuthComponent onlyAnonymous>
-          <div className="col-md-1">
+          <div className="col-md-1 text-center">
             {!id && (
               <ModalWind
                 renderButton={(action) => (
-                  <div className="btn btn-light" id="headbtn"
+                  <div
+                    className="btn btn-light"
+                    id="headbtn"
                     className="btn btn-light navbtns"
                     variant="contained"
                     onClick={action}
@@ -42,9 +50,42 @@ class Header extends Component {
           </div>
         </AuthComponent>
         <AuthComponent>
-          <div className="col-md-2 text-right">
-            <div className="btn btn-light" id="headbtn">Create Event</div>
-            <div className="btn btn-light" id="headbtn" onClick={this.logout_reset}>Log out</div>
+          <div className="col-md-1 text-center">
+            <div className="btn-group">
+              <div
+                type="button"
+                className="dropdown-toggle d-flex flex-row alignItemsCenter"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <p id="userNameAlign">{name}</p>
+                <CustomAvatar size="small" userId={id} name={name} />
+              </div>
+              <div className="dropdown-menu dropdown-menu-right bgcolorwhite">
+                <AuthComponent rolesMatch={Roles.User}>
+                  <button className="dropdown-item bgcolorwhite" type="button">
+                    my events
+                  </button>
+                </AuthComponent>
+                <AuthComponent rolesMatch={Roles.User}>
+                  <Link className="removedecorations" to={"/user/" + id}>
+                    <button
+                      className="dropdown-item bgcolorwhite"
+                      type="button"
+                    >
+                      my profile
+                    </button>
+                  </Link>
+                </AuthComponent>
+                <button className="dropdown-item bgcolorwhite" type="button" onClick={this.logout_reset}>
+                  log out
+                </button>
+                <button className="dropdown-item bgcolorwhite" type="button">
+                  help and feedback
+                </button>
+              </div>
+            </div>
           </div>
         </AuthComponent>
       </nav>

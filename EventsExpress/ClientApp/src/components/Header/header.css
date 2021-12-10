@@ -6,6 +6,35 @@
   font-weight: bold;
 }
 
-#headbtn{
-    border-radius: 15px;
+#headbtn {
+  border-radius: 15px;
+}
+
+#userNameAlign {
+  margin-top: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 3px;
+}
+
+.alignItemsCenter{
+  align-items: center;
+}
+
+.dropdownitemsbackcl{
+  background-color: white;
+}
+
+.removedecorations{
+  all:unset;
+}
+
+.removedecorations:hover{
+  all:unset;
+}
+
+.bgcolorwhite{
+  background-color: white;
 }
