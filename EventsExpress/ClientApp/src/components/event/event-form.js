@@ -140,6 +140,7 @@ class EventForm extends Component {
                   type="number"
                   component={renderTextField}
                   label="Frequency"
+                  parse={Number}
                 />
               </div>
             </div>

@@ -8,11 +8,11 @@ namespace EventsExpress.Core.IServices
 {
     public interface ICategoryService
     {
-        IEnumerable<CategoryDto> GetAllCategories();
+        IEnumerable<CategoryDto> GetAllCategories(Guid? groupId);
 
         Category GetById(Guid id);
 
-        Task Create(string title);
+        Task Create(CategoryDto category);
 
         Task Edit(CategoryDto category);
 
@@ -23,5 +23,7 @@ namespace EventsExpress.Core.IServices
         bool ExistsByName(string categoryName);
 
         bool ExistsAll(IEnumerable<Guid> ids);
+
+        bool IsDuplicate(CategoryDto category);
     }
 }

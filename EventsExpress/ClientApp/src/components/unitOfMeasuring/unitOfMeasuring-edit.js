@@ -27,7 +27,7 @@ class UnitOfMeasuringEdit extends Component {
             showAlert: false
         });
     };
-
+    
     categoriesList = (
         this.props.all_categories.data.map((item) =>
             <option value={item.id} key={item.id}>
