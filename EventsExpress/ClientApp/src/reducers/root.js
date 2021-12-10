@@ -37,6 +37,7 @@ import * as NotificationTemplate from "./notification-templates/notification-tem
 import * as Config from './config';
 import * as RequestCount from "./request-index-count";
 import * as RequestLocalCount from "./request-index-local-count";
+import * as CategoriesOfMeasuring from "./categoryOfMeasuring-list"
 
 const rootReducers = {
     requestLocalCount: RequestLocalCount.reducer,
@@ -77,7 +78,8 @@ const rootReducers = {
     notificationType: NotificationTypes.reducer,
     NotificationTemplates: NotificationTemplates.reducer,
     NotificationTemplate: NotificationTemplate.reducer,
-    config: Config.reducer
+    config: Config.reducer,
+    categoriesOfMeasuring:CategoriesOfMeasuring.reducer
 };
 
 export default rootReducers;

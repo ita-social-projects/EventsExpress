@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         edit_event: (data) => dispatch(edit_event(data, async response => {
             throw new SubmissionError(await buildValidationState(response));
-        }, dispatch(setSuccessAllert(msg)))),
+        }, dispatch(setSuccessAllert('Your event has been successfully saved!')))),
         alert: (msg) => dispatch(setSuccessAllert(msg))
     };
 };
