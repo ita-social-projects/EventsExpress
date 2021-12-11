@@ -8,7 +8,7 @@ namespace EventsExpress
     using System.Text.Json;
     using System.Threading.Tasks;
     using AutoMapper;
-    using EventsExpress.Core.GraphQL.ServiceExtension;
+    using EventsExpress.Core.GraphQL.Extensions;
     using EventsExpress.Core.HostedService;
     using EventsExpress.Core.Infrastructure;
     using EventsExpress.Core.IServices;
@@ -117,10 +117,12 @@ namespace EventsExpress
 
             #endregion
 
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContextFactory<AppDbContext>(
+                options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.UseNetTopologySuite()));
+                    x => x.UseNetTopologySuite()),
+                ServiceLifetime.Scoped);
 
             #region Configure our services...
             services.AddScoped<ISecurityContext, SecurityContextService>();
