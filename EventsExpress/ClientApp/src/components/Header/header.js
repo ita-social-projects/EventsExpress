@@ -19,21 +19,23 @@ class Header extends Component {
     const { id, name } = this.props.user.id !== null ? this.props.user : {};
 
     return (
-      <nav className="row" id="bgcolornav">
-        <div className="col-md-10">
+      <nav class="navbar navbar-expand-lg navbar-light extraHeaderStyles" id="bgcolornav">
+        <div class="navbar-brand">
           <Link to={"/homepage"} className="nav-link" id="EEButton">
             EVENTS EXPRESS
           </Link>
         </div>
+        <ul class="navbar-nav mr-auto"></ul>
+        <span class="form-inline my-2 my-lg-0">
         <AuthComponent rolesMatch={Roles.User}>
-        <div className="col-md-1 text-right">
+        <div className="my-2 my-sm-0">
           <div className="btn btn-light" id="headbtn">
             Create Event
           </div>
         </div>
         </AuthComponent>
         <AuthComponent onlyAnonymous>
-          <div className="col-md-2 text-right">
+          <div className="my-2 my-sm-0">
             {!id && (
               <ModalWind
                 renderButton={(action) => (
@@ -52,7 +54,7 @@ class Header extends Component {
           </div>
         </AuthComponent>
         <AuthComponent>
-          <div className="col-md-1 text-center">
+          <div className="my-2 my-sm-0">
             <div className="btn-group">
               <div
                 type="button"
@@ -90,6 +92,7 @@ class Header extends Component {
             </div>
           </div>
         </AuthComponent>
+        </span>
       </nav>
     );
   }
