@@ -2,7 +2,6 @@
 import { connect } from 'react-redux';
 
 import add_event from '../actions/event/event-add-action';
-import logout from '../actions/login/logout-action';
 import Landing from '../components/landing';
 
 class LandingWrapper extends Component {
