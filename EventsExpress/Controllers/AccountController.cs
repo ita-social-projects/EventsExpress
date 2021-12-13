@@ -115,24 +115,6 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method allow to add an Twitter-authorization method to an existing account.
-        /// </summary>
-        /// <param name="model">Param model defines AuthExternalViewModel.</param>
-        /// <returns>This method adds a twitter login to account.</returns>
-        /// <response code="200">Return Ok.</response>
-        /// <response code="400">If authentication process failed.</response>
-        [Authorize]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> AddTwitterLogin(AuthExternalViewModel model)
-        {
-            var accountId = GetCurrentAccountId();
-
-            await _accountService.AddAuth(accountId, model.Email, AuthExternalType.Twitter);
-
-            return Ok();
-        }
-
-        /// <summary>
         /// This method is to unblock user.
         /// </summary>
         /// <param name="userId">Param userId defines the user identifier.</param>

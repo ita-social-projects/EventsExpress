@@ -57,7 +57,7 @@ namespace EventsExpress.Core.Services
             return ImageToByteArray(newBitmap);
         }
 
-        private byte[] ImageToByteArray(FreeImageBitmap imageIn)
+        private static byte[] ImageToByteArray(FreeImageBitmap imageIn)
         {
             using var ms = new MemoryStream();
             imageIn.Save(ms, FREE_IMAGE_FORMAT.FIF_PNG);
