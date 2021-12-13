@@ -153,7 +153,7 @@ namespace EventsExpress.Core.Services
                 .Include(a => a.RefreshTokens)
                 .Include(a => a.AccountRoles)
                 .Where(a => a.Id == _securityContext.GetCurrentAccountId())
-                .FirstOrDefault();
+                .Single();
 
             var authExternal = externalAccount.AuthExternal.First();
             authExternal.AccountId = localAccount.Id;
@@ -191,7 +191,7 @@ namespace EventsExpress.Core.Services
         public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
             var authLocal = Context.AuthLocal
-                .FirstOrDefault(x => x.AccountId == _securityContext.GetCurrentAccountId());
+                .First(x => x.AccountId == _securityContext.GetCurrentAccountId());
 
             authLocal.Salt = _passwordHasher.GenerateSalt();
             authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);

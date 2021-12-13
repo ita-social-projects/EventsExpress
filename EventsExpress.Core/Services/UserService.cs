@@ -52,6 +52,12 @@ namespace EventsExpress.Core.Services
             }
 
             var account = await Context.Accounts.FindAsync(userDto.AccountId);
+
+            if (account == null)
+            {
+                throw new EventsExpressException("Registration failed");
+            }
+
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
@@ -185,14 +191,20 @@ namespace EventsExpress.Core.Services
         {
             var user = Context.Users
                 .FirstOrDefault(u => u.Id == userId);
-
-            try
+            if (user != null)
             {
-                await _photoService.AddUserPhoto(avatar, user.Id);
+                try
+                {
+                    await _photoService.AddUserPhoto(avatar, user.Id);
+                }
+                catch (ArgumentException)
+                {
+                    throw new EventsExpressException("Bad image file");
+                }
             }
-            catch (ArgumentException)
+            else
             {
-                throw new EventsExpressException("Bad image file");
+                throw new EventsExpressException("User not found");
             }
         }
 
