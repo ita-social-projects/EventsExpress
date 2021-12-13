@@ -25,13 +25,15 @@ class Header extends Component {
             EVENTS EXPRESS
           </Link>
         </div>
+        <AuthComponent rolesMatch={Roles.User}>
         <div className="col-md-1 text-right">
           <div className="btn btn-light" id="headbtn">
             Create Event
           </div>
         </div>
+        </AuthComponent>
         <AuthComponent onlyAnonymous>
-          <div className="col-md-1 text-center">
+          <div className="col-md-2 text-right">
             {!id && (
               <ModalWind
                 renderButton={(action) => (
