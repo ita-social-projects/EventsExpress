@@ -24,7 +24,7 @@ class Header extends Component {
         id="bgcolornav"
       >
         <div class="navbar-brand">
-          <Link to={"/homepage"} className="nav-link" id="EEButton">
+          <Link to={"/home"} className="nav-link" id="EEButton">
             EVENTS EXPRESS
           </Link>
         </div>
@@ -71,15 +71,17 @@ class Header extends Component {
                 </div>
                 <div className="dropdown-menu dropdown-menu-right bgcolorwhite">
                   <AuthComponent rolesMatch={Roles.User}>
+                    <Link className="removedecorations" to={'/user/' + id}>
                     <button
                       className="dropdown-item bgcolorwhite"
                       type="button"
                     >
                       my events
                     </button>
+                    </Link>
                   </AuthComponent>
-                  <AuthComponent rolesMatch={Roles.User}>
-                    <Link className="removedecorations" to={"/user/" + id}>
+                  <AuthComponent>
+                    <Link className="removedecorations" to={'/editProfile'}>
                       <button
                         className="dropdown-item bgcolorwhite"
                         type="button"
