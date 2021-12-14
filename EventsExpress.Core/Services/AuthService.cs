@@ -209,10 +209,6 @@ namespace EventsExpress.Core.Services
             account.AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } };
             var result = Insert(account);
             await Context.SaveChangesAsync();
-            var authLocal = Context.AuthLocal.FirstOrDefault(al => al.Id == result.AuthLocal.Id);
-            var existingAcc = Context.Accounts.FirstOrDefault(ec => ec.Id == result.Id);
-            existingAcc.UserId = authLocal.AccountId;
-            await Context.SaveChangesAsync();
             await _mediator.Publish(new RegisterVerificationMessage(account.AuthLocal));
 
             return result.Id;
