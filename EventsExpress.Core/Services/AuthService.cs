@@ -174,7 +174,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
-            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId)?.AccountId;
+            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.AccountId == accountId)?.AccountId;
             var userToken = Context.UserTokens
                             .FirstOrDefault(rt => rt.Token == token && rt.AccountId == localAccountId);
 
@@ -208,9 +208,11 @@ namespace EventsExpress.Core.Services
             var account = Mapper.Map<Account>(registerDto);
             account.AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } };
             var result = Insert(account);
-
             await Context.SaveChangesAsync();
-
+            var authLocal = Context.AuthLocal.FirstOrDefault(al => al.Id == result.AuthLocal.Id);
+            var existingAcc = Context.Accounts.FirstOrDefault(ec => ec.Id == result.Id);
+            existingAcc.UserId = authLocal.AccountId;
+            await Context.SaveChangesAsync();
             await _mediator.Publish(new RegisterVerificationMessage(account.AuthLocal));
 
             return result.Id;
