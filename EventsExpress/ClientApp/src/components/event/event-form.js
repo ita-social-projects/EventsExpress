@@ -130,6 +130,7 @@ class EventForm extends Component {
                   name="periodicity"
                   text="Periodicity"
                   component={renderSelectField}
+                  parse={Number}
                 >
                   {this.periodicityListOptions}
                 </Field>
