@@ -1,23 +1,27 @@
+using System;
 using EventsExpress.Db.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EventsExpress.Db.Configurations
+namespace EventsExpress.Db.Configurations;
+
+public class CategoryGroupConfiguration : IEntityTypeConfiguration<CategoryGroup>
 {
-    using System;
+    public static CategoryGroup ArtAndCraftGroup { get; } = new () { Id = Guid.NewGuid(), Title = "Art&Craft" };
 
-    public class CategoryGroupConfiguration : IEntityTypeConfiguration<CategoryGroup>
+    public static CategoryGroup EducationAndTraining { get; } = new () { Id = Guid.NewGuid(), Title = "Education&Training" };
+
+    public static CategoryGroup WellnessHealthAndFitness { get; } = new () { Id = Guid.NewGuid(), Title = "Wellness, Health&Fitness" };
+
+    public static CategoryGroup[] CategoryGroups { get; } =
     {
-        public static CategoryGroup[] CategoryGroups { get; } =
-        {
-            new CategoryGroup { Id = Guid.NewGuid(), Title = "Art&Craft" },
-            new CategoryGroup { Id = Guid.NewGuid(), Title = "Education&Training" },
-            new CategoryGroup { Id = Guid.NewGuid(), Title = "Wellness, Health&Fitness" },
-        };
+        ArtAndCraftGroup,
+        EducationAndTraining,
+        WellnessHealthAndFitness,
+    };
 
-        public void Configure(EntityTypeBuilder<CategoryGroup> builder)
-        {
-            builder.HasData(CategoryGroups);
-        }
+    public void Configure(EntityTypeBuilder<CategoryGroup> builder)
+    {
+        builder.HasData(CategoryGroups);
     }
 }

@@ -100,14 +100,14 @@ namespace EventsExpress.Db.DbInitialize
 
             var categories = new Category[]
             {
-                new Category { Name = "Drawing", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[0] },
-                new Category { Name = "Pottery", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[0] },
-                new Category { Name = "Self-education", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
-                new Category { Name = "Public Speaking", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
-                new Category { Name = "Book Club", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
-                new Category { Name = "Climbing", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
-                new Category { Name = "Volleyball", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
-                new Category { Name = "Football", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
+                new Category { Name = "Drawing", CategoryGroup = CategoryGroupConfiguration.ArtAndCraftGroup },
+                new Category { Name = "Pottery", CategoryGroup = CategoryGroupConfiguration.ArtAndCraftGroup },
+                new Category { Name = "Self-education", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
+                new Category { Name = "Public Speaking", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
+                new Category { Name = "Book Club", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
+                new Category { Name = "Climbing", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
+                new Category { Name = "Volleyball", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
+                new Category { Name = "Football", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
             };
 
             dbContext.Categories.AddRange(categories);
