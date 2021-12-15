@@ -382,9 +382,6 @@ namespace EventsExpress.Test.ServiceTests
             Context.Rates.AddRange(rates);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<EventDto, LocationDto>(It.IsAny<EventDto>()))
-                .Returns((EventDto e) => MapLocationDtoFromEventDto(e));
-
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
                 .Returns((LocationDto e) => MapEventLocationFromLocationDto(e));
 

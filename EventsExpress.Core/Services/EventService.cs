@@ -154,7 +154,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = Mapper.Map<EventDto, LocationDto>(eventDTO);
+            var locationDTO = eventDTO.Location;
             var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             var ev = Mapper.Map<EventDto, Event>(eventDTO);
