@@ -22,13 +22,33 @@ namespace EventsExpress.Core.GraphQL.Types
             //    .ImplementsNode()
             //    .IdField(f => f.Id)
             //    .ResolveNode((context, id) => context.DataLoader<EventByIdDataLoader>().LoadAsync(id, context.RequestAborted));
-            descriptor.Field(f => f.Title).Type<StringType>();
-            descriptor.Field(f => f.Description).Type<StringType>();
-            descriptor.Field(f => f.DateFrom).Type<DateTimeType>();
-            descriptor.Field(f => f.DateTo).Type<DateTimeType>();
-            descriptor.Field(f => f.IsPublic).Type<BooleanType>();
-            descriptor.Field(f => f.MaxParticipants).Type<IntType>();
-            descriptor.Field(f => f.EventLocationId).Type<UuidType>();
+            descriptor
+                .Field(f => f.Title)
+                .Type<StringType>();
+
+            descriptor
+                .Field(f => f.Description)
+                .Type<StringType>();
+
+            descriptor
+                .Field(f => f.DateFrom)
+                .Type<DateTimeType>();
+
+            descriptor
+                .Field(f => f.DateTo)
+                .Type<DateTimeType>();
+
+            descriptor
+                .Field(f => f.IsPublic)
+                .Type<BooleanType>();
+
+            descriptor
+                .Field(f => f.MaxParticipants)
+                .Type<IntType>();
+
+            descriptor
+                .Field(f => f.EventLocationId)
+                .Type<UuidType>();
 
             descriptor
                 .Field(f => f.Categories)
@@ -42,14 +62,13 @@ namespace EventsExpress.Core.GraphQL.Types
 
             descriptor
                 .Field(f => f.EventSchedule)
-                .ResolveWith<EventResolvers>(r => r.GetEventSchedulesAsync(default, default, default))
-                .UseDbContext<AppDbContext>()
-                .Name("eventSchedule");
+                .ResolveWith<EventResolvers>(r => r.GetEventSchedulesAsync(default, default, default));
 
             descriptor.Ignore(f => f.Inventories);
             descriptor.Ignore(f => f.Owners);
             descriptor.Ignore(f => f.Rates);
             descriptor.Ignore(f => f.StatusHistory);
+
             descriptor.Ignore(f => f.Visitors);
         }
 
@@ -83,7 +102,7 @@ namespace EventsExpress.Core.GraphQL.Types
                     return null;
                 }
 
-                return await eventScheduleByEventId.LoadAsync(ev.EventSchedule.EventId, cancellationToken);
+                return await eventScheduleByEventId.LoadAsync(ev.EventSchedule.Id, cancellationToken);
             }
         }
     }

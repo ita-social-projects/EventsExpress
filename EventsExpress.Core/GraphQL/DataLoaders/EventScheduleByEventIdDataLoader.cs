@@ -25,8 +25,8 @@ namespace EventsExpress.Core.GraphQL.DataLoaders
             await using AppDbContext dbContext = dbContextFactory.CreateDbContext();
 
             return await dbContext.EventSchedules
-                .Where(s => keys.Contains(s.EventId))
-                .ToDictionaryAsync(t => t.EventId, cancellationToken);
+                .Where(s => keys.Contains(s.Id))
+                .ToDictionaryAsync(t => t.Id, cancellationToken);
         }
     }
 }

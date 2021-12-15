@@ -28,12 +28,6 @@ namespace EventsExpress.Core.GraphQL.Events
         public async Task<IEnumerable<Event>> GetEventsByIdAsync([ID(nameof(Event))] Guid[] ids, EventByIdDataLoader dataLoader, CancellationToken cancellationToken) =>
             await dataLoader.LoadAsync(ids, cancellationToken);
 
-        // public Task<Event> GetEventAsync(Guid id, EventByIdDataLoader dataLoader, CancellationToken cancellationToken) =>
-        //    dataLoader.LoadAsync(id, cancellationToken);
-
-        // public IQueryable<Event> GetEvents([Service] AppDbContext context) =>
-        //    context.Events;
-
         // [UseApplicationDbContext]
         // public async Task<IEnumerable<Event>> GetEventsAsync(
         //    [ScopedService] AppDbContext appDbContext,
