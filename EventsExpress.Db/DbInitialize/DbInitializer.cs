@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.Configurations;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -97,25 +98,16 @@ namespace EventsExpress.Db.DbInitialize
                 return;
             }
 
-            var categoryGroups = new CategoryGroup[]
-            {
-                new CategoryGroup { Title = "Art&Craft" },
-                new CategoryGroup { Title = "Education&Training" },
-                new CategoryGroup { Title = "Wellness, Health&Fitness" },
-            };
-
-            dbContext.CategoryGroups.AddRange(categoryGroups);
-
             var categories = new Category[]
             {
-                new Category { Name = "Drawing", CategoryGroup = categoryGroups[0] },
-                new Category { Name = "Pottery", CategoryGroup = categoryGroups[0] },
-                new Category { Name = "Self-education", CategoryGroup = categoryGroups[1] },
-                new Category { Name = "Public Speaking", CategoryGroup = categoryGroups[1] },
-                new Category { Name = "Book Club", CategoryGroup = categoryGroups[1] },
-                new Category { Name = "Climbing", CategoryGroup = categoryGroups[2] },
-                new Category { Name = "Volleyball", CategoryGroup = categoryGroups[2] },
-                new Category { Name = "Football", CategoryGroup = categoryGroups[2] },
+                new Category { Name = "Drawing", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[0] },
+                new Category { Name = "Pottery", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[0] },
+                new Category { Name = "Self-education", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
+                new Category { Name = "Public Speaking", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
+                new Category { Name = "Book Club", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[1] },
+                new Category { Name = "Climbing", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
+                new Category { Name = "Volleyball", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
+                new Category { Name = "Football", CategoryGroup = CategoryGroupConfiguration.CategoryGroups[2] },
             };
 
             dbContext.Categories.AddRange(categories);
