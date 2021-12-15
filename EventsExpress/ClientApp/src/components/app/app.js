@@ -35,6 +35,7 @@ import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
+import MainLayout from '../MainLayout';
 
 class App extends Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
+            <MainLayout>
                 <Switch>
                     <Route path="/landing" component={LandingWrapper} />
                     <Route
@@ -96,6 +98,7 @@ class App extends Component {
                         </Layout>
                     </Route>
                 </Switch>
+                </MainLayout>
             </BrowserRouter>
         );
     }

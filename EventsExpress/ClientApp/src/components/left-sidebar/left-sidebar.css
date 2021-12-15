@@ -8,7 +8,7 @@ body {
     height: 100%;
     position: fixed;
     z-index: 101;
-    top: 0;
+    top: inherit;
     left: 0;
     background-color: rgb(255, 255, 255);
     overflow-x: hidden;
