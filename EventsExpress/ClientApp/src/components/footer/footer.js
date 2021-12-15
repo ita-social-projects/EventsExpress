@@ -25,6 +25,7 @@ export const Footer = () => {
                         to={link.path}
                         className="nav-link custom-footer__link"
                     >
+                        <i className="custom-footer__link-circle fas fa-circle"/>
                         {link.name}
                     </Link>
                 ))}

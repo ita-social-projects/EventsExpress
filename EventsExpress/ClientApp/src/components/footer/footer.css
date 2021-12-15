@@ -35,6 +35,15 @@
 
 .custom-footer__link {
     font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.custom-footer__link-circle {
+    width: 0.3em;
+    height: 0.3em;
 }
 
 @media screen and (max-width: 705px) {
