@@ -1,15 +1,12 @@
 ﻿import React, { Component } from "react";
 import Carousel from "react-material-ui-carousel";
 import CarouselEventCard from "./CarouselEventCard";
-import EventService from "../../services/EventService";
 import ModalWind from "../modal-wind";
 import AuthComponent from "../../security/authComponent";
 import "./landing.css";
 import { get_upcoming_events } from "../../actions/event/event-list-action";
 import { connect } from "react-redux";
 import HeadArticle from "./HeadArticle";
-
-const eventService = new EventService();
 
 class Landing extends Component {
   constructor(props) {
@@ -40,19 +37,16 @@ class Landing extends Component {
     </div>
   );
 
-  render() {
-    let { id } = this.props.user.id !== null ? this.props.user : {};
-    console.log(id);
+  render() {    
     const { items } = this.props.events.data;
     const events = this.splitDataIntoBlocks(items);
 
     const carouselNavIsVisible = events.length > 1;
-    const { onLogoutClick } = this.props;
 
     return (
       <>
         <div className="main">
-          <HeadArticle id={id} onLogoutClick={onLogoutClick} />
+          <HeadArticle />
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>
