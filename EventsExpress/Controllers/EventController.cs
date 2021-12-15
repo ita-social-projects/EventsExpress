@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
@@ -123,7 +124,7 @@ namespace EventsExpress.Controllers
 
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Publish(Guid eventId)
+        public async Task<IActionResult> Publish(Guid eventId, [FromServices] IValidator<EventViewModel> validator)
         {
             EventDto eventDto = _eventService.EventById(eventId);
             if (eventDto == null)
@@ -133,18 +134,7 @@ namespace EventsExpress.Controllers
 
             EventViewModel ev = _mapper.Map<EventViewModel>(eventDto);
 
-            var validationResult = _validator.Validate(ev);
-            if (!validationResult.IsValid)
-            {
-                Dictionary<string, string> exept = new Dictionary<string, string>();
-                var p = validationResult.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
+            validator.ValidateAndThrowIfInvalid(ev);
 
             var result = await _eventService.Publish(eventId);
 
