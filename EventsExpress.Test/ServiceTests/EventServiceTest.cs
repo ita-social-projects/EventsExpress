@@ -751,7 +751,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Set rate")]
         public void SetRate_InvalidEventId_ThrowsAsync()
         {
-            Assert.ThrowsAsync<NullReferenceException>(async () => await service.SetRate(userId, Guid.NewGuid(), score));
+            Assert.DoesNotThrowAsync(async () => await service.SetRate(userId, Guid.NewGuid(), score));
         }
 
         [Test]
