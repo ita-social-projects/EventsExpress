@@ -133,9 +133,7 @@ namespace EventsExpress.Mapping
 
                 if (e.Location.Type == LocationType.Map)
                 {
-                    locationDto.Point = e.GetType() == typeof(EventCreateViewModel) ?
-                        PointOrNullCreate((EventCreateViewModel)e) :
-                        PointOrNullEdit((EventEditViewModel)e);
+                    locationDto.Point = new Point(e.Location.Latitude.Value, e.Location.Longitude.Value) { SRID = 4326 };
                 }
             }
 
@@ -165,18 +163,6 @@ namespace EventsExpress.Mapping
                         OnlineMeeting = eventDto.Location.OnlineMeeting,
                         Type = eventDto.Location.Type,
                     };
-        }
-
-        private static Point PointOrNullEdit(EventEditViewModel editViewModel)
-        {
-            return editViewModel.Location?.Type == LocationType.Map ?
-                 new Point(editViewModel.Location.Latitude.Value, editViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
-        }
-
-        private static Point PointOrNullCreate(EventCreateViewModel createViewModel)
-        {
-            return createViewModel.Location.Type == LocationType.Map ?
-                 new Point(createViewModel.Location.Latitude.Value, createViewModel.Location.Longitude.Value) { SRID = 4326 } : null;
         }
 
         private static string UserName(User user)
