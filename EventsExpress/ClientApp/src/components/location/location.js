@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "react-widgets/dist/css/react-widgets.css";
-import { LocationMapWithMarker } from "../helpers/form-helpers";
+import { LocationMapWithMarker } from "../helpers/form-helpers/location";
 import { enumLocationType } from "../../constants/EventLocationType";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
