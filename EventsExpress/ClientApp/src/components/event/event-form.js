@@ -88,6 +88,7 @@ class EventForm extends Component {
               component={renderTextField}
               type="input"
               label="Organizer"
+              InputLabelProps={{ shrink: true }}
               inputProps={{ value: user_name }}
               readOnly
             />
