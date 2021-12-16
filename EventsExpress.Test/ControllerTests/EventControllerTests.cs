@@ -35,7 +35,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<ISecurityContext> mockSecurityContextService;
         private Mock<IPhotoService> mockPhotoservice;
         private Mock<IValidator<IFormFile>> mockValidator;
-        private Mock<IValidator<EventViewModel>> mockEventValidator;
+        private Mock<IValidator<EventViewModel>> mockEventViewModelValidator;
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
         private Guid _eventId = Guid.NewGuid();
@@ -53,8 +53,8 @@ namespace EventsExpress.Test.ControllerTests
             mockPhotoservice = new Mock<IPhotoService>();
             service = new Mock<IEventService>();
             mockValidator = new Mock<IValidator<IFormFile>>();
-            mockEventValidator = new Mock<IValidator<EventViewModel>>();
-            eventController = new EventController(mockEventValidator.Object, service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
+            mockEventViewModelValidator = new Mock<IValidator<EventViewModel>>();
+            eventController = new EventController(mockEventViewModelValidator.Object, service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
             eventController.ControllerContext = new ControllerContext();
             eventController.ControllerContext.HttpContext = new DefaultHttpContext();
 

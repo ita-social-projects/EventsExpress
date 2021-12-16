@@ -35,7 +35,6 @@ namespace EventsExpress.Core.Services
             IPhotoService photoService,
             ILocationService locationService,
             IEventScheduleService eventScheduleService,
-            IValidator<Event> validator,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
