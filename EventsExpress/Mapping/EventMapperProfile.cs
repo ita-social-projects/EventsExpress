@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Azure.Storage.Blobs;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
@@ -142,27 +143,27 @@ namespace EventsExpress.Mapping
 
         private static LocationViewModel MapLocation(EventDto eventDto)
         {
-            if (eventDto.Location == null)
+            return eventDto.Location == null ? null :
+            eventDto.Location.Type switch
             {
-                return null;
-            }
+                LocationType.Map => new LocationViewModel
+                {
+                    Latitude = eventDto.Location.Point.X,
+                    Longitude = eventDto.Location.Point.Y,
+                    OnlineMeeting = null,
+                    Type = eventDto.Location.Type,
+                },
 
-            return eventDto.Location.Type == LocationType.Map ?
-              new LocationViewModel
-              {
-                  Latitude = eventDto.Location.Point.X,
-                  Longitude = eventDto.Location.Point.Y,
-                  OnlineMeeting = null,
-                  Type = eventDto.Location.Type,
-              }
-                      :
-                    new LocationViewModel
-                    {
-                        Latitude = null,
-                        Longitude = null,
-                        OnlineMeeting = eventDto.Location.OnlineMeeting,
-                        Type = eventDto.Location.Type,
-                    };
+                LocationType.Online => new LocationViewModel
+                {
+                    Latitude = null,
+                    Longitude = null,
+                    OnlineMeeting = eventDto.Location.OnlineMeeting,
+                    Type = eventDto.Location.Type,
+                },
+
+                _ => throw new EventsExpressException("Cannot map to LocationViewModel fro EventDto"),
+            };
         }
 
         private static string UserName(User user)
