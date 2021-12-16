@@ -8,7 +8,7 @@ import { setSuccessAllert } from '../actions/alert-action';
 import { validate } from './event-edit-validate-form ';
 import { validateEventForm } from './event-validate-form';
 import Button from '@material-ui/core/Button';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState, handleFormError } from '../components/helpers/action-helpers';
 
 class EditEventWrapper extends Component {
 
@@ -22,6 +22,8 @@ class EditEventWrapper extends Component {
         this.props.history.goBack();
     };
 
+    onError = error => this.props.handleFormError(error);
+
     render() {
         return <>
             <div className="pl-md-4">
@@ -29,6 +31,7 @@ class EditEventWrapper extends Component {
                     validate={validate}
                     all_categories={this.props.all_categories}
                     onSubmit={this.onSubmit}
+                    onError={this.onError}
                     initialValues={this.props.event}
                     form_values={this.props.form_values}
                     haveReccurentCheckBox={false}
@@ -70,7 +73,8 @@ const mapDispatchToProps = (dispatch) => {
         edit_event: (data) => dispatch(edit_event(data, async response => {
             throw new SubmissionError(await buildValidationState(response));
         }, dispatch(setSuccessAllert('Your event has been successfully saved!')))),
-        alert: (msg) => dispatch(setSuccessAllert(msg))
+        alert: (msg) => dispatch(setSuccessAllert(msg)),
+        handleFormError: error => dispatch(handleFormError(error))
     };
 };
 
