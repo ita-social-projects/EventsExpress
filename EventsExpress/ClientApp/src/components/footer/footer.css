@@ -1,11 +1,11 @@
 .custom-footer {
+    margin-top: 30px;
     z-index: 500;
     background-color: rgb(184, 184, 184);
     position: relative;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding: 5px;
-    margin-top: auto;
 }
 
 .custom-footer__links-to-pages {
