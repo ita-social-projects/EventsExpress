@@ -25,51 +25,17 @@ export default class Location extends Component {
     });
   };
 
-  onMapLocationChange = (mapLocation) =>{
+  onMapLocationChange = (mapLocation) => {
     this.props.input.onChange({
-      type:enumLocationType.map,
-      latitude:mapLocation.latitude,
-      longitude:mapLocation.longitude
-    })
-  }
-
-  returnLocationRender = () => {
-    const { value } = this.props.input;
-    if (value != null) {
-      if (value !== "" && value.type === enumLocationType.map) {
-        return <LocationMapWithMarker
-        latitude = {value.latitude !== null ? value.latitude : null}
-        longitude = {value.longitude !== null ? value.longitude : null}
-        onChangeValues = {this.onMapLocationChange}
-        />;
-      } else if (value !== "" && value.type === enumLocationType.online) {
-        return (
-          <>
-            <label htmlFor="url">Enter an https:// URL:</label>
-            <br />
-            <TextField
-              name="onlineMeeting"
-              label="Url"
-              id="url"
-              fullWidth
-              onChange={this.onUrlInputChange}
-              value={
-                value !== "" && value.type === enumLocationType.online
-                  ? value.onlineMeeting
-                  : ""
-              }
-            />
-            <br />
-          </>
-        );
-      }
-    }
+      type: enumLocationType.map,
+      latitude: mapLocation.latitude,
+      longitude: mapLocation.longitude,
+    });
   };
 
   render() {
     const { value } = this.props.input;
-    let renderedLocation = null;
-    renderedLocation = this.returnLocationRender();
+    console.log(this.props);
     return (
       <span>
         <FormControl name="location.type">
@@ -88,7 +54,30 @@ export default class Location extends Component {
             />
           </RadioGroup>
         </FormControl>
-        <div className="mt-2">{renderedLocation}</div>
+        <div className="mt-2">
+          {value !== "" && value.type === enumLocationType.map && (
+            <LocationMapWithMarker
+              latitude={value.latitude !== null ? value.latitude : null}
+              longitude={value.longitude !== null ? value.longitude : null}
+              onChangeValues={this.onMapLocationChange}
+            />
+          )}
+          {value !== "" && value.type === enumLocationType.online && (
+            <>
+              <label htmlFor="url">Enter an https:// URL:</label>
+              <br />
+              <TextField
+                name="onlineMeeting"
+                label="Url"
+                id="url"
+                fullWidth
+                onChange={this.onUrlInputChange}
+                value={value.onlineMeeting}
+              />
+              <br />
+            </>
+          )}
+        </div>
         {renderFieldError({
           touched: this.props.meta.touched,
           error: this.props.meta.error,
