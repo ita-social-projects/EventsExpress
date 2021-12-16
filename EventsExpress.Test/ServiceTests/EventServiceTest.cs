@@ -29,7 +29,6 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
-        private static Mock<IValidator<Event>> mockValidationService;
         private static Mock<ISecurityContext> mockSecurityContextService;
 
         private EventService service;
@@ -153,7 +152,6 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
-            mockValidationService = new Mock<IValidator<Event>>();
             mockSecurityContextService = new Mock<ISecurityContext>();
             mockSecurityContextService.Setup(x => x.GetCurrentUserId())
                 .Returns(userId);
@@ -165,7 +163,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockLocationService.Object,
                 mockEventScheduleService.Object,
-                mockValidationService.Object,
                 mockSecurityContextService.Object);
 
             eventLocationMap = new EventLocation
@@ -642,7 +639,6 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Publish Event")]
         public void Publish_ValidEvent_Works()
         {
-            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
