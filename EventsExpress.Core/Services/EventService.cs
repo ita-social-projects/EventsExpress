@@ -74,7 +74,14 @@ namespace EventsExpress.Core.Services
             {
                 EventId = eventId,
                 UserId = userId,
-                UserStatusEvent = ev.IsPublic == null ? UserStatusEvent.Denied : ev.IsPublic.Value ? UserStatusEvent.Approved : UserStatusEvent.Pending,
+
+                // UserStatusEvent = ev.IsPublic == null ? UserStatusEvent.Denied : ev.IsPublic.Value ? UserStatusEvent.Approved : UserStatusEvent.Pending,
+                UserStatusEvent = ev.IsPublic switch
+                {
+                    null => UserStatusEvent.Denied,
+                    true => UserStatusEvent.Approved,
+                    false => UserStatusEvent.Pending,
+                },
             });
 
             await Context.SaveChangesAsync();
@@ -203,8 +210,7 @@ namespace EventsExpress.Core.Services
 
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
 
-            // ????????????????????????????
-            var ticksDiff = DateTime.Now.Ticks;
+            long ticksDiff = 0;
             if (eventDTO.DateTo != null && eventDTO.DateFrom != null)
             {
                 ticksDiff = eventDTO.DateTo.Value.Ticks - eventDTO.DateFrom.Value.Ticks;
@@ -553,12 +559,9 @@ namespace EventsExpress.Core.Services
         {
             var ev = Context.Events
                 .Include(e => e.Rates)
-                .FirstOrDefault(e => e.Id == eventId);
+                .Single(e => e.Id == eventId);
 
-            if (ev != null)
-            {
-                ev.Rates ??= new List<Rate>();
-            }
+            ev.Rates ??= new List<Rate>();
 
             var currentRate = ev?.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
 

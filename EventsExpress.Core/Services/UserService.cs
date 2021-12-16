@@ -190,21 +190,14 @@ namespace EventsExpress.Core.Services
         public async Task ChangeAvatar(Guid userId, IFormFile avatar)
         {
             var user = Context.Users
-                .FirstOrDefault(u => u.Id == userId);
-            if (user != null)
+                .Single(u => u.Id == userId);
+            try
             {
-                try
-                {
-                    await _photoService.AddUserPhoto(avatar, user.Id);
-                }
-                catch (ArgumentException)
-                {
-                    throw new EventsExpressException("Bad image file");
-                }
+                await _photoService.AddUserPhoto(avatar, user.Id);
             }
-            else
+            catch (ArgumentException)
             {
-                throw new EventsExpressException("User not found");
+                throw new EventsExpressException("Bad image file");
             }
         }
 
