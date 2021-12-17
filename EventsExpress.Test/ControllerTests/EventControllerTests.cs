@@ -16,9 +16,11 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -196,6 +198,18 @@ namespace EventsExpress.Test.ControllerTests
         {
             var expected = eventController.VisitedEvents(_idUser, 1);
             Assert.IsInstanceOf<OkObjectResult>(expected);
+        }
+
+        [Test]
+        public void Publish_OkResult()
+        {
+            mockEventViewModelValidator.Setup(v => v.Validate(It.IsAny<EventViewModel>()))
+                .Returns(new ValidationResult() { });
+            MockMapper.Setup(m => m.Map<EventViewModel>(It.IsAny<EventDto>())).Returns(new EventViewModel() { });
+            service.Setup(e => e.EventById(_eventId)).Returns(new EventDto() { });
+            service.Setup(e => e.Publish(_eventId)).Returns(Task.FromResult(Guid.NewGuid()));
+            var expected = eventController.Publish(_eventId, mockEventViewModelValidator.Object);
+            Assert.IsInstanceOf<OkObjectResult>(expected.Result);
         }
     }
 }
