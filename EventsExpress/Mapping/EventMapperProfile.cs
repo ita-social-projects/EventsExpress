@@ -141,19 +141,18 @@ namespace EventsExpress.Mapping
             return locationDto;
         }
 
-        private static LocationViewModel MapLocation(EventDto eventDto)
+        public static LocationViewModel MapLocation(EventDto eventDto)
         {
-            return eventDto switch
+            return eventDto.Location switch
             {
-                { Location: null } => null,
-                { Location.Type: LocationType.Map } => new LocationViewModel
+                { Type: LocationType.Map } => new LocationViewModel
                 {
                     Latitude = eventDto.Location.Point.X,
                     Longitude = eventDto.Location.Point.Y,
                     OnlineMeeting = null,
                     Type = eventDto.Location.Type,
                 },
-                { Location.Type: LocationType.Online } => new LocationViewModel
+                { Type: LocationType.Online } => new LocationViewModel
                 {
                     Latitude = null,
                     Longitude = null,
@@ -161,7 +160,7 @@ namespace EventsExpress.Mapping
                     Type = eventDto.Location.Type,
                 },
 
-                _ => throw new EventsExpressException("Cannot map to LocationViewModel from EventDto"),
+                _ => null,
             };
         }
 
