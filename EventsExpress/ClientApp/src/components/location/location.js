@@ -34,8 +34,7 @@ export default class Location extends Component {
   };
 
   render() {
-    const { value } = this.props.input;
-    console.log(this.props);
+    const { input:{value}, meta:{touched, error} } = this.props;
     return (
       <span>
         <FormControl name="location.type">
@@ -78,10 +77,7 @@ export default class Location extends Component {
             </>
           )}
         </div>
-        {renderFieldError({
-          touched: this.props.meta.touched,
-          error: this.props.meta.error,
-        })}
+        { renderFieldError({ touched, error, })}
       </span>
     );
   }
