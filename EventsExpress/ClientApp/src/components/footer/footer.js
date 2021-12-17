@@ -7,7 +7,7 @@ export const Footer = () => {
         { id: 0, name: 'Privacy', path: '/privacy' },
         { id: 1, name: 'Terms', path: '/terms' },
         { id: 2, name: 'About', path: '/about' },
-        { id: 3, name: 'Contact us', path: '/contact' }
+        { id: 3, name: 'Contact us', path: '/contactAdmin' }
     ];
 
     const socialLinks = [
