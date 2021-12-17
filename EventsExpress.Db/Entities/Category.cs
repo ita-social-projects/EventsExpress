@@ -7,7 +7,7 @@ namespace EventsExpress.Db.Entities
     {
         public string Name { get; set; }
 
-        public Guid? CategoryGroupId { get; set; }
+        public Guid CategoryGroupId { get; set; }
 
         public virtual CategoryGroup CategoryGroup { get; set; }
 

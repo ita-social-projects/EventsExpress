@@ -53,23 +53,29 @@ namespace EventsExpress.Mapping
 
         private static CategoryGroupDto MapCategoryGroupDtoFromCategoryGroup(CategoryGroup categoryGroup)
         {
-            return categoryGroup is not null
-                ? new CategoryGroupDto { Id = categoryGroup.Id, Title = categoryGroup.Title }
-                : null;
+            return new CategoryGroupDto
+            {
+                Id = categoryGroup.Id,
+                Title = categoryGroup.Title,
+            };
         }
 
         private static CategoryGroupDto MapCategoryGroupDtoFromCategoryGroupViewModel(CategoryGroupViewModel categoryGroup)
         {
-            return categoryGroup is not null
-                ? new CategoryGroupDto { Id = categoryGroup.Id, Title = categoryGroup.Title }
-                : null;
+            return new CategoryGroupDto
+            {
+                Id = categoryGroup.Id,
+                Title = categoryGroup.Title,
+            };
         }
 
         private static CategoryGroupViewModel MapCategoryGroupViewModelFromCategoryGroupDto(CategoryGroupDto categoryGroup)
         {
-            return categoryGroup is not null
-                ? new CategoryGroupViewModel { Id = categoryGroup.Id, Title = categoryGroup.Title }
-                : null;
+            return new CategoryGroupViewModel
+            {
+                Id = categoryGroup.Id,
+                Title = categoryGroup.Title,
+            };
         }
     }
 }

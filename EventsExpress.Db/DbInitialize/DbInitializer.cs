@@ -100,14 +100,14 @@ namespace EventsExpress.Db.DbInitialize
 
             var categories = new Category[]
             {
-                new Category { Name = "Drawing", CategoryGroup = CategoryGroupConfiguration.ArtAndCraftGroup },
-                new Category { Name = "Pottery", CategoryGroup = CategoryGroupConfiguration.ArtAndCraftGroup },
-                new Category { Name = "Self-education", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
-                new Category { Name = "Public Speaking", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
-                new Category { Name = "Book Club", CategoryGroup = CategoryGroupConfiguration.EducationAndTraining },
-                new Category { Name = "Climbing", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
-                new Category { Name = "Volleyball", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
-                new Category { Name = "Football", CategoryGroup = CategoryGroupConfiguration.WellnessHealthAndFitness },
+                new Category { Name = "Drawing", CategoryGroupId = CategoryGroupConfiguration.ArtAndCraftGroup.Id },
+                new Category { Name = "Pottery", CategoryGroupId = CategoryGroupConfiguration.ArtAndCraftGroup.Id },
+                new Category { Name = "Self-education", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Public Speaking", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Book Club", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Climbing", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
+                new Category { Name = "Volleyball", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
+                new Category { Name = "Football", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
             };
 
             dbContext.Categories.AddRange(categories);
