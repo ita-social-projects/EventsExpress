@@ -1,7 +1,6 @@
 ﻿using EventsExpress.Db.Entities;
 using HotChocolate.Types;
 using HotChocolate.Types.Spatial;
-using NetTopologySuite.Geometries;
 
 namespace EventsExpress.Core.GraphQL.Types
 {

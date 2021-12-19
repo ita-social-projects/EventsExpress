@@ -1,8 +1,7 @@
 ﻿using System;
-using EventsExpress.Core.GraphQL.Categories;
 using EventsExpress.Core.GraphQL.DataLoaders;
 using EventsExpress.Core.GraphQL.Events;
-using EventsExpress.Core.GraphQL.EventSchedules;
+using EventsExpress.Core.GraphQL.IDataLoaders;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +16,6 @@ namespace EventsExpress.Core.GraphQL.Extensions
                 .AddGraphQLServer()
                 .AddQueryType(q => q.Name("Query"))
                     .AddTypeExtension<EventQueries>()
-                    .AddTypeExtension<CategoryQueries>()
-                    .AddTypeExtension<EventScheduleQueries>()
                 .AddType<EventType>()
                 .AddType<CategoryType>()
                 .AddType<UserType>()
@@ -27,33 +24,44 @@ namespace EventsExpress.Core.GraphQL.Extensions
 
                 // .AddType<EventLocationType>()
                 .AddSpatialTypes()
-                .AddDataLoader<EventByIdDataLoader>()
-                .AddDataLoader<CategoryByIdDataLoader>()
-                .AddDataLoader<UserByIdDataLoader>()
-                .AddDataLoader<EventLocationByIdDataLoader>();
+                .AddDataLoader<IEventByIdDataLoader,              EventByIdDataLoader>()
+                .AddDataLoader<ICategoryByIdDataLoader,           CategoryByIdDataLoader>()
+                .AddDataLoader<IUserByIdDataLoader,               UserByIdDataLoader>()
+                .AddDataLoader<IEventScheduleByIdDataLoader,      EventScheduleByIdDataLoader>()
+                .AddDataLoader<IEventLocationByIdDataLoader,      EventLocationByIdDataLoader>()
+                .AddDataLoader<IInventoryByIdDataLoader,          InventoryByIdDataLoader>()
+                .AddDataLoader<IRateByIdDataLoader,               RateByIdDataLoader>()
+                .AddDataLoader<IEventStatusHistoryByIdDataLoader, EventStatusHistoryByIdDataLoader>()
 
-                // .ModifyOptions(options => options.DefaultResolverStrategy = HotChocolate.Execution.ExecutionStrategy.Serial)
+                .AddErrorFilter(error =>
+                {
+                    switch (error.Exception)
+                    {
+                        case ArgumentException argumentException:
+                            return ErrorBuilder.FromError(error)
+                                .SetMessage(argumentException.Message)
+                                .SetCode("ArgumentException")
+                                .RemoveException()
+                                .ClearExtensions()
+                                .ClearLocations()
+                                .Build();
+                        case HotChocolate.SchemaException schemaException:
+                            return ErrorBuilder.FromError(error)
+                                .SetMessage(schemaException.Message)
+                                .SetCode("Schema exception")
+                                .Build();
+                        case HotChocolate.GraphQLException graphQLException:
+                            return ErrorBuilder.FromError(error)
+                                .SetMessage(graphQLException.Message)
+                                .SetCode("Schema exception")
+                                .Build();
+                    }
+
+                    return error;
+                });
+
                 // .AddProjections()
-                // .AddErrorFilter(error =>
-                // {
-                //    switch (error.Exception)
-                //    {
-                //        case ArgumentException argEx:
-                //            return ErrorBuilder.FromError(error)
-                //                .SetMessage(argEx.Message)
-                //                .SetCode("ArgumentException")
-                //                .RemoveException()
-                //                .ClearExtensions()
-                //                .ClearLocations()
-                //                .Build();
-                //        case HotChocolate.SchemaException shcEr:
-                //            return ErrorBuilder.FromError(error)
-                //                .SetMessage(shcEr.Message)
-                //                .SetCode("Schema exception")
-                //                .Build();
-                //    }
-                //    return error;
-                // });
+                // .ModifyOptions(options => options.DefaultResolverStrategy = HotChocolate.Execution.ExecutionStrategy.Serial)
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EventsExpress.Core.GraphQL.IDataLoaders;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using GreenDonut;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.DataLoaders
 {
-    public class EventLocationByIdDataLoader : BatchDataLoader<Guid, EventLocation>
+    public class EventLocationByIdDataLoader : BatchDataLoader<Guid, EventLocation>, IEventLocationByIdDataLoader
     {
         private readonly IDbContextFactory<AppDbContext> dbContextFactory;
 

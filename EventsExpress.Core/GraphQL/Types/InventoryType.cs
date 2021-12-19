@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using EventsExpress.Core.GraphQL.DataLoaders;
-using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
-using HotChocolate;
-using HotChocolate.Resolvers;
+﻿using EventsExpress.Db.Entities;
 using HotChocolate.Types;
-using HotChocolate.Types.Spatial;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.Types
 {
@@ -24,6 +13,7 @@ namespace EventsExpress.Core.GraphQL.Types
 
             descriptor.Ignore(f => f.Event);
             descriptor.Ignore(f => f.UnitOfMeasuringId);
+            descriptor.Ignore(f => f.UnitOfMeasuring);
             descriptor.Ignore(f => f.UserEventInventories);
         }
     }

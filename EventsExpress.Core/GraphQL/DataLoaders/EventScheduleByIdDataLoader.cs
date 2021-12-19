@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EventsExpress.Core.GraphQL.IDataLoaders;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using GreenDonut;
@@ -10,14 +11,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.DataLoaders
 {
-    public class EventScheduleByIdDataLoader : BatchDataLoader<Guid, EventSchedule>
+    public class EventScheduleByIdDataLoader : BatchDataLoader<Guid, EventSchedule>, IEventScheduleByIdDataLoader
     {
         private readonly IDbContextFactory<AppDbContext> dbContextFactory;
 
         public EventScheduleByIdDataLoader(IBatchScheduler batchScheduler, IDbContextFactory<AppDbContext> dbContextFactory)
             : base(batchScheduler)
         {
-            this.dbContextFactory = dbContextFactory;
+            this.dbContextFactory = dbContextFactory ?? throw new ArgumentException(nameof(dbContextFactory));
         }
 
         protected override async Task<IReadOnlyDictionary<Guid, EventSchedule>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
