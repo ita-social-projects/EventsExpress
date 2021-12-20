@@ -53,6 +53,10 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
                 .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
+            MockMapper.Setup(opts => opts.Map<User>(It.IsAny<UserDto>()))
+                .Returns((UserDto u) => new User()
+                {
+                });
 
             service = new UserService(
                 Context,
@@ -186,6 +190,23 @@ namespace EventsExpress.Test.ServiceTests
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void CreateUserDTO_ThrowException()
+        {
+            existingUserDTO.Email = "test";
+            existingUserDTO.AccountId = Guid.Empty;
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
+            Assert.That(ex.Message, Contains.Substring("Account not found"));
+        }
+
+        [Test]
+        public void GetCurrentUserInfo_UserId()
+        {
+            var expected = existingUserDTO;
+            var actual = service.GetCurrentUserInfo();
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [Test]
@@ -339,6 +360,13 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
             mockPhotoService.Verify(x => x.AddUserPhoto(file, userId));
+        }
+
+        [Test]
+        public void ChangeAvatar_ThrowException()
+        {
+            mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<IFormFile>()));
         }
 
         private string GetContentType(string fileName)

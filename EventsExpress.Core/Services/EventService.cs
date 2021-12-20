@@ -74,8 +74,6 @@ namespace EventsExpress.Core.Services
             {
                 EventId = eventId,
                 UserId = userId,
-
-                // UserStatusEvent = ev.IsPublic == null ? UserStatusEvent.Denied : ev.IsPublic.Value ? UserStatusEvent.Approved : UserStatusEvent.Pending,
                 UserStatusEvent = ev.IsPublic switch
                 {
                     null => UserStatusEvent.Denied,

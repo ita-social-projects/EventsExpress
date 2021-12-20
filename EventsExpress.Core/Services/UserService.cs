@@ -55,7 +55,7 @@ namespace EventsExpress.Core.Services
 
             if (account == null)
             {
-                throw new EventsExpressException("Registration failed");
+                throw new EventsExpressException("Account not found");
             }
 
             account.UserId = newUser.Id;
