@@ -404,7 +404,7 @@ namespace EventsExpress.Test.ServiceTests
                     },
                     EventLocationId = eventLocationIdOnline,
                     Title = "Second event",
-                    IsPublic = false,
+                    IsPublic = null,
                     Categories = null,
                     MaxParticipants = 25,
                     StatusHistory = new List<EventStatusHistory>()
