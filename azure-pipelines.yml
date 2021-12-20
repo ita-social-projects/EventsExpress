@@ -34,9 +34,17 @@ stages:
           # Exclude some files from analyze
           sonar.cpd.exclusions=**/Migrations/**/*.*
           sonar.coverage.exclusions=**/ClientApp/**/*.*,**/Migrations/**/*.*,**/Startup.cs
-          sonar.issue.ignore.multicriteria=e1
+
+          sonar.issue.ignore.multicriteria=e1, e2, e3
+
           sonar.issue.ignore.multicriteria.e1.ruleKey=javascript:S1788
-          sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/*.js
+          sonar.issue.ignore.multicriteria.e1.resourceKey=**/ClientApp/src/reducers/**/*.js
+          
+          sonar.issue.ignore.multicriteria.e2.ruleKey=roslyn:SA1210
+          sonar.issue.ignore.multicriteria.e2.resourceKey=EventsExpress.Test/*.cs
+          
+          sonar.issue.ignore.multicriteria.e3.ruleKey=roslyn:SA1518
+          sonar.issue.ignore.multicriteria.e3.resourceKey=EventsExpress.Test/*.cs
 
     - task: UseDotNet@2
       inputs:
