@@ -33,9 +33,12 @@
                     Name = "Category#1",
                 },
             },
-            Point = new Point(10.45, 12.34),
+            Location = new LocationDto()
+            {
+                Point = new Point(10.45, 12.34),
+                Type = LocationType.Map,
+            },
             MaxParticipants = 2147483647,
-            Type = LocationType.Map,
         };
 
         private static EventDto eventDTOOnline = new EventDto
@@ -65,9 +68,12 @@
                     Name = "Category#1",
                 },
             },
-            OnlineMeeting = new Uri("http://basin.example.com/#branch"),
+            Location = new LocationDto()
+            {
+                OnlineMeeting = "http://basin.example.com/#branch",
+                Type = LocationType.Online,
+            },
             MaxParticipants = 2147483647,
-            Type = LocationType.Online,
         };
 
         private static EventDto eventDTOReccurentDraft = new EventDto
@@ -97,9 +103,12 @@
                     Name = "Category#1",
                 },
             },
-            Point = new Point(50.45, 35.34),
+            Location = new LocationDto()
+            {
+                Point = new Point(50.45, 35.34),
+                Type = LocationType.Map,
+            },
             MaxParticipants = 14,
-            Type = LocationType.Map,
         };
 
         public static EventDto EventDTOMap

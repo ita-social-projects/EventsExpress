@@ -29,7 +29,6 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
-        private static Mock<IValidator<Event>> mockValidationService;
         private static Mock<ISecurityContext> mockSecurityContextService;
 
         private EventService service;
@@ -54,23 +53,26 @@ namespace EventsExpress.Test.ServiceTests
 
         private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
         {
-            if (eventDto.Type == LocationType.Map)
+            if (eventDto.Location != null)
             {
-                return new LocationDto
+                if (eventDto.Location.Type == LocationType.Map)
                 {
-                    Id = Guid.NewGuid(),
-                    Point = eventDto.Point,
-                    Type = LocationType.Map,
-                };
-            }
-            else if (eventDto.Type == LocationType.Online)
-            {
-                return new LocationDto
+                    return new LocationDto
+                    {
+                        Id = Guid.NewGuid(),
+                        Point = eventDto.Location.Point,
+                        Type = LocationType.Map,
+                    };
+                }
+                else if (eventDto.Location.Type == LocationType.Online)
                 {
-                    Id = Guid.NewGuid(),
-                    OnlineMeeting = eventDto.OnlineMeeting,
-                    Type = LocationType.Online,
-                };
+                    return new LocationDto
+                    {
+                        Id = Guid.NewGuid(),
+                        OnlineMeeting = eventDto.Location.OnlineMeeting,
+                        Type = LocationType.Online,
+                    };
+                }
             }
 
             return null;
@@ -92,7 +94,7 @@ namespace EventsExpress.Test.ServiceTests
                 return new EventLocation
                 {
                     Id = Guid.NewGuid(),
-                    OnlineMeeting = locationDto.OnlineMeeting,
+                    OnlineMeeting = string.Empty,
                     Type = LocationType.Online,
                 };
             }
@@ -133,9 +135,12 @@ namespace EventsExpress.Test.ServiceTests
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
-                Point = eventDto.Point,
                 MaxParticipants = eventDto.MaxParticipants,
-                Type = eventDto.Type,
+                Location = new LocationDto()
+                {
+                    Point = eventDto.Location.Point,
+                    Type = eventDto.Location.Type,
+                },
             };
         }
 
@@ -147,7 +152,6 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
-            mockValidationService = new Mock<IValidator<Event>>();
             mockSecurityContextService = new Mock<ISecurityContext>();
             mockSecurityContextService.Setup(x => x.GetCurrentUserId())
                 .Returns(userId);
@@ -159,7 +163,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockLocationService.Object,
                 mockEventScheduleService.Object,
-                mockValidationService.Object,
                 mockSecurityContextService.Object);
 
             eventLocationMap = new EventLocation
@@ -179,7 +182,7 @@ namespace EventsExpress.Test.ServiceTests
             eventLocationOnline = new EventLocation
             {
                 Id = eventLocationIdOnline,
-                OnlineMeeting = new Uri("http://basin.example.com/#branch"),
+                OnlineMeeting = "http://basin.example.com/#branch",
                 Type = LocationType.Online,
             };
 
@@ -446,9 +449,6 @@ namespace EventsExpress.Test.ServiceTests
             Context.Events.AddRange(events);
             Context.Rates.AddRange(rates);
             Context.SaveChanges();
-
-            MockMapper.Setup(u => u.Map<EventDto, LocationDto>(It.IsAny<EventDto>()))
-                .Returns((EventDto e) => MapLocationDtoFromEventDto(e));
 
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
                 .Returns((LocationDto e) => MapEventLocationFromLocationDto(e));
@@ -726,37 +726,12 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Publish Event")]
-        public void Publish_InvalidId_Throw()
-        {
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(Guid.NewGuid()));
-            Assert.That(ex.Message, Contains.Substring("Not found"));
-        }
-
-        [Test]
-        [Category("Publish Event")]
         public void Publish_ValidEvent_Works()
         {
-            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
             mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
-        }
-
-        [Test]
-        [Category("Publish Event")]
-        public void Publish_InValidEvent_Throws()
-        {
-            var validationResultMock = new Mock<FluentValidation.Results.ValidationResult>();
-            validationResultMock
-                .SetupGet(x => x.IsValid)
-                .Returns(() => false);
-
-            validationResultMock.Object.Errors.Add(new FluentValidation.Results.ValidationFailure("Description", "Field is required!"));
-
-            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.SecondEventId));
-            Assert.That(ex.Message, Contains.Substring("validation failed"));
         }
 
         [Test]

@@ -26,7 +26,6 @@ namespace EventsExpress.Core.Services
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
         private readonly IEventScheduleService _eventScheduleService;
-        private readonly IValidator<Event> _validator;
         private readonly ISecurityContext _securityContextService;
 
         public EventService(
@@ -36,7 +35,6 @@ namespace EventsExpress.Core.Services
             IPhotoService photoService,
             ILocationService locationService,
             IEventScheduleService eventScheduleService,
-            IValidator<Event> validator,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
@@ -44,7 +42,6 @@ namespace EventsExpress.Core.Services
             _locationService = locationService;
             _mediator = mediator;
             _eventScheduleService = eventScheduleService;
-            _validator = validator;
             _securityContextService = securityContextService;
         }
 
@@ -161,7 +158,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = Mapper.Map<EventDto, LocationDto>(eventDTO);
+            var locationDTO = eventDTO.Location;
             var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             var ev = Mapper.Map<EventDto, Event>(eventDTO);
@@ -240,10 +237,9 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventSchedule)
                 .First(x => x.Id == e.Id);
 
-            if (e.OnlineMeeting != null || e.Point != null)
+            if (e.Location != null)
             {
-                var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
-                var locationId = await _locationService.AddLocationToEvent(locationDTO);
+                var locationId = await _locationService.AddLocationToEvent(e.Location);
                 ev.EventLocationId = locationId;
             }
 
@@ -297,38 +293,17 @@ namespace EventsExpress.Core.Services
                    .ThenInclude(c => c.Category)
                .FirstOrDefault(x => x.Id == eventId);
 
-            if (ev == null)
-            {
-                throw new EventsExpressException("Not found");
-            }
-
-            Dictionary<string, string> exept = new Dictionary<string, string>();
-            var result = _validator.Validate(ev);
-
-            if (result.IsValid)
-            {
-                ev.StatusHistory.Add(
+            ev.StatusHistory.Add(
                     new EventStatusHistory
                     {
                         EventStatus = EventStatus.Active,
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-                await Context.SaveChangesAsync();
-                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-                await _mediator.Publish(new EventCreatedMessage(dtos));
-                return ev.Id;
-            }
-            else
-            {
-                var p = result.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
+            await Context.SaveChangesAsync();
+            EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+            await _mediator.Publish(new EventCreatedMessage(dtos));
+            return ev.Id;
         }
 
         public async Task<Guid> EditNextEvent(EventDto eventDTO)
