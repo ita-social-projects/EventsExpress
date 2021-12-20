@@ -30,15 +30,13 @@ namespace EventsExpress.Controllers
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
-        private readonly IValidator<EventViewModel> _validator;
 
-        public EventController(IValidator<EventViewModel> validator, IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IPhotoService photoService)
         {
             _photoService = photoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
-            _validator = validator;
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
