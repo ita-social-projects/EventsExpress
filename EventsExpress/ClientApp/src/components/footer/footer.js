@@ -18,24 +18,24 @@ export const Footer = () => {
 
     return (
         <footer className="custom-footer">
-            <div className="custom-footer__links-to-pages">
+            <div className="links-to-pages">
                 {links.map(link => (
                     <Link
                         key={link.id}
                         to={link.path}
-                        className="nav-link custom-footer__link"
+                        className="nav-link link"
                     >
-                        <i className="custom-footer__link-circle fas fa-circle"/>
+                        <i className="link-circle fas fa-circle"/>
                         {link.name}
                     </Link>
                 ))}
             </div>
-            <div className="custom-footer__social-links">
+            <div className="social-links">
                 {socialLinks.map(link => (
                     <Link
                         key={link.id}
                         to={link.path}
-                        className="nav-link custom-footer__social-link"
+                        className="nav-link social-link"
                     >
                         <i className={link.icon}/>
                     </Link>
