@@ -57,6 +57,11 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((UserDto u) => new User()
                 {
                 });
+            MockMapper.Setup(opts => opts.Map<UserDto>(It.IsAny<User>()))
+                .Returns((User u) => new UserDto()
+                {
+                    Id = u.Id,
+                });
 
             service = new UserService(
                 Context,
@@ -201,14 +206,14 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(ex.Message, Contains.Substring("Account not found"));
         }
 
-        /*[Test]
+        [Test]
         public void GetCurrentUserInfo_UserId()
         {
             var expected = existingUserDTO;
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(secondUser.Id);
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUser.Id);
             var actual = service.GetCurrentUserInfo();
-            Assert.AreEqual(expected, actual);
-        }*/
+            Assert.AreEqual(expected.Id, actual.Id);
+        }
 
         [Test]
         public void GetUserByNotificationType_NotificationChange_IEnumerable_userIds_userExisting()
@@ -367,7 +372,8 @@ namespace EventsExpress.Test.ServiceTests
         public void ChangeAvatar_ThrowException()
         {
             mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.ChangeAvatar(It.IsAny<Guid>(), It.IsAny<IFormFile>()));
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(userId, new FormFile(new MemoryStream(), 0, 0, null, "tset")));
+            Assert.That(ex.Message, Contains.Substring("Bad image file"));
         }
 
         private string GetContentType(string fileName)

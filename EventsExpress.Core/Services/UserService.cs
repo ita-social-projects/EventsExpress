@@ -46,7 +46,7 @@ namespace EventsExpress.Core.Services
 
             var user = Mapper.Map<User>(userDto);
             var newUser = Insert(user);
-            if (newUser.Email != user.Email || newUser.Id == Guid.Empty)
+            if (newUser.Email != user.Email)
             {
                 throw new EventsExpressException("Registration failed");
             }
@@ -87,6 +87,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(ar => ar.Role)
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId);
+
             var userDto = Mapper.Map<UserDto>(user);
 
             return userDto;

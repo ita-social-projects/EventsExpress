@@ -40,7 +40,6 @@ namespace EventsExpress.Test.ServiceTests
         private EventLocation eventLocationOnline;
         private Guid userId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
-        private Guid isPublicNullEventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
         private Guid eventCategoryId = Guid.NewGuid();
@@ -349,7 +348,42 @@ namespace EventsExpress.Test.ServiceTests
                 },
                 new Event
                 {
-                    Id = isPublicNullEventId,
+                    Id = GetEventExistingId.IsPublicFalseEventId,
+                    EventSchedule = new EventSchedule
+                    {
+                        IsActive = true,
+                        Frequency = 1,
+                        Periodicity = Periodicity.Weekly,
+                        LastRun = DateTime.Today,
+                        NextRun = DateTime.Today.AddDays(7),
+                    },
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "Is Public false",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = userId,
+                        },
+                    },
+                    EventLocationId = eventLocationIdOnline,
+                    Title = "Second event",
+                    IsPublic = false,
+                    Categories = null,
+                    MaxParticipants = 25,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
+                },
+                new Event
+                {
+                    Id = GetEventExistingId.IsPublicNullEventId,
                     EventSchedule = new EventSchedule
                     {
                         IsActive = true,
@@ -574,9 +608,18 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Add user to event")]
         public void AddUserToEvent_Event_IsPublicFalse()
         {
-            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, isPublicNullEventId));
-            var ev = Context.UserEvent.First(ue => ue.EventId == isPublicNullEventId);
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, GetEventExistingId.IsPublicFalseEventId));
+            var ev = Context.UserEvent.First(ue => ue.EventId == GetEventExistingId.IsPublicFalseEventId);
             Assert.AreEqual(ev.UserStatusEvent, UserStatusEvent.Pending);
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_Event_IsPublicNull()
+        {
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, GetEventExistingId.IsPublicNullEventId));
+            var ev = Context.UserEvent.First(ue => ue.EventId == GetEventExistingId.IsPublicNullEventId);
+            Assert.AreEqual(ev.UserStatusEvent, UserStatusEvent.Denied);
         }
 
         [Test]
@@ -678,7 +721,7 @@ namespace EventsExpress.Test.ServiceTests
         public void CreateDraft_Works()
         {
             service.CreateDraft();
-            Assert.AreEqual(6, Context.Events.Count());
+            Assert.AreEqual(7, Context.Events.Count());
         }
 
         [Test]
