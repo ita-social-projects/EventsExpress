@@ -46,12 +46,18 @@ namespace EventsExpress.Core.Services
 
             var user = Mapper.Map<User>(userDto);
             var newUser = Insert(user);
-            if (newUser.Email != user.Email || newUser.Id == Guid.Empty)
+            if (newUser.Email != user.Email)
             {
                 throw new EventsExpressException("Registration failed");
             }
 
             var account = await Context.Accounts.FindAsync(userDto.AccountId);
+
+            if (account == null)
+            {
+                throw new EventsExpressException("Account not found");
+            }
+
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
@@ -75,15 +81,16 @@ namespace EventsExpress.Core.Services
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            var user = Mapper.Map<UserDto>(
-                Context.Users
+            var user = Context.Users
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
                 .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId));
+                .FirstOrDefault(x => x.Id == userId);
 
-            return user;
+            var userDto = Mapper.Map<UserDto>(user);
+
+            return userDto;
         }
 
         public IEnumerable<NotificationTypeDto> GetUserNotificationTypes()
@@ -184,8 +191,7 @@ namespace EventsExpress.Core.Services
         public async Task ChangeAvatar(Guid userId, IFormFile avatar)
         {
             var user = Context.Users
-                .FirstOrDefault(u => u.Id == userId);
-
+                .Single(u => u.Id == userId);
             try
             {
                 await _photoService.AddUserPhoto(avatar, user.Id);

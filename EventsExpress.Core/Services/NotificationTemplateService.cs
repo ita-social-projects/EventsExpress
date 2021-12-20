@@ -88,7 +88,7 @@ namespace EventsExpress.Core.Services
 
             var pattern = GetPropertiesAndValuesFromObject(model);
 
-            return pattern.Aggregate(text, (current, element) => current
+            return pattern.Aggregate(text, (current, element) => current?
                 .Replace(element.Key, element.Value));
         }
 
