@@ -678,7 +678,7 @@ namespace EventsExpress.Test.ServiceTests
         public void CreateDraft_Works()
         {
             service.CreateDraft();
-            Assert.AreEqual(5, Context.Events.Count());
+            Assert.AreEqual(6, Context.Events.Count());
         }
 
         [Test]

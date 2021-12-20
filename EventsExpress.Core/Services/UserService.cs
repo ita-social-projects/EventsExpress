@@ -81,15 +81,15 @@ namespace EventsExpress.Core.Services
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            var user = Mapper.Map<UserDto>(
-                Context.Users
+            var user = Context.Users
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
                 .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId));
+                .FirstOrDefault(x => x.Id == userId);
+            var userDto = Mapper.Map<UserDto>(user);
 
-            return user;
+            return userDto;
         }
 
         public IEnumerable<NotificationTypeDto> GetUserNotificationTypes()
