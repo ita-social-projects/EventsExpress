@@ -41,5 +41,16 @@
 }
 
 .extraHeaderStyles{
-  height: 8%;
+  z-index: 500;
+  position: sticky;
+  top: 0;
+}
+
+.navbar.extraHeaderStyles {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.extraHeaderStyles .navbar-brand {
+  padding: 0;
 }
