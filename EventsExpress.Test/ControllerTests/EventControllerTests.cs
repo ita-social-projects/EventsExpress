@@ -56,7 +56,7 @@ namespace EventsExpress.Test.ControllerTests
             service = new Mock<IEventService>();
             mockValidator = new Mock<IValidator<IFormFile>>();
             mockEventViewModelValidator = new Mock<IValidator<EventViewModel>>();
-            eventController = new EventController(mockEventViewModelValidator.Object, service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
+            eventController = new EventController(service.Object, MockMapper.Object, mockSecurityContextService.Object, mockPhotoservice.Object);
             eventController.ControllerContext = new ControllerContext();
             eventController.ControllerContext.HttpContext = new DefaultHttpContext();
 
