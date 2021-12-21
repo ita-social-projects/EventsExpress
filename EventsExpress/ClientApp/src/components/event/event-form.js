@@ -8,9 +8,7 @@ import PhotoService from "../../services/PhotoService";
 import periodicity from "../../constants/PeriodicityConstants";
 import {
   renderDatePicker,
-  LocationMapWithMarker,
   renderCheckbox,
-  radioButton,
   renderSelectField,
   renderTextField,
   renderTextArea,
@@ -19,11 +17,9 @@ import {
 } from "../helpers/form-helpers";
 import { enumLocationType } from "../../constants/EventLocationType";
 import "./event-form.css";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
 import asyncValidatePhoto from "../../containers/async-validate-photo";
 import ErrorMessages from '../shared/errorMessage';
-
+import Location from "../location";
 momentLocaliser(moment);
 
 const photoService = new PhotoService();
@@ -193,36 +189,7 @@ class EventForm extends Component {
               placeholder="#hashtags"
             />
           </div>
-          <Field
-            name="location.type"
-            component={radioButton}
-            parse={Number}
-            onChange={() => this.checkLocation(this.props.form_values.location)}
-          >
-            <FormControlLabel value={0} control={<Radio />} label="Map" />
-            <FormControlLabel value={1} control={<Radio />} label="Online" />
-          </Field>
-          {this.props.form_values &&
-            this.props.form_values.location &&
-            this.props.form_values.location.type == enumLocationType.map && (
-              <div className="mt-2">
-                <Field name="location" component={LocationMapWithMarker} />
-              </div>
-            )}
-          {this.props.form_values &&
-            this.props.form_values.location &&
-            this.props.form_values.location.type == enumLocationType.online && (
-              <div className="mt-2">
-                <label htmlFor="url">Enter an https:// URL:</label>
-                <Field
-                  name="location.onlineMeeting"
-                  component={renderTextField}
-                  type="url"
-                  label="Url"
-                  id="url"
-                />
-              </div>
-            )}
+          <Field name="location" component={Location}/>
         </div>
         <div className="row my-4">
           {error && <ErrorMessages error={error} className="text-center" />}

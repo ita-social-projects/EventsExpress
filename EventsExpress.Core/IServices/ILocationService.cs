@@ -15,6 +15,6 @@ namespace EventsExpress.Core.IServices
 
         LocationDto LocationByPoint(Point point);
 
-        LocationDto LocationByURI(Uri uri);
+        LocationDto LocationByURI(string uri);
     }
 }

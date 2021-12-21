@@ -212,6 +212,13 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void Edit_EventSchedule_NotFound_ThrouAsync()
+        {
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new EventScheduleDto()));
+            Assert.That(ex.Message, Contains.Substring("Not found"));
+        }
+
+        [Test]
         [Category("Delete event")]
         public void DeleteEventSchedule_ExistingId_Success()
         {
