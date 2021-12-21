@@ -16,13 +16,8 @@ class RecoverPasswordContainer extends React.Component {
 
         return <>
             <RecoverPassword onSubmit={this.submit} />
-            {!status.isError &&
+            {status.isError !== undefined && status.isError &&
                 <p className="text-success text-center">New password sent by your email.<br />Please use it to sign in.</p>
-
-            }
-            {
-                status.isError &&
-                <p className="text-danger text-center">{status.isError}</p>
             }
         </>
     }
