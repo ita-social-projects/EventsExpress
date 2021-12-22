@@ -5,7 +5,7 @@ import { getRequestInc, getRequestDec } from "../request-count-action";
 
 
 export const recoverPassword = {
-    DATA: "SET_RECOVERPASSWORD_SUCCESS",
+    DATA: "SET_RECOVERPASSWORD_STATE",
 }
 
 const api_serv = new AuthenticationService();
@@ -16,14 +16,15 @@ export default function recover_Password(data) {
         let response = await api_serv.setRecoverPassword(data);
         dispatch(getRequestDec());
         if (!response.ok) {
+            dispatch(setRecoverPasswordStateError(true));
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(setRecoverPasswordSucces());
+        dispatch(setRecoverPasswordStateError(false));
         return Promise.resolve();
     }
 }
 
-const setRecoverPasswordSucces = () => {
+const setRecoverPasswordStateError = (data) => {
     return {
         type: recoverPassword.DATA,
         payload: data
