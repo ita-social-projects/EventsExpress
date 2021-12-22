@@ -4,12 +4,12 @@ import {
     FilterExpansionPanelWrapper
 } from './filter-expansion-panel-parts';
 import React, { useState } from 'react';
-import { useStyles } from './filter-styles';
 import { Button } from '@material-ui/core';
+import { useFilterExpansionPanelStyles } from './filter-expansion-panel-styles';
 
 export const FilterExpansionPanel = ({ title, children }) => {
     const [expanded, setExpanded] = useState(false);
-    const classes = useStyles();
+    const classes = useFilterExpansionPanelStyles();
 
     const handleChange = panel => (event, newExpanded) => {
         if (event.target.localName === 'button' || event.target.localName === 'span') {
@@ -30,9 +30,9 @@ export const FilterExpansionPanel = ({ title, children }) => {
                 aria-controls="panel1d-content"
                 id="panel1d-header"
             >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className={classes.headingWrapper}>
                     <i className={`fas ${expanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} />
-                    <h6 className={classes.filterExpansionPanelHeading}>{title}</h6>
+                    <h6 className={classes.heading}>{title}</h6>
                 </div>
                 <Button color="secondary" size="small">Clear</Button>
             </FilterExpansionPanelSummary>

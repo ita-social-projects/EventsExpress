@@ -5,11 +5,11 @@ import {
     Icon,
     IconButton,
 } from '@material-ui/core';
-import { useStyles } from './filter-styles';
+import { useFilterStyles } from './filter-styles';
 
 export const Filter = () => {
     const [open, setOpen] = useState(false);
-    const classes = useStyles();
+    const classes = useFilterStyles();
 
     const toggleOpen = () => setOpen(!open);
 

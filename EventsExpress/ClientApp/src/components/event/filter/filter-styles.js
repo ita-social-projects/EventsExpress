@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 320;
 const drawerIndex = 250;
 
-export const useStyles = makeStyles(theme => ({
+export const useFilterStyles = makeStyles({
     drawerPaper: {
         zIndex: drawerIndex,
         top: '55px',
@@ -22,10 +22,5 @@ export const useStyles = makeStyles(theme => ({
     },
     filterHeading: {
         margin: 0
-    },
-    filterExpansionPanelHeading: {
-        margin: 0,
-        borderWidth: 0,
-        color: '#0c4bc7'
     }
-}));
+});
