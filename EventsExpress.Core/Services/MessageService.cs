@@ -64,7 +64,7 @@ namespace EventsExpress.Core.Services
             if (chat == null)
             {
                 chat = Context.ChatRoom
-                    .FirstOrDefault(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
+                    .First(x => x.Users.Count == 2 && x.Users.Any(y => y.UserId == chatId) && x.Users.Any(y => y.UserId == sender));
             }
 
             var msg = Insert(new Message { ChatRoomId = chat.Id, SenderId = sender, Text = text });
@@ -77,7 +77,7 @@ namespace EventsExpress.Core.Services
         {
             return Context.ChatRoom
                 .Include(c => c.Users)
-                .FirstOrDefault(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
+                .First(x => x.Id == chatId).Users.Select(y => y.UserId.ToString()).ToList();
         }
 
         public async Task<Guid> MsgSeen(List<Guid> messageIds)
@@ -94,7 +94,7 @@ namespace EventsExpress.Core.Services
                 await Context.SaveChangesAsync();
             }
 
-            return Context.Message.Find(messageIds[0]).ChatRoomId;
+            return Context.Message.Single(ms => ms.Id == messageIds[0]).ChatRoomId;
         }
 
         public List<Message> GetUnreadMessages(Guid userId)

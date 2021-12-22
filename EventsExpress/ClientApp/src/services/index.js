@@ -1,5 +1,6 @@
 import AuthenticationService from './AuthenticationService'
 import CategoryService from './CategoryService'
+import CategoryGroupService from './CategoryGroupService'
 import ChatService from './ChatService'
 import CommentService from './CommentService'
 import EventService from './EventService'
@@ -19,6 +20,7 @@ import CategoryOfMeasuringService from './CategoryOfMeasuringService'
 export {
     AuthenticationService,
     CategoryService,
+    CategoryGroupService,
     ChatService,
     CommentService,
     EventService, 

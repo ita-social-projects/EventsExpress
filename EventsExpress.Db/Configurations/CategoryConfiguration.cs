@@ -10,6 +10,9 @@ namespace EventsExpress.Db.Configuration
         {
             builder.Property(c => c.Name)
                 .IsRequired();
+            builder.HasOne(c => c.CategoryGroup)
+                .WithMany(cg => cg.Categories)
+                .HasForeignKey(c => c.CategoryGroupId);
         }
     }
 }

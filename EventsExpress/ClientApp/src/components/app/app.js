@@ -23,7 +23,6 @@ import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
 import ContactAdminWrapper from '../../containers/contactAdmin/contactAdmin-container';
 import ContactAdminDetails from '../../containers/contactAdmin/contactAdmin-details-container';
-import LoginTwitter from '../../containers/TwitterLogin';
 import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
 import RegisterSuccess from '../register/register-success';
@@ -36,6 +35,7 @@ import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
+import MainLayout from '../MainLayout';
 
 class App extends Component {
     constructor(props) {
@@ -51,6 +51,7 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
+            <MainLayout>
                 <Switch>
                     <Route path="/landing" component={LandingWrapper} />
                     <Route
@@ -85,7 +86,6 @@ class App extends Component {
                                 <Route path="/contactAdmin/:id/UpdateStatus" component={this.AdminRoleSecurity(ContactAdminDetails)} />
                                 <Route path="/notification_events" component={this.AdminAndUserRoleSecurity(NotificationEvents)} />
                                 <Route path="/authentication/:id/:token" component={Authentication} />
-                                <Route path="/authentication/twitterLogin" component={LoginTwitter} />
                                 <Route path="/chat/:chatId" component={this.AdminAndUserRoleSecurity(Chat)} />
                                 <Route path="/contactAdmin" component={ContactAdminWrapper} />
                                 <Route path='/registerSuccess' component={RegisterSuccess} />
@@ -98,6 +98,7 @@ class App extends Component {
                         </Layout>
                     </Route>
                 </Switch>
+                </MainLayout>
             </BrowserRouter>
         );
     }

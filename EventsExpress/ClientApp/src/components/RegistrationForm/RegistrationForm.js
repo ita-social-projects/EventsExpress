@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Stepper from "../stepper/Stepper";
 import CompleteProfileForm from "./CompleteProfileForm";
 import ConfirmForm from "./ConfirmForm";
+import ChooseActivities from "./ChooseActivities";
 import Success from "./Success";
 import PlaceHolder from "./PlaceHolder";
 import TellUsMoreAboutYourself from "./TellUsMoreAboutYourself";
@@ -45,7 +46,7 @@ export default class RegistrationForm extends Component {
                 <CompleteProfileForm onSubmit={this.nextPage} />
               )}
               {currentStep === 3 && (
-                <PlaceHolder
+                <ChooseActivities
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />
@@ -60,7 +61,6 @@ export default class RegistrationForm extends Component {
                 <ConfirmForm
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
-
                 />
               )}
               {currentStep === 6 && <Success />}

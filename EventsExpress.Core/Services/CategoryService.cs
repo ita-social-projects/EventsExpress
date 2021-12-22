@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -24,26 +25,22 @@ namespace EventsExpress.Core.Services
             return Context.Categories.Find(id);
         }
 
-        public IEnumerable<CategoryDto> GetAllCategories()
+        public IEnumerable<CategoryDto> GetAllCategories(Guid? groupId)
         {
             var categories = Context.Categories
                                 .Include(c => c.Users)
                                 .Include(c => c.Events)
-                                .Select(x => new CategoryDto
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    CountOfEvents = x.Events.Count(),
-                                    CountOfUser = x.Users.Count(),
-                                })
+                                .Where(c => !groupId.HasValue || c.CategoryGroupId == groupId)
+                                .ProjectTo<CategoryDto>(Mapper.ConfigurationProvider)
                                 .OrderBy(category => category.Name);
 
             return categories;
         }
 
-        public async Task Create(string title)
+        public async Task Create(CategoryDto category)
         {
-            Insert(new Category { Name = title });
+            var newCategory = Mapper.Map<CategoryDto, Category>(category);
+            Insert(newCategory);
             await Context.SaveChangesAsync();
         }
 
@@ -56,6 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             oldCategory.Name = category.Name;
+            oldCategory.CategoryGroupId = category.CategoryGroup.Id;
             await Context.SaveChangesAsync();
         }
 
@@ -84,5 +82,8 @@ namespace EventsExpress.Core.Services
 
         public bool ExistsAll(IEnumerable<Guid> ids) =>
             Context.Categories.Count(x => ids.Contains(x.Id)) == ids.Count();
+
+        public bool IsDuplicate(CategoryDto category) =>
+            Context.Categories.Any(x => x.Id == category.Id && x.CategoryGroup.Id == category.CategoryGroup.Id);
     }
 }

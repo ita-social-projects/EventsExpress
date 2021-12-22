@@ -14,9 +14,9 @@ namespace EventsExpress.Db.Entities
         public Point Point { get; set; }
 
         [Track]
-        public Uri OnlineMeeting { get; set; }
+        public string OnlineMeeting { get; set; }
 
         [Track]
-        public LocationType Type { get; set; }
+        public LocationType? Type { get; set; }
     }
 }

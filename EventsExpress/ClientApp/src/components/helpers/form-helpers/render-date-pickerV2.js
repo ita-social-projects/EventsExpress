@@ -5,6 +5,7 @@ import {
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
+
 export default ({
   input: { onChange, value, ...inputProps },
   meta: { touched, invalid, error },
@@ -20,8 +21,9 @@ export default ({
           {...inputProps}
           label={label}
           selected={moment(value).format("L")}
-          value={value ? moment(value).format("YYYY-MM-DD") : undefined}
-          autoOK
+          value={value ? moment(value).format("L") : null}
+          autoOK={true}
+          emptyLabel={""}
           format="DD-MM-YYYY"
           error={touched && invalid}
           helperText={touched && error}

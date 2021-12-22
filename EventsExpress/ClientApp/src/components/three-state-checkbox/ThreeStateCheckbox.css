@@ -1,0 +1,50 @@
+.tri-state-checkbox {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.555);
+  margin: 0.50vw;
+  font: inherit;
+  color: #505050;
+  width: 1.75em;
+  height: 1.75em;
+  border: 0.15em solid #505050;
+  border-radius: 50px;
+  transform: translateY(0.03em);
+  display: inline-grid;
+  place-content: center;
+}
+
+.tri-state-checkbox:hover {
+  cursor: pointer;
+  border-color: rgb(255, 153, 0);
+}
+
+.tri-state-checkbox::before {
+  content: "";
+  width: 0.85em;
+  height: 0.85em;
+  transform: scale(0);
+  transform-origin: 50% 50%;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #fff;
+}
+
+.tri-state-checkbox:checked {
+  background-color: rgb(255, 153, 0);
+  border-color: rgb(255, 153, 0);
+}
+
+.tri-state-checkbox:checked::before {
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(1);
+}
+
+.tri-state-checkbox:indeterminate {
+  background-color: rgb(255, 153, 0);
+  border-color: rgb(255, 153, 0);
+}
+
+.tri-state-checkbox:indeterminate::before {
+  clip-path: polygon(0% 30%, 100% 30%, 100% 60%, 0% 60%);
+  transform: scale(1);
+}
+

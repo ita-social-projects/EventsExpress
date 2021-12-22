@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using FreeImageAPI;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Extensions
@@ -75,7 +76,7 @@ namespace EventsExpress.Core.Extensions
             try
             {
                 using var memoryStream = postedFile.ToMemoryStream();
-                using var bitmap = new Bitmap(memoryStream);
+                using var bitmap = new FreeImageBitmap(memoryStream);
             }
             catch (Exception)
             {

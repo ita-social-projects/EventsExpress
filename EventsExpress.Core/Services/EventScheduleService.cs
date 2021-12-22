@@ -79,14 +79,22 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Edit(EventScheduleDto eventScheduleDTO)
         {
             var ev = Context.EventSchedules.Find(eventScheduleDTO.Id);
-            ev.Frequency = eventScheduleDTO.Frequency;
-            ev.Periodicity = eventScheduleDTO.Periodicity;
-            ev.LastRun = eventScheduleDTO.LastRun;
-            ev.NextRun = eventScheduleDTO.NextRun;
-            ev.IsActive = eventScheduleDTO.IsActive;
-            ev.EventId = eventScheduleDTO.EventId;
 
-            await Context.SaveChangesAsync();
+            if (ev == null)
+            {
+                throw new EventsExpressException("Not found");
+            }
+            else
+            {
+                ev.Frequency = eventScheduleDTO.Frequency;
+                ev.Periodicity = eventScheduleDTO.Periodicity;
+                ev.LastRun = eventScheduleDTO.LastRun;
+                ev.NextRun = eventScheduleDTO.NextRun;
+                ev.IsActive = eventScheduleDTO.IsActive;
+                ev.EventId = eventScheduleDTO.EventId;
+
+                await Context.SaveChangesAsync();
+            }
 
             return eventScheduleDTO.Id;
         }

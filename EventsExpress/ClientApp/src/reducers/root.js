@@ -6,6 +6,7 @@ import * as EditEventFromParent from './edit-event-from-parent';
 import * as Events from './event-list';
 import * as EventSchedules from './eventSchedules-list';
 import * as Categories from './category/category-list';
+import * as CategoryGroups from './category-group/category-group-list';
 import * as Users from './users';
 import * as Roles from './roles';
 import * as ChangeAvatar from './editReducers/change_avatar';
@@ -36,6 +37,7 @@ import * as NotificationTemplate from "./notification-templates/notification-tem
 import * as Config from './config';
 import * as RequestCount from "./request-index-count";
 import * as RequestLocalCount from "./request-index-local-count";
+import * as CategoriesOfMeasuring from "./categoryOfMeasuring-list"
 
 const rootReducers = {
     requestLocalCount: RequestLocalCount.reducer,
@@ -53,6 +55,7 @@ const rootReducers = {
     usersInventories: UsersInventories.reducer,
     unitsOfMeasuring: UnitsOfMeasuring.reducer,
     categories: Categories.reducer,
+    categoryGroups: CategoryGroups.reducer,
     users: Users.reducer,
     change_avatar: ChangeAvatar.reducer,
     event: EventView.reducer,
@@ -75,7 +78,8 @@ const rootReducers = {
     notificationType: NotificationTypes.reducer,
     NotificationTemplates: NotificationTemplates.reducer,
     NotificationTemplate: NotificationTemplate.reducer,
-    config: Config.reducer
+    config: Config.reducer,
+    categoriesOfMeasuring:CategoriesOfMeasuring.reducer
 };
 
 export default rootReducers;

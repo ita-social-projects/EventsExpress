@@ -47,6 +47,9 @@ const initialState = {
         editedCategory: null,
         data: []
     },
+    categoryGroups: {
+        data: []
+    },
     categoriesOfMeasuring: {
         isPending: false,
         data: []
