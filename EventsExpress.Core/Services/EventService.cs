@@ -291,7 +291,7 @@ namespace EventsExpress.Core.Services
                .Include(e => e.StatusHistory)
                .Include(e => e.Categories)
                    .ThenInclude(c => c.Category)
-               .FirstOrDefault(x => x.Id == eventId);
+               .First(x => x.Id == eventId);
 
             ev.StatusHistory.Add(
                     new EventStatusHistory
