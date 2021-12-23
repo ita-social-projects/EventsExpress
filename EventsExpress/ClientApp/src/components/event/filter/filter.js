@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-    Button,
     Drawer,
     Icon,
-    IconButton,
+    IconButton
 } from '@material-ui/core';
 import { useFilterStyles } from './filter-styles';
+import FilterForm from './filter-form';
 
 export const Filter = () => {
     const [open, setOpen] = useState(false);
@@ -24,13 +24,7 @@ export const Filter = () => {
                 anchor="right"
                 classes={{ paper: classes.drawerPaper }}
             >
-                <div className={classes.filterHeader}>
-                    <IconButton onClick={toggleOpen}>
-                        <Icon className="fas fa-arrow-right" />
-                    </IconButton>
-                    <h5 className={classes.filterHeading}>Filters</h5>
-                    <Button color="secondary">Clear</Button>
-                </div>
+                <FilterForm toggleOpen={toggleOpen} />
             </Drawer>
         </div>
     );

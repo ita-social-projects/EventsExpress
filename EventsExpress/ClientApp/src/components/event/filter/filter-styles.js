@@ -22,5 +22,15 @@ export const useFilterStyles = makeStyles({
     },
     filterHeading: {
         margin: 0
+    },
+    filterForm: {
+    },
+    filterContent: {
+    },
+    filterFooter: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px'
     }
 });
