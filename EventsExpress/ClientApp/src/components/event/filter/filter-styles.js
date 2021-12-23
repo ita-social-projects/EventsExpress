@@ -23,14 +23,13 @@ export const useFilterStyles = makeStyles({
     filterHeading: {
         margin: 0
     },
-    filterForm: {
-    },
-    filterContent: {
-    },
+    filterForm: {},
+    filterContent: {},
     filterFooter: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '10px'
+        gap: '10px',
+        margin: '15px 0'
     }
 });
