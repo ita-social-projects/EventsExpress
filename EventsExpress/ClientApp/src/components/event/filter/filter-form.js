@@ -19,19 +19,18 @@ const FilterForm = ({ toggleOpen }) => {
     const classes = useFilterStyles();
 
     return (
-        <form className={classes.filterForm}>
-            <div className={classes.filterContent}>
-                <div className={classes.filterHeader}>
+        <form>
+            <div className={classes.filterHeader}>
+                <div className={classes.filterHeaderPart}>
                     <IconButton onClick={toggleOpen}>
                         <Icon className="fas fa-arrow-right" />
                     </IconButton>
                     <h5 className={classes.filterHeading}>Filters</h5>
-                    <Button color="secondary">Clear</Button>
                 </div>
-            </div>
-            <div className={classes.filterFooter}>
-                <Button variant="outlined" color="secondary">Reset</Button>
-                <GreenButton>Apply</GreenButton>
+                <div className={classes.filterHeaderPart}>
+                    <GreenButton>Apply</GreenButton>
+                    <Button color="secondary">Reset</Button>
+                </div>
             </div>
         </form>
     );

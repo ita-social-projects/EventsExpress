@@ -6,8 +6,9 @@ const drawerIndex = 250;
 export const useFilterStyles = makeStyles({
     drawerPaper: {
         zIndex: drawerIndex,
-        top: '55px',
-        width: drawerWidth
+        paddingTop: '53px',
+        paddingBottom: '40px',
+        width: drawerWidth,
     },
     openButton: {
         zIndex: drawerIndex - 1,
@@ -18,18 +19,19 @@ export const useFilterStyles = makeStyles({
     filterHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: '0 10px',
+        position: 'sticky',
+        top: 0,
+        backgroundColor: '#fff',
+        zIndex: drawerIndex + 2
+    },
+    filterHeaderPart: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px'
     },
     filterHeading: {
         margin: 0
-    },
-    filterForm: {},
-    filterContent: {},
-    filterFooter: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-        margin: '15px 0'
     }
 });
