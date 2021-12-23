@@ -1,19 +1,8 @@
 import { Button, Icon, IconButton } from '@material-ui/core';
 import React from 'react';
-import { useFilterStyles } from './filter-styles';
+import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
-import { green } from '@material-ui/core/colors';
-import { withStyles } from '@material-ui/core/styles';
-
-const GreenButton = withStyles({
-    root: {
-        color: '#fff',
-        backgroundColor: green[500],
-        '&:hover': {
-            backgroundColor: green[700]
-        }
-    }
-})(Button);
+import { GreenButton } from './green-button';
 
 const FilterForm = ({ toggleOpen }) => {
     const classes = useFilterStyles();

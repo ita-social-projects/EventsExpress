@@ -5,7 +5,7 @@ import {
     IconButton
 } from '@material-ui/core';
 import { useFilterStyles } from './filter-styles';
-import FilterForm from './filter-form';
+import FilterForm from './form/filter-form';
 
 export const Filter = () => {
     const [open, setOpen] = useState(false);
