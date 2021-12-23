@@ -5,6 +5,7 @@ import {
     Redirect,
     Switch
 } from 'react-router-dom';
+import './app.css'
 
 import LandingWrapper from '../../containers/landing-wrapper';
 import Home from '../home';
