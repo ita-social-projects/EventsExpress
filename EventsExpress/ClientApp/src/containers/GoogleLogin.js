@@ -19,7 +19,6 @@ class LoginGoogle extends Component {
         );
     }
     googleResponseOnFailure = (response) =>{
-        console.log(response);
         this.props.setErrorAlert("You cannot login via google because third party cookies are blocked in your browser, you can enable it on browser settings.");
     }
 
