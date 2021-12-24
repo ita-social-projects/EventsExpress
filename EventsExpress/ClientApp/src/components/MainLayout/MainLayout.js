@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './../Header';
 import { Footer } from '../footer/footer';
+import AlertContainer from '../../containers/alert';
 import './main-layout.css'
 
 const MainLayout = ({ children }) => {
@@ -9,6 +10,7 @@ const MainLayout = ({ children }) => {
             <Header />
             {children}
             <Footer />
+            <AlertContainer />
         </div>
     );
 };
