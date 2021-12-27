@@ -5,11 +5,6 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>    
   <ItemGroup>
-    <PackageReference Include="HotChocolate.AspNetCore" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data.Spatial" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Types" Version="12.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">

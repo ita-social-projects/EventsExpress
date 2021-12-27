@@ -28,12 +28,6 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
     <PackageReference Include="GeoAPI.CoordinateSystems" Version="2.0.0-nuget005" />
     <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Data.Spatial" Version="12.3.2" />
-    <PackageReference Include="HotChocolate.Types" Version="12.3.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.4.0" />

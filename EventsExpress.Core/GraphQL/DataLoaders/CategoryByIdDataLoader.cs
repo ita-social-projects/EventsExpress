@@ -18,7 +18,7 @@ namespace EventsExpress.Core.GraphQL.DataLoaders
         public CategoryByIdDataLoader(IBatchScheduler batchScheduler, IDbContextFactory<AppDbContext> dbContextFactory)
             : base(batchScheduler)
         {
-            this.dbContextFactory = dbContextFactory ?? throw new ArgumentException(nameof(dbContextFactory));
+            this.dbContextFactory = dbContextFactory;
         }
 
         protected override async Task<IReadOnlyDictionary<Guid, Category>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ namespace EventsExpress.Core.GraphQL.DataLoaders
             await using AppDbContext dbContext = dbContextFactory.CreateDbContext();
 
             return await dbContext.Categories
-                .Where(s => keys.Contains(s.Id))
+                .Where(c => keys.Contains(c.Id))
                 .ToDictionaryAsync(t => t.Id, cancellationToken);
         }
     }

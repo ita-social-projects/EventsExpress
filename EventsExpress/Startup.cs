@@ -25,8 +25,6 @@ namespace EventsExpress
     using EventsExpress.Validation;
     using FluentValidation;
     using FluentValidation.AspNetCore;
-    using HotChocolate;
-    using HotChocolate.Data;
     using MediatR;
     using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -239,12 +237,12 @@ namespace EventsExpress
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddGraphQLService();
-
             services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
+
+            services.AddGraphQLService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
