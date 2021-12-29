@@ -37,7 +37,8 @@ import * as NotificationTemplate from "./notification-templates/notification-tem
 import * as Config from './config';
 import * as RequestCount from "./request-index-count";
 import * as RequestLocalCount from "./request-index-local-count";
-import * as CategoriesOfMeasuring from "./categoryOfMeasuring-list"
+import * as CategoriesOfMeasuring from "./categoryOfMeasuring-list";
+import * as EventsFilter from './events-filter';
 
 const rootReducers = {
     requestLocalCount: RequestLocalCount.reducer,
@@ -50,6 +51,7 @@ const rootReducers = {
     login: LoginReducer,
     edit_event_from_parent: EditEventFromParent.reducer,
     events: Events.reducer,
+    eventsFilter: EventsFilter.reducer,
     eventSchedules: EventSchedules.reducer,
     inventories: Inventory.reducer,
     usersInventories: UsersInventories.reducer,
