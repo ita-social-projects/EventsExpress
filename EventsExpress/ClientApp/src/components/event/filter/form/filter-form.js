@@ -5,7 +5,7 @@ import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 
-const FilterForm = ({ toggleOpen }) => {
+const FilterForm = ({ toggleOpen, reset }) => {
     const classes = useFilterStyles();
 
     return (
@@ -19,7 +19,7 @@ const FilterForm = ({ toggleOpen }) => {
                 </div>
                 <div className={classes.filterHeaderPart}>
                     <GreenButton>Apply</GreenButton>
-                    <Button color="secondary">Reset</Button>
+                    <Button color="secondary" onClick={reset}>Reset</Button>
                 </div>
             </div>
             <OrganizerFilter />
