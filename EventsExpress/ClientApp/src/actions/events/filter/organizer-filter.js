@@ -29,7 +29,6 @@ export const fetchOrganizers = filter => {
         }
 
         const { items: organizers } = await response.json();
-        console.log(organizers);
         dispatch(setOrganizers(organizers));
     };
 };
