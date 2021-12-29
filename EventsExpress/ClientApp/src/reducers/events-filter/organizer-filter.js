@@ -1,14 +1,14 @@
 import {
     DELETE_ORGANIZER_FROM_SELECTED,
     SET_SELECTED_ORGANIZERS
-} from '../actions/events/events-filter';
+} from '../../actions/events/filter/organizer-filter';
 
 const initialState = {
     organizers: [],
     selectedOrganizers: []
 };
 
-export const reducer = (state = initialState, action) => {
+export const organizerFilterReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_SELECTED_ORGANIZERS:
             return {

@@ -38,7 +38,7 @@ import * as Config from './config';
 import * as RequestCount from "./request-index-count";
 import * as RequestLocalCount from "./request-index-local-count";
 import * as CategoriesOfMeasuring from "./categoryOfMeasuring-list";
-import * as EventsFilter from './events-filter';
+import * as EventsFilter from './events-filter/index';
 
 const rootReducers = {
     requestLocalCount: RequestLocalCount.reducer,
