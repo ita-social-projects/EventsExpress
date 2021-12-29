@@ -44,8 +44,14 @@ const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
         };
     };
 
+    const clear = () => updateSelectedOrganizers(null, []);
+
     return (
-        <FilterExpansionPanel title="Organizer">
+        <FilterExpansionPanel
+            title="Organizer"
+            onClearClick={clear}
+            clearDisabled={!selectedOrganizers.length}
+        >
             <div className={classes.wrapper}>
                 <Autocomplete
                     id="organizer-autocomplete"
