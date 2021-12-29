@@ -28,5 +28,8 @@ const FilterForm = ({ toggleOpen, reset }) => {
 };
 
 export default reduxForm({
-    form: 'filter-form'
+    form: 'filter-form',
+    initialValues: {
+        organizers: []
+    }
 })(FilterForm);
