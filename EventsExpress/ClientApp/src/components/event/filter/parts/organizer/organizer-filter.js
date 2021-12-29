@@ -7,7 +7,8 @@ import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import {
     deleteOrganizerFromSelected,
-    setSelectedOrganizers
+    setSelectedOrganizers,
+    fetchOrganizers
 } from '../../../../../actions/events/filter/organizer-filter';
 
 const organizerTextField = field => (
@@ -28,10 +29,18 @@ const organizerTextField = field => (
 
 const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
     const classes = useOrganizerFilterStyles();
-    const handleChange = (event, value) => dispatch(setSelectedOrganizers(value));
+
+    const updateOrganizers = (event, username) => {
+        dispatch(fetchOrganizers(`?KeyWord=${username}`));
+    };
+
+    const updateSelectedOrganizers = (event, value) => {
+        dispatch(setSelectedOrganizers(value));
+    };
+
     const deleteOrganizer = organizer => {
         return () => {
-            dispatch(deleteOrganizerFromSelected(organizer))
+            dispatch(deleteOrganizerFromSelected(organizer));
         };
     };
 
@@ -45,8 +54,10 @@ const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
                     disableClearable={true}
                     value={selectedOrganizers}
                     options={organizers}
-                    getOptionLabel={option => option.name}
-                    onChange={handleChange}
+                    getOptionLabel={option => option.username}
+                    getOptionSelected={(option, value) => option.id === value.id}
+                    onChange={updateSelectedOrganizers}
+                    onInputChange={updateOrganizers}
                     renderInput={params => (
                         <Field
                             {...params}
@@ -59,7 +70,7 @@ const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
                     {selectedOrganizers.map(organizer => (
                         <Chip
                             key={organizer.id}
-                            label={organizer.name}
+                            label={organizer.username}
                             color="secondary"
                             onDelete={deleteOrganizer(organizer)}
                         />
