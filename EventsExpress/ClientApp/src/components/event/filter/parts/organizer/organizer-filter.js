@@ -1,79 +1,44 @@
 import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
-import { Field } from 'redux-form';
-import React from 'react';
-import { Chip, InputAdornment, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { change, Field, getFormValues } from 'redux-form';
+import React, { useEffect } from 'react';
+import { Chip } from '@material-ui/core';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
-import {
-    deleteOrganizerFromSelected,
-    setSelectedOrganizers,
-    fetchOrganizers
-} from '../../../../../actions/events/filter/organizer-filter';
+import OrganizerAutocomplete from './organizer-autocomplete';
+import { fetchOrganizers } from '../../../../../actions/events/filter/organizer-filter';
 
-const organizerTextField = field => (
-    <TextField
-        {...field}
-        variant="outlined"
-        placeholder="Search by name"
-        InputProps={{
-            ...field.InputProps,
-            startAdornment: (
-                <InputAdornment position="start">
-                    <i className="fas fa-search" />
-                </InputAdornment>
-            )
-        }}
-    />
-);
-
-const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
+const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
     const classes = useOrganizerFilterStyles();
 
-    const updateOrganizers = (event, username) => {
-        dispatch(fetchOrganizers(`?KeyWord=${username}`));
-    };
-
-    const updateSelectedOrganizers = (event, value) => {
-        dispatch(setSelectedOrganizers(value));
-    };
-
-    const deleteOrganizer = organizer => {
+    const deleteOrganizer = organizerToDelete => {
         return () => {
-            dispatch(deleteOrganizerFromSelected(organizer));
+            dispatch(change(
+                'filter-form',
+                'organizers',
+                formValues.organizers.filter(organizer => organizer.id !== organizerToDelete.id)));
         };
     };
 
-    const clear = () => updateSelectedOrganizers(null, []);
+    const clear = () => dispatch(change('filter-form', 'organizers', []));
+
+    useEffect(() => {
+        dispatch(fetchOrganizers(''));
+    }, []);
 
     return (
         <FilterExpansionPanel
             title="Organizer"
             onClearClick={clear}
-            clearDisabled={!selectedOrganizers.length}
+            clearDisabled={!formValues.organizers.length}
         >
             <div className={classes.wrapper}>
-                <Autocomplete
-                    id="organizer-autocomplete"
-                    className={classes.fullWidth}
-                    multiple={true}
-                    disableClearable={true}
-                    value={selectedOrganizers}
+                <Field
+                    name="organizers"
                     options={organizers}
-                    getOptionLabel={option => option.username}
-                    getOptionSelected={(option, value) => option.id === value.id}
-                    onChange={updateSelectedOrganizers}
-                    onInputChange={updateOrganizers}
-                    renderInput={params => (
-                        <Field
-                            {...params}
-                            name="organizerAutocomplete"
-                            component={organizerTextField}
-                        />
-                    )}
+                    component={OrganizerAutocomplete}
                 />
                 <div className={classes.chips}>
-                    {selectedOrganizers.map(organizer => (
+                    {formValues.organizers.map(organizer => (
                         <Chip
                             key={organizer.id}
                             label={organizer.username}
@@ -87,6 +52,11 @@ const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
     );
 };
 
-const mapStateToProps = state => state.eventsFilter.organizerFilter;
+const mapStateToProps = state => {
+    return {
+        ...state.eventsFilter.organizerFilter,
+        formValues: getFormValues('filter-form')(state)
+    };
+};
 
 export default connect(mapStateToProps)(OrganizerFilter);
