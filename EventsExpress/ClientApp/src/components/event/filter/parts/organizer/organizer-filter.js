@@ -1,9 +1,14 @@
 import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
 import { Field } from 'redux-form';
-import React, { useState } from 'react';
+import React from 'react';
 import { Chip, InputAdornment, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
+import { connect } from 'react-redux';
+import {
+    deleteOrganizerFromSelected,
+    setSelectedOrganizers
+} from '../../../../../actions/events/filter/organizer-filter';
 
 const organizerTextField = field => (
     <TextField
@@ -21,13 +26,12 @@ const organizerTextField = field => (
     />
 );
 
-export const OrganizerFilter = () => {
+const OrganizerFilter = ({ dispatch, organizers, selectedOrganizers }) => {
     const classes = useOrganizerFilterStyles();
-    const [selected, setSelected] = useState([]);
-    const handleChange = (event, value) => setSelected(value);
-    const deleteOrganizer = organizerToDelete => {
+    const handleChange = (event, value) => dispatch(setSelectedOrganizers(value));
+    const deleteOrganizer = organizer => {
         return () => {
-            setSelected(selected.filter(organizer => organizer.name !== organizerToDelete.name));
+            dispatch(deleteOrganizerFromSelected(organizer))
         };
     };
 
@@ -39,16 +43,20 @@ export const OrganizerFilter = () => {
                     className={classes.fullWidth}
                     multiple={true}
                     disableClearable={true}
-                    value={selected}
-                    options={[]}
+                    value={selectedOrganizers}
+                    options={organizers}
                     getOptionLabel={option => option.name}
                     onChange={handleChange}
                     renderInput={params => (
-                        <Field {...params} component={organizerTextField} />
+                        <Field
+                            {...params}
+                            name="organizerAutocomplete"
+                            component={organizerTextField}
+                        />
                     )}
                 />
                 <div className={classes.chips}>
-                    {selected.map(organizer => (
+                    {selectedOrganizers.map(organizer => (
                         <Chip
                             key={organizer.id}
                             label={organizer.name}
@@ -61,3 +69,7 @@ export const OrganizerFilter = () => {
         </FilterExpansionPanel>
     );
 };
+
+const mapStateToProps = state => state.eventsFilter.organizerFilter;
+
+export default connect(mapStateToProps)(OrganizerFilter);

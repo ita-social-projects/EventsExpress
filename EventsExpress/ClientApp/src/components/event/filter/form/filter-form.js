@@ -3,7 +3,7 @@ import React from 'react';
 import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
-import { OrganizerFilter } from '../parts/organizer/organizer-filter';
+import OrganizerFilter from '../parts/organizer/organizer-filter';
 
 const FilterForm = ({ toggleOpen }) => {
     const classes = useFilterStyles();
