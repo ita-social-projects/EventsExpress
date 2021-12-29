@@ -13,13 +13,20 @@ const FilterForm = ({ toggleOpen, reset }) => {
             <div className={classes.filterHeader}>
                 <div className={classes.filterHeaderPart}>
                     <IconButton onClick={toggleOpen}>
-                        <Icon className="fas fa-arrow-right" />
+                        <Icon className="fas fa-arrow-circle-right" />
                     </IconButton>
                     <h5 className={classes.filterHeading}>Filters</h5>
                 </div>
                 <div className={classes.filterHeaderPart}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        disableElevation={true}
+                        onClick={reset}
+                    >
+                        Reset
+                    </Button>
                     <GreenButton>Apply</GreenButton>
-                    <Button color="secondary" onClick={reset}>Reset</Button>
                 </div>
             </div>
             <OrganizerFilter />

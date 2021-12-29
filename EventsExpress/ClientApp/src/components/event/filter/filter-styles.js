@@ -14,7 +14,11 @@ export const useFilterStyles = makeStyles({
         zIndex: drawerIndex - 1,
         top: '56px',
         position: 'fixed',
-        right: 0
+        right: '30px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontWeight: 'bold'
     },
     filterHeader: {
         display: 'flex',
