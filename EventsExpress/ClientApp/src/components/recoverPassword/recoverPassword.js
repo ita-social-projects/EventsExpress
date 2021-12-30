@@ -9,6 +9,7 @@ import { isValidEmail } from '../helpers/validators/email-address-validator';
 import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
 
 const validate = values => {
+    const requiredFields=['email']
     return {
         ...fieldIsRequired(values, requiredFields),
         ...isValidEmail(values.email)

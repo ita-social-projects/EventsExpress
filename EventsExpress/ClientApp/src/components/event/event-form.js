@@ -18,6 +18,7 @@ import {
 import { enumLocationType } from "../../constants/EventLocationType";
 import "./event-form.css";
 import asyncValidatePhoto from "../../containers/async-validate-photo";
+import ErrorMessages from '../shared/errorMessage';
 import Location from "../location";
 momentLocaliser(moment);
 
@@ -55,12 +56,8 @@ class EventForm extends Component {
   ));
 
   render() {
-    const { form_values, all_categories, user_name, onError, error } = this.props;
+    const { form_values, all_categories, user_name, error } = this.props;
     const { checked } = this.state;
-
-    if (onError) {
-      onError(error);
-    }
 
     return (
       <form
@@ -193,6 +190,9 @@ class EventForm extends Component {
             />
           </div>
           <Field name="location" component={Location}/>
+        </div>
+        <div className="row my-4">
+          {error && <ErrorMessages error={error} className="text-center" />}
         </div>
         <div className="row my-4">{this.props.children}</div>
       </form>
