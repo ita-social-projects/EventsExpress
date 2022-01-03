@@ -40,6 +40,6 @@ export default reduxForm({
     form: 'filter-form',
     initialValues: {
         organizers: [],
-        location:{},
+        location:null,
     }
 })(FilterForm);
