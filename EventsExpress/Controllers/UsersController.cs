@@ -69,7 +69,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Returns IEnumerable UserShortInformationDto models.</response>
         /// <response code="400">Return failed.</response>
         [HttpGet("[action]")]
-        [Authorize(Policy = PolicyNames.UserPolicyName)]
+        [AllowAnonymous]
         public IActionResult SearchUsersShortInformation([FromQuery] UsersFilterViewModel filter)
         {
             filter.IsConfirmed = true;
