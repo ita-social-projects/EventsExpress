@@ -6,8 +6,14 @@ export const applyFilters = filters => {
         const filter = stringify({
             ...filters,
             organizers: undefined,
-            owners: filters.organizers.map(organizer => organizer.id)
+            owners: filters?.organizers?.map(organizer => organizer.id)
         }, { arrayFormat: 'index', skipNull: true });
         dispatch(get_events(`?${filter}`));
-    }
-}
+    };
+};
+
+export const resetFilters = () => {
+    return async dispatch => {
+        dispatch(get_events(''));
+    };
+};

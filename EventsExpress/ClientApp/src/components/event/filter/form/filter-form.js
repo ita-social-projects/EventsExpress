@@ -4,11 +4,15 @@ import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
-import { applyFilters } from '../../../../actions/events/filter/actions';
+import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
 
 const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
     const onSubmit = formValues => dispatch(applyFilters(formValues));
+    const onReset = () => {
+        reset();
+        dispatch(resetFilters());
+    };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -24,7 +28,7 @@ const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => 
                         color="secondary"
                         variant="contained"
                         disableElevation={true}
-                        onClick={reset}
+                        onClick={onReset}
                     >
                         Reset
                     </Button>
