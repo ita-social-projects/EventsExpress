@@ -1,23 +1,19 @@
 import { Autocomplete } from '@material-ui/lab';
 import { InputAdornment, TextField } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import { fetchOrganizers } from '../../../../../actions/events/filter/organizer-filter';
+import { useDelay } from './use-delay';
 
 export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) => {
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useDelay(username => {
+        dispatch(fetchOrganizers(`?KeyWord=${username}`));
+    }, '');
     const classes = useOrganizerFilterStyles();
     const onChange = (event, value) => input.onChange(value);
     const updateUsername = event => setUsername(event.target.value);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            dispatch(fetchOrganizers(`?KeyWord=${username}`));
-        }, 1000);
-        return () => clearTimeout(timeoutId);
-    }, [username]);
 
     return (
         <Autocomplete
