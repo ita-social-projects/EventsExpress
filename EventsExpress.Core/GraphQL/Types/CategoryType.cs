@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventsExpress.Db.Entities;
+﻿using EventsExpress.Db.Entities;
 using HotChocolate.Types;
 
 namespace EventsExpress.Core.GraphQL.Types
@@ -18,9 +13,11 @@ namespace EventsExpress.Core.GraphQL.Types
             descriptor.Field(f => f.CategoryGroupId)
                 .Type<UuidType>();
 
-            descriptor.Ignore(f => f.CategoryGroup);
-            descriptor.Ignore(f => f.Users);
-            descriptor.Ignore(f => f.Events);
+            descriptor.Field(f => f.CategoryGroup);
+
+            descriptor.Field(f => f.Users);
+
+            descriptor.Field(f => f.Events);
         }
     }
 }

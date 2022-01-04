@@ -1,6 +1,4 @@
-﻿using EventsExpress.Core.GraphQL.DataLoaders;
-using EventsExpress.Core.GraphQL.IDataLoaders;
-using EventsExpress.Core.GraphQL.IServices;
+﻿using EventsExpress.Core.GraphQL.IServices;
 using EventsExpress.Core.GraphQL.Services;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
@@ -13,17 +11,20 @@ namespace EventsExpress.Core.GraphQL.Extensions
     {
         public static void AddGraphQLService(this IServiceCollection services)
         {
-            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IEventGraphQLService, EventGraphQLService>();
 
             services
                 .AddGraphQLServer()
                     .AddQueryType<QueryType>()
                 .AddType<EventType>()
                 .AddType<CategoryType>()
-                .AddProjections()
+                .AddType<UserType>()
+                .AddType<EventLocationType>()
 
-                .AddDataLoader<ICategoryByIdDataLoader, CategoryByIdDataLoader>()
-                ;
+                .AddSpatialTypes()
+
+                .AddProjections()
+                .AddFiltering();
         }
     }
 }
