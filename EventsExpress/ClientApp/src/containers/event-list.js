@@ -52,6 +52,7 @@ class EventListWrapper extends Component {
                 filter={this.props.events.filter}
                 page={data.pageViewModel.pageNumber}
                 totalPages={data.pageViewModel.totalPages}
+                customNoResultsMessage="No events meet the specified criteria. Please make another choice."
             />
         </SpinnerWrapper>
     }
