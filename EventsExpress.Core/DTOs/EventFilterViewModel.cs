@@ -31,5 +31,7 @@ namespace EventsExpress.Core.DTOs
         public SortBy SortBy { get; set; }
 
         public List<EventStatus> Statuses { get; set; }
+
+        public List<Guid> Owners { get; set; }
     }
 }
