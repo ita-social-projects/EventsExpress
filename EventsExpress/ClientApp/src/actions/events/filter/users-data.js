@@ -1,15 +1,15 @@
 import { UserService } from '../../../services';
 
-export const SET_ORGANIZERS = 'SET_ORGANIZERS';
+export const SET_USERS = 'SET_ORGANIZERS';
 
-export const setOrganizers = organizers => ({
-    type: SET_ORGANIZERS,
+export const setUsers = organizers => ({
+    type: SET_USERS,
     payload: organizers
 });
 
 const userService = new UserService();
 
-export const fetchOrganizers = filter => {
+export const fetchUsers = filter => {
     return async dispatch => {
         const response = await userService.getSearchUsers(filter);
         if (!response.ok) {
@@ -17,6 +17,6 @@ export const fetchOrganizers = filter => {
         }
 
         const { items: organizers } = await response.json();
-        dispatch(setOrganizers(organizers));
+        dispatch(setUsers(organizers));
     };
 };
