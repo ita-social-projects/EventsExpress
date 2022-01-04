@@ -6,7 +6,7 @@ import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import { applyFilters } from '../../../../actions/events/filter/actions';
 
-const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset }) => {
+const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
     const onSubmit = formValues => dispatch(applyFilters(formValues));
 
@@ -28,7 +28,7 @@ const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset }) => {
                     >
                         Reset
                     </Button>
-                    <GreenButton type="submit">Apply</GreenButton>
+                    <GreenButton type="submit" disabled={pristine}>Apply</GreenButton>
                 </div>
             </div>
             <OrganizerFilter />
