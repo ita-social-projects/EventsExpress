@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**As a** <role> **I want to** <goal> **so that** <reason>
+**As a** role **I want to** goal **so that** reason
 
 **Date Time**
 MM-DD-YYYY HH:MM
