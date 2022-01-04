@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**As a** <...> **I want to** <....> **so that** <...>
+**As a** <role> **I want to** <goal> **so that** <reason>
 
 **Date Time**
 MM-DD-YYYY HH:MM
@@ -20,17 +20,13 @@ Describe feature functionality Add mockup if needed
 
 **Acceptance criteria**
 Notes about what the story must do in order for the product owner to accept it as complete  
-
-[Given] <...>  
-[When] <...>  
-[Then] <...>  
-
-
-or 
-1. Criteria 1
-2. Criteria 2
-3. Criteria 3
-4. ...
+|             |             |
+|:-----------:|:-----------:|
+|   Given     |    <br>     |
+|   When      |    <br>     |
+|   Then      |    <br>     |
+|   And       |    <br>     |
+|   Or        |    <br>     |
 
 
 
