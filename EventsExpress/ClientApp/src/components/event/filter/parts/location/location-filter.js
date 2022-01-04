@@ -39,7 +39,6 @@ const LocationFilter = ({ dispatch, location, formValues }) => {
       clearDisabled={formValues.location === null}
     >
       <div className="row">
-        <div>
           <FormControl name="location.type">
             <RadioGroup onChange={onChangeLocationType}>
               <FormControlLabel
@@ -64,11 +63,9 @@ const LocationFilter = ({ dispatch, location, formValues }) => {
               />
             </RadioGroup>
           </FormControl>
-        </div>
         {formValues !== null &&
           formValues.location !== null &&
           formValues.location.radius && (
-            <div>
               <div class="slidecontainer">
                 <label>Radius is {formValues.location.radius} km</label>
                 <Field
@@ -82,7 +79,6 @@ const LocationFilter = ({ dispatch, location, formValues }) => {
                   className="radius-slider"
                 />
               </div>
-            </div>
           )}
         {formValues !== null &&
           formValues.location &&
@@ -90,8 +86,6 @@ const LocationFilter = ({ dispatch, location, formValues }) => {
           formValues.location.longitude && (
             <div>
               <p>Current position on the Map is:</p>
-              <p>latitude: {formValues.location.latitude}</p>
-              <p>longitude: {formValues.location.longitude}</p>
               <DisplayMap location={{ ...formValues.location }} />
             </div>
           )}
