@@ -5,13 +5,14 @@ import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
+import { connect } from 'react-redux';
 
-const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => {
+const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => {
     const classes = useFilterStyles();
-    const onSubmit = formValues => dispatch(applyFilters(formValues));
+    const onSubmit = formValues => props.applyFilters(formValues);
     const onReset = () => {
         reset();
-        dispatch(resetFilters());
+        props.resetFilters();
     };
 
     return (
@@ -40,9 +41,16 @@ const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => 
     );
 };
 
-export default reduxForm({
-    form: 'filter-form',
-    initialValues: {
-        organizers: []
-    }
-})(FilterForm);
+const mapDispatchToProps = dispatch => ({
+    applyFilters: filters => dispatch(applyFilters(filters)),
+    resetFilters: () => dispatch(resetFilters())
+});
+
+export default connect(null, mapDispatchToProps)(
+    reduxForm({
+        form: 'filter-form',
+        initialValues: {
+            organizers: []
+        }
+    })
+)(FilterForm);
