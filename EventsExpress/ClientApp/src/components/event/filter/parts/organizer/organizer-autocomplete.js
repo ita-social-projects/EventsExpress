@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 import { useDelay } from './use-delay';
 
-export const OrganizerAutocomplete = ({ input, options, fetchUsers }) => {
-    const [username, setUsername] = useDelay(username => {
-        fetchUsers(`?KeyWord=${username}`);
+export const OrganizerAutocomplete = ({ input, options, ...props }) => {
+    const [username, setUsername] = useDelay(delayedUsername => {
+        props.fetchUsers(`?KeyWord=${delayedUsername}`);
     }, '');
     const classes = useOrganizerFilterStyles();
     const onChange = (event, value) => input.onChange(value);

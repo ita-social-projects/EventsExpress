@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import OrganizerAutocomplete from './organizer-autocomplete';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 
-const OrganizerFilter = ({ organizers, formValues, fetchUsers, change }) => {
+const OrganizerFilter = ({ organizers, formValues, ...props }) => {
     const classes = useOrganizerFilterStyles();
-    const clear = () => change([]);
+    const clear = () => props.change([]);
 
     useEffect(() => {
-        fetchUsers('');
+        props.fetchUsers('');
     }, []);
 
     return (
