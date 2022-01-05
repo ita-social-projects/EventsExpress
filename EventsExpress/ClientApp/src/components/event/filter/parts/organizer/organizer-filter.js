@@ -7,22 +7,19 @@ import { connect } from 'react-redux';
 import OrganizerAutocomplete from './organizer-autocomplete';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 
-const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
+const OrganizerFilter = ({ organizers, formValues, fetchUsers, change }) => {
     const classes = useOrganizerFilterStyles();
 
     const deleteOrganizer = organizerToDelete => {
         return () => {
-            dispatch(change(
-                'filter-form',
-                'organizers',
-                formValues.organizers.filter(organizer => organizer.id !== organizerToDelete.id)));
+            change(formValues.organizers.filter(organizer => organizer.id !== organizerToDelete.id));
         };
     };
 
-    const clear = () => dispatch(change('filter-form', 'organizers', []));
+    const clear = () => change([]);
 
     useEffect(() => {
-        dispatch(fetchUsers(''));
+        fetchUsers('');
     }, []);
 
     return (
@@ -52,11 +49,14 @@ const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        organizers: state.eventsFilter.users,
-        formValues: getFormValues('filter-form')(state)
-    };
-};
+const mapStateToProps = state => ({
+    organizers: state.eventsFilter.users,
+    formValues: getFormValues('filter-form')(state)
+});
 
-export default connect(mapStateToProps)(OrganizerFilter);
+const mapDispatchToProps = dispatch => ({
+    fetchUsers: filter => dispatch(fetchUsers(filter)),
+    change: value => dispatch(change('filter-form', 'organizers', value))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizerFilter);

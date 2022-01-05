@@ -7,9 +7,9 @@ import { getFormValues } from 'redux-form';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 import { useDelay } from './use-delay';
 
-export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) => {
+export const OrganizerAutocomplete = ({ input, options, formValues, fetchUsers }) => {
     const [username, setUsername] = useDelay(username => {
-        dispatch(fetchUsers(`?KeyWord=${username}`));
+        fetchUsers(`?KeyWord=${username}`);
     }, '');
     const classes = useOrganizerFilterStyles();
     const onChange = (event, value) => input.onChange(value);
@@ -51,10 +51,12 @@ export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) 
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        formValues: getFormValues('filter-form')(state)
-    };
-};
+const mapStateToProps = state => ({
+    formValues: getFormValues('filter-form')(state)
+});
 
-export default connect(mapStateToProps)(OrganizerAutocomplete);
+const mapDispatchToProps = dispatch => ({
+    fetchUsers: filter => dispatch(fetchUsers(filter))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizerAutocomplete);
