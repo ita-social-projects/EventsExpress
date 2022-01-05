@@ -39,6 +39,10 @@ export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) 
                             </InputAdornment>
                         )
                     }}
+                    inputProps={{
+                        ...params.inputProps,
+                        maxLength: 50
+                    }}
                     value={username}
                     onChange={updateUsername}
                 />
