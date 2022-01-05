@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.GraphQL.Extensions;
+using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using HotChocolate.Data;
@@ -20,10 +21,13 @@ namespace EventsExpress.Core.GraphQL.Types
                 .UseDbContext<AppDbContext>()
                 .Resolve(resolver =>
                 {
-                    return resolver.DbContext<AppDbContext>().Events; // .Include(c => c.Categories).ThenInclude(c => c.Category);
+                    return resolver.DbContext<AppDbContext>().Events;
                 })
+
+                .UsePaging<EventType>()
                 .UseProjection()
-                .UseFiltering();
+                .UseFiltering()
+                .UseSorting();
         }
     }
 }

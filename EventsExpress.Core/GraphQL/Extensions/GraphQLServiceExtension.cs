@@ -1,8 +1,11 @@
 ﻿using EventsExpress.Core.GraphQL.IServices;
 using EventsExpress.Core.GraphQL.Services;
+using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
 using HotChocolate.Data;
+using HotChocolate.Data.Sorting;
+using HotChocolate.Types.Descriptors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventsExpress.Core.GraphQL.Extensions
@@ -11,20 +14,21 @@ namespace EventsExpress.Core.GraphQL.Extensions
     {
         public static void AddGraphQLService(this IServiceCollection services)
         {
-            services.AddScoped<IEventGraphQLService, EventGraphQLService>();
-
             services
                 .AddGraphQLServer()
                     .AddQueryType<QueryType>()
+
                 .AddType<EventType>()
                 .AddType<CategoryType>()
                 .AddType<UserType>()
-                .AddType<EventLocationType>()
-
-                .AddSpatialTypes()
+                .AddType<PointSortType>()
 
                 .AddProjections()
-                .AddFiltering();
+                .AddFiltering()
+                .AddSorting()
+
+                .AddSpatialProjections()
+                .AddSpatialTypes();
         }
     }
 }
