@@ -6,6 +6,9 @@ export const applyFilters = filters => {
         const filter = stringify({
             ...filters,
             organizers: undefined,
+            x:filters?.location.latitude,
+            y:filters?.location.longitude,
+            radius:filters?.location.radius,
             owners: filters?.organizers?.map(organizer => organizer.id)
         }, { arrayFormat: 'index', skipNull: true });
         dispatch(get_events(`?${filter}`));
