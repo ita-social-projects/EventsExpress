@@ -4,12 +4,16 @@ import React from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
-import { fetchOrganizers } from '../../../../../actions/events/filter/organizer-filter';
+import { fetchUsers } from '../../../../../actions/events/filter/users-data';
+import { useDelay } from './use-delay';
 
 export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) => {
+    const [username, setUsername] = useDelay(username => {
+        dispatch(fetchUsers(`?KeyWord=${username}`));
+    }, '');
     const classes = useOrganizerFilterStyles();
     const onChange = (event, value) => input.onChange(value);
-    const onInputChange = (event, username) => dispatch(fetchOrganizers(`?KeyWord=${username}`));
+    const updateUsername = event => setUsername(event.target.value);
 
     return (
         <Autocomplete
@@ -22,7 +26,6 @@ export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) 
             getOptionLabel={option => option.username}
             getOptionSelected={(option, value) => option.id === value.id}
             onChange={onChange}
-            onInputChange={onInputChange}
             renderInput={params => (
                 <TextField
                     {...params}
@@ -36,6 +39,8 @@ export const OrganizerAutocomplete = ({ dispatch, input, options, formValues }) 
                             </InputAdornment>
                         )
                     }}
+                    value={username}
+                    onChange={updateUsername}
                 />
             )}
         />

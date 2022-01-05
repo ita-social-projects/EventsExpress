@@ -5,7 +5,7 @@ import { Chip } from '@material-ui/core';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import OrganizerAutocomplete from './organizer-autocomplete';
-import { fetchOrganizers } from '../../../../../actions/events/filter/organizer-filter';
+import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 
 const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
     const classes = useOrganizerFilterStyles();
@@ -22,7 +22,7 @@ const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
     const clear = () => dispatch(change('filter-form', 'organizers', []));
 
     useEffect(() => {
-        dispatch(fetchOrganizers(''));
+        dispatch(fetchUsers(''));
     }, []);
 
     return (
@@ -54,7 +54,7 @@ const OrganizerFilter = ({ dispatch, organizers, formValues }) => {
 
 const mapStateToProps = state => {
     return {
-        ...state.eventsFilter.organizerFilter,
+        organizers: state.eventsFilter.users,
         formValues: getFormValues('filter-form')(state)
     };
 };

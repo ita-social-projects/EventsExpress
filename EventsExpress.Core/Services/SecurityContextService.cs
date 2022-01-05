@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
 
             if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid result))
             {
-                throw new EventsExpressException("User not found");
+                return Guid.Empty;
             }
 
             return result;
@@ -33,7 +33,7 @@ namespace EventsExpress.Core.Services
 
             if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid result))
             {
-                throw new EventsExpressException("User not found");
+                return Guid.Empty;
             }
 
             return result;

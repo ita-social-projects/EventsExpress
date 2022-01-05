@@ -5,12 +5,18 @@ import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import LocationFilter from '../parts/location/location-filter';
+import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
 
-const FilterForm = ({ toggleOpen, reset }) => {
+const FilterForm = ({ dispatch, handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
+    const onSubmit = formValues => dispatch(applyFilters(formValues));
+    const onReset = () => {
+        reset();
+        dispatch(resetFilters());
+    };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.filterHeader}>
                 <div className={classes.filterHeaderPart}>
                     <IconButton onClick={toggleOpen}>
@@ -23,11 +29,11 @@ const FilterForm = ({ toggleOpen, reset }) => {
                         color="secondary"
                         variant="contained"
                         disableElevation={true}
-                        onClick={reset}
+                        onClick={onReset}
                     >
                         Reset
                     </Button>
-                    <GreenButton>Apply</GreenButton>
+                    <GreenButton type="submit" disabled={pristine}>Apply</GreenButton>
                 </div>
             </div>
             <OrganizerFilter />
