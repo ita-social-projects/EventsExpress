@@ -8,6 +8,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ExtensionMethods;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,19 +26,22 @@ namespace EventsExpress.Controllers
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
         private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
+        private readonly IValidator<ChangeViewModel> _passwordValidator;
 
         public AuthenticationController(
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
             IAccountService accountService,
-            IGoogleSignatureVerificator googleSignatureVerificator)
+            IGoogleSignatureVerificator googleSignatureVerificator,
+            IValidator<ChangeViewModel> passwordValidator)
         {
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
             _accountService = accountService;
             _googleSignatureVerificator = googleSignatureVerificator;
+            _passwordValidator = passwordValidator;
         }
 
         /// <summary>
@@ -213,6 +217,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangeViewModel model)
         {
+            _passwordValidator.ValidateAndThrowIfInvalid(model);
             await _authService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
 
             return Ok();
