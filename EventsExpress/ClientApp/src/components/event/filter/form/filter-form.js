@@ -52,5 +52,5 @@ export default connect(null, mapDispatchToProps)(
         initialValues: {
             organizers: []
         }
-    })
-)(FilterForm);
+    })(FilterForm)
+);
