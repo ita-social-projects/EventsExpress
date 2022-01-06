@@ -354,6 +354,47 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        [Category("SearchUsersShortInformation")]
+        public void SearchUsersShortInformation_NotNull_Exception()
+        {
+            int count = 0;
+            _userService.Setup(a => a.Get(_usersFilterViewModel, out count)).Throws<EventsExpressException>();
+
+            Assert.Throws<EventsExpressException>(() => _usersController.SearchUsersShortInformation(_usersFilterViewModel));
+            _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("SearchUsersShortInformation")]
+        public void SearchUsersShortInformation_NotNull_BadRequestResult()
+        {
+            int count = 0;
+            _userService.Setup(a => a.Get(_usersFilterViewModel, out count)).Throws<ArgumentOutOfRangeException>();
+
+            var res = _usersController.SearchUsersShortInformation(_usersFilterViewModel);
+            Assert.That(res, Is.TypeOf<BadRequestResult>());
+            BadRequestResult badResult = res as BadRequestResult;
+            Assert.IsNotNull(badResult);
+            Assert.AreEqual(400, badResult.StatusCode);
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+
+            _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("SearchUsersShortInformation")]
+        public void SearchUsersShortInformation_NotNull_OkObjectResult()
+        {
+            int count = 0;
+            _userService.Setup(user => user.Get(It.IsAny<UsersFilterViewModel>(), out count)).Returns(new UserDto[] { _userDto });
+
+            var res = _usersController.SearchUsersShortInformation(_usersFilterViewModel);
+
+            Assert.IsInstanceOf<OkObjectResult>(res);
+            _userService.Verify(us => us.Get(It.IsAny<UsersFilterViewModel>(), out count), Times.Exactly(1));
+        }
+
+        [Test]
         [Category("GetUserInfo")]
         public void GetUserInfo_Success()
         {

@@ -6,16 +6,16 @@ class RenderList extends Component {
         arr.map(item => this.props.renderSingleItem(item))   
 
     render() {
-        const { page, totalPages, data_list } = this.props;
+        const { page, totalPages, data_list, customNoResultsMessage } = this.props;
 
         return <>
             <div className="row">
                 {data_list.length > 0
                     ? this.renderItems(data_list)
                     : <div id="notfound" className="w-100">
-                        <div className="notfound">
+                        <div className="notfound mw-100">
                             <div className="notfound-404">
-                                <div className="h1">No Results</div>
+                                <div className="h1">{customNoResultsMessage || "No Results"}</div>
                             </div>
                         </div>
                     </div>}
