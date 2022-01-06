@@ -4,7 +4,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.ValueResolvers
 {
@@ -19,7 +18,17 @@ namespace EventsExpress.ValueResolvers
             this.securityContext = securityContext;
         }
 
-        public bool Resolve(User source, UserDto destination, bool destMember, ResolutionContext context) =>
-            dbContext.AuthLocal.Any(x => x.AccountId == securityContext.GetCurrentAccountId());
+        public bool Resolve(User source, UserDto destination, bool destMember, ResolutionContext context)
+        {
+            try
+            {
+                var currentAccountId = securityContext.GetCurrentAccountId();
+                return dbContext.AuthLocal.Any(x => x.AccountId == currentAccountId);
+            }
+            catch (Core.Exceptions.EventsExpressException)
+            {
+                return false;
+            }
+        }
     }
 }
