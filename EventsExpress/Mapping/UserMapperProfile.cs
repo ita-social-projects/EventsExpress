@@ -2,9 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
@@ -50,10 +47,16 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom(src => src.CanChangePassword));
 
+            void MapUsername<T>(IMemberConfigurationExpression<UserDto, T, string> options)
+            {
+                options.MapFrom(source => source.Name ?? source.Email.Substring(
+                    0, source.Email.IndexOf("@", StringComparison.Ordinal)));
+            }
+
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
+                .ForMember(dest => dest.Username, MapUsername)
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked))
                 .ForMember(
                     dest => dest.Roles,
@@ -62,6 +65,12 @@ namespace EventsExpress.Mapping
                         Id = x.Role.Id,
                         Name = x.Role.Name,
                     })));
+
+            CreateMap<UserDto, UserShortInformationViewModel>()
+                .ForMember(
+                    destination => destination.Id,
+                    options => options.MapFrom(source => source.Id))
+                .ForMember(destination => destination.Username, MapUsername);
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))

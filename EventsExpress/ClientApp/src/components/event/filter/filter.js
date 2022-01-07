@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Drawer,
-    Icon,
-    IconButton
-} from '@material-ui/core';
+import { Drawer, Icon, IconButton, Typography } from '@material-ui/core';
 import { useFilterStyles } from './filter-styles';
 import FilterForm from './form/filter-form';
 
@@ -15,9 +11,14 @@ export const Filter = () => {
 
     return (
         <div>
-            <IconButton className={classes.openButton} onClick={toggleOpen}>
-                <Icon className="fas fa-arrow-left" />
-            </IconButton>
+            <div className={classes.openButton}>
+                <IconButton onClick={toggleOpen}>
+                    <Icon className="fas fa-arrow-circle-left" />
+                </IconButton>
+                <Typography variant="h6" component="span">
+                    Filters
+                </Typography>
+            </div>
             <Drawer
                 open={open}
                 variant="persistent"

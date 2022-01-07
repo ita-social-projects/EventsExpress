@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
@@ -185,6 +186,20 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<User, UserDto>(firstUser);
 
             Assert.That(resEven.Attitude, Is.EqualTo(1));
+            Assert.That(resEven.Rating, Is.EqualTo(5));
+            Assert.That(resEven.CanChangePassword, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void UserMapperProfile_UserToUserDto_WhenEventsExpressExceptionThrown()
+        {
+            mockSecurityContextService.Setup(x => x.GetCurrentUserId()).Throws<EventsExpressException>();
+            mockSecurityContextService.Setup(x => x.GetCurrentAccountId()).Throws<EventsExpressException>();
+
+            firstUser = context.Users.FirstOrDefault(x => x.Id == GetUser().Id);
+            var resEven = Mapper.Map<User, UserDto>(firstUser);
+
+            Assert.That(resEven.Attitude, Is.EqualTo(2));
             Assert.That(resEven.Rating, Is.EqualTo(5));
             Assert.That(resEven.CanChangePassword, Is.EqualTo(false));
         }

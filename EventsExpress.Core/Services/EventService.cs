@@ -397,6 +397,10 @@ namespace EventsExpress.Core.Services
                .EventStatus))
             : events;
 
+            events = (model.Owners != null)
+                ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+                : events;
+
             if (model.Categories != null)
             {
                 List<Guid> categoryIds = model.Categories
