@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Map, TileLayer } from 'react-leaflet';
-import Search from 'react-leaflet-search';
 import '../../../event/map/map.css';
 
 export default class LocationMap extends Component {
@@ -15,10 +14,6 @@ export default class LocationMap extends Component {
 
     handleClick = (e) => {
         this.updateLocation(e.latlng);
-    }
-
-    handleSearch = (e) => {
-        this.updateLocation(e.latLng);
     }
 
     getCurrentZoom() {
@@ -43,15 +38,6 @@ export default class LocationMap extends Component {
                     onClick={this.handleClick}>
                     <TileLayer
                         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
-                    />
-                    <Search
-                        position="topright"
-                        inputPlaceholder="Enter location"
-                        showMarker={true}
-                        zoom={7}
-                        closeResultsOnClick={false}
-                        openSearchOnLoad={false}
-                        onChange={this.handleSearch}
                     />
                     {this.props.children}     
                 </Map>
