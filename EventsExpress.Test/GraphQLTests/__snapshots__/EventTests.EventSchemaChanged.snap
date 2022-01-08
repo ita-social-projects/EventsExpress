@@ -1,0 +1,1442 @@
+﻿schema {
+  query: Query
+}
+
+interface GeoJSONInterface {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float]
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+type Category {
+  name: String
+  categoryGroupId: UUID
+  categoryGroup: CategoryGroup
+  users: [UserCategory]
+  events: [EventCategory]
+  id: UUID!
+}
+
+type CategoryGroup {
+  title: String
+  categories: [Category]
+  id: UUID!
+}
+
+type CategoryOfMeasuring {
+  categoryName: String
+  unitOfMeasurings: [UnitOfMeasuring]
+  id: UUID!
+}
+
+type Event {
+  title: String
+  description: String
+  dateFrom: DateTime
+  dateTo: DateTime
+  isPublic: Boolean
+  maxParticipants: Int
+  eventLocationId: UUID
+  eventSchedule: EventSchedule
+  eventLocation: EventLocation
+  owners: [EventOwner]
+  visitors: [UserEvent]
+  categories: [EventCategory]
+  rates: [Rate]
+  inventories: [Inventory]
+  statusHistory: [EventStatusHistory]
+  id: UUID!
+}
+
+type EventCategory {
+  eventId: UUID!
+  event: Event
+  categoryId: UUID!
+  category: Category
+}
+
+type EventLocation {
+  point: GeoJSONPointType
+  onlineMeeting: URL
+  type: LocationType!
+  id: UUID!
+}
+
+type EventOwner {
+  userId: UUID!
+  user: User
+  eventId: UUID!
+  event: Event
+}
+
+type EventSchedule {
+  frequency: Int!
+  lastRun: DateTime!
+  nextRun: DateTime!
+  periodicity: Periodicity!
+  isActive: Boolean!
+  eventId: UUID!
+  event: Event
+  id: UUID!
+}
+
+type EventStatusHistory {
+  userId: UUID!
+  user: User
+  eventId: UUID!
+  event: Event
+  eventStatus: EventStatus!
+  reason: String
+  createdOn: DateTime!
+  id: UUID!
+}
+
+"A connection to a list of items."
+type EventsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [EventsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Event]
+}
+
+"An edge in a connection."
+type EventsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Event
+}
+
+type GeoJSONLineStringType implements GeoJSONInterface {
+  "The \"coordinates\" field is an array of two or more positions."
+  coordinates: [Position]
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type GeoJSONMultiLineStringType implements GeoJSONInterface {
+  "The \"coordinates\" field is an array of LineString coordinate arrays."
+  coordinates: [Position]
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type GeoJSONMultiPointType implements GeoJSONInterface {
+  "The \"coordinates\" field is an array of positions."
+  coordinates: [Position]
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type GeoJSONMultiPolygonType implements GeoJSONInterface {
+  "The \"coordinates\" field is an array of Polygon coordinate arrays."
+  coordinates: Coordinates
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type GeoJSONPointType implements GeoJSONInterface {
+  "The \"coordinates\" field is a single position."
+  coordinates: Position
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type GeoJSONPolygonType implements GeoJSONInterface {
+  "The \"coordinates\" field MUST be an array of linear ring coordinate arrays. For Polygons with more than one of these rings, the first MUST be the exterior ring, and any others MUST be interior rings. The exterior ring bounds the surface, and the interior rings (if present) bound holes within the surface."
+  coordinates: [[Position]]
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType!
+  "The minimum bounding box around the geometry object"
+  bbox: [Float!]!
+  "The coordinate reference system integer identifier"
+  crs: Int!
+}
+
+type Inventory {
+  needQuantity: Float!
+  itemName: String
+  eventId: UUID!
+  event: Event
+  unitOfMeasuringId: UUID!
+  unitOfMeasuring: UnitOfMeasuring
+  userEventInventories: [UserEventInventory]
+  id: UUID!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Query {
+  events("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: EventFilterInput order: [EventSortInput!]): EventsConnection
+}
+
+type Rate {
+  userFromId: UUID!
+  userFrom: User
+  eventId: UUID!
+  event: Event
+  score: Byte!
+  id: UUID!
+}
+
+type UnitOfMeasuring {
+  unitName: String
+  shortName: String
+  inventories: [Inventory]
+  category: CategoryOfMeasuring
+  categoryId: UUID!
+  isDeleted: Boolean!
+  id: UUID!
+}
+
+type User {
+  name: String
+  id: UUID!
+}
+
+type UserCategory {
+  userId: UUID!
+  user: User
+  categoryId: UUID!
+  category: Category
+}
+
+type UserEvent {
+  userId: UUID!
+  user: User
+  eventId: UUID!
+  event: Event
+  status: Status!
+  inventories: [UserEventInventory]
+  userStatusEvent: UserStatusEvent!
+}
+
+type UserEventInventory {
+  eventId: UUID!
+  userId: UUID!
+  userEvent: UserEvent
+  inventoryId: UUID!
+  inventory: Inventory
+  quantity: Float!
+}
+
+input AccountFilterInput {
+  and: [AccountFilterInput!]
+  or: [AccountFilterInput!]
+  userId: ComparableNullableOfGuidOperationFilterInput
+  isBlocked: BooleanOperationFilterInput
+  user: UserFilterInput
+  authLocal: AuthLocalFilterInput
+  authExternal: ListFilterInputTypeOfAuthExternalFilterInput
+  accountRoles: ListFilterInputTypeOfAccountRoleFilterInput
+  refreshTokens: ListFilterInputTypeOfUserTokenFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input AccountRoleFilterInput {
+  and: [AccountRoleFilterInput!]
+  or: [AccountRoleFilterInput!]
+  roleId: RoleOperationFilterInput
+  accountId: ComparableGuidOperationFilterInput
+  account: AccountFilterInput
+  role: RoleFilterInput
+}
+
+input AttitudeOperationFilterInput {
+  eq: Attitude
+  neq: Attitude
+  in: [Attitude!]
+  nin: [Attitude!]
+}
+
+input AuthExternalFilterInput {
+  and: [AuthExternalFilterInput!]
+  or: [AuthExternalFilterInput!]
+  type: AuthExternalTypeOperationFilterInput
+  email: StringOperationFilterInput
+  accountId: ComparableGuidOperationFilterInput
+  account: AccountFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input AuthExternalTypeOperationFilterInput {
+  eq: AuthExternalType
+  neq: AuthExternalType
+  in: [AuthExternalType!]
+  nin: [AuthExternalType!]
+}
+
+input AuthLocalFilterInput {
+  and: [AuthLocalFilterInput!]
+  or: [AuthLocalFilterInput!]
+  passwordHash: StringOperationFilterInput
+  salt: StringOperationFilterInput
+  emailConfirmed: BooleanOperationFilterInput
+  email: StringOperationFilterInput
+  accountId: ComparableGuidOperationFilterInput
+  account: AccountFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
+}
+
+input CategoryFilterInput {
+  and: [CategoryFilterInput!]
+  or: [CategoryFilterInput!]
+  name: StringOperationFilterInput
+  categoryGroupId: ComparableNullableOfGuidOperationFilterInput
+  categoryGroup: CategoryGroupFilterInput
+  users: ListFilterInputTypeOfUserCategoryFilterInput
+  events: ListFilterInputTypeOfEventCategoryFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input CategoryGroupFilterInput {
+  and: [CategoryGroupFilterInput!]
+  or: [CategoryGroupFilterInput!]
+  title: StringOperationFilterInput
+  categories: ListFilterInputTypeOfCategoryFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input CategoryOfMeasuringFilterInput {
+  and: [CategoryOfMeasuringFilterInput!]
+  or: [CategoryOfMeasuringFilterInput!]
+  categoryName: StringOperationFilterInput
+  unitOfMeasurings: ListFilterInputTypeOfUnitOfMeasuringFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input ChatRoomFilterInput {
+  and: [ChatRoomFilterInput!]
+  or: [ChatRoomFilterInput!]
+  title: StringOperationFilterInput
+  users: ListFilterInputTypeOfUserChatFilterInput
+  messages: ListFilterInputTypeOfMessageFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input ComparableByteOperationFilterInput {
+  eq: Byte
+  neq: Byte
+  in: [Byte!]
+  nin: [Byte!]
+  gt: Byte
+  ngt: Byte
+  gte: Byte
+  ngte: Byte
+  lt: Byte
+  nlt: Byte
+  lte: Byte
+  nlte: Byte
+}
+
+input ComparableDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime!]
+  nin: [DateTime!]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableDoubleOperationFilterInput {
+  eq: Float
+  neq: Float
+  in: [Float!]
+  nin: [Float!]
+  gt: Float
+  ngt: Float
+  gte: Float
+  ngte: Float
+  lt: Float
+  nlt: Float
+  lte: Float
+  nlte: Float
+}
+
+input ComparableGuidOperationFilterInput {
+  eq: UUID
+  neq: UUID
+  in: [UUID!]
+  nin: [UUID!]
+  gt: UUID
+  ngt: UUID
+  gte: UUID
+  ngte: UUID
+  lt: UUID
+  nlt: UUID
+  lte: UUID
+  nlte: UUID
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int!]
+  nin: [Int!]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input ComparableNullableOfDateTimeOperationFilterInput {
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+input ComparableNullableOfGuidOperationFilterInput {
+  eq: UUID
+  neq: UUID
+  in: [UUID]
+  nin: [UUID]
+  gt: UUID
+  ngt: UUID
+  gte: UUID
+  ngte: UUID
+  lt: UUID
+  nlt: UUID
+  lte: UUID
+  nlte: UUID
+}
+
+input ComparableNullableOfInt32OperationFilterInput {
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+input CoordinateEqualityComparerFilterInput {
+  and: [CoordinateEqualityComparerFilterInput!]
+  or: [CoordinateEqualityComparerFilterInput!]
+}
+
+input CoordinateFilterInput {
+  and: [CoordinateFilterInput!]
+  or: [CoordinateFilterInput!]
+  x: ComparableDoubleOperationFilterInput
+  y: ComparableDoubleOperationFilterInput
+  z: ComparableDoubleOperationFilterInput
+  m: ComparableDoubleOperationFilterInput
+  coordinateValue: CoordinateFilterInput
+}
+
+input CoordinateSequenceFactoryFilterInput {
+  and: [CoordinateSequenceFactoryFilterInput!]
+  or: [CoordinateSequenceFactoryFilterInput!]
+  ordinates: OrdinatesOperationFilterInput
+}
+
+input CoordinateSequenceFilterInput {
+  and: [CoordinateSequenceFilterInput!]
+  or: [CoordinateSequenceFilterInput!]
+  dimension: ComparableInt32OperationFilterInput
+  measures: ComparableInt32OperationFilterInput
+  spatial: ComparableInt32OperationFilterInput
+  ordinates: OrdinatesOperationFilterInput
+  hasZ: BooleanOperationFilterInput
+  hasM: BooleanOperationFilterInput
+  zOrdinateIndex: ComparableInt32OperationFilterInput
+  mOrdinateIndex: ComparableInt32OperationFilterInput
+  count: ComparableInt32OperationFilterInput
+}
+
+input DimensionOperationFilterInput {
+  eq: Dimension
+  neq: Dimension
+  in: [Dimension!]
+  nin: [Dimension!]
+}
+
+input EnvelopeFilterInput {
+  and: [EnvelopeFilterInput!]
+  or: [EnvelopeFilterInput!]
+  isNull: BooleanOperationFilterInput
+  width: ComparableDoubleOperationFilterInput
+  height: ComparableDoubleOperationFilterInput
+  diameter: ComparableDoubleOperationFilterInput
+  minX: ComparableDoubleOperationFilterInput
+  maxX: ComparableDoubleOperationFilterInput
+  minY: ComparableDoubleOperationFilterInput
+  maxY: ComparableDoubleOperationFilterInput
+  area: ComparableDoubleOperationFilterInput
+  minExtent: ComparableDoubleOperationFilterInput
+  maxExtent: ComparableDoubleOperationFilterInput
+  centre: CoordinateFilterInput
+}
+
+input EventCategoryFilterInput {
+  and: [EventCategoryFilterInput!]
+  or: [EventCategoryFilterInput!]
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  categoryId: ComparableGuidOperationFilterInput
+  category: CategoryFilterInput
+}
+
+input EventFilterInput {
+  and: [EventFilterInput!]
+  or: [EventFilterInput!]
+  title: StringOperationFilterInput
+  description: StringOperationFilterInput
+  dateFrom: ComparableNullableOfDateTimeOperationFilterInput
+  dateTo: ComparableNullableOfDateTimeOperationFilterInput
+  isPublic: BooleanOperationFilterInput
+  maxParticipants: ComparableNullableOfInt32OperationFilterInput
+  eventLocationId: ComparableNullableOfGuidOperationFilterInput
+  eventSchedule: EventScheduleFilterInput
+  eventLocation: EventLocationFilterInput
+  owners: ListFilterInputTypeOfEventOwnerFilterInput
+  visitors: ListFilterInputTypeOfUserEventFilterInput
+  categories: ListFilterInputTypeOfEventCategoryFilterInput
+  rates: ListFilterInputTypeOfRateFilterInput
+  inventories: ListFilterInputTypeOfInventoryFilterInput
+  statusHistory: ListFilterInputTypeOfEventStatusHistoryFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input EventLocationFilterInput {
+  and: [EventLocationFilterInput!]
+  or: [EventLocationFilterInput!]
+  point: PointFilterInput
+  onlineMeeting: UriFilterInput
+  type: LocationTypeOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input EventLocationSortInput {
+  point: PointSortInput
+  onlineMeeting: UriSortInput
+  type: SortEnumType
+  id: SortEnumType
+}
+
+input EventOwnerFilterInput {
+  and: [EventOwnerFilterInput!]
+  or: [EventOwnerFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+}
+
+input EventScheduleFilterInput {
+  and: [EventScheduleFilterInput!]
+  or: [EventScheduleFilterInput!]
+  frequency: ComparableInt32OperationFilterInput
+  lastRun: ComparableDateTimeOperationFilterInput
+  nextRun: ComparableDateTimeOperationFilterInput
+  periodicity: PeriodicityOperationFilterInput
+  isActive: BooleanOperationFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input EventScheduleSortInput {
+  frequency: SortEnumType
+  lastRun: SortEnumType
+  nextRun: SortEnumType
+  periodicity: SortEnumType
+  isActive: SortEnumType
+  eventId: SortEnumType
+  event: EventSortInput
+  id: SortEnumType
+}
+
+input EventSortInput {
+  title: SortEnumType
+  description: SortEnumType
+  dateFrom: SortEnumType
+  dateTo: SortEnumType
+  isPublic: SortEnumType
+  maxParticipants: SortEnumType
+  eventLocationId: SortEnumType
+  eventSchedule: EventScheduleSortInput
+  eventLocation: EventLocationSortInput
+  id: SortEnumType
+}
+
+input EventStatusHistoryFilterInput {
+  and: [EventStatusHistoryFilterInput!]
+  or: [EventStatusHistoryFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  eventStatus: EventStatusOperationFilterInput
+  reason: StringOperationFilterInput
+  createdOn: ComparableDateTimeOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input EventStatusOperationFilterInput {
+  eq: EventStatus
+  neq: EventStatus
+  in: [EventStatus!]
+  nin: [EventStatus!]
+}
+
+input GenderOperationFilterInput {
+  eq: Gender
+  neq: Gender
+  in: [Gender!]
+  nin: [Gender!]
+}
+
+input GeoJSONLineStringInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field is an array of two or more positions."
+  coordinates: [Position]
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeoJSONMultiLineStringInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field is an array of LineString coordinate arrays."
+  coordinates: [[Position]]
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeoJSONMultiPointInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field is an array of positions."
+  coordinates: [Position]
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeoJSONMultiPolygonInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field is an array of Polygon coordinate arrays."
+  coordinates: Coordinates
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeoJSONPointInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field is a single position."
+  coordinates: Position
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeoJSONPolygonInput {
+  "The geometry type of the GeoJson object"
+  type: GeoJSONGeometryType
+  "The \"coordinates\" field MUST be an array of linear ring coordinate arrays. For Polygons with more than one of these rings, the first MUST be the exterior ring, and any others MUST be interior rings. The exterior ring bounds the surface, and the interior rings (if present) bound holes within the surface."
+  coordinates: [[Position]]
+  "The coordinate reference system integer identifier"
+  crs: Int
+}
+
+input GeometryFactoryFilterInput {
+  and: [GeometryFactoryFilterInput!]
+  or: [GeometryFactoryFilterInput!]
+  precisionModel: PrecisionModelFilterInput
+  coordinateSequenceFactory: CoordinateSequenceFactoryFilterInput
+  sRID: ComparableInt32OperationFilterInput
+  geometryServices: NtsGeometryServicesFilterInput
+}
+
+input GeometryFilterInput {
+  and: [GeometryFilterInput!]
+  or: [GeometryFilterInput!]
+  factory: GeometryFactoryFilterInput
+  sRID: ComparableInt32OperationFilterInput
+  geometryType: StringOperationFilterInput
+  ogcGeometryType: OgcGeometryTypeOperationFilterInput
+  precisionModel: PrecisionModelFilterInput
+  coordinate: CoordinateFilterInput
+  coordinates: ListFilterInputTypeOfCoordinateFilterInput
+  numPoints: ComparableInt32OperationFilterInput
+  numGeometries: ComparableInt32OperationFilterInput
+  isSimple: BooleanOperationFilterInput
+  isValid: BooleanOperationFilterInput
+  isEmpty: BooleanOperationFilterInput
+  area: ComparableDoubleOperationFilterInput
+  length: ComparableDoubleOperationFilterInput
+  centroid: PointFilterInput
+  interiorPoint: PointFilterInput
+  pointOnSurface: PointFilterInput
+  dimension: DimensionOperationFilterInput
+  boundary: GeometryFilterInput
+  boundaryDimension: DimensionOperationFilterInput
+  envelope: GeometryFilterInput
+  envelopeInternal: EnvelopeFilterInput
+  isRectangle: BooleanOperationFilterInput
+}
+
+input GeometryOverlayFilterInput {
+  and: [GeometryOverlayFilterInput!]
+  or: [GeometryOverlayFilterInput!]
+}
+
+input InventoryFilterInput {
+  and: [InventoryFilterInput!]
+  or: [InventoryFilterInput!]
+  needQuantity: ComparableDoubleOperationFilterInput
+  itemName: StringOperationFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  unitOfMeasuringId: ComparableGuidOperationFilterInput
+  unitOfMeasuring: UnitOfMeasuringFilterInput
+  userEventInventories: ListFilterInputTypeOfUserEventInventoryFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input ListFilterInputTypeOfAccountRoleFilterInput {
+  all: AccountRoleFilterInput
+  none: AccountRoleFilterInput
+  some: AccountRoleFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAuthExternalFilterInput {
+  all: AuthExternalFilterInput
+  none: AuthExternalFilterInput
+  some: AuthExternalFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfCategoryFilterInput {
+  all: CategoryFilterInput
+  none: CategoryFilterInput
+  some: CategoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfCoordinateFilterInput {
+  all: CoordinateFilterInput
+  none: CoordinateFilterInput
+  some: CoordinateFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfEventCategoryFilterInput {
+  all: EventCategoryFilterInput
+  none: EventCategoryFilterInput
+  some: EventCategoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfEventOwnerFilterInput {
+  all: EventOwnerFilterInput
+  none: EventOwnerFilterInput
+  some: EventOwnerFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfEventStatusHistoryFilterInput {
+  all: EventStatusHistoryFilterInput
+  none: EventStatusHistoryFilterInput
+  some: EventStatusHistoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfInventoryFilterInput {
+  all: InventoryFilterInput
+  none: InventoryFilterInput
+  some: InventoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfMessageFilterInput {
+  all: MessageFilterInput
+  none: MessageFilterInput
+  some: MessageFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfRateFilterInput {
+  all: RateFilterInput
+  none: RateFilterInput
+  some: RateFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfRelationshipFilterInput {
+  all: RelationshipFilterInput
+  none: RelationshipFilterInput
+  some: RelationshipFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUnitOfMeasuringFilterInput {
+  all: UnitOfMeasuringFilterInput
+  none: UnitOfMeasuringFilterInput
+  some: UnitOfMeasuringFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserCategoryFilterInput {
+  all: UserCategoryFilterInput
+  none: UserCategoryFilterInput
+  some: UserCategoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserChatFilterInput {
+  all: UserChatFilterInput
+  none: UserChatFilterInput
+  some: UserChatFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserEventFilterInput {
+  all: UserEventFilterInput
+  none: UserEventFilterInput
+  some: UserEventFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserEventInventoryFilterInput {
+  all: UserEventInventoryFilterInput
+  none: UserEventInventoryFilterInput
+  some: UserEventInventoryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserNotificationTypeFilterInput {
+  all: UserNotificationTypeFilterInput
+  none: UserNotificationTypeFilterInput
+  some: UserNotificationTypeFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserTokenFilterInput {
+  all: UserTokenFilterInput
+  none: UserTokenFilterInput
+  some: UserTokenFilterInput
+  any: Boolean
+}
+
+input ListStringOperationFilterInput {
+  all: StringOperationFilterInput
+  none: StringOperationFilterInput
+  some: StringOperationFilterInput
+  any: Boolean
+}
+
+input LocationTypeOperationFilterInput {
+  eq: LocationType
+  neq: LocationType
+  in: [LocationType!]
+  nin: [LocationType!]
+}
+
+input MessageFilterInput {
+  and: [MessageFilterInput!]
+  or: [MessageFilterInput!]
+  chatRoomId: ComparableGuidOperationFilterInput
+  senderId: ComparableGuidOperationFilterInput
+  sender: UserFilterInput
+  parentId: ComparableNullableOfGuidOperationFilterInput
+  parent: MessageFilterInput
+  dateCreated: ComparableDateTimeOperationFilterInput
+  edited: BooleanOperationFilterInput
+  seen: BooleanOperationFilterInput
+  text: StringOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input NotificationChangeOperationFilterInput {
+  eq: NotificationChange
+  neq: NotificationChange
+  in: [NotificationChange!]
+  nin: [NotificationChange!]
+}
+
+input NotificationTypeFilterInput {
+  and: [NotificationTypeFilterInput!]
+  or: [NotificationTypeFilterInput!]
+  id: NotificationChangeOperationFilterInput
+  name: StringOperationFilterInput
+  users: ListFilterInputTypeOfUserNotificationTypeFilterInput
+}
+
+input NtsGeometryServicesFilterInput {
+  and: [NtsGeometryServicesFilterInput!]
+  or: [NtsGeometryServicesFilterInput!]
+  geometryOverlay: GeometryOverlayFilterInput
+  coordinateEqualityComparer: CoordinateEqualityComparerFilterInput
+  defaultSRID: ComparableInt32OperationFilterInput
+  defaultCoordinateSequenceFactory: CoordinateSequenceFactoryFilterInput
+  defaultPrecisionModel: PrecisionModelFilterInput
+}
+
+input OgcGeometryTypeOperationFilterInput {
+  eq: OgcGeometryType
+  neq: OgcGeometryType
+  in: [OgcGeometryType!]
+  nin: [OgcGeometryType!]
+}
+
+input OrdinatesOperationFilterInput {
+  eq: Ordinates
+  neq: Ordinates
+  in: [Ordinates!]
+  nin: [Ordinates!]
+}
+
+input PeriodicityOperationFilterInput {
+  eq: Periodicity
+  neq: Periodicity
+  in: [Periodicity!]
+  nin: [Periodicity!]
+}
+
+input PointFilterInput {
+  and: [PointFilterInput!]
+  or: [PointFilterInput!]
+  area: ComparableDoubleOperationFilterInput
+  boundary: GeometryFilterInput
+  boundaryDimension: DimensionOperationFilterInput
+  centroid: PointFilterInput
+  coordinate: CoordinateFilterInput
+  coordinates: ListFilterInputTypeOfCoordinateFilterInput
+  coordinateSequence: CoordinateSequenceFilterInput
+  numPoints: ComparableInt32OperationFilterInput
+  isEmpty: BooleanOperationFilterInput
+  dimension: DimensionOperationFilterInput
+  x: ComparableDoubleOperationFilterInput
+  y: ComparableDoubleOperationFilterInput
+  geometryType: StringOperationFilterInput
+  ogcGeometryType: OgcGeometryTypeOperationFilterInput
+  z: ComparableDoubleOperationFilterInput
+  m: ComparableDoubleOperationFilterInput
+  factory: GeometryFactoryFilterInput
+  sRID: ComparableInt32OperationFilterInput
+  precisionModel: PrecisionModelFilterInput
+  numGeometries: ComparableInt32OperationFilterInput
+  isSimple: BooleanOperationFilterInput
+  isValid: BooleanOperationFilterInput
+  length: ComparableDoubleOperationFilterInput
+  interiorPoint: PointFilterInput
+  pointOnSurface: PointFilterInput
+  envelope: GeometryFilterInput
+  envelopeInternal: EnvelopeFilterInput
+  isRectangle: BooleanOperationFilterInput
+}
+
+input PointSortInput {
+  x: SortEnumType
+  y: SortEnumType
+  z: SortEnumType
+}
+
+input PrecisionModelFilterInput {
+  and: [PrecisionModelFilterInput!]
+  or: [PrecisionModelFilterInput!]
+  isFloating: BooleanOperationFilterInput
+  maximumSignificantDigits: ComparableInt32OperationFilterInput
+  scale: ComparableDoubleOperationFilterInput
+  precisionModelType: PrecisionModelsOperationFilterInput
+}
+
+input PrecisionModelsOperationFilterInput {
+  eq: PrecisionModels
+  neq: PrecisionModels
+  in: [PrecisionModels!]
+  nin: [PrecisionModels!]
+}
+
+input RateFilterInput {
+  and: [RateFilterInput!]
+  or: [RateFilterInput!]
+  userFromId: ComparableGuidOperationFilterInput
+  userFrom: UserFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  score: ComparableByteOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input RelationshipFilterInput {
+  and: [RelationshipFilterInput!]
+  or: [RelationshipFilterInput!]
+  userFromId: ComparableGuidOperationFilterInput
+  userFrom: UserFilterInput
+  userToId: ComparableGuidOperationFilterInput
+  userTo: UserFilterInput
+  attitude: AttitudeOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input RoleFilterInput {
+  and: [RoleFilterInput!]
+  or: [RoleFilterInput!]
+  id: RoleOperationFilterInput
+  name: StringOperationFilterInput
+  accounts: ListFilterInputTypeOfAccountRoleFilterInput
+}
+
+input RoleOperationFilterInput {
+  eq: Role
+  neq: Role
+  in: [Role!]
+  nin: [Role!]
+}
+
+input StatusOperationFilterInput {
+  eq: Status
+  neq: Status
+  in: [Status!]
+  nin: [Status!]
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}
+
+input TokenTypeOperationFilterInput {
+  eq: TokenType
+  neq: TokenType
+  in: [TokenType!]
+  nin: [TokenType!]
+}
+
+input UnitOfMeasuringFilterInput {
+  and: [UnitOfMeasuringFilterInput!]
+  or: [UnitOfMeasuringFilterInput!]
+  unitName: StringOperationFilterInput
+  shortName: StringOperationFilterInput
+  inventories: ListFilterInputTypeOfInventoryFilterInput
+  category: CategoryOfMeasuringFilterInput
+  categoryId: ComparableGuidOperationFilterInput
+  isDeleted: BooleanOperationFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input UriFilterInput {
+  and: [UriFilterInput!]
+  or: [UriFilterInput!]
+  absolutePath: StringOperationFilterInput
+  absoluteUri: StringOperationFilterInput
+  localPath: StringOperationFilterInput
+  authority: StringOperationFilterInput
+  hostNameType: UriHostNameTypeOperationFilterInput
+  isDefaultPort: BooleanOperationFilterInput
+  isFile: BooleanOperationFilterInput
+  isLoopback: BooleanOperationFilterInput
+  pathAndQuery: StringOperationFilterInput
+  segments: ListStringOperationFilterInput
+  isUnc: BooleanOperationFilterInput
+  host: StringOperationFilterInput
+  port: ComparableInt32OperationFilterInput
+  query: StringOperationFilterInput
+  fragment: StringOperationFilterInput
+  scheme: StringOperationFilterInput
+  originalString: StringOperationFilterInput
+  dnsSafeHost: StringOperationFilterInput
+  idnHost: StringOperationFilterInput
+  isAbsoluteUri: BooleanOperationFilterInput
+  userEscaped: BooleanOperationFilterInput
+  userInfo: StringOperationFilterInput
+}
+
+input UriHostNameTypeOperationFilterInput {
+  eq: UriHostNameType
+  neq: UriHostNameType
+  in: [UriHostNameType!]
+  nin: [UriHostNameType!]
+}
+
+input UriSortInput {
+  absolutePath: SortEnumType
+  absoluteUri: SortEnumType
+  localPath: SortEnumType
+  authority: SortEnumType
+  hostNameType: SortEnumType
+  isDefaultPort: SortEnumType
+  isFile: SortEnumType
+  isLoopback: SortEnumType
+  pathAndQuery: SortEnumType
+  isUnc: SortEnumType
+  host: SortEnumType
+  port: SortEnumType
+  query: SortEnumType
+  fragment: SortEnumType
+  scheme: SortEnumType
+  originalString: SortEnumType
+  dnsSafeHost: SortEnumType
+  idnHost: SortEnumType
+  isAbsoluteUri: SortEnumType
+  userEscaped: SortEnumType
+  userInfo: SortEnumType
+}
+
+input UserCategoryFilterInput {
+  and: [UserCategoryFilterInput!]
+  or: [UserCategoryFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  categoryId: ComparableGuidOperationFilterInput
+  category: CategoryFilterInput
+}
+
+input UserChatFilterInput {
+  and: [UserChatFilterInput!]
+  or: [UserChatFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  chatId: ComparableGuidOperationFilterInput
+  chat: ChatRoomFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input UserEventFilterInput {
+  and: [UserEventFilterInput!]
+  or: [UserEventFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  eventId: ComparableGuidOperationFilterInput
+  event: EventFilterInput
+  status: StatusOperationFilterInput
+  inventories: ListFilterInputTypeOfUserEventInventoryFilterInput
+  userStatusEvent: UserStatusEventOperationFilterInput
+}
+
+input UserEventInventoryFilterInput {
+  and: [UserEventInventoryFilterInput!]
+  or: [UserEventInventoryFilterInput!]
+  eventId: ComparableGuidOperationFilterInput
+  userId: ComparableGuidOperationFilterInput
+  userEvent: UserEventFilterInput
+  inventoryId: ComparableGuidOperationFilterInput
+  inventory: InventoryFilterInput
+  quantity: ComparableDoubleOperationFilterInput
+}
+
+input UserFilterInput {
+  and: [UserFilterInput!]
+  or: [UserFilterInput!]
+  name: StringOperationFilterInput
+  account: AccountFilterInput
+  email: StringOperationFilterInput
+  phone: StringOperationFilterInput
+  birthday: ComparableDateTimeOperationFilterInput
+  gender: GenderOperationFilterInput
+  events: ListFilterInputTypeOfEventOwnerFilterInput
+  eventsToVisit: ListFilterInputTypeOfUserEventFilterInput
+  categories: ListFilterInputTypeOfUserCategoryFilterInput
+  rates: ListFilterInputTypeOfRateFilterInput
+  relationships: ListFilterInputTypeOfRelationshipFilterInput
+  chats: ListFilterInputTypeOfUserChatFilterInput
+  changedStatusEvents: ListFilterInputTypeOfEventStatusHistoryFilterInput
+  notificationTypes: ListFilterInputTypeOfUserNotificationTypeFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+input UserNotificationTypeFilterInput {
+  and: [UserNotificationTypeFilterInput!]
+  or: [UserNotificationTypeFilterInput!]
+  userId: ComparableGuidOperationFilterInput
+  user: UserFilterInput
+  notificationTypeId: NotificationChangeOperationFilterInput
+  notificationType: NotificationTypeFilterInput
+}
+
+input UserStatusEventOperationFilterInput {
+  eq: UserStatusEvent
+  neq: UserStatusEvent
+  in: [UserStatusEvent!]
+  nin: [UserStatusEvent!]
+}
+
+input UserTokenFilterInput {
+  and: [UserTokenFilterInput!]
+  or: [UserTokenFilterInput!]
+  type: TokenTypeOperationFilterInput
+  token: StringOperationFilterInput
+  expires: ComparableDateTimeOperationFilterInput
+  created: ComparableDateTimeOperationFilterInput
+  revoked: ComparableNullableOfDateTimeOperationFilterInput
+  replacedByToken: StringOperationFilterInput
+  createdByIp: StringOperationFilterInput
+  revokedByIp: StringOperationFilterInput
+  accountId: ComparableGuidOperationFilterInput
+  account: AccountFilterInput
+  id: ComparableGuidOperationFilterInput
+}
+
+enum Attitude {
+  LIKE
+  DISLIKE
+  NONE
+}
+
+enum AuthExternalType {
+  GOOGLE
+  FACEBOOK
+}
+
+enum Dimension {
+  P
+  CURVE
+  SURFACE
+  COLLAPSE
+  DONTCARE
+  TRUE
+  UNKNOWN
+}
+
+enum EventStatus {
+  ACTIVE
+  BLOCKED
+  CANCELED
+  DRAFT
+  DELETED
+}
+
+enum Gender {
+  UNDEFINED
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum GeoJSONGeometryType {
+  Point
+  MultiPoint
+  LineString
+  MultiLineString
+  Polygon
+  MultiPolygon
+  GeometryCollection
+}
+
+enum LocationType {
+  MAP
+  ONLINE
+}
+
+enum NotificationChange {
+  PROFILE
+  OWN_EVENT
+  VISITED_EVENT
+}
+
+enum OgcGeometryType {
+  POINT
+  LINE_STRING
+  POLYGON
+  MULTI_POINT
+  MULTI_LINE_STRING
+  MULTI_POLYGON
+  GEOMETRY_COLLECTION
+  CIRCULAR_STRING
+  COMPOUND_CURVE
+  CURVE_POLYGON
+  MULTI_CURVE
+  MULTI_SURFACE
+  CURVE
+  SURFACE
+  POLYHEDRAL_SURFACE
+  TIN
+}
+
+enum Ordinates {
+  NONE
+  SPATIAL1
+  SPATIAL2
+  XY
+  Z
+  XYZ
+  SPATIAL4
+  SPATIAL5
+  SPATIAL6
+  SPATIAL7
+  SPATIAL8
+  SPATIAL9
+  SPATIAL10
+  SPATIAL11
+  SPATIAL12
+  SPATIAL13
+  SPATIAL14
+  SPATIAL15
+  SPATIAL16
+  ALL_SPATIAL_ORDINATES
+  M
+  XYM
+  XYZM
+  MEASURE2
+  MEASURE3
+  MEASURE4
+  MEASURE5
+  MEASURE6
+  MEASURE7
+  MEASURE8
+  MEASURE9
+  MEASURE10
+  MEASURE11
+  MEASURE12
+  MEASURE13
+  MEASURE14
+  MEASURE15
+  MEASURE16
+  ALL_MEASURE_ORDINATES
+  ALL_ORDINATES
+}
+
+enum Periodicity {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum PrecisionModels {
+  FLOATING
+  FLOATING_SINGLE
+  FIXED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+enum Status {
+  WILL_GO
+  MAYBE_GO
+  WANT_GO
+}
+
+enum TokenType {
+  REFRESH_TOKEN
+  EMAIL_CONFIRMATION_TOKEN
+}
+
+enum UriHostNameType {
+  UNKNOWN
+  BASIC
+  DNS
+  I_PV4
+  I_PV6
+}
+
+enum UserStatusEvent {
+  APPROVED
+  DENIED
+  PENDING
+}
+
+"The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
+directive @defer("If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to." label: String "Deferred when true." if: Boolean) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
+directive @stream("If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to." label: String "The initial elements that shall be send down to the consumer." initialCount: Int! = 0 "Streamed when true." if: Boolean) on FIELD
+
+"The `Byte` scalar type represents non-fractional whole numeric values. Byte can represent values between 0 and 255."
+scalar Byte
+
+"A coordinate is an array of positions."
+scalar Coordinates
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
+
+scalar Geometry
+
+"A position is an array of numbers. There MUST be two or more elements. The first two elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers. Altitude or elevation MAY be included as an optional third element."
+scalar Position
+
+scalar URL @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc3986")
+
+scalar UUID @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc4122")

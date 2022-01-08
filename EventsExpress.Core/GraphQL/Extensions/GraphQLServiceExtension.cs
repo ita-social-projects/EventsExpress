@@ -1,6 +1,4 @@
-﻿using EventsExpress.Core.GraphQL.IServices;
-using EventsExpress.Core.GraphQL.Services;
-using EventsExpress.Core.GraphQL.SortInputTypes;
+﻿using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
 using HotChocolate.Data;
