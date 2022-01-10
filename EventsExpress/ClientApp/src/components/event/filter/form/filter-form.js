@@ -4,6 +4,7 @@ import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
+import AgeFilter from '../parts/age/age-filter';
 import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
 import { connect } from 'react-redux';
 
@@ -37,6 +38,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => 
                 </div>
             </div>
             <OrganizerFilter />
+            <AgeFilter />
         </form>
     );
 };

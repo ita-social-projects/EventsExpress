@@ -4,11 +4,15 @@ import { get_events } from '../../event/event-list-action';
 export const applyFilters = filters => {
     return async dispatch => {
         filters.owners = filters?.organizers?.map(organizer => organizer.id);
+        filters.isOnlyForAdults =
+            (filters.onlyAdult !== filters.withChildren)
+            ? (filters.onlyAdult ?? false)
+            : null;
 
         const options = { arrayFormat: 'index', skipNull: true };
         const filter = exclude(
             `?${stringify(filters, options)}`,
-            ['organizers'],
+            ['organizers', 'withChildren', 'onlyAdult'],
             options
         );
 
