@@ -20,6 +20,7 @@ import "./event-form.css";
 import asyncValidatePhoto from "../../containers/async-validate-photo";
 import ErrorMessages from '../shared/errorMessage';
 import Location from "../location";
+import eventStatusEnum from "../../constants/eventStatusEnum";
 momentLocaliser(moment);
 
 const photoService = new PhotoService();
@@ -148,6 +149,16 @@ class EventForm extends Component {
               label="Public"
             />
           </div>
+          {this.props.initialValues.eventStatus == eventStatusEnum.Draft && (
+            <div className="mt-2">
+              <Field
+                name="isOnlyForAdults"
+                component={renderCheckbox}
+                type="checkbox"
+                label="Only adults"
+              />
+            </div>
+          )}
           <div className="meta-wrap">
             <span>
               <Field
