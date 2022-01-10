@@ -3,28 +3,54 @@ import React from 'react';
 import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
+import OrganizerFilter from '../parts/organizer/organizer-filter';
+import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
+import { connect } from 'react-redux';
 
-const FilterForm = ({ toggleOpen }) => {
+const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => {
     const classes = useFilterStyles();
+    const onSubmit = formValues => props.applyFilters(formValues);
+    const onReset = () => {
+        reset();
+        props.resetFilters();
+    };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className={classes.filterHeader}>
                 <div className={classes.filterHeaderPart}>
                     <IconButton onClick={toggleOpen}>
-                        <Icon className="fas fa-arrow-right" />
+                        <Icon className="fas fa-arrow-circle-right" />
                     </IconButton>
                     <h5 className={classes.filterHeading}>Filters</h5>
                 </div>
                 <div className={classes.filterHeaderPart}>
-                    <GreenButton>Apply</GreenButton>
-                    <Button color="secondary">Reset</Button>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        disableElevation={true}
+                        onClick={onReset}
+                    >
+                        Reset
+                    </Button>
+                    <GreenButton type="submit" disabled={pristine}>Apply</GreenButton>
                 </div>
             </div>
+            <OrganizerFilter />
         </form>
     );
 };
 
-export default reduxForm({
-    form: 'filter-form'
-})(FilterForm);
+const mapDispatchToProps = dispatch => ({
+    applyFilters: filters => dispatch(applyFilters(filters)),
+    resetFilters: () => dispatch(resetFilters())
+});
+
+export default connect(null, mapDispatchToProps)(
+    reduxForm({
+        form: 'filter-form',
+        initialValues: {
+            organizers: []
+        }
+    })(FilterForm)
+);
