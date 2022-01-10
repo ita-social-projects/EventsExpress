@@ -26,6 +26,8 @@ namespace EventsExpress.Core.DTOs
 
         public double? Radius { get; set; }
 
+        public bool? IsOnlyForAdults { get; set; }
+
         public List<string> Categories { get; set; }
 
         public SortBy SortBy { get; set; }

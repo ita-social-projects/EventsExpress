@@ -373,6 +373,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventAudience)
                 .AsNoTracking()
                 .AsQueryable();
+
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft);
 
             events = !string.IsNullOrEmpty(model.KeyWord)
@@ -409,6 +410,11 @@ namespace EventsExpress.Core.Services
 
             events = (model.Owners != null)
                 ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+                : events;
+
+            events = (model.IsOnlyForAdults != null)
+                ? events.Where(e => e.EventAudience != null
+                    && e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
                 : events;
 
             if (model.Categories != null)
