@@ -9,6 +9,7 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ControllerTests
 {
+    using FluentValidation.Results;
+
     [TestFixture]
     internal class AuthenticationControllerTests
     {
@@ -30,6 +33,7 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<ITokenService> _tokenService;
         private Mock<IAccountService> _accountService;
         private Mock<IGoogleSignatureVerificator> _googleSignatureVerificator;
+        private Mock<IValidator<ChangeViewModel>> _mockChangePasswordViewModelValidator;
 
         [SetUp]
         public void Initialize()
@@ -39,12 +43,15 @@ namespace EventsExpress.Test.ControllerTests
             _mapper = new Mock<IMapper>();
             _tokenService = new Mock<ITokenService>();
             _googleSignatureVerificator = new Mock<IGoogleSignatureVerificator>();
+            _mockChangePasswordViewModelValidator = new Mock<IValidator<ChangeViewModel>>();
+
             _authenticationController = new AuthenticationController(
                 _mapper.Object,
                 _authService.Object,
                 _tokenService.Object,
                 _accountService.Object,
-                _googleSignatureVerificator.Object);
+                _googleSignatureVerificator.Object,
+                _mockChangePasswordViewModelValidator.Object);
         }
 
         [Test]
@@ -341,6 +348,8 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ChangePassword")]
         public async Task ChangePassword_AllOk_DoesNotThrowExceptionAsync()
         {
+            _mockChangePasswordViewModelValidator.Setup(v => v.Validate(It.IsAny<ChangeViewModel>()))
+                .Returns(new ValidationResult() { });
             _authenticationController.ControllerContext = new ControllerContext();
             _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             var model = new ChangeViewModel
