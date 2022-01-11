@@ -1,19 +1,29 @@
 import { Button, Icon, IconButton } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFilterStyles } from '../filter-styles';
-import { reduxForm } from 'redux-form';
+import { change, reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
-import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
+import { applyFilters, parseFilters, resetFilters } from '../../../../actions/events/filter/actions';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => {
+const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, history, ...props }) => {
     const classes = useFilterStyles();
-    const onSubmit = formValues => props.applyFilters(formValues);
+    const onSubmit = formValues => applyFilters(formValues, history);
     const onReset = () => {
         reset();
-        props.resetFilters();
+        resetFilters(history);
     };
+
+    useEffect(() => {
+        if (history.location.search) {
+            const filtersFromQuery = parseFilters(history.location.search);
+            for (const key in filtersFromQuery) {
+                props.change(key, filtersFromQuery[key]);
+            }
+        }
+    }, []);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -42,15 +52,16 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => 
 };
 
 const mapDispatchToProps = dispatch => ({
-    applyFilters: filters => dispatch(applyFilters(filters)),
-    resetFilters: () => dispatch(resetFilters())
+    change: (field, value) => dispatch(change('filter-form', field, value))
 });
 
-export default connect(null, mapDispatchToProps)(
-    reduxForm({
-        form: 'filter-form',
-        initialValues: {
-            organizers: []
-        }
-    })(FilterForm)
+export default withRouter(
+    connect(null, mapDispatchToProps)(
+        reduxForm({
+            form: 'filter-form',
+            initialValues: {
+                organizers: []
+            }
+        })(FilterForm)
+    )
 );
