@@ -12,7 +12,7 @@ import { LocationMapWithCircle } from "../../../../helpers/form-helpers/location
 import DisplayMap from "../../../../event/map/display-map";
 import "../../../slider.css";
 const LocationFilter = ({ dispatch, location, formValues }) => {
-  const clear = () => dispatch(change("filter-form", "location", null));
+  const clear = () => dispatch(change("filter-form", "location", {type: null} ));
 
   const onChangeLocationType = (event) => {
     const type = Number(event.target.value);
@@ -36,7 +36,7 @@ const LocationFilter = ({ dispatch, location, formValues }) => {
     <FilterExpansionPanel
       title="Location"
       onClearClick={clear}
-      clearDisabled={formValues.location === null}
+      clearDisabled={formValues.location.type === null}
     >
       <div className="row">
           <FormControl name="location.type">

@@ -53,7 +53,7 @@ export default connect(null, mapDispatchToProps)(
         form: 'filter-form',
         initialValues: {
             organizers: [],
-            location:null,
+            location:{type:null},
         }
     })(FilterForm)
 );

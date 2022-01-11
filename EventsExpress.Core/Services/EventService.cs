@@ -390,6 +390,8 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
 
+            events = events.Where(x => x.EventLocation.Type == model.LocationType);
+
             events = (model.Statuses != null)
             ? events.Where(e => model.Statuses.Contains(e.StatusHistory
                .OrderByDescending(n => n.CreatedOn)
