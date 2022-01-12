@@ -50,10 +50,7 @@ class EventListWrapper extends Component {
 const mapStateToProps = (state) => {
     return {
         events: state.events,
-        current_user: state.user,
-        // TODO: delete, possible dead code
-        form_values: getFormValues('event-filter-form')(state)
-        //
+        current_user: state.user
     };
 };
 
