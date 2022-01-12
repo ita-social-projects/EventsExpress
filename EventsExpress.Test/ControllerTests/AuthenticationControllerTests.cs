@@ -9,7 +9,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
-using FluentValidation;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +17,6 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ControllerTests
 {
-    using FluentValidation.Results;
-
     [TestFixture]
     internal class AuthenticationControllerTests
     {
