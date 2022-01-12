@@ -53,6 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             var ev = Context.Events
+                .Include(e => e.EventAudience)
                 .Include(e => e.Visitors)
                 .First(e => e.Id == eventId);
 
@@ -67,10 +68,13 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found!");
             }
 
-            int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
-            if (userAge < 18)
+            if (ev.EventAudience?.IsOnlyForAdults == true)
             {
-                throw new EventsExpressException("User does not meet age requirements!");
+                int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
+                if (userAge < 18)
+                {
+                    throw new EventsExpressException("User does not meet age requirements!");
+                }
             }
 
             Context.UserEvent.Add(new UserEvent
