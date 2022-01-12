@@ -82,6 +82,17 @@ export default class EventHeader extends Component {
 
         }
     }
+    
+    renderTitle = (title, onlyAdults) => {
+        return (
+            <div>
+                {title}
+                {onlyAdults &&
+                    <span> &#128286;</span>
+                }
+            </div>
+        )
+    }
 
     render() {
         const classes = useStyle;
@@ -92,6 +103,7 @@ export default class EventHeader extends Component {
             owners,
             dateFrom,
             title,
+            onlyAdults,
         } = this.props;
         const { anchorElM, anchorElO } = this.state;
 
@@ -152,7 +164,7 @@ export default class EventHeader extends Component {
                         PrintMenuItems
                     }
                 </Menu>
-                < Menu
+                <Menu
                     id="menu-for-members"
                     anchorEl={anchorElM}
                     keepMounted
@@ -166,7 +178,7 @@ export default class EventHeader extends Component {
                 <CardHeader
                     avatar={ this.renderOwners(owners, classes.avatar) }
                     action={ this.renderMembers(firstMember, countVisitor, classes.avatar) }
-                    title={title}
+                    title={ this.renderTitle(title, onlyAdults) }
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                     classes={{ title: 'title' }}
                 />

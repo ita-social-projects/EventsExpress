@@ -58,6 +58,7 @@ export default class EventCard extends Component {
             dateFrom,
             description,
             isPublic,
+            isOnlyForAdults,
             maxParticipants,
             eventStatus,
             categories,
@@ -65,6 +66,7 @@ export default class EventCard extends Component {
             owners,
             members,
         } = this.props.item;
+        
         const INT32_MAX_VALUE = null;
         const categoriesNotDisplayed = categories.length - 2;
         const restCategories = " ... " + categoriesNotDisplayed + " more";
@@ -85,6 +87,7 @@ export default class EventCard extends Component {
                         owners={owners}
                         dateFrom={dateFrom}
                         title={title}
+                        onlyAdults={isOnlyForAdults}
                     />
                     <CardMedia
                         className={classes.media}
