@@ -67,6 +67,12 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found!");
             }
 
+            int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
+            if (userAge < 18)
+            {
+                throw new EventsExpressException("User does not meet age requirements!");
+            }
+
             Context.UserEvent.Add(new UserEvent
             {
                 EventId = eventId,

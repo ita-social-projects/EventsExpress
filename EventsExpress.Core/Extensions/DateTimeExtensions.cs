@@ -26,5 +26,18 @@ namespace EventsExpress.Core.Extensions
                     return date;
             }
         }
+
+        public static int GetDifferenceInYears(this DateTime dateTime, DateTime otherDateTime)
+        {
+            int yearDiff = dateTime.Year - otherDateTime.Year;
+
+            if (dateTime.Month < otherDateTime.Month
+                || (dateTime.Month == otherDateTime.Month && dateTime.Day < otherDateTime.Day))
+            {
+                --yearDiff;
+            }
+
+            return yearDiff;
+        }
     }
 }
