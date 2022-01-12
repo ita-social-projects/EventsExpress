@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import EventList from '../components/event/event-list';
 import SpinnerWrapper from './spinner';
