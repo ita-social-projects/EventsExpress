@@ -87,7 +87,6 @@ export default class EventCard extends Component {
                         owners={owners}
                         dateFrom={dateFrom}
                         title={title}
-                        onlyAdults={isOnlyForAdults}
                     />
                     <CardMedia
                         className={classes.media}
