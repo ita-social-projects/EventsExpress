@@ -24,6 +24,7 @@ namespace EventsExpress.Validation
             RuleFor(x => x.OldPassword).Must(ValidOldPassword).WithMessage("Wrong password");
             RuleFor(x => x.NewPassword).NotEmpty().WithMessage("Password is required");
             RuleFor(x => x.NewPassword).NotEqual(x => x.OldPassword).WithMessage("New Password can't be the same as Old Password!");
+            RuleFor(x => x.NewPassword).Must(pass => pass.Length >= 6 && pass.Length <= 15).WithMessage("Password should be 6-15 characters long");
         }
 
         protected bool ValidOldPassword(string password)
