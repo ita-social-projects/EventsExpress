@@ -22,11 +22,11 @@ namespace EventsExpress.Core.GraphQL.Extensions
                 .AddType<PointSortType>()
 
                 .AddProjections()
-                .AddFiltering()
-                .AddSorting()
-
+                .AddSpatialTypes()
                 .AddSpatialProjections()
-                .AddSpatialTypes();
+                .AddFiltering()
+                .AddSpatialFiltering()
+                .AddSorting();
         }
     }
 }

@@ -6,7 +6,9 @@ using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using HotChocolate.Data;
+using HotChocolate.Data.Filters.Spatial;
 using HotChocolate.Types;
+using HotChocolate.Types.Spatial;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.Types
