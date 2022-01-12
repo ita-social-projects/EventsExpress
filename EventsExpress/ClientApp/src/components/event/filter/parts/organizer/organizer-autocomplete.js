@@ -1,70 +1,16 @@
 import { Autocomplete } from '@material-ui/lab';
 import { Chip, InputAdornment, TextField } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
-import { useDelay } from './delay-hook';
-import { UserService } from '../../../../../services';
-import { stringify } from 'query-string';
+import { useOrganizerAutocomplete } from './organizer-autocomplete-hook';
+import { useUsersSearch } from './users-search-hook';
 
 export const OrganizerAutocomplete = ({ input, options, ...props }) => {
-    const [username, setUsername] = useDelay(delayedUsername => {
-        props.fetchUsers(`?KeyWord=${delayedUsername}`);
-    }, '');
-    const [selectedOrganizers, setSelectedOrganizers] = useState([]);
+    const [username, updateUsername] = useUsersSearch(props.fetchUsers);
+    const { selectedOrganizers, updateOrganizers, deleteOrganizer } = useOrganizerAutocomplete(input, options);
     const classes = useOrganizerFilterStyles();
-
-    const updateUsername = event => setUsername(event.target.value);
-
-    const updateOrganizers = (event, values) => {
-        const last = values[values.length - 1].id;
-        setSelectedOrganizers(
-            selectedOrganizers.concat(
-                options.find(organizer => organizer.id === last)
-            )
-        );
-
-        input.onChange(
-            input.value.concat(last)
-        );
-    };
-
-    const deleteOrganizer = organizerToDelete => {
-        return () => {
-            setSelectedOrganizers(
-                selectedOrganizers.filter(organizer => organizer.id !== organizerToDelete.id)
-            );
-
-            input.onChange(
-                input.value.filter(id => id !== organizerToDelete.id)
-            );
-        };
-    };
-
-    const fetchOrganizers = async () => {
-        const userService = new UserService();
-        const response = await userService.getUsersShortInformation(
-            `?${stringify({ ids: input.value }, { arrayFormat: 'index' })}`
-        );
-        if (!response.ok) {
-            return;
-        }
-
-        const organizers = await response.json();
-        setSelectedOrganizers(organizers);
-    };
-
-    useEffect(() => {
-        fetchOrganizers();
-    }, []);
-
-    useEffect(() => {
-        const inputErased = input.value.length === 0;
-        if (inputErased) {
-            setSelectedOrganizers([]);
-        }
-    }, [input.value]);
 
     return (
         <>
