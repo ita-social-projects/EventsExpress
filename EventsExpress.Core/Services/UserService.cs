@@ -158,6 +158,12 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
+        public IEnumerable<UserDto> GetUsersInformationByIds(IEnumerable<Guid> ids)
+        {
+            var users = Context.Users.Where(user => ids.Contains(user.Id));
+            return Mapper.Map<IEnumerable<UserDto>>(users.ToList());
+        }
+
         public IEnumerable<UserDto> GetUsersByRole(Role role)
         {
             var users = Context.Roles

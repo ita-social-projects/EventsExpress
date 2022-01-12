@@ -85,6 +85,28 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
+        /// This method gets short information of Users with specified ids.
+        /// </summary>
+        /// <param name="ids">Ids of users, that we want to get.</param>
+        /// <returns>The method returns short information of found users.</returns>
+        /// <response code="200">Returns IEnumerable UserShortInformationDto models.</response>
+        /// <response code="400">Return failed.</response>
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public IActionResult GetUsersShortInformation([FromQuery] IEnumerable<Guid> ids)
+        {
+            try
+            {
+                var users = _userService.GetUsersInformationByIds(ids);
+                return Ok(_mapper.Map<IEnumerable<UserShortInformationViewModel>>(users));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
         /// This method is used to get the number of all users.
         /// </summary>
         /// <param name="accountStatus">Param account status is used to determine the number of users with a specific status.</param>
