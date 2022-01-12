@@ -163,7 +163,15 @@ namespace EventsExpress
             services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
-            services.AddCors();
+            services.AddCors(options =>
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("AllowedOrigins")
+                                                     .Get<string[]>())
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                }));
             services.AddControllers();
             services.AddHttpClient();
             services.Configure<ViewModels.FrontConfigsViewModel>(Configuration.GetSection("FrontEndConfigs"));
@@ -268,10 +276,7 @@ namespace EventsExpress
                 SupportedUICultures = supportedCultures,
             });
 
-            app.UseCors(x => x
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials());
+            app.UseCors();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -12,6 +12,8 @@ export default class UserService {
 
     getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
+    getSearchUsersShortInformation = filter => baseService.getResource(`users/searchUsersShortInformation${filter}`);
+
     setAvatar = async(data) => {
         let file = new FormData();
         file.append('Photo', data.image.file);

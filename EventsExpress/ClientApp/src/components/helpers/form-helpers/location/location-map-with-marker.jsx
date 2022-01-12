@@ -5,18 +5,17 @@ import { LocationMap } from '.';
 
 export default function LocationMapWithMarker(props) {
     let initialPos = { lat: 50.4547, lng: 30.5238 };
-    if (props.input.value.latitude != undefined) {
-        initialPos = { lat: props.input.value.latitude, lng: props.input.value.longitude };
+    if (props.latitude != null) {
+        initialPos = { lat: props.latitude, lng: props.longitude };
     }
     else {
-        props.input.value.latitude = initialPos.lat;
-        props.input.value.longitude = initialPos.lng;
+        props.onChangeValues({ latitude: initialPos.lat, longitude: initialPos.lng });
     }
     const [location, setLocation] = React.useState(initialPos);
 
     function handleChange(latlng) {
         setLocation(latlng);
-        props.input.onChange({ ...props.input.value, latitude: latlng.lat, longitude: latlng.lng });
+        props.onChangeValues({ latitude: latlng.lat, longitude: latlng.lng });
     }
 
     function updateMarker(e) {

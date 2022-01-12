@@ -53,6 +53,15 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
                 .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
+            MockMapper.Setup(opts => opts.Map<User>(It.IsAny<UserDto>()))
+                .Returns((UserDto u) => new User()
+                {
+                });
+            MockMapper.Setup(opts => opts.Map<UserDto>(It.IsAny<User>()))
+                .Returns((User u) => new UserDto()
+                {
+                    Id = u.Id,
+                });
 
             service = new UserService(
                 Context,
@@ -186,6 +195,24 @@ namespace EventsExpress.Test.ServiceTests
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void CreateUserDTO_ThrowException()
+        {
+            existingUserDTO.Email = "test";
+            existingUserDTO.AccountId = Guid.Empty;
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
+            Assert.That(ex.Message, Contains.Substring("Account not found"));
+        }
+
+        [Test]
+        public void GetCurrentUserInfo_UserId()
+        {
+            var expected = existingUserDTO;
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUser.Id);
+            var actual = service.GetCurrentUserInfo();
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [Test]
@@ -339,6 +366,14 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
             mockPhotoService.Verify(x => x.AddUserPhoto(file, userId));
+        }
+
+        [Test]
+        public void ChangeAvatar_ThrowException()
+        {
+            mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(userId, new FormFile(new MemoryStream(), 0, 0, null, "tset")));
+            Assert.That(ex.Message, Contains.Substring("Bad image file"));
         }
 
         private string GetContentType(string fileName)

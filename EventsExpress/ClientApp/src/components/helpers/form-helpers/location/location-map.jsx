@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Map, TileLayer } from 'react-leaflet';
 import Search from 'react-leaflet-search';
-import '../../event/map/map.css';
+import '../../../event/map/map.css';
 
 export default class LocationMap extends Component {
     constructor(props) {

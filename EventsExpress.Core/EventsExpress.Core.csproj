@@ -3,6 +3,7 @@
   <PropertyGroup>
 	<LangVersion>preview</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>warnings</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

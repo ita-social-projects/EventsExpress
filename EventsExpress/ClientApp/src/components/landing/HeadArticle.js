@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import ModalWind from "../modal-wind";
-import AuthComponent from "../../security/authComponent";
-import "./landing.css";
-import Button from "@material-ui/core/Button";
+import Header from "./../Header"
 import { Link } from "react-router-dom";
 import image1 from "./landing-images/1.jpg";
 import image2 from "./landing-images/2.jpg";
@@ -52,8 +49,6 @@ export default class HeadArticle extends Component {
 
   render() {
     const { currentImage } = this.state;
-    const { onLogoutClick, id } = this.props;
-
     return (
       <article
         style={{
@@ -63,35 +58,6 @@ export default class HeadArticle extends Component {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <nav className="row">
-          <div className="col-md-10">
-            <h1>EventsExpress</h1>
-          </div>
-          <AuthComponent onlyAnonymous>
-            <div className="col-md-1">
-              {!id && (
-                <ModalWind
-                  renderButton={(action) => (
-                    <Button
-                      className="mt-5 btn btn-warning"
-                      variant="contained"
-                      onClick={action}
-                    >
-                      Sign In/Up
-                    </Button>
-                  )}
-                />
-              )}
-            </div>
-          </AuthComponent>
-          <AuthComponent>
-            <div className="col-md-2 text-right">
-              <div onClick={onLogoutClick} className="btn">
-                Log out
-              </div>
-            </div>
-          </AuthComponent>
-        </nav>
         <div className="button-container text-center">
           <h2>What do you want to do?</h2>
           <div className="buttons">

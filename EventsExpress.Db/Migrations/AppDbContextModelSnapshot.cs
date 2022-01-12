@@ -118,7 +118,7 @@ namespace EventsExpress.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryGroupId")
+                    b.Property<Guid>("CategoryGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -144,6 +144,23 @@ namespace EventsExpress.Db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CategoryGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("88b791a5-6ce3-4b50-80ae-65572991f676"),
+                            Title = "Art&Craft"
+                        },
+                        new
+                        {
+                            Id = new Guid("d11d77e5-818d-41b4-affd-780a1991a16c"),
+                            Title = "Education&Training"
+                        },
+                        new
+                        {
+                            Id = new Guid("78ed6ee2-9d5a-4802-aced-b3284e948a83"),
+                            Title = "Wellness, Health&Fitness"
+                        });
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.CategoryOfMeasuring", b =>
@@ -885,7 +902,9 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.HasOne("EventsExpress.Db.Entities.CategoryGroup", "CategoryGroup")
                         .WithMany("Categories")
-                        .HasForeignKey("CategoryGroupId");
+                        .HasForeignKey("CategoryGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CategoryGroup");
                 });

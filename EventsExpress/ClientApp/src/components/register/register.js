@@ -6,6 +6,7 @@ import { minLength6, maxLength15 } from '../helpers/validators/min-max-length-va
 import { renderTextField } from '../helpers/form-helpers';
 import { isValidEmail } from '../helpers/validators/email-address-validator';
 import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
+import ErrorMessages from '../shared/errorMessage';
 
 const validate = values => {
     let errors = {};
@@ -33,7 +34,8 @@ const validate = values => {
 class Register extends Component {
 
     render() {
-        const {pristine, reset, submitting} = this.props;
+        const {pristine, reset, submitting, error} = this.props;
+
         return (
             <div className="register">
                 <form onSubmit={this.props.handleSubmit}>
@@ -65,9 +67,9 @@ class Register extends Component {
                     </div>
                     <div>
                         <DialogActions>
-                            <Button 
-                                fullWidth={true} 
-                                type="button" color="primary" 
+                            <Button
+                                fullWidth={true}
+                                type="button" color="primary"
                                 disabled={pristine || submitting}
                                 onClick={reset}
                             >
@@ -75,18 +77,17 @@ class Register extends Component {
                             </Button>
                             <Button fullWidth={true} type="submit" color="primary">
                                 Sign Up
-                            </Button> 
+                            </Button>
                         </DialogActions>
                     </div>
+                    {error && <ErrorMessages error={error} className="text-center" />}
                 </form>
             </div>
         );
     }
 }
 
-Register = reduxForm({
+export default reduxForm({
     form: "register-form",
     validate
 })(Register);
-
-export default Register;

@@ -7,6 +7,7 @@ using EventsExpress.Db.Enums;
 using EventsExpress.Test.ValidationTests.TestClasses.Location;
 using EventsExpress.Test.ValidatorTests.TestClasses.Location;
 using EventsExpress.Validation;
+using EventsExpress.ViewModels;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
@@ -14,16 +15,16 @@ using NUnit.Framework;
 namespace EventsExpress.Test.ValidatorTests
 {
     [TestFixture]
-    internal class EventValidatorTests
+    internal class EventViewModelValidatorTests
     {
-        private IValidator<Event> validator;
-        private Event ev;
+        private IValidator<EventViewModel> validator;
+        private EventViewModel ev;
 
         [SetUp]
         public void Setup()
         {
-            validator = new EventValidator();
-            ev = new Event
+            validator = new EventViewModelValidator();
+            ev = new EventViewModel
             {
                 Title = "Some title",
                 Description = "Some desc",
@@ -174,19 +175,6 @@ namespace EventsExpress.Test.ValidatorTests
 
             // Assert
             result.ShouldHaveValidationErrorFor(e => e.MaxParticipants);
-        }
-
-        [TestCaseSource(typeof(CorrectLocation))]
-        public void Check_CorrectLocation_validation(EventLocation location)
-        {
-            // Arrange
-            ev.EventLocation = location;
-
-            // Act
-            var result = validator.TestValidate(ev);
-
-            // Assert
-            result.ShouldNotHaveValidationErrorFor(e => e.EventLocation);
         }
     }
 }

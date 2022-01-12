@@ -9,7 +9,7 @@
     public class CreatingNotExistingLocation : IEnumerable
     {
         private LocationDto locationDtoPoint = new LocationDto { Id = Guid.NewGuid(), Point = new Point(1.1, 4.5), Type = LocationType.Map };
-        private LocationDto locationDtoOnline = new LocationDto { Id = Guid.NewGuid(), OnlineMeeting = new Uri("https://example.com/bead"), Type = LocationType.Online };
+        private LocationDto locationDtoOnline = new LocationDto { Id = Guid.NewGuid(), OnlineMeeting = "https://example.com/bead", Type = LocationType.Online };
 
         public IEnumerator GetEnumerator()
         {

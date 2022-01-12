@@ -44,8 +44,13 @@ stages:
           sonar.issue.ignore.multicriteria.e2.resourceKey=EventsExpress.Test/*.cs
           
           sonar.issue.ignore.multicriteria.e3.ruleKey=roslyn:SA1518
-          sonar.issue.ignore.multicriteria.e3.resourceKey=EventsExpress.Test/*.cs   
-    
+          sonar.issue.ignore.multicriteria.e3.resourceKey=EventsExpress.Test/*.cs
+
+    - task: UseDotNet@2
+      inputs:
+        version: $(dotNetVersion)
+        includePreviewVersions: true
+        
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
