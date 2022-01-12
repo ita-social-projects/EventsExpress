@@ -248,15 +248,18 @@ export default class EventItemView extends Component {
                                         )
                                     }
                                 </div>
-                                {/* <br /> */}
                                 {canJoin &&
-                                    <button onClick={this.props.onJoin}
-                                        type="button"
-                                        className="btn btn-success join-leave"
-                                        variant="contained"
-                                    >
-                                        Join
-                                    </button>}
+                                    <div>
+                                        <br />
+                                        <button onClick={this.props.onJoin}
+                                            type="button"
+                                            className="btn btn-success join-leave"
+                                            variant="contained"
+                                        >
+                                            Join
+                                        </button>
+                                    </div>
+                                }
                                 {canLeave &&
                                     <EventLeaveModal data={{}}
                                         submitLeave={this.props.onLeave}

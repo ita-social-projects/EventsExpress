@@ -137,6 +137,11 @@ export default class EventCard extends Component {
 
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                                {isOnlyForAdults &&
+                                    <Tooltip title="Only for adults">
+                                        <span className="age-icon">&#128286;</span>
+                                    </Tooltip>
+                                }
                                 {!isPublic &&
                                     <Tooltip title="Private event">
                                         <IconButton>
