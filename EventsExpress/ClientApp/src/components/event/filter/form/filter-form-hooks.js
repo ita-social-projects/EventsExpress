@@ -1,4 +1,5 @@
-import { stringify, exclude, parse } from 'query-string';
+import { exclude, parse, stringify } from 'query-string';
+import { useHistory } from 'react-router-dom';
 
 const combineOrganizers = (ids, names) => {
     const organizers = [];
@@ -11,7 +12,7 @@ const combineOrganizers = (ids, names) => {
     return organizers;
 };
 
-export const applyFilters = (filters, history) => {
+const applyFilters = (filters, history) => {
     filters.owners = filters?.organizers?.map(organizer => organizer.id);
     filters.ownersNames = filters?.organizers?.map(organizer => organizer.username);
 
@@ -25,16 +26,29 @@ export const applyFilters = (filters, history) => {
     history.push(`${history.location.pathname}${filter}`);
 };
 
-export const resetFilters = history => {
+const resetFilters = history => {
     history.push(history.location.pathname);
 };
 
-export const parseFilters = query => {
+const parseFilters = query => {
     const filter = parse(query, { arrayFormat: 'index' });
     const organizersArePassedFromQuery = filter.owners && filter.owners.length !== 0;
 
     return {
         organizers: organizersArePassedFromQuery ? combineOrganizers(filter.owners, filter.ownersNames) : [],
         ...filter
+    };
+};
+
+export const useFilterFormInitialValues = () => {
+    const history = useHistory();
+    return parseFilters(history.location.search);
+};
+
+export const useFilterFormActions = () => {
+    const history = useHistory();
+    return {
+        applyFilters: filters => applyFilters(filters, history),
+        resetFilters: () => resetFilters(history)
     };
 };
