@@ -7,8 +7,10 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,15 +24,18 @@ namespace EventsExpress.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
+        private readonly IValidator<EditUserNameViewModel> _validator;
 
         public UsersController(
             IUserService userSrv,
             IMapper mapper,
-            IPhotoService photoService)
+            IPhotoService photoService,
+            IValidator<EditUserNameViewModel> validator)
         {
             _userService = userSrv;
             _photoService = photoService;
             _mapper = mapper;
+            _validator = validator;
         }
 
         /// <summary>
@@ -150,6 +155,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> EditUsername(EditUserNameViewModel userName)
         {
+            _validator.ValidateAndThrowIfInvalid(userName);
             await _userService.EditUserName(userName.Name);
 
             return Ok();
