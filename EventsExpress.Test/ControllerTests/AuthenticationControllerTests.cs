@@ -39,7 +39,6 @@ namespace EventsExpress.Test.ControllerTests
             _mapper = new Mock<IMapper>();
             _tokenService = new Mock<ITokenService>();
             _googleSignatureVerificator = new Mock<IGoogleSignatureVerificator>();
-
             _authenticationController = new AuthenticationController(
                 _mapper.Object,
                 _authService.Object,

@@ -8,7 +8,6 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.Enums;
 using EventsExpress.ExtensionMethods;
 using EventsExpress.ViewModels;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
