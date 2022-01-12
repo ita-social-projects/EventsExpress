@@ -1,18 +1,13 @@
 import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
 import { change, Field, getFormValues } from 'redux-form';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import OrganizerAutocomplete from './organizer-autocomplete';
-import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 
 const OrganizerFilter = ({ organizers, formValues, ...props }) => {
     const classes = useOrganizerFilterStyles();
     const clear = () => props.change([]);
-
-    useEffect(() => {
-        props.fetchUsers('');
-    }, []);
 
     return (
         <FilterExpansionPanel
@@ -37,7 +32,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchUsers: filter => dispatch(fetchUsers(filter)),
     change: value => dispatch(change('filter-form', 'organizers', value))
 });
 

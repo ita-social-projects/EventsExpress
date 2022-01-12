@@ -1,23 +1,51 @@
 import { Autocomplete } from '@material-ui/lab';
 import { Chip, InputAdornment, TextField } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
-import { useDelay } from './use-delay';
+import { useDelay } from './delay-hook';
 
 export const OrganizerAutocomplete = ({ input, options, ...props }) => {
     const [username, setUsername] = useDelay(delayedUsername => {
         props.fetchUsers(`?KeyWord=${delayedUsername}`);
     }, '');
+    const [selectedOrganizers, setSelectedOrganizers] = useState([]);
     const classes = useOrganizerFilterStyles();
-    const onChange = (event, value) => input.onChange(value);
+
     const updateUsername = event => setUsername(event.target.value);
+
+    const updateOrganizers = (event, values) => {
+        const last = values[values.length - 1].id;
+        setSelectedOrganizers(
+            selectedOrganizers.concat(
+                options.find(organizer => organizer.id === last)
+            )
+        );
+
+        input.onChange(
+            input.value.concat(last)
+        );
+    };
+
     const deleteOrganizer = organizerToDelete => {
         return () => {
-            input.onChange(input.value.filter(organizer => organizer.id !== organizerToDelete.id));
+            setSelectedOrganizers(
+                selectedOrganizers.filter(organizer => organizer.id !== organizerToDelete.id)
+            );
+
+            input.onChange(
+                input.value.filter(id => id !== organizerToDelete.id)
+            );
         };
     };
+
+    useEffect(() => {
+        const inputErased = input.value.length === 0;
+        if (inputErased) {
+            setSelectedOrganizers([]);
+        }
+    }, [input.value]);
 
     return (
         <>
@@ -27,10 +55,10 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
                 multiple={true}
                 disableClearable={true}
                 value={input.value}
-                options={options}
+                options={options.filter(organizer => !input.value.includes(organizer.id))}
                 getOptionLabel={option => option.username}
-                getOptionSelected={(option, value) => option.id === value.id}
-                onChange={onChange}
+                getOptionSelected={(option, value) => option.id === value}
+                onChange={updateOrganizers}
                 renderInput={params => (
                     <TextField
                         {...params}
@@ -54,7 +82,7 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
                 )}
             />
             <div className={classes.chips}>
-                {input.value.map(organizer => (
+                {selectedOrganizers.map(organizer => (
                     <Chip
                         key={organizer.id}
                         label={organizer.username}

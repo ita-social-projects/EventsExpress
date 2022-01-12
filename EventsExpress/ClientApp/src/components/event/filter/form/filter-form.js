@@ -11,7 +11,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
     const { applyFilters, resetFilters } = useFilterFormActions();
 
     const onSubmit = formValues => {
-        applyFilters(formValues);
+        applyFilters({ ...formValues });
     };
 
     const onReset = () => {
