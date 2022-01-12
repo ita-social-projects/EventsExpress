@@ -5,6 +5,8 @@ import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
 import { fetchUsers } from '../../../../../actions/events/filter/users-data';
 import { useDelay } from './delay-hook';
+import { UserService } from '../../../../../services';
+import { stringify } from 'query-string';
 
 export const OrganizerAutocomplete = ({ input, options, ...props }) => {
     const [username, setUsername] = useDelay(delayedUsername => {
@@ -39,6 +41,23 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
             );
         };
     };
+
+    const fetchOrganizers = async () => {
+        const userService = new UserService();
+        const response = await userService.getUsersShortInformation(
+            `?${stringify({ ids: input.value }, { arrayFormat: 'index' })}`
+        );
+        if (!response.ok) {
+            return;
+        }
+
+        const organizers = await response.json();
+        setSelectedOrganizers(organizers);
+    };
+
+    useEffect(() => {
+        fetchOrganizers();
+    }, []);
 
     useEffect(() => {
         const inputErased = input.value.length === 0;

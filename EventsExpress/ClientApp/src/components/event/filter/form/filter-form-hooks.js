@@ -22,7 +22,7 @@ const parseFilters = query => {
     const filter = parse(query, { arrayFormat: 'index' });
 
     return {
-        organizers: [],
+        organizers: filter.owners || [],
         ...filter
     };
 };
