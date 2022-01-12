@@ -26,22 +26,19 @@ namespace EventsExpress.Controllers
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
         private readonly IGoogleSignatureVerificator _googleSignatureVerificator;
-        private readonly IValidator<ChangeViewModel> _passwordValidator;
 
         public AuthenticationController(
             IMapper mapper,
             IAuthService authSrv,
             ITokenService tokenService,
             IAccountService accountService,
-            IGoogleSignatureVerificator googleSignatureVerificator,
-            IValidator<ChangeViewModel> passwordValidator)
+            IGoogleSignatureVerificator googleSignatureVerificator)
         {
             _mapper = mapper;
             _authService = authSrv;
             _tokenService = tokenService;
             _accountService = accountService;
             _googleSignatureVerificator = googleSignatureVerificator;
-            _passwordValidator = passwordValidator;
         }
 
         /// <summary>
@@ -217,7 +214,6 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ChangePassword(ChangeViewModel model)
         {
-            _passwordValidator.ValidateAndThrowIfInvalid(model);
             await _authService.ChangePasswordAsync(model.OldPassword, model.NewPassword);
 
             return Ok();

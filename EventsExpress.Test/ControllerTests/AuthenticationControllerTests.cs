@@ -33,7 +33,6 @@ namespace EventsExpress.Test.ControllerTests
         private Mock<ITokenService> _tokenService;
         private Mock<IAccountService> _accountService;
         private Mock<IGoogleSignatureVerificator> _googleSignatureVerificator;
-        private Mock<IValidator<ChangeViewModel>> _mockChangePasswordViewModelValidator;
 
         [SetUp]
         public void Initialize()
@@ -43,15 +42,13 @@ namespace EventsExpress.Test.ControllerTests
             _mapper = new Mock<IMapper>();
             _tokenService = new Mock<ITokenService>();
             _googleSignatureVerificator = new Mock<IGoogleSignatureVerificator>();
-            _mockChangePasswordViewModelValidator = new Mock<IValidator<ChangeViewModel>>();
 
             _authenticationController = new AuthenticationController(
                 _mapper.Object,
                 _authService.Object,
                 _tokenService.Object,
                 _accountService.Object,
-                _googleSignatureVerificator.Object,
-                _mockChangePasswordViewModelValidator.Object);
+                _googleSignatureVerificator.Object);
         }
 
         [Test]
@@ -348,8 +345,6 @@ namespace EventsExpress.Test.ControllerTests
         [Category("ChangePassword")]
         public async Task ChangePassword_AllOk_DoesNotThrowExceptionAsync()
         {
-            _mockChangePasswordViewModelValidator.Setup(v => v.Validate(It.IsAny<ChangeViewModel>()))
-                .Returns(new ValidationResult() { });
             _authenticationController.ControllerContext = new ControllerContext();
             _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
             var model = new ChangeViewModel
