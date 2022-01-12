@@ -11,24 +11,20 @@ import { Field } from "redux-form";
 import { LocationMapWithCircle } from "../../../../helpers/form-helpers/location";
 import DisplayMap from "../../../../event/map/display-map";
 import "../../../slider.css";
-const LocationFilter = ({ dispatch, location, formValues }) => {
-  const clear = () => dispatch(change("filter-form", "location", {type: null} ));
+const LocationFilter = ({ dispatch, formValues, ...props }) => {
+  const clear = () => props.clear({type:null});
 
   const onChangeLocationType = (event) => {
     const type = Number(event.target.value);
     if (type === enumLocationType.map) {
-      dispatch(
-        change("filter-form", "location", {
+        props.changeLocation( {
           type: enumLocationType.map,
           latitude: null,
           longitude: null,
           radius: 1,
-        })
-      );
+        });
     } else if (type === enumLocationType.online) {
-      dispatch(
-        change("filter-form", "location", { type: enumLocationType.online })
-      );
+        props.changeLocation({ type: enumLocationType.online });
     }
   };
 
@@ -110,4 +106,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(LocationFilter);
+const mapDispatchToProps = dispatch => ({
+  changeLocation: location => dispatch(change("filter-form", "location", location)),
+  clear: value => dispatch(change("filter-form", "location", value )),
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(LocationFilter);
