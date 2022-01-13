@@ -15,11 +15,14 @@
 
         public PhotoValidator()
         {
-            RuleFor(f => f.Photo).NotEmpty().Must(ValidImage).WithMessage("The upload file should be a valid image!");
-            RuleFor(f => f.Photo).Must(f => f.Length > tenMB).WithMessage("File size can not exceed 10 MB");
-            RuleFor(f => f.Photo).Must(f => allowedExtensions.Contains(Path.GetExtension(f.FileName))).
-                WithMessage("Accepted file formats are .jpeg, .jpg, .png, or .bmp");
-            RuleFor(f => f.Photo).Must(ValidImageSize).WithMessage("Image size should be at least 750x750px");
+            RuleFor(f => f.Photo).NotEmpty().Must(ValidImage).OverridePropertyName("image")
+                .WithMessage("The upload file should be a valid image!");
+            RuleFor(f => f.Photo).Must(f => f.Length > tenMB).OverridePropertyName("image")
+                .WithMessage("File size can not exceed 10 MB");
+            RuleFor(f => f.Photo).Must(f => !allowedExtensions.Contains(Path.GetExtension(f.FileName))).OverridePropertyName("image")
+                .WithMessage("Accepted file formats are .jpeg, .jpg, .png, or .bmp");
+            RuleFor(f => f.Photo).Must(ValidImageSize).OverridePropertyName("image")
+                .WithMessage("Image size should be at least 750x750px");
         }
 
         private bool ValidImage(IFormFile file) => file.IsImage();
