@@ -53,6 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             var ev = Context.Events
+                .Include(e => e.EventAudience)
                 .Include(e => e.Visitors)
                 .First(e => e.Id == eventId);
 
@@ -65,6 +66,15 @@ namespace EventsExpress.Core.Services
             if (us == null)
             {
                 throw new EventsExpressException("User not found!");
+            }
+
+            if (ev.EventAudience?.IsOnlyForAdults == true)
+            {
+                int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
+                if (userAge < 18)
+                {
+                    throw new EventsExpressException("User does not meet age requirements!");
+                }
             }
 
             Context.UserEvent.Add(new UserEvent
@@ -400,6 +410,8 @@ namespace EventsExpress.Core.Services
             events = (model.X != null && model.Y != null && model.Radius != null)
                 ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
+
+            events = events.Where(x => x.EventLocation.Type == model.LocationType);
 
             events = (model.Statuses != null)
             ? events.Where(e => model.Statuses.Contains(e.StatusHistory

@@ -51,6 +51,8 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
                 .ForMember(dest => dest.EventLocationId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventLocation, opts => opts.Ignore())
+                .ForMember(dest => dest.EventAudienceId, opts => opts.Ignore())
+                .ForMember(dest => dest.EventAudience, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
                 .ForMember(dest => dest.Rates, opts => opts.Ignore())
                 .ForMember(dest => dest.StatusHistory, opts => opts.Ignore());
