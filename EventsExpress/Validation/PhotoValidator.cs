@@ -17,7 +17,7 @@
         {
             RuleFor(f => f.Photo).NotEmpty().Must(ValidImage).OverridePropertyName("image")
                 .WithMessage("The upload file should be a valid image!");
-            RuleFor(f => f.Photo).Must(f => f.Length > tenMB).OverridePropertyName("image")
+            RuleFor(f => f.Photo).Must(f => f.Length < tenMB).OverridePropertyName("image")
                 .WithMessage("File size can not exceed 10 MB");
             RuleFor(f => f.Photo).Must(f => !allowedExtensions.Contains(Path.GetExtension(f.FileName))).OverridePropertyName("image")
                 .WithMessage("Accepted file formats are .jpeg, .jpg, .png, or .bmp");
