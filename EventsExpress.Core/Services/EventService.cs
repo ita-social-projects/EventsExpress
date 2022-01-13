@@ -26,7 +26,6 @@ namespace EventsExpress.Core.Services
         private readonly ILocationService _locationService;
         private readonly IMediator _mediator;
         private readonly IEventScheduleService _eventScheduleService;
-        private readonly IValidator<Event> _validator;
         private readonly ISecurityContext _securityContextService;
 
         public EventService(
@@ -36,7 +35,6 @@ namespace EventsExpress.Core.Services
             IPhotoService photoService,
             ILocationService locationService,
             IEventScheduleService eventScheduleService,
-            IValidator<Event> validator,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
@@ -44,7 +42,6 @@ namespace EventsExpress.Core.Services
             _locationService = locationService;
             _mediator = mediator;
             _eventScheduleService = eventScheduleService;
-            _validator = validator;
             _securityContextService = securityContextService;
         }
 
@@ -56,6 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             var ev = Context.Events
+                .Include(e => e.EventAudience)
                 .Include(e => e.Visitors)
                 .First(e => e.Id == eventId);
 
@@ -70,11 +68,25 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("User not found!");
             }
 
+            if (ev.EventAudience?.IsOnlyForAdults == true)
+            {
+                int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
+                if (userAge < 18)
+                {
+                    throw new EventsExpressException("User does not meet age requirements!");
+                }
+            }
+
             Context.UserEvent.Add(new UserEvent
             {
                 EventId = eventId,
                 UserId = userId,
-                UserStatusEvent = ev.IsPublic.Value ? UserStatusEvent.Approved : UserStatusEvent.Pending,
+                UserStatusEvent = ev.IsPublic switch
+                {
+                    null => UserStatusEvent.Denied,
+                    true => UserStatusEvent.Approved,
+                    false => UserStatusEvent.Pending,
+                },
             });
 
             await Context.SaveChangesAsync();
@@ -84,7 +96,7 @@ namespace EventsExpress.Core.Services
         {
             var userEvent = Context.UserEvent
                 .Where(x => x.EventId == eventId && x.UserId == userId)
-                .FirstOrDefault();
+                .First();
 
             userEvent.UserStatusEvent = status;
 
@@ -115,7 +127,7 @@ namespace EventsExpress.Core.Services
 
             if (v != null)
             {
-                ev.Visitors.Remove(v);
+                ev.Visitors?.Remove(v);
                 await Context.SaveChangesAsync();
             }
             else
@@ -156,7 +168,7 @@ namespace EventsExpress.Core.Services
             eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
             eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
 
-            var locationDTO = Mapper.Map<EventDto, LocationDto>(eventDTO);
+            var locationDTO = eventDTO.Location;
             var locationId = await _locationService.AddLocationToEvent(locationDTO);
 
             var ev = Mapper.Map<EventDto, Event>(eventDTO);
@@ -203,7 +215,12 @@ namespace EventsExpress.Core.Services
 
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
 
-            var ticksDiff = eventDTO.DateTo.Value.Ticks - eventDTO.DateFrom.Value.Ticks;
+            long ticksDiff = 0;
+            if (eventDTO.DateTo != null && eventDTO.DateFrom != null)
+            {
+                ticksDiff = eventDTO.DateTo.Value.Ticks - eventDTO.DateFrom.Value.Ticks;
+            }
+
             eventDTO.Id = Guid.Empty;
             eventDTO.Owners = null;
             eventDTO.Inventories = null;
@@ -228,12 +245,12 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
-                .FirstOrDefault(x => x.Id == e.Id);
+                .Include(e => e.EventAudience)
+                .First(x => x.Id == e.Id);
 
-            if (e.OnlineMeeting != null || e.Point != null)
+            if (e.Location != null)
             {
-                var locationDTO = Mapper.Map<EventDto, LocationDto>(e);
-                var locationId = await _locationService.AddLocationToEvent(locationDTO);
+                var locationId = await _locationService.AddLocationToEvent(e.Location);
                 ev.EventLocationId = locationId;
             }
 
@@ -268,6 +285,12 @@ namespace EventsExpress.Core.Services
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
 
+            if (e.EventStatus == EventStatus.Draft)
+            {
+                ev.EventAudience ??= new EventAudience();
+                ev.EventAudience.IsOnlyForAdults = e.IsOnlyForAdults;
+            }
+
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 
@@ -283,50 +306,33 @@ namespace EventsExpress.Core.Services
             var ev = Context.Events
                .Include(e => e.EventLocation)
                .Include(e => e.StatusHistory)
+               .Include(e => e.EventAudience)
                .Include(e => e.Categories)
                    .ThenInclude(c => c.Category)
-               .FirstOrDefault(x => x.Id == eventId);
+               .First(x => x.Id == eventId);
 
-            if (ev == null)
-            {
-                throw new EventsExpressException("Not found");
-            }
-
-            Dictionary<string, string> exept = new Dictionary<string, string>();
-            var result = _validator.Validate(ev);
-
-            if (result.IsValid)
-            {
-                ev.StatusHistory.Add(
+            ev.StatusHistory.Add(
                     new EventStatusHistory
                     {
                         EventStatus = EventStatus.Active,
                         CreatedOn = DateTime.UtcNow,
                         UserId = CurrentUserId(),
                     });
-                await Context.SaveChangesAsync();
-                EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-                await _mediator.Publish(new EventCreatedMessage(dtos));
-                return ev.Id;
-            }
-            else
-            {
-                var p = result.Errors.Select(e => new KeyValuePair<string, string>(e.PropertyName, e.ErrorMessage));
-                foreach (var x in p)
-                {
-                    exept.Add(x.Key, x.Value);
-                }
-
-                throw new EventsExpressException("validation failed", exept);
-            }
+            await Context.SaveChangesAsync();
+            EventDto dtos = Mapper.Map<Event, EventDto>(ev);
+            await _mediator.Publish(new EventCreatedMessage(dtos));
+            return ev.Id;
         }
 
         public async Task<Guid> EditNextEvent(EventDto eventDTO)
         {
             var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-            eventScheduleDTO.LastRun = eventDTO.DateTo.Value;
-            eventScheduleDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
+            if (eventDTO.DateTo != null)
+            {
+                eventScheduleDTO.LastRun = eventDTO.DateTo.Value;
+                eventScheduleDTO.NextRun = DateTimeExtensions
+                    .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
+            }
 
             await _eventScheduleService.Edit(eventScheduleDTO);
 
@@ -355,6 +361,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.EventSchedule)
+                .Include(e => e.EventAudience)
                 .FirstOrDefault(x => x.Id == eventId));
 
             return res;
@@ -373,6 +380,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
+                .Include(e => e.EventAudience)
                 .AsNoTracking()
                 .AsQueryable();
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft);
@@ -402,12 +410,18 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
 
+            events = events.Where(x => x.EventLocation.Type == model.LocationType);
+
             events = (model.Statuses != null)
             ? events.Where(e => model.Statuses.Contains(e.StatusHistory
                .OrderByDescending(n => n.CreatedOn)
-               .FirstOrDefault()
+               .First()
                .EventStatus))
             : events;
+
+            events = (model.Owners != null)
+                ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+                : events;
 
             if (model.Categories != null)
             {
@@ -528,6 +542,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
                 .Include(e => e.StatusHistory)
+                .Include(e => e.EventAudience)
                 .Where(x => eventIds.Contains(x.Id))
                 .AsNoTracking()
                 .AsQueryable();
@@ -544,15 +559,15 @@ namespace EventsExpress.Core.Services
         {
             var ev = Context.Events
                 .Include(e => e.Rates)
-                .FirstOrDefault(e => e.Id == eventId);
+                .Single(e => e.Id == eventId);
 
             ev.Rates ??= new List<Rate>();
 
-            var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
+            var currentRate = ev?.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
 
             if (currentRate == null)
             {
-                ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
+                ev?.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
             }
             else
             {

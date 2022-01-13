@@ -37,12 +37,14 @@ namespace EventsExpress.Test.ServiceTests
                     Id = Guid.NewGuid(),
                     Title = "SLdndsndj",
                     Status = ContactAdminStatus.InProgress,
+                    Email = "TestEmail",
                 },
                 new ContactAdmin
                 {
                     Id = Guid.NewGuid(),
                     Title = "other title",
                     Status = ContactAdminStatus.Open,
+                    Email = "TestEmail",
                 },
             };
 

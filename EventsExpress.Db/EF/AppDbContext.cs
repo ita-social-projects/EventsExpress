@@ -53,9 +53,13 @@ namespace EventsExpress.Db.EF
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 
+        public DbSet<EventAudience> EventAudiences { get; set; }
+
         public DbSet<Comments> Comments { get; set; }
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<CategoryGroup> CategoryGroups { get; set; }
 
         public DbSet<UserCategory> UserCategory { get; set; }
 

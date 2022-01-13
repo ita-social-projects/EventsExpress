@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react';
-import { connect } from 'react-redux';
+﻿import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import SelectCategories from '../../components/SelectCategories/SelectCategories';
 import setUserCategory from '../../actions/redactProfile/userCategory-add-action';
 import get_categories from '../../actions/category/category-list-action';
@@ -25,11 +25,12 @@ class SelectCategoriesWrapper extends Component {
     render() {
         return <SelectCategories
             items={this.props.allCategories.data}
-            initialValues={this.props.user.categories}
+            initialValues={{categories: this.props.user.categories}}
             onSubmit={this.handleSubmit}
         />;
     }
 }
+
 const mapStateToProps = state => {
     return {
         allCategories: state.categories,

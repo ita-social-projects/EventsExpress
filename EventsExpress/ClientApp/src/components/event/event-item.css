@@ -11,3 +11,13 @@
 .description-tooltip{
     overflow-wrap: anywhere;
 }
+
+.age-icon {
+    font-size: 20px;
+    padding: 1px 5px 0 5px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none; 
+}

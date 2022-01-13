@@ -6,7 +6,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
 {
     internal static class GetEventExistingId
     {
-        private static Guid[] eventIds = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+        private static Guid[] eventIds = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 
         internal static Guid FirstEventId
         {
@@ -21,6 +21,16 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
         internal static Guid ThirdEventId
         {
             get => eventIds[2];
+        }
+
+        internal static Guid IsPublicFalseEventId
+        {
+            get => eventIds[3];
+        }
+
+        internal static Guid IsPublicNullEventId
+        {
+            get => eventIds[4];
         }
 
         internal static IEnumerable TestCasesForGetEvent => GetTestCasesFor("GetEvent");

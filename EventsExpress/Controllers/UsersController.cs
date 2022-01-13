@@ -5,11 +5,12 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,6 +56,29 @@ namespace EventsExpress.Controllers
                 };
 
                 return Ok(viewModel);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// This method searches short information of Users with filter.
+        /// </summary>
+        /// <param name="filter">Param filter defines UsersFilterViewModel.</param>
+        /// <returns>The method returns short information of found users.</returns>
+        /// <response code="200">Returns IEnumerable UserShortInformationDto models.</response>
+        /// <response code="400">Return failed.</response>
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public IActionResult SearchUsersShortInformation([FromQuery] UsersFilterViewModel filter)
+        {
+            filter.IsConfirmed = true;
+            try
+            {
+                var users = _userService.Get(filter, out _);
+                return Ok(_mapper.Map<IEnumerable<UserShortInformationViewModel>>(users));
             }
             catch (ArgumentOutOfRangeException)
             {

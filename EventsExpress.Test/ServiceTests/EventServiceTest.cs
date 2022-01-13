@@ -22,6 +22,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
+    using System.Threading.Tasks;
+
     [TestFixture]
     internal class EventServiceTest : TestInitializer
     {
@@ -29,7 +31,6 @@ namespace EventsExpress.Test.ServiceTests
         private static Mock<ILocationService> mockLocationService;
         private static Mock<IEventScheduleService> mockEventScheduleService;
         private static Mock<IMediator> mockMediator;
-        private static Mock<IValidator<Event>> mockValidationService;
         private static Mock<ISecurityContext> mockSecurityContextService;
 
         private EventService service;
@@ -38,12 +39,15 @@ namespace EventsExpress.Test.ServiceTests
         private EventLocation eventLocationMap;
         private EventLocation eventLocationMapSecond;
         private EventLocation eventLocationOnline;
+
         private Guid userId = Guid.NewGuid();
+        private Guid secondUserId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
         private Guid eventCategoryId = Guid.NewGuid();
         private Guid eventLocationIdMapSecond = Guid.NewGuid();
+
         private double radius = 8;
         private byte score = 9;
         private PaginationViewModel model = new PaginationViewModel
@@ -54,23 +58,26 @@ namespace EventsExpress.Test.ServiceTests
 
         private static LocationDto MapLocationDtoFromEventDto(EventDto eventDto)
         {
-            if (eventDto.Type == LocationType.Map)
+            if (eventDto.Location != null)
             {
-                return new LocationDto
+                if (eventDto.Location.Type == LocationType.Map)
                 {
-                    Id = Guid.NewGuid(),
-                    Point = eventDto.Point,
-                    Type = LocationType.Map,
-                };
-            }
-            else if (eventDto.Type == LocationType.Online)
-            {
-                return new LocationDto
+                    return new LocationDto
+                    {
+                        Id = Guid.NewGuid(),
+                        Point = eventDto.Location.Point,
+                        Type = LocationType.Map,
+                    };
+                }
+                else if (eventDto.Location.Type == LocationType.Online)
                 {
-                    Id = Guid.NewGuid(),
-                    OnlineMeeting = eventDto.OnlineMeeting,
-                    Type = LocationType.Online,
-                };
+                    return new LocationDto
+                    {
+                        Id = Guid.NewGuid(),
+                        OnlineMeeting = eventDto.Location.OnlineMeeting,
+                        Type = LocationType.Online,
+                    };
+                }
             }
 
             return null;
@@ -92,7 +99,7 @@ namespace EventsExpress.Test.ServiceTests
                 return new EventLocation
                 {
                     Id = Guid.NewGuid(),
-                    OnlineMeeting = locationDto.OnlineMeeting,
+                    OnlineMeeting = string.Empty,
                     Type = LocationType.Online,
                 };
             }
@@ -133,9 +140,12 @@ namespace EventsExpress.Test.ServiceTests
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
-                Point = eventDto.Point,
                 MaxParticipants = eventDto.MaxParticipants,
-                Type = eventDto.Type,
+                Location = new LocationDto()
+                {
+                    Point = eventDto.Location.Point,
+                    Type = eventDto.Location.Type,
+                },
             };
         }
 
@@ -147,7 +157,6 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
-            mockValidationService = new Mock<IValidator<Event>>();
             mockSecurityContextService = new Mock<ISecurityContext>();
             mockSecurityContextService.Setup(x => x.GetCurrentUserId())
                 .Returns(userId);
@@ -159,7 +168,6 @@ namespace EventsExpress.Test.ServiceTests
                 mockPhotoService.Object,
                 mockLocationService.Object,
                 mockEventScheduleService.Object,
-                mockValidationService.Object,
                 mockSecurityContextService.Object);
 
             eventLocationMap = new EventLocation
@@ -175,10 +183,11 @@ namespace EventsExpress.Test.ServiceTests
                 Point = new Point(50.45, 30.34),
                 Type = LocationType.Map,
             };
+
             eventLocationOnline = new EventLocation
             {
                 Id = eventLocationIdOnline,
-                OnlineMeeting = new Uri("http://basin.example.com/#branch"),
+                OnlineMeeting = "http://basin.example.com/#branch",
                 Type = LocationType.Online,
             };
 
@@ -189,6 +198,14 @@ namespace EventsExpress.Test.ServiceTests
                     Id = userId,
                     Name = "NameIsExist",
                     Email = "stas@gmail.com",
+                    Birthday = DateTime.Today.AddYears(-20),
+                },
+                new User
+                {
+                    Id = secondUserId,
+                    Name = "UnderageUser",
+                    Email = "younguser@gmail.com",
+                    Birthday = DateTime.Today.AddYears(-16),
                 },
             };
 
@@ -288,6 +305,11 @@ namespace EventsExpress.Test.ServiceTests
                     EventLocationId = eventLocationIdOnline,
                     Title = "Second event",
                     IsPublic = true,
+                    EventAudience = new EventAudience
+                    {
+                        Id = Guid.NewGuid(),
+                        IsOnlyForAdults = true,
+                    },
                     Categories = null,
                     MaxParticipants = 25,
                     StatusHistory = new List<EventStatusHistory>()
@@ -345,6 +367,76 @@ namespace EventsExpress.Test.ServiceTests
                         },
                     },
                 },
+                new Event
+                {
+                    Id = GetEventExistingId.IsPublicFalseEventId,
+                    EventSchedule = new EventSchedule
+                    {
+                        IsActive = true,
+                        Frequency = 1,
+                        Periodicity = Periodicity.Weekly,
+                        LastRun = DateTime.Today,
+                        NextRun = DateTime.Today.AddDays(7),
+                    },
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "Is Public false",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = userId,
+                        },
+                    },
+                    EventLocationId = eventLocationIdOnline,
+                    Title = "Second event",
+                    IsPublic = false,
+                    Categories = null,
+                    MaxParticipants = 25,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
+                },
+                new Event
+                {
+                    Id = GetEventExistingId.IsPublicNullEventId,
+                    EventSchedule = new EventSchedule
+                    {
+                        IsActive = true,
+                        Frequency = 1,
+                        Periodicity = Periodicity.Weekly,
+                        LastRun = DateTime.Today,
+                        NextRun = DateTime.Today.AddDays(7),
+                    },
+                    DateFrom = DateTime.Today,
+                    DateTo = DateTime.Today,
+                    Description = "Is Public null",
+                    Owners = new List<EventOwner>()
+                    {
+                        new EventOwner
+                        {
+                            UserId = userId,
+                        },
+                    },
+                    EventLocationId = eventLocationIdOnline,
+                    Title = "Second event",
+                    IsPublic = null,
+                    Categories = null,
+                    MaxParticipants = 25,
+                    StatusHistory = new List<EventStatusHistory>()
+                    {
+                        new EventStatusHistory
+                        {
+                            EventStatus = EventStatus.Draft,
+                            CreatedOn = DateTime.Today,
+                        },
+                    },
+                },
             };
 
             rates = new List<Rate>
@@ -374,10 +466,8 @@ namespace EventsExpress.Test.ServiceTests
             Context.EventLocations.Add(eventLocationOnline);
             Context.Events.AddRange(events);
             Context.Rates.AddRange(rates);
+            Context.Users.AddRange(users);
             Context.SaveChanges();
-
-            MockMapper.Setup(u => u.Map<EventDto, LocationDto>(It.IsAny<EventDto>()))
-                .Returns((EventDto e) => MapLocationDtoFromEventDto(e));
 
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
                 .Returns((LocationDto e) => MapEventLocationFromLocationDto(e));
@@ -535,6 +625,24 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Add user to event")]
+        public void AddUserToEvent_Event_IsPublicFalse()
+        {
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, GetEventExistingId.IsPublicFalseEventId));
+            var ev = Context.UserEvent.First(ue => ue.EventId == GetEventExistingId.IsPublicFalseEventId);
+            Assert.AreEqual(ev.UserStatusEvent, UserStatusEvent.Pending);
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_Event_IsPublicNull()
+        {
+            Assert.DoesNotThrowAsync(async () => await service.AddUserToEvent(userId, GetEventExistingId.IsPublicNullEventId));
+            var ev = Context.UserEvent.First(ue => ue.EventId == GetEventExistingId.IsPublicNullEventId);
+            Assert.AreEqual(ev.UserStatusEvent, UserStatusEvent.Denied);
+        }
+
+        [Test]
+        [Category("Add user to event")]
         public void AddUserToEvent_UserNotFound_ThrowsAsync()
         {
             var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(Guid.NewGuid(), GetEventExistingId.SecondEventId));
@@ -555,6 +663,34 @@ namespace EventsExpress.Test.ServiceTests
         {
             var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
             Assert.That(ex.Message, Contains.Substring("Event not found!"));
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_UnderageUserJoinsAgeRestrictedEvent_ThrowsWithAppropriateMessage()
+        {
+            async Task AddUser() => await service.AddUserToEvent(secondUserId, GetEventExistingId.SecondEventId);
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(AddUser);
+            Assert.That(ex!.Message, Contains.Substring("User does not meet age requirements!"));
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_AdultUserJoinsAgeRestrictedEvent_DoesNotThrow()
+        {
+            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.SecondEventId);
+
+            Assert.DoesNotThrowAsync(AddUser);
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_UserJoinsEventWithoutAgeRestriction_DoesNotThrow()
+        {
+            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.FirstEventId);
+
+            Assert.DoesNotThrowAsync(AddUser);
         }
 
         [Test]
@@ -632,42 +768,17 @@ namespace EventsExpress.Test.ServiceTests
         public void CreateDraft_Works()
         {
             service.CreateDraft();
-            Assert.AreEqual(5, Context.Events.Count());
-        }
-
-        [Test]
-        [Category("Publish Event")]
-        public void Publish_InvalidId_Throw()
-        {
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(Guid.NewGuid()));
-            Assert.That(ex.Message, Contains.Substring("Not found"));
+            Assert.AreEqual(7, Context.Events.Count());
         }
 
         [Test]
         [Category("Publish Event")]
         public void Publish_ValidEvent_Works()
         {
-            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(new FluentValidation.Results.ValidationResult());
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
             mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
-        }
-
-        [Test]
-        [Category("Publish Event")]
-        public void Publish_InValidEvent_Throws()
-        {
-            var validationResultMock = new Mock<FluentValidation.Results.ValidationResult>();
-            validationResultMock
-                .SetupGet(x => x.IsValid)
-                .Returns(() => false);
-
-            validationResultMock.Object.Errors.Add(new FluentValidation.Results.ValidationFailure("Description", "Field is required!"));
-
-            mockValidationService.Setup(v => v.Validate(It.IsAny<Event>())).Returns(validationResultMock.Object);
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Publish(GetEventExistingId.SecondEventId));
-            Assert.That(ex.Message, Contains.Substring("validation failed"));
         }
 
         [Test]
@@ -751,7 +862,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Set rate")]
         public void SetRate_InvalidEventId_ThrowsAsync()
         {
-            Assert.ThrowsAsync<NullReferenceException>(async () => await service.SetRate(userId, Guid.NewGuid(), score));
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await service.SetRate(userId, Guid.NewGuid(), score));
         }
 
         [Test]

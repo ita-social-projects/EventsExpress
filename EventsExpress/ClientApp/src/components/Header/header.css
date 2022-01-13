@@ -1,0 +1,56 @@
+#bgcolornav {
+  background-color: rgb(184, 184, 184);
+}
+
+#EEButton {
+  font-weight: bold;
+}
+
+#headbtn {
+  border-radius: 15px;
+}
+
+#userNameAlign {
+  margin-top: 0;
+  margin-left: 5px;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 3px;
+}
+
+.alignItemsCenter{
+  align-items: center;
+}
+
+.dropdownitemsbackcl{
+  background-color: white;
+}
+
+.removedecorations{
+  all:unset;
+}
+
+.removedecorations:hover{
+  all:unset;
+}
+
+.bgcolorwhite{
+  background-color: white;
+}
+
+.extraHeaderStyles{
+  z-index: 500;
+  position: sticky;
+  top: 0;
+}
+
+.navbar.extraHeaderStyles {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.extraHeaderStyles .navbar-brand {
+  padding: 0;
+}

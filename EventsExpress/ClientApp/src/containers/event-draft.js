@@ -9,14 +9,13 @@ import { edit_event, publish_event } from '../actions/event/event-add-action';
 import { validateEventForm } from './event-validate-form';
 import { change_event_status } from '../actions/event/event-item-view-action';
 import {
-    setErrorAlert,
     setErrorAllertFromResponse,
     setSuccessAllert
 } from '../actions/alert-action';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import './css/Draft.css';
-import { buildValidationState } from '../components/helpers/action-helpers';
+import { buildValidationState, handleFormError } from '../components/helpers/action-helpers';
 
 class EventDraftWrapper extends Component {
 
@@ -49,9 +48,7 @@ class EventDraftWrapper extends Component {
         this.props.history.goBack();
     };
 
-    onError = error => {
-        this.props.errorAlert(error);
-    };
+    onError = error => this.props.handleFormError(error);
 
     render() {
         return <>
@@ -136,8 +133,8 @@ const mapDispatchToProps = (dispatch) => {
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-        errorAlert: message => dispatch(setErrorAlert(message)),
-        errorAlertFromResponse: response => dispatch(setErrorAllertFromResponse(response))
+        errorAlertFromResponse: response => dispatch(setErrorAllertFromResponse(response)),
+        handleFormError: error => dispatch(handleFormError(error))
     };
 };
 

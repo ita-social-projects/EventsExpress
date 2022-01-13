@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Badge from '@material-ui/core/Badge';
-import HeaderProfileWrapper from '../../containers/header-profile';
 import './left-sidebar.css';
 import { NavItem } from '../NavItem/NavItem';
 import AuthComponent from '../../security/authComponent';
@@ -31,7 +30,6 @@ class LeftSidebar extends Component {
                     </button>
                 </div>
                 <div className={this.state._class + ' left-sidebar'}>
-                    <HeaderProfileWrapper />
                     <nav>
                         <hr />
                         <ul className="list-unstyled">

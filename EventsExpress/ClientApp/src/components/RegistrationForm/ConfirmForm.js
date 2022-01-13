@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, List, ListItem, ListItemText, Button } from "@material-ui/core";
+import SelectedActivitiesList from "./SelectedActivitiesList";
 import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 import moment from "moment";
@@ -7,8 +8,26 @@ import moment from "moment";
 const ConfirmForm = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
 
+  const areCategoriesSelected = () => {
+    return props.formValues.categories !== undefined;
+  };
 
+  const getSelectedCategories = () => {
+    const selected = props.formValues.categories;
 
+    const filteredCategories = props.categories.filter((el) =>
+      selected.includes(el.id)
+    );
+
+    return props.categoryGroups
+      .map((g) => ({
+        group: g.title,
+        categories: filteredCategories
+          .filter((c) => c.categoryGroup.id === g.id)
+          .map((el) => el.name),
+      }))
+      .filter((el) => el.categories.length > 0);
+  };
 
   return (
     <>
@@ -39,14 +58,13 @@ const ConfirmForm = (props) => {
                 <ListItem>
                   <ListItemText
                     primary="Birth Date"
-
                     secondary={
                       props.formValues.birthDate
-                        ? moment(props.formValues.birthDate).format("DD-MM-YYYY")
+                        ? moment(props.formValues.birthDate).format(
+                            "DD-MM-YYYY"
+                          )
                         : "Not entered."
                     }
-
-
                   />
                 </ListItem>
               </List>
@@ -76,6 +94,10 @@ const ConfirmForm = (props) => {
             <Grid item xs={5}>
               <h5>Some step 3/4 data</h5>
             </Grid>
+
+            {areCategoriesSelected() && (
+              <SelectedActivitiesList data={getSelectedCategories()} />
+            )}
 
             <Grid item sm={12} justify="center">
               <Button
@@ -111,6 +133,8 @@ const gendersArray = ["", "Male", "Female", "Other"];
 const mapStateToProps = (state) => {
   return {
     formValues: getFormValues("registrationForm")(state),
+    categoryGroups: state.categoryGroups.data,
+    categories: state.categories.data,
   };
 };
 

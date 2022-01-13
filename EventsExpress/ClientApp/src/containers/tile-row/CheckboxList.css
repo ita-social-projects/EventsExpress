@@ -1,0 +1,15 @@
+.checkbox-group {
+    margin: 0 10px;
+}
+
+h2 {
+    margin: 5px auto 10px 15px;
+    text-align: left;
+}
+
+.checkbox-group > div {
+    margin: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
