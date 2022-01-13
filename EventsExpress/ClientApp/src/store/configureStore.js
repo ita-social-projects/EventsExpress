@@ -11,11 +11,8 @@ export default function configureStore(history, initialState) {
   ];
 
   // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
   const isDevelopment = process.env.NODE_ENV === 'development';
-  if (isDevelopment && typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__) {
-    enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
-  }
+  const composeEnhancers = isDevelopment && typeof window !== 'undefined' && (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose);
 
   const rootReducer = combineReducers({
     ...rootReducers
@@ -24,6 +21,7 @@ export default function configureStore(history, initialState) {
   return createStore(
     rootReducer,
     initialState,
-    compose(applyMiddleware(...middleware), ...enhancers)
-  );
+    composeEnhancers(
+      applyMiddleware(...middleware)
+  ));
 }
