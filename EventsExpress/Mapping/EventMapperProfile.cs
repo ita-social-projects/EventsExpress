@@ -31,6 +31,7 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.EventSchedule.Frequency))
                .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.EventSchedule.Periodicity))
                .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => (src.EventSchedule != null)))
+               .ForMember(dest => dest.IsOnlyForAdults, opts => opts.MapFrom(src => src.EventAudience.IsOnlyForAdults))
                .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus))
                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
@@ -50,6 +51,8 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
                 .ForMember(dest => dest.EventLocationId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventLocation, opts => opts.Ignore())
+                .ForMember(dest => dest.EventAudienceId, opts => opts.Ignore())
+                .ForMember(dest => dest.EventAudience, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
                 .ForMember(dest => dest.Rates, opts => opts.Ignore())
                 .ForMember(dest => dest.StatusHistory, opts => opts.Ignore());
