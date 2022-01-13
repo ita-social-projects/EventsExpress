@@ -22,6 +22,8 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
+    using System.Threading.Tasks;
+
     [TestFixture]
     internal class EventServiceTest : TestInitializer
     {
@@ -37,12 +39,15 @@ namespace EventsExpress.Test.ServiceTests
         private EventLocation eventLocationMap;
         private EventLocation eventLocationMapSecond;
         private EventLocation eventLocationOnline;
+
         private Guid userId = Guid.NewGuid();
+        private Guid secondUserId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
         private Guid eventLocationIdOnline = Guid.NewGuid();
         private Guid eventCategoryId = Guid.NewGuid();
         private Guid eventLocationIdMapSecond = Guid.NewGuid();
+
         private double radius = 8;
         private byte score = 9;
         private PaginationViewModel model = new PaginationViewModel
@@ -193,6 +198,14 @@ namespace EventsExpress.Test.ServiceTests
                     Id = userId,
                     Name = "NameIsExist",
                     Email = "stas@gmail.com",
+                    Birthday = DateTime.Today.AddYears(-20),
+                },
+                new User
+                {
+                    Id = secondUserId,
+                    Name = "UnderageUser",
+                    Email = "younguser@gmail.com",
+                    Birthday = DateTime.Today.AddYears(-16),
                 },
             };
 
@@ -292,6 +305,11 @@ namespace EventsExpress.Test.ServiceTests
                     EventLocationId = eventLocationIdOnline,
                     Title = "Second event",
                     IsPublic = true,
+                    EventAudience = new EventAudience
+                    {
+                        Id = Guid.NewGuid(),
+                        IsOnlyForAdults = true,
+                    },
                     Categories = null,
                     MaxParticipants = 25,
                     StatusHistory = new List<EventStatusHistory>()
@@ -448,6 +466,7 @@ namespace EventsExpress.Test.ServiceTests
             Context.EventLocations.Add(eventLocationOnline);
             Context.Events.AddRange(events);
             Context.Rates.AddRange(rates);
+            Context.Users.AddRange(users);
             Context.SaveChanges();
 
             MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
@@ -644,6 +663,34 @@ namespace EventsExpress.Test.ServiceTests
         {
             var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.AddUserToEvent(userId, Guid.NewGuid()));
             Assert.That(ex.Message, Contains.Substring("Event not found!"));
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_UnderageUserJoinsAgeRestrictedEvent_ThrowsWithAppropriateMessage()
+        {
+            async Task AddUser() => await service.AddUserToEvent(secondUserId, GetEventExistingId.SecondEventId);
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(AddUser);
+            Assert.That(ex!.Message, Contains.Substring("User does not meet age requirements!"));
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_AdultUserJoinsAgeRestrictedEvent_DoesNotThrow()
+        {
+            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.SecondEventId);
+
+            Assert.DoesNotThrowAsync(AddUser);
+        }
+
+        [Test]
+        [Category("Add user to event")]
+        public void AddUserToEvent_UserJoinsEventWithoutAgeRestriction_DoesNotThrow()
+        {
+            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.FirstEventId);
+
+            Assert.DoesNotThrowAsync(AddUser);
         }
 
         [Test]
