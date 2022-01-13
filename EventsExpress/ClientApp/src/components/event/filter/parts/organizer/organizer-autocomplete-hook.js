@@ -44,7 +44,9 @@ export const useOrganizerAutocomplete = (input, options) => {
     };
 
     useEffect(() => {
-        fetchOrganizers();
+        if (input.value.length !== 0) {
+            fetchOrganizers();
+        }
     }, []);
 
     useEffect(() => {

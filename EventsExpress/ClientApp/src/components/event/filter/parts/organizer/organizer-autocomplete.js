@@ -3,7 +3,7 @@ import { Chip, InputAdornment, TextField } from '@material-ui/core';
 import React from 'react';
 import { useOrganizerFilterStyles } from './organizer-filter-styles';
 import { connect } from 'react-redux';
-import { fetchUsers } from '../../../../../actions/events/filter/users-data';
+import { fetchUsers, setUsers } from '../../../../../actions/events/filter/users-data';
 import { useOrganizerAutocomplete } from './organizer-autocomplete-hook';
 import { useUsersSearch } from './users-search-hook';
 
@@ -11,6 +11,11 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
     const [username, updateUsername] = useUsersSearch(props.fetchUsers);
     const { selectedOrganizers, updateOrganizers, deleteOrganizer } = useOrganizerAutocomplete(input, options);
     const classes = useOrganizerFilterStyles();
+    const eraseOptions = () => {
+        if (options.length !== 0) {
+            props.eraseUsers();
+        }
+    };
 
     return (
         <>
@@ -24,6 +29,7 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
                 getOptionLabel={option => option.username}
                 getOptionSelected={(option, value) => option.id === value}
                 onChange={updateOrganizers}
+                onClose={eraseOptions}
                 renderInput={params => (
                     <TextField
                         {...params}
@@ -61,7 +67,8 @@ export const OrganizerAutocomplete = ({ input, options, ...props }) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    fetchUsers: filter => dispatch(fetchUsers(filter))
+    fetchUsers: filter => dispatch(fetchUsers(filter)),
+    eraseUsers: () => dispatch(setUsers([]))
 });
 
 export default connect(null, mapDispatchToProps)(OrganizerAutocomplete);
