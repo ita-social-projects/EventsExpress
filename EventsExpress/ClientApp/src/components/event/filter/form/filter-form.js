@@ -4,6 +4,7 @@ import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
+import LocationFilter from '../parts/location/location-filter';
 import { useFilterFormActions } from './filter-form-hooks';
 
 const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
@@ -41,6 +42,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
                 </div>
             </div>
             <OrganizerFilter />
+            <LocationFilter />
         </form>
     );
 };

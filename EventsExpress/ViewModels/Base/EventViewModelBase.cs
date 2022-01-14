@@ -26,6 +26,8 @@ namespace EventsExpress.ViewModels.Base
 
         public bool? IsPublic { get; set; }
 
+        public bool IsOnlyForAdults { get; set; }
+
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
         public IEnumerable<UserPreviewViewModel> Owners { get; set; }

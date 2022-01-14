@@ -31,6 +31,8 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsPublic { get; set; }
 
+        public bool IsOnlyForAdults { get; set; }
+
         public LocationDto Location { get; set; }
 
         public IEnumerable<CategoryDto> Categories { get; set; }

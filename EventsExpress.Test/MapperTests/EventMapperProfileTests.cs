@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
-using Azure.Storage.Blobs;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
-using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
@@ -33,9 +26,11 @@ namespace EventsExpress.Test.MapperTests
         private EventDto firstEventDto;
         private EventEditViewModel firstEventEditViewModel;
         private EventCreateViewModel firstEventCreateViewModel;
+
         private Guid idEventShedule = Guid.NewGuid();
         private Guid idEvent = Guid.NewGuid();
         private Guid idEventLocation = Guid.NewGuid();
+        private Guid idEventAudience = Guid.NewGuid();
         private Guid idUser = Guid.NewGuid();
         private Guid idCategory = Guid.NewGuid();
         private Guid idInventory = Guid.NewGuid();
@@ -70,6 +65,7 @@ namespace EventsExpress.Test.MapperTests
                 IsPublic = true,
                 MaxParticipants = 8,
                 EventLocationId = idEventLocation,
+                EventAudienceId = idEventAudience,
                 EventSchedule = new EventSchedule
                 {
                     Id = idEventShedule,
@@ -86,6 +82,11 @@ namespace EventsExpress.Test.MapperTests
                     Id = idEventLocation,
                     Type = LocationType.Map,
                     Point = new Point(8, 3),
+                },
+                EventAudience = new EventAudience
+                {
+                    Id = idEventAudience,
+                    IsOnlyForAdults = true,
                 },
                 Owners = new List<EventOwner>()
                 {
@@ -194,6 +195,7 @@ namespace EventsExpress.Test.MapperTests
                     },
                 },
                 MaxParticipants = 8,
+                IsOnlyForAdults = true,
             };
         }
 
@@ -370,6 +372,7 @@ namespace EventsExpress.Test.MapperTests
                                                            ex.NeedQuantity == f.NeedQuantity &&
                                                            ex.UnitOfMeasuring.Id == f.UnitOfMeasuring.Id)));
             Assert.That(e.OwnerIds, Is.Null);
+            Assert.That(e.IsOnlyForAdults, Is.EqualTo(firstEvent.EventAudience.IsOnlyForAdults));
         }
 
         [Test]
@@ -394,6 +397,8 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Categories, Is.Null);
             Assert.That(resEven.EventLocationId, Is.Null);
             Assert.That(resEven.EventLocation, Is.Null);
+            Assert.That(resEven.EventAudienceId, Is.Null);
+            Assert.That(resEven.EventAudience, Is.Null);
             Assert.That(resEven.EventSchedule, Is.Null);
             Assert.That(resEven.Rates, Is.Null);
             Assert.That(resEven.StatusHistory, Is.Null);
@@ -473,6 +478,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resView.Periodicity, Is.EqualTo(firstEventDto.Periodicity));
             Assert.That(resView.IsReccurent, Is.EqualTo(firstEventDto.IsReccurent));
             Assert.That(resView.MaxParticipants, Is.EqualTo(firstEventDto.MaxParticipants));
+            Assert.That(resView.IsOnlyForAdults, Is.EqualTo(firstEventDto.IsOnlyForAdults));
         }
 
         [Test]

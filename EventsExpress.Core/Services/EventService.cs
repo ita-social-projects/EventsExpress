@@ -53,6 +53,7 @@ namespace EventsExpress.Core.Services
             }
 
             var ev = Context.Events
+                .Include(e => e.EventAudience)
                 .Include(e => e.Visitors)
                 .First(e => e.Id == eventId);
 
@@ -65,6 +66,15 @@ namespace EventsExpress.Core.Services
             if (us == null)
             {
                 throw new EventsExpressException("User not found!");
+            }
+
+            if (ev.EventAudience?.IsOnlyForAdults == true)
+            {
+                int userAge = DateTime.Today.GetDifferenceInYears(us.Birthday);
+                if (userAge < 18)
+                {
+                    throw new EventsExpressException("User does not meet age requirements!");
+                }
             }
 
             Context.UserEvent.Add(new UserEvent
@@ -235,6 +245,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
+                .Include(e => e.EventAudience)
                 .First(x => x.Id == e.Id);
 
             if (e.Location != null)
@@ -274,6 +285,12 @@ namespace EventsExpress.Core.Services
             ev.DateTo = e.DateTo;
             ev.IsPublic = e.IsPublic;
 
+            if (e.EventStatus == EventStatus.Draft)
+            {
+                ev.EventAudience ??= new EventAudience();
+                ev.EventAudience.IsOnlyForAdults = e.IsOnlyForAdults;
+            }
+
             var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 
@@ -289,6 +306,7 @@ namespace EventsExpress.Core.Services
             var ev = Context.Events
                .Include(e => e.EventLocation)
                .Include(e => e.StatusHistory)
+               .Include(e => e.EventAudience)
                .Include(e => e.Categories)
                    .ThenInclude(c => c.Category)
                .First(x => x.Id == eventId);
@@ -343,6 +361,7 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.EventSchedule)
+                .Include(e => e.EventAudience)
                 .FirstOrDefault(x => x.Id == eventId));
 
             return res;
@@ -361,6 +380,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
+                .Include(e => e.EventAudience)
                 .AsNoTracking()
                 .AsQueryable();
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft);
@@ -389,6 +409,8 @@ namespace EventsExpress.Core.Services
             events = (model.X != null && model.Y != null && model.Radius != null)
                 ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
+
+            events = events.Where(x => x.EventLocation.Type == model.LocationType);
 
             events = (model.Statuses != null)
             ? events.Where(e => model.Statuses.Contains(e.StatusHistory
@@ -520,6 +542,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
                 .Include(e => e.StatusHistory)
+                .Include(e => e.EventAudience)
                 .Where(x => eventIds.Contains(x.Id))
                 .AsNoTracking()
                 .AsQueryable();
