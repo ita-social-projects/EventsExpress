@@ -12,7 +12,7 @@ export default function configureStore(history, initialState) {
 
     // In development, use the browser's Redux dev tools extension if installed
     const isDevelopment = process.env.NODE_ENV === 'development';
-    const composeEnhancers = isDevelopment && typeof window !== 'undefined' && (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose);
+    const composeEnhancers = (isDevelopment && typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
     const rootReducer = combineReducers({
         ...rootReducers
     });
