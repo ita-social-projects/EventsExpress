@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderTextField } from '../../helpers/form-helpers';
 import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
+import {maxLength15, minLength6} from "../../helpers/validators/min-max-length-validators";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,6 +35,10 @@ const validate = values => {
         'newPassword',
         'repeatPassword',
     ]
+
+    if (!values.newPassword){
+        errors.newPassword = 'Password should be 6-15 characters long';
+    }
     if (values.newPassword !== values.repeatPassword) {
         errors.repeatPassword = 'Passwords do not match';
     }
@@ -85,6 +90,7 @@ const ChangePassword = (props) => {
                                     component={renderTextField}
                                     type="password"
                                     className="mb-3"
+                                    validate={[maxLength15, minLength6]}
                                 />
 
                                 <Field
