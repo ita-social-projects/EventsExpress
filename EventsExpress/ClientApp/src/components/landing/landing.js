@@ -37,7 +37,7 @@ class Landing extends Component {
     </div>
   );
 
-  render() {    
+  render() {
     const { items } = this.props.events.data;
     const events = this.splitDataIntoBlocks(items);
 
@@ -46,7 +46,8 @@ class Landing extends Component {
     return (
       <>
         <div className="main">
-          <HeadArticle />
+          <HeadArticle
+              onSubmit={this.props.onSubmit}/>
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>
