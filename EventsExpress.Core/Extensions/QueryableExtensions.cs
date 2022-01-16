@@ -9,5 +9,10 @@ namespace EventsExpress.Core.Extensions
         {
             return new FilterBuilder<T>(queryable);
         }
+
+        public static IQueryable<T> Page<T>(this IQueryable<T> queryable, int number, int size)
+        {
+            return queryable.Skip((number - 1) * size).Take(size);
+        }
     }
 }

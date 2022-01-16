@@ -786,7 +786,7 @@ namespace EventsExpress.Test.ServiceTests
         public void GetAllDrafts_Works()
         {
             int x = 1;
-            MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
+            MockMapper.Setup(u => u.Map<IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
                 .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
             mockSecurityContextService.Setup(x => x.GetCurrentUserId())
                 .Returns(userId);
