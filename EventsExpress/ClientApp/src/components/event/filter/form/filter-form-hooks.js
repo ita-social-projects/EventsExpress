@@ -4,6 +4,10 @@ import { enumLocationType } from '../../../../constants/EventLocationType';
 
 const applyFilters = (filters, history) => {
     filters.owners = filters?.organizers;
+    filters.isOnlyForAdults =
+        (filters.onlyAdult !== filters.withChildren)
+            ? (filters.onlyAdult ?? false)
+            : null;
     filters.locationtype = filters?.location.type;
     if (filters.location.type === enumLocationType.map)
     {
@@ -15,7 +19,7 @@ const applyFilters = (filters, history) => {
     const options = { arrayFormat: 'index', skipNull: true };
     const filter = exclude(
         `?${stringify(filters, options)}`,
-        ['organizers', 'location'],
+        ['organizers', 'location', 'withChildren', 'onlyAdult'],
         options
     );
 
@@ -43,11 +47,22 @@ const parseLocation = filters => {
     return location;
 }
 
+const transformAgeRestriction = filters => {
+    if (filters.isOnlyForAdults !== undefined) {
+        filters.onlyAdult = filters.isOnlyForAdults;
+        filters.withChildren = !filters.isOnlyForAdults
+        delete filters.isOnlyForAdults;
+    }
+}
+
 const parseFilters = query => {
-    const filters = parse(query, { arrayFormat: 'index', parseNumbers: true });
+    const filters = parse(query, { arrayFormat: 'index', parseNumbers: true, parseBooleans: true });
+    transformAgeRestriction(filters);
 
     return {
         organizers: filters.owners || [],
+        onlyAdult: false,
+        withChildren: false,
         location: filters.locationtype !== undefined ? parseLocation(filters) : { type: null },
         ...filters
     };

@@ -383,6 +383,7 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.EventAudience)
                 .AsNoTracking()
                 .AsQueryable();
+
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft);
 
             events = !string.IsNullOrEmpty(model.KeyWord)
@@ -410,7 +411,9 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
                 : events;
 
-            events = events.Where(x => x.EventLocation.Type == model.LocationType);
+            events = (model.LocationType != null)
+                ? events.Where(x => x.EventLocation.Type == model.LocationType)
+                : events;
 
             events = (model.Statuses != null)
             ? events.Where(e => model.Statuses.Contains(e.StatusHistory
@@ -421,6 +424,11 @@ namespace EventsExpress.Core.Services
 
             events = (model.Owners != null)
                 ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+                : events;
+
+            events = (model.IsOnlyForAdults != null)
+                ? events.Where(e => e.EventAudience != null
+                    && e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
                 : events;
 
             if (model.Categories != null)
