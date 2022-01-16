@@ -82,7 +82,7 @@ export default class EventHeader extends Component {
 
         }
     }
-
+    
     render() {
         const classes = useStyle;
 
@@ -152,7 +152,7 @@ export default class EventHeader extends Component {
                         PrintMenuItems
                     }
                 </Menu>
-                < Menu
+                <Menu
                     id="menu-for-members"
                     anchorEl={anchorElM}
                     keepMounted
