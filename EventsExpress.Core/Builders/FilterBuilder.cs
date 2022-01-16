@@ -6,7 +6,7 @@ namespace EventsExpress.Core.Builders
 {
     public class FilterBuilder<T>
     {
-        private bool filterWillApply = true;
+        private bool _filterWillApply = true;
         private IQueryable<T> _queryable;
 
         public FilterBuilder(IQueryable<T> queryable)
@@ -16,15 +16,20 @@ namespace EventsExpress.Core.Builders
 
         public FilterBuilder<T> If(bool condition)
         {
-            filterWillApply = filterWillApply && condition;
+            _filterWillApply = _filterWillApply && condition;
             return this;
+        }
+
+        public FilterBuilder<T> IfNotNull<TValue>(TValue value)
+        {
+            return If(value is not null);
         }
 
         public FilterBuilder<T> IfNotNull<TValue>(params TValue[] values)
         {
             foreach (var value in values)
             {
-                If(value is not null);
+                IfNotNull(value);
             }
 
             return this;
@@ -32,8 +37,8 @@ namespace EventsExpress.Core.Builders
 
         public NextFilterBuilder<T> AddFilter(Expression<Func<T, bool>> filter)
         {
-            _queryable = filterWillApply ? _queryable.Where(filter) : _queryable;
-            filterWillApply = true;
+            _queryable = _filterWillApply ? _queryable.Where(filter) : _queryable;
+            _filterWillApply = true;
             return new NextFilterBuilder<T>(_queryable);
         }
     }

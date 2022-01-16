@@ -371,6 +371,7 @@ namespace EventsExpress.Core.Services
         {
             var events = Context.Events
                 .Include(e => e.EventLocation)
+                .Include(e => e.EventAudience)
                 .Include(e => e.StatusHistory)
                 .Include(e => e.Owners)
                     .ThenInclude(o => o.User)
@@ -379,18 +380,16 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.Visitors)
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
-                .Include(e => e.StatusHistory)
-                .Include(e => e.EventAudience)
-                .AsNoTracking()
-                .AsQueryable();
+                .AsNoTracking();
 
             events = ApplyFilters(events, model);
             count = events.Count();
 
             var result = events
-                .OrderBy(x => x.DateFrom)
+                .OrderBy(e => e.DateFrom)
                 .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize).ToList();
+                .Take(model.PageSize)
+                .ToList();
 
             return Mapper.Map<IEnumerable<EventDto>>(result);
         }
@@ -567,7 +566,8 @@ namespace EventsExpress.Core.Services
                         .Last().EventStatus != EventStatus.Draft)
                 .Then()
                     .If(!string.IsNullOrEmpty(model.KeyWord))
-                    .AddFilter(x => x.Title.Contains(model.KeyWord) || x.Description.Contains(model.KeyWord))
+                    .AddFilter(e => e.Title.Contains(model.KeyWord)
+                        || e.Description.Contains(model.KeyWord))
                 .Then()
                     .If(model.DateFrom != DateTime.MinValue)
                     .AddFilter(e => e.DateFrom >= model.DateFrom)
@@ -582,20 +582,18 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
                 .Then()
                     .IfNotNull(model.X, model.Y, model.Radius)
-                    .AddFilter(e => (e.EventLocation.Point.Distance(
-                        new Point(model.X!.Value, model.Y!.Value) { SRID = 4326 }) / 1000) -
-                        model.Radius!.Value <= 0)
+                    .AddFilter(e => e.EventLocation.Point
+                        .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
                 .Then()
                     .IfNotNull(model.LocationType)
                     .AddFilter(e => e.EventLocation.Type == model.LocationType)
                 .Then()
                     .IfNotNull(model.IsOnlyForAdults)
-                    .AddFilter(e => e.EventAudience != null
-                        && e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
+                    .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
                 .Then()
                     .IfNotNull(model.Statuses)
                     .AddFilter(e => model.Statuses.Contains(
-                        e.StatusHistory.OrderByDescending(n => n.CreatedOn).First().EventStatus))
+                        e.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus))
                 .Then()
                     .IfNotNull(model.Owners)
                     .AddFilter(e => e.Owners.Any(o => model.Owners.Contains(o.UserId)))
@@ -605,6 +603,11 @@ namespace EventsExpress.Core.Services
                         c => model.Categories.Contains(c.CategoryId.ToString())));
 
             return eventsFilters.Apply();
+        }
+
+        private Point MapPointFromFilter(EventFilterViewModel model)
+        {
+            return new Point(model.X ?? 0, model.Y ?? 0) { SRID = 4326 };
         }
     }
 }
