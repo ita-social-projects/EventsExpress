@@ -4,6 +4,7 @@ import EventList from '../components/event/event-list';
 import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import { withRouter } from "react-router";
+import { exclude, parse, stringify } from 'query-string';
 
 class EventListWrapper extends Component {
     constructor(props) {
@@ -12,16 +13,45 @@ class EventListWrapper extends Component {
     }
 
     componentDidMount() {
-        const query = this.props.history.location.search;
-        this.props.get_events(query);
+        this.fetchEvents();
     }
 
     componentDidUpdate() {
         const query = this.props.history.location.search;
         if (query !== this.prevQueryStringSearch) {
             this.prevQueryStringSearch = query;
-            this.props.get_events(query);
+            this.fetchEvents();
         }
+    }
+
+    fetchEvents() {
+        const query = this.props.history.location.search;
+
+        const modifyAgeFilterValuesToMatchRequirements = query => {
+            const filters = parse(
+                query,
+                {
+                    arrayFormat: 'index',
+                    parseNumbers: true,
+                    parseBooleans: true
+                }
+            );
+
+            filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
+                ? (filters.onlyAdult ?? false)
+                : null;
+
+            const options = { arrayFormat: 'index', skipNull: true };
+            return exclude(
+                `?${stringify(filters, options)}`,
+                ['onlyAdult', 'withChildren'],
+                options
+            );
+        };
+
+        this.props.get_events(
+            modifyAgeFilterValuesToMatchRequirements(query)
+        );
     }
 
     render() {

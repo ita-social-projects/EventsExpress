@@ -4,13 +4,8 @@ import { enumLocationType } from '../../../../constants/EventLocationType';
 
 const applyFilters = (filters, history) => {
     filters.owners = filters?.organizers;
-    filters.isOnlyForAdults =
-        (filters.onlyAdult !== filters.withChildren)
-            ? (filters.onlyAdult ?? false)
-            : null;
     filters.locationtype = filters?.location.type;
-    if (filters.location.type === enumLocationType.map)
-    {
+    if (filters.location.type === enumLocationType.map) {
         filters.x = filters?.location.latitude;
         filters.y = filters?.location.longitude;
         filters.radius = filters?.location.radius;
@@ -19,7 +14,7 @@ const applyFilters = (filters, history) => {
     const options = { arrayFormat: 'index', skipNull: true };
     const filter = exclude(
         `?${stringify(filters, options)}`,
-        ['organizers', 'location', 'withChildren', 'onlyAdult'],
+        ['organizers', 'location'],
         options
     );
 
@@ -45,19 +40,17 @@ const parseLocation = filters => {
     }
 
     return location;
-}
-
-const transformAgeRestriction = filters => {
-    if (filters.isOnlyForAdults !== undefined) {
-        filters.onlyAdult = filters.isOnlyForAdults;
-        filters.withChildren = !filters.isOnlyForAdults
-        delete filters.isOnlyForAdults;
-    }
-}
+};
 
 const parseFilters = query => {
-    const filters = parse(query, { arrayFormat: 'index', parseNumbers: true, parseBooleans: true });
-    transformAgeRestriction(filters);
+    const filters = parse(
+        query,
+        {
+            arrayFormat: 'index',
+            parseNumbers: true,
+            parseBooleans: true
+        }
+    );
 
     return {
         organizers: filters.owners || [],
