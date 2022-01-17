@@ -97,15 +97,8 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         public IActionResult GetUsersShortInformation([FromQuery] IEnumerable<Guid> ids)
         {
-            try
-            {
-                var users = _userService.GetUsersInformationByIds(ids);
-                return Ok(_mapper.Map<IEnumerable<UserShortInformationViewModel>>(users));
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest();
-            }
+            var users = _userService.GetUsersInformationByIds(ids);
+            return Ok(_mapper.Map<IEnumerable<UserShortInformationViewModel>>(users));
         }
 
         /// <summary>
