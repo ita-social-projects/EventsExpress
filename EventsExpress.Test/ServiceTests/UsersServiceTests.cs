@@ -11,6 +11,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
@@ -23,6 +24,8 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class UsersServiceTests : TestInitializer
     {
+        private static Guid[] emptyIds = Array.Empty<Guid>();
+
         private static Mock<IPhotoService> mockPhotoService;
         private Guid secondUserId = Guid.NewGuid();
         private Mock<ISecurityContext> mockSecurityContext;
@@ -30,6 +33,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IMediator> mockMediator;
 
         private UserDto existingUserDTO;
+        private UserDto secondUserDTO;
         private User existingUser;
         private User secondUser;
 
@@ -40,6 +44,8 @@ namespace EventsExpress.Test.ServiceTests
         private string secondName = "secondName";
         private string existingEmail = "existingEmail@gmail.com";
         private string secondEmail = "secondEmail@gmail.com";
+
+        private UserDtoComparer userDtoComparer;
 
         [SetUp]
         protected override void Initialize()
@@ -62,6 +68,9 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     Id = u.Id,
                 });
+            MockMapper.Setup(opts => opts.Map<IEnumerable<UserDto>>(It.IsAny<IEnumerable<User>>()))
+                      .Returns((IEnumerable<User> users) =>
+                          users.Select(user => new UserDto { Id = user.Id }));
 
             service = new UserService(
                 Context,
@@ -171,10 +180,66 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
+            secondUserDTO = new UserDto
+            {
+                Id = secondUserId,
+                Name = secondName,
+                Email = secondEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                },
+                Account = new Account
+                {
+                    UserId = secondUserId,
+                    IsBlocked = false,
+                },
+            };
+
+            userDtoComparer = new UserDtoComparer();
+
             Context.Users.Add(existingUser);
             Context.Users.Add(secondUser);
 
             Context.SaveChanges();
+        }
+
+        [Test]
+        public void GetUsersInformationByIds_WhenIdsArePassed_ReturnsListWithFoundUsers()
+        {
+            var ids = new[] { existingUser.Id, secondUser.Id };
+            var expected = new[] { existingUserDTO, secondUserDTO };
+
+            var actual = service.GetUsersInformationByIds(ids);
+
+            Assert.That(actual, Is.EquivalentTo(expected).Using(userDtoComparer));
+        }
+
+        [TestCaseSource(nameof(emptyIds))]
+        public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList(Guid[] ids)
+        {
+            var expectedLength = 0;
+
+            var actual = service.GetUsersInformationByIds(ids);
+            var actualLength = actual.Count();
+
+            Assert.AreEqual(expectedLength, actualLength);
         }
 
         [TestCase(AccountStatus.All)]

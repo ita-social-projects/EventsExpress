@@ -12,6 +12,8 @@ export default class UserService {
 
     getSearchUsers = filter => baseService.getResource(`users/searchUsers${filter}`);
 
+    getUsersShortInformation = ids => baseService.getResource(`users/getUsersShortInformation${ids}`);
+
     getSearchUsersShortInformation = filter => baseService.getResource(`users/searchUsersShortInformation${filter}`);
 
     setAvatar = async(data) => {
