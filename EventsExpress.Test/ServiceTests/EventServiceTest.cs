@@ -106,7 +106,7 @@ namespace EventsExpress.Test.ServiceTests
             return null;
         }
 
-        private FormFile GetPhoto(string filePath)
+        private static FormFile GetPhoto(string filePath)
         {
             string testFilePath = filePath;
             byte[] bytes = File.ReadAllBytes(testFilePath);
@@ -121,7 +121,7 @@ namespace EventsExpress.Test.ServiceTests
             return file;
         }
 
-        private string GetContentType(string fileName)
+        private static string GetContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(fileName, out var contentType))
@@ -132,7 +132,7 @@ namespace EventsExpress.Test.ServiceTests
             return contentType;
         }
 
-        private EventDto DeepCopyDto(EventDto eventDto)
+        private static EventDto DeepCopyDto(EventDto eventDto)
         {
             List<User> users = new List<User>();
             foreach (var owner in eventDto.Owners)

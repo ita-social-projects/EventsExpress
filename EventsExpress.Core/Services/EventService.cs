@@ -45,6 +45,16 @@ namespace EventsExpress.Core.Services
             _securityContextService = securityContextService;
         }
 
+        private static Point MapPointFromFilter(EventFilterViewModel model)
+        {
+            return new Point(model.X ?? 0, model.Y ?? 0) { SRID = 4326 };
+        }
+
+        private static List<Event> GetPageOfSortedEventList(IQueryable<Event> events, int page, int pageSize)
+        {
+            return events.OrderBy(e => e.DateFrom).Page(page, pageSize).ToList();
+        }
+
         public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!Context.Events.Any(e => e.Id == eventId))
@@ -598,16 +608,6 @@ namespace EventsExpress.Core.Services
                         c => model.Categories.Contains(c.CategoryId.ToString())));
 
             return eventsFilters.Apply();
-        }
-
-        private Point MapPointFromFilter(EventFilterViewModel model)
-        {
-            return new Point(model.X ?? 0, model.Y ?? 0) { SRID = 4326 };
-        }
-
-        private List<Event> GetPageOfSortedEventList(IQueryable<Event> events, int page, int pageSize)
-        {
-            return events.OrderBy(e => e.DateFrom).Page(page, pageSize).ToList();
         }
     }
 }

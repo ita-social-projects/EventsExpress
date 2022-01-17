@@ -10,8 +10,19 @@ namespace EventsExpress.Test.BuilderTests
     {
         private NextFilterBuilder<int> _builder;
 
+        private static IQueryable<int> GetQueryable<TBuilder>(TBuilder builder)
+        {
+            const string fieldName = "_queryable";
+            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
+
+            return (IQueryable<int>)builder
+                .GetType()
+                .GetField(fieldName, flags)
+                ?.GetValue(builder);
+        }
+
         [SetUp]
-        public void Initialize()
+        protected void Initialize()
         {
             var queryable = Enumerable.Range(1, 10).AsQueryable();
             _builder = new NextFilterBuilder<int>(queryable);
@@ -36,17 +47,6 @@ namespace EventsExpress.Test.BuilderTests
             var actualQueryable = _builder.Apply();
 
             Assert.That(actualQueryable, Is.EqualTo(expectedQueryable));
-        }
-
-        private IQueryable<int> GetQueryable<TBuilder>(TBuilder builder)
-        {
-            const string fieldName = "_queryable";
-            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-
-            return (IQueryable<int>)builder
-                .GetType()
-                .GetField(fieldName, flags)
-                ?.GetValue(builder);
         }
     }
 }

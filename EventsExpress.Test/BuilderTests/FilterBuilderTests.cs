@@ -21,11 +21,10 @@ namespace EventsExpress.Test.BuilderTests
         private IQueryable<int> Queryable
         {
             get => (IQueryable<int>)_queryableField.GetValue(_builder);
-            set => _queryableField.SetValue(_builder, value);
         }
 
         [SetUp]
-        public void Initialize()
+        protected void Initialize()
         {
             var queryable = Enumerable.Range(1, 10).AsQueryable();
             _builder = new FilterBuilder<int>(queryable);
