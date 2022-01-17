@@ -45,6 +45,53 @@ namespace EventsExpress.Core.Services
             _securityContextService = securityContextService;
         }
 
+        private static IQueryable<Event> ApplyEventFilters(IQueryable<Event> events, EventFilterViewModel model)
+        {
+            var eventsFilters = events
+                .Filters()
+                    .AddFilter(e => e.StatusHistory.OrderBy(h => h.CreatedOn)
+                        .Last().EventStatus != EventStatus.Draft)
+                .Then()
+                    .If(!string.IsNullOrEmpty(model.KeyWord))
+                    .AddFilter(e => e.Title.Contains(model.KeyWord)
+                        || e.Description.Contains(model.KeyWord))
+                .Then()
+                    .If(model.DateFrom != DateTime.MinValue)
+                    .AddFilter(e => e.DateFrom >= model.DateFrom)
+                .Then()
+                    .If(model.DateTo != DateTime.MinValue)
+                    .AddFilter(e => e.DateTo <= model.DateTo)
+                .Then()
+                    .IfNotNull(model.OwnerId)
+                    .AddFilter(e => e.Owners.Any(o => o.UserId == model.OwnerId))
+                .Then()
+                    .IfNotNull(model.VisitorId)
+                    .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
+                .Then()
+                    .IfNotNull(model.X, model.Y, model.Radius)
+                    .AddFilter(e => e.EventLocation.Point
+                        .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
+                .Then()
+                    .IfNotNull(model.LocationType)
+                    .AddFilter(e => e.EventLocation.Type == model.LocationType)
+                .Then()
+                    .IfNotNull(model.IsOnlyForAdults)
+                    .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
+                .Then()
+                    .IfNotNull(model.Statuses)
+                    .AddFilter(e => model.Statuses.Contains(
+                        e.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus))
+                .Then()
+                    .IfNotNull(model.Owners)
+                    .AddFilter(e => e.Owners.Any(o => model.Owners.Contains(o.UserId)))
+                .Then()
+                    .IfNotNull(model.Categories)
+                    .AddFilter(e => e.Categories.Any(
+                        c => model.Categories.Contains(c.CategoryId.ToString())));
+
+            return eventsFilters.Apply();
+        }
+
         private static Point MapPointFromFilter(EventFilterViewModel model)
         {
             return new Point(model.X ?? 0, model.Y ?? 0) { SRID = 4326 };
@@ -562,52 +609,5 @@ namespace EventsExpress.Core.Services
 
         private Guid CurrentUserId() =>
            _securityContextService.GetCurrentUserId();
-
-        private IQueryable<Event> ApplyEventFilters(IQueryable<Event> events, EventFilterViewModel model)
-        {
-            var eventsFilters = events
-                .Filters()
-                    .AddFilter(e => e.StatusHistory.OrderBy(h => h.CreatedOn)
-                        .Last().EventStatus != EventStatus.Draft)
-                .Then()
-                    .If(!string.IsNullOrEmpty(model.KeyWord))
-                    .AddFilter(e => e.Title.Contains(model.KeyWord)
-                        || e.Description.Contains(model.KeyWord))
-                .Then()
-                    .If(model.DateFrom != DateTime.MinValue)
-                    .AddFilter(e => e.DateFrom >= model.DateFrom)
-                .Then()
-                    .If(model.DateTo != DateTime.MinValue)
-                    .AddFilter(e => e.DateTo <= model.DateTo)
-                .Then()
-                    .IfNotNull(model.OwnerId)
-                    .AddFilter(e => e.Owners.Any(o => o.UserId == model.OwnerId))
-                .Then()
-                    .IfNotNull(model.VisitorId)
-                    .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
-                .Then()
-                    .IfNotNull(model.X, model.Y, model.Radius)
-                    .AddFilter(e => e.EventLocation.Point
-                        .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
-                .Then()
-                    .IfNotNull(model.LocationType)
-                    .AddFilter(e => e.EventLocation.Type == model.LocationType)
-                .Then()
-                    .IfNotNull(model.IsOnlyForAdults)
-                    .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
-                .Then()
-                    .IfNotNull(model.Statuses)
-                    .AddFilter(e => model.Statuses.Contains(
-                        e.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus))
-                .Then()
-                    .IfNotNull(model.Owners)
-                    .AddFilter(e => e.Owners.Any(o => model.Owners.Contains(o.UserId)))
-                .Then()
-                    .IfNotNull(model.Categories)
-                    .AddFilter(e => e.Categories.Any(
-                        c => model.Categories.Contains(c.CategoryId.ToString())));
-
-            return eventsFilters.Apply();
-        }
     }
 }
