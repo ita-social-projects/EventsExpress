@@ -12,7 +12,8 @@ namespace EventsExpress.Core.Extensions
 
         public static IQueryable<T> Page<T>(this IQueryable<T> queryable, int number, int size)
         {
-            return queryable.Skip((number - 1) * size).Take(size);
+            var result = (number > 1) ? queryable.Skip((number - 1) * size) : queryable;
+            return result.Take(size);
         }
     }
 }

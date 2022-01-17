@@ -16,7 +16,7 @@ namespace EventsExpress.Core.Builders
 
         public FilterBuilder<T> If(bool condition)
         {
-            _filterWillApply = _filterWillApply && condition;
+            _filterWillApply &= condition;
             return this;
         }
 
