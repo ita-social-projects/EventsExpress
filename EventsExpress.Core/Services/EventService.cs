@@ -222,7 +222,7 @@ namespace EventsExpress.Core.Services
             }
 
             eventDTO.Id = Guid.Empty;
-            eventDTO.Owners = null;
+            eventDTO.Organizers = null;
             eventDTO.Inventories = null;
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;

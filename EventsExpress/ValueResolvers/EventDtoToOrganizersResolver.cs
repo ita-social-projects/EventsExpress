@@ -40,7 +40,7 @@ namespace EventsExpress.ValueResolvers
                 currentUserId = null;
             }
 
-            foreach (var o in source.Owners)
+            foreach (var o in source.Organizers)
             {
                 var att = o.Relationships?.FirstOrDefault(r => r.UserFromId == currentUserId)?.Attitude ?? Attitude.None;
 

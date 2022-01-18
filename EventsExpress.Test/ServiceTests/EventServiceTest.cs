@@ -125,7 +125,7 @@ namespace EventsExpress.Test.ServiceTests
         private EventDto DeepCopyDto(EventDto eventDto)
         {
             List<User> users = new List<User>();
-            foreach (var owner in eventDto.Owners)
+            foreach (var owner in eventDto.Organizers)
             {
                 users.Add(owner);
             }
@@ -136,7 +136,7 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = eventDto.DateFrom,
                 DateTo = eventDto.DateTo,
                 Description = eventDto.Description,
-                Owners = users,
+                Organizers = users,
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
