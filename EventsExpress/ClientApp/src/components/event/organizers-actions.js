@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { connect } from 'react-redux';
 import { deleteFromOrganizers } from '../../actions/event/event-item-view-action';
 
-const OwnersActions = (props) => {
+const OrganizersActions = (props) => {
     const { user, isMyEvent } = props;
     return (
         <>
@@ -37,4 +37,4 @@ const mapDispatchToProps = (dispatch) => ({
     deleteFromOrganizers: (userId, eventId) => dispatch(deleteFromOrganizers(userId, eventId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnersActions);
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizersActions);
