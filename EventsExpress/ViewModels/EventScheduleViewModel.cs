@@ -20,7 +20,7 @@ namespace EventsExpress.ViewModels
 
         public string Title { get; set; }
 
-        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
+        public IEnumerable<UserPreviewViewModel> Organizers { get; set; }
 
         public Guid EventId { get; set; }
     }
