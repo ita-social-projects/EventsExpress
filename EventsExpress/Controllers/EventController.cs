@@ -161,7 +161,7 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
-            filter.OwnerId = null;
+            filter.OrganizerId = null;
             filter.VisitorId = null;
 
             if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)

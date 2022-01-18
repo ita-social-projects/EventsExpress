@@ -399,8 +399,8 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.DateTo <= model.DateTo)
                 : events;
 
-            events = (model.OwnerId != null)
-                ? events.Where(x => x.Owners.Any(c => c.UserId == model.OwnerId))
+            events = (model.OrganizerId != null)
+                ? events.Where(x => x.Owners.Any(c => c.UserId == model.OrganizerId))
                 : events;
 
             events = (model.VisitorId != null)
@@ -476,7 +476,7 @@ namespace EventsExpress.Core.Services
         {
             var filter = new EventFilterViewModel
             {
-                OwnerId = userId,
+                OrganizerId = userId,
                 DateFrom = DateTime.Today,
                 Page = paginationViewModel.Page,
                 PageSize = paginationViewModel.PageSize,
@@ -493,7 +493,7 @@ namespace EventsExpress.Core.Services
         {
             var filter = new EventFilterViewModel
             {
-                OwnerId = userId,
+                OrganizerId = userId,
                 DateTo = DateTime.Today,
                 Page = paginationViewModel.Page,
                 PageSize = paginationViewModel.PageSize,
