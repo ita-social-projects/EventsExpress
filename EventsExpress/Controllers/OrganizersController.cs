@@ -11,17 +11,17 @@ namespace EventsExpress.Controllers
     [Route("api/[controller]")]
     [Authorize(Policy = PolicyNames.UserPolicyName)]
     [ApiController]
-    public class OwnersController : Controller
+    public class OrganizersController : Controller
     {
         private readonly IEventOwnersService _eventOwnersService;
 
-        public OwnersController(IEventOwnersService eventOwnersService)
+        public OrganizersController(IEventOwnersService eventOwnersService)
         {
             _eventOwnersService = eventOwnersService;
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> DeleteFromOwners(Guid userId, Guid eventId)
+        public async Task<ActionResult> DeleteFromOrganizers(Guid userId, Guid eventId)
         {
             await _eventOwnersService.DeleteOwnerFromEvent(userId, eventId);
 
@@ -29,7 +29,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> PromoteToOwner(Guid userId, Guid eventId)
+        public async Task<ActionResult> PromoteToOrganizer(Guid userId, Guid eventId)
         {
             await _eventOwnersService.PromoteToOwner(userId, eventId);
 

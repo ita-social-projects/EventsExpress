@@ -2,7 +2,7 @@
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/styles";
 import { connect } from 'react-redux';
-import { promoteToOwner, approveUser } from '../../actions/event/event-item-view-action';
+import { promoteToOrganizer, approveUser } from '../../actions/event/event-item-view-action';
 
 const useStyles = makeStyles((theme) => ({
     success: {
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
-    promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId))
+    promoteToOrganizer: (userId, eventId) => dispatch(promoteToOrganizer(userId, eventId))
 });
 
 

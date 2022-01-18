@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { connect } from 'react-redux';
-import { promoteToOwner, approveUser } from '../../actions/event/event-item-view-action';
+import { promoteToOrganizer, approveUser } from '../../actions/event/event-item-view-action';
 
 const DeniedUsersActions = (props) => {
     const { user, isMyEvent } = props;
@@ -12,7 +12,7 @@ const DeniedUsersActions = (props) => {
         <>
             {(isMyEvent) &&
                 <div>
-                <IconButton aria-label="delete" onClick={() => props.promoteToOwner(user.id, props.eventId)}>
+                <IconButton aria-label="delete" onClick={() => props.promoteToOrganizer(user.id, props.eventId)}>
                         <DeleteIcon />
                     </IconButton>
                 </div>
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
-    promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId))
+    promoteToOrganizer: (userId, eventId) => dispatch(promoteToOrganizer(userId, eventId))
 });
 
 
