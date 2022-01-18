@@ -14,12 +14,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.ValueResolvers
 {
-    public class EventDtoToOwnersResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
+    public class EventDtoToOrganizersResolver : IValueResolver<EventDto, EventViewModelBase, IEnumerable<UserPreviewViewModel>>
     {
         private readonly IUserService _userService;
         private readonly ISecurityContext _securityContextService;
 
-        public EventDtoToOwnersResolver(
+        public EventDtoToOrganizersResolver(
             IUserService userService,
             ISecurityContext securityContextService)
         {

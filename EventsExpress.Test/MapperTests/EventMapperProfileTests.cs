@@ -227,7 +227,7 @@ namespace EventsExpress.Test.MapperTests
                         },
                     },
                 },
-                Owners = new List<UserPreviewViewModel>()
+                Organizers = new List<UserPreviewViewModel>()
                 {
                     new UserPreviewViewModel
                     {
@@ -266,7 +266,7 @@ namespace EventsExpress.Test.MapperTests
                         Name = categoryName,
                     },
                 },
-                Owners = new List<UserPreviewViewModel>()
+                Organizers = new List<UserPreviewViewModel>()
                 {
                     new UserPreviewViewModel
                     {
@@ -429,7 +429,7 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
-            Assert.That(resEven.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
+            Assert.That(resEven.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                        firstEventDto.Owners
                                                        .All(f =>
                                                            ex.Id == f.Id &&
@@ -468,7 +468,7 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
-            Assert.That(resView.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
+            Assert.That(resView.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                       firstEventDto.Owners
                                                       .All(f =>
                                                           ex.Id == f.Id &&
@@ -502,7 +502,7 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.UnitOfMeasuring.UnitName == f.UnitOfMeasuring.UnitName)));
             Assert.That(resDto.Owners, Is.Null);
             Assert.That(resDto.OwnerIds, Has.All.Matches<Guid>(ex =>
-                                                      firstEventEditViewModel.Owners
+                                                      firstEventEditViewModel.Organizers
                                                       .All(f =>
                                                           ex == f.Id)));
             Assert.That(resDto.Location.Point, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Map ?
@@ -525,7 +525,7 @@ namespace EventsExpress.Test.MapperTests
                                                          ex.Name == f.Name)));
             Assert.That(resDto.Owners, Is.Null);
             Assert.That(resDto.OwnerIds, Has.All.Matches<Guid>(ex =>
-                                                      firstEventCreateViewModel.Owners
+                                                      firstEventCreateViewModel.Organizers
                                                       .All(f =>
                                                           ex == f.Id)));
             Assert.That(resDto.Location.Point, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Map ?
