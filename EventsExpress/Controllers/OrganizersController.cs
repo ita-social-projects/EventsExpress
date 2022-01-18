@@ -13,17 +13,17 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class OrganizersController : Controller
     {
-        private readonly IEventOwnersService _eventOwnersService;
+        private readonly IEventOrganizersService _eventOrganizersService;
 
-        public OrganizersController(IEventOwnersService eventOwnersService)
+        public OrganizersController(IEventOrganizersService eventOrganizersService)
         {
-            _eventOwnersService = eventOwnersService;
+            _eventOrganizersService = eventOrganizersService;
         }
 
         [HttpPost("[action]")]
         public async Task<ActionResult> DeleteFromOrganizers(Guid userId, Guid eventId)
         {
-            await _eventOwnersService.DeleteOwnerFromEvent(userId, eventId);
+            await _eventOrganizersService.DeleteOrganizerFromEvent(userId, eventId);
 
             return Ok();
         }
@@ -31,7 +31,7 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> PromoteToOrganizer(Guid userId, Guid eventId)
         {
-            await _eventOwnersService.PromoteToOwner(userId, eventId);
+            await _eventOrganizersService.PromoteToOrganizer(userId, eventId);
 
             return Ok();
         }
