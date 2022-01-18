@@ -423,7 +423,7 @@ namespace EventsExpress.Core.Services
             : events;
 
             events = (model.Organizers != null)
-                ? events.Where(@event => @event.Organizers.Any(owner => model.Organizers.Contains(owner.UserId)))
+                ? events.Where(@event => @event.Organizers.Any(organizer => model.Organizers.Contains(organizer.UserId)))
                 : events;
 
             events = (model.IsOnlyForAdults != null)
