@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { enumLocationType } from '../../../../constants/EventLocationType';
 
 const applyFilters = (filters, history) => {
-    filters.owners = filters?.organizers;
     filters.locationtype = filters?.location.type;
     if (filters.location.type === enumLocationType.map) {
         filters.x = filters?.location.latitude;
@@ -14,7 +13,7 @@ const applyFilters = (filters, history) => {
     const options = { arrayFormat: 'index', skipNull: true };
     const filter = exclude(
         `?${stringify(filters, options)}`,
-        ['organizers', 'location'],
+        ['location'],
         options
     );
 
@@ -53,7 +52,7 @@ const parseFilters = query => {
     );
 
     return {
-        organizers: filters.owners || [],
+        organizers: [],
         onlyAdult: false,
         withChildren: false,
         location: filters.locationtype !== undefined ? parseLocation(filters) : { type: null },

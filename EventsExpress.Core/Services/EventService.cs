@@ -422,8 +422,8 @@ namespace EventsExpress.Core.Services
                .EventStatus))
             : events;
 
-            events = (model.Owners != null)
-                ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+            events = (model.Organizers != null)
+                ? events.Where(@event => @event.Owners.Any(owner => model.Organizers.Contains(owner.UserId)))
                 : events;
 
             events = (model.IsOnlyForAdults != null)

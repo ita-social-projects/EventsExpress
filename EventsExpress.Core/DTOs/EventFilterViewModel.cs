@@ -36,6 +36,6 @@ namespace EventsExpress.Core.DTOs
 
         public List<EventStatus> Statuses { get; set; }
 
-        public List<Guid> Owners { get; set; }
+        public List<Guid> Organizers { get; set; }
     }
 }
