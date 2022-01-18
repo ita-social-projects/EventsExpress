@@ -7,7 +7,7 @@ using EventsExpress.Db.Entities;
 
 namespace EventsExpress.Core.Services
 {
-    public class EventOwnersService : BaseService<EventOwner>, IEventOwnersService
+    public class EventOwnersService : BaseService<EventOrganizer>, IEventOwnersService
     {
         public EventOwnersService(AppDbContext context)
             : base(context)
@@ -18,7 +18,7 @@ namespace EventsExpress.Core.Services
         {
             if (!Context.EventOwners.Any(x => x.EventId == eventId && x.UserId == userId))
             {
-                Context.EventOwners.Add(new EventOwner { EventId = eventId, UserId = userId });
+                Context.EventOwners.Add(new EventOrganizer { EventId = eventId, UserId = userId });
 
                 Context.UserEvent.Remove(new UserEvent { UserId = userId, EventId = eventId });
 
@@ -28,7 +28,7 @@ namespace EventsExpress.Core.Services
 
         public async Task DeleteOwnerFromEvent(Guid userId, Guid eventId)
         {
-            Context.EventOwners.Remove(new EventOwner { UserId = userId, EventId = eventId });
+            Context.EventOwners.Remove(new EventOrganizer { UserId = userId, EventId = eventId });
             await Context.SaveChangesAsync();
         }
     }

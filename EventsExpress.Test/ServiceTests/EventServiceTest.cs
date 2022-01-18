@@ -225,9 +225,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -260,9 +260,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "test event",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -295,9 +295,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },
@@ -327,9 +327,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -381,9 +381,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "Is Public false",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },
@@ -416,9 +416,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "Is Public null",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },

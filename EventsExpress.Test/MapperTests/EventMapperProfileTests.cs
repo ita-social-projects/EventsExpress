@@ -88,9 +88,9 @@ namespace EventsExpress.Test.MapperTests
                     Id = idEventAudience,
                     IsOnlyForAdults = true,
                 },
-                Owners = new List<EventOwner>()
+                Organizers = new List<EventOrganizer>()
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = Guid.NewGuid(),
                         User = users[0],
@@ -353,7 +353,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(e.Location.Type, Is.EqualTo(firstEvent.EventLocation.Type));
             Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.EventLocation.OnlineMeeting));
             Assert.That(e.Organizers, Has.All.Matches<User>(ex =>
-                                                        firstEvent.Owners
+                                                        firstEvent.Organizers
                                                         .All(f =>
                                                             ex.Id == f.User.Id)));
             Assert.That(e.Categories, Has.All.Matches<CategoryDto>(ex =>
@@ -380,12 +380,12 @@ namespace EventsExpress.Test.MapperTests
         {
             firstEventDto = GetEventDto();
             var resEven = Mapper.Map<EventDto, Event>(firstEventDto);
-            Assert.That(resEven.Owners, Has.All.Matches<EventOwner>(ex =>
+            Assert.That(resEven.Organizers, Has.All.Matches<EventOrganizer>(ex =>
                                                         firstEventDto.Organizers
                                                         .All(f =>
                                                             ex.UserId == f.Id))
                                         .And
-                                        .All.Matches<EventOwner>(e => firstEventDto.Id == e.EventId));
+                                        .All.Matches<EventOrganizer>(e => firstEventDto.Id == e.EventId));
             Assert.That(resEven.Inventories, Has.All.Matches<Inventory>(ex =>
                                                       firstEventDto.Inventories
                                                       .All(f =>

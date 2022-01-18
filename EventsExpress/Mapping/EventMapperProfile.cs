@@ -23,7 +23,7 @@ namespace EventsExpress.Mapping
         {
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
-               .ForMember(dest => dest.Organizers, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
+               .ForMember(dest => dest.Organizers, opt => opt.MapFrom(x => x.Organizers.Select(z => z.User)))
                .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -39,8 +39,8 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.Photo, opts => opts.Ignore());
 
             CreateMap<EventDto, Event>()
-                .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Organizers.Select(x =>
-                   new EventOwner
+                .ForMember(dest => dest.Organizers, opt => opt.MapFrom(src => src.Organizers.Select(x =>
+                   new EventOrganizer
                    {
                        UserId = x.Id,
                        EventId = src.Id,

@@ -21,7 +21,7 @@ namespace EventsExpress.Mapping
                Title = src.Event.Title,
                DateTo = src.Event.DateTo,
                DateFrom = src.Event.DateFrom,
-               Organizers = src.Event.Owners.Select(x => new User
+               Organizers = src.Event.Organizers.Select(x => new User
                {
                    Id = x.UserId,
                }),
