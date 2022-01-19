@@ -24,8 +24,6 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class UsersServiceTests : TestInitializer
     {
-        private static Guid[] emptyIds = Array.Empty<Guid>();
-
         private static Mock<IPhotoService> mockPhotoService;
         private Guid secondUserId = Guid.NewGuid();
         private Mock<ISecurityContext> mockSecurityContext;
@@ -231,12 +229,13 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(actual, Is.EquivalentTo(expected).Using(userDtoComparer));
         }
 
-        [TestCaseSource(nameof(emptyIds))]
-        public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList(Guid[] ids)
+        [Test]
+        public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList()
         {
-            var expectedLength = 0;
+            const int expectedLength = 0;
+            var emptyIds = Array.Empty<Guid>();
 
-            var actual = service.GetUsersInformationByIds(ids);
+            var actual = service.GetUsersInformationByIds(emptyIds);
             var actualLength = actual.Count();
 
             Assert.AreEqual(expectedLength, actualLength);
