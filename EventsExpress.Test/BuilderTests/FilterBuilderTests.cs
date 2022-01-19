@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection;
 using EventsExpress.Core.Builders;
 using NUnit.Framework;
 
@@ -9,94 +8,64 @@ namespace EventsExpress.Test.BuilderTests
     public class FilterBuilderTests
     {
         private FilterBuilder<int> _builder;
-        private FieldInfo _conditionField;
-        private FieldInfo _queryableField;
-
-        private bool FilterWillApply
-        {
-            get => (bool)_conditionField.GetValue(_builder);
-            set => _conditionField.SetValue(_builder, value);
-        }
-
-        private IQueryable<int> Queryable
-        {
-            get => (IQueryable<int>)_queryableField.GetValue(_builder);
-        }
+        private IQueryable<int> _queryable;
 
         [SetUp]
         protected void Initialize()
         {
-            var queryable = Enumerable.Range(1, 10).AsQueryable();
-            _builder = new FilterBuilder<int>(queryable);
-
-            var builderType = _builder.GetType();
-            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-
-            _conditionField = builderType.GetField("_filterWillApply", flags);
-            _queryableField = builderType.GetField("_queryable", flags);
+            _queryable = Enumerable.Range(1, 10).AsQueryable();
+            _builder = new FilterBuilder<int>(_queryable);
         }
 
         [Test]
-        [TestCase(false, false, false)]
-        [TestCase(false, true, false)]
-        [TestCase(true, false, false)]
-        [TestCase(true, true, true)]
-        public void If_WithGivenCondition_CorrectlySetsWhetherFilterWillApply(
-            bool filterWillApply,
-            bool condition,
-            bool expectedValue)
+        public void AddFilter_ConditionIsTrue_FilterIsApplied()
         {
-            FilterWillApply = filterWillApply;
+            var expectedElements = _queryable.Where(value => value > 5).ToList();
+            var valueForCondition = new object();
 
-            _builder = _builder.If(condition);
+            var actualElements = _builder
+                .IfNotNull(valueForCondition)
+                .AddFilter(value => value > 5)
+                .Apply()
+                .ToList();
 
-            Assert.That(FilterWillApply, Is.EqualTo(expectedValue));
+            Assert.That(actualElements, Is.EquivalentTo(expectedElements));
         }
 
         [Test]
-        public void IfNotNull_WithOneParameterThatIsNull_FilterWillNotApply()
+        public void AddFilter_ConditionIsFalse_FilterIsNotApplied()
         {
-            int? value = null;
-            FilterWillApply = true;
+            var expectedElements = _queryable.ToList();
+            object[] valuesForCondition = { new object(), null, "text" };
 
-            _builder = _builder.IfNotNull(value);
+            var actualElements = _builder
+                .IfNotNull(valuesForCondition)
+                .AddFilter(value => value > 5)
+                .Apply()
+                .ToList();
 
-            Assert.That(FilterWillApply, Is.False);
+            Assert.That(actualElements, Is.EquivalentTo(expectedElements));
         }
 
         [Test]
-        public void IfNotNull_WithMultipleParametersThatContainNull_FilterWillNotApply()
+        public void AddFilter_MultipleFiltersWithDifferentConditions_CorrectFiltersAreApplied()
         {
-            int?[] values = { 0, null, 1 };
-            FilterWillApply = true;
+            var expectedElements = _queryable
+                .Where(value => value > 5 && value % 2 == 0)
+                .ToList();
 
-            _builder = _builder.IfNotNull(values);
+            var actualElements = _builder
+                    .AddFilter(value => value % 2 == 0)
+                .Then()
+                    .If(false)
+                    .AddFilter(value => value < 9)
+                .Then()
+                    .If(true)
+                    .AddFilter(value => value > 5)
+                .Apply()
+                .ToList();
 
-            Assert.That(FilterWillApply, Is.False);
-        }
-
-        [Test]
-        public void AddFilter_ShouldApply_SequenceIsFiltered()
-        {
-            const int expectedCount = 5;
-            FilterWillApply = true;
-
-            _builder.AddFilter(value => value > 5);
-            int actualCount = Queryable.Count();
-
-            Assert.That(actualCount, Is.EqualTo(expectedCount));
-        }
-
-        [Test]
-        public void AddFilter_ShouldNotApply_SequenceIsNotFiltered()
-        {
-            const int expectedCount = 10;
-            FilterWillApply = false;
-
-            _builder.AddFilter(value => value > 5);
-            int actualCount = Queryable.Count();
-
-            Assert.That(actualCount, Is.EqualTo(expectedCount));
+            Assert.That(actualElements, Is.EquivalentTo(expectedElements));
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Reflection;
-using EventsExpress.Core.Builders;
 using EventsExpress.Core.Extensions;
 using NUnit.Framework;
 
@@ -9,22 +7,6 @@ namespace EventsExpress.Test.ExtensionTests
     [TestFixture]
     public class QueryableExtensionsTests
     {
-        [Test]
-        public void Filters_Always_ReturnsBuilderWithSameQueryable()
-        {
-            const int start = 1;
-            const int count = 5;
-            const string fieldName = "_queryable";
-            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-            var field = typeof(FilterBuilder<int>).GetField(fieldName, flags);
-            var expectedQueryable = Enumerable.Range(start, count).AsQueryable();
-
-            var builder = expectedQueryable.Filters();
-            var actualQueryable = field?.GetValue(builder);
-
-            Assert.That(actualQueryable, Is.EqualTo(expectedQueryable));
-        }
-
         [Test]
         [TestCase(2, 2, 2)]
         [TestCase(2, 15, 5)]
