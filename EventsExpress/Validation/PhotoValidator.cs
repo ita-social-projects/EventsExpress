@@ -1,6 +1,5 @@
 ﻿namespace EventsExpress.Validation
 {
-    using System.Drawing;
     using System.IO;
     using System.Linq;
     using EventsExpress.Core.Extensions;
