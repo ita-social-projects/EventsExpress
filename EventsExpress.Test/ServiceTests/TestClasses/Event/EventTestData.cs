@@ -25,7 +25,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
         public static readonly Guid EventLocationMapSecondId = Guid.NewGuid();
         public static readonly Guid EventLocationOnlineId = Guid.NewGuid();
 
-        public static readonly Guid EventOwnerId = Guid.NewGuid();
+        public static readonly Guid EventOrganizerId = Guid.NewGuid();
         public static readonly Guid EventCategoryId = Guid.NewGuid();
 
         public static List<User> Users => new ()
@@ -107,11 +107,11 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 },
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
-                        UserId = EventOwnerId,
+                        UserId = EventOrganizerId,
                     },
                 },
                 EventLocationId = EventLocationMapId,
@@ -154,9 +154,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 },
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = FirstUserId,
                     },
@@ -181,9 +181,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 Description = "Public event for adults, blocked status, map location",
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = Guid.NewGuid(),
                     },
@@ -212,9 +212,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 Description = "Future private event with a visitor and rate, online location",
                 DateFrom = DateTime.Today.AddDays(1),
                 DateTo = DateTime.Today.AddDays(2),
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = Guid.NewGuid(),
                     },
@@ -266,9 +266,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 },
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = FirstUserId,
                     },
@@ -301,9 +301,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 },
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
-                Owners = new List<EventOwner>
+                Organizers = new List<EventOrganizer>
                 {
-                    new EventOwner
+                    new EventOrganizer
                     {
                         UserId = FirstUserId,
                     },

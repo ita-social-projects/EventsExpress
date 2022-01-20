@@ -20,7 +20,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "First event",
-                Owners = new List<User>
+                Organizers = new List<User>
                 {
                     new User
                     {
@@ -50,7 +50,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "Second event",
-                Owners = new List<User>
+                Organizers = new List<User>
                 {
                     new User
                     {
@@ -84,7 +84,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today,
                 Description = "Third event",
-                Owners = new List<User>
+                Organizers = new List<User>
                 {
                     new User
                     {

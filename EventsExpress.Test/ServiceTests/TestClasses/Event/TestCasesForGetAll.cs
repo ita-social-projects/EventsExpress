@@ -20,9 +20,9 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 DateFrom = DateTime.Today.AddDays(1),
                 DateTo = DateTime.Today.AddDays(5),
             },
-            ["OwnerId"] = new EventFilterViewModel
+            ["OrganizerId"] = new EventFilterViewModel
             {
-                OwnerId = EventTestData.EventOwnerId,
+                OrganizerId = EventTestData.EventOrganizerId,
             },
             ["VisitorId"] = new EventFilterViewModel
             {
@@ -50,11 +50,11 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                     EventStatus.Canceled,
                 },
             },
-            ["Owners"] = new EventFilterViewModel
+            ["Organizers"] = new EventFilterViewModel
             {
-                Owners = new List<Guid>
+                Organizers = new List<Guid>
                 {
-                    EventTestData.EventOwnerId,
+                    EventTestData.EventOrganizerId,
                 },
             },
             ["Categories"] = new EventFilterViewModel

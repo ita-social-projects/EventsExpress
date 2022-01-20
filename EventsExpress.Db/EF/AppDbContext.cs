@@ -47,7 +47,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<Event> Events { get; set; }
 
-        public DbSet<EventOwner> EventOwners { get; set; }
+        public DbSet<EventOrganizer> EventOrganizers { get; set; }
 
         public DbSet<EventLocation> EventLocations { get; set; }
 

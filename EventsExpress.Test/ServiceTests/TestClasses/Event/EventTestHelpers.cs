@@ -119,12 +119,12 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 DateFrom = eventDto.DateFrom,
                 DateTo = eventDto.DateTo,
                 Description = eventDto.Description,
-                Owners = new List<User>(eventDto.Owners),
+                Organizers = new List<User>(eventDto.Organizers),
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
                 MaxParticipants = eventDto.MaxParticipants,
-                Location = new LocationDto()
+                Location = new LocationDto
                 {
                     Point = eventDto.Location.Point,
                     Type = eventDto.Location.Type,

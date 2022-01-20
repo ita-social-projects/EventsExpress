@@ -5,16 +5,20 @@ import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import AgeFilter from '../parts/age/age-filter';
-import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
 import LocationFilter from '../parts/location/location-filter';
-import { connect } from 'react-redux';
+import { useFilterFormActions } from './filter-form-hooks';
 
-const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => {
+const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
-    const onSubmit = formValues => props.applyFilters(formValues);
+    const { applyFilters, resetFilters } = useFilterFormActions();
+
+    const onSubmit = formValues => {
+        applyFilters({ ...formValues });
+    };
+
     const onReset = () => {
         reset();
-        props.resetFilters();
+        resetFilters();
     };
 
     return (
@@ -45,17 +49,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => 
     );
 };
 
-const mapDispatchToProps = dispatch => ({
-    applyFilters: filters => dispatch(applyFilters(filters)),
-    resetFilters: () => dispatch(resetFilters())
-});
-
-export default connect(null, mapDispatchToProps)(
-    reduxForm({
-        form: 'filter-form',
-        initialValues: {
-            organizers: [],
-            location:{type:null},
-        }
-    })(FilterForm)
-);
+export default reduxForm({
+    form: 'filter-form',
+    enableReinitialize: true
+})(FilterForm);

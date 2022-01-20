@@ -31,6 +31,8 @@ namespace EventsExpress.Core.IServices
 
         IEnumerable<UserDto> Get(UsersFilterViewModel model, out int count);
 
+        IEnumerable<UserDto> GetUsersInformationByIds(IEnumerable<Guid> ids);
+
         IEnumerable<UserDto> GetUsersByCategories(IEnumerable<CategoryDto> categories);
 
         IEnumerable<UserDto> GetUsersByRole(Role role);
