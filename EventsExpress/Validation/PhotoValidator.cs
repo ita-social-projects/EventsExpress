@@ -1,5 +1,6 @@
 ﻿namespace EventsExpress.Validation
 {
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using EventsExpress.Core.Extensions;
@@ -15,12 +16,13 @@
 
         public PhotoValidator()
         {
+            CascadeMode = CascadeMode.Stop;
             RuleFor(f => f.Photo).NotEmpty().Must(ValidImage).OverridePropertyName("image")
                 .WithMessage("The upload file should be a valid image!");
-            RuleFor(f => f.Photo).Must(f => f.Length < tenMegaBytesInBytes).OverridePropertyName("image")
-                .WithMessage("File size can not exceed 10 MB");
             RuleFor(f => f.Photo).Must(f => !allowedExtensions.Contains(Path.GetExtension(f.FileName))).OverridePropertyName("image")
                 .WithMessage("Accepted file formats are .jpeg, .jpg, .png, or .bmp");
+            RuleFor(f => f.Photo).Must(f => f.Length < tenMegaBytesInBytes).OverridePropertyName("image")
+                .WithMessage("File size can not exceed 10 MB");
             RuleFor(f => f.Photo).Must(ValidImageSize).OverridePropertyName("image")
                 .WithMessage("Image size should be at least 400x400px");
         }
