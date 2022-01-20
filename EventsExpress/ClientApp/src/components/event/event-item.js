@@ -63,7 +63,7 @@ export default class EventCard extends Component {
             eventStatus,
             categories,
             countVisitor,
-            owners,
+            organizers,
             members,
         } = this.props.item;
         
@@ -84,7 +84,7 @@ export default class EventCard extends Component {
                     <EventHeader
                         members={members}
                         countVisitor={countVisitor}
-                        owners={owners}
+                        organizers={organizers}
                         dateFrom={dateFrom}
                         title={title}
                     />

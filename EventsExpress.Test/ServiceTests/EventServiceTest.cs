@@ -125,7 +125,7 @@ namespace EventsExpress.Test.ServiceTests
         private EventDto DeepCopyDto(EventDto eventDto)
         {
             List<User> users = new List<User>();
-            foreach (var owner in eventDto.Owners)
+            foreach (var owner in eventDto.Organizers)
             {
                 users.Add(owner);
             }
@@ -136,7 +136,7 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = eventDto.DateFrom,
                 DateTo = eventDto.DateTo,
                 Description = eventDto.Description,
-                Owners = users,
+                Organizers = users,
                 Title = eventDto.Title,
                 IsPublic = eventDto.IsPublic,
                 Categories = eventDto.Categories,
@@ -225,9 +225,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -260,9 +260,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "test event",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -295,9 +295,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },
@@ -327,9 +327,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = Guid.NewGuid(),
                         },
@@ -381,9 +381,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "Is Public false",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },
@@ -416,9 +416,9 @@ namespace EventsExpress.Test.ServiceTests
                     DateFrom = DateTime.Today,
                     DateTo = DateTime.Today,
                     Description = "Is Public null",
-                    Owners = new List<EventOwner>()
+                    Organizers = new List<EventOrganizer>()
                     {
-                        new EventOwner
+                        new EventOrganizer
                         {
                             UserId = userId,
                         },

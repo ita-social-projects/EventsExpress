@@ -148,9 +148,9 @@ namespace EventsExpress.Core.Services
                     UserId = CurrentUserId(),
                 },
             };
-            ev.Owners = new List<EventOwner>
+            ev.Organizers = new List<EventOrganizer>
             {
-                new EventOwner
+                new EventOrganizer
                 {
                     UserId = CurrentUserId(),
                     EventId = ev.Id,
@@ -184,9 +184,9 @@ namespace EventsExpress.Core.Services
                 },
             };
 
-            ev.Owners = new List<EventOwner>
+            ev.Organizers = new List<EventOrganizer>
             {
-                new EventOwner
+                new EventOrganizer
                 {
                     UserId = CurrentUserId(),
                     EventId = eventDTO.Id,
@@ -222,7 +222,7 @@ namespace EventsExpress.Core.Services
             }
 
             eventDTO.Id = Guid.Empty;
-            eventDTO.Owners = null;
+            eventDTO.Organizers = null;
             eventDTO.Inventories = null;
             eventDTO.IsReccurent = false;
             eventDTO.DateFrom = eventScheduleDTO.NextRun;
@@ -349,7 +349,7 @@ namespace EventsExpress.Core.Services
             var res = Mapper.Map<EventDto>(
                 Context.Events
                 .Include(e => e.EventLocation)
-                .Include(e => e.Owners)
+                .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.Categories)
@@ -372,7 +372,7 @@ namespace EventsExpress.Core.Services
             var events = Context.Events
                 .Include(e => e.EventLocation)
                 .Include(e => e.StatusHistory)
-                .Include(e => e.Owners)
+                .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
@@ -399,8 +399,8 @@ namespace EventsExpress.Core.Services
                 ? events.Where(x => x.DateTo <= model.DateTo)
                 : events;
 
-            events = (model.OwnerId != null)
-                ? events.Where(x => x.Owners.Any(c => c.UserId == model.OwnerId))
+            events = (model.OrganizerId != null)
+                ? events.Where(x => x.Organizers.Any(c => c.UserId == model.OrganizerId))
                 : events;
 
             events = (model.VisitorId != null)
@@ -422,8 +422,8 @@ namespace EventsExpress.Core.Services
                .EventStatus))
             : events;
 
-            events = (model.Owners != null)
-                ? events.Where(@event => @event.Owners.Any(owner => model.Owners.Contains(owner.UserId)))
+            events = (model.Organizers != null)
+                ? events.Where(@event => @event.Organizers.Any(organizer => model.Organizers.Contains(organizer.UserId)))
                 : events;
 
             events = (model.IsOnlyForAdults != null)
@@ -458,7 +458,7 @@ namespace EventsExpress.Core.Services
             var events = Context.Events
                 .Include(e => e.EventLocation)
                 .Include(e => e.StatusHistory)
-                .Include(e => e.Owners)
+                .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
@@ -466,7 +466,7 @@ namespace EventsExpress.Core.Services
                 .AsNoTracking()
                 .AsQueryable();
             events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus == EventStatus.Draft);
-            events = events.Where(x => x.Owners.Any(o => o.UserId == CurrentUserId()));
+            events = events.Where(x => x.Organizers.Any(o => o.UserId == CurrentUserId()));
             count = events.Count();
             var result = events.OrderBy(x => x.DateFrom).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             return Mapper.Map<IEnumerable<Event>, IEnumerable<EventDto>>(result);
@@ -476,7 +476,7 @@ namespace EventsExpress.Core.Services
         {
             var filter = new EventFilterViewModel
             {
-                OwnerId = userId,
+                OrganizerId = userId,
                 DateFrom = DateTime.Today,
                 Page = paginationViewModel.Page,
                 PageSize = paginationViewModel.PageSize,
@@ -493,7 +493,7 @@ namespace EventsExpress.Core.Services
         {
             var filter = new EventFilterViewModel
             {
-                OwnerId = userId,
+                OrganizerId = userId,
                 DateTo = DateTime.Today,
                 Page = paginationViewModel.Page,
                 PageSize = paginationViewModel.PageSize,
@@ -544,7 +544,7 @@ namespace EventsExpress.Core.Services
         {
             var events = Context.Events
                 .Include(e => e.EventLocation)
-                .Include(e => e.Owners)
+                .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)

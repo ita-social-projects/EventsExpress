@@ -43,8 +43,8 @@ namespace EventsExpress.Core.DTOs
 
         public IEnumerable<InventoryDto> Inventories { get; set; }
 
-        public IEnumerable<Guid> OwnerIds { get; set; }
+        public IEnumerable<Guid> OrganizerIds { get; set; }
 
-        public IEnumerable<User> Owners { get; set; }
+        public IEnumerable<User> Organizers { get; set; }
     }
 }

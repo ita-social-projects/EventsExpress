@@ -4,7 +4,7 @@ using EventsExpress.Db.EF;
 namespace EventsExpress.Db.Entities
 {
     [Track]
-    public class EventOwner
+    public class EventOrganizer
     {
         [Track]
         public Guid UserId { get; set; }

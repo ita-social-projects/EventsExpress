@@ -16,7 +16,7 @@
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today,
             Description = "First event",
-            Owners = new List<User>()
+            Organizers = new List<User>()
             {
                 new User
                 {
@@ -47,7 +47,7 @@
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today,
             Description = "Second event",
-            Owners = new List<User>()
+            Organizers = new List<User>()
             {
                 new User
                 {
@@ -82,7 +82,7 @@
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today,
             Description = "Third event",
-            Owners = new List<User>()
+            Organizers = new List<User>()
             {
                 new User
                 {
