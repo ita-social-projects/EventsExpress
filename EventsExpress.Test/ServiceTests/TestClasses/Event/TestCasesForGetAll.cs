@@ -9,7 +9,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
 {
     internal class TestCasesForGetAll : IEnumerable
     {
-        private static readonly Dictionary<string, EventFilterViewModel> Models = new ()
+        private static Dictionary<string, EventFilterViewModel> Models => new ()
         {
             ["KeyWord"] = new EventFilterViewModel
             {
@@ -22,11 +22,11 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             },
             ["OwnerId"] = new EventFilterViewModel
             {
-                OwnerId = Guid.Parse("6e93756a-1920-43b0-a781-0445373f9a7c"),
+                OwnerId = EventTestData.EventOwnerId,
             },
             ["VisitorId"] = new EventFilterViewModel
             {
-                VisitorId = Guid.Parse("2eee6760-db3a-4f0d-8eb9-7c9ccac51092"),
+                VisitorId = EventTestData.FirstUserId,
             },
             ["Location"] = new EventFilterViewModel
             {
@@ -54,14 +54,14 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             {
                 Owners = new List<Guid>
                 {
-                    Guid.Parse("6e93756a-1920-43b0-a781-0445373f9a7c"),
+                    EventTestData.EventOwnerId,
                 },
             },
             ["Categories"] = new EventFilterViewModel
             {
                 Categories = new List<string>
                 {
-                    "ef40993e-9118-4380-adc9-4b3910550a59",
+                    EventTestData.EventCategoryId.ToString(),
                 },
             },
         };
@@ -72,7 +72,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             {
                 yield return new TestCaseData(value)
                 {
-                    TestName = $"GetAll_{key}FilterApplied_ReturnsSingleElement",
+                    TestName = $"Case_{key}FilterApplied_ReturnsSingleElement",
                 };
             }
         }

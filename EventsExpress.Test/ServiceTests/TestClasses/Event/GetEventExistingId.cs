@@ -4,45 +4,25 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests.TestClasses.Event
 {
-    internal static class GetEventExistingId
+    internal class GetEventExistingId : IEnumerable
     {
-        private static Guid[] eventIds = new Guid[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
-
-        internal static Guid FirstEventId
+        private static Guid[] EventIds => new[]
         {
-            get => eventIds[0];
-        }
+            EventTestData.FirstEventId,
+            EventTestData.SecondEventId,
+            EventTestData.ThirdEventId,
+            EventTestData.PrivateEventId,
+            EventTestData.IsPublicNullEventId,
+        };
 
-        internal static Guid SecondEventId
+        public IEnumerator GetEnumerator()
         {
-            get => eventIds[1];
-        }
-
-        internal static Guid ThirdEventId
-        {
-            get => eventIds[2];
-        }
-
-        internal static Guid IsPublicFalseEventId
-        {
-            get => eventIds[3];
-        }
-
-        internal static Guid IsPublicNullEventId
-        {
-            get => eventIds[4];
-        }
-
-        internal static IEnumerable TestCasesForGetEvent => GetTestCasesFor("GetEvent");
-
-        internal static IEnumerable TestCasesForAddUserToEvent => GetTestCasesFor("AddUserToEvent");
-
-        private static IEnumerable GetTestCasesFor(string caller)
-        {
-            for (int i = 0; i < eventIds.Length; i++)
+            for (int i = 0; i < EventIds.Length; i++)
             {
-                yield return new TestCaseData(FirstEventId)
-                    .SetName($"{caller}_TestCase{i}");
+                yield return new TestCaseData(EventIds[i])
+                {
+                    TestName = $"Case_Id{i}_ExecutesSuccessfully",
+                };
             }
         }
     }
