@@ -30,7 +30,7 @@ export default class UserService {
     });
 
     setBirthday = data => baseService.setResource('Users/EditBirthday', {
-        birthday: new Date(data.birthday)
+        birthday: data.birthday
     });
 
     setGender = data => baseService.setResource('Users/EditGender', {
