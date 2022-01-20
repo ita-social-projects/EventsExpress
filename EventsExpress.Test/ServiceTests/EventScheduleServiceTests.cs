@@ -45,9 +45,9 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today.AddDays(2),
                 Description = "...",
-                Owners = new List<EventOwner>()
+                Organizers = new List<EventOrganizer>()
                 {
-                    new EventOwner { UserId = validUserId },
+                    new EventOrganizer { UserId = validUserId },
                 },
                 StatusHistory = new List<EventStatusHistory>
                 {
@@ -60,9 +60,9 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today.AddDays(2),
                 Description = "...",
-                Owners = new List<EventOwner>()
+                Organizers = new List<EventOrganizer>()
                 {
-                    new EventOwner { UserId = validUserId },
+                    new EventOrganizer { UserId = validUserId },
                 },
                 StatusHistory = new List<EventStatusHistory>
                 {

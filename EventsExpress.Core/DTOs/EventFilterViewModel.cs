@@ -18,7 +18,7 @@ namespace EventsExpress.Core.DTOs
 
         public Guid? VisitorId { get; set; }
 
-        public Guid? OwnerId { get; set; }
+        public Guid? OrganizerId { get; set; }
 
         public double? X { get; set; }
 
@@ -36,6 +36,6 @@ namespace EventsExpress.Core.DTOs
 
         public List<EventStatus> Statuses { get; set; }
 
-        public List<Guid> Owners { get; set; }
+        public List<Guid> Organizers { get; set; }
     }
 }

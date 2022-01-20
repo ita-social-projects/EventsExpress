@@ -395,6 +395,29 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
+        public void GetUsersShortInformation_IdsNotNull_OkObjectResult()
+        {
+            var ids = new[] { _userDto.Id };
+            _userService.Setup(service => service.GetUsersInformationByIds(ids))
+                        .Returns(new[] { _userDto });
+
+            var result = _usersController.GetUsersShortInformation(ids);
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
+        }
+
+        [Test]
+        public void GetUsersShortInformation_IdsNull_OkObjectResult()
+        {
+            _userService.Setup(service => service.GetUsersInformationByIds(null))
+                        .Returns(Array.Empty<UserDto>());
+
+            var result = _usersController.GetUsersShortInformation(null);
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
+        }
+
+        [Test]
         [Category("GetUserInfo")]
         public void GetUserInfo_Success()
         {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import IconButton from "@material-ui/core/IconButton";
 
-export default class OwnerSeeItem extends Component {
+export default class OrganizerSeeItem extends Component {
 
     render() {
         const { item, disabledEdit, onAlreadyGet, markItemAsEdit, deleteItemFromList, usersInventories, showAlreadyGetDetailed } = this.props;

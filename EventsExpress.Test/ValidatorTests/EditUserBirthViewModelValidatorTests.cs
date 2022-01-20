@@ -14,39 +14,45 @@ namespace EventsExpress.Test.ValidatorTests
         private EditUserBirthViewModel birthDate;
 
         [SetUp]
-        public void Setup()
+        protected void Initialize()
         {
             validator = new EditUserBirthViewModelValidator();
             birthDate = new EditUserBirthViewModel();
         }
 
+        [Test]
         [TestCase(2005, 12, 12)]
         [TestCase(1999, 11, 12)]
         [TestCase(1999, 7, 8)]
-        public void SetBirthDate_ValidBirthDate_ValidationErrorIsNotReturn(int year, int month, int day)
+        public void Validator_ValidBirthDate_ReturnsNoErrors(int year, int month, int day)
         {
-            // Arrange
             birthDate.Birthday = new DateTime(year, month, day);
 
-            // Act
             var result = validator.TestValidate(birthDate);
 
-            // Assert
             result.ShouldNotHaveValidationErrorFor(e => e.Birthday);
         }
 
+        [Test]
         [TestCase(2222, 12, 12)]
+        [TestCase(2020, 1, 1)]
         [TestCase(1800, 11, 12)]
-
-        public void SetBirthDate_ValidBirthDate_ValidationErrorIsReturn(int year, int month, int day)
+        public void Validator_InvalidBirthDate_ReturnsValidationError(int year, int month, int day)
         {
-            // Arrange
             birthDate.Birthday = new DateTime(year, month, day);
 
-            // Act
             var result = validator.TestValidate(birthDate);
 
-            // Assert
+            result.ShouldHaveValidationErrorFor(e => e.Birthday);
+        }
+
+        [Test]
+        public void Validator_TimeSpecified_ReturnsValidationError()
+        {
+            birthDate.Birthday = new DateTime(2000, 1, 1, 12, 30, 0);
+
+            var result = validator.TestValidate(birthDate);
+
             result.ShouldHaveValidationErrorFor(e => e.Birthday);
         }
     }

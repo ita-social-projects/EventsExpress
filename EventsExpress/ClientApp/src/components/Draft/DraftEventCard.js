@@ -54,7 +54,7 @@ export default class DraftEventCard extends Component {
             title,
             dateFrom,
             description,
-            owners
+            organizers
         } = this.props.item;
         return (
             <div className={"col-12 col-sm-8 col-md-6 col-xl-4 mt-3"}>
@@ -64,12 +64,12 @@ export default class DraftEventCard extends Component {
                     <Link to={`/editEvent/${id}`} className="text-dark">
                         <CardHeader
                             avatar={
-                                <Button title={owners[0].username} className="btn-custom">
-                                    <Badge overlap="circle" badgeContent={owners.length} color="primary">
+                                <Button title={organizers[0].username} className="btn-custom">
+                                    <Badge overlap="circle" badgeContent={organizers.length} color="primary">
                                         <CustomAvatar
                                             className={classes.avatar}
-                                            userId={owners[0].id}
-                                            name={owners[0].username}
+                                            userId={organizers[0].id}
+                                            name={organizers[0].username}
                                         />
                                     </Badge>
                                 </Button>
