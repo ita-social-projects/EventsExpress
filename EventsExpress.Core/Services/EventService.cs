@@ -423,7 +423,6 @@ namespace EventsExpress.Core.Services
             var events = Context.Events
                 .Include(e => e.EventLocation)
                 .Include(e => e.EventAudience)
-                .Include(e => e.StatusHistory)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
