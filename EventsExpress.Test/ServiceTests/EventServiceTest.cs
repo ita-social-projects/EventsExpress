@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
@@ -22,8 +23,6 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
 {
-    using System.Threading.Tasks;
-
     [TestFixture]
     internal class EventServiceTest : TestInitializer
     {
@@ -40,15 +39,15 @@ namespace EventsExpress.Test.ServiceTests
         private EventLocation eventLocationMapSecond;
         private EventLocation eventLocationOnline;
 
-        private Guid userId = Guid.NewGuid();
         private Guid secondUserId = Guid.NewGuid();
         private Guid eventId = Guid.NewGuid();
         private Guid eventLocationIdMap = Guid.NewGuid();
-        private Guid eventLocationIdOnline = Guid.NewGuid();
-        private Guid eventCategoryId = Guid.NewGuid();
         private Guid eventLocationIdMapSecond = Guid.NewGuid();
+        private Guid userId = Guid.Parse("2eee6760-db3a-4f0d-8eb9-7c9ccac51092");
+        private Guid eventOrganizerId = Guid.Parse("6e93756a-1920-43b0-a781-0445373f9a7c");
+        private Guid eventLocationIdOnline = Guid.Parse("04d6ede6-7541-4b58-9964-78b4378c2f46");
+        private Guid eventCategoryId = Guid.Parse("ef40993e-9118-4380-adc9-4b3910550a59");
 
-        private double radius = 8;
         private byte score = 9;
         private PaginationViewModel model = new PaginationViewModel
         {
@@ -107,7 +106,7 @@ namespace EventsExpress.Test.ServiceTests
             return null;
         }
 
-        private FormFile GetPhoto(string filePath)
+        private static FormFile GetPhoto(string filePath)
         {
             string testFilePath = filePath;
             byte[] bytes = File.ReadAllBytes(testFilePath);
@@ -122,12 +121,23 @@ namespace EventsExpress.Test.ServiceTests
             return file;
         }
 
-        private EventDto DeepCopyDto(EventDto eventDto)
+        private static string GetContentType(string fileName)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return contentType;
+        }
+
+        private static EventDto DeepCopyDto(EventDto eventDto)
         {
             List<User> users = new List<User>();
-            foreach (var owner in eventDto.Organizers)
+            foreach (var organizer in eventDto.Organizers)
             {
-                users.Add(owner);
+                users.Add(organizer);
             }
 
             return new EventDto
@@ -229,7 +239,7 @@ namespace EventsExpress.Test.ServiceTests
                     {
                         new EventOrganizer
                         {
-                            UserId = Guid.NewGuid(),
+                            UserId = eventOrganizerId,
                         },
                     },
                     EventLocationId = eventLocationIdMap,
@@ -270,6 +280,10 @@ namespace EventsExpress.Test.ServiceTests
                     EventLocationId = eventLocationIdMapSecond,
                     Title = "Third event",
                     IsPublic = true,
+                    EventAudience = new EventAudience
+                    {
+                        IsOnlyForAdults = true,
+                    },
                     Categories = null,
                     MaxParticipants = 8,
                     StatusHistory = new List<EventStatusHistory>()
@@ -305,11 +319,6 @@ namespace EventsExpress.Test.ServiceTests
                     EventLocationId = eventLocationIdOnline,
                     Title = "Second event",
                     IsPublic = true,
-                    EventAudience = new EventAudience
-                    {
-                        Id = Guid.NewGuid(),
-                        IsOnlyForAdults = true,
-                    },
                     Categories = null,
                     MaxParticipants = 25,
                     StatusHistory = new List<EventStatusHistory>()
@@ -324,8 +333,8 @@ namespace EventsExpress.Test.ServiceTests
                 new Event
                 {
                     Id = eventId,
-                    DateFrom = DateTime.Today,
-                    DateTo = DateTime.Today,
+                    DateFrom = DateTime.Today.AddDays(1),
+                    DateTo = DateTime.Today.AddDays(2),
                     Description = "sjsdnl fgr sdmkskdl dsnlndsl",
                     Organizers = new List<EventOrganizer>()
                     {
@@ -335,6 +344,7 @@ namespace EventsExpress.Test.ServiceTests
                         },
                     },
                     Title = "SLdndstrhndj",
+                    EventLocationId = eventLocationIdOnline,
                     IsPublic = false,
                     Categories = null,
                     MaxParticipants = 1,
@@ -533,36 +543,45 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Get All")]
-        public void GetAll_GetEventByLocation_Success()
+        public void GetAll_WithEmptyFilter_ReturnsAllEventsExceptDrafts()
         {
-            EventFilterViewModel eventFilterViewModel = new EventFilterViewModel()
-            {
-                X = eventLocationMap.Point.X,
-                Y = eventLocationMap.Point.Y,
-                Radius = radius,
-            };
-            var count = events.Count;
-            service.GetAll(eventFilterViewModel, out count);
-            Assert.AreEqual(1, count);
+            const int expectedCount = 3;
+            var filterModel = new EventFilterViewModel();
+
+            service.GetAll(filterModel, out int actualCount);
+
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
         }
 
         [Test]
         [Category("Get All")]
-        public void GetAll_GetEventByCategories_Success()
+        [TestCaseSource(typeof(TestCasesForGetAll))]
+        public void GetAll_WithAppliedFilters_ReturnsSingleElement(EventFilterViewModel filterModel)
         {
-            EventFilterViewModel eventFilterViewModel = new EventFilterViewModel()
-            {
-                Categories = new List<string>() { eventCategoryId.ToString() },
-            };
-            var count = events.Count;
-            service.GetAll(eventFilterViewModel, out count);
-            Assert.AreEqual(1, count);
+            const int expectedCount = 1;
+
+            service.GetAll(filterModel, out int actualCount);
+
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        [Category("Get all drafts")]
+        public void GetAllDrafts_ValidParameters_ReturnsAllDraftEvents()
+        {
+            const int pageNumber = 1;
+            const int pageSize = 6;
+            const int expectedCount = 3;
+
+            service.GetAllDraftEvents(pageNumber, pageSize, out int actualCount);
+
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
         }
 
         [Test]
         [TestCaseSource(typeof(EditingOrCreatingExistingDto))]
         [Category("Edit Next Event")]
-        public async System.Threading.Tasks.Task EditNextEvent_Work_PlugAsync(EventDto eventDto)
+        public async Task EditNextEvent_Work_PlugAsync(EventDto eventDto)
         {
             mockEventScheduleService.Setup(e => e.EventScheduleByEventId(eventDto.Id)).Returns(new EventScheduleDto()
             {
@@ -669,17 +688,17 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Add user to event")]
         public void AddUserToEvent_UnderageUserJoinsAgeRestrictedEvent_ThrowsWithAppropriateMessage()
         {
-            async Task AddUser() => await service.AddUserToEvent(secondUserId, GetEventExistingId.SecondEventId);
+            async Task AddUser() => await service.AddUserToEvent(secondUserId, GetEventExistingId.ThirdEventId);
 
             var ex = Assert.ThrowsAsync<EventsExpressException>(AddUser);
-            Assert.That(ex!.Message, Contains.Substring("User does not meet age requirements!"));
+            Assert.That(ex.Message, Contains.Substring("User does not meet age requirements!"));
         }
 
         [Test]
         [Category("Add user to event")]
         public void AddUserToEvent_AdultUserJoinsAgeRestrictedEvent_DoesNotThrow()
         {
-            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.SecondEventId);
+            async Task AddUser() => await service.AddUserToEvent(userId, GetEventExistingId.ThirdEventId);
 
             Assert.DoesNotThrowAsync(AddUser);
         }
@@ -753,17 +772,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(events, Is.Not.Null);
         }
 
-        private string GetContentType(string fileName)
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
-        }
-
         [Test]
         public void CreateDraft_Works()
         {
@@ -782,20 +790,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [Category("Get all drafts")]
-        public void GetAllDrafts_Works()
-        {
-            int x = 1;
-            MockMapper.Setup(u => u.Map<IEnumerable<Event>, IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
-                .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            mockSecurityContextService.Setup(x => x.GetCurrentUserId())
-                .Returns(userId);
-            var result = service.GetAllDraftEvents(1, 1, out x);
-            Assert.AreEqual(1, result.Count());
-        }
-
-        [Test]
-        public async System.Threading.Tasks.Task CreateNextEvent_WorksAsync()
+        public async Task CreateNextEvent_WorksAsync()
         {
             mockEventScheduleService.Setup(e => e.EventScheduleByEventId(GetEventExistingId.FirstEventId)).Returns(new EventScheduleDto()
             {
@@ -814,30 +809,29 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Get Events")]
-        public void GetEvents_ExistingIds_ReturnsEvents()
+        public void GetEvents_ExistingIds_ReturnsExpectedEvents()
         {
-            MockMapper.Setup(u => u.Map<IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
-                .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            List<Guid> eventIds = new List<Guid> { GetEventExistingId.FirstEventId, GetEventExistingId.SecondEventId };
+            const int expectedCount = 2;
+            var eventIds = new List<Guid>
+            {
+                GetEventExistingId.FirstEventId,
+                GetEventExistingId.SecondEventId,
+            };
 
-            var events = service.GetEvents(eventIds, model);
+            service.GetEvents(eventIds, model);
 
-            Assert.That(events, Is.Not.Null);
-            Assert.AreEqual(2, events.Count());
+            Assert.That(expectedCount, Is.EqualTo(model.Count));
         }
 
         [Test]
         [Category("Get Events")]
         public void GetEvents_NotExistingIds_ReturnsEmpty()
         {
-            MockMapper.Setup(u => u.Map<IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
-                .Returns((IEnumerable<Event> e) => e?.Select(item => new EventDto { Id = item.Id }));
-            List<Guid> eventIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+            var eventIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
 
-            var events = service.GetEvents(eventIds, model);
+            var result = service.GetEvents(eventIds, model);
 
-            Assert.That(events, Is.Not.Null);
-            Assert.AreEqual(0, events.Count());
+            Assert.That(result, Is.Empty);
         }
 
         [Test]

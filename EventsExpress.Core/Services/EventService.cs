@@ -45,6 +45,63 @@ namespace EventsExpress.Core.Services
             _securityContextService = securityContextService;
         }
 
+        private static IQueryable<Event> ApplyEventFilters(IQueryable<Event> events, EventFilterViewModel model)
+        {
+            var eventsFilters = events
+                .Filters()
+                    .AddFilter(e => e.StatusHistory.OrderBy(h => h.CreatedOn)
+                        .Last().EventStatus != EventStatus.Draft)
+                .Then()
+                    .If(!string.IsNullOrEmpty(model.KeyWord))
+                    .AddFilter(e => e.Title.Contains(model.KeyWord)
+                        || e.Description.Contains(model.KeyWord))
+                .Then()
+                    .If(model.DateFrom != DateTime.MinValue)
+                    .AddFilter(e => e.DateFrom >= model.DateFrom)
+                .Then()
+                    .If(model.DateTo != DateTime.MinValue)
+                    .AddFilter(e => e.DateTo <= model.DateTo)
+                .Then()
+                    .IfNotNull(model.OrganizerId)
+                    .AddFilter(e => e.Organizers.Any(o => o.UserId == model.OrganizerId))
+                .Then()
+                    .IfNotNull(model.VisitorId)
+                    .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
+                .Then()
+                    .IfNotNull(model.X, model.Y, model.Radius)
+                    .AddFilter(e => e.EventLocation.Point
+                        .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
+                .Then()
+                    .IfNotNull(model.LocationType)
+                    .AddFilter(e => e.EventLocation.Type == model.LocationType)
+                .Then()
+                    .IfNotNull(model.IsOnlyForAdults)
+                    .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
+                .Then()
+                    .IfNotNull(model.Statuses)
+                    .AddFilter(e => model.Statuses.Contains(
+                        e.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus))
+                .Then()
+                    .IfNotNull(model.Organizers)
+                    .AddFilter(e => e.Organizers.Any(o => model.Organizers.Contains(o.UserId)))
+                .Then()
+                    .IfNotNull(model.Categories)
+                    .AddFilter(e => e.Categories.Any(
+                        c => model.Categories.Contains(c.CategoryId.ToString())));
+
+            return eventsFilters.Apply();
+        }
+
+        private static Point MapPointFromFilter(EventFilterViewModel model)
+        {
+            return new Point(model.X ?? 0, model.Y ?? 0) { SRID = 4326 };
+        }
+
+        private static List<Event> GetPageOfSortedEventList(IQueryable<Event> events, int page, int pageSize)
+        {
+            return events.OrderBy(e => e.DateFrom).Page(page, pageSize).ToList();
+        }
+
         public async Task AddUserToEvent(Guid userId, Guid eventId)
         {
             if (!Context.Events.Any(e => e.Id == eventId))
@@ -346,9 +403,10 @@ namespace EventsExpress.Core.Services
 
         public EventDto EventById(Guid eventId)
         {
-            var res = Mapper.Map<EventDto>(
-                Context.Events
+            var events = Context.Events
+                .Include(e => e.EventSchedule)
                 .Include(e => e.EventLocation)
+                .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                         .ThenInclude(u => u.Relationships)
@@ -360,18 +418,17 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
-                .Include(e => e.EventSchedule)
-                .Include(e => e.EventAudience)
-                .FirstOrDefault(x => x.Id == eventId));
+                .AsQueryable();
 
-            return res;
+            var ev = events.FirstOrDefault(x => x.Id == eventId);
+            return Mapper.Map<EventDto>(ev);
         }
 
         public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
         {
             var events = Context.Events
                 .Include(e => e.EventLocation)
-                .Include(e => e.StatusHistory)
+                .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
@@ -380,96 +437,35 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
-                .Include(e => e.EventAudience)
-                .AsNoTracking()
-                .AsQueryable();
+                .AsNoTracking();
 
-            events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus != EventStatus.Draft);
-
-            events = !string.IsNullOrEmpty(model.KeyWord)
-                ? events.Where(x => x.Title.Contains(model.KeyWord)
-                    || x.Description.Contains(model.KeyWord))
-                : events;
-
-            events = (model.DateFrom != DateTime.MinValue)
-                ? events.Where(x => x.DateFrom >= model.DateFrom)
-                : events;
-
-            events = (model.DateTo != DateTime.MinValue)
-                ? events.Where(x => x.DateTo <= model.DateTo)
-                : events;
-
-            events = (model.OrganizerId != null)
-                ? events.Where(x => x.Organizers.Any(c => c.UserId == model.OrganizerId))
-                : events;
-
-            events = (model.VisitorId != null)
-                ? events.Where(x => x.Visitors.Any(v => v.UserId == model.VisitorId))
-                : events;
-
-            events = (model.X != null && model.Y != null && model.Radius != null)
-                ? events.Where(x => (x.EventLocation.Point.Distance(new Point((double)model.X, (double)model.Y) { SRID = 4326 }) / 1000) - (double)model.Radius <= 0)
-                : events;
-
-            events = (model.LocationType != null)
-                ? events.Where(x => x.EventLocation.Type == model.LocationType)
-                : events;
-
-            events = (model.Statuses != null)
-            ? events.Where(e => model.Statuses.Contains(e.StatusHistory
-               .OrderByDescending(n => n.CreatedOn)
-               .First()
-               .EventStatus))
-            : events;
-
-            events = (model.Organizers != null)
-                ? events.Where(@event => @event.Organizers.Any(organizer => model.Organizers.Contains(organizer.UserId)))
-                : events;
-
-            events = (model.IsOnlyForAdults != null)
-                ? events.Where(e => e.EventAudience != null
-                    && e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)
-                : events;
-
-            if (model.Categories != null)
-            {
-                List<Guid> categoryIds = model.Categories
-                    .Select(x => Guid.TryParse(x, out Guid item) ? item : Guid.Empty)
-                    .Where(x => x != Guid.Empty)
-                    .ToList();
-
-                events = events.Where(x =>
-                    x.Categories.Any(category =>
-                        categoryIds.Contains(category.CategoryId)));
-            }
-
+            events = ApplyEventFilters(events, model);
             count = events.Count();
 
-            var result = events
-                .OrderBy(x => x.DateFrom)
-                .Skip((model.Page - 1) * model.PageSize)
-                .Take(model.PageSize).ToList();
-
-            return Mapper.Map<IEnumerable<EventDto>>(result);
+            var eventPage = GetPageOfSortedEventList(events, model.Page, model.PageSize);
+            return Mapper.Map<IEnumerable<EventDto>>(eventPage);
         }
 
         public IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, out int count)
         {
             var events = Context.Events
                 .Include(e => e.EventLocation)
-                .Include(e => e.StatusHistory)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.Visitors)
-                .AsNoTracking()
-                .AsQueryable();
-            events = events.Where(x => x.StatusHistory.OrderBy(h => h.CreatedOn).Last().EventStatus == EventStatus.Draft);
-            events = events.Where(x => x.Organizers.Any(o => o.UserId == CurrentUserId()));
+                .Include(e => e.StatusHistory)
+                .AsNoTracking();
+
+            events = events.Where(e => e.StatusHistory.OrderBy(h => h.CreatedOn)
+                .Last().EventStatus == EventStatus.Draft);
+            events = events.Where(e => e.Organizers.Any(o => o.UserId == CurrentUserId()));
+
             count = events.Count();
-            var result = events.OrderBy(x => x.DateFrom).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            return Mapper.Map<IEnumerable<Event>, IEnumerable<EventDto>>(result);
+
+            var eventPage = GetPageOfSortedEventList(events, page, pageSize);
+            return Mapper.Map<IEnumerable<EventDto>>(eventPage);
         }
 
         public IEnumerable<EventDto> FutureEventsByUserId(Guid userId, PaginationViewModel paginationViewModel)
@@ -552,15 +548,12 @@ namespace EventsExpress.Core.Services
                 .Include(e => e.StatusHistory)
                 .Include(e => e.EventAudience)
                 .Where(x => eventIds.Contains(x.Id))
-                .AsNoTracking()
-                .AsQueryable();
+                .AsNoTracking();
 
             paginationViewModel.Count = events.Count();
 
-            events = events.Skip((paginationViewModel.Page - 1) * paginationViewModel.PageSize)
-                .Take(paginationViewModel.PageSize);
-
-            return Mapper.Map<IEnumerable<EventDto>>(events);
+            var eventPage = events.Page(paginationViewModel.Page, paginationViewModel.PageSize);
+            return Mapper.Map<IEnumerable<EventDto>>(eventPage);
         }
 
         public async Task SetRate(Guid userId, Guid eventId, byte rate)
