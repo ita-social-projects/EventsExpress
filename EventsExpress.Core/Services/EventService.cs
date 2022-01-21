@@ -12,9 +12,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
@@ -119,7 +117,7 @@ namespace EventsExpress.Core.Services
                 throw new EventsExpressException("Too much participants!");
             }
 
-            var us = Context.Users.Find(userId);
+            var us = await Context.Users.FindAsync(userId);
             if (us == null)
             {
                 throw new EventsExpressException("User not found!");
@@ -152,8 +150,7 @@ namespace EventsExpress.Core.Services
         public async Task ChangeVisitorStatus(Guid userId, Guid eventId, UserStatusEvent status)
         {
             var userEvent = Context.UserEvent
-                .Where(x => x.EventId == eventId && x.UserId == userId)
-                .First();
+                .First(x => x.EventId == eventId && x.UserId == userId);
 
             userEvent.UserStatusEvent = status;
 
@@ -175,10 +172,7 @@ namespace EventsExpress.Core.Services
 
             var uei = Context.UserEventInventories.Where(ue => ue.UserId == userId).ToArray();
 
-            if (uei != null)
-            {
-                Context.UserEventInventories.RemoveRange(uei);
-            }
+            Context.UserEventInventories.RemoveRange(uei);
 
             var v = ev.Visitors?.FirstOrDefault(x => x.UserId == userId);
 
@@ -220,15 +214,15 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public async Task<Guid> Create(EventDto eventDTO)
+        public async Task<Guid> Create(EventDto eventDto)
         {
-            eventDTO.DateFrom = (eventDTO.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDTO.DateFrom;
-            eventDTO.DateTo = (eventDTO.DateTo < eventDTO.DateFrom) ? eventDTO.DateFrom : eventDTO.DateTo;
+            eventDto.DateFrom = (eventDto.DateFrom == DateTime.MinValue) ? DateTime.Today : eventDto.DateFrom;
+            eventDto.DateTo = (eventDto.DateTo < eventDto.DateFrom) ? eventDto.DateFrom : eventDto.DateTo;
 
-            var locationDTO = eventDTO.Location;
-            var locationId = await _locationService.AddLocationToEvent(locationDTO);
+            var locationDto = eventDto.Location;
+            var locationId = await _locationService.AddLocationToEvent(locationDto);
 
-            var ev = Mapper.Map<EventDto, Event>(eventDTO);
+            var ev = Mapper.Map<EventDto, Event>(eventDto);
             ev.EventLocationId = locationId;
 
             ev.StatusHistory = new List<EventStatusHistory>
@@ -246,56 +240,56 @@ namespace EventsExpress.Core.Services
                 new EventOrganizer
                 {
                     UserId = CurrentUserId(),
-                    EventId = eventDTO.Id,
+                    EventId = eventDto.Id,
                 },
             };
 
-            var eventCategories = eventDTO.Categories?
+            var eventCategories = eventDto.Categories?
                 .Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
             ev.Categories = eventCategories;
 
             var result = Insert(ev);
 
-            eventDTO.Id = result.Id;
+            eventDto.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new EventCreatedMessage(eventDTO));
-            await _photoService.ChangeTempToImagePhoto(eventDTO.Id);
+            await _mediator.Publish(new EventCreatedMessage(eventDto));
+            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return result.Id;
         }
 
         public async Task<Guid> CreateNextEvent(Guid eventId)
         {
-            var eventDTO = EventById(eventId);
+            var eventDto = EventById(eventId);
 
-            var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventId);
+            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventId);
 
             long ticksDiff = 0;
-            if (eventDTO.DateTo != null && eventDTO.DateFrom != null)
+            if (eventDto.DateTo != null && eventDto.DateFrom != null)
             {
-                ticksDiff = eventDTO.DateTo.Value.Ticks - eventDTO.DateFrom.Value.Ticks;
+                ticksDiff = eventDto.DateTo.Value.Ticks - eventDto.DateFrom.Value.Ticks;
             }
 
-            eventDTO.Id = Guid.Empty;
-            eventDTO.Organizers = null;
-            eventDTO.Inventories = null;
-            eventDTO.IsReccurent = false;
-            eventDTO.DateFrom = eventScheduleDTO.NextRun;
-            eventDTO.DateTo = eventDTO.DateFrom.Value.AddTicks(ticksDiff);
-            eventScheduleDTO.LastRun = eventDTO.DateTo.Value;
-            eventScheduleDTO.NextRun = DateTimeExtensions
-                .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
+            eventDto.Id = Guid.Empty;
+            eventDto.Organizers = null;
+            eventDto.Inventories = null;
+            eventDto.IsReccurent = false;
+            eventDto.DateFrom = eventScheduleDto.NextRun;
+            eventDto.DateTo = eventDto.DateFrom.Value.AddTicks(ticksDiff);
+            eventScheduleDto.LastRun = eventDto.DateTo.Value;
+            eventScheduleDto.NextRun = DateTimeExtensions
+                .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
 
-            await _eventScheduleService.Edit(eventScheduleDTO);
+            await _eventScheduleService.Edit(eventScheduleDto);
 
-            var createResult = await Create(eventDTO);
+            var createResult = await Create(eventDto);
 
             return createResult;
         }
 
-        public async Task<Guid> Edit(EventDto e)
+        public async Task<Guid> Edit(EventDto eventDto)
         {
             var ev = Context.Events
                 .Include(e => e.EventLocation)
@@ -303,27 +297,27 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .Include(e => e.EventAudience)
-                .First(x => x.Id == e.Id);
+                .First(x => x.Id == eventDto.Id);
 
-            if (e.Location != null)
+            if (eventDto.Location != null)
             {
-                var locationId = await _locationService.AddLocationToEvent(e.Location);
+                var locationId = await _locationService.AddLocationToEvent(eventDto.Location);
                 ev.EventLocationId = locationId;
             }
 
-            if (e.IsReccurent)
+            if (eventDto.IsReccurent)
             {
-                if (e.EventStatus == EventStatus.Draft)
+                if (eventDto.EventStatus == EventStatus.Draft)
                 {
                     if (ev.EventSchedule == null)
                     {
-                        await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(e));
+                        await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(eventDto));
                     }
                     else
                     {
-                        var eventScheduleDTO = Mapper.Map<EventScheduleDto>(e);
-                        eventScheduleDTO.Id = ev.EventSchedule.Id;
-                        await _eventScheduleService.Edit(eventScheduleDTO);
+                        var eventScheduleDto = Mapper.Map<EventScheduleDto>(eventDto);
+                        eventScheduleDto.Id = ev.EventSchedule.Id;
+                        await _eventScheduleService.Edit(eventScheduleDto);
                     }
                 }
             }
@@ -335,25 +329,25 @@ namespace EventsExpress.Core.Services
                 }
             }
 
-            ev.Title = e.Title;
-            ev.MaxParticipants = e.MaxParticipants;
-            ev.Description = e.Description;
-            ev.DateFrom = e.DateFrom;
-            ev.DateTo = e.DateTo;
-            ev.IsPublic = e.IsPublic;
+            ev.Title = eventDto.Title;
+            ev.MaxParticipants = eventDto.MaxParticipants;
+            ev.Description = eventDto.Description;
+            ev.DateFrom = eventDto.DateFrom;
+            ev.DateTo = eventDto.DateTo;
+            ev.IsPublic = eventDto.IsPublic;
 
-            if (e.EventStatus == EventStatus.Draft)
+            if (eventDto.EventStatus == EventStatus.Draft)
             {
                 ev.EventAudience ??= new EventAudience();
-                ev.EventAudience.IsOnlyForAdults = e.IsOnlyForAdults;
+                ev.EventAudience.IsOnlyForAdults = eventDto.IsOnlyForAdults;
             }
 
-            var eventCategories = e.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
+            var eventCategories = eventDto.Categories?.Select(x => new EventCategory { Event = ev, CategoryId = x.Id })
                 .ToList();
 
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
-            await _photoService.ChangeTempToImagePhoto(e.Id);
+            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return ev.Id;
         }
@@ -381,22 +375,22 @@ namespace EventsExpress.Core.Services
             return ev.Id;
         }
 
-        public async Task<Guid> EditNextEvent(EventDto eventDTO)
+        public async Task<Guid> EditNextEvent(EventDto eventDto)
         {
-            var eventScheduleDTO = _eventScheduleService.EventScheduleByEventId(eventDTO.Id);
-            if (eventDTO.DateTo != null)
+            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventDto.Id);
+            if (eventDto.DateTo != null)
             {
-                eventScheduleDTO.LastRun = eventDTO.DateTo.Value;
-                eventScheduleDTO.NextRun = DateTimeExtensions
-                    .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventDTO.DateTo.Value);
+                eventScheduleDto.LastRun = eventDto.DateTo.Value;
+                eventScheduleDto.NextRun = DateTimeExtensions
+                    .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
             }
 
-            await _eventScheduleService.Edit(eventScheduleDTO);
+            await _eventScheduleService.Edit(eventScheduleDto);
 
-            eventDTO.IsReccurent = false;
-            eventDTO.Id = Guid.Empty;
+            eventDto.IsReccurent = false;
+            eventDto.Id = Guid.Empty;
 
-            var createResult = await Create(eventDTO);
+            var createResult = await Create(eventDto);
 
             return createResult;
         }
@@ -564,11 +558,11 @@ namespace EventsExpress.Core.Services
 
             ev.Rates ??= new List<Rate>();
 
-            var currentRate = ev?.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
+            var currentRate = ev.Rates.FirstOrDefault(x => x.UserFromId == userId && x.EventId == eventId);
 
             if (currentRate == null)
             {
-                ev?.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
+                ev.Rates.Add(new Rate { EventId = eventId, UserFromId = userId, Score = rate });
             }
             else
             {
