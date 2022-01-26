@@ -4,7 +4,6 @@ import {
     FilterExpansionPanelWrapper
 } from '../../expansion-panel/filter-expansion-panel-parts';
 import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
 import { useFilterExpansionPanelStyles } from '../../expansion-panel/filter-expansion-panel-styles';
 
 export const CategoryGroupPanel = ({ title, children }) => {

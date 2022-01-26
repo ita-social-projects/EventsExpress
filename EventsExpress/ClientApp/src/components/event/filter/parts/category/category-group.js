@@ -1,8 +1,6 @@
-import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
 import { CategoryGroupPanel } from './category-group-panel';
 import React, { useEffect } from 'react';
 import { useCategoryFilterStyles } from './category-filter-styles';
-import { Accordion } from '@material-ui/core';
 import MultiCheckbox from '../../../../helpers/form-helpers/MultiCheckbox';
 import { Field } from 'redux-form';
 
@@ -23,7 +21,6 @@ export const CategoryGroup = ({name, categories}) => {
                     <Field
                         name="categories"
                         component={MultiCheckbox}
-                        //type="select-multiple"
                         options={optionsList}
                     />
                 </div>

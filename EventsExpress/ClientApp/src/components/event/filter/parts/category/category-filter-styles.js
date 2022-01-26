@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { autofill } from 'redux-form';
 
 export const useCategoryFilterStyles = makeStyles({
     wrapper: {
