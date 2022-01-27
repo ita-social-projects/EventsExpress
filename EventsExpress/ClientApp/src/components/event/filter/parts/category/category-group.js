@@ -1,5 +1,5 @@
 import { CategoryGroupPanel } from './category-group-panel';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useCategoryFilterStyles } from './category-filter-styles';
 import MultiCheckbox from '../../../../helpers/form-helpers/MultiCheckbox';
 import { Field } from 'redux-form';

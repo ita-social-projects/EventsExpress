@@ -1,10 +1,10 @@
 import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
-import { change, Field, getFormValues } from 'redux-form';
+import { change, getFormValues } from 'redux-form';
 import React, { useEffect, useState, useRef } from 'react';
 import { useCategoryFilterStyles } from './category-filter-styles';
 import { CategoryGroup } from './category-group';
 import { connect } from 'react-redux';
-import get_categories, { getCategories } from '../../../../../actions/category/category-list-action';
+import get_categories from '../../../../../actions/category/category-list-action';
 
 
 const HandleCategories = categories => {
