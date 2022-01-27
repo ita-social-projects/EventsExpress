@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import { useFilterExpansionPanelStyles } from './filter-expansion-panel-styles';
 
-export const FilterExpansionPanel = ({ title, children, onClearClick, clearDisabled = false }) => {
+export const FilterExpansionPanel = ({ title, children, onClearClick, clearDisabled = false, clearButton = true }) => {
     const [expanded, setExpanded] = useState(false);
     const classes = useFilterExpansionPanelStyles();
 
@@ -34,14 +34,16 @@ export const FilterExpansionPanel = ({ title, children, onClearClick, clearDisab
                     <i className={`fas ${expanded ? 'fa-chevron-up' : 'fa-chevron-down'}`} />
                     <h6 className={classes.heading}>{title}</h6>
                 </div>
-                <Button
-                    color="secondary"
-                    size="small"
-                    onClick={onClearClick}
-                    disabled={clearDisabled}
-                >
-                    Clear
-                </Button>
+                {clearButton &&
+                    <Button
+                        color="secondary"
+                        size="small"
+                        onClick={onClearClick}
+                        disabled={clearDisabled}
+                    >
+                        Clear
+                    </Button>
+                }
             </FilterExpansionPanelSummary>
             <FilterExpansionPanelDetails>
                 {children}

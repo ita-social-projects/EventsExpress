@@ -1,4 +1,4 @@
-import { CategoryGroupPanel } from './category-group-panel';
+import { FilterExpansionPanel } from '../../expansion-panel/filter-expansion-panel';
 import React from 'react';
 import { useCategoryFilterStyles } from './category-filter-styles';
 import MultiCheckbox from '../../../../helpers/form-helpers/MultiCheckbox';
@@ -16,7 +16,10 @@ export const CategoryGroup = ({name, categories}) => {
 
     return (
         <div className={classes.wrapper}>
-            <CategoryGroupPanel title={name}>
+            <FilterExpansionPanel 
+                title={name}
+                clearButton={false}
+            >
                 <div className={classes.wrapper}>
                     <Field
                         name="categories"
@@ -24,7 +27,7 @@ export const CategoryGroup = ({name, categories}) => {
                         options={optionsList}
                     />
                 </div>
-            </CategoryGroupPanel>
+            </FilterExpansionPanel>
         </div>
     );
 };
