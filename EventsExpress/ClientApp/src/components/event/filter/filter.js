@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Drawer, Icon, IconButton, Typography } from '@material-ui/core';
 import { useFilterStyles } from './filter-styles';
 import FilterForm from './form/filter-form';
-import { useFilterFormInitialValues } from './form/filter-form-hooks';
+import { useFilterInitialValues } from './filter-hooks';
 
 export const Filter = () => {
     const [open, setOpen] = useState(false);
-    const initialValues = useFilterFormInitialValues();
+    const initialValues = useFilterInitialValues();
     const classes = useFilterStyles();
 
     const toggleOpen = () => setOpen(!open);

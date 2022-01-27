@@ -6,11 +6,11 @@ import { GreenButton } from './green-button';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import AgeFilter from '../parts/age/age-filter';
 import LocationFilter from '../parts/location/location-filter';
-import { useFilterFormActions } from './filter-form-hooks';
+import { useFilterActions } from '../filter-hooks';
 
 const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
-    const { applyFilters, resetFilters } = useFilterFormActions();
+    const { applyFilters, resetFilters } = useFilterActions();
 
     const onSubmit = formValues => {
         applyFilters({ ...formValues });

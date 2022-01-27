@@ -74,32 +74,3 @@ export function get_upcoming_events(filters) {
     }
 }
 
-export function getEventsToGoByUser(id, page = 1) {
-    return async dispatch => {
-        dispatch(getRequestInc());
-        const response = await api_serv.getEventsToGo(id, page);
-        dispatch(getRequestDec());
-        if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
-        }
-        const json = await response.json();
-        dispatch(getEvents(json));
-        return Promise.resolve();
-    };
-}
-
-export function getVisitedEventsByUser(id, page = 1) {
-    return async dispatch => {
-        dispatch(getRequestInc());
-        const response = await api_serv.getVisitedEvents(id, page);
-        dispatch(getRequestDec());
-        if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
-        }
-        const json = await response.json();
-        dispatch(getEvents(json));
-        return Promise.resolve();
-    };
-}

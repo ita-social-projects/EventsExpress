@@ -5,6 +5,7 @@ import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import { withRouter } from "react-router";
 import { exclude, parse, stringify } from 'query-string';
+import moment from 'moment';
 
 class EventListWrapper extends Component {
     constructor(props) {
@@ -25,17 +26,23 @@ class EventListWrapper extends Component {
     }
 
     fetchEvents() {
-        const query = this.props.history.location.search;
+        const adjustFiltersForRequest = query => {
+            const filters = parse(query, {
+                arrayFormat: 'index',
+                parseNumbers: true,
+                parseBooleans: true
+            });
 
-        const modifyAgeFilterValuesToMatchRequirements = query => {
-            const filters = parse(
-                query,
-                {
-                    arrayFormat: 'index',
-                    parseNumbers: true,
-                    parseBooleans: true
-                }
-            );
+            const userId = this.props.current_user.id;
+            const today = moment().startOf('day').format('YYYY-MM-DD');
+
+            if (filters.goingToVisit) {
+                filters.visitorId = userId;
+                filters.dateFrom = today;
+            } else if (filters.visited) {
+                filters.visitorId = userId;
+                filters.dateTo = today;
+            }
 
             filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
                 ? (filters.onlyAdult ?? false)
@@ -44,13 +51,14 @@ class EventListWrapper extends Component {
             const options = { arrayFormat: 'index', skipNull: true };
             return exclude(
                 `?${stringify(filters, options)}`,
-                ['onlyAdult', 'withChildren'],
+                ['onlyAdult', 'withChildren', 'goingToVisit', 'visited'],
                 options
             );
         };
-
+        
+        const query = this.props.history.location.search;
         this.props.get_events(
-            modifyAgeFilterValuesToMatchRequirements(query)
+            adjustFiltersForRequest(query)
         );
     }
 

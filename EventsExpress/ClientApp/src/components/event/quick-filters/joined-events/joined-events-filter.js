@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import {
-    get_events,
-    getEventsToGoByUser,
-    getVisitedEventsByUser,
-} from '../../../../actions/event/event-list-action';
+import { useFilterActions, useFilterInitialValues } from '../../filter/filter-hooks';
 
-const JoinedEventsFilter = ({ userId, showEventsToGo, showVisitedEvents, resetEvents }) => {
+export const JoinedEventsFilter = () => {
     const [menuAnchor, setMenuAnchor] = useState(null);
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
+
+    const { goingToVisit, visited } = useFilterInitialValues();
+    const { appendFilters } = useFilterActions();
+
+    useEffect(() => {
+        setJoinedEventsShown(goingToVisit || visited);
+    }, []);
 
     const switchJoinedEvents = event => {
         if (!joinedEventsShown) {
             setMenuAnchor(event.currentTarget);
         } else {
-            resetEvents();
+            appendFilters({ goingToVisit: null, visited: null });
             setJoinedEventsShown(false);
         }
     };
@@ -26,14 +28,14 @@ const JoinedEventsFilter = ({ userId, showEventsToGo, showVisitedEvents, resetEv
         setMenuAnchor(null);
     };
 
-    const goingToAttendClick = () => {
-        showEventsToGo(userId);
+    const showEventsGoingToVisit = () => {
+        appendFilters({ goingToVisit: true });
         closeMenu();
         setJoinedEventsShown(true);
     };
 
-    const archivedClick = () => {
-        showVisitedEvents(userId);
+    const showVisitedEvents = () => {
+        appendFilters({ visited: true });
         closeMenu();
         setJoinedEventsShown(true);
     };
@@ -62,25 +64,13 @@ const JoinedEventsFilter = ({ userId, showEventsToGo, showVisitedEvents, resetEv
                 onClose={closeMenu}
                 anchorOrigin={{ vertical: 'bottom' }}
             >
-                <MenuItem onClick={goingToAttendClick}>
-                    Going to attend
+                <MenuItem onClick={showEventsGoingToVisit}>
+                    Going to visit
                 </MenuItem>
-                <MenuItem onClick={archivedClick}>
-                    Archived
+                <MenuItem onClick={showVisitedEvents}>
+                    Visited
                 </MenuItem>
             </Menu>
         </div>
     );
 };
-
-const mapStateToProps = state => ({
-    userId: state.user.id,
-});
-
-const mapDispatchToProps = dispatch => ({
-    showEventsToGo: userId => dispatch(getEventsToGoByUser(userId)),
-    showVisitedEvents: userId => dispatch(getVisitedEventsByUser(userId)),
-    resetEvents: () => dispatch(get_events('')),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(JoinedEventsFilter);

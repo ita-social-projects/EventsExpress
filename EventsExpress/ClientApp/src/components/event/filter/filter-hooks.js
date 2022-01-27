@@ -1,13 +1,16 @@
 import { exclude, parse, stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
-import { enumLocationType } from '../../../../constants/EventLocationType';
+import { enumLocationType } from '../../../constants/EventLocationType';
 
 const applyFilters = (filters, history) => {
-    filters.locationtype = filters?.location.type;
-    if (filters.location.type === enumLocationType.map) {
-        filters.x = filters?.location.latitude;
-        filters.y = filters?.location.longitude;
-        filters.radius = filters?.location.radius;
+    if (filters.location)
+    {
+        filters.locationtype = filters.location.type;
+        if (filters.location.type === enumLocationType.map) {
+            filters.x = filters.location.latitude;
+            filters.y = filters.location.longitude;
+            filters.radius = filters.location.radius;
+        }
     }
 
     const options = { arrayFormat: 'index', skipNull: true };
@@ -18,6 +21,11 @@ const applyFilters = (filters, history) => {
     );
 
     history.push(`${history.location.pathname}${filter}`);
+};
+
+const appendFilters = (filters, history) => {
+    const currentFilters = parse(history.location.search);
+    applyFilters({ ...currentFilters, ...filters }, history);
 };
 
 const resetFilters = history => {
@@ -60,15 +68,16 @@ const parseFilters = query => {
     };
 };
 
-export const useFilterFormInitialValues = () => {
+export const useFilterInitialValues = () => {
     const history = useHistory();
     return parseFilters(history.location.search);
 };
 
-export const useFilterFormActions = () => {
+export const useFilterActions = () => {
     const history = useHistory();
     return {
         applyFilters: filters => applyFilters(filters, history),
-        resetFilters: () => resetFilters(history)
+        appendFilters: filters => appendFilters(filters, history),
+        resetFilters: () => resetFilters(history),
     };
 };
