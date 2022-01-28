@@ -1,19 +1,19 @@
-'use strict';
+"use strict";
 
-import filterHelper from '../components/helpers/filterHelper';
+import filterHelper from "../components/helpers/filterHelper";
 
 const initialState = {
-    requestCount:{
+    requestCount: {
         counter: 0,
     },
     requestLocalCount: {
         localCounter: 0,
     },
-    account:{
-        linkedAuths:[],
+    account: {
+        linkedAuths: [],
     },
     modalWind: {
-        isOpen: false
+        isOpen: false,
     },
     user: {
         id: null,
@@ -28,8 +28,11 @@ const initialState = {
         categories: [],
         notificationTypes: [],
     },
+    userMoreInfo: {
+        data: [],
+    },
     roles: {
-        data: []
+        data: [],
     },
     login: {
         isLoginSuccess: false,
@@ -38,21 +41,20 @@ const initialState = {
         units: [],
         editedUnitOfMeasuring: null,
         isAdded: false,
-
     },
     change_avatar: {
-        Update:0,
+        Update: 0,
     },
     categories: {
         editedCategory: null,
-        data: []
+        data: [],
     },
     categoryGroups: {
-        data: []
+        data: [],
     },
     categoriesOfMeasuring: {
         isPending: false,
-        data: []
+        data: [],
     },
     users: {
         status: null,
@@ -61,14 +63,14 @@ const initialState = {
         userSearchFilter: null,
         data: {
             items: [],
-            pageViewModel: {}
-        }
+            pageViewModel: {},
+        },
     },
     comments: {
         data: {
             items: [],
             pageViewModel: {},
-        }
+        },
     },
     event: {
         cancelationModalStatus: false,
@@ -81,7 +83,7 @@ const initialState = {
         data: {
             lastRun: null,
             nextRun: null,
-        }
+        },
     },
     edit_event_from_parent: {
         isEventFromParentPending: false,
@@ -97,15 +99,15 @@ const initialState = {
     tracks: {
         isError: false,
         data: {
-            items:{},
+            items: {},
             pageViewModel: {},
         },
     },
     inventories: {
-        items: []
+        items: [],
     },
     usersInventories: {
-        data: []
+        data: [],
     },
     eventSchedules: {
         data: {
@@ -113,44 +115,43 @@ const initialState = {
         },
     },
     profile: {
-        data: null
+        data: null,
     },
     events_for_profile: {
         data: {
             items: [],
             pageViewModel: {},
-        }
+        },
     },
     changePassword: {
-        data: []
+        data: [],
     },
-    recoverPassword: {
-    },
+    recoverPassword: {},
     authenticate: {
-        data: []
+        data: [],
     },
     hubConnections: {
-      chatHub: null,
-      usersHub: null
+        chatHub: null,
+        usersHub: null,
     },
     chat: {
         data: {
             messages: [],
             users: [],
-            id: null
-        }
+            id: null,
+        },
     },
     chats: {
-        data: []
+        data: [],
     },
     alert: {
         variant: null,
         message: null,
         autoHideDuration: null,
-        open: false
+        open: false,
     },
     contactAdmin: {
-        data: []
+        data: [],
     },
     contactAdminList: {
         data: {
@@ -160,26 +161,25 @@ const initialState = {
         filter: filterHelper.getDefaultContactAdminFilter(),
     },
     contactAdminItem: {
-        data: []
+        data: [],
     },
-    notification:
-    {
+    notification: {
         messages: [],
         seen_messages: [],
-        events: []
+        events: [],
     },
     notificationTypes: {
-        data: []
+        data: [],
     },
     notificationTemplates: {
-        data: []
+        data: [],
     },
     notificationTemplate: {
         id: null,
         title: null,
         subject: null,
         message: null,
-        availableProperties: null
+        availableProperties: null,
     },
     config: {
         facebookClientId: null,
@@ -187,8 +187,8 @@ const initialState = {
         twitterCallbackUrl: null,
         twitterConsumerKey: null,
         twitterConsumerSecret: null,
-        twitterLoginEnabled:null
-    }
+        twitterLoginEnabled: null,
+    },
 };
 
 export default initialState;

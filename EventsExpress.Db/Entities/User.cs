@@ -5,13 +5,13 @@ using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Db.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class User : BaseEntity
     {
         public string Name { get; set; }
 
         public Account Account { get; set; }
 
-        [ExcludeFromCodeCoverage]
         public UserMoreInfo UserMoreInfo { get; set; }
 
         public string Email { get; set; }

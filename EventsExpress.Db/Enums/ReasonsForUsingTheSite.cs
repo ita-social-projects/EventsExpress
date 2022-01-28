@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Db.Enums
 {
-    public enum ReasonsForUsingTheSite
+    public enum ReasonsForUsingTheSite : byte
     {
         DevelopASkill,
         MeetPeopleLikeMe,

@@ -7,7 +7,7 @@
     {
         public UserMoreInfoCreateViewModelValidator()
         {
-            RuleFor(x => x.UserId).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.UserId).NotEmpty().WithMessage("User ID is not correct");
         }
     }
 }

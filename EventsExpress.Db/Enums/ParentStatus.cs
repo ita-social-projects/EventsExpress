@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Db.Enums
 {
-    public enum ParentStatus
+    public enum ParentStatus : byte
     {
         Kids,
         NoKids,

@@ -29,7 +29,6 @@ const CompleteProfileForm = (props) => {
             <Grid item sm={9}>
               <ChangeAvatarWrapper />
             </Grid>
-            <Grid item sm={0} />
 
             <Grid item sm={12} />
 
@@ -83,7 +82,6 @@ const CompleteProfileForm = (props) => {
 
             <Grid item sm={2}></Grid>
             <Grid item sm={4}>
-
               <Field
                 minWidth={140}
                 name="gender"
@@ -97,7 +95,7 @@ const CompleteProfileForm = (props) => {
               </Field>
             </Grid>
 
-            <Grid item sm={12} justify="space-around">
+            <Grid container item sm={12} justify="space-around">
               <Button
                 type="submit"
                 className="next"

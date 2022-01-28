@@ -1,44 +1,42 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { Field, reduxForm, getFormValues } from "redux-form";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
-import { renderSelectField, renderPhoneInput, renderDatePicker, renderTextField} from '../helpers/form-helpers';
+import {
+    renderSelectField,
+    renderPhoneInput,
+    renderDatePicker,
+    renderTextField,
+} from "../helpers/form-helpers";
 import moment from "moment";
-import { isValidPhoneNumber } from 'react-phone-number-input';
-import { isValidEmail } from '../helpers/validators/email-address-validator';
-import { fieldIsRequired } from '../helpers/validators/required-fields-validator';
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { isValidEmail } from "../helpers/validators/email-address-validator";
+import { fieldIsRequired } from "../helpers/validators/required-fields-validator";
 
-const validate = values => {
-    let errors = {}
-    const requiredFields = [
-        'birthday',
-        'userName',
-        'email',
-        'phone',
-        'gender'
-    ]
+const validate = (values) => {
+    let errors = {};
+    const requiredFields = ["birthday", "userName", "email", "phone", "gender"];
 
     if (values.userName && values.userName.length < 3)
-        errors.userName = 'User name too short'
+        errors.userName = "User name too short";
     else if (values.userName && values.userName.length > 50)
-        errors.userName = 'User name too long'
+        errors.userName = "User name too long";
 
     if (values.phone && !isValidPhoneNumber(values.phone)) {
-        errors.phone = 'Invalid phone number'
+        errors.phone = "Invalid phone number";
     }
     if (values.gender && values.gender > 3) {
-        errors.gender = 'Invalid gender'
+        errors.gender = "Invalid gender";
     }
 
     return {
         ...errors,
         ...fieldIsRequired(values, requiredFields),
-        ...isValidEmail(values.email)
-    }
-}
+        ...isValidEmail(values.email),
+    };
+};
 
 class RegisterComplete extends Component {
-
     render() {
         const { pristine, submitting, handleSubmit } = this.props;
         return (
@@ -49,7 +47,7 @@ class RegisterComplete extends Component {
                 <div className="row">
                     <form onSubmit={handleSubmit} className="col-md-6">
                         <div className="form-group">
-                            < Field
+                            <Field
                                 name="email"
                                 component={renderTextField}
                                 label="E-mail:"
@@ -57,8 +55,8 @@ class RegisterComplete extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            < Field
-                                name="userName"
+                            <Field
+                                name="username"
                                 component={renderTextField}
                                 label="User name"
                             />
@@ -69,8 +67,14 @@ class RegisterComplete extends Component {
                                     name="birthday"
                                     id="date"
                                     label="Birthday"
-                                    minValue={moment(new Date()).subtract(115, 'years')}
-                                    maxValue={moment(new Date()).subtract(15, 'years')}
+                                    minValue={moment(new Date()).subtract(
+                                        115,
+                                        "years"
+                                    )}
+                                    maxValue={moment(new Date()).subtract(
+                                        15,
+                                        "years"
+                                    )}
                                     component={renderDatePicker}
                                 />
                             </div>
@@ -92,12 +96,17 @@ class RegisterComplete extends Component {
                         <div className="form-group">
                             <Field
                                 component={renderPhoneInput}
-                                name='phone'
-                                label='Phone'
+                                name="phone"
+                                label="Phone"
                             />
                         </div>
                         <div className="form-group">
-                            <Button fullWidth={true} type="submit" color="primary" disabled={pristine || submitting}>
+                            <Button
+                                fullWidth={true}
+                                type="submit"
+                                color="primary"
+                                disabled={pristine || submitting}
+                            >
                                 Complete
                             </Button>
                         </div>
@@ -109,22 +118,28 @@ class RegisterComplete extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const profile = 'profile' in state.routing.location.state ? state.routing.location.state.profile : null;
+    const profile =
+        "profile" in state.routing.location.state
+            ? state.routing.location.state.profile
+            : null;
     if (profile)
         return {
             initialValues: {
-                email: 'email' in profile ? profile.email : null,
-                userName: 'name' in profile ? profile.name : null,
-                birthday: 'birthday' in profile ? profile.birthday: null,
-                gender: 'gender' in profile ? profile.gender : null
+                email: "email" in profile ? profile.email : null,
+                userName: "username" in profile ? profile.username : null,
+                birthday: "birthday" in profile ? profile.birthday : null,
+                gender: "gender" in profile ? profile.gender : null,
+                phone: "phone" in profile ? profile.phone : null,
             },
-            form_values: getFormValues('register-complete-form')(state),
-        }
-    else return
-}
+            form_values: getFormValues("register-complete-form")(state),
+        };
+    else return;
+};
 
-export default connect(mapStateToProps)(reduxForm({
-    form: "register-complete-form",
-    validate,
-    enableReinitialize: true
-})(RegisterComplete));
+export default connect(mapStateToProps)(
+    reduxForm({
+        form: "register-complete-form",
+        validate,
+        enableReinitialize: true,
+    })(RegisterComplete)
+);

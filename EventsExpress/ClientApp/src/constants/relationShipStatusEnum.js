@@ -1,6 +1,6 @@
-﻿const relationShipStatusEnum = {
-    Single: 0,
-    InARelationship: 1,
-}
+﻿const relationShipStatusEnum = [
+    { value: 0, label: "Single" },
+    { value: 0, label: "In a relationship" },
+];
 
-export default relationShipStatusEnum ;
+export default relationShipStatusEnum;

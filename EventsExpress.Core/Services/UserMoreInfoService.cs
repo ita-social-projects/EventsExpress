@@ -34,8 +34,6 @@
                 throw new EventsExpressException("Inserting failed");
             }
 
-            var user = await Context.Users.FindAsync(userMoreInfo.UserId);
-            user.UserMoreInfo = newUserMoreInfo;
             await Context.SaveChangesAsync();
 
             return newUserMoreInfo.Id;

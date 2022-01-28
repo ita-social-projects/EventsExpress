@@ -7,8 +7,6 @@
 
     public class UserMoreInfoCreateViewModel
     {
-        public Guid Id { get; set; }
-
         public Guid UserId { get; set; }
 
         public ParentStatus ParentStatus { get; set; }

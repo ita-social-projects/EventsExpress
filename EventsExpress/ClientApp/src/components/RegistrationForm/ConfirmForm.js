@@ -5,13 +5,23 @@ import { reduxForm, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 
 import moment from "moment";
-
+import MoreInfoList from "./MoreInfoList";
 
 const ConfirmForm = (props) => {
   const { handleSubmit, pristine, previousPage, submitting } = props;
 
   const areCategoriesSelected = () => {
     return props.formValues.categories !== undefined;
+  };
+
+  const isDetailedInfoPresent = () => {
+    return (
+      props.formValues.parentstatus !== undefined ||
+      props.formValues.reasonsForUsingTheSite !== undefined ||
+      props.formValues.eventType !== undefined ||
+      props.formValues.relationshipstatus !== undefined ||
+      props.formValues.thetypeofleisure !== undefined
+    );
   };
 
   const getSelectedCategories = () => {
@@ -29,6 +39,16 @@ const ConfirmForm = (props) => {
           .map((el) => el.name),
       }))
       .filter((el) => el.categories.length > 0);
+  };
+
+  const getDetailedInfo = () => {
+    return {
+      parentStatus: props.formValues.parentstatus,
+      reasonsForUsingTheSite: props.formValues.reasonsForUsingTheSite,
+      eventType: props.formValues.eventType,
+      relationshipStatus: props.formValues.relationshipstatus,
+      typeOfLeisure: props.formValues.thetypeofleisure,
+    };
   };
 
   return (
@@ -72,7 +92,7 @@ const ConfirmForm = (props) => {
               </List>
             </Grid>
             <Grid item xs={6}>
-                <List>
+              <List>
                 <ListItem>
                   <ListItemText
                     primary="Gender"
@@ -91,59 +111,17 @@ const ConfirmForm = (props) => {
                     secondary={props.formValues.city}
                   />
                 </ListItem>
-                </List>
-                </Grid>
-                <Grid item xs={6}>
-                <List>
-                    <ListItem>
-                        <ListItemText primary="Parent status:" />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemText secondary={props.formValues.parentstatus ? "No Kids" : "Kids"} />
-                    </ListItem>
-
-                <ListItem>
-                    <ListItemText primary="Reasons for using the site:"/>
-                </ListItem>
-
-                <ListItem>
-                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[0]}></AddReasonsForUsingTheSite>
-                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[1]}></AddReasonsForUsingTheSite>
-                    <AddReasonsForUsingTheSite number={props.formValues.reasonsForUsingTheSite[2]}></AddReasonsForUsingTheSite>
-                </ListItem>
-                
-                <ListItem>
-                    <ListItemText primary="Event type:" />
-                </ListItem>
-
-                <ListItem>
-                    <AddEventType number={props.formValues.eventType[0]}></AddEventType>
-                    <AddEventType number={props.formValues.eventType[1]}></AddEventType>
-                    <AddEventType number={props.formValues.eventType[2]}></AddEventType>
-                    <AddEventType number={props.formValues.eventType[3]}></AddEventType>
-                    <AddEventType number={props.formValues.eventType[4]}></AddEventType>
-                </ListItem>
-
-                <ListItem>
-                    <ListItemText primary="Relationship status:" />
-                </ListItem>
-
-                <ListItem>
-                    <ListItemText secondary={props.formValues.relationshipstatus ? "In a relationship" : "Single"} />
-                </ListItem>
-
-                <ListItem>
-                    <ListItemText primary="The type of leisure status:" />
-                </ListItem>
-
-                <ListItem>
-                    <ListItemText secondary={props.formValues.thetypeofleisure ? "Passive" : "Active"} />
-                </ListItem>
               </List>
             </Grid>
 
+            <Grid item xs={4}></Grid>
+
             {areCategoriesSelected() && (
               <SelectedActivitiesList data={getSelectedCategories()} />
+            )}
+
+            {isDetailedInfoPresent() && (
+              <MoreInfoList data={getDetailedInfo()} />
             )}
 
             <Grid item sm={12} justify="center">
@@ -184,68 +162,6 @@ const mapStateToProps = (state) => {
     categories: state.categories.data,
   };
 };
-
-function AddReasonsForUsingTheSite(props) {
-    const number = props.number;
-
-    const project = () => {
-        switch (number) {
-            case 0:
-                return <ListItem>
-                    <ListItemText secondary={"Develop a skill"} />
-                </ListItem>;
-            case 1:
-                return <ListItem>
-                    <ListItemText secondary={"Meet people like me"} />
-                </ListItem>;
-            case 2:
-                return <ListItem>
-                    <ListItemText secondary={"Be more active"} />
-                </ListItem>;
-            default:
-                return null;
-        }
-    }
-
-    return (<div>{project()} </div>);
-}
-
-function AddEventType(props) {
-    const number = props.number;
-
-    const project = () => {
-        switch (number) {
-            case 0:
-                return <ListItem>
-                    <ListItemText secondary={"Online"} />
-                </ListItem>;
-            case 1:
-                return <ListItem>
-                    <ListItemText secondary={"Offline"} />
-                </ListItem>;
-            case 2:
-                return <ListItem>
-                    <ListItemText secondary={"Free"} />
-                </ListItem>;
-            case 3:
-                return <ListItem>
-                    <ListItemText secondary={"Paid"} />
-                </ListItem>;
-            case 4:
-                return <ListItem>
-                    <ListItemText secondary={"Near me"} />
-                </ListItem>;
-            case 5:
-                return <ListItem>
-                    <ListItemText secondary={"Any distance"} />
-                </ListItem>;
-            default:
-                return null;
-        }
-    }
-
-    return (<div>{project()} </div>);
-}
 
 export default connect(mapStateToProps)(
   reduxForm({

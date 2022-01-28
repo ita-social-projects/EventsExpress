@@ -22,7 +22,7 @@ export default ({
           label={label}
           selected={moment(value).format("L")}
           value={value ? moment(value).format("L") : null}
-          autoOK={true}
+          autoOk={true}
           emptyLabel={""}
           format="DD-MM-YYYY"
           error={touched && invalid}
