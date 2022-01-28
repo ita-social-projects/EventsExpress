@@ -4,7 +4,7 @@ import { GoogleLogin as Login } from "react-google-login";
 export default class GoogleLogin extends Component {
 
     render() {
-        const { googleClientId, googleResponseHandler } = this.props;
+        const { googleClientId, googleResponseHandler, googleResponseOnFailure } = this.props;
 
         return (
             <div>
@@ -17,6 +17,7 @@ export default class GoogleLogin extends Component {
                         </button>
                     )}
                     onSuccess={googleResponseHandler}
+                    onFailure={googleResponseOnFailure}
                     version="3.2"
                 />
             </div>

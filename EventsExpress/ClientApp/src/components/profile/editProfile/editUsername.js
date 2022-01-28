@@ -1,20 +1,8 @@
 ﻿import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
-
-const renderTextField = (
-    { input, label, meta: { touched, error }, ...custom },
-) => (
-        <TextField
-            hintText={label}
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            {...custom}
-        />
-    );
+import { renderTextField } from '../../helpers/form-helpers';
 
 const EditUsername = props => {
     const { handleSubmit, pristine, reset, submitting } = props;

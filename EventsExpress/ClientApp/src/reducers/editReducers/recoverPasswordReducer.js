@@ -6,7 +6,7 @@ export const reducer = (state = initialState.recoverPassword, action) => {
         case recoverPassword.DATA:
             return {
                 ...state,
-                isError: false
+                isError: action.payload
             }
         default:
             return state;

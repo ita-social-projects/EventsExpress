@@ -18,7 +18,7 @@ namespace EventsExpress.Core.DTOs
 
         public Guid? VisitorId { get; set; }
 
-        public Guid? OwnerId { get; set; }
+        public Guid? OrganizerId { get; set; }
 
         public double? X { get; set; }
 
@@ -26,10 +26,16 @@ namespace EventsExpress.Core.DTOs
 
         public double? Radius { get; set; }
 
+        public bool? IsOnlyForAdults { get; set; }
+
+        public LocationType? LocationType { get; set; }
+
         public List<string> Categories { get; set; }
 
         public SortBy SortBy { get; set; }
 
         public List<EventStatus> Statuses { get; set; }
+
+        public List<Guid> Organizers { get; set; }
     }
 }

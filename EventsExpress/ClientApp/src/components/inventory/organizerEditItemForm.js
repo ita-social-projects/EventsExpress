@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ErrorMessages from '../shared/errorMessage';
 import { validate } from './inventory-form-validator';
 
-class OwnerEditItemForm extends Component {
+class OrganizerEditItemForm extends Component {
 
     render() {
         const { initialValues, unitOfMeasuringState, alreadyGet, error } = this.props;
@@ -60,4 +60,4 @@ export default reduxForm({
     form: 'item-form',
     validate,
     enableReinitialize: true
-})(OwnerEditItemForm);
+})(OrganizerEditItemForm);

@@ -9,9 +9,9 @@ class SelectCategories extends Component {
         super(props);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.initialize({
-            categories: this.props.initialValues,
+            categories: this.props.initialValues.categories
         });
     }
 
@@ -49,4 +49,5 @@ class SelectCategories extends Component {
 
 export default reduxForm({
     form: 'SelectCategories',
+    enableReinitialize: true
 })(SelectCategories)

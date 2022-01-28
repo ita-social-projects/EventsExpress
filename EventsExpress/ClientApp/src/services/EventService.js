@@ -40,9 +40,9 @@ export default class EventService {
             ?  baseService.setResource(`event/${data.eventId}/ApproveVisitor?userId=${data.userId}`)
             :  baseService.setResource(`event/${data.eventId}/DenyVisitor?userId=${data.userId}`);
 
-    onDeleteFromOwners = data => baseService.setResource(`owners/DeleteFromOwners?userId=${data.userId}&eventId=${data.eventId}`);
+    onDeleteFromOrganizers = data => baseService.setResource(`organizers/DeleteFromOrganizers?userId=${data.userId}&eventId=${data.eventId}`);
 
-    onPromoteToOwner = data => baseService.setResource(`owners/PromoteToOwner?userId=${data.userId}&eventId=${data.eventId}`);
+    onPromoteToOrganizer = data => baseService.setResource(`organizers/PromoteToOrganizer?userId=${data.userId}&eventId=${data.eventId}`);
 
     setRate = data =>  baseService.setResource('event/setrate', {
             rate: Number(data.rate),

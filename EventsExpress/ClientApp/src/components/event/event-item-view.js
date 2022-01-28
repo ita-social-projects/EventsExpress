@@ -3,6 +3,7 @@ import Comment from '../comment/comment';
 import { Link } from 'react-router-dom'
 import RatingWrapper from '../../containers/rating';
 import Moment from 'react-moment';
+import moment from 'moment';
 import 'moment-timezone';
 import '../layout/colorlib.css';
 import './event-item-view.css';
@@ -86,11 +87,14 @@ export default class EventItemView extends Component {
             dateTo,
             description,
             isPublic,
+            isOnlyForAdults,
             eventStatus,
             maxParticipants,
             visitors,
-            owners,
+            organizers,
         } = this.props.event.data;
+
+        const today = moment().startOf('day');
         const categories_list = this.renderCategories(categories);
         const INT32_MAX_VALUE = 2147483647;
         const visitorsEnum = {
@@ -101,10 +105,13 @@ export default class EventItemView extends Component {
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
-        let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
+        let isMyEvent = organizers.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
+        let isAdult = moment.duration(today.diff(moment(current_user.birthday))).asYears() >= 18;
+        
         let canEdit = isFutureEvent && isMyEvent;
-        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === eventStatusEnum.Active;
+        let isAppropriateAge = !isOnlyForAdults || isAdult;
+        let canJoin = isFutureEvent && isFreePlace && !iWillVisitIt && !isMyEvent && eventStatus === eventStatusEnum.Active && isAppropriateAge;
         let canLeave = isFutureEvent && !isMyEvent && iWillVisitIt && visitorsEnum.deniedUsers.find(x => x.id === current_user.id) == null && eventStatus === eventStatusEnum.Active;
         let canCancel = isFutureEvent && current_user.id != null && isMyEvent && eventStatus !== eventStatusEnum.Canceled;
         let canUncancel = isFutureEvent && isMyEvent && eventStatus === eventStatusEnum.Canceled;
@@ -198,6 +205,13 @@ export default class EventItemView extends Component {
                                 />
                             </div>
                         }
+                        {isOnlyForAdults &&
+                            <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
+                                <span className="font-weight-bold font">18+</span>
+                                <br />
+                                This event is only for adults.
+                            </div>
+                        }
                         <div className="text-box-big overflow-auto shadow p-3 mx-3 mb-5 mt-2 bg-white rounded">
                             {(eventStatus === eventStatusEnum.Canceled) &&
                                 <div className="text-center text-uppercase cancel-text">
@@ -223,17 +237,29 @@ export default class EventItemView extends Component {
                         {(!isMyEvent) &&
                             <div className="text-box overflow-auto shadow p-3 mb-5 mt-2 bg-white rounded">
                                 <div className="d-flex justify-content-center">
-                                    {this.getUserEventStatus(visitors.find(x => x.id === current_user.id))}
+                                    {isAppropriateAge
+                                        ? (
+                                            this.getUserEventStatus(visitors.find(x => x.id === current_user.id))
+                                        )
+                                        : (
+                                            <span className="alert alert-warning shadow" role="alert">
+                                                You do not meet age requirements for this event.
+                                            </span>
+                                        )
+                                    }
                                 </div>
-                                <br />
                                 {canJoin &&
-                                    <button onClick={this.props.onJoin}
-                                        type="button"
-                                        className="btn btn-success join-leave"
-                                        variant="contained"
-                                    >
-                                        Join
-                                    </button>}
+                                    <div>
+                                        <br />
+                                        <button onClick={this.props.onJoin}
+                                            type="button"
+                                            className="btn btn-success join-leave"
+                                            variant="contained"
+                                        >
+                                            Join
+                                        </button>
+                                    </div>
+                                }
                                 {canLeave &&
                                     <EventLeaveModal data={{}}
                                         submitLeave={this.props.onLeave}
@@ -241,7 +267,7 @@ export default class EventItemView extends Component {
                             </div>
                         }
                         <EventVisitors data={{}}
-                            admins={owners}
+                            admins={organizers}
                             visitors={visitorsEnum}
                             isMyPrivateEvent={isMyPrivateEvent}
                             isMyEvent={isMyEvent}

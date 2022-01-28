@@ -10,11 +10,13 @@ namespace EventsExpress.Core.IServices
     {
         Guid CreateDraft();
 
+        Task<Guid> Create(EventDto eventDto);
+
         Task<Guid> CreateNextEvent(Guid eventId);
 
-        Task<Guid> EditNextEvent(EventDto eventDTO);
+        Task<Guid> EditNextEvent(EventDto eventDto);
 
-        Task<Guid> Edit(EventDto e);
+        Task<Guid> Edit(EventDto eventDto);
 
         Task<Guid> Publish(Guid eventId);
 

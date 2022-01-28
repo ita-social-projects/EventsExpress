@@ -3,19 +3,19 @@ import SimpleModal from './simple-modal';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from 'react-redux';
-import { deleteFromOwners } from '../../actions/event/event-item-view-action';
+import { deleteFromOrganizers } from '../../actions/event/event-item-view-action';
 
-const OwnersActions = (props) => {
+const OrganizersActions = (props) => {
     const { user, isMyEvent } = props;
     return (
         <>
             {(isMyEvent && user.id != props.currentUserId) &&
                 <div>
                     <SimpleModal
-                        action={() => props.deleteFromOwners(user.id, props.eventId)}
-                        data={'Are you sure, that you wanna delete ' + user.username + ' from owners?'}
+                        action={() => props.deleteFromOrganizers(user.id, props.eventId)}
+                        data={'Are you sure, that you wanna delete ' + user.username + ' from organizers?'}
                         button={
-                            <Tooltip title="Delete from owners">
+                            <Tooltip title="Delete from organizers">
                                 <IconButton aria-label="delete">
                                     <i className="far fa-trash-alt" />
                                 </IconButton>
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteFromOwners: (userId, eventId) => dispatch(deleteFromOwners(userId, eventId)),
+    deleteFromOrganizers: (userId, eventId) => dispatch(deleteFromOrganizers(userId, eventId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnersActions);
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizersActions);
