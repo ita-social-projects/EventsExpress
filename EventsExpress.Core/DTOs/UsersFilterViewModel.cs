@@ -1,4 +1,6 @@
-﻿namespace EventsExpress.Core.DTOs
+﻿using EventsExpress.Core.Enums;
+
+namespace EventsExpress.Core.DTOs
 {
     public class UsersFilterViewModel
     {
