@@ -18,7 +18,7 @@ export const CategoryGroup = ({name, categories}) => {
         <div className={classes.wrapper}>
             <FilterExpansionPanel 
                 title={name}
-                clearButton={false}
+                showClearButton={false}
             >
                 <div className={classes.wrapper}>
                     <Field
