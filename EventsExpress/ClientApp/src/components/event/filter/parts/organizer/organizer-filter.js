@@ -14,6 +14,7 @@ const OrganizerFilter = ({ organizers, formValues, ...props }) => {
             title="Organizer"
             onClearClick={clear}
             clearDisabled={!formValues.organizers.length}
+            clearButton={true}
         >
             <div className={classes.wrapper}>
                 <Field
