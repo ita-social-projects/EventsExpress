@@ -33,16 +33,7 @@ class EventListWrapper extends Component {
                 parseBooleans: true
             });
 
-            const userId = this.props.current_user.id;
-            const today = moment().startOf('day').format('YYYY-MM-DD');
-
-            if (filters.goingToVisit) {
-                filters.visitorId = userId;
-                filters.dateFrom = today;
-            } else if (filters.visited) {
-                filters.visitorId = userId;
-                filters.dateTo = today;
-            }
+            filters.displayUserEvents = sessionStorage.getItem('displayUserEvents');
 
             filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
                 ? (filters.onlyAdult ?? false)
@@ -51,7 +42,7 @@ class EventListWrapper extends Component {
             const options = { arrayFormat: 'index', skipNull: true };
             return exclude(
                 `?${stringify(filters, options)}`,
-                ['onlyAdult', 'withChildren', 'goingToVisit', 'visited'],
+                ['onlyAdult', 'withChildren'],
                 options
             );
         };

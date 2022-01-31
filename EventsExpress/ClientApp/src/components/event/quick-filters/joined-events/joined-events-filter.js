@@ -2,41 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import { useFilterActions, useFilterInitialValues } from '../../filter/filter-hooks';
+import { userToEventRelation } from '../../../../constants/user-to-event-relation-enum';
+import { useSessionFilter } from '../quick-filter-hooks';
 
 export const JoinedEventsFilter = () => {
     const [menuAnchor, setMenuAnchor] = useState(null);
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
 
-    const { goingToVisit, visited } = useFilterInitialValues();
-    const { appendFilters } = useFilterActions();
+    const joinedEventsFilter = useSessionFilter('displayUserEvents');
 
     useEffect(() => {
-        setJoinedEventsShown(goingToVisit || visited);
+        const filterApplied = Boolean(joinedEventsFilter.value);
+        setJoinedEventsShown(filterApplied);
     }, []);
 
     const switchJoinedEvents = event => {
         if (!joinedEventsShown) {
             setMenuAnchor(event.currentTarget);
         } else {
-            appendFilters({ goingToVisit: null, visited: null });
+            joinedEventsFilter.reset();
             setJoinedEventsShown(false);
         }
     };
 
-    const closeMenu = () => {
-        setMenuAnchor(null);
-    };
-
     const showEventsGoingToVisit = () => {
-        appendFilters({ goingToVisit: true });
-        closeMenu();
+        joinedEventsFilter.value = userToEventRelation.GOING_TO_VISIT;
         setJoinedEventsShown(true);
     };
 
     const showVisitedEvents = () => {
-        appendFilters({ visited: true });
-        closeMenu();
+        joinedEventsFilter.value = userToEventRelation.VISITED;
         setJoinedEventsShown(true);
     };
 
@@ -49,10 +44,11 @@ export const JoinedEventsFilter = () => {
                     aria-haspopup="true"
                     onClick={switchJoinedEvents}
                 >
-                    {joinedEventsShown ? (
-                        <AssignmentTurnedInIcon />
-                    ) : (
-                        <AssignmentTurnedInOutlinedIcon />
+                    {joinedEventsShown
+                        ? (
+                            <AssignmentTurnedInIcon />
+                        ) : (
+                            <AssignmentTurnedInOutlinedIcon />
                     )}
                 </IconButton>
             </Tooltip>
@@ -61,7 +57,7 @@ export const JoinedEventsFilter = () => {
                 anchorEl={menuAnchor}
                 getContentAnchorEl={null}
                 open={Boolean(menuAnchor)}
-                onClose={closeMenu}
+                onClick={() => setMenuAnchor(null)}
                 anchorOrigin={{ vertical: 'bottom' }}
             >
                 <MenuItem onClick={showEventsGoingToVisit}>
