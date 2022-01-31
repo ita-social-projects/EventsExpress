@@ -4,5 +4,4 @@ public enum UserToEventRelation
 {
     GoingToVisit,
     Visited,
-    SavedBookmark,
 }

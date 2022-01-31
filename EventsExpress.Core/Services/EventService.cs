@@ -606,10 +606,10 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.Visitors.Any(v => v.UserId == CurrentUserId()))
                 .Then()
                     .If(model.DisplayUserEvents == UserToEventRelation.GoingToVisit)
-                    .AddFilter(e => e.DateFrom > DateTime.Today)
+                    .AddFilter(e => e.DateFrom >= DateTime.Today)
                 .Then()
                     .If(model.DisplayUserEvents == UserToEventRelation.Visited)
-                    .AddFilter(e => e.DateTo < DateTime.Today);
+                    .AddFilter(e => e.DateTo <= DateTime.Today);
 
             return eventsFilters.Apply();
         }
