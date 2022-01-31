@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Enums;
 using EventsExpress.Db.Enums;
 using NUnit.Framework;
 
@@ -63,6 +64,10 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                 {
                     EventTestData.EventCategoryId.ToString(),
                 },
+            },
+            ["GoingToVisit"] = new EventFilterViewModel
+            {
+                DisplayUserEvents = UserToEventRelation.GoingToVisit,
             },
         };
 

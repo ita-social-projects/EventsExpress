@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Enums;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
@@ -164,7 +165,9 @@ namespace EventsExpress.Controllers
             filter.OrganizerId = null;
             filter.VisitorId = null;
 
-            if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)
+            if (!User.IsInRole("Admin")
+                && filter.DateFrom == DateTime.MinValue
+                && filter.DisplayUserEvents != UserToEventRelation.Visited)
             {
                 filter.DateFrom = DateTime.Today;
             }
