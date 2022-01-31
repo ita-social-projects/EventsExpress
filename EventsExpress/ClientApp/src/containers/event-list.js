@@ -1,92 +1,48 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import EventList from '../components/event/event-list';
 import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
-import { withRouter } from "react-router";
-import { exclude, parse, stringify } from 'query-string';
-import moment from 'moment';
+import { useFilterActions } from '../components/event/filter/filter-hooks';
 
-class EventListWrapper extends Component {
-    constructor(props) {
-        super(props);
-        this.prevQueryStringSearch = '';
-    }
+const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => {
+    const [prevQuery, setPrevQuery] = useState(null);
 
-    componentDidMount() {
-        this.fetchEvents();
-    }
+    const { getQueryWithRequestFilters } = useFilterActions();
 
-    componentDidUpdate() {
-        const query = this.props.history.location.search;
-        if (query !== this.prevQueryStringSearch) {
-            this.prevQueryStringSearch = query;
-            this.fetchEvents();
+    useEffect(() => {
+        const query = history.location.search;
+        if (query !== prevQuery) {
+            const filterQuery = getQueryWithRequestFilters();
+            getEvents(filterQuery);
+            setPrevQuery(query);
         }
-    }
+    });
 
-    fetchEvents() {
-        const adjustFiltersForRequest = query => {
-            const filters = parse(query, {
-                arrayFormat: 'index',
-                parseNumbers: true,
-                parseBooleans: true
-            });
-
-            filters.displayUserEvents = sessionStorage.getItem('displayUserEvents');
-
-            filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
-                ? (filters.onlyAdult ?? false)
-                : null;
-
-            const options = { arrayFormat: 'index', skipNull: true };
-            return exclude(
-                `?${stringify(filters, options)}`,
-                ['onlyAdult', 'withChildren'],
-                options
-            );
-        };
-        
-        const query = this.props.history.location.search;
-        this.props.get_events(
-            adjustFiltersForRequest(query)
-        );
-    }
-
-    render() {
-        let current_user = this.props.current_user.id !== null
-            ? this.props.current_user
-            : {};
-        const { data } = this.props.events;
-        const { items } = this.props.events.data;
-
-        return (
-            <SpinnerWrapper showContent={data != undefined}>
-                <EventList
-                    current_user={current_user}
-                    data_list={items}
-                    filter={this.props.events.filter}
-                    page={data.pageViewModel.pageNumber}
-                    totalPages={data.pageViewModel.totalPages}
-                    customNoResultsMessage="No events meet the specified criteria. Please make another choice."
-                />
-            </SpinnerWrapper>
-        );
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        events: state.events,
-        current_user: state.user
-    };
+    return (
+        <SpinnerWrapper showContent={data !== undefined}>
+            <EventList
+                current_user={currentUser.id !== null ? currentUser : {}}
+                data_list={data.items}
+                filter={events.filter}
+                page={data.pageViewModel.pageNumber}
+                totalPages={data.pageViewModel.totalPages}
+                customNoResultsMessage="No events meet the specified criteria. Please make another choice."
+            />
+        </SpinnerWrapper>
+    );
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        get_events: (filter) => dispatch(get_events(filter))
-    };
-};
+const mapStateToProps = state => ({
+    events: state.events,
+    data: state.events.data,
+    currentUser: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+    getEvents: query => dispatch(get_events(query)),
+});
 
 export default withRouter(connect(
     mapStateToProps,

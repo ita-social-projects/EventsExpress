@@ -1,6 +1,7 @@
 import { exclude, parse, stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
 import { enumLocationType } from '../../../constants/EventLocationType';
+import { DISPLAY_USER_EVENTS } from '../../../constants/user-to-event-relation';
 
 const applyFilters = (filters, history) => {
     if (filters.location)
@@ -50,14 +51,11 @@ const parseLocation = filters => {
 };
 
 const parseFilters = query => {
-    const filters = parse(
-        query,
-        {
-            arrayFormat: 'index',
-            parseNumbers: true,
-            parseBooleans: true
-        }
-    );
+    const filters = parse(query, {
+        arrayFormat: 'index',
+        parseNumbers: true,
+        parseBooleans: true
+    });
 
     return {
         organizers: [],
@@ -66,6 +64,27 @@ const parseFilters = query => {
         location: filters.locationtype !== undefined ? parseLocation(filters) : { type: null },
         ...filters
     };
+};
+
+const getQueryWithRequestFilters = query => {
+    const filters = parse(query, {
+        arrayFormat: 'index',
+        parseNumbers: true,
+        parseBooleans: true
+    });
+
+    filters.displayUserEvents = sessionStorage.getItem(DISPLAY_USER_EVENTS);
+
+    filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
+        ? (filters.onlyAdult ?? false)
+        : null;
+
+    const options = { arrayFormat: 'index', skipNull: true };
+    return exclude(
+        `?${stringify(filters, options)}`,
+        ['onlyAdult', 'withChildren'],
+        options
+    );
 };
 
 export const useFilterInitialValues = () => {
@@ -79,5 +98,6 @@ export const useFilterActions = () => {
         applyFilters: filters => applyFilters(filters, history),
         appendFilters: filters => appendFilters(filters, history),
         resetFilters: () => resetFilters(history),
+        getQueryWithRequestFilters: () => getQueryWithRequestFilters(history.location.search),
     };
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { JoinedEventsFilter } from './joined-events/joined-events-filter';
+import JoinedEventsFilter from './joined-events/joined-events-filter';
 
 export const QuickFilters = () => {
     return (

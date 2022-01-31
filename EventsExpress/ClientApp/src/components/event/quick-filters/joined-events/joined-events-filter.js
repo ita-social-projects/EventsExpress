@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
+import { userToEventRelationEnum, DISPLAY_USER_EVENTS } from '../../../../constants/user-to-event-relation';
+import { useSessionFilter } from '../quick-filter-hooks';
+import { useFilterActions } from '../../filter/filter-hooks';
+import { get_events } from '../../../../actions/event/event-list-action';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import { userToEventRelation } from '../../../../constants/user-to-event-relation-enum';
-import { useSessionFilter } from '../quick-filter-hooks';
 
-export const JoinedEventsFilter = () => {
+const JoinedEventsFilter = ({ getEvents }) => {
     const [menuAnchor, setMenuAnchor] = useState(null);
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
 
-    const joinedEventsFilter = useSessionFilter('displayUserEvents');
+    const joinedEventsFilter = useSessionFilter(DISPLAY_USER_EVENTS);
+
+    const { getQueryWithRequestFilters } = useFilterActions();
 
     useEffect(() => {
         const filterApplied = Boolean(joinedEventsFilter.value);
         setJoinedEventsShown(filterApplied);
     }, []);
+
+    useEffect(() => {
+        const filterQuery = getQueryWithRequestFilters();
+        getEvents(filterQuery);
+    }, [joinedEventsShown]);
 
     const switchJoinedEvents = event => {
         if (!joinedEventsShown) {
@@ -26,12 +36,12 @@ export const JoinedEventsFilter = () => {
     };
 
     const showEventsGoingToVisit = () => {
-        joinedEventsFilter.value = userToEventRelation.GOING_TO_VISIT;
+        joinedEventsFilter.value = userToEventRelationEnum.GOING_TO_VISIT;
         setJoinedEventsShown(true);
     };
 
     const showVisitedEvents = () => {
-        joinedEventsFilter.value = userToEventRelation.VISITED;
+        joinedEventsFilter.value = userToEventRelationEnum.VISITED;
         setJoinedEventsShown(true);
     };
 
@@ -70,3 +80,9 @@ export const JoinedEventsFilter = () => {
         </div>
     );
 };
+
+const mapDispatchToProps = dispatch => ({
+    getEvents: query => dispatch(get_events(query)),
+});
+
+export default connect(null, mapDispatchToProps)(JoinedEventsFilter);
