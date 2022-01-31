@@ -58,6 +58,7 @@ const parseFilters = query => {
     });
 
     return {
+        categories: [],
         organizers: [],
         onlyAdult: false,
         withChildren: false,

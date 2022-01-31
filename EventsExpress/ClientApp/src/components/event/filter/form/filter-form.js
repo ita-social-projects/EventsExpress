@@ -3,6 +3,7 @@ import React from 'react';
 import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
+import CategoryFilter from '../parts/category/category-filter';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import AgeFilter from '../parts/age/age-filter';
 import LocationFilter from '../parts/location/location-filter';
@@ -42,6 +43,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
                     <GreenButton type="submit" disabled={pristine}>Apply</GreenButton>
                 </div>
             </div>
+            <CategoryFilter />
             <OrganizerFilter />
             <LocationFilter />
             <AgeFilter />

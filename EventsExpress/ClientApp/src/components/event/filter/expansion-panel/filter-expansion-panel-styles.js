@@ -9,6 +9,7 @@ export const useFilterExpansionPanelStyles = makeStyles({
     headingWrapper: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
+        position: 'relative'
     }
 });
