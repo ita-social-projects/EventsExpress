@@ -18,6 +18,7 @@ namespace EventsExpress.Core.GraphQL.Extensions
 
                 .AddType<EventType>()
                 .AddType<CategoryType>()
+                .AddType<EventLocationType>()
                 .AddType<UserType>()
                 .AddType<PointSortType>()
 
