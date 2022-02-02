@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.Enums;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
@@ -31,6 +32,8 @@ namespace EventsExpress.Core.DTOs
         public LocationType? LocationType { get; set; }
 
         public List<string> Categories { get; set; }
+
+        public UserToEventRelation? DisplayUserEvents { get; set; }
 
         public SortBy SortBy { get; set; }
 
