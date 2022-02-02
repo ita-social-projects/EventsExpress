@@ -29,7 +29,7 @@ namespace EventsExpress.Core.GraphQL.Types
 
             descriptor.Field(f => f.EventLocation);
 
-            descriptor.Field(f => f.Owners);
+            descriptor.Field(f => f.Organizers);
 
             descriptor.Field(f => f.Visitors);
 

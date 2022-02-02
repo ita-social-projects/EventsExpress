@@ -154,7 +154,8 @@ namespace EventsExpress.Test.GraphQLTests
                 .AddSingleton(context)
                 .AddSingleton(sp => mockHttpContextAccessor.Object)
                 .AddScoped(sp => mockSecurityContext.Object)
-                .AddGraphQLService();
+                .AddGraphQLService()
+                .BuildRequestExecutorAsync();
         }
 
         [Test]
@@ -221,7 +222,6 @@ namespace EventsExpress.Test.GraphQLTests
 
             // assert
             List<Event> eventList = GetEventsFromExecutionResult(result);
-
             int filteredEventsCount = eventList.Count();
 
             Assert.AreEqual(2, filteredEventsCount);
