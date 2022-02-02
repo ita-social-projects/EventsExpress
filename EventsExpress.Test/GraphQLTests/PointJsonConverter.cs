@@ -8,7 +8,7 @@ namespace EventsExpress.Test.GraphQLTests
     {
         public override Point Create(Type objectType)
         {
-            return new Point(1, 1);
+            return new Point(0, 0);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using EventsExpress.Db.EF;
+﻿using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using HotChocolate.Types;
 using NetTopologySuite.Geometries;

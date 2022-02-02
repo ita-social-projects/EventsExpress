@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using EventsExpress.Core.DTOs;
-using EventsExpress.Core.GraphQL.Extensions;
-using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
-using GreenDonut;
-using HotChocolate;
-using HotChocolate.Data;
-using HotChocolate.Resolvers;
+﻿using EventsExpress.Db.Entities;
 using HotChocolate.Types;
-using HotChocolate.Types.Spatial;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.Types
 {
@@ -34,6 +20,10 @@ namespace EventsExpress.Core.GraphQL.Types
             descriptor.Field(f => f.MaxParticipants);
 
             descriptor.Field(f => f.EventLocationId);
+
+            descriptor.Field(f => f.EventAudienceId);
+
+            descriptor.Field(f => f.EventAudience);
 
             descriptor.Field(f => f.EventSchedule);
 

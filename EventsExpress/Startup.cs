@@ -15,7 +15,6 @@ namespace EventsExpress
     using EventsExpress.Core.Services;
     using EventsExpress.Db.Bridge;
     using EventsExpress.Db.EF;
-    using EventsExpress.Db.Entities;
     using EventsExpress.Filters;
     using EventsExpress.Hubs;
     using EventsExpress.Mapping;
@@ -288,7 +287,7 @@ namespace EventsExpress
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGraphQL("/");
+                endpoints.MapGraphQL("/graphql");
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<Hubs.ChatRoom>("/chatRoom");
                 endpoints.MapHub<UsersHub>("/usersHub");

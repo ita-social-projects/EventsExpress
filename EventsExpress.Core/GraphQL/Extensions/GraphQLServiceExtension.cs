@@ -1,18 +1,17 @@
-﻿using EventsExpress.Core.GraphQL.SortInputTypes;
+﻿using System.Threading.Tasks;
+using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
-using HotChocolate.Data;
-using HotChocolate.Data.Sorting;
-using HotChocolate.Types.Descriptors;
+using HotChocolate.Execution;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventsExpress.Core.GraphQL.Extensions
 {
     public static class GraphQLServiceExtension
     {
-        public static void AddGraphQLService(this IServiceCollection services)
+        public static async Task<IRequestExecutor> AddGraphQLService(this IServiceCollection services)
         {
-            services
+            return await services
                 .AddGraphQLServer()
                     .AddQueryType<QueryType>()
 
@@ -27,7 +26,8 @@ namespace EventsExpress.Core.GraphQL.Extensions
                 .AddSpatialProjections()
                 .AddFiltering()
                 .AddSpatialFiltering()
-                .AddSorting();
+                .AddSorting()
+                .BuildRequestExecutorAsync();
         }
     }
 }

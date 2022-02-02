@@ -46,6 +46,9 @@
                   eventSchedule {
                     id
                   }
+                  eventAudience {
+                    id
+                  }
                 }
               }
             }
@@ -115,6 +118,22 @@
                     }
                   }
 
+                }
+              }
+            }
+            ";
+        }
+
+        internal static string GetQueryWithPagingFilter()
+        {
+            return @"
+            {
+              events(
+                first: 2
+              ) {
+                nodes {
+                  title
+                  description
                 }
               }
             }

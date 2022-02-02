@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using EventsExpress.Core.GraphQL.SortInputTypes;
-using EventsExpress.Core.GraphQL.Types;
+using EventsExpress.Core.GraphQL.Extensions;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
@@ -36,6 +35,7 @@ namespace EventsExpress.Test.GraphQLTests
         private Inventory inventory = new Inventory();
         private EventStatusHistory statusHistory = new EventStatusHistory();
         private EventSchedule eventSchedule = new EventSchedule();
+        private EventAudience eventAudience = new EventAudience();
 
         private JsonSerializerSettings serializerSettings = new JsonSerializerSettings()
         {
@@ -52,31 +52,8 @@ namespace EventsExpress.Test.GraphQLTests
             return eventList;
         }
 
-        [OneTimeSetUp]
-        public void Setup()
+        public void AddTestData(AppDbContext context)
         {
-            Init().Wait();
-        }
-
-        public async Task Init()
-        {
-            // arrange
-            var mockSecurityContext = new Mock<ISecurityContext>();
-            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-
-            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(userId);
-            mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(new DefaultHttpContext());
-
-            var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "EventExpress").Options;
-            AppDbContext context = new AppDbContext(options, mockSecurityContext.Object);
-
-            IServiceCollection services = new ServiceCollection()
-                .AddDbContextFactory<AppDbContext>(options =>
-                    options.UseInMemoryDatabase("EventExpress"))
-                .AddSingleton(context)
-                .AddSingleton(sp => mockHttpContextAccessor.Object)
-                .AddScoped(sp => mockSecurityContext.Object);
-
             Event testEvent = new Event
             {
                 Id = Guid.NewGuid(),
@@ -87,6 +64,7 @@ namespace EventsExpress.Test.GraphQLTests
                 IsPublic = true,
                 MaxParticipants = 10,
                 EventSchedule = eventSchedule,
+                EventAudience = eventAudience,
                 Rates = new List<Rate> { rate },
                 Inventories = new List<Inventory> { inventory },
                 StatusHistory = new List<EventStatusHistory> { statusHistory },
@@ -107,6 +85,7 @@ namespace EventsExpress.Test.GraphQLTests
                 IsPublic = true,
                 MaxParticipants = 10,
                 EventSchedule = new EventSchedule(),
+                EventAudience = new EventAudience(),
                 Rates = new List<Rate> { new Rate() },
                 Inventories = new List<Inventory> { new Inventory() },
                 StatusHistory = new List<EventStatusHistory> { new EventStatusHistory() },
@@ -128,6 +107,7 @@ namespace EventsExpress.Test.GraphQLTests
                 IsPublic = true,
                 MaxParticipants = 10,
                 EventSchedule = new EventSchedule(),
+                EventAudience = new EventAudience(),
                 Rates = new List<Rate> { new Rate() },
                 Inventories = new List<Inventory> { new Inventory() },
                 StatusHistory = new List<EventStatusHistory> { new EventStatusHistory() },
@@ -147,22 +127,34 @@ namespace EventsExpress.Test.GraphQLTests
             context.Events.Add(testEventFiltering);
             context.Events.Add(testEventWithLocation);
             context.SaveChanges();
+        }
 
-            executor = await services
-                .AddGraphQL()
-                .AddQueryType<QueryType>()
-                .AddType<EventType>()
-                .AddType<CategoryType>()
-                .AddType<EventLocationType>()
-                .AddType<UserType>()
-                .AddType<PointSortType>()
-                .AddProjections()
-                .AddSpatialTypes()
-                .AddSpatialProjections()
-                .AddFiltering()
-                .AddSpatialFiltering()
-                .AddSorting()
-                .BuildRequestExecutorAsync();
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            Init().Wait();
+        }
+
+        public async Task Init()
+        {
+            // arrange
+            var mockSecurityContext = new Mock<ISecurityContext>();
+            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+
+            mockSecurityContext.Setup(x => x.GetCurrentUserId()).Returns(userId);
+            mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(new DefaultHttpContext());
+
+            var options = new DbContextOptionsBuilder<AppDbContext>().UseInMemoryDatabase(databaseName: "EventExpress").Options;
+            AppDbContext context = new AppDbContext(options, mockSecurityContext.Object);
+            AddTestData(context);
+
+            executor = await new ServiceCollection()
+                .AddDbContextFactory<AppDbContext>(options =>
+                    options.UseInMemoryDatabase("EventExpress"))
+                .AddSingleton(context)
+                .AddSingleton(sp => mockHttpContextAccessor.Object)
+                .AddScoped(sp => mockSecurityContext.Object)
+                .AddGraphQLService();
         }
 
         [Test]
@@ -219,6 +211,20 @@ namespace EventsExpress.Test.GraphQLTests
 
             Assert.AreEqual(1, filteredEventsCount);
             Assert.AreEqual(ev.Title, "Event with location");
+        }
+
+        [Test]
+        public async Task GetFirstTwoEvents()
+        {
+            // act
+            IExecutionResult result = await executor.ExecuteAsync(TestQueries.GetQueryWithPagingFilter());
+
+            // assert
+            List<Event> eventList = GetEventsFromExecutionResult(result);
+
+            int filteredEventsCount = eventList.Count();
+
+            Assert.AreEqual(2, filteredEventsCount);
         }
     }
 }
