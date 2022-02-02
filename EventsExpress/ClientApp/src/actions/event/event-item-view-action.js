@@ -76,10 +76,10 @@ export function approveUser(userId, eventId, buttonAction) {
     }
 }
 
-// ACTION CREATOR FOR DELETE FROM OWNERS:
-export function deleteFromOwners(userId, eventId) {
+// ACTION CREATOR FOR DELETE FROM ORGANIZERS:
+export function deleteFromOrganizers(userId, eventId) {
     return async dispatch => {
-        let response = await api_serv.onDeleteFromOwners({ userId: userId, eventId: eventId });
+        let response = await api_serv.onDeleteFromOrganizers({ userId: userId, eventId: eventId });
         if (response.ok) {
             let res = await api_serv.getEvent(eventId);
             if (!res.ok) {
@@ -93,10 +93,10 @@ export function deleteFromOwners(userId, eventId) {
     }
 }
 
-// ACTION CREATOR FOR PROMOTE TO OWNER:
-export function promoteToOwner(userId, eventId) {
+// ACTION CREATOR FOR PROMOTE TO ORGANIZER:
+export function promoteToOrganizer(userId, eventId) {
     return async dispatch => {
-        let response = await api_serv.onPromoteToOwner({ userId: userId, eventId: eventId });
+        let response = await api_serv.onPromoteToOrganizer({ userId: userId, eventId: eventId });
         if (response.ok) {
             let res = await api_serv.getEvent(eventId);
             if (!res.ok) {

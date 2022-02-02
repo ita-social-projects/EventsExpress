@@ -73,3 +73,4 @@ export function get_upcoming_events(filters) {
         return Promise.resolve();
     }
 }
+

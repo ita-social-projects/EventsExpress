@@ -91,7 +91,7 @@ export default class EventItemView extends Component {
             eventStatus,
             maxParticipants,
             visitors,
-            owners,
+            organizers,
         } = this.props.event.data;
 
         const today = moment().startOf('day');
@@ -105,7 +105,7 @@ export default class EventItemView extends Component {
 
         let iWillVisitIt = visitors.find(x => x.id === current_user.id);
         let isFutureEvent = new Date(dateFrom) >= new Date().setHours(0, 0, 0, 0);
-        let isMyEvent = owners.find(x => x.id === current_user.id) != undefined;
+        let isMyEvent = organizers.find(x => x.id === current_user.id) != undefined;
         let isFreePlace = visitorsEnum.approvedUsers.length < maxParticipants;
         let isAdult = moment.duration(today.diff(moment(current_user.birthday))).asYears() >= 18;
         
@@ -267,7 +267,7 @@ export default class EventItemView extends Component {
                             </div>
                         }
                         <EventVisitors data={{}}
-                            admins={owners}
+                            admins={organizers}
                             visitors={visitorsEnum}
                             isMyPrivateEvent={isMyPrivateEvent}
                             isMyEvent={isMyEvent}

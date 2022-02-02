@@ -3,18 +3,23 @@ import React from 'react';
 import { useFilterStyles } from '../filter-styles';
 import { reduxForm } from 'redux-form';
 import { GreenButton } from './green-button';
+import CategoryFilter from '../parts/category/category-filter';
 import OrganizerFilter from '../parts/organizer/organizer-filter';
 import AgeFilter from '../parts/age/age-filter';
-import { applyFilters, resetFilters } from '../../../../actions/events/filter/actions';
 import LocationFilter from '../parts/location/location-filter';
-import { connect } from 'react-redux';
+import { useFilterActions } from '../filter-hooks';
 
-const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => {
+const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine }) => {
     const classes = useFilterStyles();
-    const onSubmit = formValues => props.applyFilters(formValues);
+    const { applyFilters, resetFilters } = useFilterActions();
+
+    const onSubmit = formValues => {
+        applyFilters({ ...formValues });
+    };
+
     const onReset = () => {
         reset();
-        props.resetFilters();
+        resetFilters();
     };
 
     return (
@@ -38,6 +43,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => 
                     <GreenButton type="submit" disabled={pristine}>Apply</GreenButton>
                 </div>
             </div>
+            <CategoryFilter />
             <OrganizerFilter />
             <LocationFilter />
             <AgeFilter />
@@ -45,17 +51,7 @@ const FilterForm = ({ handleSubmit, toggleOpen, reset, pristine, ...props }) => 
     );
 };
 
-const mapDispatchToProps = dispatch => ({
-    applyFilters: filters => dispatch(applyFilters(filters)),
-    resetFilters: () => dispatch(resetFilters())
-});
-
-export default connect(null, mapDispatchToProps)(
-    reduxForm({
-        form: 'filter-form',
-        initialValues: {
-            organizers: [],
-            location:{type:null},
-        }
-    })(FilterForm)
-);
+export default reduxForm({
+    form: 'filter-form',
+    enableReinitialize: true
+})(FilterForm);

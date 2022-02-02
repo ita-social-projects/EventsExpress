@@ -140,7 +140,7 @@ namespace EventsExpress
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<ICategoryOfMeasuringService, CategoryOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
-            services.AddScoped<IEventOwnersService, EventOwnersService>();
+            services.AddScoped<IEventOrganizersService, EventOrganizersService>();
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
