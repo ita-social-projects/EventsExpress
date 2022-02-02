@@ -12,4 +12,4 @@ export const useSessionFilter = filterName => {
             sessionStorage.removeItem(filterName);
         }
     };
-}
+};
