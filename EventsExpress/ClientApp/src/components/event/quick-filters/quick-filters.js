@@ -1,10 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import JoinedEventsFilter from './joined-events/joined-events-filter';
 
-export const QuickFilters = () => {
+const QuickFilters = ({ userId }) => {
     return (
         <div className="d-flex justify-content-end">
-            <JoinedEventsFilter />
+            {userId &&
+                <JoinedEventsFilter />
+            }
         </div>
     );
 };
+
+const mapStateToProps = state => ({
+    userId: state.user.id,
+});
+
+export default connect(mapStateToProps)(QuickFilters);
