@@ -7,6 +7,11 @@ import { useSessionItem } from '../quick-actions-hooks';
 import { QuickActionButtonWithMenu } from '../quick-action-button-with-menu';
 import { userToEventRelationEnum, DISPLAY_USER_EVENTS } from '../../../../constants/user-to-event-relation';
 
+const optionPairs = [
+    [userToEventRelationEnum.GOING_TO_VISIT, 'Going to visit'],
+    [userToEventRelationEnum.VISITED, 'Visited'],
+];
+
 export const JoinedEventsFilter = () => {
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
     const refreshEvents = useContext(RefreshEventsContext);
@@ -16,11 +21,6 @@ export const JoinedEventsFilter = () => {
         const filterApplied = Boolean(displayUserEvents.value);
         setJoinedEventsShown(filterApplied);
     }, []);
-
-    const optionPairs = [
-        [userToEventRelationEnum.GOING_TO_VISIT, 'Going to visit'],
-        [userToEventRelationEnum.VISITED, 'Visited'],
-    ];
 
     const handleItemClick = value => {
         displayUserEvents.value = value;

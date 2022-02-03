@@ -1,32 +1,39 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { MenuItem } from '@material-ui/core';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
+import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle';
 import { useSessionItem } from '../quick-actions-hooks';
 import { QuickActionButtonWithMenu } from '../quick-action-button-with-menu';
 import { eventOrderCriteriaEnum, ORDER } from '../../../../constants/event-order-criteria';
 import { RefreshEventsContext } from '../quick-actions';
 
+const criteriaPairs = [
+    [eventOrderCriteriaEnum.START_SOON, 'Start soon'],
+    [eventOrderCriteriaEnum.RECENTLY_PUBLISHED, 'Recently published'],
+];
+
+const defaultOrder = eventOrderCriteriaEnum.START_SOON;
+
 export const OrderEvents = () => {
-    const [orderCriteria, setOrderCriteria] = useState(eventOrderCriteriaEnum.START_SOON);
+    const [orderCriteria, setOrderCriteria] = useState(defaultOrder);
     const refreshEvents = useContext(RefreshEventsContext);
     const savedOrder = useSessionItem(ORDER);
 
     useEffect(() => {
-        setOrderCriteria(+savedOrder.value ?? eventOrderCriteriaEnum.START_SOON);
+        setOrderCriteria(+savedOrder.value ?? defaultOrder);
     }, []);
-
-    const criteriaPairs = [
-        [eventOrderCriteriaEnum.START_SOON, 'Start soon'],
-        [eventOrderCriteriaEnum.RECENTLY_PUBLISHED, 'Recently published'],
-    ];
     
     const handleItemClick = (event, criteria) => {
         event.stopPropagation();
-        const newCriteria = (criteria === orderCriteria)
-            ? eventOrderCriteriaEnum.START_SOON
-            : criteria;
+        let newCriteria = criteria;
+        if (criteria === orderCriteria) {
+            if (criteria === defaultOrder) {
+                return;
+            }
+            newCriteria = defaultOrder;
+        }
         setOrderCriteria(newCriteria);
-        savedOrder.value = orderCriteria;
+        savedOrder.value = newCriteria;
         refreshEvents();
     };
 
@@ -44,7 +51,10 @@ export const OrderEvents = () => {
     return (
         <QuickActionButtonWithMenu
             title="Order events"
-            icon={<SwapVertIcon />}
+            icon={orderCriteria === defaultOrder
+                ? <SwapVertIcon />
+                : <SwapVerticalCircleIcon />
+            }
             renderMenuItems={renderCriteria}
         />
     );
