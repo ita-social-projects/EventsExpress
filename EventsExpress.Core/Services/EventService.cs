@@ -390,7 +390,16 @@ namespace EventsExpress.Core.Services
             events = ApplyEventFilters(events, model);
             count = events.Count();
 
-            var eventPage = GetPageOfSortedEventList(events, model.Page, model.PageSize);
+            events = model.Order switch
+            {
+                OrderCriteria.StartSoon => events.OrderBy(e => e.DateFrom),
+                OrderCriteria.RecentlyPublished => events.OrderByDescending(e => e.StatusHistory.OrderBy(sh => sh.CreatedOn)
+                    .Last(sh => sh.EventStatus == EventStatus.Active)
+                    .CreatedOn),
+                _ => events
+            };
+
+            var eventPage = events.Page(model.Page, model.PageSize).ToList();
             return Mapper.Map<IEnumerable<EventDto>>(eventPage);
         }
 
