@@ -1,5 +1,6 @@
 import { exclude, parse, stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
+import { ORDER } from '../../../constants/event-order-criteria';
 import { enumLocationType } from '../../../constants/EventLocationType';
 import { DISPLAY_USER_EVENTS } from '../../../constants/user-to-event-relation';
 
@@ -75,6 +76,7 @@ const getQueryWithRequestFilters = query => {
     });
 
     filters.displayUserEvents = sessionStorage.getItem(DISPLAY_USER_EVENTS);
+    filters.order = sessionStorage.getItem(ORDER);
 
     filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
         ? (filters.onlyAdult ?? false)

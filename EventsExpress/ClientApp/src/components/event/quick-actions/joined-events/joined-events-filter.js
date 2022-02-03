@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
 import { userToEventRelationEnum, DISPLAY_USER_EVENTS } from '../../../../constants/user-to-event-relation';
-import { useSessionFilter } from '../quick-actions-hooks';
+import { useSessionItem } from '../quick-actions-hooks';
 import { useFilterActions } from '../../filter/filter-hooks';
 import { get_events } from '../../../../actions/event/event-list-action';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
@@ -12,7 +12,7 @@ const JoinedEventsFilter = ({ getEvents }) => {
     const [menuAnchor, setMenuAnchor] = useState(null);
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
 
-    const joinedEventsFilter = useSessionFilter(DISPLAY_USER_EVENTS);
+    const joinedEventsFilter = useSessionItem(DISPLAY_USER_EVENTS);
 
     const { getQueryWithRequestFilters } = useFilterActions();
 
