@@ -3,9 +3,9 @@ import { getUserInfo } from '../login/login-action';
 
 const apiService = new BookmarkService();
 
-export const saveBookmark = (userId, eventId) => {
+export const saveBookmark = eventId => {
     return async dispatch => {
-        const response = await apiService.saveEventBookmark(userId, eventId);
+        const response = await apiService.saveEventBookmark(eventId);
         if (!response.ok) {
             return;
         }
@@ -14,9 +14,9 @@ export const saveBookmark = (userId, eventId) => {
     };
 };
 
-export const deleteBookmark = (userId, eventId) => {
+export const deleteBookmark = eventId => {
     return async dispatch => {
-        const response = await apiService.deleteEventBookmark(userId, eventId);
+        const response = await apiService.deleteEventBookmark(eventId);
         if (!response.ok) {
             return;
         }

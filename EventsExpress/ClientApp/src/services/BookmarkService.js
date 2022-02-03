@@ -3,11 +3,11 @@
 const baseService = new EventsExpressService();
 
 export default class BookmarkService {
-    saveEventBookmark = (userId, eventId) => baseService.setResource(
-        `Bookmark/SaveEventBookmark?userId=${userId}&eventId=${eventId}`
+    saveEventBookmark = eventId => baseService.setResource(
+        `Bookmark/SaveEventBookmark?eventId=${eventId}`
     );
 
-    deleteEventBookmark = (userId, eventId) => baseService.setResource(
-        `Bookmark/DeleteEventBookmark?userId=${userId}&eventId=${eventId}`
+    deleteEventBookmark = eventId => baseService.setResource(
+        `Bookmark/DeleteEventBookmark?eventId=${eventId}`
     );
 }

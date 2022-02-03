@@ -9,9 +9,9 @@ const BookmarkButton = ({ event, currentUser, ...props }) => {
 
     const toggleBookmark = () => {
         if (bookmarked) {
-            props.deleteBookmark(currentUser.id, event.id);
+            props.deleteBookmark(event.id);
         } else {
-            props.saveBookmark(currentUser.id, event.id);
+            props.saveBookmark(event.id);
         }
     };
 
@@ -33,8 +33,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    saveBookmark: (userId, eventId) => dispatch(saveBookmark(userId, eventId)),
-    deleteBookmark: (userId, eventId) => dispatch(deleteBookmark(userId, eventId))
+    saveBookmark: eventId => dispatch(saveBookmark(eventId)),
+    deleteBookmark: eventId => dispatch(deleteBookmark(eventId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookmarkButton);
