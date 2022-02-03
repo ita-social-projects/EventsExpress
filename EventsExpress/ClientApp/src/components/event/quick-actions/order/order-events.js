@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
-import { eventOrderCriteriaEnum, ORDER } from '../../../../constants/event-order-criteria';
+import React, { useContext, useEffect, useState } from 'react';
+import { MenuItem } from '@material-ui/core';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
-import { useFilterActions } from '../../filter/filter-hooks';
 import { useSessionItem } from '../quick-actions-hooks';
-import { connect } from 'react-redux';
-import { get_events } from '../../../../actions/event/event-list-action';
+import { QuickActionButtonWithMenu } from '../quick-action-button-with-menu';
+import { eventOrderCriteriaEnum, ORDER } from '../../../../constants/event-order-criteria';
+import { RefreshEventsContext } from '../quick-actions';
 
-const OrderEvents = ({ getEvents }) => {
-    const [menuAnchor, setMenuAnchor] = useState(null);
+export const OrderEvents = () => {
     const [orderCriteria, setOrderCriteria] = useState(eventOrderCriteriaEnum.START_SOON);
-
+    const refreshEvents = useContext(RefreshEventsContext);
     const savedOrder = useSessionItem(ORDER);
-
-    const { getQueryWithRequestFilters } = useFilterActions();
 
     useEffect(() => {
         setOrderCriteria(+savedOrder.value ?? eventOrderCriteriaEnum.START_SOON);
@@ -21,11 +17,15 @@ const OrderEvents = ({ getEvents }) => {
 
     useEffect(() => {
         savedOrder.value = orderCriteria;
-        const query = getQueryWithRequestFilters();
-        getEvents(query);
+        refreshEvents();
     }, [orderCriteria]);
 
-    const changeCriteria = (event, criteria) => {
+    const criteriaPairs = [
+        [eventOrderCriteriaEnum.START_SOON, 'Start soon'],
+        [eventOrderCriteriaEnum.RECENTLY_PUBLISHED, 'Recently published'],
+    ];
+    
+    const handleItemClick = (event, criteria) => {
         event.stopPropagation();
         const newCriteria = (criteria === orderCriteria)
             ? eventOrderCriteriaEnum.START_SOON
@@ -33,45 +33,22 @@ const OrderEvents = ({ getEvents }) => {
         setOrderCriteria(newCriteria);
     };
 
-    return (
-        <div>
-            <Tooltip title="Order events">
-                <IconButton
-                    id="order-events-button"
-                    aria-controls="order-events-menu"
-                    aria-haspopup="true"
-                    onClick={e => setMenuAnchor(e.currentTarget)}
-                >
-                    <SwapVertIcon />
-                </IconButton>
-            </Tooltip>
-            <Menu
-                id="order-events-menu"
-                anchorEl={menuAnchor}
-                getContentAnchorEl={null}
-                open={Boolean(menuAnchor)}
-                onClick={() => setMenuAnchor(null)}
-                anchorOrigin={{ vertical: 'bottom' }}
+    const renderCriteria = () => {
+        return criteriaPairs.map(([key, value]) => (
+            <MenuItem
+                onClick={e => handleItemClick(e, key)}
+                selected={orderCriteria === key}
             >
-                <MenuItem
-                    onClick={e => changeCriteria(e, eventOrderCriteriaEnum.START_SOON)}
-                    selected={orderCriteria === eventOrderCriteriaEnum.START_SOON}
-                >
-                    Start soon
-                </MenuItem>
-                <MenuItem
-                    onClick={e => changeCriteria(e, eventOrderCriteriaEnum.RECENTLY_PUBLISHED)}
-                    selected={orderCriteria === eventOrderCriteriaEnum.RECENTLY_PUBLISHED}
-                >
-                    Recently published
-                </MenuItem>
-            </Menu>
-        </div>
+                {value}
+            </MenuItem>
+        ));
+    };
+
+    return (
+        <QuickActionButtonWithMenu
+            title="Order events"
+            icon={<SwapVertIcon />}
+            renderMenuItems={renderCriteria}
+        />
     );
 };
-
-const mapDispatchToProps = dispatch => ({
-    getEvents: query => dispatch(get_events(query)),
-});
-
-export default connect(null, mapDispatchToProps)(OrderEvents);

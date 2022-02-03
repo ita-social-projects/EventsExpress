@@ -1,88 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { IconButton, Tooltip, Menu, MenuItem } from '@material-ui/core';
-import { userToEventRelationEnum, DISPLAY_USER_EVENTS } from '../../../../constants/user-to-event-relation';
-import { useSessionItem } from '../quick-actions-hooks';
-import { useFilterActions } from '../../filter/filter-hooks';
-import { get_events } from '../../../../actions/event/event-list-action';
+import React, { useContext, useEffect, useState } from 'react';
+import { MenuItem } from '@material-ui/core';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
+import { RefreshEventsContext } from '../quick-actions';
+import { useSessionItem } from '../quick-actions-hooks';
+import { QuickActionButtonWithMenu } from '../quick-action-button-with-menu';
+import { userToEventRelationEnum, DISPLAY_USER_EVENTS } from '../../../../constants/user-to-event-relation';
 
-const JoinedEventsFilter = ({ getEvents }) => {
-    const [menuAnchor, setMenuAnchor] = useState(null);
+export const JoinedEventsFilter = () => {
     const [joinedEventsShown, setJoinedEventsShown] = useState(false);
-
-    const joinedEventsFilter = useSessionItem(DISPLAY_USER_EVENTS);
-
-    const { getQueryWithRequestFilters } = useFilterActions();
+    const refreshEvents = useContext(RefreshEventsContext);
+    const displayUserEvents = useSessionItem(DISPLAY_USER_EVENTS);
 
     useEffect(() => {
-        const filterApplied = Boolean(joinedEventsFilter.value);
+        const filterApplied = Boolean(displayUserEvents.value);
         setJoinedEventsShown(filterApplied);
     }, []);
 
     useEffect(() => {
-        const filterQuery = getQueryWithRequestFilters();
-        getEvents(filterQuery);
+        refreshEvents();
     }, [joinedEventsShown]);
 
-    const switchJoinedEvents = event => {
+    const optionPairs = [
+        [userToEventRelationEnum.GOING_TO_VISIT, 'Going to visit'],
+        [userToEventRelationEnum.VISITED, 'Visited'],
+    ];
+
+    const handleItemClick = value => {
+        displayUserEvents.value = value;
+        setJoinedEventsShown(true);
+    };
+
+    const renderFilterOptions = () => {
+        return optionPairs.map(([key, value]) => (
+            <MenuItem onClick={() => handleItemClick(key)}>
+                {value}
+            </MenuItem>
+        ));
+    };
+    
+    const restoreDefaultValues = () => {
         if (!joinedEventsShown) {
-            setMenuAnchor(event.currentTarget);
-        } else {
-            joinedEventsFilter.reset();
-            setJoinedEventsShown(false);
+            return false;
         }
-    };
-
-    const showEventsGoingToVisit = () => {
-        joinedEventsFilter.value = userToEventRelationEnum.GOING_TO_VISIT;
-        setJoinedEventsShown(true);
-    };
-
-    const showVisitedEvents = () => {
-        joinedEventsFilter.value = userToEventRelationEnum.VISITED;
-        setJoinedEventsShown(true);
+        displayUserEvents.reset();
+        setJoinedEventsShown(false);
+        return true;
     };
 
     return (
-        <div>
-            <Tooltip title="Joined events">
-                <IconButton
-                    id="joined-events-button"
-                    aria-controls="joined-events-menu"
-                    aria-haspopup="true"
-                    onClick={switchJoinedEvents}
-                >
-                    {joinedEventsShown
-                        ? (
-                            <AssignmentTurnedInIcon />
-                        ) : (
-                            <AssignmentTurnedInOutlinedIcon />
-                    )}
-                </IconButton>
-            </Tooltip>
-            <Menu
-                id="joined-events-menu"
-                anchorEl={menuAnchor}
-                getContentAnchorEl={null}
-                open={Boolean(menuAnchor)}
-                onClick={() => setMenuAnchor(null)}
-                anchorOrigin={{ vertical: 'bottom' }}
-            >
-                <MenuItem onClick={showEventsGoingToVisit}>
-                    Going to visit
-                </MenuItem>
-                <MenuItem onClick={showVisitedEvents}>
-                    Visited
-                </MenuItem>
-            </Menu>
-        </div>
+        <QuickActionButtonWithMenu
+            title="Joined events"
+            icon={joinedEventsShown
+                ? <AssignmentTurnedInIcon />
+                : <AssignmentTurnedInOutlinedIcon />
+            }
+            renderMenuItems={renderFilterOptions}
+            suppressMenu={restoreDefaultValues}
+        />
     );
 };
-
-const mapDispatchToProps = dispatch => ({
-    getEvents: query => dispatch(get_events(query)),
-});
-
-export default connect(null, mapDispatchToProps)(JoinedEventsFilter);
