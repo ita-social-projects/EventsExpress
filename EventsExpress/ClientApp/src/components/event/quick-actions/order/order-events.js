@@ -15,11 +15,6 @@ export const OrderEvents = () => {
         setOrderCriteria(+savedOrder.value ?? eventOrderCriteriaEnum.START_SOON);
     }, []);
 
-    useEffect(() => {
-        savedOrder.value = orderCriteria;
-        refreshEvents();
-    }, [orderCriteria]);
-
     const criteriaPairs = [
         [eventOrderCriteriaEnum.START_SOON, 'Start soon'],
         [eventOrderCriteriaEnum.RECENTLY_PUBLISHED, 'Recently published'],
@@ -31,6 +26,8 @@ export const OrderEvents = () => {
             ? eventOrderCriteriaEnum.START_SOON
             : criteria;
         setOrderCriteria(newCriteria);
+        savedOrder.value = orderCriteria;
+        refreshEvents();
     };
 
     const renderCriteria = () => {

@@ -17,10 +17,6 @@ export const JoinedEventsFilter = () => {
         setJoinedEventsShown(filterApplied);
     }, []);
 
-    useEffect(() => {
-        refreshEvents();
-    }, [joinedEventsShown]);
-
     const optionPairs = [
         [userToEventRelationEnum.GOING_TO_VISIT, 'Going to visit'],
         [userToEventRelationEnum.VISITED, 'Visited'],
@@ -29,6 +25,7 @@ export const JoinedEventsFilter = () => {
     const handleItemClick = value => {
         displayUserEvents.value = value;
         setJoinedEventsShown(true);
+        refreshEvents();
     };
 
     const renderFilterOptions = () => {
@@ -45,6 +42,7 @@ export const JoinedEventsFilter = () => {
         }
         displayUserEvents.reset();
         setJoinedEventsShown(false);
+        refreshEvents();
         return true;
     };
 
