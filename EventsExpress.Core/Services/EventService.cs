@@ -390,14 +390,17 @@ namespace EventsExpress.Core.Services
             events = ApplyEventFilters(events, model);
             count = events.Count();
 
-            events = model.Order switch
+            if (model.Order == EventOrderCriteria.StartSoon)
             {
-                OrderCriteria.StartSoon => events.OrderBy(e => e.DateFrom),
-                OrderCriteria.RecentlyPublished => events.OrderByDescending(e => e.StatusHistory.OrderBy(sh => sh.CreatedOn)
-                    .Last(sh => sh.EventStatus == EventStatus.Active)
-                    .CreatedOn),
-                _ => events
-            };
+                events = events.OrderBy(e => e.DateFrom);
+            }
+            else if (model.Order == EventOrderCriteria.RecentlyPublished)
+            {
+                events = events.OrderByDescending(e => e.StatusHistory
+                    .OrderBy(sh => sh.CreatedOn)
+                    .First(sh => sh.EventStatus != EventStatus.Draft)
+                    .CreatedOn);
+            }
 
             var eventPage = events.Page(model.Page, model.PageSize).ToList();
             return Mapper.Map<IEnumerable<EventDto>>(eventPage);

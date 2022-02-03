@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Core.Enums;
 
-public enum OrderCriteria
+public enum EventOrderCriteria
 {
     StartSoon,
     RecentlyPublished,
