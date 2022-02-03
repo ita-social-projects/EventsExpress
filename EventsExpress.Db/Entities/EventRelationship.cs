@@ -3,7 +3,7 @@ using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities;
 
-public abstract class EventRelationship
+public abstract class EventRelationship : BaseEntity
 {
     public string Discriminator { get; set; }
 

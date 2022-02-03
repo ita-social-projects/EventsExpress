@@ -10,6 +10,6 @@ public class EventRelationshipConfiguration : IEntityTypeConfiguration<EventRela
     {
         builder.Property(r => r.Discriminator).HasDefaultValue("Rate");
         builder.HasDiscriminator(r => r.Discriminator);
-        builder.HasKey(r => new { r.Discriminator, r.UserFromId, r.EventId });
+        builder.HasIndex(r => new { r.Discriminator, r.UserFromId, r.EventId }).IsUnique();
     }
 }
