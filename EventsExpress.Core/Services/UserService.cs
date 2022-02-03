@@ -82,6 +82,7 @@ namespace EventsExpress.Core.Services
             var userId = _securityContext.GetCurrentUserId();
 
             var user = Context.Users
+                .Include(u => u.EventBookmarks)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)

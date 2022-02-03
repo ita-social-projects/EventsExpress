@@ -27,6 +27,7 @@ const initialState = {
         token: null,
         categories: [],
         notificationTypes: [],
+        bookmarkedEvents: []
     },
     roles: {
         data: []
