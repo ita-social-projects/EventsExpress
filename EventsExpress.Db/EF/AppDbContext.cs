@@ -39,7 +39,11 @@ namespace EventsExpress.Db.EF
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<EventRelationship> EventRelationships { get; set; }
+
         public DbSet<Rate> Rates { get; set; }
+
+        public DbSet<EventBookmark> EventBookmarks { get; set; }
 
         public DbSet<Entities.Role> Roles { get; set; }
 

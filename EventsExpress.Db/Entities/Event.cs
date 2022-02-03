@@ -48,5 +48,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
+
+        public virtual ICollection<EventBookmark> EventBookmarks { get; set; }
     }
 }
