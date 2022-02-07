@@ -16,15 +16,15 @@ public class BookmarkController : ControllerBase
 
     public BookmarkController(IBookmarkService service) => _service = service;
 
-    [HttpPost("[action]")]
-    public async Task<IActionResult> SaveEventBookmark([FromQuery] Guid eventId)
+    [HttpPost("[action]/{eventId:guid}")]
+    public async Task<IActionResult> SaveEventBookmark([FromRoute] Guid eventId)
     {
         await _service.SaveEventToBookmarksAsync(eventId);
         return Ok();
     }
 
-    [HttpPost("[action]")]
-    public async Task<IActionResult> DeleteEventBookmark([FromQuery] Guid eventId)
+    [HttpPost("[action]/{eventId:guid}")]
+    public async Task<IActionResult> DeleteEventBookmark([FromRoute] Guid eventId)
     {
         await _service.DeleteEventFromBookmarksAsync(eventId);
         return Ok();
