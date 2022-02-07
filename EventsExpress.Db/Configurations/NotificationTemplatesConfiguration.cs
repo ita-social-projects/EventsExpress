@@ -22,8 +22,8 @@ namespace EventsExpress.Db.Configurations
                new NotificationTemplate { Id = NotificationProfile.ParticipationDenied, Title = "ParticipationDenied", Subject = "Denying participation", Message = "Dear {{UserEmail}}, you have been denied to join to this event. To check it, please, visit \"<a href='{{EventLink}}'>EventExpress</a>\"" },
                new NotificationTemplate { Id = NotificationProfile.RegisterVerification, Title = "RegisterVerification", Subject = "EventExpress registration", Message = "For confirm your email please follow the <a href='{{EmailLink}}'>link</a>" },
                new NotificationTemplate { Id = NotificationProfile.UnblockedUser, Title = "UnblockedUser", Subject = "Your account was Unblocked", Message = "Dear {{UserEmail}}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress" },
-               new NotificationTemplate { Id = NotificationProfile.OwnEventChanged, Title = "OwnEventChanged", Subject = "Your event was changed", Message = "Dear {{UserEmail}}, your event has been changed." },
-               new NotificationTemplate { Id = NotificationProfile.JoinedEventChanged, Title = "JoinedEventChanged", Subject = "Joined event was changed", Message = "Dear {{UserEmail}}, your joined event has been changed." },
+               new NotificationTemplate { Id = NotificationProfile.OwnEventChanged, Title = "OwnEventChanged", Subject = "Your event was changed", Message = "Dear {{UserEmail}}, your <a href='{{EventLink}}'>event</a> has been changed." },
+               new NotificationTemplate { Id = NotificationProfile.JoinedEventChanged, Title = "JoinedEventChanged", Subject = "Joined event was changed", Message = "Dear {{UserEmail}}, your joined <a href='{{EventLink}}'>event</a> has been changed." },
             });
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Id)

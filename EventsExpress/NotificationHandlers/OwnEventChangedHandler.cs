@@ -21,17 +21,20 @@ namespace EventsExpress.NotificationHandlers
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IEventService _eventService;
+        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
         public OwnEventChangedHandler(
             IEmailService sender,
             IUserService userService,
             IEventService eventService,
-            INotificationTemplateService notificationTemplateService)
+            INotificationTemplateService notificationTemplateService,
+            IOptions<AppBaseUrlModel> urlOptions)
         {
             _sender = sender;
             _userService = userService;
             _notificationTemplateService = notificationTemplateService;
             _eventService = eventService;
+            _urlOptions = urlOptions;
         }
 
         public async Task Handle(OwnEventMessage notification, CancellationToken cancellationToken)
@@ -48,6 +51,7 @@ namespace EventsExpress.NotificationHandlers
                 foreach (string email in usersEmails)
                 {
                     model.UserEmail = email;
+                    model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.EventId}/1";
                     await _sender.SendEmailAsync(new EmailDto
                     {
                         Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
