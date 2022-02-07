@@ -35,7 +35,7 @@ namespace EventsExpress.Core.DTOs
 
         public UserToEventRelation? DisplayUserEvents { get; set; }
 
-        public SortBy SortBy { get; set; }
+        public EventOrderCriteria Order { get; set; }
 
         public List<EventStatus> Statuses { get; set; }
 
