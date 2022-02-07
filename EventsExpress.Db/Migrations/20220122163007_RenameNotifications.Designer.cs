@@ -4,6 +4,7 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220122163007_RenameNotifications")]
+    partial class RenameNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -557,92 +559,6 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique();
 
                     b.ToTable("NotificationTemplates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Message = "Dear {{UserEmail}}, your account was blocked for some reason!",
-                            Subject = "Your account was blocked",
-                            Title = "BlockedUser"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Message = "Follow the <a href='{{EventScheduleLink}}'>link</a> to create the recurrent event.",
-                            Subject = "Approve your recurrent event!",
-                            Title = "CreateEventVerification"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Message = "The <a href='{{EventLink}}'>event</a> was created which could interested you.",
-                            Subject = "New event for you!",
-                            Title = "EventCreated"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Message = "Dear {{UserEmail}}, the event you have been joined was CANCELED. The reason is: {{Reason}} \"<a href='{{EventLink}}'>{{Title}}</a>\"",
-                            Subject = "The event you have been joined was canceled",
-                            Title = "EventStatusCanceled"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Message = "Dear {{UserEmail}}, the event you have been joined was BLOCKED. The reason is: {{Reason}} \"<a href='{{EventLink}}'>{{Title}}</a>\"",
-                            Subject = "The event you have been joined was blocked",
-                            Title = "EventStatusBlocked"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Message = "Dear {{UserEmail}}, the event you have been joined was ACTIVATED. The reason is: {{Reason}} \"<a href='{{EventLink}}'>{{Title}}</a>\"",
-                            Subject = "The event you have been joined was activated",
-                            Title = "EventStatusActivated"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Message = "Dear {{UserEmail}}, you have been approved to join to this event. To check it, please, visit \"<a href='{{EventLink}}'>EventExpress</a>\"",
-                            Subject = "Approving participation",
-                            Title = "ParticipationApproved"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Message = "Dear {{UserEmail}}, you have been denied to join to this event. To check it, please, visit \"<a href='{{EventLink}}'>EventExpress</a>\"",
-                            Subject = "Denying participation",
-                            Title = "ParticipationDenied"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Message = "For confirm your email please follow the <a href='{{EmailLink}}'>link</a>",
-                            Subject = "EventExpress registration",
-                            Title = "RegisterVerification"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Message = "Dear {{UserEmail}}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress",
-                            Subject = "Your account was Unblocked",
-                            Title = "UnblockedUser"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Message = "Dear {{UserEmail}}, your event has been changed.",
-                            Subject = "Your event was changed",
-                            Title = "OwnEventChanged"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Message = "Dear {{UserEmail}}, your joined event has been changed.",
-                            Subject = "Joined event was changed",
-                            Title = "JoinedEventChanged"
-                        });
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>

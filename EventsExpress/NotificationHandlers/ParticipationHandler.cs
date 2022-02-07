@@ -18,7 +18,7 @@ namespace EventsExpress.NotificationHandlers
     {
         private readonly IEmailService _sender;
         private readonly IUserService _userService;
-        private readonly NotificationChange _nameNotification = NotificationChange.VisitedEvent;
+        private readonly NotificationChange _nameNotification = NotificationChange.JoinedEvent;
         private readonly INotificationTemplateService _notificationTemplateService;
         private readonly IOptions<AppBaseUrlModel> _urlOptions;
 

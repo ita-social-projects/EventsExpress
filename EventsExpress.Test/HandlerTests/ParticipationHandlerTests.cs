@@ -29,7 +29,7 @@ namespace EventsExpress.Test.HandlerTests
         private ParticipationMessage _participationMessage;
         private Guid _idParticipationMessage = Guid.NewGuid();
         private UserStatusEvent _participationStatus = UserStatusEvent.Approved;
-        private NotificationChange _notificationChange = NotificationChange.VisitedEvent;
+        private NotificationChange _notificationChange = NotificationChange.JoinedEvent;
         private Guid[] _usersIds;
 
         [SetUp]

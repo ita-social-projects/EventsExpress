@@ -34,6 +34,8 @@ namespace EventsExpress.Core.Services
                 { NotificationProfile.EventStatusActivated, () => new EventStatusNotificationTemplateModel() },
                 { NotificationProfile.EventStatusBlocked, () => new EventStatusNotificationTemplateModel() },
                 { NotificationProfile.EventStatusCanceled, () => new EventStatusNotificationTemplateModel() },
+                { NotificationProfile.OwnEventChanged, () => new EventChangeNotificationTemplateModel() },
+                { NotificationProfile.JoinedEventChanged, () => new EventChangeNotificationTemplateModel() },
             };
 
         private static string AddBraces(string property)

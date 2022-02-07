@@ -38,8 +38,8 @@ namespace EventsExpress.Test.ControllerTests
             };
             secondNotificationTypeDTO = new NotificationTypeDto
             {
-                Id = NotificationChange.VisitedEvent,
-                Name = NotificationChange.VisitedEvent.ToString(),
+                Id = NotificationChange.JoinedEvent,
+                Name = NotificationChange.JoinedEvent.ToString(),
             };
             thirdNotificationTypeDTO = new NotificationTypeDto
             {

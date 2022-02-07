@@ -297,6 +297,8 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
             await _photoService.ChangeTempToImagePhoto(e.Id);
+            await _mediator.Publish(new OwnEventMessage(e.Id));
+            await _mediator.Publish(new JoinedEventMessage(e.Id));
 
             return ev.Id;
         }

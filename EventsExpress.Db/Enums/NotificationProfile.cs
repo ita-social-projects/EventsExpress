@@ -12,5 +12,7 @@
         ParticipationDenied,
         RegisterVerification,
         UnblockedUser,
+        OwnEventChanged,
+        JoinedEventChanged,
     }
 }
