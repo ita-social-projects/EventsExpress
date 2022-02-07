@@ -44,7 +44,6 @@ class UserInfoWrapper extends Component {
 const mapStateToProps = (state) => ({
     currentUser: state.user.id,
     editedUser: state.users.editedUser,
-    roles: state.roles.data
 });
 
 const mapDispatchToProps = (dispatch) => {
