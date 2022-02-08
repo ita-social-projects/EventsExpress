@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
@@ -51,7 +50,7 @@ public class BookmarkServiceTests : TestInitializer
     }
 
     [TestCaseSource(typeof(BookmarkedEventsIds))]
-    public void SaveEventToBookmarksAsync_WhenBookmarkAlreadyExists_ShouldThrowException(
+    public void SaveEventToBookmarksAsync_WhenBookmarkAlreadyExists_DoesNotThrowException(
         Guid userId,
         Guid eventId)
     {
@@ -59,7 +58,7 @@ public class BookmarkServiceTests : TestInitializer
 
         async Task SaveEvent() => await _service.SaveEventToBookmarksAsync(eventId);
 
-        Assert.ThrowsAsync<EventsExpressException>(SaveEvent);
+        Assert.DoesNotThrowAsync(SaveEvent);
     }
 
     [TestCaseSource(typeof(BookmarkedEventsIds))]
@@ -77,14 +76,14 @@ public class BookmarkServiceTests : TestInitializer
     }
 
     [TestCaseSource(typeof(NotBookmarkedEventsIds))]
-    public void DeleteEventFromBookmarksAsync_WhenBookmarkDoesntExist_ShouldThrowException(
+    public void DeleteEventFromBookmarksAsync_WhenBookmarkDoesntExist_DoesNotThrowException(
         Guid userId,
         Guid eventId)
     {
         _securityContext.Setup(c => c.GetCurrentUserId()).Returns(userId);
 
-        async Task SaveEvent() => await _service.DeleteEventFromBookmarksAsync(eventId);
+        async Task DeleteEvent() => await _service.DeleteEventFromBookmarksAsync(eventId);
 
-        Assert.ThrowsAsync<EventsExpressException>(SaveEvent);
+        Assert.DoesNotThrowAsync(DeleteEvent);
     }
 }
