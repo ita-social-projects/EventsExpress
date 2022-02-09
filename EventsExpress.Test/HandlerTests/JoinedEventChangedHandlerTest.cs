@@ -17,7 +17,7 @@ using NUnit.Framework;
 
 namespace EventsExpress.Test.HandlerTests
 {
-    internal class OwnEventChangedHandlerTest
+    internal class JoinedEventChangedHandlerTest
     {
         private readonly Guid _idEvent = Guid.NewGuid();
         private Mock<IEmailService> _emailService;
@@ -25,8 +25,8 @@ namespace EventsExpress.Test.HandlerTests
         private Mock<IUserService> _userService;
         private Mock<INotificationTemplateService> _notificationTemplateService;
         private Mock<IOptions<AppBaseUrlModel>> _appBaseUrl;
-        private OwnEventChangedHandler _ownEventChangedHandler;
-        private OwnEventMessage _ownEventMessage;
+        private JoinedEventChangedHandler _joinedEventChangedHandler;
+        private JoinedEventMessage _joinedEventMessage;
 
         private Guid firstIdUser = Guid.NewGuid();
         private Guid secondIdUser = Guid.NewGuid();
@@ -41,9 +41,9 @@ namespace EventsExpress.Test.HandlerTests
         private UserDto thirdUserDto;
 
         private EventDto _eventDto;
-        private User firstUser;
-        private User secondUser;
-        private User thirdUser;
+        private UserEvent firstUser;
+        private UserEvent secondUser;
+        private UserEvent thirdUser;
 
         [SetUp]
         public void Initialize()
@@ -54,8 +54,8 @@ namespace EventsExpress.Test.HandlerTests
             _notificationTemplateService = new Mock<INotificationTemplateService>();
             _appBaseUrl = new Mock<IOptions<AppBaseUrlModel>>();
             _appBaseUrl.Setup(it => it.Value.Host).Returns("https://localhost:44344");
-            _ownEventMessage = new OwnEventMessage(_idEvent);
-            _ownEventChangedHandler = new OwnEventChangedHandler(
+            _joinedEventMessage = new JoinedEventMessage(_idEvent);
+            _joinedEventChangedHandler = new JoinedEventChangedHandler(
                 _emailService.Object,
                 _userService.Object,
                 _eventService.Object,
@@ -78,25 +78,22 @@ namespace EventsExpress.Test.HandlerTests
                 Email = thirdEmail,
             };
 
-            firstUser = new User
+            firstUser = new UserEvent()
             {
-                Id = firstIdUser,
-                Email = firstEmail,
+                UserId = firstIdUser,
             };
-            secondUser = new User
+            secondUser = new UserEvent
             {
-                Id = secondIdUser,
-                Email = secondEmail,
+                UserId = secondIdUser,
             };
-            thirdUser = new User
+            thirdUser = new UserEvent
             {
-                Id = thirdIdUser,
-                Email = thirdEmail,
+                UserId = thirdIdUser,
             };
             _eventDto = new EventDto
             {
                 Id = _idEvent,
-                Owners = new[]
+                Visitors = new[]
                 {
                     firstUser, secondUser, thirdUser,
                 },
@@ -111,25 +108,25 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_ThreeOwnersByNotificationTypes_ThreeOwnersReceiveNotification()
+        public void Handle_ThreeVisitorsHaveTurnedOnNotification_ThreeVisitorsReceiveNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(new[] { firstUserDto, secondUserDto, thirdUserDto });
 
-            var result = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+            var result = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
 
         [Test]
-        public void Handle_NoOwnersByNotificationTypes_NobodyReceivesNotification()
+        public void Handle_NoVisitorsHaveTurnedOnNotification_NobodyReceivesNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(Enumerable.Empty<UserDto>());
 
-            var result = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+            var result = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
@@ -142,7 +139,7 @@ namespace EventsExpress.Test.HandlerTests
                 .ThrowsAsync(new Exception("Some reason!"));
 
             // Act
-            var actual = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+            var actual = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
 
             // Assert
             Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
