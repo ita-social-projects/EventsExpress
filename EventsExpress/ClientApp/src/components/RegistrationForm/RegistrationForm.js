@@ -3,10 +3,18 @@ import React, { Component } from "react";
 import Stepper from "../stepper/Stepper";
 import CompleteProfileForm from "./CompleteProfileForm";
 import ConfirmForm from "./ConfirmForm";
-import Success from "./Success";
+import SuccessPage from "./SuccessPage";
 import PlaceHolder from "./PlaceHolder";
-import TellUsMoreAboutYourself from "./TellUsMoreAboutYourself";
+import UserPreferencesForm from "./UserPreferencesForm";
 import PropTypes from "prop-types";
+
+const stepsArray = [
+    "Register",
+    "Complete Profile",
+    "Step 3",
+    "Preferences",
+    "Confirm",
+  ];
 
 export default class RegistrationForm extends Component {
   constructor(props) {
@@ -38,7 +46,6 @@ export default class RegistrationForm extends Component {
             steps={stepsArray}
             stepColor="#ff9900"
           />
-          <br />
           <div className="buttons-container">
             <div>
               {currentStep === 2 && (
@@ -51,7 +58,7 @@ export default class RegistrationForm extends Component {
                 />
               )}
               {currentStep === 4 && (
-                <TellUsMoreAboutYourself
+                <UserPreferencesForm
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />
@@ -63,7 +70,7 @@ export default class RegistrationForm extends Component {
 
                 />
               )}
-              {currentStep === 6 && <Success />}
+              {currentStep === 6 && <SuccessPage />}
             </div>
           </div>
         </div>
@@ -71,14 +78,6 @@ export default class RegistrationForm extends Component {
     );
   }
 }
-
-const stepsArray = [
-  "Register",
-  "Complete Profile",
-  "Step 3",
-  "Step 4",
-  "Confirm",
-];
 
 RegistrationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,

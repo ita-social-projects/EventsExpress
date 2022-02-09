@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TwitterLogin from 'react-twitter-login';
 import oauth from 'oauth-sign';
-import uuid from 'uuid';
+import { v4 } from 'uuid';
 import { connect } from 'react-redux';
 import '../css/Auth.css';
 
@@ -45,7 +45,7 @@ export class TwitterLoginBase extends Component {
             skip_status: true,
             oauth_token: oauthToken,
             oauth_consumer_key: this.props.config.twitterConsumerKey,
-            oauth_nonce: uuid.v4().replace(/-/g, ''),
+            oauth_nonce: v4().replace(/-/g, ''),
             oauth_signature_method: 'HMAC-SHA1',
             oauth_timestamp: (Date.now() / 1000).toFixed(),
             oauth_version: '1.0'
