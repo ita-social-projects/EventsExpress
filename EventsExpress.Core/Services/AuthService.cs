@@ -153,7 +153,7 @@ namespace EventsExpress.Core.Services
                 .Include(a => a.RefreshTokens)
                 .Include(a => a.AccountRoles)
                 .Where(a => a.Id == _securityContext.GetCurrentAccountId())
-                .FirstOrDefault();
+                .Single();
 
             var authExternal = externalAccount.AuthExternal.First();
             authExternal.AccountId = localAccount.Id;
@@ -174,7 +174,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
-            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.Id == accountId)?.AccountId;
+            var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.AccountId == accountId)?.AccountId;
             var userToken = Context.UserTokens
                             .FirstOrDefault(rt => rt.Token == token && rt.AccountId == localAccountId);
 
@@ -191,7 +191,7 @@ namespace EventsExpress.Core.Services
         public async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
             var authLocal = Context.AuthLocal
-                .FirstOrDefault(x => x.AccountId == _securityContext.GetCurrentAccountId());
+                .First(x => x.AccountId == _securityContext.GetCurrentAccountId());
 
             authLocal.Salt = _passwordHasher.GenerateSalt();
             authLocal.PasswordHash = _passwordHasher.GenerateHash(newPassword, authLocal.Salt);
@@ -208,9 +208,7 @@ namespace EventsExpress.Core.Services
             var account = Mapper.Map<Account>(registerDto);
             account.AccountRoles = new[] { new AccountRole { RoleId = Db.Enums.Role.User } };
             var result = Insert(account);
-
             await Context.SaveChangesAsync();
-
             await _mediator.Publish(new RegisterVerificationMessage(account.AuthLocal));
 
             return result.Id;

@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
-using Azure.Storage.Blobs;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Extensions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Mapping;
 using EventsExpress.Test.MapperTests.BaseMapperTestInitializer;
-using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
@@ -33,9 +26,11 @@ namespace EventsExpress.Test.MapperTests
         private EventDto firstEventDto;
         private EventEditViewModel firstEventEditViewModel;
         private EventCreateViewModel firstEventCreateViewModel;
+
         private Guid idEventShedule = Guid.NewGuid();
         private Guid idEvent = Guid.NewGuid();
         private Guid idEventLocation = Guid.NewGuid();
+        private Guid idEventAudience = Guid.NewGuid();
         private Guid idUser = Guid.NewGuid();
         private Guid idCategory = Guid.NewGuid();
         private Guid idInventory = Guid.NewGuid();
@@ -70,6 +65,7 @@ namespace EventsExpress.Test.MapperTests
                 IsPublic = true,
                 MaxParticipants = 8,
                 EventLocationId = idEventLocation,
+                EventAudienceId = idEventAudience,
                 EventSchedule = new EventSchedule
                 {
                     Id = idEventShedule,
@@ -87,9 +83,14 @@ namespace EventsExpress.Test.MapperTests
                     Type = LocationType.Map,
                     Point = new Point(8, 3),
                 },
-                Owners = new List<EventOwner>()
+                EventAudience = new EventAudience
                 {
-                    new EventOwner
+                    Id = idEventAudience,
+                    IsOnlyForAdults = true,
+                },
+                Organizers = new List<EventOrganizer>()
+                {
+                    new EventOrganizer
                     {
                         UserId = Guid.NewGuid(),
                         User = users[0],
@@ -149,7 +150,7 @@ namespace EventsExpress.Test.MapperTests
             return new EventDto
             {
                 Id = idEvent,
-                Owners = users,
+                Organizers = users,
                 Inventories = new List<InventoryDto>()
                 {
                     new InventoryDto
@@ -176,8 +177,12 @@ namespace EventsExpress.Test.MapperTests
                     },
                 },
 
-                Type = LocationType.Map,
-                Point = new Point(8, 3),
+                Location = new LocationDto
+                {
+                    Type = LocationType.Map,
+                    Point = new Point(8, 3),
+                },
+
                 Visitors = new List<UserEvent>()
                 {
                     new UserEvent
@@ -190,6 +195,7 @@ namespace EventsExpress.Test.MapperTests
                     },
                 },
                 MaxParticipants = 8,
+                IsOnlyForAdults = true,
             };
         }
 
@@ -221,7 +227,7 @@ namespace EventsExpress.Test.MapperTests
                         },
                     },
                 },
-                Owners = new List<UserPreviewViewModel>()
+                Organizers = new List<UserPreviewViewModel>()
                 {
                     new UserPreviewViewModel
                     {
@@ -260,7 +266,7 @@ namespace EventsExpress.Test.MapperTests
                         Name = categoryName,
                     },
                 },
-                Owners = new List<UserPreviewViewModel>()
+                Organizers = new List<UserPreviewViewModel>()
                 {
                     new UserPreviewViewModel
                     {
@@ -343,11 +349,11 @@ namespace EventsExpress.Test.MapperTests
             var e = Mapper.Map<Event, EventDto>(firstEvent);
 
             Assert.That(e.Photo, Is.Null);
-            Assert.That(e.Point, Is.EqualTo(firstEvent.EventLocation.Point));
-            Assert.That(e.Type, Is.EqualTo(firstEvent.EventLocation.Type));
-            Assert.That(e.OnlineMeeting, Is.EqualTo(firstEvent.EventLocation.OnlineMeeting));
-            Assert.That(e.Owners, Has.All.Matches<User>(ex =>
-                                                        firstEvent.Owners
+            Assert.That(e.Location.Point, Is.EqualTo(firstEvent.EventLocation.Point));
+            Assert.That(e.Location.Type, Is.EqualTo(firstEvent.EventLocation.Type));
+            Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.EventLocation.OnlineMeeting));
+            Assert.That(e.Organizers, Has.All.Matches<User>(ex =>
+                                                        firstEvent.Organizers
                                                         .All(f =>
                                                             ex.Id == f.User.Id)));
             Assert.That(e.Categories, Has.All.Matches<CategoryDto>(ex =>
@@ -365,7 +371,8 @@ namespace EventsExpress.Test.MapperTests
                                                            ex.ItemName == f.ItemName &&
                                                            ex.NeedQuantity == f.NeedQuantity &&
                                                            ex.UnitOfMeasuring.Id == f.UnitOfMeasuring.Id)));
-            Assert.That(e.OwnerIds, Is.Null);
+            Assert.That(e.OrganizerIds, Is.Null);
+            Assert.That(e.IsOnlyForAdults, Is.EqualTo(firstEvent.EventAudience.IsOnlyForAdults));
         }
 
         [Test]
@@ -373,12 +380,12 @@ namespace EventsExpress.Test.MapperTests
         {
             firstEventDto = GetEventDto();
             var resEven = Mapper.Map<EventDto, Event>(firstEventDto);
-            Assert.That(resEven.Owners, Has.All.Matches<EventOwner>(ex =>
-                                                        firstEventDto.Owners
+            Assert.That(resEven.Organizers, Has.All.Matches<EventOrganizer>(ex =>
+                                                        firstEventDto.Organizers
                                                         .All(f =>
                                                             ex.UserId == f.Id))
                                         .And
-                                        .All.Matches<EventOwner>(e => firstEventDto.Id == e.EventId));
+                                        .All.Matches<EventOrganizer>(e => firstEventDto.Id == e.EventId));
             Assert.That(resEven.Inventories, Has.All.Matches<Inventory>(ex =>
                                                       firstEventDto.Inventories
                                                       .All(f =>
@@ -390,6 +397,8 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Categories, Is.Null);
             Assert.That(resEven.EventLocationId, Is.Null);
             Assert.That(resEven.EventLocation, Is.Null);
+            Assert.That(resEven.EventAudienceId, Is.Null);
+            Assert.That(resEven.EventAudience, Is.Null);
             Assert.That(resEven.EventSchedule, Is.Null);
             Assert.That(resEven.Rates, Is.Null);
             Assert.That(resEven.StatusHistory, Is.Null);
@@ -407,10 +416,10 @@ namespace EventsExpress.Test.MapperTests
                                                       .All(f =>
                                                           ex.Id == f.Id &&
                                                           ex.Name == f.Name)));
-            Assert.That(resEven.Location.Type, Is.EqualTo(firstEventDto.Type));
-            Assert.That(resEven.Location.OnlineMeeting, Is.EqualTo(firstEventDto.OnlineMeeting));
-            Assert.That(resEven.Location.Latitude, Is.EqualTo(firstEventDto.Point.X));
-            Assert.That(resEven.Location.Longitude, Is.EqualTo(firstEventDto.Point.Y));
+            Assert.That(resEven.Location.Type, Is.EqualTo(firstEventDto.Location.Type));
+            Assert.That(resEven.Location.OnlineMeeting, Is.EqualTo(firstEventDto.Location.OnlineMeeting));
+            Assert.That(resEven.Location.Latitude, Is.EqualTo(firstEventDto.Location.Point.X));
+            Assert.That(resEven.Location.Longitude, Is.EqualTo(firstEventDto.Location.Point.Y));
             Assert.That(resEven.CountVisitor, Is.EqualTo(visitorCount));
             Assert.That(resEven.MaxParticipants, Is.EqualTo(firstEventDto.MaxParticipants));
             Assert.That(resEven.Members, Has.All.Matches<UserPreviewViewModel>(ex =>
@@ -420,8 +429,8 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
-            Assert.That(resEven.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
-                                                       firstEventDto.Owners
+            Assert.That(resEven.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
+                                                       firstEventDto.Organizers
                                                        .All(f =>
                                                            ex.Id == f.Id &&
                                                            ex.Birthday == f.Birthday &&
@@ -448,10 +457,10 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.UnitOfMeasuring.Id == f.UnitOfMeasuring.Id &&
                                                           ex.UnitOfMeasuring.ShortName == f.UnitOfMeasuring.ShortName &&
                                                           ex.UnitOfMeasuring.UnitName == f.UnitOfMeasuring.UnitName)));
-            Assert.That(resView.Location.Type, Is.EqualTo(firstEventDto.Type));
-            Assert.That(resView.Location.OnlineMeeting, Is.EqualTo(firstEventDto.OnlineMeeting));
-            Assert.That(resView.Location.Latitude, Is.EqualTo(firstEventDto.Point.X));
-            Assert.That(resView.Location.Longitude, Is.EqualTo(firstEventDto.Point.Y));
+            Assert.That(resView.Location.Type, Is.EqualTo(firstEventDto.Location.Type));
+            Assert.That(resView.Location.OnlineMeeting, Is.EqualTo(firstEventDto.Location.OnlineMeeting));
+            Assert.That(resView.Location.Latitude, Is.EqualTo(firstEventDto.Location.Point.X));
+            Assert.That(resView.Location.Longitude, Is.EqualTo(firstEventDto.Location.Point.Y));
             Assert.That(resView.Visitors, Has.All.Matches<UserPreviewViewModel>(ex =>
                                                       firstEventDto.Visitors
                                                       .All(f =>
@@ -459,8 +468,8 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.Username == f.User.Name &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
-            Assert.That(resView.Owners, Has.All.Matches<UserPreviewViewModel>(ex =>
-                                                      firstEventDto.Owners
+            Assert.That(resView.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
+                                                      firstEventDto.Organizers
                                                       .All(f =>
                                                           ex.Id == f.Id &&
                                                           ex.Birthday == f.Birthday &&
@@ -469,6 +478,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resView.Periodicity, Is.EqualTo(firstEventDto.Periodicity));
             Assert.That(resView.IsReccurent, Is.EqualTo(firstEventDto.IsReccurent));
             Assert.That(resView.MaxParticipants, Is.EqualTo(firstEventDto.MaxParticipants));
+            Assert.That(resView.IsOnlyForAdults, Is.EqualTo(firstEventDto.IsOnlyForAdults));
         }
 
         [Test]
@@ -490,16 +500,16 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.UnitOfMeasuring.Id == f.UnitOfMeasuring.Id &&
                                                           ex.UnitOfMeasuring.ShortName == f.UnitOfMeasuring.ShortName &&
                                                           ex.UnitOfMeasuring.UnitName == f.UnitOfMeasuring.UnitName)));
-            Assert.That(resDto.Owners, Is.Null);
-            Assert.That(resDto.OwnerIds, Has.All.Matches<Guid>(ex =>
-                                                      firstEventEditViewModel.Owners
+            Assert.That(resDto.Organizers, Is.Null);
+            Assert.That(resDto.OrganizerIds, Has.All.Matches<Guid>(ex =>
+                                                      firstEventEditViewModel.Organizers
                                                       .All(f =>
                                                           ex == f.Id)));
-            Assert.That(resDto.Point, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Map ?
+            Assert.That(resDto.Location.Point, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Map ?
                  new Point(firstEventEditViewModel.Location.Latitude.Value, firstEventEditViewModel.Location.Longitude.Value) { SRID = 4326 } : null));
-            Assert.That(resDto.OnlineMeeting, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Online ?
-                 new Uri(firstEventEditViewModel.Location.OnlineMeeting) : null));
-            Assert.That(resDto.Type, Is.EqualTo(firstEventEditViewModel.Location.Type));
+            Assert.That(resDto.Location.OnlineMeeting, Is.EqualTo(firstEventEditViewModel.Location.Type == LocationType.Online ?
+                 firstEventEditViewModel.Location.OnlineMeeting : null));
+            Assert.That(resDto.Location.Type, Is.EqualTo(firstEventEditViewModel.Location.Type));
             Assert.That(resDto.Visitors, Is.EqualTo(default(string)));
         }
 
@@ -513,16 +523,16 @@ namespace EventsExpress.Test.MapperTests
                                                      .All(f =>
                                                          ex.Id == f.Id &&
                                                          ex.Name == f.Name)));
-            Assert.That(resDto.Owners, Is.Null);
-            Assert.That(resDto.OwnerIds, Has.All.Matches<Guid>(ex =>
-                                                      firstEventCreateViewModel.Owners
+            Assert.That(resDto.Organizers, Is.Null);
+            Assert.That(resDto.OrganizerIds, Has.All.Matches<Guid>(ex =>
+                                                      firstEventCreateViewModel.Organizers
                                                       .All(f =>
                                                           ex == f.Id)));
-            Assert.That(resDto.Point, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Map ?
+            Assert.That(resDto.Location.Point, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Map ?
                  new Point(firstEventCreateViewModel.Location.Latitude.Value, firstEventCreateViewModel.Location.Longitude.Value) { SRID = 4326 } : null));
-            Assert.That(resDto.OnlineMeeting, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Online ?
-                 new Uri(firstEventCreateViewModel.Location.OnlineMeeting) : null));
-            Assert.That(resDto.Type, Is.EqualTo(firstEventCreateViewModel.Location.Type));
+            Assert.That(resDto.Location.OnlineMeeting, Is.EqualTo(firstEventCreateViewModel.Location.Type == LocationType.Online ?
+                 firstEventCreateViewModel.Location.OnlineMeeting : null));
+            Assert.That(resDto.Location.Type, Is.EqualTo(firstEventCreateViewModel.Location.Type));
             Assert.That(resDto.Periodicity, Is.EqualTo(firstEventCreateViewModel.Periodicity));
             Assert.That(resDto.IsReccurent, Is.EqualTo(firstEventCreateViewModel.IsReccurent));
             Assert.That(resDto.Inventories, Has.All.Matches<InventoryDto>(ex =>

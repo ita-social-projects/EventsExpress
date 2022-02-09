@@ -157,44 +157,6 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        [Category("TwitterLogin")]
-        public void TwitterLogin_CantAuthenticate_ThrowException()
-        {
-            _accountService.Setup(s =>
-                s.EnsureExternalAccountAsync(It.IsAny<string>(), It.IsAny<AuthExternalType>()));
-            _authService.Setup(s =>
-                s.Authenticate(It.IsAny<string>(), It.IsAny<AuthExternalType>()))
-                .Throws<EventsExpressException>();
-
-            Assert.ThrowsAsync<EventsExpressException>(() =>
-                _authenticationController.TwitterLogin(new AccountViewModel()));
-        }
-
-        [Test]
-        [Category("TwitterLogin")]
-        public async Task TwitterLogin_AllOk_DoesNotThrowExceptionAsync()
-        {
-            _authenticationController.ControllerContext = new ControllerContext();
-            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
-            var fb = AuthExternalType.Twitter;
-            var accountWiew = new AccountViewModel
-            {
-                Email = SomeEmail,
-            };
-
-            _accountService.Setup(s =>
-                s.EnsureExternalAccountAsync(accountWiew.Email, fb));
-            _authService.Setup(s =>
-                s.Authenticate(accountWiew.Email, fb))
-                .ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-
-            var res = await _authenticationController.TwitterLogin(accountWiew);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkObjectResult>(res);
-        }
-
-        [Test]
         [Category("RegisterBegin")]
         public void RegisterBegin_EmailAlreadyInUse_ThrowException()
         {

@@ -18,7 +18,7 @@
         private static LocationDto locationDTOOnline = new LocationDto
             {
                 Id = Guid.NewGuid(),
-                OnlineMeeting = new Uri("http://www.example.edu/?ball=box"),
+                OnlineMeeting = "http://www.example.edu/?ball=box",
                 Type = LocationType.Online,
             };
 

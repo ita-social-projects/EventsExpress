@@ -1,38 +1,54 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router";
+import { withRouter } from 'react-router';
 import EventForm from '../components/event/event-form';
 import SimpleModalWithDetails from '../components/helpers/simple-modal-with-details';
 import eventStatusEnum from '../constants/eventStatusEnum';
 import { connect } from 'react-redux';
-import { getFormValues , isPristine} from 'redux-form';
-import { edit_event, publish_event} from '../actions/event/event-add-action';
-import { validateEventForm } from './event-validate-form'
+import { getFormValues, isPristine, SubmissionError } from 'redux-form';
+import { edit_event, publish_event } from '../actions/event/event-add-action';
+import { validateEventForm } from './event-validate-form';
 import { change_event_status } from '../actions/event/event-item-view-action';
-import { setSuccessAllert } from '../actions/alert-action';
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+import {
+    setErrorAllertFromResponse,
+    setSuccessAllert
+} from '../actions/alert-action';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import './css/Draft.css';
+import { buildValidationState, handleFormError } from '../components/helpers/action-helpers';
 
 class EventDraftWrapper extends Component {
 
     onPublish = async (values) => {
-        if (!this.props.pristine)
-        {
-            await this.props.edit_event({ ...validateEventForm(values), user_id: this.props.user_id, id: this.props.event.id  });
+        if (!this.props.pristine) {
+            await this.props.edit_event({
+                ...validateEventForm(values),
+                user_id: this.props.user_id,
+                id: this.props.event.id
+            }, async response => {
+                throw new SubmissionError(await buildValidationState(response));
+            });
         }
         return this.props.publish(this.props.event.id);
-    }
+    };
 
     onSave = async () => {
-        await this.props.edit_event({ ...validateEventForm(this.props.form_values), user_id: this.props.user_id, id: this.props.event.id });
-        this.props.alert('Your event has been successfully saved!');
-    }
+        await this.props.edit_event({
+                ...validateEventForm(this.props.form_values),
+                user_id: this.props.user_id,
+                id: this.props.event.id
+            },
+            response => this.props.errorAlertFromResponse(response),
+            _ => this.props.alert('Your event has been successfully saved!'));
+    };
 
     onDelete = async (reason) => {
         await this.props.delete(this.props.event.id, reason);
         this.props.alert('Your event has been successfully deleted!');
         this.props.history.goBack();
-    }
+    };
+
+    onError = error => this.props.handleFormError(error);
 
     render() {
         return <>
@@ -43,7 +59,7 @@ class EventDraftWrapper extends Component {
                             <div className="float-left">
                                 <h1>Edit event draft</h1>
                             </div>
-                            <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                            <div className="d-flex flex-row align-items-center justify-content-center float-right">
                                 <SimpleModalWithDetails
                                     submitCallback={this.onDelete}
                                     data="Are you sure?"
@@ -62,6 +78,7 @@ class EventDraftWrapper extends Component {
                     user_name={this.props.user_name}
                     all_categories={this.props.all_categories}
                     onSubmit={this.onPublish}
+                    onError={this.onError}
                     initialValues={this.props.event}
                     form_values={this.props.form_values}
                     haveReccurentCheckBox={true}
@@ -95,7 +112,7 @@ class EventDraftWrapper extends Component {
                     </div>
                 </EventForm>
             </div>
-        </>
+        </>;
     }
 }
 
@@ -106,17 +123,19 @@ const mapStateToProps = (state) => ({
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),
     pristine: isPristine('event-form')(state),
-    event: state.event.data,
+    event: state.event.data
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        edit_event: (data) => dispatch(edit_event(data)),
+        edit_event: (data, onError, onSuccess) => dispatch(edit_event(data, onError, onSuccess)),
         delete: (eventId, reason) => dispatch(change_event_status(eventId, reason, eventStatusEnum.Deleted)),
         publish: (data) => dispatch(publish_event(data)),
         get_categories: () => dispatch(get_categories()),
         alert: (msg) => dispatch(setSuccessAllert(msg)),
-    }
+        errorAlertFromResponse: response => dispatch(setErrorAllertFromResponse(response)),
+        handleFormError: error => dispatch(handleFormError(error))
+    };
 };
 
 export default withRouter(connect(

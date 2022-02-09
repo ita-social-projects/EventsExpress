@@ -22,6 +22,7 @@ using EventsExpress.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -128,6 +129,7 @@ namespace EventsExpress
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryGroupService, CategoryGroupService>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
@@ -135,7 +137,7 @@ namespace EventsExpress
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<ICategoryOfMeasuringService, CategoryOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
-            services.AddScoped<IEventOwnersService, EventOwnersService>();
+            services.AddScoped<IEventOrganizersService, EventOrganizersService>();
             services.AddTransient<IGoogleSignatureVerificator, GoogleSignatureVerificator>();
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
@@ -158,7 +160,15 @@ namespace EventsExpress
             services.AddSingleton<UserAccessTypeFilterAttribute>();
             services.AddHostedService<SendMessageHostedService>();
             #endregion
-            services.AddCors();
+            services.AddCors(options =>
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("AllowedOrigins")
+                                                     .Get<string[]>())
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                }));
             services.AddControllers();
             services.AddHttpClient();
             services.Configure<ViewModels.FrontConfigsViewModel>(Configuration.GetSection("FrontEndConfigs"));
@@ -226,13 +236,13 @@ namespace EventsExpress
                     });
 
                 c.DocumentFilter<ApplyDocumentExtension>();
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
-                c.AddFluentValidationRules();
             });
 
+            services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
@@ -261,10 +271,7 @@ namespace EventsExpress
                 SupportedUICultures = supportedCultures,
             });
 
-            app.UseCors(x => x
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials());
+            app.UseCors();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

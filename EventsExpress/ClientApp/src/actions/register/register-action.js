@@ -1,7 +1,8 @@
 import { AuthenticationService } from '../../services';
-import { setErrorAllertFromResponse } from '../alert-action';
 import { createBrowserHistory } from 'history';
 import { getRequestInc, getRequestDec } from "../request-count-action";
+import { buildValidationState } from '../../components/helpers/action-helpers';
+import { SubmissionError } from 'redux-form';
 
 export const SET_REGISTER_PENDING = "SET_REGISTER_PENDING";
 export const SET_REGISTER_SUCCESS = "SET_REGISTER_SUCCESS";
@@ -16,8 +17,7 @@ export default function register(email, password) {
         let response = await api_serv.setRegister({ Email: email, Password: password });
         dispatch(getRequestDec());
         if (!response.ok) {
-            dispatch(setErrorAllertFromResponse(response));
-            return Promise.reject();
+            throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(history.push('/registerSuccess'))
         return Promise.resolve();

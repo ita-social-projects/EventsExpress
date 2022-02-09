@@ -22,7 +22,7 @@ namespace EventsExpress.Db.Entities
 
         public Gender Gender { get; set; }
 
-        public IEnumerable<EventOwner> Events { get; set; }
+        public IEnumerable<EventOrganizer> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
 

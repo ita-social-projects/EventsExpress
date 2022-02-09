@@ -1,0 +1,11 @@
+.line {
+    display: block;
+    width: 100%;
+    margin: auto;
+}
+
+.line path {
+    stroke: gray; 
+    fill: transparent;
+    stroke-width: 0.3;
+}

@@ -35,9 +35,12 @@
             }
 
             var user = await Context.Users.FindAsync(userMoreInfo.UserId);
-            user.UserMoreInfo = newUserMoreInfo;
-            await Context.SaveChangesAsync();
+            if (user is not null)
+            {
+                user.UserMoreInfo = newUserMoreInfo;
+            }
 
+            await Context.SaveChangesAsync();
             return newUserMoreInfo.Id;
         }
     }

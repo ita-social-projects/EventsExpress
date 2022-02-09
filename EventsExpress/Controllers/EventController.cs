@@ -4,13 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Enums;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.Filters;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -119,8 +123,18 @@ namespace EventsExpress.Controllers
 
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Publish(Guid eventId)
+        public async Task<IActionResult> Publish(Guid eventId, [FromServices] IValidator<EventViewModel> validator)
         {
+            EventDto eventDto = _eventService.EventById(eventId);
+            if (eventDto == null)
+            {
+                throw new EventsExpressException("Event not found!");
+            }
+
+            EventViewModel ev = _mapper.Map<EventViewModel>(eventDto);
+
+            validator.ValidateAndThrowIfInvalid(ev);
+
             var result = await _eventService.Publish(eventId);
 
             return Ok(new { id = result });
@@ -148,10 +162,12 @@ namespace EventsExpress.Controllers
         [HttpGet("[action]")]
         public IActionResult All([FromQuery] EventFilterViewModel filter)
         {
-            filter.OwnerId = null;
+            filter.OrganizerId = null;
             filter.VisitorId = null;
 
-            if (!User.IsInRole("Admin") && filter.DateFrom == DateTime.MinValue)
+            if (!User.IsInRole("Admin")
+                && filter.DateFrom == DateTime.MinValue
+                && filter.DisplayUserEvents != UserToEventRelation.Visited)
             {
                 filter.DateFrom = DateTime.Today;
             }

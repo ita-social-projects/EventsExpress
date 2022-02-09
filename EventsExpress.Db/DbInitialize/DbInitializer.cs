@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EventsExpress.Db.Bridge;
+using EventsExpress.Db.Configurations;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
@@ -14,7 +15,15 @@ namespace EventsExpress.Db.DbInitialize
         public static void Seed(AppDbContext dbContext, IPasswordHasher passwordHasher)
         {
             dbContext.Database.EnsureCreated();
+            SeedUsers(dbContext, passwordHasher);
+            SeedCategories(dbContext);
+            SeedUnitsOfMeasuring(dbContext);
+            SeedEmailMessages(dbContext);
+            dbContext.SaveChanges();
+        }
 
+        private static void SeedUsers(AppDbContext dbContext, IPasswordHasher passwordHasher)
+        {
             // Look for any users
             if (dbContext.Users.Any())
             {
@@ -80,23 +89,36 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.Users.AddRange(users);
+        }
+
+        private static void SeedCategories(AppDbContext dbContext)
+        {
+            if (dbContext.Categories.Any())
+            {
+                return;
+            }
 
             var categories = new Category[]
             {
-                new Category { Name = "Sea" },
-                new Category { Name = "Mount" },
-                new Category { Name = "Summer" },
-                new Category { Name = "Golf" },
-                new Category { Name = "Team-Building" },
-                new Category { Name = "Swimming" },
-                new Category { Name = "Gaming" },
-                new Category { Name = "Fishing" },
-                new Category { Name = "Trips" },
-                new Category { Name = "Meeting" },
-                new Category { Name = "Sport" },
+                new Category { Name = "Drawing", CategoryGroupId = CategoryGroupConfiguration.ArtAndCraftGroup.Id },
+                new Category { Name = "Pottery", CategoryGroupId = CategoryGroupConfiguration.ArtAndCraftGroup.Id },
+                new Category { Name = "Self-education", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Public Speaking", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Book Club", CategoryGroupId = CategoryGroupConfiguration.EducationAndTraining.Id },
+                new Category { Name = "Climbing", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
+                new Category { Name = "Volleyball", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
+                new Category { Name = "Football", CategoryGroupId = CategoryGroupConfiguration.WellnessHealthAndFitness.Id },
             };
 
             dbContext.Categories.AddRange(categories);
+        }
+
+        private static void SeedUnitsOfMeasuring(AppDbContext dbContext)
+        {
+            if (dbContext.UnitOfMeasurings.Any())
+            {
+                return;
+            }
 
             var unitsOfMeasuring = new UnitOfMeasuring[]
             {
@@ -143,6 +165,14 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.UnitOfMeasurings.AddRange(unitsOfMeasuring);
+        }
+
+        private static void SeedEmailMessages(AppDbContext dbContext)
+        {
+            if (dbContext.NotificationTemplates.Any())
+            {
+                return;
+            }
 
             var emailMessages = new[]
             {
@@ -159,8 +189,6 @@ namespace EventsExpress.Db.DbInitialize
             };
 
             dbContext.NotificationTemplates.AddRange(emailMessages);
-
-            dbContext.SaveChanges();
         }
     }
 }

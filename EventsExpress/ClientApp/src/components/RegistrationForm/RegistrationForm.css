@@ -34,7 +34,7 @@
     padding: 30px;
 }
 
-button {
+.previous {
     margin: 0 2rem;
     width: 100px;
     padding: 4px;
@@ -44,4 +44,14 @@ button {
 
 h1 {
     font-size: 20px;
+    
+}
+
+.next {
+    margin: 0 2rem;
+    width: 100px;
+    padding: 4px;
+    background-color: rgb(255, 153, 0);
+    border: none;
+    
 }

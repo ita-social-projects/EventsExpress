@@ -11,6 +11,7 @@ using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
@@ -30,6 +31,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<IMediator> mockMediator;
 
         private UserDto existingUserDTO;
+        private UserDto secondUserDTO;
         private User existingUser;
         private User secondUser;
 
@@ -40,6 +42,8 @@ namespace EventsExpress.Test.ServiceTests
         private string secondName = "secondName";
         private string existingEmail = "existingEmail@gmail.com";
         private string secondEmail = "secondEmail@gmail.com";
+
+        private UserDtoComparer userDtoComparer;
 
         [SetUp]
         protected override void Initialize()
@@ -53,6 +57,18 @@ namespace EventsExpress.Test.ServiceTests
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
                 .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
+            MockMapper.Setup(opts => opts.Map<User>(It.IsAny<UserDto>()))
+                .Returns((UserDto u) => new User()
+                {
+                });
+            MockMapper.Setup(opts => opts.Map<UserDto>(It.IsAny<User>()))
+                .Returns((User u) => new UserDto()
+                {
+                    Id = u.Id,
+                });
+            MockMapper.Setup(opts => opts.Map<IEnumerable<UserDto>>(It.IsAny<IEnumerable<User>>()))
+                      .Returns((IEnumerable<User> users) =>
+                          users.Select(user => new UserDto { Id = user.Id }));
 
             service = new UserService(
                 Context,
@@ -162,10 +178,67 @@ namespace EventsExpress.Test.ServiceTests
                 },
             };
 
+            secondUserDTO = new UserDto
+            {
+                Id = secondUserId,
+                Name = secondName,
+                Email = secondEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                },
+                Account = new Account
+                {
+                    UserId = secondUserId,
+                    IsBlocked = false,
+                },
+            };
+
+            userDtoComparer = new UserDtoComparer();
+
             Context.Users.Add(existingUser);
             Context.Users.Add(secondUser);
 
             Context.SaveChanges();
+        }
+
+        [Test]
+        public void GetUsersInformationByIds_WhenIdsArePassed_ReturnsListWithFoundUsers()
+        {
+            var ids = new[] { existingUser.Id, secondUser.Id };
+            var expected = new[] { existingUserDTO, secondUserDTO };
+
+            var actual = service.GetUsersInformationByIds(ids);
+
+            Assert.That(actual, Is.EquivalentTo(expected).Using(userDtoComparer));
+        }
+
+        [Test]
+        public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList()
+        {
+            const int expectedLength = 0;
+            var emptyIds = Array.Empty<Guid>();
+
+            var actual = service.GetUsersInformationByIds(emptyIds);
+            var actualLength = actual.Count();
+
+            Assert.AreEqual(expectedLength, actualLength);
         }
 
         [TestCase(AccountStatus.All)]
@@ -186,6 +259,24 @@ namespace EventsExpress.Test.ServiceTests
 
             // Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void CreateUserDTO_ThrowException()
+        {
+            existingUserDTO.Email = "test";
+            existingUserDTO.AccountId = Guid.Empty;
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
+            Assert.That(ex.Message, Contains.Substring("Account not found"));
+        }
+
+        [Test]
+        public void GetCurrentUserInfo_UserId()
+        {
+            var expected = existingUserDTO;
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUser.Id);
+            var actual = service.GetCurrentUserInfo();
+            Assert.AreEqual(expected.Id, actual.Id);
         }
 
         [Test]
@@ -339,6 +430,14 @@ namespace EventsExpress.Test.ServiceTests
 
             Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
             mockPhotoService.Verify(x => x.AddUserPhoto(file, userId));
+        }
+
+        [Test]
+        public void ChangeAvatar_ThrowException()
+        {
+            mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(userId, new FormFile(new MemoryStream(), 0, 0, null, "tset")));
+            Assert.That(ex.Message, Contains.Substring("Bad image file"));
         }
 
         private string GetContentType(string fileName)

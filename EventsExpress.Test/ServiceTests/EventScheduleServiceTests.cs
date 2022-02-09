@@ -45,9 +45,9 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today.AddDays(2),
                 Description = "...",
-                Owners = new List<EventOwner>()
+                Organizers = new List<EventOrganizer>()
                 {
-                    new EventOwner { UserId = validUserId },
+                    new EventOrganizer { UserId = validUserId },
                 },
                 StatusHistory = new List<EventStatusHistory>
                 {
@@ -60,9 +60,9 @@ namespace EventsExpress.Test.ServiceTests
                 DateFrom = DateTime.Today,
                 DateTo = DateTime.Today.AddDays(2),
                 Description = "...",
-                Owners = new List<EventOwner>()
+                Organizers = new List<EventOrganizer>()
                 {
-                    new EventOwner { UserId = validUserId },
+                    new EventOrganizer { UserId = validUserId },
                 },
                 StatusHistory = new List<EventStatusHistory>
                 {
@@ -209,6 +209,13 @@ namespace EventsExpress.Test.ServiceTests
         public void Edit_EventSchedule_Success()
         {
             Assert.DoesNotThrowAsync(async () => await service.Edit(esDTO));
+        }
+
+        [Test]
+        public void Edit_EventSchedule_NotFound_ThrouAsync()
+        {
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new EventScheduleDto()));
+            Assert.That(ex.Message, Contains.Substring("Not found"));
         }
 
         [Test]

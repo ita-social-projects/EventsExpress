@@ -46,12 +46,18 @@ namespace EventsExpress.Core.Services
 
             var user = Mapper.Map<User>(userDto);
             var newUser = Insert(user);
-            if (newUser.Email != user.Email || newUser.Id == Guid.Empty)
+            if (newUser.Email != user.Email)
             {
                 throw new EventsExpressException("Registration failed");
             }
 
             var account = await Context.Accounts.FindAsync(userDto.AccountId);
+
+            if (account == null)
+            {
+                throw new EventsExpressException("Account not found");
+            }
+
             account.UserId = newUser.Id;
 
             await Context.SaveChangesAsync();
@@ -65,7 +71,7 @@ namespace EventsExpress.Core.Services
             {
                 AccountStatus.Activated => await Entities.Where(user => !user.Account.IsBlocked).CountAsync(),
                 AccountStatus.Blocked => await Entities.Where(user => user.Account.IsBlocked).CountAsync(),
-                _ => await Entities.CountAsync()
+                _ => await Entities.CountAsync(),
             };
 
             return count;
@@ -75,15 +81,16 @@ namespace EventsExpress.Core.Services
         {
             var userId = _securityContext.GetCurrentUserId();
 
-            var user = Mapper.Map<UserDto>(
-                Context.Users
+            var user = Context.Users
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
                 .AsNoTracking()
-                .FirstOrDefault(x => x.Id == userId));
+                .FirstOrDefault(x => x.Id == userId);
 
-            return user;
+            var userDto = Mapper.Map<UserDto>(user);
+
+            return userDto;
         }
 
         public IEnumerable<NotificationTypeDto> GetUserNotificationTypes()
@@ -151,6 +158,12 @@ namespace EventsExpress.Core.Services
             return result;
         }
 
+        public IEnumerable<UserDto> GetUsersInformationByIds(IEnumerable<Guid> ids)
+        {
+            var users = Context.Users.Where(user => ids.Contains(user.Id));
+            return Mapper.Map<IEnumerable<UserDto>>(users.ToList());
+        }
+
         public IEnumerable<UserDto> GetUsersByRole(Role role)
         {
             var users = Context.Roles
@@ -184,8 +197,7 @@ namespace EventsExpress.Core.Services
         public async Task ChangeAvatar(Guid userId, IFormFile avatar)
         {
             var user = Context.Users
-                .FirstOrDefault(u => u.Id == userId);
-
+                .Single(u => u.Id == userId);
             try
             {
                 await _photoService.AddUserPhoto(avatar, user.Id);
@@ -276,7 +288,7 @@ namespace EventsExpress.Core.Services
 
         public double GetRating(Guid userId)
         {
-            var ownEventsIds = Context.EventOwners
+            var ownEventsIds = Context.EventOrganizers
                 .Where(e => e.UserId == userId).Select(e => e.EventId).ToList();
             try
             {

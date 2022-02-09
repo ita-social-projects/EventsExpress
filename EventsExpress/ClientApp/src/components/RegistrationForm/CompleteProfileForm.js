@@ -1,10 +1,15 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { reduxForm, Field } from 'redux-form';
-import { renderDatePicker, renderTextField, renderSelectField } from '../helpers/form-helpers';
 import moment from 'moment';
 import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
 import genders from '../../constants/GenderConstants';
+import {
+    renderDatePicker,
+    renderTextField,
+    renderSelectField,
+    parseEuDate
+} from '../helpers/form-helpers';
 
 // TODO: extract styles
 const CompleteProfileForm = ({ handleSubmit }) => (
@@ -50,6 +55,7 @@ const CompleteProfileForm = ({ handleSubmit }) => (
                         minValue={moment().subtract(115, 'years')}
                         maxValue={moment().subtract(14, 'years')}
                         component={renderDatePicker}
+                        parse={parseEuDate}
                     />
                     {/* TODO: look how to reuse component from user profile */}
                 </Grid>

@@ -6,6 +6,7 @@ import moment from 'moment';
 import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../constants/eventTypeEnum';
 import genders from '../../constants/GenderConstants';
+import SelectedActivitiesList from './SelectedActivitiesList';
 
 // TODO: extract to reduce duplication in components
 const reasonsMap = new Map([
@@ -24,16 +25,40 @@ const eventPreferencesMap = new Map([
 ]);
 
 // TODO: extract styles
-const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formValues }) => {
+const ConfirmForm = ({
+    handleSubmit,
+    previousPage,
+    formValues,
+    pristine,
+    submitting,
+    categories,
+    categoryGroups,
+}) => {
     const Items = ({ source, map }) => (
         <div className="d-flex flex-row">
-            {source && source.map(value => (
-                <ListItem key={map.get(value)}>
-                    <ListItemText secondary={map.get(value)} />
-                </ListItem>
-            ))}
+            {source &&
+                source.map(value => (
+                    <ListItem key={map.get(value)}>
+                        <ListItemText secondary={map.get(value)} />
+                    </ListItem>
+                ))}
         </div>
     );
+
+    const getSelectedCategories = () => {
+        const filteredCategories = categories.filter(el =>
+            formValues.categories.includes(el.id)
+        );
+
+        return categoryGroups
+            .map(g => ({
+                group: g.title,
+                categories: filteredCategories
+                    .filter(c => c.categoryGroup.id === g.id)
+                    .map(el => el.name),
+            }))
+            .filter(el => el.categories.length > 0);
+    };
 
     return (
         <div style={{ width: '97%', padding: '10px' }}>
@@ -45,7 +70,7 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                         </h1>
                     </Grid>
                     <Grid item sm={5} />
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <List>
                             <ListItem>
                                 <ListItemText primary="Email" />
@@ -68,22 +93,20 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                                     secondary={
                                         formValues.birthDate
                                             ? moment(
-                                                formValues.birthDate
-                                            ).format('DD-MM-YYYY')
+                                                  formValues.birthDate
+                                              ).format('DD-MM-YYYY')
                                             : 'Not entered.'
                                     }
                                 />
                             </ListItem>
                         </List>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                         <List>
                             <ListItem>
                                 <ListItemText
                                     primary="Gender"
-                                    secondary={
-                                        genders[formValues.gender]
-                                    }
+                                    secondary={genders[formValues.gender]}
                                 />
                             </ListItem>
                             <ListItem>
@@ -100,7 +123,7 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                             </ListItem>
                         </List>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={5}>
                         <List>
                             <ListItem>
                                 <ListItemText primary="Parental status:" />
@@ -114,7 +137,6 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                                     }
                                 />
                             </ListItem>
-
                             <ListItem>
                                 <ListItemText primary="Reasons for using the site:" />
                             </ListItem>
@@ -122,7 +144,6 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                                 source={formValues.reasonsForUsingTheSite}
                                 map={reasonsMap}
                             />
-
                             <ListItem>
                                 <ListItemText primary="Event preferences:" />
                             </ListItem>
@@ -130,11 +151,9 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                                 source={formValues.eventType}
                                 map={eventPreferencesMap}
                             />
-
                             <ListItem>
                                 <ListItemText primary="Relationship status:" />
                             </ListItem>
-
                             <ListItem>
                                 <ListItemText
                                     secondary={
@@ -144,11 +163,9 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                                     }
                                 />
                             </ListItem>
-
                             <ListItem>
                                 <ListItemText primary="The type of leisure status:" />
                             </ListItem>
-
                             <ListItem>
                                 <ListItemText
                                     secondary={
@@ -160,7 +177,11 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
                             </ListItem>
                         </List>
                     </Grid>
-
+                    {formValues.categories && (
+                        <SelectedActivitiesList
+                            data={getSelectedCategories()}
+                        />
+                    )}
                     <Grid item sm={12}>
                         <Button
                             type="button"
@@ -191,6 +212,8 @@ const ConfirmForm = ({ handleSubmit, pristine, previousPage, submitting, formVal
 
 const mapStateToProps = state => ({
     formValues: getFormValues('registrationForm')(state),
+    categoryGroups: state.categoryGroups.data,
+    categories: state.categories.data,
 });
 
 export default connect(mapStateToProps)(

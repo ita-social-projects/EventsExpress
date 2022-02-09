@@ -1,0 +1,17 @@
+﻿.tile {
+  display: flex;
+  background-color: #d4d4d4;
+  border-radius: 12px;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  min-height: 16vh;
+  cursor: pointer;
+}
+
+.tile:hover {
+  background-color: #aaaaaa;
+}
+
+.tri-state-checkbox {
+  margin: 25 px;
+}

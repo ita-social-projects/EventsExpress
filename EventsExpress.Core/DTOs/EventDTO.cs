@@ -31,11 +31,9 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsPublic { get; set; }
 
-        public Point Point { get; set; }
+        public bool IsOnlyForAdults { get; set; }
 
-        public LocationType Type { get; set; }
-
-        public Uri OnlineMeeting { get; set; }
+        public LocationDto Location { get; set; }
 
         public IEnumerable<CategoryDto> Categories { get; set; }
 
@@ -45,8 +43,8 @@ namespace EventsExpress.Core.DTOs
 
         public IEnumerable<InventoryDto> Inventories { get; set; }
 
-        public IEnumerable<Guid> OwnerIds { get; set; }
+        public IEnumerable<Guid> OrganizerIds { get; set; }
 
-        public IEnumerable<User> Owners { get; set; }
+        public IEnumerable<User> Organizers { get; set; }
     }
 }

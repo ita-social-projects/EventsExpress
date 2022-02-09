@@ -4,14 +4,14 @@ import Stepper from "../stepper/Stepper";
 import CompleteProfileForm from "./CompleteProfileForm";
 import ConfirmForm from "./ConfirmForm";
 import SuccessPage from "./SuccessPage";
-import PlaceHolder from "./PlaceHolder";
+import ChooseActivities from "./ChooseActivities";
 import UserPreferencesForm from "./UserPreferencesForm";
 import PropTypes from "prop-types";
 
 const stepsArray = [
     "Register",
     "Complete Profile",
-    "Step 3",
+    "Choose Activities",
     "Preferences",
     "Confirm",
   ];
@@ -52,7 +52,7 @@ export default class RegistrationForm extends Component {
                 <CompleteProfileForm onSubmit={this.nextPage} />
               )}
               {currentStep === 3 && (
-                <PlaceHolder
+                <ChooseActivities
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />
@@ -67,7 +67,6 @@ export default class RegistrationForm extends Component {
                 <ConfirmForm
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
-
                 />
               )}
               {currentStep === 6 && <SuccessPage />}
