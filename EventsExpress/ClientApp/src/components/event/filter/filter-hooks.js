@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { ORDER } from '../../../constants/event-order-criteria';
 import { enumLocationType } from '../../../constants/EventLocationType';
 import { DISPLAY_USER_EVENTS } from '../../../constants/user-to-event-relation';
+import { BOOKMARKED_EVENTS_FILTER_APPLIED } from '../../../constants/bookmarks-constants';
 
 const applyFilters = (filters, history) => {
     if (filters.location)
@@ -77,6 +78,7 @@ const getQueryWithRequestFilters = query => {
 
     filters.displayUserEvents = sessionStorage.getItem(DISPLAY_USER_EVENTS);
     filters.order = sessionStorage.getItem(ORDER);
+    filters.bookmarked = sessionStorage.getItem(BOOKMARKED_EVENTS_FILTER_APPLIED);
 
     filters.isOnlyForAdults = (filters.onlyAdult !== filters.withChildren)
         ? (filters.onlyAdult ?? false)
