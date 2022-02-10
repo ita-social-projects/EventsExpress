@@ -11,9 +11,9 @@ export const Footer = () => {
     ];
 
     const socialLinks = [
-        { id: 0, icon: 'fab fa-facebook-f', link: '' },
-        { id: 1, icon: 'fab fa-instagram', link: '' },
-        { id: 2, icon: 'fab fa-youtube', link: '' }
+        { id: 0, icon: 'fab fa-facebook-f', path: '' },
+        { id: 1, icon: 'fab fa-instagram', path: '' },
+        { id: 2, icon: 'fab fa-youtube', path: '' }
     ];
 
     return (
