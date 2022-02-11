@@ -1,20 +1,20 @@
-﻿import React, { useEffect } from 'react';
+﻿import React, { useContext, useEffect } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import get_category_groups from '../../../../actions/categoryGroup/category-group-list-action';
 import get_categories from '../../../../actions/category/category-list-action';
 import TileGroup from '../../../../containers/TileGroup';
+import { RegisterStepContext } from '../../RegistrationForm';
 
 // TODO: extract styles
 const ChooseActivities = ({
-    handleSubmit,
-    previousPage,
     categories,
     categoryGroups,
     getCategories,
     getCategoryGroups,
 }) => {
+    const { goBack, goToNext } = useContext(RegisterStepContext);
     
     useEffect(() => {
         getCategoryGroups();
@@ -37,14 +37,14 @@ const ChooseActivities = ({
                 (you can skip this step and choose activities later in Profile
                 Settings)
             </h4>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={goToNext}>
                 <TileGroup data={mapToCategories()} />
                 <Grid container spacing={3}>
-                    <Grid item sm={12} justify="center">
+                    <Grid item sm={12}>
                         <Button
                             type="button"
                             className="previous"
-                            onClick={previousPage}
+                            onClick={goBack}
                             color="primary"
                             variant="text"
                             size="large"

@@ -1,12 +1,13 @@
-import React from 'react';
-import { Grid, List, ListItem, ListItemText, Button } from '@material-ui/core';
-import { reduxForm, getFormValues } from 'redux-form';
-import { connect } from 'react-redux';
+import React, { useContext } from 'react';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { reduxForm, getFormValues } from 'redux-form';
+import { Grid, List, ListItem, ListItemText, Button } from '@material-ui/core';
 import reasonsForUsingTheSiteEnum from '../../../../constants/reasonsForUsingTheSiteEnum';
 import eventTypeEnum from '../../../../constants/eventTypeEnum';
 import genders from '../../../../constants/GenderConstants';
 import SelectedActivitiesList from '../activities/SelectedActivitiesList';
+import { RegisterStepContext } from '../../RegistrationForm';
 
 // TODO: extract to reduce duplication in components
 const reasonsMap = new Map([
@@ -25,15 +26,15 @@ const eventPreferencesMap = new Map([
 ]);
 
 // TODO: extract styles
-const ConfirmationView = ({
-    handleSubmit,
-    previousPage,
+const ConfirmationPage = ({
     formValues,
     pristine,
     submitting,
     categories,
     categoryGroups,
 }) => {
+    const { goBack, goToNext } = useContext(RegisterStepContext);
+
     const Items = ({ source, map }) => (
         <div className="d-flex flex-row">
             {source &&
@@ -62,7 +63,7 @@ const ConfirmationView = ({
 
     return (
         <div style={{ width: '97%', padding: '10px' }}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={goToNext}>
                 <Grid container spacing={3}>
                     <Grid item sm={7}>
                         <h1 style={{ fontSize: 20 }}>
@@ -186,7 +187,7 @@ const ConfirmationView = ({
                         <Button
                             type="button"
                             className="previous"
-                            onClick={previousPage}
+                            onClick={goBack}
                             color="primary"
                             variant="text"
                             size="large"
@@ -221,5 +222,5 @@ export default connect(mapStateToProps)(
         form: 'registrationForm',
         destroyOnUnmount: false,
         forceUnregisterOnUnmount: true,
-    })(ConfirmationView)
+    })(ConfirmationPage)
 );
