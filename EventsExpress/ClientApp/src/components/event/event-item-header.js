@@ -41,7 +41,7 @@ export default class EventHeader extends Component {
     renderOrganizers = (organizers, avatar) => {
         return (
             <Button title={organizers[0].username} className="btn-custom" onClick={this.handleClickOnOrganizers}>
-                <Badge overlap="circle" badgeContent={organizers.length} color="primary">
+                <Badge overlap="circular" badgeContent={organizers.length} color="primary">
                     <CustomAvatar
                         className={avatar}
                         userId={organizers[0].id}
@@ -94,7 +94,7 @@ export default class EventHeader extends Component {
         const firstMember = members ? members[0] : null;
 
         const PrintMenuMembers = members.map(user => (
-            <MenuItem onClick={this.handleCloseOnMember} style={{ overflow: "visible" }}>
+            <MenuItem key={user.id} onClick={this.handleCloseOnMember} style={{ overflow: "visible" }}>
                 <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(user.attitude)}>
                     <div className="flex-grow-1">
                         <Link to={'/user/' + user.id} className="btn-custom">
@@ -114,7 +114,7 @@ export default class EventHeader extends Component {
         ));
 
         const PrintMenuItems = organizers.map(user => (
-            <MenuItem onClick={this.handleCloseOnOrganizers}>
+            <MenuItem key={user.id} onClick={this.handleCloseOnOrganizers}>
                 <div className="d-flex align-items-center border-bottom">
                     <div className="flex-grow-1">
                         <Link to={'/user/' + user.id} className="btn-custom">

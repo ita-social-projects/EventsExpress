@@ -129,10 +129,12 @@ export default class EventCard extends Component {
                             <div className="float-left">
                                 {categories.length <= 2
                                     ? displayedCategories
-                                    : [displayedCategories,
+                                    : <>
+                                        {displayedCategories}
                                         <Typography variant="body2" color="textSecondary" component="span">
                                             {restCategories}
-                                        </Typography>]
+                                        </Typography>
+                                    </>
                                 }
 
                             </div>
