@@ -20,16 +20,16 @@ class Header extends Component {
 
     return (
       <nav
-        class="navbar navbar-expand-lg navbar-light extraHeaderStyles"
+        className="navbar navbar-expand-lg navbar-light extraHeaderStyles"
         id="bgcolornav"
       >
-        <div class="navbar-brand">
+        <div className="navbar-brand">
           <Link to={"/home"} className="nav-link" id="EEButton">
             EVENTS EXPRESS
           </Link>
         </div>
-        <ul class="navbar-nav mr-auto"></ul>
-        <span class="form-inline my-2 my-lg-0">
+        <ul className="navbar-nav mr-auto"></ul>
+        <span className="form-inline my-2 my-lg-0">
           <AuthComponent rolesMatch={Roles.User}>
             <div className="my-2 my-sm-0">
               <div className="btn btn-light" id="headbtn" onClick={this.props.add_event}>
