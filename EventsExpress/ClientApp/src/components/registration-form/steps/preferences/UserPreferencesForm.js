@@ -1,16 +1,16 @@
-﻿import './RegistrationForm.css';
-import './CheckboxDesign.css';
-import React from 'react';
+﻿import React from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { reduxForm, Field } from 'redux-form';
-import parentStatusEnum from '../../constants/parentStatusEnum';
-import relationShipStatusEnum from '../../constants/relationShipStatusEnum';
-import theTypeOfLeisureEnum from '../../constants/theTypeOfLeisureEnum';
-import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
-import eventTypeEnum from '../../constants/eventTypeEnum';
-import { radioButton, MultiCheckbox } from '../helpers/form-helpers';
+import parentStatusEnum from '../../../../constants/parentStatusEnum';
+import relationShipStatusEnum from '../../../../constants/relationShipStatusEnum';
+import theTypeOfLeisureEnum from '../../../../constants/theTypeOfLeisureEnum';
+import reasonsForUsingTheSiteEnum from '../../../../constants/reasonsForUsingTheSiteEnum';
+import eventTypeEnum from '../../../../constants/eventTypeEnum';
+import { radioButton, MultiCheckbox } from '../../../helpers/form-helpers';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
+import '../../RegistrationForm.css';
+import './CheckboxDesign.css';
 
 const reasonsOptions = [
     { value: reasonsForUsingTheSiteEnum.BeMoreActive, text: 'Be more active' },

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import CheckMark from './checkmark/checkmark';
+import CheckMark from './checkmark/CheckMark';
 
 // TODO: extract styles to hooks
 const SuccessPage = () => (

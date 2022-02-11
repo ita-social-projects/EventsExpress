@@ -2,14 +2,14 @@ import React from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { reduxForm, Field } from 'redux-form';
 import moment from 'moment';
-import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-avatar';
-import genders from '../../constants/GenderConstants';
+import ChangeAvatarWrapper from '../../../../containers/editProfileContainers/change-avatar';
+import genders from '../../../../constants/GenderConstants';
 import {
     renderDatePicker,
     renderTextField,
     renderSelectField,
     parseEuDate
-} from '../helpers/form-helpers';
+} from '../../../helpers/form-helpers';
 
 // TODO: extract styles
 const CompleteProfileForm = ({ handleSubmit }) => (

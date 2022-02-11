@@ -2,9 +2,9 @@
 import { Grid, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import get_category_groups from '../../actions/categoryGroup/category-group-list-action';
-import get_categories from '../../actions/category/category-list-action';
-import TileGroup from '../../containers/TileGroup';
+import get_category_groups from '../../../../actions/categoryGroup/category-group-list-action';
+import get_categories from '../../../../actions/category/category-list-action';
+import TileGroup from '../../../../containers/TileGroup';
 
 // TODO: extract styles
 const ChooseActivities = ({

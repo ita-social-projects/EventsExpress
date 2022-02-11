@@ -1,12 +1,12 @@
 import "./RegistrationForm.css";
 import React, { Component } from "react";
-import Stepper from "../stepper/Stepper";
-import CompleteProfileForm from "./CompleteProfileForm";
-import ConfirmForm from "./ConfirmForm";
-import SuccessPage from "./SuccessPage";
-import ChooseActivities from "./ChooseActivities";
-import UserPreferencesForm from "./UserPreferencesForm";
 import PropTypes from "prop-types";
+import Stepper from "../stepper/Stepper";
+import ConfirmationView from "./steps/confirm/ConfirmationView";
+import CompleteProfileForm from "./steps/complete-profile/CompleteProfileForm";
+import UserPreferencesForm from "./steps/preferences/UserPreferencesForm";
+import ChooseActivities from "./steps/activities/ChooseActivities";
+import SuccessPage from "./steps/success/SuccessPage";
 
 const stepsArray = [
     "Register",
@@ -64,12 +64,14 @@ export default class RegistrationForm extends Component {
                 />
               )}
               {currentStep === 5 && (
-                <ConfirmForm
+                <ConfirmationView
                   previousPage={this.previousPage}
                   onSubmit={this.nextPage}
                 />
               )}
-              {currentStep === 6 && <SuccessPage />}
+              {currentStep === 6 && (
+                <SuccessPage />
+              )}
             </div>
           </div>
         </div>

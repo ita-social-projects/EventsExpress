@@ -3,10 +3,10 @@ import { Grid, List, ListItem, ListItemText, Button } from '@material-ui/core';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import reasonsForUsingTheSiteEnum from '../../constants/reasonsForUsingTheSiteEnum';
-import eventTypeEnum from '../../constants/eventTypeEnum';
-import genders from '../../constants/GenderConstants';
-import SelectedActivitiesList from './SelectedActivitiesList';
+import reasonsForUsingTheSiteEnum from '../../../../constants/reasonsForUsingTheSiteEnum';
+import eventTypeEnum from '../../../../constants/eventTypeEnum';
+import genders from '../../../../constants/GenderConstants';
+import SelectedActivitiesList from '../activities/SelectedActivitiesList';
 
 // TODO: extract to reduce duplication in components
 const reasonsMap = new Map([
@@ -25,7 +25,7 @@ const eventPreferencesMap = new Map([
 ]);
 
 // TODO: extract styles
-const ConfirmForm = ({
+const ConfirmationView = ({
     handleSubmit,
     previousPage,
     formValues,
@@ -221,5 +221,5 @@ export default connect(mapStateToProps)(
         form: 'registrationForm',
         destroyOnUnmount: false,
         forceUnregisterOnUnmount: true,
-    })(ConfirmForm)
+    })(ConfirmationView)
 );

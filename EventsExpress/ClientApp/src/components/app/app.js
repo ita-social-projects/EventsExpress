@@ -35,7 +35,7 @@ import withAuthRedirect from '../../security/withAuthRedirect';
 import { connect } from 'react-redux';
 import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
-import RegistrationForm from '../RegistrationForm';
+import RegistrationForm from '../registration-form';
 import MainLayout from '../MainLayout';
 
 class App extends Component {
