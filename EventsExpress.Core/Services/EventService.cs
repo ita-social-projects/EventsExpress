@@ -12,9 +12,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
@@ -102,7 +100,6 @@ namespace EventsExpress.Core.Services
 
             Context.UserEvent.Update(userEvent);
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
         }
 
         public async Task DeleteUserFromEvent(Guid userId, Guid eventId)
@@ -203,7 +200,6 @@ namespace EventsExpress.Core.Services
             eventDTO.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new EventCreatedMessage(eventDTO));
             await _photoService.ChangeTempToImagePhoto(eventDTO.Id);
 
             return result.Id;
@@ -322,7 +318,6 @@ namespace EventsExpress.Core.Services
                     });
             await Context.SaveChangesAsync();
             EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-            await _mediator.Publish(new EventCreatedMessage(dtos));
             return ev.Id;
         }
 

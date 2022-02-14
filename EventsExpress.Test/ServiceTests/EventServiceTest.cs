@@ -778,7 +778,6 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(async () => await service.Publish(GetEventExistingId.SecondEventId));
             var statusHistory = Context.Events.Find(GetEventExistingId.SecondEventId).StatusHistory.Last();
             Assert.AreEqual(EventStatus.Active, statusHistory.EventStatus);
-            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
         }
 
         [Test]
