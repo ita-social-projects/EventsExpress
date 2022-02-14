@@ -93,6 +93,7 @@ const initialState = {
             pageViewModel: {},
         },
         filter: filterHelper.getDefaultEventFilter(),
+        layout: null,
     },
     tracks: {
         isError: false,
